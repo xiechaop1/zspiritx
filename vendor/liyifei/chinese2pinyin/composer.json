@@ -1,0 +1,21 @@
+{
+  "name": "liyifei/chinese2pinyin",
+  "description": "yii2 chinese transform pinyin",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "liyifei",
+      "email": "119422342@qq.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "liyifei\\chinese2pinyin\\": "src/"
+    }
+  }
+}
+

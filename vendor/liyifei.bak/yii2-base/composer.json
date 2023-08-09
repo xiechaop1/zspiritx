@@ -1,0 +1,36 @@
+{
+    "name": "liyifei/yii2-base",
+    "description": "simple way to use base things",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","base"],
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "liyifei",
+            "email": "119422342@qq.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "liyifei/yii2-pluploader": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "liyifei\\base\\": "",
+            "liyifei\\base\\helpers\\": "helpers",
+            "liyifei\\base\\controllers\\": "controllers",
+            "liyifei\\base\\actions\\": "actions",
+            "liyifei\\base\\widgets\\": "widgets"
+        }
+    },
+    "config": {
+        "process-timeout": 1800,
+        "secure-http": false
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "liyifei/yii2-aliyunsms",
+  "description": "simple way to use alidayu",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension",
+    "alidayu"
+  ],
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liyifei",
+      "email": "119422342@qq.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*",
+    "yiisoft/yii2-httpclient": "~2.0.0",
+    "liyifei/aliyun-dysms-php-sdk": "~1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "liyifei\\aliyunsms\\": "src"
+    }
+  },
+  "config": {
+    "process-timeout": 1800,
+    "secure-http": false
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "git",
+      "url": "http://deploy:deploy@121.40.176.149:3000/Yii2-composer/aliyun-dysms-php-sdk.git"
+    }
+  ]
+}

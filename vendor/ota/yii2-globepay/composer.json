@@ -1,0 +1,28 @@
+{
+  "name": "ota/yii2-globepay",
+  "description": "simple way to globe pay",
+  "type": "yii2-extension",
+  "keywords": ["yii2","extension","globe pay"],
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liyifei",
+      "email": "119422342@qq.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "yiisoft/yii2": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ota\\globepay\\": "src"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  ]
+}

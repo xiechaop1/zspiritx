@@ -1,0 +1,21 @@
+{
+  "name": "liyifei/yii2-aliyun-direct-mail",
+  "description": "yii2 aliyun Direct Mail",
+  "authors": [
+    {
+      "name": "liyifei",
+      "email": "119422342@qq.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.0.0",
+    "liyifei/aliyun-dysms-php-sdk": "~1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "liyifei\\DirectMail\\": "src/",
+      "liyifei\\Dm\\": "src/lib/aliyun-php-sdk-dm/Dm"
+    }
+  }
+}
