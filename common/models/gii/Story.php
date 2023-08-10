@@ -27,7 +27,7 @@ class Story extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'desc', 'thumbnail', 'image', ], 'string'],
+            [['title', 'desc', 'thumbnail', 'cover_image', 'image', ], 'string'],
             [['persons_ct', 'roles_ct', 'status'], 'integer'],
             [['is_delete', 'created_at', 'updated_at',], 'integer'],
         ];
