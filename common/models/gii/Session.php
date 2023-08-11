@@ -13,14 +13,14 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class Tag extends \yii\db\ActiveRecord
+class Session extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%tag}}';
+        return '{{%session}}';
     }
 
     /**
@@ -29,8 +29,8 @@ class Tag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tag_type', 'parent_id', 'level', 'created_at', 'updated_at'], 'integer'],
-            [['tag_name'], 'string', 'max' => 32],
+            [['user_id', 'created_at', 'updated_at'], 'integer'],
+            [['session_name'], 'string', 'max' => 32],
         ];
     }
 

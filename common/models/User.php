@@ -9,12 +9,8 @@
 namespace common\models;
 
 
-use common\definitions\Common;
-
 class User extends \common\models\gii\User
 {
-
-    public $lockCount;
 
     const USER_STATUS_NORMAL    = 0;    // 正常
     const USER_STATUS_FORBIDDEN = 1;    // 禁用

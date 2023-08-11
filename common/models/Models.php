@@ -1,0 +1,37 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: leeyifiei
+ * Date: 2019/2/25
+ * Time: 9:16 PM
+ */
+
+namespace common\models;
+
+
+class Models extends \common\models\gii\Models
+{
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => 'yii\behaviors\TimestampBehavior'
+            ]
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'model_name',
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'model_name' => 'Model Name',
+        ];
+    }
+}

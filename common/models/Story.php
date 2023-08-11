@@ -32,5 +32,13 @@ class Story extends \common\models\gii\Story
         return $this->hasOne('common\models\StoryExtend',  ['id' => 'story_id']);
     }
 
+    public function getRoles(){
+        return $this->hasMany('common\models\StoryRole',  ['id' => 'story_id']);
+    }
+
+    public function getTeams(){
+        return $this->hasMany('common\models\UserStory',  ['id' => 'story_id']);
+    }
+
 
 }

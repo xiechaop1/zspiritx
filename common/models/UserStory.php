@@ -9,8 +9,11 @@
 namespace common\models;
 
 
-class MusicTag extends \common\models\gii\MusicTag
+use common\definitions\Common;
+
+class UserStory extends \common\models\gii\UserStory
 {
+
     public function behaviors()
     {
         return [
@@ -20,13 +23,9 @@ class MusicTag extends \common\models\gii\MusicTag
         ];
     }
 
-    public function getMusic(){
-        return $this->hasOne('common\models\Music',  ['id' => 'music_id']);
+    public function exec() {
+
+        $ret = $this->save();
+        return $ret;
     }
-
-    public function getCategory(){
-        return $this->hasOne('common\models\Tag',  ['id' => 'tag_id']);
-    }
-
-
 }

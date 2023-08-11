@@ -5,17 +5,20 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%music_category}}".
+ * This is the model class for table "{{%story_model}}".
  *
  */
-class MusicTag extends \yii\db\ActiveRecord
+class StoryModels extends \yii\db\ActiveRecord
 {
+
+    public $lyricJson;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%music_tag}}';
+        return '{{%story_model}}';
     }
 
     /**
@@ -24,8 +27,10 @@ class MusicTag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['music_id', 'tag_id', ], 'integer'],
-            [['created_at', 'updated_at',], 'integer'],
+            [['lat', 'lng', 'show_x', 'show_y', 'show_z' ], 'number'],
+            [['story_id', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
+            [['is_delete', 'created_at', 'updated_at',], 'integer'],
+            [['scan_image_id'], 'string'],
         ];
     }
 
