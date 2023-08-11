@@ -28,7 +28,7 @@ class SessionModels extends \yii\db\ActiveRecord
     {
         return [
             [['lat', 'lng', 'show_x', 'show_y', 'show_z', 'is_unique', 'is_pickup' ], 'number'],
-            [['story_id', 'session_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
+            [['story_id', 'building_id', 'poi_id', 'session_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
             [['is_delete', 'created_at', 'updated_at',], 'integer'],
             [['scan_image_id', 'snapshot'], 'string'],
         ];
