@@ -5,10 +5,10 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%story_model}}".
+ * This is the model class for table "{{%session_model}}".
  *
  */
-class StoryModels extends \yii\db\ActiveRecord
+class SessionModels extends \yii\db\ActiveRecord
 {
 
     public $lyricJson;
@@ -18,7 +18,7 @@ class StoryModels extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%story_model}}';
+        return '{{%session_model}}';
     }
 
     /**
@@ -27,10 +27,10 @@ class StoryModels extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lat', 'lng', 'show_x', 'show_y', 'show_z' ], 'number'],
-            [['story_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
+            [['lat', 'lng', 'show_x', 'show_y', 'show_z', 'is_unique', 'is_pickup' ], 'number'],
+            [['story_id', 'session_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
             [['is_delete', 'created_at', 'updated_at',], 'integer'],
-            [['scan_image_id'], 'string'],
+            [['scan_image_id', 'snapshot'], 'string'],
         ];
     }
 

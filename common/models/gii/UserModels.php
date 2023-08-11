@@ -5,19 +5,19 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%user_music_list}}".
+ * This is the model class for table "{{%user}}".
  *
  * @property int $created_at
  * @property int $updated_at
  */
-class UserMusicList extends \yii\db\ActiveRecord
+class UserModels extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%user_music_list}}';
+        return '{{%user_model}}';
     }
 
     /**
@@ -26,7 +26,7 @@ class UserMusicList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['list_id', 'music_id', 'user_id', 'ct', 'expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'session_id', 'model_id', 'is_use', 'is_delete', 'status', 'created_at', 'updated_at'], 'integer'],
         ];
     }
 
@@ -37,10 +37,6 @@ class UserMusicList extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'list_id' => 'List ID',
-            'music_id'  => 'Music ID',
-            'user_id'    => 'User ID',
-            'expire_time' => 'Expire Time',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
