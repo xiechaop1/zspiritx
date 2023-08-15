@@ -45,6 +45,10 @@ class UserController extends Controller
                 'class' => 'frontend\actions\user\UserApi',
                 'action' => 'login',
             ],
+            'new_user' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'new_user',
+            ],
 
         ];
     }

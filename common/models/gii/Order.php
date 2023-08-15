@@ -9,9 +9,9 @@ use Yii;
  *
  * @property int $id
  * @property int $user_id 用户ID
- * @property int $music_id 音乐ID
+ * @property int $story_id 剧本ID
  * @property string $amount 成交价
- * @property string $price 原价
+ * @property string $story_price 原价
  * @property int $pay_method 支付方式 1微信
  * @property int $order_status 1待付款 2已付款 3已退款
  * @property string $attach 附件
@@ -35,9 +35,9 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'music_id', 'pay_method', 'order_status', 'order_permission', 'status', 'expire_time', 'created_at', 'updated_at'], 'integer'],
-            [['price', 'amount'], 'number'],
-            [['attach', ], 'string'],
+            [['user_id', 'story_id', 'pay_method', 'order_status', 'status', 'expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['story_price', 'amount'], 'number'],
+//            [['attach', ], 'string'],
         ];
     }
 
@@ -49,11 +49,10 @@ class Order extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'music_id' => 'Music ID',
+            'story_id' => 'Story ID',
             'pay_method' => 'Pay Method',
-            'price' => 'Price',
+            'story_price' => 'Story Price',
             'amount' => 'Amount',
-            'attach' => 'Attach',
             'order_status' => 'Order Status',
             'status'    => 'Status',
             'created_at' => 'Created At',

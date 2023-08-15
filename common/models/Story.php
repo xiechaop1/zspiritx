@@ -40,5 +40,9 @@ class Story extends \common\models\gii\Story
         return $this->hasMany('common\models\UserStory',  ['id' => 'story_id']);
     }
 
+    public function getTags(){
+        return $this->hasMany('common\models\StoryTag', ['id' => 'story_id']);
+    }
+
 
 }

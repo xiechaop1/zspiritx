@@ -5,19 +5,19 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%user}}".
+ * This is the model class for table "{{%user_friends}}".
  *
  * @property int $created_at
  * @property int $updated_at
  */
-class User extends \yii\db\ActiveRecord
+class UserFriend extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%user}}';
+        return '{{%user_friends}}';
     }
 
     /**
@@ -26,9 +26,8 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_status', 'status', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
-            [['user_name', 'nick_name', 'user_pass', 'wx_openid', 'wx_unionid', 'wx_token', 'mobile', 'avatar', ], 'string'],
-            [['last_login_geo_lat', 'last_login_geo_lng'], 'number'],
+            [['user_id', 'to_user_id', 'user_friend_status', 'created_at', 'updated_at'], 'integer'],
+            [['invite_word', ], 'string'],
         ];
     }
 

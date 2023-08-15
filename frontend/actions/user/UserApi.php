@@ -10,6 +10,7 @@ namespace frontend\actions\user;
 
 
 use common\definitions\Common;
+use common\definitions\ErrorCode;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
 use frontend\actions\ApiAction;
@@ -28,11 +29,14 @@ class UserApi extends ApiAction
         try {
             $this->_get = Yii::$app->request->get();
             switch ($this->action) {
+                case 'new_user':
+                    $ret = $this->newUser();
+                    break;
                 case 'get_user':
                     $ret = $this->getUser();
                     break;
-                case 'get_session':
-                    $ret = $this->getSession();
+                case 'get_wx_session':
+                    $ret = $this->getWxSession();
                     break;
                 case 'get_mobile':
                     $ret = $this->getMobile();
@@ -60,6 +64,33 @@ class UserApi extends ApiAction
     }
 
     public function login() {
+        $userName = !empty($this->_get['user_name']) ? $this->_get['user_name'] : '';
+        $userPass = !empty($this->_get['user_pass']) ? $this->_get['user_pass'] : '';
+
+        if (empty($userName) || empty($userPass)) {
+            throw new \Exception('用户名或密码不能为空', ErrorCode::USER_PARAMETERS_INVALID);
+        }
+
+        $userInfo = User::findOne([
+            'user_name' =>  $userName,
+            'user_pass' =>  md5($userPass),
+//            'user_status'   => User::USER_STATUS_NORMAL,
+        ]);
+
+        if (empty($userInfo)) {
+            throw new \Exception('用户名或密码错误', ErrorCode::USER_PARAMETERS_INVALID);
+        }
+
+        if ($userInfo['user_status'] == User::USER_STATUS_FORBIDDEN) {
+            throw new \Exception('用户已被禁用', ErrorCode::USER_FORBIDDEN);
+        }
+
+        $_SESSION['user_info'] = $userInfo;
+
+        return $userInfo;
+    }
+
+    public function wxlogin() {
         $code = $this->_get['code'];
         $userInfo = $this->_get['user_info'];
         try {
@@ -89,6 +120,42 @@ class UserApi extends ApiAction
 
     public function getSelfToken() {
 
+    }
+
+    public function getSessionUser() {
+        return $_SESSION['user_info'];
+    }
+
+    public function newUser() {
+        $userName = !empty($this->_get['user_name']) ? $this->_get['user_name'] : '';
+//        $nickName = !empty($this->_get['nick_name']) ? $this->_get['nick_name'] : '';
+        $userInfo = User::findOne(['user_name' => $userName]);
+        if (!empty($userInfo)) {
+            throw new \Exception('用户名已存在', ErrorCode::USER_EXIST);
+        }
+
+        $userPass = !empty($this->_get['user_pass']) ? $this->_get['user_pass'] : '';
+        $avatar = !empty($this->_get['avatar']) ? $this->_get['avatar'] : '';
+        $mobile = !empty($this->_get['mobile']) ? $this->_get['mobile'] : '';
+        $geoLat = !empty($this->_get['lat']) ? $this->_get['lat'] : '';
+        $geoLng = !empty($this->_get['lng']) ? $this->_get['lng'] : '';
+
+        $userModel = new User();
+        $userModel->user_name = $userName;
+        $userModel->user_pass = md5($userPass);
+        $userModel->avatar = $avatar;
+        $userModel->mobile = $mobile;
+        $userModel->last_login_geo_lat = $geoLat;
+        $userModel->last_login_geo_lng = $geoLng;
+        $userModel->user_status = User::USER_STATUS_NORMAL;
+        try {
+            $ret = $userModel->save();
+            $userModel['id'] = Yii::$app->db->getLastInsertId();
+
+            return $userModel;
+        } catch (\Exception $e) {
+            throw new \Exception('注册失败', ErrorCode::USER_REGISTER_FAIL);
+        }
     }
 
     public function getToken() {
@@ -123,7 +190,7 @@ class UserApi extends ApiAction
         }
     }
 
-    public function getSession() {
+    public function getWxSession() {
         $code = $this->_get['code'];
         try {
             $ret = Yii::$app->wechat->getSession($code);
@@ -200,32 +267,7 @@ class UserApi extends ApiAction
 
         $ret = $retModel->one();
 
-        if ($ret) {
-//
-            $r = $ret->toArray();
-
-
-            $r['ct'] = [
-                'lock' => $ret->getUserLockCount(),
-                'fav' => $ret->getUserFavCount(),
-                'view' => $ret->getUserViewCount(),
-                'order_completed' => $ret->getUserOrderPaiedCount(),
-            ];
-
-            $r['music_last'] = [
-                'fav' => $ret->getUserLastFavMusic(),
-                'view' => $ret->getUserLastViewMusic(),
-                'lock' => $ret->getUserLastLockMusic(),
-                'order_completed' => $ret->getUserLastOrderCompletedMusic(),
-            ];
-
-        } else {
-            $r = [];
-        }
-
-//        $ret->toArray();
-
-        return $r;
+        return $ret;
     }
 
     public function updateUser() {
