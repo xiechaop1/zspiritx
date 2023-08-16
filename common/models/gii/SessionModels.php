@@ -7,11 +7,35 @@ use Yii;
 /**
  * This is the model class for table "{{%session_model}}".
  *
+ * @property int $id
+ * @property int $story_id
+ * @property int $building_id
+ * @property int $poi_id
+ * @property int $session_id
+ * @property int $timebegin
+ * @property int $timeend
+ * @property int $rate
+ * @property int $scan_type
+ * @property int $pre_story_model_id
+ * @property int $model_id
+ * @property int $misrange
+ * @property int $sort_by
+ * @property int $status
+ * @property int $is_delete
+ * @property int $created_at
+ * @property int $updated_at
+ * @property string $scan_image_id
+ * @property string $snapshot
+ * @property double $lat
+ * @property double $lng
+ * @property double $show_x
+ * @property double $show_y
+ * @property double $show_z
+ * @property int $is_unique
+ * @property int $is_pickup
  */
 class SessionModels extends \yii\db\ActiveRecord
 {
-
-    public $lyricJson;
 
     /**
      * {@inheritdoc}
@@ -28,8 +52,8 @@ class SessionModels extends \yii\db\ActiveRecord
     {
         return [
             [['lat', 'lng', 'show_x', 'show_y', 'show_z', 'is_unique', 'is_pickup' ], 'number'],
-            [['story_id', 'building_id', 'poi_id', 'session_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
-            [['is_delete', 'created_at', 'updated_at',], 'integer'],
+            [['building_id', 'poi_id', 'session_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
+            [['created_at', 'updated_at',], 'integer'],
             [['scan_image_id', 'snapshot'], 'string'],
         ];
     }

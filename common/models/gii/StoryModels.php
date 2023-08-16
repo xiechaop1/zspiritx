@@ -11,8 +11,6 @@ use Yii;
 class StoryModels extends \yii\db\ActiveRecord
 {
 
-    public $lyricJson;
-
     /**
      * {@inheritdoc}
      */

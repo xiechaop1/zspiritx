@@ -31,4 +31,10 @@ class ErrorCode extends Api
     const ORDER_STATUS_ERROR        = -30002;   // 订单状态错误
 
     const STORY_NOT_FOUND           = -20001;   // 剧本不存在
+
+    const SESSION_NOT_FOUND         = -40001;   // 场次不存在
+
+    const ROLE_NOT_FOUND            = -50001;   // 角色不存在
+
+    const ROLE_FULL                 = -50002;   // 角色已满
 }

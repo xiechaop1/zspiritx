@@ -9,6 +9,22 @@ use Yii;
  *
  * @property int $created_at
  * @property int $updated_at
+ * @property int $id
+ * @property string $user_name
+ * @property string $user_pass
+ * @property string $nick_name
+ * @property string $wx_openid
+ * @property string $wx_unionid
+ * @property string $wx_token
+ * @property int $wx_token_expire_time
+ * @property string $mobile
+ * @property string $avatar
+ * @property int $user_status
+ * @property int $last_login_time
+ * @property double $last_login_geo_lat
+ * @property double $last_login_geo_lng
+ * @property int $status
+ * @property int $is_delete
  */
 class User extends \yii\db\ActiveRecord
 {
@@ -27,7 +43,7 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['user_status', 'status', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
-            [['user_name', 'nick_name', 'user_pass', 'wx_openid', 'wx_unionid', 'wx_token', 'mobile', 'avatar', ], 'string'],
+            [['user_name', 'user_pass', 'nick_name', 'user_pass', 'wx_openid', 'wx_unionid', 'wx_token', 'mobile', 'avatar', ], 'string'],
             [['last_login_geo_lat', 'last_login_geo_lng'], 'number'],
         ];
     }
@@ -40,7 +56,7 @@ class User extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_name' => 'User Name',
-            'wx_id'  => 'WX ID',
+            'user_pass' => 'User Pass',
             'mobile'    => 'Mobile',
             'avatar'    => 'Avatar',
             'user_status'   => 'User Status',

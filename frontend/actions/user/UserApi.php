@@ -73,7 +73,7 @@ class UserApi extends ApiAction
 
         $userInfo = User::findOne([
             'user_name' =>  $userName,
-            'user_pass' =>  md5($userPass),
+            'user_pass' =>  Yii::$app->security->generatePasswordHash($userPass),
 //            'user_status'   => User::USER_STATUS_NORMAL,
         ]);
 
@@ -142,7 +142,7 @@ class UserApi extends ApiAction
 
         $userModel = new User();
         $userModel->user_name = $userName;
-        $userModel->user_pass = md5($userPass);
+        $userModel->user_pass = Yii::$app->security->generatePasswordHash($userPass);
         $userModel->avatar = $avatar;
         $userModel->mobile = $mobile;
         $userModel->last_login_geo_lat = $geoLat;
@@ -154,6 +154,7 @@ class UserApi extends ApiAction
 
             return $userModel;
         } catch (\Exception $e) {
+            var_dump($e);
             throw new \Exception('注册失败', ErrorCode::USER_REGISTER_FAIL);
         }
     }

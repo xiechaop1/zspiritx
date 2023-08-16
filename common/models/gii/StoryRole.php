@@ -8,8 +8,10 @@ use Yii;
  * This is the model class for table "{{%story_role}}".
  *
  * @property int $id
- * @property int $tag_type 0非特殊
- * @property string $tag_name 标签名
+ * @property int $story_id
+ * @property string $role_name
+ * @property string $role_desc
+ * @property int $role_max_ct
  * @property int $created_at
  * @property int $updated_at
  */
@@ -29,7 +31,7 @@ class StoryRole extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'created_at', 'updated_at'], 'integer'],
+            [['story_id', 'role_max_ct', 'created_at', 'updated_at'], 'integer'],
             [['role_name'], 'string', 'max' => 32],
             [['role_desc'], 'string'],
         ];

@@ -5,11 +5,11 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%tag}}".
+ * This is the model class for table "{{%session}}".
  *
  * @property int $id
- * @property int $tag_type 0非特殊
- * @property string $tag_name 标签名
+ * @property int $session_status 场次状态
+ * @property string $session_name 场次名称
  * @property int $created_at
  * @property int $updated_at
  */
@@ -29,8 +29,8 @@ class Session extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'created_at', 'updated_at'], 'integer'],
-            [['session_name'], 'string', 'max' => 32],
+            [['user_id', 'session_status', 'created_at', 'updated_at'], 'integer'],
+            [['session_name'], 'string'],
         ];
     }
 
