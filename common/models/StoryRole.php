@@ -20,19 +20,4 @@ class StoryRole extends \common\models\gii\StoryRole
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'role_name',
-            'story_id',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'role_name' => 'Role Name',
-        ];
-    }
 }

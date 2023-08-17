@@ -20,18 +20,4 @@ class Building extends \common\models\gii\Building
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'building_name',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'building_name' => 'Building Name',
-        ];
-    }
 }

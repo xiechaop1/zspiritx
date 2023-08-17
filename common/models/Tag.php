@@ -20,19 +20,4 @@ class Tag extends \common\models\gii\Tag
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'tag_name',
-            'tag_type',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'tag_name' => 'Tag',
-        ];
-    }
 }

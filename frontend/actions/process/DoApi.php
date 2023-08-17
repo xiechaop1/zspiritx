@@ -149,6 +149,7 @@ class DoApi extends ApiAction
                     }
                     $sessionModel->$key = $value;
                 }
+                $sessionModel->story_model_id = $storyModel->id;
                 $sessionModel->session_id = $this->_sessionInfo['id'];
                 $sessionModel->snapshot = json_encode($storyModel->toArray(), true);
                 $sessionModel->is_pickup = 0;
@@ -249,26 +250,33 @@ class DoApi extends ApiAction
 
         }
 
-        $ret = SessionModels::find()
+        $sessModels = SessionModels::find()
             ->with('model')
             ->where([
                 'session_id' => (int)$sessionId,
 //                'story_id'  => (int)$storyId,
             ]);
 //        if (!empty($preStoryModelId)) {
-            $ret = $ret->andFilterWhere([
+            $sessModels = $sessModels->andFilterWhere([
                 'pre_story_model_id' => (int)$preStoryModelId,
             ]);
-            $ret = $ret->andFilterWhere([
+            $sessModels = $sessModels->andFilterWhere([
                 'or',
-                'is_unique' => SessionModels::IS_UNIQUE_NO,
-                'is_pickup' => SessionModels::IS_PICKUP_NO,
+                ['is_unique' => SessionModels::IS_UNIQUE_NO,],
+                ['is_pickup' => SessionModels::IS_PICKUP_NO,]
             ]);
 //        }
 
-        $ret = $ret->all();
+//        var_dump($ret->createCommand()->getRawSql());exit;
+        $sessModels = $sessModels->all();
 
-        return $ret;
+//        $ret = [];
+//        foreach ($sessModels as $row) {
+//            unset($row['snapshot']);
+//            $ret[] = $row;
+//        }
+
+        return $sessModels;
 
     }
 

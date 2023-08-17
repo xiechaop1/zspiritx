@@ -20,18 +20,4 @@ class Models extends \common\models\gii\Models
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'model_name',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'model_name' => 'Model Name',
-        ];
-    }
 }

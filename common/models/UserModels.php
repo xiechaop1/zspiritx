@@ -20,17 +20,4 @@ class UserModels extends \common\models\gii\UserModels
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-
-        ];
-    }
 }

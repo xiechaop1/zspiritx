@@ -20,18 +20,4 @@ class Team extends \common\models\gii\Team
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'team_name',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'team_name' => 'Team Name',
-        ];
-    }
 }

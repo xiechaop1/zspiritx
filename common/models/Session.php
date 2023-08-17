@@ -32,18 +32,4 @@ class Session extends \common\models\gii\Session
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'team_name',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'session_name' => 'Session Name',
-        ];
-    }
 }

@@ -20,18 +20,4 @@ class Poi extends \common\models\gii\Poi
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'poi_name',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'poi_name' => 'POI Name',
-        ];
-    }
 }

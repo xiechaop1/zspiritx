@@ -26,17 +26,7 @@ class SessionModels extends \common\models\gii\SessionModels
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-
-        ];
+    public function getModel(){
+        return $this->hasOne('common\models\Models',  ['id' => 'model_id']);
     }
 }
