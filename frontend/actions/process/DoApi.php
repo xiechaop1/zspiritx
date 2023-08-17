@@ -125,6 +125,8 @@ class DoApi extends ApiAction
             if (empty($this->_sessionInfo)) {
                 $sessionObj = new Session();
                 $sessionObj->session_name = $this->_userInfo['user_name'] . ' 创建 ' . $this->_storyInfo['title'] . ' ' . ' 场次';
+                $sessionObj->user_id = $this->_userId;
+                $sessionObj->story_id = $this->_storyId;
                 $sessionObj->session_status = Session::SESSION_STATUS_INIT;
                 $ret = $sessionObj->save();
 

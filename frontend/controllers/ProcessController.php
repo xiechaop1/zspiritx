@@ -18,13 +18,21 @@ class ProcessController extends Controller
     public function actions()
     {
         return [
-            'init' => [
+            'initdata' => [
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'init',
             ],
-            'get_models' => [
+            'join' => [
                 'class'     => 'frontend\actions\process\DoApi',
-                'action'    => 'get_models',
+                'action'    => 'join',
+            ],
+            'get_session_models' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'get_session_models',
+            ],
+            'update_session_models' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'update_session_models',
             ],
         ];
     }

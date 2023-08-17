@@ -29,7 +29,7 @@ class Session extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'session_status', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'story_id', 'session_status', 'created_at', 'updated_at'], 'integer'],
             [['session_name'], 'string'],
         ];
     }
