@@ -279,10 +279,17 @@ class DoApi extends ApiAction
                 'session_id' => (int)$sessionId,
 //                'story_id'  => (int)$storyId,
             ]);
-//        if (!empty($preStoryModelId)) {
+        if (!empty($preStoryModelId)) {
             $sessModels = $sessModels->andFilterWhere([
                 'pre_story_model_id' => (int)$preStoryModelId,
             ]);
+        } else {
+            $sessModels = $sessModels->andFilterWhere([
+                'or',
+                ['pre_story_model_id' => $preStoryModelId,],
+                ['is_set' => SessionModels::IS_SET_YES,]
+            ]);
+        }
             $sessModels = $sessModels->andFilterWhere([
                 'or',
                 ['is_unique' => SessionModels::IS_UNIQUE_NO,],
@@ -292,6 +299,18 @@ class DoApi extends ApiAction
 
 //        var_dump($ret->createCommand()->getRawSql());exit;
         $sessModels = $sessModels->all();
+
+        try {
+            $transaction = Yii::$app->db->beginTransaction();
+            foreach ($sessModels as $sModel) {
+                $sModel->is_set = SessionModels::IS_SET_YES;
+                $sModel->save();
+            }
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return $this->fail($e->getMessage(), $e->getCode());
+        }
 
         return $sessModels;
 

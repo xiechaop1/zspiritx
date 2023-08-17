@@ -17,6 +17,10 @@ class SessionModels extends \common\models\gii\SessionModels
     const IS_UNIQUE_YES = 1;
     const IS_UNIQUE_NO = 0;
 
+    const IS_SET_YES    = 1;
+
+    const IS_SET_NO     = 0;
+
     public function behaviors()
     {
         return [
