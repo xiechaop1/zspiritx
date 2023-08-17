@@ -37,4 +37,8 @@ class ErrorCode extends Api
     const ROLE_NOT_FOUND            = -50001;   // 角色不存在
 
     const ROLE_FULL                 = -50002;   // 角色已满
+
+    const DO_PRE_MODELS_NOT_FOUND   = -60001;   // 没有前置模型
+
+    const DO_MODELS_PICK_UP_FAIL    = -60002;   // 模型拾取失败
 }

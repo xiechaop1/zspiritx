@@ -19,10 +19,8 @@ use common\models\StoryExtend;
 use common\models\StoryModels;
 use common\models\StoryRole;
 use common\models\User;
-use common\models\UserList;
-use common\models\UserMusicList;
-use common\models\Music;
 use common\models\UserStory;
+use common\models\UserModels;
 use frontend\actions\ApiAction;
 use frontend\actions\order\Exception;
 use Yii;
@@ -40,6 +38,8 @@ class DoApi extends ApiAction
 
     private $_sessionInfo;
 
+    private $_buildingId;
+
     public function run()
     {
 
@@ -49,6 +49,8 @@ class DoApi extends ApiAction
             $this->_get = Yii::$app->request->get();
 
             $this->_userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+
+            $this->_buildingId = !empty($this->_get['building_id']) ? $this->_get['building_id'] : 0;
 
             if (empty($this->_userId)) {
                 return $this->fail('请您给出用户信息', ErrorCode::USER_NOT_FOUND);
@@ -86,6 +88,12 @@ class DoApi extends ApiAction
                     break;
                 case 'join':
                     $ret = $this->join();
+                    break;
+                case 'get_session_models':
+                    $ret = $this->getSessionModels();
+                    break;
+                case 'update_session_models':
+                    $ret = $this->updateSessionModels();
                     break;
                 default:
                     $ret = [];
@@ -126,8 +134,11 @@ class DoApi extends ApiAction
             }
 
             $storyModels = StoryModels::find()
-                ->where(['story_id' => (int)$this->_storyId])
-                ->all();
+                ->where(['story_id' => (int)$this->_storyId]);
+            if (!empty($this->_buildingId)) {
+                $storyModels->andFilterWhere(['building_id' => (int)$this->_buildingId]);
+            }
+            $storyModels = $storyModels->all();
             foreach ($storyModels as $storyModel) {
                 $sessionModel = new SessionModels();
                 foreach ($storyModel as $key => $value) {
@@ -174,6 +185,7 @@ class DoApi extends ApiAction
                 'story_id' => (int)$this->_storyId,
                 'session_id' => (int)$this->_sessionId,
                 'role_id' => (int)$roleId,
+                'building_id' => (int)$this->_buildingId,
             ])
             ->count();
 
@@ -209,6 +221,104 @@ class DoApi extends ApiAction
         }
 
 
+
+        return $ret;
+    }
+
+    public function getSessionModels(){
+        $preStoryModelId = !empty($this->_get['pre_story_model_id']) ? $this->_get['pre_story_model_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        if (!empty($preStoryModelId)) {
+            $preModel = SessionModels::find()
+                ->where([
+                    'story_model_id' => (int)$preStoryModelId,
+                    'session_id'    => (int)$sessionId,
+                    'story_id'      => (int)$storyId,
+                    'is_pickup'     => SessionModels::IS_PICKUP_YES,
+                ])
+                ->one();
+            if (empty($preModel)) {
+//                return $this->fail('物品不存在', ErrorCode::DO_PRE_MODELS_NOT_FOUND);
+                return [];
+            }
+
+        }
+
+        $ret = SessionModels::find()
+            ->with('model')
+            ->where([
+                'session_id' => (int)$sessionId,
+                'story_id'  => (int)$storyId,
+            ]);
+//        if (!empty($preStoryModelId)) {
+            $ret = $ret->andFilterWhere([
+                'pre_story_model_id' => (int)$preStoryModelId,
+            ]);
+            $ret = $ret->andFilterWhere([
+                'or',
+                'is_unique' => SessionModels::IS_UNIQUE_NO,
+                'is_pickup' => SessionModels::IS_PICKUP_NO,
+            ]);
+//        }
+
+        $ret = $ret->all();
+
+        return $ret;
+
+    }
+
+    public function updateSessionModels() {
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
+        $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
+
+        $transaction = Yii::$app->db->beginTransaction();
+        $sessionModel = SessionModels::find()
+            ->where([
+                'session_id' => (int)$sessionId,
+                'story_id'  => (int)$storyId,
+                'story_model_id' => (int)$storyModelId,
+                'is_pickup' => SessionModels::IS_PICKUP_NO,
+            ])
+            ->one();
+
+        if (empty($sessionModel)) {
+            return $this->fail('物品可能已经被拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+        }
+
+        $sessionModel->is_pickup = SessionModels::IS_PICKUP_YES;
+        try {
+            $ret = $sessionModel->save();
+
+            $userModelBaggage = UserModels::find()
+                ->where([
+                    'user_id'           => (int)$userId,
+                    'session_id'        => (int)$sessionId,
+                    'model_id'          => $sessionModel->model_id,
+                    'story_model_id'    => (int)$storyModelId,
+                    'session_model_id'  => $sessionModel->id,
+                ])
+                ->one();
+            if (empty($userModelBaggage)) {
+                $userModel = new UserModels();
+                $userModel->user_id = $userId;
+                $userModel->session_id = $sessionId;
+                $userModel->model_id = $sessionModel->model_id;
+                $userModel->story_model_id = $storyModelId;
+                $userModel->session_model_id = $sessionModel->id;
+                $ret = $userModel->save();
+            }
+            $transaction->commit();
+
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return $this->fail($e->getMessage(), $e->getCode());
+        }
 
         return $ret;
     }

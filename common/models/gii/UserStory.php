@@ -26,7 +26,7 @@ class UserStory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'role_id', 'story_id', 'session_id', 'team_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'role_id', 'story_id', 'session_id', 'team_id', 'building_id', 'status', 'created_at', 'updated_at'], 'integer'],
         ];
     }
 
