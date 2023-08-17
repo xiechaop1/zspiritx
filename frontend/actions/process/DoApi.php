@@ -95,6 +95,9 @@ class DoApi extends ApiAction
                 case 'pickup':
                     $ret = $this->pickupModels();
                     break;
+                case 'get_baggage_models':
+                    $ret = $this->getBaggageModels();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -226,6 +229,26 @@ class DoApi extends ApiAction
 
 
         return $ret;
+    }
+
+    public function getBaggageModels(){
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        $bagModels = UserModels::find()
+            ->with('models', 'sessionModels')
+            ->where([
+                'session_id' => (int)$sessionId,
+                'user_id'   => (int)$userId,
+//                'story_id'  => (int)$storyId,
+            ]);
+
+//        var_dump($ret->createCommand()->getRawSql());exit;
+        $bagModels = $bagModels->all();
+
+        return $bagModels;
+
     }
 
     public function getSessionModels(){

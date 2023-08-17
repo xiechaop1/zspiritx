@@ -20,4 +20,12 @@ class UserModels extends \common\models\gii\UserModels
         ];
     }
 
+    public function getModels(){
+        return $this->hasOne('common\models\Models',  ['id' => 'model_id']);
+    }
+
+    public function getSessionModels(){
+        return $this->hasOne('common\models\SessionModels',  ['id' => 'session_model_id']);
+    }
+
 }

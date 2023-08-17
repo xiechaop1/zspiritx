@@ -28,4 +28,8 @@ class UserStory extends \common\models\gii\UserStory
         $ret = $this->save();
         return $ret;
     }
+
+    public function getStory(){
+        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
+    }
 }

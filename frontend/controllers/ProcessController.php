@@ -18,7 +18,7 @@ class ProcessController extends Controller
     public function actions()
     {
         return [
-            'initdata' => [
+            'init' => [
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'init',
             ],
@@ -33,6 +33,10 @@ class ProcessController extends Controller
             'pickup' => [
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'pickup',
+            ],
+            'get_baggage_models' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'get_baggage_models',
             ],
         ];
     }
