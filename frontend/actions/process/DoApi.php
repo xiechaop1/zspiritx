@@ -238,7 +238,7 @@ class DoApi extends ApiAction
                 ->where([
                     'story_model_id' => (int)$preStoryModelId,
                     'session_id'    => (int)$sessionId,
-                    'story_id'      => (int)$storyId,
+//                    'story_id'      => (int)$storyId,
                     'is_pickup'     => SessionModels::IS_PICKUP_YES,
                 ])
                 ->one();
@@ -253,7 +253,7 @@ class DoApi extends ApiAction
             ->with('model')
             ->where([
                 'session_id' => (int)$sessionId,
-                'story_id'  => (int)$storyId,
+//                'story_id'  => (int)$storyId,
             ]);
 //        if (!empty($preStoryModelId)) {
             $ret = $ret->andFilterWhere([
@@ -283,7 +283,7 @@ class DoApi extends ApiAction
         $sessionModel = SessionModels::find()
             ->where([
                 'session_id' => (int)$sessionId,
-                'story_id'  => (int)$storyId,
+//                'story_id'  => (int)$storyId,
                 'story_model_id' => (int)$storyModelId,
                 'is_pickup' => SessionModels::IS_PICKUP_NO,
             ])
