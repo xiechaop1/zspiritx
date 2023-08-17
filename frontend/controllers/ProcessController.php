@@ -30,9 +30,9 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'get_session_models',
             ],
-            'update_session_models' => [
+            'pickup' => [
                 'class'     => 'frontend\actions\process\DoApi',
-                'action'    => 'update_session_models',
+                'action'    => 'pickup',
             ],
         ];
     }

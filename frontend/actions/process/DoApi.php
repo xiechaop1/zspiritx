@@ -92,8 +92,8 @@ class DoApi extends ApiAction
                 case 'get_session_models':
                     $ret = $this->getSessionModels();
                     break;
-                case 'update_session_models':
-                    $ret = $this->updateSessionModels();
+                case 'pickup':
+                    $ret = $this->pickupModels();
                     break;
                 default:
                     $ret = [];
@@ -270,17 +270,11 @@ class DoApi extends ApiAction
 //        var_dump($ret->createCommand()->getRawSql());exit;
         $sessModels = $sessModels->all();
 
-//        $ret = [];
-//        foreach ($sessModels as $row) {
-//            unset($row['snapshot']);
-//            $ret[] = $row;
-//        }
-
         return $sessModels;
 
     }
 
-    public function updateSessionModels() {
+    public function pickupModels() {
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
@@ -324,6 +318,10 @@ class DoApi extends ApiAction
                 $ret = $userModel->save();
             }
             $transaction->commit();
+
+            $this->_get['pre_story_model_id'] = $storyModelId;
+
+            $ret = $this->getSessionModels();
 
         } catch (\Exception $e) {
             $transaction->rollBack();
