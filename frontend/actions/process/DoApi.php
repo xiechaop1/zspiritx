@@ -16,6 +16,7 @@ use common\models\Session;
 use common\models\SessionModels;
 use common\models\Story;
 use common\models\StoryExtend;
+use common\models\StoryGoal;
 use common\models\StoryModels;
 use common\models\StoryRole;
 use common\models\User;
@@ -97,6 +98,9 @@ class DoApi extends ApiAction
                     break;
                 case 'get_baggage_models':
                     $ret = $this->getBaggageModels();
+                    break;
+                case 'finish':
+                    $ret = $this->finish();
                     break;
                 default:
                     $ret = [];
@@ -227,6 +231,57 @@ class DoApi extends ApiAction
         }
 
 
+
+        return $ret;
+    }
+
+    public function finish() {
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+
+        $goal = !empty($this->_get['goal']) ? $this->_get['goal'] : '';
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        $sessionInfo = Session::find()
+            ->where([
+                'id' => (int)$sessionId,
+                'user_id' => (int)$userId,
+            ])
+            ->one();
+
+        if (empty($sessionInfo)) {
+            return $this->fail('场次不存在', ErrorCode::SESSION_NOT_FOUND);
+        }
+
+        try {
+            $sessionInfo->session_status = Session::SESSION_STATUS_FINISH;
+            $ret = $sessionInfo->save();
+
+            $storyGoals = StoryGoal::find()
+                ->where(['story_id' => (int)$this->_storyId])
+                ->one();
+
+            $userStory = UserStory::findOne([
+                'user_id'       =>  (int)$userId,
+                'story_id'      =>  (int)$this->_storyId,
+                'session_id'    =>  (int)$sessionId,
+            ]);
+
+            $userStory->goal = $goal;
+
+            if ($goal == $storyGoals->goal) {
+                $userStory->goal_right = '结论正确';
+            } else {
+                $userStory->goal_right = '结论错误，正确结论：' . $storyGoals->goal;
+            }
+            $ret = $userStory->save();
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return $this->fail($e->getMessage(), $e->getCode());
+        }
 
         return $ret;
     }

@@ -9,10 +9,9 @@
 namespace common\models;
 
 
-use common\definitions\Common;
-
-class UserStory extends \common\models\gii\UserStory
+class StoryGoal extends \common\models\gii\StoryGoal
 {
+
 
     public function behaviors()
     {
@@ -29,12 +28,5 @@ class UserStory extends \common\models\gii\UserStory
         return $ret;
     }
 
-    public function getStory(){
-        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
-    }
-
-    public function getTeam(){
-        return $this->hasOne('common\models\Team',  ['id' => 'team_id']);
-    }
 
 }
