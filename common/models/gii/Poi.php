@@ -41,10 +41,7 @@ class Poi extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'tag_type' => 'Tag Type',
-            'tag_name' => 'Tag Name',
-            'level'     => 'Leve',
-            'parent_id' => 'Parent Id',
+            'poi_name' => 'Poi Name',
             'deleted_at'    => 'Deleted At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

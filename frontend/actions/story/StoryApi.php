@@ -9,7 +9,10 @@
 namespace frontend\actions\story;
 
 
+use common\definitions\ErrorCode;
 use common\models\Story;
+use common\models\StoryExtend;
+use common\models\StoryGoal;
 use frontend\actions\ApiAction;
 use Yii;
 
@@ -27,6 +30,12 @@ class StoryApi extends ApiAction
             case 'all':
                 $ret = $this->getStoryList();
                 break;
+            case 'detail':
+                $ret = $this->getStoryDetail();
+                break;
+            case 'goal':
+                $ret = $this->getStoryGoal();
+                break;
             default:
                 $ret = [];
                 break;
@@ -34,6 +43,43 @@ class StoryApi extends ApiAction
         }
 
         return $this->success($ret);
+    }
+
+    // 获取故事详情
+    public function getStoryDetail() {
+
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        if (empty($storyId)) {
+            return $this->fail('故事ID不能为空', ErrorCode::STORY_NOT_FOUND);
+        }
+
+        $story = Story::find()
+            ->where(['id' => $storyId])
+            ->one();
+
+        $story['extend'] = StoryExtend::findOne(['story_id' => $storyId]);
+
+        return $story;
+    }
+
+    // 获取故事结果
+    public function getStoryGoal() {
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        if (empty($storyId)) {
+            return $this->fail('故事ID不能为空', ErrorCode::STORY_NOT_FOUND);
+        }
+
+        $story = StoryGoal::find()
+            ->where(['id' => $storyId])
+            ->one();
+
+        if (!empty($story['selected'])) {
+            $story['selected'] = json_decode($story['selected'], true);
+        }
+
+        return $story;
     }
 
     public function getStoryList() {
