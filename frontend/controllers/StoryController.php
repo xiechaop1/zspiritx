@@ -30,6 +30,14 @@ class StoryController extends Controller
                 'class'     => 'frontend\actions\story\StoryApi',
                 'action'    => 'goal',
             ],
+            'role' => [
+                'class'     => 'frontend\actions\story\StoryApi',
+                'action'    => 'role',
+            ],
+            'session' => [
+                'class'     => 'frontend\actions\story\StoryApi',
+                'action'    => 'session',
+            ],
         ];
     }
 }
