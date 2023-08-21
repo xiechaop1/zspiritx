@@ -1,0 +1,44 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: choiceGroup
+ * Date: 2023/5/18
+ * Time: 下午6:06
+ */
+
+namespace common\models;
+
+
+use common\definitions\Common;
+
+class UserScore extends \common\models\gii\UserScore
+{
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => 'yii\behaviors\TimestampBehavior',
+            ]
+        ];
+    }
+
+    public function exec() {
+
+        $ret = $this->save();
+        return $ret;
+    }
+
+    public function getStory(){
+        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
+    }
+
+    public function getTeam(){
+        return $this->hasOne('common\models\Team',  ['id' => 'team_id']);
+    }
+
+    public function getSession(){
+        return $this->hasOne('common\models\Session',  ['id' => 'session_id']);
+    }
+
+}

@@ -13,6 +13,9 @@ use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
+use common\models\UserList;
+use common\models\UserScore;
+use common\models\UserStory;
 use frontend\actions\ApiAction;
 use yii;
 
@@ -50,6 +53,25 @@ class UserApi extends ApiAction
                 case 'update_user':
                     $this->valToken();
                     $ret = $this->updateUser();
+                    break;
+
+                case 'get_user_list_by_session':
+                    $ret = $this->getUserListBySession();
+                    break;
+                case 'get_user_list_by_story':
+                    $ret = $this->getUserListByStory();
+                    break;
+                case 'get_user_list_by_team':
+                    $ret = $this->getUserListByTeam();
+                    break;
+                case 'get_user_score_rank':
+                    $ret = $this->getUserScoreRank();
+                    break;
+                case 'add_user_score':
+                    $ret = $this->addUserScore();
+                    break;
+                case 'get_user_score':
+                    $ret = $this->getUserScore();
                     break;
                 default:
                     $ret = [];
@@ -289,6 +311,129 @@ class UserApi extends ApiAction
 //            return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
     }
+
+    public function getUserListBySession() {
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : '';
+
+        $ret = UserStory::find()
+            ->where(['session_id' => $sessionId])
+            ->with('user')
+            ->asArray()
+            ->all();
+
+        return $ret;
+    }
+
+    public function getUserListByStory() {
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : '';
+
+        $ret = UserStory::find()
+            ->where(['story_id' => $storyId])
+            ->with('user')
+            ->asArray()
+            ->all();
+
+        return $ret;
+    }
+
+    public function getUserListByTeam() {
+        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : '';
+
+        $ret = UserTeam::find()
+            ->where(['team_id' => $teamId])
+            ->with('user')
+            ->asArray()
+            ->all();
+
+        return $ret;
+    }
+
+    public function addUserScore() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
+        $score = !empty($this->_get['score']) ? $this->_get['score'] : 0;
+
+        try {
+            $userScore = UserScore::find()
+                ->where([
+                    'user_id' => $userId,
+                    'story_id' => $storyId,
+                    'session_id' => $sessionId,
+                ]);
+
+            if (!empty($teamId)) {
+                $userScore = $userScore->andFilterWhere(['team_id' => $teamId]);
+            }
+
+            $userScore = $userScore->one();
+
+            if (empty($userScore)) {
+                $userScore = new UserScore();
+                $userScore->user_id = $userId;
+                $userScore->story_id = $storyId;
+                $userScore->session_id = $sessionId;
+                $userScore->team_id = $teamId;
+                $userScore->score = $score;
+            } else {
+                $userScore->score = $userScore + $score;
+            }
+            $ret = $userScore->save();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $ret;
+    }
+
+    public function getUserScore() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
+
+        $ret = UserScore::find()
+            ->where([
+                'user_id' => $userId,
+                'story_id' => $storyId,
+                'session_id' => $sessionId,
+            ]);
+
+        if (!empty($teamId)) {
+            $ret = $ret->andFilterWhere(['team_id' => $teamId]);
+        }
+        $ret = $ret->one();
+
+        return $ret;
+    }
+
+    public function getUserScoreRank() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
+
+        $ret = UserScore::find()
+            ->where([
+                'user_id'   => $userId,
+                'story_id'  => $storyId,
+            ]);
+
+        if (!empty($sessionId)) {
+            $ret = $ret->andFilterWhere(['session_id' => $sessionId]);
+        }
+
+        if (!empty($teamId)) {
+            $ret = $ret->andFilterWhere(['team_id' => $teamId]);
+        }
+
+        $ret = $ret->orderBy('score desc')->asArray()->all();
+
+        return $ret;
+
+    }
+
 
 
 }

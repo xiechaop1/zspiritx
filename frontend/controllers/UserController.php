@@ -50,6 +50,31 @@ class UserController extends Controller
                 'action' => 'new_user',
             ],
 
+            'get_user_list_by_story' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'get_user_list_by_story',
+            ],
+            'get_user_list_by_session' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'get_user_list_by_session',
+            ],
+            'get_user_list_by_team' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'get_user_list_by_team',
+            ],
+            'get_user_score_rank' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'get_user_score_rank',
+            ],
+            'add_user_score' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'add_user_score',
+            ],
+            'get_user_score' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'get_user_score',
+            ],
+
         ];
     }
 }
