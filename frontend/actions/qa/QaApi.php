@@ -28,10 +28,20 @@ class QaApi extends ApiAction
 
 //    public $userId;
 
+    private $_storyId;
+
+    private $_story;
+
     private $_get;
 
     public function run()
     {
+        $this->_storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        if (empty($this->_storyId)) {
+            throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+        }
+
         try {
             $this->_get = Yii::$app->request->get();
             switch ($this->action) {
