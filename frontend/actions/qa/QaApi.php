@@ -136,7 +136,7 @@ class QaApi extends ApiAction
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
 
         if (!empty($qa['st_selected'])
-            && is_json($qa['st_selected'])
+            && \common\helpers\Common::isJson($qa['st_selected'])
         ) {
             $qa['st_selected'] = json_decode($qa['st_selected'], true);
         }
