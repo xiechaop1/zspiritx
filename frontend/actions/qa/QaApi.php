@@ -157,7 +157,7 @@ class QaApi extends ApiAction
             throw new \Exception('问答不存在', ErrorCode::QA_NOT_EXIST);
         }
 
-        $userQa = UserQa::find()->where(['user_id' => $userId, 'qa_id' => $qaId])->asArray()->one();
+        $userQa = UserQa::findOne(['user_id' => $userId, 'qa_id' => $qaId]);
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
@@ -173,11 +173,16 @@ class QaApi extends ApiAction
                 $userQa->qa_id = $qaId;
                 $userQa->answer = $answer;
                 $userQa->is_right = $isRight;
+                $ret = $userQa->save();
+                $userQaId = Yii::$app->db->getLastInsertID();
+                $userQa->id = $userQaId;
+
             } else {
                 $userQa->answer = $answer;
                 $userQa->is_right = $isRight;
+                $ret = $userQa->save();
             }
-            $ret = $userQa->save();
+
 
             if (!empty($sessionId)) {
                 $sessionQa = SessionQa::find()->where(['session_id' => $sessionId, 'qa_id' => $qaId])->asArray()->one();
@@ -187,10 +192,14 @@ class QaApi extends ApiAction
             }
 
             $transaction->commit();
+
         } catch (\Exception $e) {
+            var_dump($e);
             $transaction->rollBack();
             throw new \Exception('添加用户问答失败', ErrorCode::QA_SAVE_FAILED);
         }
+
+        $ret = $userQa;
 
         return $ret;
     }
