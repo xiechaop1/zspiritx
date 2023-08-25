@@ -36,14 +36,15 @@ class QaApi extends ApiAction
 
     public function run()
     {
-        $this->_storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $this->_get = Yii::$app->request->get();
 
-        if (empty($this->_storyId)) {
-            throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
-        }
 
         try {
-            $this->_get = Yii::$app->request->get();
+            $this->_storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+            if (empty($this->_storyId)) {
+                throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+            }
+
             switch ($this->action) {
                 case 'get_qa_list':
                     $ret = $this->getQaList();
