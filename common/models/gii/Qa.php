@@ -33,7 +33,7 @@ class Qa extends \yii\db\ActiveRecord
     {
         return [
             [['qa_type', 'story_id', 'created_at', 'updated_at'], 'integer'],
-            [['topic', 'attachment', 'st_answer', 'st_selected', 'selected'], 'string'],
+            [['topic', 'voice', 'attachment', 'st_answer', 'st_selected', 'selected'], 'string'],
         ];
     }
 

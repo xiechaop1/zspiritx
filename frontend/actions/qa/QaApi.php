@@ -157,6 +157,7 @@ class QaApi extends ApiAction
             }
             if (empty($userQa)) {
                 $userQa = new UserQa();
+                $userQa->story_id = $qa['story_id'];
                 $userQa->user_id = $userId;
                 $userQa->qa_id = $qaId;
                 $userQa->answer = $answer;
