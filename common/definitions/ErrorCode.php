@@ -41,4 +41,8 @@ class ErrorCode extends Api
     const DO_PRE_MODELS_NOT_FOUND   = -60001;   // 没有前置模型
 
     const DO_MODELS_PICK_UP_FAIL    = -60002;   // 模型拾取失败
+
+    const QA_NOT_EXIST              = -70001;   // 问答不存在
+
+    const QA_SAVE_FAILED            = -70002;   // 问答保存失败
 }
