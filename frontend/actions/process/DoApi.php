@@ -153,7 +153,7 @@ class DoApi extends ApiAction
             foreach ($storyModels as $storyModel) {
                 $checkSessionModel = SessionModels::find()
                     ->where([
-                        'story_id'  => (int)$this->_storyId,
+//                        'story_id'  => (int)$this->_storyId,
                         'session_id'    => (int)$this->_sessionInfo['id'],
                         'story_model_id'    => (int)$storyModel['id'],
                     ]);
