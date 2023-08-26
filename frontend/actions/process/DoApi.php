@@ -12,8 +12,10 @@ namespace frontend\actions\process;
 use common\definitions\ErrorCode;
 use common\models\Log;
 use common\models\Order;
+use common\models\Qa;
 use common\models\Session;
 use common\models\SessionModels;
+use common\models\SessionQa;
 use common\models\Story;
 use common\models\StoryExtend;
 use common\models\StoryGoal;
@@ -149,6 +151,21 @@ class DoApi extends ApiAction
             }
             $storyModels = $storyModels->all();
             foreach ($storyModels as $storyModel) {
+                $checkSessionModel = SessionModels::find()
+                    ->where([
+                        'story_id'  => (int)$this->_storyId,
+                        'session_id'    => (int)$this->_sessionInfo['id'],
+                        'story_model_id'    => (int)$storyModel['id'],
+                    ]);
+                if (!empty($this->_buildingId)) {
+                    $checkSessionModel->andFilterWhere(['building_id' => (int)$this->_buildingId]);
+                }
+                $checkSession = $checkSessionModel->one();
+
+                if (!empty($checkSession)) {
+                    continue;
+                }
+
                 $sessionModel = new SessionModels();
                 foreach ($storyModel as $key => $value) {
                     if (in_array($key, ['id', 'story_id'])) {
@@ -161,6 +178,34 @@ class DoApi extends ApiAction
                 $sessionModel->snapshot = json_encode($storyModel->toArray(), true);
                 $sessionModel->is_pickup = 0;
                 $sessionModel->save();
+            }
+
+            $qaModels = Qa::find()
+                ->where([
+                    'story_id'  => (int)$this->_storyId,
+                ])
+                ->all();
+
+            foreach ($qaModels as $qaModel) {
+                $checkSessionQa = SessionQa::find()
+                    ->where([
+                        'story_id'  => (int)$this->_storyId,
+                        'session_id'    => (int)$this->_sessionInfo['id'],
+                        'qa_id'    => (int)$qaModel['id'],
+                    ])
+                    ->one();
+
+                if (!empty($checkSessionQa)) {
+                    continue;
+                }
+
+                $sessionQa = new SessionQa();
+                $sessionQa->qa_id = $qaModel->id;
+                $sessionQa->story_id = $qaModel->story_id;
+                $sessionQa->qa_type = $qaModel->qa_type;
+                $sessionQa->session_id = $this->_sessionInfo['id'];
+                $sessionQa->snapshot = json_encode($qaModel->toArray(), true);
+                $sessionQa->save();
             }
 
 
