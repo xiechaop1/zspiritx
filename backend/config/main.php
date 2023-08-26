@@ -8,7 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
-    'name' => '歌曲管理后台',
+    'name' => '庄生管理后台',
     'timeZone' => 'Asia/Shanghai',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',

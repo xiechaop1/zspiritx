@@ -47,7 +47,7 @@ use dmstr\widgets\Alert;
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.0
     </div>
-    <strong>Copyright &copy; 2020-2023 <a href="#">歌曲管理</a>.</strong> All rights
+    <strong>Copyright &copy; 2020-2023 <a href="#">庄生管理</a>.</strong> All rights
     reserved.
 </footer>
 
