@@ -157,7 +157,7 @@ class QaApi extends ApiAction
             throw new \Exception('问答不存在', ErrorCode::QA_NOT_EXIST);
         }
 
-        $userQa = UserQa::findOne(['user_id' => $userId, 'qa_id' => $qaId]);
+        $userQa = UserQa::findOne(['user_id' => $userId, 'session_id' => $sessionId, 'qa_id' => $qaId]);
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
@@ -169,6 +169,7 @@ class QaApi extends ApiAction
             if (empty($userQa)) {
                 $userQa = new UserQa();
                 $userQa->story_id = $qa['story_id'];
+                $userQa->session_id = $sessionId;
                 $userQa->user_id = $userId;
                 $userQa->qa_id = $qaId;
                 $userQa->answer = $answer;

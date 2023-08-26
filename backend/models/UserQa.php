@@ -13,19 +13,20 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class UserMusicList extends \common\models\UserMusicList
+class UserQa extends \common\models\UserQa
 {
 
     public function rules()
     {
         return [
-            [['list_id', 'music_id', 'user_id', 'expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'session_id', 'story_id','qa_id', 'is_right', 'created_at', 'updated_at'], 'integer'],
+            [['answer', ], 'string'],
         ];
     }
 
     public function search($params)
     {
-        $query = \common\models\UserMusicList::find();
+        $query = \common\models\UserQa::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
@@ -38,8 +39,6 @@ class UserMusicList extends \common\models\UserMusicList
 
         $this->load($params);
 
-        $query->andFilterWhere(['user_id' => $params['id']]);
-        $query->andFilterWhere(['list_type' => $params['list_type']]);
 
         return $dataProvider;
     }

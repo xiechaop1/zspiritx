@@ -28,4 +28,12 @@ class UserQa extends \common\models\gii\UserQa
         return $this->hasOne('common\models\User',  ['id' => 'user_id']);
     }
 
+    public function getSession(){
+        return $this->hasOne('common\models\Session',  ['id' => 'session_id']);
+    }
+
+    public function getStory() {
+        return $this->hasOne('common\models\Story', ['id' => 'story_id']);
+    }
+
 }

@@ -32,7 +32,7 @@ class UserQa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'story_id','qa_id', 'is_right', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'session_id', 'story_id','qa_id', 'is_right', 'created_at', 'updated_at'], 'integer'],
             [['answer', ], 'string'],
         ];
     }
