@@ -42,27 +42,27 @@ class Index extends Action
 
         $monMaxDay = (int)(($endDateInt - $startDateInt) / 86400);
 
-        $totalCount = Yii::$app->db
-            ->createCommand('select op_code, count(distinct user_id) as ct from o_log where op_status = 1 and created_at between '.$startDateInt.' and '.$endDateInt.' group by op_code');
-        $totalCount = $totalCount->queryAll();
-
-        $ret = [];
-        foreach ($totalCount as $t) {
-            $ret[$t['op_code']] = $t['ct'];
-        }
-
-        // 月均购买歌曲数
-        $avgBuyMusic = Yii::$app->db
-            ->createCommand('select count(distinct music_id) as ct from o_log where op_code = 105 and op_status = 1 and created_at between '.$startDateInt.' and '.$endDateInt);
-
-        // 用户数
-        $userCount = Yii::$app->db
-            ->createCommand('select count(1) as ct from o_user where user_status in (0,2) and is_delete = 0');
+//        $totalCount = Yii::$app->db
+//            ->createCommand('select op_code, count(distinct user_id) as ct from o_log where op_status = 1 and created_at between '.$startDateInt.' and '.$endDateInt.' group by op_code');
+//        $totalCount = $totalCount->queryAll();
+//
+//        $ret = [];
+//        foreach ($totalCount as $t) {
+//            $ret[$t['op_code']] = $t['ct'];
+//        }
+//
+//        // 月均购买歌曲数
+//        $avgBuyMusic = Yii::$app->db
+//            ->createCommand('select count(distinct music_id) as ct from o_log where op_code = 105 and op_status = 1 and created_at between '.$startDateInt.' and '.$endDateInt);
+//
+//        // 用户数
+//        $userCount = Yii::$app->db
+//            ->createCommand('select count(1) as ct from o_user where user_status in (0,2) and is_delete = 0');
 
         return $this->controller->render('index', [
-            'ret' => $ret,
-            'avgBuyMusic' => $avgBuyMusic->queryOne()['ct'],
-            'userCount' => $userCount->queryOne()['ct'],
+//            'ret' => $ret,
+//            'avgBuyMusic' => $avgBuyMusic->queryOne()['ct'],
+//            'userCount' => $userCount->queryOne()['ct'],
             'monMaxDay' => $monMaxDay,
         ]);
     }

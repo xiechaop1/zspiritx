@@ -14,7 +14,7 @@ use liyifei\base\controllers\ViewController;
 use liyifei\base\helpers\Net;
 use yii;
 
-class MusicController extends ViewController
+class QaController extends ViewController
 {
     public function behaviors()
     {
@@ -23,7 +23,7 @@ class MusicController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['music', 'edit', 'detail', 's_music', 's_edit'],
+                        'actions' => ['qa', 'edit', 'detail', 'user_qa'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -35,25 +35,17 @@ class MusicController extends ViewController
     public function actions()
     {
         return yii\helpers\ArrayHelper::merge(parent::actions(), [
-            'music' => [
-                'class' => 'backend\actions\music\Music',
-//                'musicType' => Music::MUSIC_TYPE_NORMAL,
+            'qa' => [
+                'class' => 'backend\actions\qa\Qa',
             ],
             'edit' => [
-                'class' => 'backend\actions\music\Edit',
-                'musicType' => Music::MUSIC_TYPE_NORMAL,
+                'class' => 'backend\actions\qa\Edit',
             ],
             'detail' => [
                 'class' => 'backend\actions\music\Detail',
-//                'musicType' => Music::MUSIC_TYPE_NORMAL,
             ],
-            's_music' => [
-                'class' => 'backend\actions\music\Smusic',
-                'musicType' => Music::MUSIC_TYPE_STATIC,
-            ],
-            's_edit' => [
-                'class' => 'backend\actions\music\Edit',
-                'musicType' => Music::MUSIC_TYPE_STATIC,
+            'user_qa' => [
+                'class' => 'backend\actions\qa\Userqa',
             ],
         ]);
     }

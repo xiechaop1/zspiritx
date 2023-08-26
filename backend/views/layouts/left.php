@@ -28,17 +28,17 @@
                         'url' =>'/'
                     ],
                     [
-                        'label' => 'Demo管理',
+                        'label' => '剧本管理',
                         'icon' => 'folder-open',
                         'items' => [
                             [
-                                'label' => 'Demo列表',
+                                'label' => '剧本列表',
                                 'url' => ['/music/music'],
                                 'active' => in_array($this->context->route, ['music/music', 'music/detail']),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
-                                'label' => '上传Demo',
+                                'label' => '剧本扩展管理',
                                 'url' => ['/music/edit'],
                                 'active' => in_array($this->context->route, ['music/edit', ]),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
@@ -46,19 +46,19 @@
                         ]
                     ],
                     [
-                        'label' => '静态歌曲管理',
+                        'label' => '问答管理',
                         'icon' => 'folder-open',
                         'items' => [
                             [
-                                'label' => '静态歌曲列表',
-                                'url' => ['/music/s_music'],
-                                'active' => in_array($this->context->route, ['music/s_music', 'music/s_detail' ]),
+                                'label' => '问答列表',
+                                'url' => ['/qa/qa'],
+                                'active' => in_array($this->context->route, ['qa/qa', 'qa/edit' ]),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
-                                'label' => '上传静态歌曲',
-                                'url' => ['/music/s_edit'],
-                                'active' => in_array($this->context->route, ['music/s_edit', ]),
+                                'label' => '用户作答',
+                                'url' => ['/qa/user_qa'],
+                                'active' => in_array($this->context->route, ['qa/user_qa', ]),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                         ]

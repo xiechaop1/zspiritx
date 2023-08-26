@@ -35,7 +35,7 @@ $this->title = '总览';
             <div class="inner">
                 <h3><?= !empty($userCount) ? $userCount : 0?></h3>
 
-                <p>白名单用户数</p>
+                <p>注册用户数</p>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>
@@ -48,7 +48,7 @@ $this->title = '总览';
             <div class="inner">
                 <h3><?= !empty($avgBuyMusic) && !empty($monMaxDay) ? number_format($avgBuyMusic / $monMaxDay, 2) : 0?></h3>
 
-                <p>日均购买歌曲数</p>
+                <p>购买用户数</p>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>
@@ -78,7 +78,7 @@ $this->title = '总览';
             <div class="inner">
                 <h3><?= !empty($ret[Log::OP_CODE_LOCK]) && !empty($monMaxDay) ? number_format($ret[Log::OP_CODE_LOCK] / $monMaxDay, 2) : 0?></h3>
 
-                <p>日均锁定数</p>
+                <p>总销售额</p>
             </div>
             <div class="icon">
                 <i class="ion ion-ios-people"></i>
@@ -92,7 +92,7 @@ $this->title = '总览';
             <div class="inner">
                 <h3><?= !empty($ret[Log::OP_CODE_UNLOCK]) && !empty($monMaxDay) ? number_format($ret[Log::OP_CODE_UNLOCK] / $monMaxDay, 2) : 0?></h3>
 
-                <p>日均解锁数</p>
+                <p>日均销售额</p>
             </div>
             <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -106,7 +106,7 @@ $this->title = '总览';
             <div class="inner">
                 <h3><?= !empty($ret[Log::OP_CODE_FAVORITE]) && !empty($monMaxDay) ? number_format($ret[Log::OP_CODE_FAVORITE] / $monMaxDay, 2) : 0?></h3>
 
-                <p>日均喜欢数</p>
+                <p>剧本数</p>
             </div>
             <div class="icon">
                 <i class="ion  ion-person"></i>
@@ -129,17 +129,5 @@ $this->title = '总览';
     </div>
     <!-- ./col -->
 
-    <div class="col-lg-3 col-xs-6">
-        <!-- small box -->
-        <div class="small-box bg-teal">
-            <div class="inner">
-                <h3><?= !empty($ret[Log::OP_CODE_CANCEL]) && !empty($monMaxDay) ? number_format($ret[Log::OP_CODE_CANCEL] / $monMaxDay, 2) : 0?></h3>
 
-                <p>日均取消数</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-        </div>
-    </div>
 </div>
