@@ -18,6 +18,7 @@ use common\models\Qa;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 class QaOne extends Action
 {
@@ -27,14 +28,17 @@ class QaOne extends Action
     {
         $qaId = Net::get('id');
         if ($qaId) {
-            $model = \common\models\Qa::findOne($qaId)->toArray();
+            $model = \common\models\Qa::findOne($qaId);
         }
 
         if (empty($model)) {
-            $this->controller->render('qaone', [
-                'err_text'  => '没有找到问答信息，请您刷新重试',
-            ]);
+//            $this->controller->render('qaone', [
+//                'err_text'  => '没有找到问答信息，请您刷新重试',
+//            ]);
+            throw new NotFoundHttpException();
         }
+
+        $model = $model->toArray();
 
         $model['qa_type_name'] = !empty(Qa::$qaType2Name[$model['qa_type']]) ? Qa::$qaType2Name[$model['qa_type']] : '未知';
         $model['story'] = Story::findOne($model['story_id']);
