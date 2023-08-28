@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+       <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=750,user-scalable=no, target-densitydpi=device-dpi">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ 
     <title>首页</title>
     <link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../css/theme.css">
     <link rel="stylesheet" href="../../css/dropdown/dropdowm.css">
     <link rel="stylesheet" href="../../css/iconfont.css">
     <link rel="stylesheet" href="../../css/datePicker/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1506168_n6jlydwcjpe.css">
     <link rel="stylesheet" href="../../css/animate.css">
     <link rel="stylesheet" href="app.css">
-    <link rel="stylesheet" href="job.css">
+    <link rel="stylesheet" href="qa.css">
 </head>
 
 <body class="bg-F5">
@@ -37,18 +37,18 @@
 
             <div class="m-t-20">
                 <div class="form-check form-check-inline m-t-5">
-                                            <input class="form-check-input" type="radio" name="legal_person" value="1" id="legal_person_yes" checked="">
+                                            <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes" >
                                             <label class="form-check-label fs-30 text-66" for="legal_person_yes">是</label>
                                         </div>
              </div>
              <div class="m-t-20">
                 <div class="form-check form-check-inline m-t-5">
-                                            <input class="form-check-input" type="radio" name="legal_person" value="2" id="legal_person_no">
+                                            <input class="form-check-input" type="radio" name="answer" value="2" id="legal_person_no">
                                             <label class="form-check-label fs-30 text-66" for="legal_person_no">否</label>
                                         </div>
             </div>
                     <div class="text-center m-t-30">
-            <label class="h5-btn-green-big loginBtn">
+            <label class="h5-btn-green-big answer-btn" data-value="1" data-detail="B，因为它每天吃2根胡萝卜，1天是2根，2天是4根，3天是6根，3天的时候，就不够吃了，6>5">
                 提交
             </label>
         </div>
@@ -62,7 +62,7 @@
 
 
 <!-- 按钮：用于打开模态框 -->
-<div class="modal fade" id="h5-like-success" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="h5-right" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
@@ -84,7 +84,7 @@
 
 
 <!-- 按钮：用于打开模态框 -->
-<div class="modal fade" id="h5-login-success" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="h5-worry" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
@@ -125,5 +125,6 @@
 <script src="../../js/datePicker/bootstrap-datepicker.zh-CN.min.js"></script>
 <script src="../../js/datePicker.js"></script>
 <script src="../../js/toTopH5.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
