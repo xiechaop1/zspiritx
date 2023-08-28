@@ -32,11 +32,11 @@ $this->title = $qa['topic'];
 
     <div class="p-20 bg-F5">
         <div class="w-100 p-30 bg-FF m-b-10">
-            <div class="w-1-0 d-flex">
+            <div class="w-100">
                 <div class="fs-30 bold w-100">
                     <?= $qa['topic'] ?>
                 </div>
-                <div class="text-66 text-center mt-2 mb-3 fs-15">
+                <div class="text-66 text-center mt-2 mb-3 fs-20">
                 <?php
                     echo $qa['selected_json'];
                 ?>
@@ -54,7 +54,7 @@ $this->title = $qa['topic'];
 
                     <div class="text-center m-t-30">
             <label class="h5-btn-green-big answer-btn"  data-value="<?php echo $qa['st_selected']; ?>
-" data-qa="<?php echo $qa['id']; ?>" data-story="<?php echo $qa['story_id']; ?>">
+" data-qa="<?php echo $qa['id']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
                 提交
             </label>
         </div>
