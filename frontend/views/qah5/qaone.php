@@ -54,7 +54,7 @@ $this->title = $qa['topic'];
 
                     <div class="text-center m-t-30">
             <label class="h5-btn-green-big answer-btn"  data-value="<?php echo $qa['st_selected']; ?>
-" data-qa="" data-story="">
+" data-qa="<?php echo $qa['id']; ?>" data-story="<?php echo $qa['story_id']; ?>">
                 提交
             </label>
         </div>

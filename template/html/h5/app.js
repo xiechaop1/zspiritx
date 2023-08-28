@@ -22,6 +22,7 @@ $(function () {
         var that=$(this);
         var qa_id=that.attr("data-qa");
         var story_id=that.attr("data-story");
+        var user_id=that.attr("data-user");
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
         var v_select=$("input[name='answer']:checked").val();
@@ -42,9 +43,10 @@ $(function () {
                 async: false,
                 url: '/qa/add_user_answer',
                 data:{
-                    qa_id=qa_id,
-                    answer=v_select,
-                    story_id=story_id
+                    user_id:user_id,
+                    qa_id:qa_id,
+                    answer:v_select,
+                    story_id:story_id
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
