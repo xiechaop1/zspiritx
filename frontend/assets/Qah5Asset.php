@@ -54,7 +54,4 @@ class Qah5Asset extends AssetBundle
         ];
 
 
-    public $depends = [
-        
-    ];
 }

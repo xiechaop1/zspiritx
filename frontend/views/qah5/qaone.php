@@ -53,7 +53,7 @@ $this->title = $qa['topic'];
                 ?>
 
                     <div class="text-center m-t-30">
-            <label class="h5-btn-green-big loginBtn"  data-value="<?php echo $qa['st_selected']; ?>
+            <label class="h5-btn-green-big answer-btn"  data-value="<?php echo $qa['st_selected']; ?>
 " data-detail="">
                 提交
             </label>
