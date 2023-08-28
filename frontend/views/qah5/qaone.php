@@ -36,6 +36,11 @@ $this->title = $qa['topic'];
                 <div class="fs-30 bold w-100">
                     <?= $qa['topic'] ?>
                 </div>
+                <div class="text-66 text-center mt-2 mb-3 fs-15">
+                <?php
+                    echo $qa['selected_json'];
+                ?>
+                </div>
             </div>
              <?php
                 $answers = ['A', 'B', 'C', 'D'];
