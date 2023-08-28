@@ -28,19 +28,39 @@ $this->registerMetaTag([
 $this->title = $qa['topic'];
 
 ?>
+<div class="w-100 m-auto">
+
+    <div class="p-20 bg-F5">
+        <div class="w-100 p-30 bg-FF m-b-10">
+            <div class="w-1-0 d-flex">
+                <div class="fs-30 bold w-100">
+                    <?= $qa['topic'] ?>
+                </div>
+            </div>
+             <?php
+                $answers = ['A', 'B', 'C', 'D'];
+                foreach ($answers as $an) {
+                    echo '<div class="form-check form-check-inline m-t-5">
+                    <input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '"> <label class="form-check-label fs-30 text-66" for="answer-' . $an . '">' . $an .'</label>
+                                        </div>
+             </div>';
+                }
+                ?>
+
+                    <div class="text-center m-t-30">
+            <label class="h5-btn-green-big loginBtn">
+                提交
+            </label>
+        </div>
+        </div>
+       
+    </div>
+
+</div>
+
 
 <div class="w-1200 mt-5 ">
-<!--    <div class="relative w-245 d-inline-block align-top rounded border overflow-hidden text-FF mr-4 mt-5 pb-3 bg-FF tree" id="ListGroup">-->
-<!--        <ul class="nav flex-column">-->
-<!--            <li class="title bg-F6 py-3 px-4 fs-18 bg-en">-->
-<!--                推荐文章-->
-<!--            </li>-->
-<!--            -->
-<!---->
-<!---->
-<!--        </ul>-->
-<!--        <div><img src="/static/img/lxs.png" class="absolute pb-2 bottom-0 z-index-99 right-0"></div>-->
-<!--    </div>-->
+
     <div class="d-inline-block align-top">
         <div class="content rounded mt-5 p-0 bg-FF border-EA px-5 py-4 bg-FF ">
             <div class="relative">

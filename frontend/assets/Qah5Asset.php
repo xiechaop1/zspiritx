@@ -16,10 +16,43 @@ class Qah5Asset extends AssetBundle
     public $sourcePath = '@runtime/../../template';
 
     public $css = [
+    	'css/bootstrap/bootstrap.min.css',
+        'js/bootoast/bootoast.css',
+        'css/theme.css',
+        'css/dropdown/dropdowm.css',
+        'css/iconfont.css',
+        'css/datePicker/bootstrap-datepicker.css',
+        'css/bootstrap-clockpicker.css',
+        '//at.alicdn.com/t/font_1506168_db4q1wh14tk.css',
+        'js/jqueryToast/css/toast.styleH5.css',
+        'css/iconfont.css',
+        'css/animate.css',
+        'html/h5/app.css',
+        'html/h5/qa.css'
 
     ];
     public $js = [
-
+    	'js/jquery/jQuery-2.1.3.min.js',
+        'js/jquery/jquery.json.min.js',
+        'js/Popper/Popper.js',
+        'js/bootstrap/bootstrap.min.js',
+        'js/bootoast/bootoast.js',
+        'js/alert.js',
+        'js/myslideup.js',
+        'js/dropdown/dropdown.js',
+        'js/datePicker/moment.js',
+        'js/datePicker/bootstrap-datepicker.min.js',
+        'js/datePicker/bootstrap-datepicker.zh-CN.min.js',
+        'js/jqueryToast/js/toast.script.js',
+        'js/header.js',
+        'js/loginH5.js',
+        'js/getOptions.js',
+        'js/jquery.SuperSlide.2.1.3.js',
+        'js/newsBackup.js',
+        'js/invite-publish.js',
+        'js/clipboard/clipboard.js',
+        'html/h5/app.js',
+        'html/h5/qa.js',
         ];
 
 

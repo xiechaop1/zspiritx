@@ -23,17 +23,11 @@ use frontend\assets\AppAsset;
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="bg-F5 relative p-b-150" >
+<body class="bg-F5" >
 <?php $this->beginBody() ?>
 <div class="container-fluid bg-F5">
 
-    <div class="justify-content-center pb-5 bg-F5  row page-content-box">
-
         <?= $content ?>
-    </div>
-
-
-
 </div>
 
 <?php $this->endBody() ?>

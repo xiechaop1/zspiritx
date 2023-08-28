@@ -1,0 +1,221 @@
+html, body {
+    height: auto;
+    width: 100% !important;
+    min-width: 750px;
+    font-size: 14px;
+    color: #333333;
+    word-break: break-all;
+}
+label{
+    margin: 0;
+}
+rem{
+    font-size: 20px;
+}
+.alert-note{
+    width: 100%;
+    min-height:50px;
+    background:rgba(255,168,26,1);
+    font-size: 24px;
+    text-align: center;
+    color: #fff;
+    padding: 10px;
+
+}
+.tag-gray-1{
+    height: auto;
+    background: #f8f8f8;
+    color: #B1B1B1;
+    font-size: 26px;
+    padding: 10px;
+    margin: 0 10px 10px 0;
+    line-height: 26px;
+}
+.vague{
+    color: transparent;
+    text-transform: uppercase;
+    text-shadow: 0px 0px 12px #999999;
+}
+.img-30{
+    width: 30px;
+}
+.img-40{
+    width: 40px;
+}
+.img-140{
+    width: 140px;
+}
+.border-radius-r-5{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.border-radius-l-5{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.bg-E0{
+    background-color: #E0ECEC;
+}
+
+.p-b-150{
+    padding-bottom: 150px;
+}
+.h5-btn-green-big{
+    background-color: #53BDB3;
+    height: 70px;
+    border-radius:5px;
+    padding: 10px 30px;
+    font-size: 28px;
+    line-height: 50px;
+    color: #ffffff;
+}
+.h5-btn-green-m{
+    background-color: #53BDB3;
+    height: 50px;
+    border-radius:5px;
+    padding: 10px 30px;
+    font-size: 20px;
+    line-height: 30px;
+    color: #ffffff;
+}
+.h5-btn-green-big-3{
+    height:60px;
+    background-color: #53BDB3;
+    border-radius:5px;
+    padding: 10px 30px;
+    font-size: 24px;
+    line-height: 40px;
+    color: #ffffff;
+}
+.h5-btn-green-big2{
+    height:110px;
+    border:2px solid rgba(83,189,179,1);
+    background-color: #53BDB3;
+    font-size: 34px;
+    font-weight: bold;
+    line-height: 106px;
+    color: #ffffff;
+}
+.h5-btn-green-big2.disable{
+    height:110px;
+    border:2px solid #CECECE;
+    background-color: #CECECE;
+    font-size: 34px;
+    font-weight: bold;
+    line-height: 106px;
+    color: #ffffff;
+}
+.h5-btn-border-big{
+    height:110px;
+    border:2px solid rgba(83,189,179,1);
+    font-size: 34px;
+    font-weight: bold;
+    line-height: 106px;
+    color: #53BDB3;
+}
+
+.h5-btn-border-m{
+    height:40px;
+    border:1px solid rgba(83,189,179,1);
+    padding: 0 20px;
+    font-size: 24px;
+    line-height: 38px;
+    color:#53BDB3;
+    background-color: RGBA(246, 250, 250, 1);
+}
+
+.note-login{
+    background-color: rgba(245, 249, 249, 0.94);
+    padding: 30px 40px 40px 40px;
+    min-height: 270px;
+    position: fixed;
+    bottom: 110px;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: .5rem;
+    font-family: inherit;
+    font-weight: normal;
+    line-height: 1.2;
+    color: inherit;
+}
+.h5 .bottomLine.nav-tabs a.active::after{
+    width: 60px;
+    height: 6px;
+}
+.h5 .nav-style-4.bottomLine.nav.nav-tabs li, .topLine.nav.nav-tabs li {
+    padding: 0;
+    margin-right: 0;
+    margin-bottom: 10px;
+    width: 50%;
+    text-align: center;
+}
+.h5 .h-45 {
+    height: 86px !important;
+}
+.h5 input {
+    outline: none;
+    background: none;
+    border: none;
+    padding: 0px!important;
+    font-size: 28px;
+}
+.h5 select[name="sections"], select[name="mobile_section"] {
+    width: 110px;
+    font-size: 28px;
+}
+.h5 .invalid-feedback {
+    font-size: 24px;
+}
+.h5 select {
+    background-size: 15px;
+}
+.w-25{
+    width: 25% !important;
+}
+.bottom-0{
+    bottom: 0;
+}
+.bottom-110{
+    bottom: 110px;
+}
+input[type="radio"] {
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+}
+input[type="radio"]+label::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid rgb(214, 211, 211);
+    background-color: #FFF;
+    background-image: url(/static/img/index/check.png);
+
+}
+input[type="radio"]:checked+label::before {
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border: 8px solid #53BDB3;
+    background-color: #ffffff;
+}
+@media (min-width: 576px){
+    .modal-dialog {
+        max-width: 600px;
+        margin: 1.75rem auto;
+    }
+    .modal-content {
+         box-shadow:none;
+        border-radius: 8px;
+    }
+    .modal[id="alert"] .modal-content {
+        width: 100%;
+        font-size: 20px;
+    }
+}
