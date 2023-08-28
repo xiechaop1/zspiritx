@@ -40,7 +40,7 @@ $this->title = $qa['topic'];
              <?php
                 $answers = ['A', 'B', 'C', 'D'];
                 foreach ($answers as $an) {
-                    echo '<div class="form-check form-check-inline m-t-5">
+                    echo '<div><div class="form-check form-check-inline m-t-5">
                     <input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '"> <label class="form-check-label fs-30 text-66" for="answer-' . $an . '">' . $an .'</label>
                                         </div>
              </div>';
@@ -56,38 +56,4 @@ $this->title = $qa['topic'];
        
     </div>
 
-</div>
-
-
-<div class="w-1200 mt-5 ">
-
-    <div class="d-inline-block align-top">
-        <div class="content rounded mt-5 p-0 bg-FF border-EA px-5 py-4 bg-FF ">
-            <div class="relative">
-            </div>
-            <div class="d-flex align-items-center justify-content-center mt-5">
-                <span class="fs-22 text-F6"><?= $qa['topic'] ?></span>
-            </div>
-            <div class="text-66 text-center mt-2 mb-3 fs-15">
-                <?php
-                    echo $qa['selected_json'];
-                ?>
-
-            </div>
-            <!--            <img class="w-100" src="" alt="">-->
-            <div class="pb-3" id="article-content-box">
-                <?php
-                $answers = ['A', 'B', 'C', 'D'];
-                foreach ($answers as $an) {
-                    echo '<input type=radio name="answer" value="' . $an . '" id="answer-' . $an . '"> ' . $an . '<br>';
-                }
-                ?>
-                <input type="button" value="提交" id="submit">
-
-            </div>
-        </div>
-    </div>
-    <!-- <div class="toTop rounded-circle bg-F6">
-        返回
-    </div> -->
 </div>

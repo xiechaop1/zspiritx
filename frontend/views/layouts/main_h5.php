@@ -25,10 +25,8 @@ use frontend\assets\AppAsset;
 </head>
 <body class="bg-F5" >
 <?php $this->beginBody() ?>
-<div class="container-fluid bg-F5">
 
         <?= $content ?>
-</div>
 
 <?php $this->endBody() ?>
 </body>

@@ -196,7 +196,6 @@ input[type="radio"]+label::before {
     border-radius: 50%;
     border: 1.5px solid rgb(214, 211, 211);
     background-color: #FFF;
-    background-image: url(/static/img/index/check.png);
 
 }
 input[type="radio"]:checked+label::before {

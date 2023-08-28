@@ -41,8 +41,6 @@ class Qah5Asset extends AssetBundle
         'js/myslideup.js',
         'js/dropdown/dropdown.js',
         'js/datePicker/moment.js',
-        'js/datePicker/bootstrap-datepicker.min.js',
-        'js/datePicker/bootstrap-datepicker.zh-CN.min.js',
         'js/jqueryToast/js/toast.script.js',
         'js/header.js',
         'js/loginH5.js',
@@ -57,6 +55,6 @@ class Qah5Asset extends AssetBundle
 
 
     public $depends = [
-        'frontend\assets\AppAsset'
+        'yii\web\JqueryAsset'
     ];
 }
