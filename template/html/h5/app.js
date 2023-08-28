@@ -17,4 +17,21 @@ $(function () {
         window.location.reload()
     })
 
+    //判断是否答对
+     $(".answer-btn").on('click',function () {
+        var that=$(this);
+        var v_ture=that.attr("data-value");
+        var v_detail=that.attr("data-detail");
+        var v_select=$("input[name='answer']:checked").val();
+        if(v_select==null){
+            alert("什么也没选中!");
+        }
+        else if(v_ture==v_select){
+          $("#h5-right").modal('show');
+        }
+        else{
+          $("#h5-worry").modal('show');
+        }
+    })
+
 })

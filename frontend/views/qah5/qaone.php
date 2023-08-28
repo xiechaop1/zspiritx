@@ -53,7 +53,8 @@ $this->title = $qa['topic'];
                 ?>
 
                     <div class="text-center m-t-30">
-            <label class="h5-btn-green-big loginBtn">
+            <label class="h5-btn-green-big loginBtn"  data-value="<?php echo $qa['st_selected']; ?>
+" data-detail="">
                 提交
             </label>
         </div>
@@ -61,4 +62,46 @@ $this->title = $qa['topic'];
        
     </div>
 
+</div>
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="h5-right" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div>
+                    <div class="fs-36 text-F6 text-center bold">
+                        恭喜您答对了
+                    </div>
+                    <div class="text-center m-t-30">
+                        <?php echo $qa['st_answer']; ?>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="h5-worry" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div>
+                    <div class="fs-36 text-F6 text-center bold">
+                        很稀罕，打错了
+                    </div>
+                    <div class="m-t-40 bg-F5 p-20 fs-26 text-orange border-radius-r-5 border-radius-l-5">
+                        正确答案是:<?php echo $qa['st_answer']; ?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
