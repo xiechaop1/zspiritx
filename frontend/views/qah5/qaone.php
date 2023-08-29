@@ -20,10 +20,10 @@ $this->registerMetaTag([
     'name' => 'referrer',
     'content' => 'no-referrer',
 ]);
-$this->registerMetaTag([
-    'name' => 'viewport',
-    'content' => 'width=device-width; initial-scale=1.0',
-]);
+//$this->registerMetaTag([
+//    'name' => 'viewport',
+//    'content' => 'width=device-width; initial-scale=1.0',
+//]);
 
 $this->title = $qa['topic'];
 

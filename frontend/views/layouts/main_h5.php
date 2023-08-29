@@ -21,6 +21,7 @@ use frontend\assets\AppAsset;
 
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    
     <?php $this->head() ?>
 </head>
 <body class="bg-F5" >
