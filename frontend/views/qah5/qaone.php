@@ -28,6 +28,7 @@ $this->registerMetaTag([
 $this->title = $qa['topic'];
 
 ?>
+<input type="hidden" name="user_id" value="<?= $userId ?>">
 <div class="w-100 m-auto">
 
     <div class="p-20 bg-F5">

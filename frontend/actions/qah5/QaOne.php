@@ -45,10 +45,12 @@ class QaOne extends Action
 
         $model['selected_json'] = \common\helpers\Common::isJson($model['selected']) ? json_decode($model['selected'], true) : $model['selected'];
 
+        $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
 
         return $this->controller->render('qaone', [
             'qa'            => $model,
             'params'        => $_GET,
+            'userId'        => $userId,
         ]);
     }
 }
