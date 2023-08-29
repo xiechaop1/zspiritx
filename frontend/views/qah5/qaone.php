@@ -39,20 +39,31 @@ $this->title = $qa['topic'];
                 </div>
                 <div class="text-66 text-center mt-2 mb-3 fs-20">
                 <?php
-                    echo $qa['selected_json'];
+                $str = $qa['selected_json'];
+                $str = str_replace("[div]", '<div>', $str);
+                $str = str_replace("[/div]", '</div>', $str);
+//                    echo $qa['selected_json'];
                 ?>
-                </div>
-            </div>
-             <?php
+                <?php
                 $answers = ['A', 'B', 'C', 'D'];
                 foreach ($answers as $an) {
-                    echo '<div><div class="form-check form-check-inline m-t-5">
-                    <input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '"> <label class="form-check-label fs-30 text-66" for="answer-' . $an . '">' . $an .'</label>
-                                        </div>
-             </div>';
+                    $optstr = '<div class="form-check form-check-inline m-t-5">';
+                    $optstr .= '<input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '">';
+                    $labelstr = '<label class="form-check-label fs-30 text-66" for="answer-' . $an . '">';
+                    //. $an .'</label></div>';
+                    $findstr = '[opt ' . $an . ']';
+                    $str = str_replace($findstr, $optstr, $str);
+
+                    $findstr = '[label ' . $an . ']';
+                    $str = str_replace($findstr, $labelstr, $str);
                 }
+                $str = str_replace('[/label]', '</label>', $str);
+                $str = str_replace('[/opt]', '</div>', $str);
+                echo $str;
                 ?>
 
+                </div>
+            </div>
                     <div class="text-center m-t-30">
             <label class="h5-btn-green-big answer-btn"  data-value="<?php echo $qa['st_selected']; ?>
 " data-qa="<?php echo $qa['id']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
