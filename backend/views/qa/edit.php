@@ -56,7 +56,7 @@ echo \dmstr\widgets\Alert::widget();
                 'multiple' => false,
                 'isImage' => false,
                 'ossHost' => Yii::$app->params['oss.host'],
-                'signatureAction' => ['/site/oss-signature?dir=qa/voice' . Date('Y/m/')],
+                'signatureAction' => ['/site/oss-signature?dir=qa/voice/' . Date('Y/m/')],
                 'clientOptions' => ['autoUpload' => true],
                 'options' => ['value' => $qaModel->voice],
 //                'directory' => 'cover/' . Date('Y/m/')
