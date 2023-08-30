@@ -37,6 +37,9 @@ $this->title = $qa['topic'];
                 <div class="fs-30 bold w-100">
                     <?= $qa['topic'] ?>
                 </div>
+                <div>
+                   <img src=" <?= $qa['attachment'] ?>" alt="" class="img-responsive d-block"/>
+                </div>
                 <div class="text-66 text-center mt-2 mb-3 fs-20">
                 <?php
                 $str = $qa['selected_json'];
@@ -61,6 +64,7 @@ $this->title = $qa['topic'];
                 $str = str_replace('[/opt]', '</div>', $str);
                 echo $str;
                 ?>
+<!--                 <img src="../../img/example.png" alt="" class="img-responsive d-block"/>-->
 
                 </div>
             </div>
@@ -71,7 +75,7 @@ $this->title = $qa['topic'];
             </label>
         </div>
         </div>
-       
+
     </div>
 
 </div>
