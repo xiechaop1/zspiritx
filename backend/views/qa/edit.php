@@ -35,7 +35,7 @@ echo \dmstr\widgets\Alert::widget();
                 'multiple' => false,
                 'isImage' => true,
                 'ossHost' => Yii::$app->params['oss.host'],
-                'signatureAction' => ['/site/oss-signature?dir=qa/attachment' . Date('Y/m/')],
+                'signatureAction' => ['/site/oss-signature?dir=qa/attachment/' . Date('Y/m/')],
                 'clientOptions' => ['autoUpload' => true],
                 'options' => ['value' => $qaModel->attachment],
 //                'directory' => 'cover/' . Date('Y/m/')
@@ -54,7 +54,7 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($qaModel, 'st_selected')->textInput(['value' => $qaModel->st_selected])->label('标准选项');
             echo $form->field($qaModel, 'voice')->widget('\liyifei\uploadOSS\FileUploadOSS', [
                 'multiple' => false,
-                'isImage' => true,
+                'isImage' => false,
                 'ossHost' => Yii::$app->params['oss.host'],
                 'signatureAction' => ['/site/oss-signature?dir=qa/voice' . Date('Y/m/')],
                 'clientOptions' => ['autoUpload' => true],
