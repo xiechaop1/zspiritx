@@ -56,11 +56,15 @@ $(function () {
                     if(obj["code"]==200){
                         if(v_ture==v_select){
                             $("#h5-right").modal('show');
-                            Unity.call('WebViewOff&TrueAnswer');
+                            setTimeout(function (){
+                                Unity.call('WebViewOff&TrueAnswer');
+                            },3000)
                         }
                         else{
                             $("#h5-worry").modal('show');
-                            Unity.call('WebViewOff&FalseAnswer');
+                            setTimeout(function (){
+                                Unity.call('WebViewOff&FalseAnswer');
+                            },3000)
                         }
                     }
                     //新消息获取失败
