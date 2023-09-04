@@ -68,7 +68,7 @@ $this->title = $qa['topic'];
 
                     $labelstr = '<label class="form-check-label fs-30 answer-btn" for="answer-' . $an . '">';
 
-                    $findstr = '[opt  <span class="answer-tag">' . $an . '</span>]';
+                    $findstr = '[opt ' . $an . ']';
                     $str = str_replace($findstr, $optstr, $str);
 
                     $findstr = '[label ' . $an . ']';
@@ -82,8 +82,8 @@ $this->title = $qa['topic'];
 
                 <!--<div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes1" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes1">
                             <span class="answer-tag">A</span>
                             8跟
                         </label>
