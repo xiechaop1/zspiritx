@@ -66,7 +66,7 @@ $this->title = $qa['topic'];
 
                     $optstr .= '<div class="answer-border"><input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '">';
 
-                    $labelstr = '<label class="form-check-label fs-30 text-66" for="answer-' . $an . '">';
+                    $labelstr = '<label class="form-check-label fs-30 answer-btn" for="answer-' . $an . '">';
 
                     $findstr = '[opt  <span class="answer-tag">' . $an . '</span>]';
                     $str = str_replace($findstr, $optstr, $str);
