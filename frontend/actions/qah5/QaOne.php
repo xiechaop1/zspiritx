@@ -44,6 +44,7 @@ class QaOne extends Action
         $model['story'] = Story::findOne($model['story_id']);
 
         $model['selected_json'] = \common\helpers\Common::isJson($model['selected']) ? json_decode($model['selected'], true) : $model['selected'];
+        $model['attachment'] = \common\helpers\Attachment::completeUrl($model['attachment'], true);
 
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
 
