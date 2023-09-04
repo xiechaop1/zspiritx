@@ -46,28 +46,28 @@ $this->title = $qa['topic'];
                 </div>
                 <div class="text-66 text-center mt-2 mb-3 fs-20">
                 <?php
-//                $str = $qa['selected_json'];
-//                $str = str_replace("[div]", '<div>', $str);
-//                $str = str_replace("[/div]", '</div>', $str);
+                $str = $qa['selected_json'];
+                $str = str_replace("[div]", '<div>', $str);
+                $str = str_replace("[/div]", '</div>', $str);
 //                    echo $qa['selected_json'];
                 ?>
                 <?php
-//                $answers = ['A', 'B', 'C', 'D'];
-//                foreach ($answers as $an) {
-//                    $optstr = '<div class="form-check form-check-inline m-t-5">';
-//                    $optstr .= '<input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '">';
-//                    $labelstr = '<label class="form-check-label fs-30 text-66" for="answer-' . $an . '">';
-//                    //. $an .'</label></div>';
-//                    $findstr = '[opt ' . $an . ']';
-//                    $str = str_replace($findstr, $optstr, $str);
-//
-//                    $findstr = '[label ' . $an . ']';
-//                    $str = str_replace($findstr, $labelstr, $str);
-//                }
-//                $str = str_replace('[/label]', '</label>', $str);
-//                $str = str_replace('[/opt]', '</div>', $str);
-//                echo $str;
-                echo \common\helpers\Qa::formatSelect($qa);
+                $answers = ['A', 'B', 'C', 'D'];
+                foreach ($answers as $an) {
+                    $optstr = '<div class="form-check form-check-inline m-t-5">';
+                    $optstr .= '<input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '">';
+                    $labelstr = '<label class="form-check-label fs-30 text-66" for="answer-' . $an . '">';
+                    //. $an .'</label></div>';
+                    $findstr = '[opt ' . $an . ']';
+                    $str = str_replace($findstr, $optstr, $str);
+
+                    $findstr = '[label ' . $an . ']';
+                    $str = str_replace($findstr, $labelstr, $str);
+                }
+                $str = str_replace('[/label]', '</label>', $str);
+                $str = str_replace('[/opt]', '</div>', $str);
+                echo $str;
+//                echo \common\helpers\Qa::formatSelect($qa);
 
                 ?>
 <!--                 <img src="../../img/example.png" alt="" class="img-responsive d-block"/>-->
