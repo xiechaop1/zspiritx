@@ -19,17 +19,18 @@ $(function () {
 
     //判断是否答对
      $(".answer-btn").on('click',function () {
-        var that=$(this);
+        var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
         var story_id=that.attr("data-story");
         var user_id=$("input[name='user_id']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
         var v_select=$("input[name='answer']:checked").val();
+         // $("#answer-box").hide();
         if(v_select==null){
             $("#h5-null").modal('show');
         }
-        else
+
 
         if(v_select!=null){
           $.ajax({
@@ -55,13 +56,17 @@ $(function () {
                     //新消息获取成功
                     if(obj["code"]==200){
                         if(v_ture==v_select){
-                            $("#h5-right").modal('show');
+                            $("#answer-box").hide();
+                            $("#answer-right-box").removeClass('hide');
+                            // $("#h5-right").modal('show');
                             setTimeout(function (){
                                 Unity.call('WebViewOff&TrueAnswer');
                             },3000)
                         }
                         else{
-                            $("#h5-worry").modal('show');
+                            $("#answer-box").hide();
+                            $("#answer-error-box").removeClass('hide');
+                            // $("#h5-worry").modal('show');
                             setTimeout(function (){
                                 Unity.call('WebViewOff&FalseAnswer');
                             },3000)
