@@ -93,7 +93,7 @@ $this->title = $qa['topic'];
             </div>
             <div class="row hide" id="answer-right-box">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
-                    <img src="../../img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
+                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
                     <div class="answer-title m-t-40">
                         <?php echo $qa['st_selected']; ?>
                     </div>
@@ -106,7 +106,7 @@ $this->title = $qa['topic'];
             <div class="row hide" id="answer-error-box">
                 <div class="m-t-36 col-sm-12 col-md-12">
                     <div class="answer-detail " >
-                        <img src="../../img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
                         <span  class=" d-inline-block vertical-mid">很遗憾，答错了…</span>
 
                     </div>
