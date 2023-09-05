@@ -523,8 +523,13 @@ class DoApi extends ApiAction
             $roleCt[$us['role_id']]++;
         }
 
+        $sRole = [];
+        foreach ($storyRole as $rr) {
+            $sRole[$rr['role_id']] = $rr['role_max_ct'];
+        }
+
         foreach ($roleCt as $roleId => $ct) {
-            if ($ct < $storyRole[$roleId]['role_max_ct']) {
+            if ($ct < $sRole[$roleId]) {
                 return false;
             }
         }
