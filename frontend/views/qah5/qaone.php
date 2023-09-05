@@ -145,7 +145,7 @@ $this->title = $qa['topic'];
 
             </div>
             <div class="row hide" id="answer-error-box">
-                <div class="m-t-36 col-sm-12 col-md-12">
+                <div class="m-t-60 col-sm-12 col-md-12">
                     <div class="answer-detail " >
                         <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
                         <span  class=" d-inline-block vertical-mid">很遗憾，答错了…</span>
@@ -154,18 +154,6 @@ $this->title = $qa['topic'];
                 </div>
             </div>
 
-
-
-
-
-            <div class="w-100">
-
-                <div class="text-66 text-center mt-2 mb-3 fs-20">
-
-
-
-                </div>
-            </div>
                     <div class="text-center m-t-30">
             <label id="answer-info" class="h5-btn-green-big answer-btn hide"  data-value="<?php echo $qa['st_selected']; ?>
 " data-qa="<?php echo $qa['id']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
