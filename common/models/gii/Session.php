@@ -30,7 +30,7 @@ class Session extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'story_id', 'session_status', 'created_at', 'updated_at'], 'integer'],
-            [['session_name'], 'string'],
+            [['session_name', 'password_code'], 'string'],
         ];
     }
 

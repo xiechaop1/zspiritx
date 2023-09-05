@@ -52,10 +52,15 @@ $this->title = $qa['topic'];
 //                    echo $qa['selected_json'];
                 ?>
                 <?php
+                if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_MULTI) {
+                    $inputType = 'checkbox';
+                } else {
+                    $inputType = 'radio';
+                }
                 $answers = ['A', 'B', 'C', 'D'];
                 foreach ($answers as $an) {
                     $optstr = '<div class="form-check form-check-inline m-t-5">';
-                    $optstr .= '<input class="form-check-input"  type=radio name="answer" value="' . $an . '" id="answer-' . $an . '">';
+                    $optstr .= '<input class="form-check-input"  type=' . $inputType . ' name="answer" value="' . $an . '" id="answer-' . $an . '">';
                     $labelstr = '<label class="form-check-label fs-30 text-66" for="answer-' . $an . '">';
                     //. $an .'</label></div>';
                     $findstr = '[opt ' . $an . ']';

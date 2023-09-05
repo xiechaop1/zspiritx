@@ -137,6 +137,13 @@ class DoApi extends ApiAction
                 $sessionObj->user_id = $this->_userId;
                 $sessionObj->story_id = $this->_storyId;
                 $sessionObj->session_status = Session::SESSION_STATUS_INIT;
+                if (!empty($this->_get['need_code'])) {
+                    if (!empty($this->_get['password_code'])) {
+                        $sessionObj->password_code = $this->_get['password_code'];
+                    } else {
+                        $sessionObj->password_code = rand(1000,9999);
+                    }
+                }
                 $ret = $sessionObj->save();
 
                 $sessionId = Yii::$app->db->getLastInsertID();
@@ -234,9 +241,27 @@ class DoApi extends ApiAction
             return $this->fail('请您给出角色信息', ErrorCode::ROLE_NOT_FOUND);
         }
 
-        $userRoleCt = UserStory::find()
+        if (!empty($this->_sessionInfo['password_code'])
+            && $this->_sessionInfo['password_code'] != $this->_get['password_code']) {
+            return $this->fail('密码错误', ErrorCode::SESSION_PASSWORD_ERROR);
+        }
+
+        $userInfo = UserStory::find()
             ->where([
                 'user_id' => (int)$this->_userId,
+                'story_id' => (int)$this->_storyId,
+                'session_id' => (int)$this->_sessionId,
+                'role_id' => (int)$roleId,
+                'building_id' => (int)$this->_buildingId,
+            ])->one();
+
+        if (!empty($userInfo)) {
+            return $userInfo;
+        }
+
+        $userRoleCt = UserStory::find()
+            ->where([
+//                'user_id' => (int)$this->_userId,
                 'story_id' => (int)$this->_storyId,
                 'session_id' => (int)$this->_sessionId,
                 'role_id' => (int)$roleId,
@@ -277,7 +302,7 @@ class DoApi extends ApiAction
 
 
 
-        return $ret;
+        return $userStory;
     }
 
     public function finish() {

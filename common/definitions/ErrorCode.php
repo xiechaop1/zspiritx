@@ -34,6 +34,8 @@ class ErrorCode extends Api
 
     const SESSION_NOT_FOUND         = -40001;   // 场次不存在
 
+    const SESSION_PASSWORD_ERROR    = -40002;   // 场次密码错误
+
     const ROLE_NOT_FOUND            = -50001;   // 角色不存在
 
     const ROLE_FULL                 = -50002;   // 角色已满
@@ -45,4 +47,5 @@ class ErrorCode extends Api
     const QA_NOT_EXIST              = -70001;   // 问答不存在
 
     const QA_SAVE_FAILED            = -70002;   // 问答保存失败
+
 }
