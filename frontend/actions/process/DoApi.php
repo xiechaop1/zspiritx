@@ -224,7 +224,7 @@ class DoApi extends ApiAction
             throw $e;
         }
 
-        return $ret;
+        return $this->_sessionInfo;
     }
 
     /**
