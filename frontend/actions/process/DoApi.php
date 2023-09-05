@@ -83,6 +83,12 @@ class DoApi extends ApiAction
                 ])
                 ->one();
 
+            if (!empty($this->_sessionInfo)
+                && empty($this->_sessionId)
+            ) {
+                $this->_sessionId = $this->_sessionInfo['id'];
+            }
+
             $this->_userInfo = User::findOne($this->_userId);
 
             switch ($this->action) {
