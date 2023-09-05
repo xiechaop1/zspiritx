@@ -39,6 +39,8 @@ class DoApi extends ApiAction
     private $_storyInfo;
     private $_userInfo;
 
+    private $_userSessionInfo;
+
     private $_sessionInfo;
 
     private $_buildingId;
@@ -71,7 +73,7 @@ class DoApi extends ApiAction
                 }
             }
 
-            $this->_sessionInfo = Session::find()
+            $this->_userSessionInfo = Session::find()
                 ->where([
                     'user_id' => (int)$this->_userId,
                     'story_id' => (int)$this->_storyId,
@@ -83,10 +85,10 @@ class DoApi extends ApiAction
                 ])
                 ->one();
 
-            if (!empty($this->_sessionInfo)
-                && empty($this->_sessionId)
-            ) {
-                $this->_sessionId = $this->_sessionInfo['id'];
+            if (!empty($this->_sessionId)) {
+                $this->_sessionInfo = Session::find()
+                    ->where(['id' => $this->_sessionId])
+                    ->one();
             }
 
             $this->_userInfo = User::findOne($this->_userId);
@@ -137,7 +139,7 @@ class DoApi extends ApiAction
 
         try {
 
-            if (empty($this->_sessionInfo)) {
+            if (empty($this->_userSessionInfo)) {
                 $sessionObj = new Session();
                 $sessionObj->session_name = $this->_userInfo['user_name'] . ' 创建 ' . $this->_storyInfo['title'] . ' ' . ' 场次';
                 $sessionObj->user_id = $this->_userId;
@@ -154,7 +156,7 @@ class DoApi extends ApiAction
 
                 $sessionId = Yii::$app->db->getLastInsertID();
                 $sessionObj['id'] = $sessionId;
-                $this->_sessionInfo = $sessionObj;
+                $this->_userSessionInfo = $sessionObj;
             }
 
             $storyModels = StoryModels::find()
@@ -167,7 +169,7 @@ class DoApi extends ApiAction
                 $checkSessionModel = SessionModels::find()
                     ->where([
 //                        'story_id'  => (int)$this->_storyId,
-                        'session_id'    => (int)$this->_sessionInfo['id'],
+                        'session_id'    => (int)$this->_userSessionInfo['id'],
                         'story_model_id'    => (int)$storyModel['id'],
                     ]);
                 if (!empty($this->_buildingId)) {
@@ -187,7 +189,7 @@ class DoApi extends ApiAction
                     $sessionModel->$key = $value;
                 }
                 $sessionModel->story_model_id = $storyModel->id;
-                $sessionModel->session_id = $this->_sessionInfo['id'];
+                $sessionModel->session_id = $this->_userSessionInfo['id'];
                 $sessionModel->snapshot = json_encode($storyModel->toArray(), true);
                 $sessionModel->is_pickup = 0;
                 $sessionModel->save();
@@ -203,7 +205,7 @@ class DoApi extends ApiAction
                 $checkSessionQa = SessionQa::find()
                     ->where([
                         'story_id'  => (int)$this->_storyId,
-                        'session_id'    => (int)$this->_sessionInfo['id'],
+                        'session_id'    => (int)$this->_userSessionInfo['id'],
                         'qa_id'    => (int)$qaModel['id'],
                     ])
                     ->one();
@@ -216,7 +218,7 @@ class DoApi extends ApiAction
                 $sessionQa->qa_id = $qaModel->id;
                 $sessionQa->story_id = $qaModel->story_id;
                 $sessionQa->qa_type = $qaModel->qa_type;
-                $sessionQa->session_id = $this->_sessionInfo['id'];
+                $sessionQa->session_id = $this->_userSessionInfo['id'];
                 $sessionQa->snapshot = json_encode($qaModel->toArray(), true);
                 $sessionQa->save();
             }
@@ -230,7 +232,7 @@ class DoApi extends ApiAction
             throw $e;
         }
 
-        return $this->_sessionInfo;
+        return $this->_userSessionInfo;
     }
 
     /**
@@ -239,7 +241,9 @@ class DoApi extends ApiAction
     public function join() {
         $roleId = !empty($this->_get['role_id']) ? $this->_get['role_id'] : 0;
 
-        if (empty($this->_sessionInfo)) {
+        if (empty($this->sessionInfo)
+            || !in_array($this->sessionInfo['session_status'], [Session::SESSION_STATUS_INIT, Session::SESSION_STATUS_READY, Session::SESSION_STATUS_START])
+        ) {
             return $this->fail('场次不存在', ErrorCode::SESSION_NOT_FOUND);
         }
 
@@ -247,8 +251,8 @@ class DoApi extends ApiAction
             return $this->fail('请您给出角色信息', ErrorCode::ROLE_NOT_FOUND);
         }
 
-        if (!empty($this->_sessionInfo['password_code'])
-            && $this->_sessionInfo['password_code'] != $this->_get['password_code']) {
+        if (!empty($this->_userSessionInfo['password_code'])
+            && $this->_userSessionInfo['password_code'] != $this->_get['password_code']) {
             return $this->fail('密码错误', ErrorCode::SESSION_PASSWORD_ERROR);
         }
 
@@ -293,12 +297,12 @@ class DoApi extends ApiAction
             $ret = $userStory->save();
 
             if ($this->_checkSessionRole()) {
-                $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
+                $this->_userSessionInfo->session_status = Session::SESSION_STATUS_START;
             } else {
-                $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
+                $this->_userSessionInfo->session_status = Session::SESSION_STATUS_READY;
             }
 
-            $this->_sessionInfo->save();
+            $this->_userSessionInfo->save();
 
             $transaction->commit();
         } catch (\Exception $e) {
