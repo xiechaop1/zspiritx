@@ -57,6 +57,8 @@ class DoApi extends ApiAction
 
             $this->_buildingId = !empty($this->_get['building_id']) ? $this->_get['building_id'] : 0;
 
+            $this->_sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+
             if (empty($this->_userId)) {
                 return $this->fail('请您给出用户信息', ErrorCode::USER_NOT_FOUND);
             }
