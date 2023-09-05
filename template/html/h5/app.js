@@ -18,7 +18,8 @@ $(function () {
     })
 
     //判断是否答对
-     $(".answer-btn").on('click',function () {
+    $("input[name='answer']").change(function ()
+    {
         var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
         var story_id=that.attr("data-story");
@@ -26,14 +27,14 @@ $(function () {
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
         var v_select=$("input[name='answer']:checked").val();
-         // $("#answer-box").hide();
+        // $("#answer-box").hide();
         if(v_select==null){
             $("#h5-null").modal('show');
         }
 
 
         if(v_select!=null){
-          $.ajax({
+            $.ajax({
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
                 async: false,
