@@ -342,7 +342,7 @@ class DoApi extends ApiAction
         $sessionInfo = Session::find()
             ->where([
                 'id' => (int)$sessionId,
-                'user_id' => (int)$userId,
+//                'user_id' => (int)$userId,
             ])
             ->one();
 
@@ -367,9 +367,9 @@ class DoApi extends ApiAction
             $userStory->goal = $goal;
 
             if ($goal == $storyGoals->goal) {
-                $userStory->goal_right = '结论正确';
+                $userStory->goal_correct = '结论正确';
             } else {
-                $userStory->goal_right = '结论错误，正确结论：' . $storyGoals->goal;
+                $userStory->goal_correct = '结论错误，正确结论：' . $storyGoals->goal;
             }
             $ret = $userStory->save();
 

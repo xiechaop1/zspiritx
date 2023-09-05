@@ -37,4 +37,8 @@ class UserStory extends \common\models\gii\UserStory
         return $this->hasOne('common\models\Team',  ['id' => 'team_id']);
     }
 
+    public function getUser(){
+        return $this->hasOne('common\models\User',  ['id' => 'user_id']);
+    }
+
 }

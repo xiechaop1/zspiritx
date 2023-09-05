@@ -38,6 +38,10 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'get_baggage_models',
             ],
+            'finish' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'finish',
+            ],
         ];
     }
 }
