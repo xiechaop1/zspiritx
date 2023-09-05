@@ -379,7 +379,7 @@ class DoApi extends ApiAction
             return $this->fail($e->getMessage(), $e->getCode());
         }
 
-        return $ret;
+        return $userStory;
     }
 
     public function getBaggageModels(){
