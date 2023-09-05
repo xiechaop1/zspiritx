@@ -241,8 +241,8 @@ class DoApi extends ApiAction
     public function join() {
         $roleId = !empty($this->_get['role_id']) ? $this->_get['role_id'] : 0;
 
-        if (empty($this->sessionInfo)
-            || !in_array($this->sessionInfo['session_status'], [Session::SESSION_STATUS_INIT, Session::SESSION_STATUS_READY, Session::SESSION_STATUS_START])
+        if (empty($this->_sessionInfo)
+            || !in_array($this->_sessionInfo['session_status'], [Session::SESSION_STATUS_INIT, Session::SESSION_STATUS_READY, Session::SESSION_STATUS_START])
         ) {
             return $this->fail('场次不存在', ErrorCode::SESSION_NOT_FOUND);
         }
