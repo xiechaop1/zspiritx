@@ -253,8 +253,21 @@ class DoApi extends ApiAction
             return $this->fail('请您给出角色信息', ErrorCode::ROLE_NOT_FOUND);
         }
 
-        if (!empty($this->_userSessionInfo['password_code'])
-            && $this->_userSessionInfo['password_code'] != $this->_get['password_code']) {
+        $userSession = UserStory::find()
+            ->where([
+                'user_id' => (int)$this->_userId,
+                'session_id' => (int)$this->_sessionId,
+                'story_id'  => (int)$this->_storyId,
+                'building_id' => (int)$this->_buildingId,
+//                'role_id' => (int)$roleId,
+            ])->one();
+
+        if (!empty($userSession)) {
+            return $this->fail('玩家已经存在', ErrorCode::PLAYER_EXIST);
+        }
+
+        if (!empty($this->_sessionInfo['password_code'])
+            && $this->_sessionInfo['password_code'] != $this->_get['password_code']) {
             return $this->fail('密码错误', ErrorCode::SESSION_PASSWORD_ERROR);
         }
 
@@ -295,16 +308,17 @@ class DoApi extends ApiAction
         $userStory->story_id = $this->_storyId;
         $userStory->session_id = $this->_sessionId;
         $userStory->role_id = $roleId;
+        $userStory->building_id = $this->_buildingId;
         try {
             $ret = $userStory->save();
 
             if ($this->_checkSessionRole()) {
-                $this->_userSessionInfo->session_status = Session::SESSION_STATUS_START;
+                $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
             } else {
-                $this->_userSessionInfo->session_status = Session::SESSION_STATUS_READY;
+                $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
             }
 
-            $this->_userSessionInfo->save();
+            $this->_sessionInfo->save();
 
             $transaction->commit();
         } catch (\Exception $e) {
@@ -526,12 +540,16 @@ class DoApi extends ApiAction
 
         $roleCt = [];
         foreach ($userStory as $us) {
-            $roleCt[$us['role_id']]++;
+            if (empty($roleCt[$us['role_id']])) {
+                $roleCt[$us['role_id']] = 1;
+            } else {
+                $roleCt[$us['role_id']]++;
+            }
         }
 
         $sRole = [];
         foreach ($storyRole as $rr) {
-            $sRole[$rr['role_id']] = $rr['role_max_ct'];
+            $sRole[$rr['id']] = $rr['role_max_ct'];
         }
 
         foreach ($roleCt as $roleId => $ct) {

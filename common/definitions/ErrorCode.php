@@ -40,6 +40,8 @@ class ErrorCode extends Api
 
     const ROLE_FULL                 = -50002;   // 角色已满
 
+    const PLAYER_EXIST              = -50003;   // 玩家已存在
+
     const DO_PRE_MODELS_NOT_FOUND   = -60001;   // 没有前置模型
 
     const DO_MODELS_PICK_UP_FAIL    = -60002;   // 模型拾取失败
