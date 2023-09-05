@@ -35,20 +35,28 @@ $this->title = $qa['topic'];
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <div class="w-100 m-auto">
 
-    <div class="p-20 bg-F5">
-        <div class="w-100 p-30 bg-FF m-b-10">
-            <div class="w-100">
-                <div class="fs-30 bold w-100">
-                    <?= $qa['topic'] ?>
+    <div class="p-20 bg-black">
+        <div class="w-100 p-30  m-b-10">
+            <div class="w-1-0 d-flex">
+                <div class="fs-30 bold w-100 text-FF title-box-border">
+                    <div class="npc-name">
+                        问题
+                    </div>
+                     <?= $qa['topic'] ?>
+                    <div>
+                     <img src=" <?= $qa['attachment'] ?>" alt="" class="img-responsive d-block"/>
+                    </div>
+                    <!--<div class="hpa-ctr">
+                        <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        播放语音
+                    </div>-->
                 </div>
-                <div>
-                   <img src=" <?= $qa['attachment'] ?>" alt="" class="img-responsive d-block"/>
-                </div>
-                <div class="text-66 text-center mt-2 mb-3 fs-20">
+            </div>
+            <div class="row" id="answer-box">
                 <?php
                 $str = $qa['selected_json'];
-                $str = str_replace("[div]", '<div>', $str);
-                $str = str_replace("[/div]", '</div>', $str);
+//                $str = str_replace("[div]", '<div>', $str);
+//                $str = str_replace("[/div]", '</div>', $str);
 //                    echo $qa['selected_json'];
                 ?>
                 <?php
@@ -57,30 +65,109 @@ $this->title = $qa['topic'];
                 } else {
                     $inputType = 'radio';
                 }
-                $answers = ['A', 'B', 'C', 'D'];
-                foreach ($answers as $an) {
-                    $optstr = '<div class="form-check form-check-inline m-t-5">';
-                    $optstr .= '<input class="form-check-input"  type=' . $inputType . ' name="answer" value="' . $an . '" id="answer-' . $an . '">';
-                    $labelstr = '<label class="form-check-label fs-30 text-66" for="answer-' . $an . '">';
-                    //. $an .'</label></div>';
-                    $findstr = '[opt ' . $an . ']';
-                    $str = str_replace($findstr, $optstr, $str);
 
-                    $findstr = '[label ' . $an . ']';
-                    $str = str_replace($findstr, $labelstr, $str);
+                $selected = explode("\n", $str);
+
+                $optstr = '';
+                foreach ($selected as $sel) {
+                    preg_match('/\[(\w+)\]/', $sel,$labelArr);
+                    $label = count($labelArr) > 1 ? $labelArr[1] : '';
+                    $txt = str_replace('[' . $label . ']', '', $sel);
+
+                    $optstr .= '
+                    <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
+                            <span class="answer-tag">' . $label . '</span>
+                    '. $txt . '
+                    </label>
+                    </div>
+                </div>
+                    ';
+
+
+
                 }
-                $str = str_replace('[/label]', '</label>', $str);
-                $str = str_replace('[/opt]', '</div>', $str);
-                echo $str;
-//                echo \common\helpers\Qa::formatSelect($qa);
+                echo $optstr;
 
                 ?>
-<!--                 <img src="../../img/example.png" alt="" class="img-responsive d-block"/>-->
+
+<!--
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_A" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_A">
+                            <span class="answer-tag">A</span>
+                            8跟
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_B" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_B">
+                            <span class="answer-tag">B</span>
+                            6跟
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_C" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_C">
+                            <span class="answer-tag">C</span>
+                            5跟
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_D" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_D">
+                            <span class="answer-tag">D</span>
+                            3跟
+                        </label>
+                    </div>
+                </div>
+-->
+            </div>
+            <div class="row hide" id="answer-right-box">
+                <div class="m-t-30 col-sm-12 col-md-12 p-40">
+                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
+                    <div class="answer-title m-t-40">
+                        <?php echo $qa['st_selected']; ?>
+                    </div>
+                    <div class="answer-detail m-t-40">
+                         <?php echo $qa['st_answer']; ?>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row hide" id="answer-error-box">
+                <div class="m-t-36 col-sm-12 col-md-12">
+                    <div class="answer-detail " >
+                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        <span  class=" d-inline-block vertical-mid">很遗憾，答错了…</span>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="w-100">
+
+                <div class="text-66 text-center mt-2 mb-3 fs-20">
+
+
 
                 </div>
             </div>
                     <div class="text-center m-t-30">
-            <label class="h5-btn-green-big answer-btn"  data-value="<?php echo $qa['st_selected']; ?>
+            <label id="answer-info" class="h5-btn-green-big answer-btn hide"  data-value="<?php echo $qa['st_selected']; ?>
 " data-qa="<?php echo $qa['id']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
                 提交
             </label>
@@ -90,6 +177,9 @@ $this->title = $qa['topic'];
     </div>
 
 </div>
+
+
+
 <!-- 按钮：用于打开模态框 -->
 <div class="modal fade" id="h5-null" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

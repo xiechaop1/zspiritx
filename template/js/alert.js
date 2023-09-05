@@ -568,7 +568,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content rounded overflow-hidden">
                             <div class="text-FF bg-F6 px-4 py-2 d-flex justify-content-center align-items-center">
-                                <span class="fs-18">禾蛙提示</span>
+                                <span class="fs-18">提示</span>
                             </div>
                             <div class="px-4 py-3 bg-sm-lxs wraper min-h-166">
                                 

@@ -24,7 +24,7 @@ use frontend\assets\AppAsset;
     
     <?php $this->head() ?>
 </head>
-<body class="bg-F5" >
+<body class="bg-black" >
 <?php $this->beginBody() ?>
 
         <?= $content ?>
