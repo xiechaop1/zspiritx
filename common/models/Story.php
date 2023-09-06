@@ -37,7 +37,7 @@ class Story extends \common\models\gii\Story
     }
 
     public function getTeams(){
-        return $this->hasMany('common\models\UserStory',  ['id' => 'story_id']);
+        return $this->hasMany('common\models\Team',  ['id' => 'story_id']);
     }
 
     public function getGoal(){

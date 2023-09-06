@@ -135,8 +135,6 @@ class DoApi extends ApiAction
 
     public function initdata() {
 
-
-
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
@@ -243,6 +241,8 @@ class DoApi extends ApiAction
     public function join() {
         $roleId = !empty($this->_get['role_id']) ? $this->_get['role_id'] : 0;
 
+        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
+
         if (empty($this->_sessionInfo)
             || !in_array($this->_sessionInfo['session_status'], [Session::SESSION_STATUS_INIT, Session::SESSION_STATUS_READY, Session::SESSION_STATUS_START])
         ) {
@@ -271,19 +271,6 @@ class DoApi extends ApiAction
             return $this->fail('密码错误', ErrorCode::SESSION_PASSWORD_ERROR);
         }
 
-        $userInfo = UserStory::find()
-            ->where([
-                'user_id' => (int)$this->_userId,
-                'story_id' => (int)$this->_storyId,
-                'session_id' => (int)$this->_sessionId,
-                'role_id' => (int)$roleId,
-                'building_id' => (int)$this->_buildingId,
-            ])->one();
-
-        if (!empty($userInfo)) {
-            return $userInfo;
-        }
-
         $userRoleCt = UserStory::find()
             ->where([
 //                'user_id' => (int)$this->_userId,
@@ -309,6 +296,7 @@ class DoApi extends ApiAction
         $userStory->session_id = $this->_sessionId;
         $userStory->role_id = $roleId;
         $userStory->building_id = $this->_buildingId;
+        $userStory->team_id = $teamId;
         try {
             $ret = $userStory->save();
 

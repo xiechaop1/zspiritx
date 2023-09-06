@@ -16,6 +16,7 @@ use common\models\User;
 use common\models\UserList;
 use common\models\UserScore;
 use common\models\UserStory;
+use common\models\UserLoc;
 use frontend\actions\ApiAction;
 use yii;
 
@@ -55,6 +56,15 @@ class UserApi extends ApiAction
                     $ret = $this->updateUser();
                     break;
 
+                case 'update_user_loc':
+                    $ret = $this->updateUserLoc();
+                    break;
+                case 'get_user_loc':
+                    $ret = $this->getUserLoc();
+                    break;
+                case 'get_user_loc_by_team':
+                    $ret = $this->getUserLocByTeam();
+                    break;
                 case 'get_user_list_by_session':
                     $ret = $this->getUserListBySession();
                     break;
@@ -312,6 +322,62 @@ class UserApi extends ApiAction
         }
     }
 
+    public function updateUserLoc() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $lng = !empty($this->_get['lng']) ? $this->_get['lng'] : 0;
+        $lat = !empty($this->_get['lat']) ? $this->_get['lat'] : 0;
+
+        $userLoc = UserLoc::findOne(['user_id' => $userId]);
+
+        if (empty($userLoc)) {
+            $userLoc = new UserLoc();
+            $userLoc->user_id = $userId;
+        }
+
+        $userLoc->lng = $lng;
+        $userLoc->lat = $lat;
+
+        try {
+            $ret = $userLoc->save();
+            return $userLoc;
+        } catch (\Exception $e) {
+            throw $e;
+//            return $this->fail($e->getCode() . ': ' . $e->getMessage());
+        }
+    }
+
+    public function getUserLocByTeam() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
+
+        $userStory = UserStory::find()
+            ->where(['team_id' => $teamId])
+            ->all();
+
+        $userIds = [$userId];
+        foreach ($userStory as $us) {
+            if ($us->user_id == $userId) {
+                continue;
+            }
+            $userIds[] = $us->user_id;
+        }
+
+        $userTeamLoc = \common\models\UserLoc::find()
+            ->where(['user_id' => $userIds])
+            ->all();
+
+
+        return $userTeamLoc;
+    }
+
+    public function getUserLoc() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+
+        $userLoc = \common\models\UserLoc::findOne($userId);
+
+        return $userLoc;
+    }
+
     public function getUserListBySession() {
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : '';
 
@@ -337,10 +403,12 @@ class UserApi extends ApiAction
     }
 
     public function getUserListByTeam() {
-        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : '';
+        $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
-        $ret = UserTeam::find()
-            ->where(['team_id' => $teamId])
+        $ret = UserStory::find()
+            ->where(['team_id' => $teamId, 'session_id' => $sessionId, 'story_id' => $storyId])
             ->with('user')
             ->asArray()
             ->all();

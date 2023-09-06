@@ -5,20 +5,23 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%team}}".
+ * This is the model class for table "{{%user}}".
  *
- * @property int $id
  * @property int $created_at
  * @property int $updated_at
+ * @property int $id
+ * @property int $user_id
+ * @property double $lat
+ * @property double $lng
  */
-class Team extends \yii\db\ActiveRecord
+class UserLoc extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%team}}';
+        return '{{%user_loc}}';
     }
 
     /**
@@ -27,8 +30,8 @@ class Team extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'created_at', 'updated_at'], 'integer'],
-            [['team_name'], 'string', 'max' => 32],
+            [['user_id', 'created_at', 'updated_at'], 'integer'],
+            [['lat', 'lng'], 'number'],
         ];
     }
 
@@ -39,11 +42,9 @@ class Team extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'tag_type' => 'Tag Type',
-            'tag_name' => 'Tag Name',
-            'level'     => 'Leve',
-            'parent_id' => 'Parent Id',
-            'deleted_at'    => 'Deleted At',
+            'user_id' => 'User ID',
+            'lat' => 'Lat',
+            'lng'    => 'Lng',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
