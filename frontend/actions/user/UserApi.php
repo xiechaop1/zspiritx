@@ -349,10 +349,16 @@ class UserApi extends ApiAction
     public function getUserLocByTeam() {
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : '';
 
-        $userStory = UserStory::find()
-            ->where(['team_id' => $teamId])
-            ->all();
+        $userStory = UserStory::find();
+        if (!empty($sessionId)) {
+            $userStory = $userStory->andFilterWhere(['session_id' => $sessionId]);
+        }
+        if (!empty($teamId)) {
+            $userStory = $userStory->andFilterWhere(['team_id' => $teamId]);
+        }
+        $userStory = $userStory->all();
 
         $userIds = [$userId];
         foreach ($userStory as $us) {
