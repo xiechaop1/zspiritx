@@ -12,6 +12,15 @@ namespace common\models;
 class Story extends \common\models\gii\Story
 {
 
+    const STORY_TYPE_CHILD      = 1; // 儿童剧本
+    const STORY_TYPE_ADULT      = 2; // 成人剧本
+    const STORY_TYPE_RUNNING    = 3; // 跑团剧本
+
+    public static $storyType2Name = [
+        self::STORY_TYPE_CHILD      => '儿童剧本',
+        self::STORY_TYPE_ADULT      => '成人剧本',
+        self::STORY_TYPE_RUNNING    => '跑团剧本',
+    ];
 
     public function behaviors()
     {

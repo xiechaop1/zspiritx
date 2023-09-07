@@ -14,7 +14,7 @@ use liyifei\base\controllers\ViewController;
 use liyifei\base\helpers\Net;
 use yii;
 
-class QaController extends ViewController
+class StoryController extends ViewController
 {
     public function behaviors()
     {
@@ -23,7 +23,7 @@ class QaController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['qa', 'edit', 'user_qa'],
+                        'actions' => ['story', 'session', 'user_story',],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -35,14 +35,14 @@ class QaController extends ViewController
     public function actions()
     {
         return yii\helpers\ArrayHelper::merge(parent::actions(), [
-            'qa' => [
-                'class' => 'backend\actions\qa\Qa',
+            'story' => [
+                'class' => 'backend\actions\story\Story',
             ],
             'edit' => [
-                'class' => 'backend\actions\qa\Edit',
+                'class' => 'backend\actions\story\Edit',
             ],
-            'user_qa' => [
-                'class' => 'backend\actions\qa\Userqa',
+            'user_story' => [
+                'class' => 'backend\actions\story\UserStory',
             ],
         ]);
     }

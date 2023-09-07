@@ -13,16 +13,15 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class Singer extends \common\models\Singer
+class UserStory extends \common\models\UserStory
 {
 
 
     public function rules()
     {
         return [
-            [['singer_name', 'singer_comment', ], 'string'],
-            [['singer_category_id', 'singer_status'], 'integer' ],
-            [['created_at', 'updated_at',], 'integer'],
+            [['user_id', 'role_id', 'story_id', 'session_id', 'team_id', 'building_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['goal', 'goal_correct'], 'string'],
         ];
     }
 
@@ -33,7 +32,7 @@ class Singer extends \common\models\Singer
 
     public function search($params)
     {
-        $query = \common\models\Singer::find();
+        $query = \common\models\UserStory::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
@@ -49,11 +48,6 @@ class Singer extends \common\models\Singer
         if (!$this->validate()) {
             return $dataProvider;
         }
-
-        $query->andFilterWhere([
-            'like', 'singer_name', $this->singer_name
-        ]);
-
 
         return $dataProvider;
     }

@@ -33,14 +33,20 @@
                         'items' => [
                             [
                                 'label' => '剧本列表',
-                                'url' => ['/music/music'],
-                                'active' => in_array($this->context->route, ['music/music', 'music/detail']),
+                                'url' => ['/story/story'],
+                                'active' => in_array($this->context->route, ['story/story', 'story/edit']),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
                                 'label' => '剧本扩展管理',
-                                'url' => ['/music/edit'],
-                                'active' => in_array($this->context->route, ['music/edit', ]),
+                                'url' => ['/story/story_extend'],
+                                'active' => in_array($this->context->route, ['story/story_extend', 'story/story_extend_edit']),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
+                                'label' => '用户剧本管理',
+                                'url' => ['/story/user_story'],
+                                'active' => in_array($this->context->route, ['story/user_story', 'story/user_story_edit']),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                         ]

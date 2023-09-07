@@ -26,7 +26,7 @@ class Story extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'desc', 'thumbnail', 'cover_image', 'image', ], 'string'],
-            [['persons_ct', 'roles_ct', 'status'], 'integer'],
+            [['persons_ct', 'roles_ct', 'story_type', 'status'], 'integer'],
             [['is_delete', 'created_at', 'updated_at',], 'integer'],
         ];
     }
