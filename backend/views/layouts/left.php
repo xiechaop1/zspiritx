@@ -49,6 +49,12 @@
                                 'active' => in_array($this->context->route, ['story/user_story', 'story/user_story_edit']),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
+                            [
+                                'label' => '场次',
+                                'url' => ['/story/session'],
+                                'active' => in_array($this->context->route, ['story/session', 'story/session_edit']),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
                         ]
                     ],
                     [

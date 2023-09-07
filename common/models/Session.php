@@ -36,11 +36,19 @@ class Session extends \common\models\gii\Session
     }
 
     public function getUsers(){
-        return $this->hasMany('common\models\UserStory',  ['id' => 'session_id']);
+        return $this->hasMany('common\models\UserStory',  ['session_id' => 'id']);
     }
 
     public function getTeams(){
-        return $this->hasMany('common\models\Team',  ['id' => 'session_id']);
+        return $this->hasMany('common\models\Team',  ['session_id' => 'id']);
+    }
+
+    public function getStory(){
+        return $this->hasOne('common\models\Story', ['id' => 'story_id']);
+    }
+    
+    public function getCreator() {
+        return $this->hasOne('common\models\User', ['id' => 'user_id']);
     }
 
 }

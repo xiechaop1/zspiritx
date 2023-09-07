@@ -23,7 +23,7 @@ class StoryController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['story', 'session', 'user_story',],
+                        'actions' => ['story', 'edit', 'session_edit', 'user_story_edit', 'session', 'user_story',],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -37,6 +37,12 @@ class StoryController extends ViewController
         return yii\helpers\ArrayHelper::merge(parent::actions(), [
             'story' => [
                 'class' => 'backend\actions\story\Story',
+            ],
+            'session' => [
+                'class' => 'backend\actions\story\Session',
+            ],
+            'user_story_edit' => [
+                'class' => 'backend\actions\story\UserStoryEdit',
             ],
             'edit' => [
                 'class' => 'backend\actions\story\Edit',

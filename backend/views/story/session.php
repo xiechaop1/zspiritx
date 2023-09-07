@@ -11,17 +11,17 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '用户剧本管理',
+    'label' => '场次管理',
 ];
 
-$this->title = '用户剧本列表';
+$this->title = '场次s列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/story/user_story_edit', [
+            <?= \yii\bootstrap\Html::a('添加', '/story/session_edit', [
                 'class' => 'btn btn-primary pull-right',
             ]) ?>
         </div>
@@ -31,10 +31,10 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($userStoryModel) {
+                'afterRow' => function ($model, $key, $index) use ($sessionModel) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
-                        'header' => '查看日志',
+                        'header' => '查看场次玩家',
                         'options' => [
                             'id' => 'case-form-' . $model->id
                         ]]);
@@ -53,6 +53,20 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
+                    foreach ($model->users as $sessionUser) {
+                        echo '<p>';
+                        if (!empty($sessionUser->user)) {
+                            echo '玩家：' . $sessionUser->user->user_name;
+                            echo ' 队伍：';
+                            if (!empty($sessionUser->team)) {
+                                echo $sessionUser->team->team_name;
+                            } else {
+                                echo '无';
+                            }
+                        } else {
+                            echo '玩家ID：' . $sessionUser->user_id . ' 队伍ID：' . $sessionUser->team_id;
+                        }
+                    }
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
@@ -61,6 +75,12 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'attribute' => 'id',
 //                        'filter'    => Html::activeInput('text', $searchModel, 'id'),
+                    ],
+                    [
+                        'label' => '场次',
+                        'attribute' => 'session_name',
+                        'format'    => 'raw',
+                        'filter' => Html::activeInput('text', $searchModel, 'session_name',['placeholder'=>'标题']),
                     ],
                     [
                         'label' => '剧本',
@@ -72,26 +92,20 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
-                        'label' => '用户',
+                        'label' => '创建者',
                         'attribute' => 'user_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->user->user_name) ? $model->user->user_name : '未知';
+                            return !empty($model->creator->user_name) ? $model->creator->user_name : '未知';
                         },
                         'filter' => false
                     ],
+
                     [
-                        'label' => '场次',
-                        'attribute' => 'session_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return !empty($model->session->session_name)
-                                ? $model->session->session_name . ' [' . \common\models\Session::$sessionStats2Name[$model->session->session_status] . ']'
-                                : '未知';
-                        },
-                        'filter' => false
+                        'label' => '密码',
+                        'attribute' => 'password_code',
                     ],
-                    ['attribute' => 'goal', 'label' => '结论'],
+
                     [
                         'label' => '创建时间',
                         'format' => 'raw',
@@ -114,10 +128,17 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {delete}',
+                        'template' => '{lines} {edit} {userslist} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['story/user_story_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['story/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                            },
+                            'userslist' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::a('玩家列表', 'javascript:void(0);', [
+                                    'class' => 'btn btn-xs btn-primary',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#case-form-' . $model->id
+                                ]);
                             },
 //                            'detail' => function ($url, $model, $key) {
 //                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
@@ -161,6 +182,7 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
+echo $form->field($sessionModel, 'session_name')->label('标题');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>

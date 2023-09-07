@@ -6,7 +6,7 @@
  * Time: 1:51 PM
  */
 
-namespace backend\actions\qa;
+namespace backend\actions\story;
 
 
 use common\definitions\Common;
@@ -17,26 +17,26 @@ use liyifei\base\helpers\Net;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class Qa extends Action
+class Session extends Action
 {
 
     
     public function run()
     {
-        $qaId = Net::post('id');
-        if ($qaId) {
-            $model = \common\models\Qa::findOne($qaId);
+        $sessionId = Net::post('id');
+        if ($sessionId) {
+            $model = \common\models\Session::findOne($sessionId);
         } else {
-            $model = new \common\models\Qa();
+            $model = new \common\models\Session();
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $qa = \common\models\Qa::findOne($id);
+            $session = \common\models\Session::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
-                    if ($qa) {
-                        if ($qa->delete()) {
+                    if ($session) {
+                        if ($session->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
@@ -44,9 +44,9 @@ class Qa extends Action
                     }
                     break;
                 case 'reset':
-                    if ($qa) {
-                        $qa->is_delete = Common::STATUS_NORMAL;
-                        if ($qa->save()) {
+                    if ($session) {
+                        $session->is_delete = Common::STATUS_NORMAL;
+                        if ($session->save()) {
 
                         }
                     }
@@ -72,16 +72,14 @@ class Qa extends Action
             return $this->controller->refresh();
         }
 
-        $searchModel = new \backend\models\Qa();
+        $searchModel = new \backend\models\Session();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $qaTypes = \common\models\Qa::$qaType2Name;
 
-        return $this->controller->render('qalist', [
+        return $this->controller->render('session', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
-            'qaTypes'   => $qaTypes,
-            'qaModel'    => $model,
+            'sessionModel'    => $model,
             'params'        => $_GET,
         ]);
     }
