@@ -394,8 +394,19 @@ class UserApi extends ApiAction
 
     public function getUserLoc() {
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+        $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
+        $disRange = !empty($this->_get['dis_range']) ? $this->_get['dis_range'] : 0;
 
-        $userLoc = \common\models\UserLoc::findOne($userId);
+        if ($disRange > 0) {
+            $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_user_loc WHERE user_id = ' . $userId;
+            $sql .= ' AND st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
+            $sql .= ' ORDER BY dist ASC;';
+//            var_dump($sql);
+            $userLoc = Yii::$app->db->createCommand($sql)->queryOne();
+        } else {
+            $userLoc = \common\models\UserLoc::findOne($userId);
+        }
 
         return $userLoc;
     }
