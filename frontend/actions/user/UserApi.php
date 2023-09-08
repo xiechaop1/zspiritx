@@ -351,6 +351,10 @@ class UserApi extends ApiAction
         $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : '';
 
+        $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+        $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
+        $disRange = !empty($this->_get['dis_range']) ? $this->_get['dis_range'] : 0;
+
         $userStory = UserStory::find();
         if (!empty($sessionId)) {
             $userStory = $userStory->andFilterWhere(['session_id' => $sessionId]);
@@ -368,9 +372,20 @@ class UserApi extends ApiAction
             $userIds[] = $us->user_id;
         }
 
-        $userTeamLoc = \common\models\UserLoc::find()
-            ->where(['user_id' => $userIds])
-            ->all();
+        if ($disRange > 0) {
+            $sql = 'SELECT * FROM o_user_loc WHERE user_id IN (' . implode(',', $userIds) . ')';
+            $sql .= ' AND st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) < ' . $disRange . ';';
+//            var_dump($sql);
+            $userTeamLoc = Yii::$app->db->createCommand($sql)->queryAll();
+
+        } else {
+            $userTeamLoc = \common\models\UserLoc::find()
+                ->where(['user_id' => $userIds]);
+            $userTeamLoc = $userTeamLoc->all();
+
+        }
+
+
 
 
         return $userTeamLoc;
