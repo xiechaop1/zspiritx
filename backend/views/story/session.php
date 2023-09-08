@@ -105,7 +105,16 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => '密码',
                         'attribute' => 'password_code',
                     ],
-
+                    [
+                        'label' => '状态',
+                        'attribute' => 'session_status',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\Session::$sessionStats2Name[$model->session_status]) ?
+                                \common\models\Session::$sessionStats2Name[$model->session_status] : '未知';
+                        },
+                        'filter' => false
+                    ],
                     [
                         'label' => '创建时间',
                         'format' => 'raw',
