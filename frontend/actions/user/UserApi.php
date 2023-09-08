@@ -373,7 +373,7 @@ class UserApi extends ApiAction
         }
 
         if ($disRange > 0) {
-            $sql = 'SELECT * FROM o_user_loc WHERE user_id IN (' . implode(',', $userIds) . ')';
+            $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) as dist FROM o_user_loc WHERE user_id IN (' . implode(',', $userIds) . ')';
             $sql .= ' AND st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) < ' . $disRange . ';';
 //            var_dump($sql);
             $userTeamLoc = Yii::$app->db->createCommand($sql)->queryAll();
