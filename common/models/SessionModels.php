@@ -21,6 +21,15 @@ class SessionModels extends \common\models\gii\SessionModels
 
     const IS_SET_NO     = 0;
 
+    const SESSION_MODEL_STATUS_READY        = 0;    // 尚未被放置
+    const SESSION_MODEL_STATUS_SET          = 1;    // 被放置
+    const SESSION_MODEL_STATUS_OPERATING    = 2;    // 被操作
+    const SESSION_MODEL_STATUS_PICKUP       = 3;    // 被拾取
+
+    public static $sessionModelStatus2Name = [
+
+    ];
+
     public function behaviors()
     {
         return [

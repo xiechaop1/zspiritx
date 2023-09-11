@@ -396,6 +396,10 @@ class DoApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
+        $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+        $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
+        $disRange = !empty($this->_get['dis_range']) ? $this->_get['dis_range'] : 0;
+
         if (!empty($preStoryModelId)) {
             $preModel = SessionModels::find()
                 ->where([
@@ -412,37 +416,60 @@ class DoApi extends ApiAction
 
         }
 
-        $sessModels = SessionModels::find()
-            ->with('model')
-            ->where([
-                'session_id' => (int)$sessionId,
-//                'story_id'  => (int)$storyId,
-            ]);
-        if (!empty($preStoryModelId)) {
-            $sessModels = $sessModels->andFilterWhere([
-                'pre_story_model_id' => (int)$preStoryModelId,
-            ]);
+        if ($disRange > 0) {
+            $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_session_model WHERE session_id = ' . $sessionId;
+            $sql .= ' AND st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
+            $sql .= ' AND (is_unique = ' . SessionModels::IS_UNIQUE_NO . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_READY . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_SET . ')'
+            $sql .= ' ORDER BY dist ASC;';
+//            var_dump($sql);
+            $sessModels = Yii::$app->db->createCommand($sql)->queryAll();
         } else {
-            $sessModels = $sessModels->andFilterWhere([
-                'or',
-                ['pre_story_model_id' => $preStoryModelId,],
-                ['is_set' => SessionModels::IS_SET_YES,]
-            ]);
-        }
-            $sessModels = $sessModels->andFilterWhere([
-                'or',
-                ['is_unique' => SessionModels::IS_UNIQUE_NO,],
-                ['is_pickup' => SessionModels::IS_PICKUP_NO,]
-            ]);
+
+
+            $sessModels = SessionModels::find()
+                ->with('model')
+                ->where([
+                    'session_id' => (int)$sessionId,
+//                'story_id'  => (int)$storyId,
+                ]);
+            if (!empty($preStoryModelId)) {
+                $sessModels = $sessModels->andFilterWhere([
+                    'pre_story_model_id' => (int)$preStoryModelId,
+                    'session_model_status' => [
+                        SessionModels::SESSION_MODEL_STATUS_READY,
+                        SessionModels::SESSION_MODEL_STATUS_SET,
+                        SessionModels::SESSION_MODEL_STATUS_OPERATING
+                    ]
+                ]);
+            } else {
+                $sessModels = $sessModels->andFilterWhere([
+                    'or',
+                    ['is_unique' => SessionModels::IS_UNIQUE_NO,],
+                    ['session_model_status' => [
+                            SessionModels::SESSION_MODEL_STATUS_SET,
+                            SessionModels::SESSION_MODEL_STATUS_READY,
+                            SessionModels::SESSION_MODEL_STATUS_OPERATING
+                        ]
+                    ]
+                ]);
+            }
+//            $sessModels = $sessModels->andFilterWhere([
+//                'or',
+//                ['is_unique' => SessionModels::IS_UNIQUE_NO,],
+//                ['is_pickup' => SessionModels::IS_PICKUP_NO,]
+//            ]);
 //        }
 
 //        var_dump($ret->createCommand()->getRawSql());exit;
-        $sessModels = $sessModels->all();
+
+            $sessModels = $sessModels->all();
+        }
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
             foreach ($sessModels as $sModel) {
                 $sModel->is_set = SessionModels::IS_SET_YES;
+                $sModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_SET;
                 $sModel->save();
             }
             $transaction->commit();
@@ -468,15 +495,30 @@ class DoApi extends ApiAction
                 'session_id' => (int)$sessionId,
 //                'story_id'  => (int)$storyId,
                 'story_model_id' => (int)$storyModelId,
-                'is_pickup' => SessionModels::IS_PICKUP_NO,
+//                'is_pickup' => SessionModels::IS_PICKUP_NO,
+//                'session_model_status' => SessionModels::SESSION_MODEL_STATUS_PICKUP
+            ])
+            ->andFilterWhere([
+                'session_model_status' => [
+                    SessionModels::SESSION_MODEL_STATUS_PICKUP,
+                    SessionModels::SESSION_MODEL_STATUS_OPERATING,
+                ],
             ])
             ->one();
 
         if (empty($sessionModel)) {
-            return $this->fail('物品可能已经被拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+            if ($sessionModel->last_operator_id != $userId
+                && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_OPERATING
+            ) {
+                return $this->fail('物品正被他人拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+            } elseif ($sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_PICKUP) {
+                return $this->fail('物品可能已经被拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+            }
         }
 
+
         $sessionModel->is_pickup = SessionModels::IS_PICKUP_YES;
+        $sessionModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_PICKUP;
         try {
             $ret = $sessionModel->save();
 
