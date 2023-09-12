@@ -36,6 +36,7 @@ class Qah5Asset extends AssetBundle
         'js/Popper/Popper.js',
         'js/bootstrap/bootstrap.min.js',
         'js/bootoast/bootoast.js',
+        'html/h5/app.js',
         'js/alert.js',
         'js/myslideup.js',
         'js/dropdown/dropdown.js',
@@ -43,7 +44,7 @@ class Qah5Asset extends AssetBundle
         'js/jqueryToast/js/toast.script.js',
         'js/getOptions.js',
         'js/jquery.SuperSlide.2.1.3.js',
-        'html/h5/map.js',
+        'html/h5/qa.js',
         ];
 
 
