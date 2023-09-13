@@ -33,7 +33,7 @@ class Actions extends \common\models\gii\Actions
         return $this->hasMany('common\models\User',  ['sender_id' => 'id']);
     }
 
-    public function toUser(){
+    public function getTo(){
         return $this->hasMany('common\models\User',  ['to_user' => 'id']);
     }
 
