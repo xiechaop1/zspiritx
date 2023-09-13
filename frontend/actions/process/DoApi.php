@@ -453,11 +453,22 @@ class DoApi extends ApiAction
 
         $ret = [];
         foreach ($sessoinStages as $sessionStage) {
+            $sessionModels = $sessionStage->models;
+            $models = [];
+            if (!empty($sessionModels)) {
+//                $models = [];
+                foreach ($sessionModels as $sessionModel) {
+                    $models[] = [
+                        'session_model' => $sessionModel,
+                        'story_model' => $sessionModel->storymodel,
+                    ];
+                }
+            }
             $ret[] = [
                 'session_stage' => $sessionStage,
                 'stage' => $sessionStage->stage,
                 'next_stage' => $sessionStage->stage->nextstage,
-                'session_models' => $sessionStage->models,
+                'session_models' => $models,
             ];
         }
 

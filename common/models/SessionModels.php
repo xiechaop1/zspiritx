@@ -45,4 +45,8 @@ class SessionModels extends \common\models\gii\SessionModels
     public function getModel(){
         return $this->hasOne('common\models\Models',  ['id' => 'model_id']);
     }
+
+    public function getStorymodel() {
+        return $this->hasOne('common\models\StoryModels',  ['id' => 'story_model_id']);
+    }
 }
