@@ -12,7 +12,7 @@ namespace frontend\controllers;
 use liyifei\base\controllers\ViewController;
 use yii\web\Controller;
 
-class Qah5Controller extends Controller
+class Maph5Controller extends Controller
 {
     public $layout = '@frontend/views/layouts/main_h5.php';
 
@@ -21,8 +21,8 @@ class Qah5Controller extends Controller
         $request = \Yii::$app->request;
 
         return [
-            'qa_one' => [
-                'class' => 'frontend\actions\map\map',
+            'get' => [
+                'class' => 'frontend\actions\map\Map',
             ],
 
         ];
