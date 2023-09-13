@@ -22,11 +22,5 @@ class StoryModels extends \common\models\gii\StoryModels
         ];
     }
 
-    public function exec() {
-
-        $ret = $this->save();
-        return $ret;
-    }
-
 
 }
