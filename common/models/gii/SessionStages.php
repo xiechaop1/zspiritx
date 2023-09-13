@@ -8,25 +8,13 @@ use Yii;
  * This is the model class for table "{{%session_model}}".
  *
  * @property int $id
- * @property int $story_model_id
+ * @property int $story_id
+ * @property int $building_id
  * @property int $session_id
- * @property int $pre_story_model_id
- * @property int $model_id
- * @property int $last_operator_id
- * @property int $session_model_status
- * @property int $created_at
- * @property int $updated_at
- * @property string $scan_image_id
- * @property string $snapshot
- * @property double $lat
- * @property double $lng
- * @property double $show_x
- * @property double $show_y
- * @property double $show_z
- * @property int $is_unique
- * @property int $is_pickup
+ * @property int $story_stage_id
+ * @property int $stage_status
  */
-class SessionModels extends \yii\db\ActiveRecord
+class SessionStages extends \yii\db\ActiveRecord
 {
 
     /**
@@ -34,7 +22,7 @@ class SessionModels extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%session_model}}';
+        return '{{%session_stage}}';
     }
 
     /**
@@ -43,9 +31,7 @@ class SessionModels extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_model_id', 'story_stage_id', 'session_id', 'model_id', 'is_unique',
-//                'is_pickup', 'pre_story_model_id',
-                'last_operator_id', 'session_model_status', 'status'], 'integer'],
+            [['session_id', 'story_stage_id', 'story_id', 'stage_status', 'status'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
             [['snapshot'], 'string'],
         ];

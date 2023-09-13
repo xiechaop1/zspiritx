@@ -16,11 +16,13 @@ use common\models\Qa;
 use common\models\Session;
 use common\models\SessionModels;
 use common\models\SessionQa;
+use common\models\SessionStages;
 use common\models\Story;
 use common\models\StoryExtend;
 use common\models\StoryGoal;
 use common\models\StoryModels;
 use common\models\StoryRole;
+use common\models\StoryStages;
 use common\models\User;
 use common\models\UserStory;
 use common\models\UserModels;
@@ -102,8 +104,14 @@ class DoApi extends ApiAction
                 case 'join':
                     $ret = $this->join();
                     break;
+                case 'get_session_stages':
+                    $ret = $this->getSessionStages();
+                    break;
                 case 'get_session_models':
                     $ret = $this->getSessionModels();
+                    break;
+                case 'get_session_models_by_stage':
+                    $ret = $this->getSessionModelsByStage();
                     break;
                 case 'pickup':
                     $ret = $this->pickupModels();
@@ -159,11 +167,35 @@ class DoApi extends ApiAction
                 $this->_userSessionInfo = $sessionObj;
             }
 
+            $storyStages = StoryStages::find()
+                ->where(['story_id' => (int)$this->_storyId]);
+            $storyStages = $storyStages->all();
+
+            foreach ($storyStages as $storyStage) {
+                $checkSessionStage = SessionStages::find()
+                    ->where([
+                        'session_id'    => (int)$this->_userSessionInfo['id'],
+                        'story_stage_id'    => (int)$storyStage['id'],
+                    ]);
+                $checkSessionStage = $checkSessionStage->one();
+
+                if (!empty($checkSessionStage)) {
+                    continue;
+                }
+
+                $sessionStageObj = new SessionStages();
+                $sessionStageObj->story_stage_id = $storyStage['id'];
+                $sessionStageObj->session_id = $this->_userSessionInfo['id'];
+                $sessionStageObj->story_id = $this->_storyId;
+                $sessionStageObj->snapshot = json_encode($sessionStageObj->toArray(), true);
+                $sessionStageObj->save();
+            }
+
             $storyModels = StoryModels::find()
                 ->where(['story_id' => (int)$this->_storyId]);
-            if (!empty($this->_buildingId)) {
-                $storyModels->andFilterWhere(['building_id' => (int)$this->_buildingId]);
-            }
+//            if (!empty($this->_buildingId)) {
+//                $storyModels->andFilterWhere(['building_id' => (int)$this->_buildingId]);
+//            }
             $storyModels = $storyModels->all();
             foreach ($storyModels as $storyModel) {
                 $checkSessionModel = SessionModels::find()
@@ -172,9 +204,9 @@ class DoApi extends ApiAction
                         'session_id'    => (int)$this->_userSessionInfo['id'],
                         'story_model_id'    => (int)$storyModel['id'],
                     ]);
-                if (!empty($this->_buildingId)) {
-                    $checkSessionModel->andFilterWhere(['building_id' => (int)$this->_buildingId]);
-                }
+//                if (!empty($this->_buildingId)) {
+//                    $checkSessionModel->andFilterWhere(['building_id' => (int)$this->_buildingId]);
+//                }
                 $checkSession = $checkSessionModel->one();
 
                 if (!empty($checkSession)) {
@@ -182,16 +214,20 @@ class DoApi extends ApiAction
                 }
 
                 $sessionModel = new SessionModels();
-                foreach ($storyModel as $key => $value) {
-                    if (in_array($key, ['id', 'story_id'])) {
-                        continue;
-                    }
-                    $sessionModel->$key = $value;
-                }
+//                foreach ($storyModel as $key => $value) {
+//                    if (in_array($key, ['id', 'story_id'])) {
+//                        continue;
+//                    }
+//                    $sessionModel->$key = $value;
+//                }
+
                 $sessionModel->story_model_id = $storyModel->id;
+                $sessionModel->story_stage_id = $storyModel->story_stage_id;
                 $sessionModel->session_id = $this->_userSessionInfo['id'];
+//                $sessionModel->pre_story_model_id = $storyModel->pre_story_model_id;
+                $sessionModel->story_id = $storyModel->story_id;
                 $sessionModel->snapshot = json_encode($storyModel->toArray(), true);
-                $sessionModel->is_pickup = 0;
+//                $sessionModel->is_pickup = 0;
                 $sessionModel->save();
             }
 
@@ -390,6 +426,44 @@ class DoApi extends ApiAction
 
     }
 
+    public function getSessionStages() {
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        $sessionStages = SessionStages::find()
+            ->where([
+                'session_id' => (int)$sessionId,
+//                'user_id'   => (int)$userId,
+                'story_id'  => (int)$storyId,
+            ])
+            ->with('stage')
+            ->all();
+
+        return $sessionStages;
+    }
+
+    public function getSessionModelsByStage() {
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
+        $sessoinStages = SessionStages::find()
+            ->where(['id' => $sessionStageId])
+            ->with('stage')
+            ->all();
+
+        $ret = [];
+        foreach ($sessoinStages as $sessionStage) {
+            $ret[] = [
+                'session_stage' => $sessionStage,
+                'stage' => $sessionStage->stage,
+                'next_stage' => $sessionStage->stage->nextstage,
+                'session_models' => $sessionStage->models,
+            ];
+        }
+
+        return $ret;
+    }
+
     public function getSessionModels(){
         $preStoryModelId = !empty($this->_get['pre_story_model_id']) ? $this->_get['pre_story_model_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
@@ -419,7 +493,7 @@ class DoApi extends ApiAction
         if ($disRange > 0) {
             $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_session_model WHERE session_id = ' . $sessionId;
             $sql .= ' AND st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
-            $sql .= ' AND (is_unique = ' . SessionModels::IS_UNIQUE_NO . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_READY . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_SET . ')'
+            $sql .= ' AND (is_unique = ' . SessionModels::IS_UNIQUE_NO . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_READY . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_SET . ')';
             $sql .= ' ORDER BY dist ASC;';
 //            var_dump($sql);
             $sessModels = Yii::$app->db->createCommand($sql)->queryAll();
@@ -517,7 +591,7 @@ class DoApi extends ApiAction
         }
 
 
-        $sessionModel->is_pickup = SessionModels::IS_PICKUP_YES;
+//        $sessionModel->is_pickup = SessionModels::IS_PICKUP_YES;
         $sessionModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_PICKUP;
         try {
             $ret = $sessionModel->save();

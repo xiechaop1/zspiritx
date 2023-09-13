@@ -27,7 +27,10 @@ class SessionModels extends \common\models\gii\SessionModels
     const SESSION_MODEL_STATUS_PICKUP       = 3;    // 被拾取
 
     public static $sessionModelStatus2Name = [
-
+        self::SESSION_MODEL_STATUS_READY      => '未放置',
+        self::SESSION_MODEL_STATUS_SET        => '已放置',
+        self::SESSION_MODEL_STATUS_OPERATING  => '被操作',
+        self::SESSION_MODEL_STATUS_PICKUP     => '被拾取',
     ];
 
     public function behaviors()
