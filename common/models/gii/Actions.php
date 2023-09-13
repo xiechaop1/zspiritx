@@ -5,22 +5,27 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%session}}".
+ * This is the model class for table "{{%action}}".
  *
  * @property int $id
- * @property int $session_status 场次状态
- * @property string $session_name 场次名称
+ * @property int $session_id 场次id
+ * @property int $sender_id 发送者id
+ * @property int $to_user 接收者id
+ * @property int $action_type 动作类型
+ * @property string $action_detail 动作详情
+ * @property int $action_status 动作状态
+ * @property int $is_delete
  * @property int $created_at
  * @property int $updated_at
  */
-class Session extends \yii\db\ActiveRecord
+class Actions extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%session}}';
+        return '{{%action}}';
     }
 
     /**
@@ -29,8 +34,8 @@ class Session extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'story_id', 'session_status', 'created_at', 'updated_at'], 'integer'],
-            [['session_name', 'password_code'], 'string'],
+            [['session_id', 'sender_id', 'to_user', 'action_type', 'action_status', 'is_delete', 'created_at', 'updated_at'], 'integer'],
+            [['action_detail', ], 'string'],
         ];
     }
 
