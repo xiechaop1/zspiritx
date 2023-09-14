@@ -10,6 +10,7 @@ namespace frontend\actions\process;
 
 
 use common\definitions\ErrorCode;
+use common\helpers\Attachment;
 use common\models\Log;
 use common\models\Order;
 use common\models\Qa;
@@ -468,9 +469,13 @@ class DoApi extends ApiAction
                     ];
                 }
             }
+            $stage = $sessionStage->stage;
+            if (!empty($stage->bgm)) {
+                $stage->bgm = Attachment::completeUrl($stage->bgm, false);
+            }
             $ret[] = [
                 'session_stage' => $sessionStage,
-                'stage' => $sessionStage->stage,
+                'stage' => $stage,
                 'next_stage' => $sessionStage->stage->nextstage,
                 'session_models' => $models,
             ];
