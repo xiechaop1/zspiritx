@@ -35,7 +35,7 @@ class SessionStages extends \common\models\gii\SessionStages
     }
 
     public function getModels() {
-        return $this->hasMany('common\models\SessionModels', ['story_stage_id' => 'story_stage_id']);
+        return $this->hasMany('common\models\SessionModels', ['story_stage_id' => 'story_stage_id', 'session_id' => 'session_id']);
     }
 
 
