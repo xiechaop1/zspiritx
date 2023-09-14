@@ -224,6 +224,7 @@ class DoApi extends ApiAction
                 $sessionModel->story_model_id = $storyModel->id;
                 $sessionModel->story_stage_id = $storyModel->story_stage_id;
                 $sessionModel->session_id = $this->_userSessionInfo['id'];
+                $sessionModel->model_id = $storyModel->model_id;
 //                $sessionModel->pre_story_model_id = $storyModel->pre_story_model_id;
                 $sessionModel->story_id = $storyModel->story_id;
                 $sessionModel->snapshot = json_encode($storyModel->toArray(), true);
