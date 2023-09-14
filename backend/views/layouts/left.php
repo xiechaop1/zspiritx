@@ -58,6 +58,19 @@
                         ]
                     ],
                     [
+                        'label' => '模型管理',
+                        'icon' => 'folder-open',
+                        'items' => [
+                            [
+                                'label' => '剧本模型列表',
+                                'url' => ['/model/story_model'],
+                                'active' => in_array($this->context->route, ['model/story_model', 'model/story_model_edit']),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+
+                        ]
+                    ],
+                    [
                         'label' => '问答管理',
                         'icon' => 'folder-open',
                         'items' => [
