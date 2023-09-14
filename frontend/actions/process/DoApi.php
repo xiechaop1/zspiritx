@@ -629,7 +629,7 @@ class DoApi extends ApiAction
                 && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_OPERATING
             ) {
                 return $this->fail('物品正被他人拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
-            } elseif ($sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_PICKUP) {
+            } elseif ($sessionModel->is_unique == SessionModels::IS_UNIQUE_YES && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_PICKUP) {
                 return $this->fail('物品可能已经被拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
             }
         }
