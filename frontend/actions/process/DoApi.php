@@ -442,6 +442,14 @@ class DoApi extends ApiAction
             ->with('stage')
             ->all();
 
+        if (!empty($sessionStages)) {
+            foreach ($sessionStages as $sessionStage) {
+                if (!empty($sessionStage->stage->bgm)) {
+                    $sessionStage->stage->bgm = Attachment::completeUrl($sessionStage->stage->bgm, false);
+                }
+            }
+        }
+
         return $sessionStages;
     }
 
@@ -490,6 +498,8 @@ class DoApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
+        $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
+
         $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
         $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
         $disRange = !empty($this->_get['dis_range']) ? $this->_get['dis_range'] : 0;
@@ -514,6 +524,9 @@ class DoApi extends ApiAction
             $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_session_model WHERE session_id = ' . $sessionId;
             $sql .= ' AND st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
             $sql .= ' AND (is_unique = ' . SessionModels::IS_UNIQUE_NO . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_READY . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_SET . ')';
+            if (!empty($storyStageId)) {
+                $sql .= ' AND story_stage_id = ' . $storyStageId;
+            }
             $sql .= ' ORDER BY dist ASC;';
 //            var_dump($sql);
             $sessModels = Yii::$app->db->createCommand($sql)->queryAll();
@@ -526,6 +539,11 @@ class DoApi extends ApiAction
                     'session_id' => (int)$sessionId,
 //                'story_id'  => (int)$storyId,
                 ]);
+            if (!empty($storyStageId)) {
+                $sessModels = $sessModels->andFilterWhere([
+                    'story_stage_id'  => $storyStageId,
+                ]);
+            }
             if (!empty($preStoryModelId)) {
                 $sessModels = $sessModels->andFilterWhere([
                     'pre_story_model_id' => (int)$preStoryModelId,
@@ -559,18 +577,19 @@ class DoApi extends ApiAction
             $sessModels = $sessModels->all();
         }
 
-        try {
-            $transaction = Yii::$app->db->beginTransaction();
-            foreach ($sessModels as $sModel) {
-                $sModel->is_set = SessionModels::IS_SET_YES;
-                $sModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_SET;
-                $sModel->save();
-            }
-            $transaction->commit();
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            return $this->fail($e->getMessage(), $e->getCode());
-        }
+        // Todo: 暂时不做记录，性能考虑
+//        try {
+//            $transaction = Yii::$app->db->beginTransaction();
+//            foreach ($sessModels as $sModel) {
+//                $sModel->is_set = SessionModels::IS_SET_YES;
+//                $sModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_SET;
+//                $sModel->save();
+//            }
+//            $transaction->commit();
+//        } catch (\Exception $e) {
+//            $transaction->rollBack();
+//            return $this->fail($e->getMessage(), $e->getCode());
+//        }
 
         return $sessModels;
 
