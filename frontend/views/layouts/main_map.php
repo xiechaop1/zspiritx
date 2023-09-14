@@ -23,6 +23,7 @@ use frontend\assets\AppAsset;
     <title><?= Html::encode($this->title) ?></title>
     
     <?php $this->head() ?>
+     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
 </head>
 <body class="bg-black" >
 <?php $this->beginBody() ?>
