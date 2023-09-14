@@ -52,7 +52,14 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('扫描类型');
+            echo $form->field($storyModel, 'direction')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$direction2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('模型朝向');
             echo $form->field($storyModel, 'misrange')->textInput(['value' => $storyModel->misrange])->label('误差');
+            echo $form->field($storyModel, 'act_misrange')->textInput(['value' => $storyModel->act_misrange])->label('动作误差距离');
             echo $form->field($storyModel, 'lat')->textInput(['value' => $storyModel->lat])->label('经度');
             echo $form->field($storyModel, 'lng')->textInput(['value' => $storyModel->lng])->label('纬度');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');

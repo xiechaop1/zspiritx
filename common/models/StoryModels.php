@@ -26,6 +26,14 @@ class StoryModels extends \common\models\gii\StoryModels
         self::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG => '经纬度固定平面',
     ];
 
+    const DIRECTION_DEFAULT     = 1;        // 朝向默认
+    const DIRECTION_TO_USER     = 2;        // 朝向用户
+
+    public static $direction2Name = [
+        self::DIRECTION_DEFAULT => '朝向默认',
+        self::DIRECTION_TO_USER => '朝向用户',
+    ];
+
 
     public function behaviors()
     {
