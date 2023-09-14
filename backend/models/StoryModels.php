@@ -20,7 +20,7 @@ class StoryModels extends \common\models\StoryModels
     {
         return [
             [['lat', 'lng', 'show_x', 'show_y', 'show_z' ], 'number'],
-            [['is_unique', 'story_id', 'building_id', 'poi_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
+            [['is_unique', 'story_stage_id','story_id', 'building_id', 'poi_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_story_model_id', 'model_id', 'misrange', 'sort_by', 'status'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
             [['scan_image_id', 'model_inst_u_id'], 'string'],
         ];
