@@ -22,7 +22,7 @@ class ModelController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['story_model', 'edit', 'session_model', 'model', 'story_stage',],
+                        'actions' => ['story_model', 'story_model_edit', 'edit', 'session_model', 'model', 'story_stage',],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
