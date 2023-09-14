@@ -38,7 +38,7 @@ $this->registerMetaTag([
 </div>
 </div>
 <script type="text/javascript"
-        src="https://webapi.amap.com/maps?v=1.4.15&key=c86c9e45ba1226a8777f3e90dfceab3d"></script>
+        src="https://webapi.amap.com/maps?v=1.4.15&key=您申请的key值"></script>
 
 
 
