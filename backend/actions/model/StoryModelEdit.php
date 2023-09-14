@@ -14,6 +14,7 @@ use common\helpers\Attachment;
 use common\helpers\Time;
 use common\models\Category;
 use common\models\Image;
+use common\models\Models;
 use common\models\Music;
 use common\models\MusicCategory;
 use common\models\Qa;
@@ -69,7 +70,7 @@ class StoryModelEdit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-                
+
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');
@@ -91,11 +92,14 @@ class StoryModelEdit extends Action
 
         $stories = ArrayHelper::map($storyDatas, 'id', 'title');
 
+        $modelDatas = Models::find()->all();
+        $models = ArrayHelper::map($modelDatas, 'id', 'model_name');
 
         return $this->controller->render('story_model_edit', [
             'storyModel'    => $model,
             'scanImageTypes'    => $scanImageTypes,
             'stories'   => $stories,
+            'models'    => $models,
         ]);
     }
 }

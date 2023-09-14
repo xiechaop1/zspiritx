@@ -37,6 +37,12 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('剧本');
 
+            echo $form->field($storyModel, 'model_id')->widget('\kartik\select2\Select2', [
+                'data' => $models,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('模型');
             echo $form->field($storyModel, 'story_stage_id')->textInput(['value' => $storyModel->story_stage_id])->label('Stage ID');
             echo $form->field($storyModel, 'model_inst_u_id')->textInput(['value' => $storyModel->model_inst_u_id])->label('Model Inst UID');
             echo $form->field($storyModel, 'scan_image_id')->textInput(['value' => $storyModel->scan_image_id])->label('Scan Image ID');
