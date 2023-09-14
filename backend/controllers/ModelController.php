@@ -22,7 +22,7 @@ class ModelController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['story_model', 'story_model_edit', 'models_edit', 'session_model', 'models', 'story_stage', 'story_stage_edit'],
+                        'actions' => ['story_stage_link', 'story_model', 'story_model_edit', 'models_edit', 'session_model', 'models', 'story_stage', 'story_stage_edit'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -54,6 +54,9 @@ class ModelController extends ViewController
             ],
             'story_stage_edit' => [
                 'class' => 'backend\actions\model\StoryStageEdit',
+            ],
+            'story_stage_link' => [
+                'class' => 'backend\actions\model\StoryStageLink',
             ],
         ]);
     }

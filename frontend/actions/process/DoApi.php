@@ -481,10 +481,18 @@ class DoApi extends ApiAction
             if (!empty($stage->bgm)) {
                 $stage->bgm = Attachment::completeUrl($stage->bgm, false);
             }
+
+            $nextStage = $sessionStage->stage->nextstage;
+            $nStage = [];
+            if (!empty($nextStage)) {
+                foreach ($nextStage as $ns) {
+                    $nStage = $ns->storystage;
+                }
+            }
             $ret[] = [
                 'session_stage' => $sessionStage,
                 'stage' => $stage,
-                'next_stage' => $sessionStage->stage->nextstage,
+                'next_stage' => $nStage,
                 'session_models' => $models,
             ];
         }

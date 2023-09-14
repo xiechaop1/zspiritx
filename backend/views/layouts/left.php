@@ -79,6 +79,12 @@
                                 'active' => in_array($this->context->route, ['model/story_stage', 'model/story_stage_edit']),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
+                            [
+                                'label' => '剧本Stage关系列表',
+                                'url' => ['/model/story_stage_link'],
+                                'active' => in_array($this->context->route, ['model/story_stage_link']),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
                         ]
                     ],
                     [

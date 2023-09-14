@@ -30,7 +30,7 @@ class StoryStages extends \common\models\gii\StoryStages
     }
 
     public function getNextstage() {
-        return $this->hasMany('common\models\StoryStages', ['id' => 'pre_stage_id']);
+        return $this->hasMany('common\models\StoryStageLink', ['pre_story_stage_id' => 'id'])->with('storystage');
     }
 
     public function getStory() {
