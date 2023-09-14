@@ -28,7 +28,7 @@ class StoryStages extends \yii\db\ActiveRecord
             [['lat', 'lng', 'show_x', 'show_y', 'show_z' ], 'number'],
             [['story_id', 'timebegin', 'timeend', 'rate', 'scan_type', 'pre_stage_id', 'misrange', 'sort_by', 'status'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
-            [['scan_image_id', 'stage_u_id', 'stage_name'], 'string'],
+            [['scan_image_id', 'stage_u_id', 'stage_name', 'bgm'], 'string'],
         ];
     }
 

@@ -56,7 +56,15 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyStage, 'show_y')->textInput(['value' => $storyStage->show_y])->label('坐标Y');
             echo $form->field($storyStage, 'show_z')->textInput(['value' => $storyStage->show_z])->label('坐标Z');
             echo $form->field($storyStage, 'sort_by')->textInput(['value' => $storyStage->sort_by])->label('排序');
-
+            echo $form->field($storyStage, 'bgm')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => false,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=bgm/stages/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $storyStage->bgm],
+            //                'directory' => 'chorus_music/' . Date('Y/m/')
+            ])->label('背景音乐');
 
 //            echo $form->field($storyStage, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [
 //                'multiple' => false,
