@@ -486,7 +486,10 @@ class DoApi extends ApiAction
             $nStage = [];
             if (!empty($nextStage)) {
                 foreach ($nextStage as $ns) {
-                    $nStage = $ns->storystage;
+                    if (empty($ns->storystage)) {
+                        continue;
+                    }
+                    $nStage[] = $ns->storystage;
                 }
             }
             $ret[] = [
