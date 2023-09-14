@@ -544,27 +544,27 @@ class DoApi extends ApiAction
                     'story_stage_id'  => $storyStageId,
                 ]);
             }
-            if (!empty($preStoryModelId)) {
-                $sessModels = $sessModels->andFilterWhere([
-                    'pre_story_model_id' => (int)$preStoryModelId,
-                    'session_model_status' => [
-                        SessionModels::SESSION_MODEL_STATUS_READY,
-                        SessionModels::SESSION_MODEL_STATUS_SET,
-                        SessionModels::SESSION_MODEL_STATUS_OPERATING
-                    ]
-                ]);
-            } else {
-                $sessModels = $sessModels->andFilterWhere([
-                    'or',
-                    ['is_unique' => SessionModels::IS_UNIQUE_NO,],
-                    ['session_model_status' => [
-                            SessionModels::SESSION_MODEL_STATUS_SET,
-                            SessionModels::SESSION_MODEL_STATUS_READY,
-                            SessionModels::SESSION_MODEL_STATUS_OPERATING
-                        ]
-                    ]
-                ]);
-            }
+//            if (!empty($preStoryModelId)) {
+//                $sessModels = $sessModels->andFilterWhere([
+//                    'pre_story_model_id' => (int)$preStoryModelId,
+//                    'session_model_status' => [
+//                        SessionModels::SESSION_MODEL_STATUS_READY,
+//                        SessionModels::SESSION_MODEL_STATUS_SET,
+//                        SessionModels::SESSION_MODEL_STATUS_OPERATING
+//                    ]
+//                ]);
+//            } else {
+//                $sessModels = $sessModels->andFilterWhere([
+//                    'or',
+//                    ['is_unique' => SessionModels::IS_UNIQUE_NO,],
+//                    ['session_model_status' => [
+//                            SessionModels::SESSION_MODEL_STATUS_SET,
+//                            SessionModels::SESSION_MODEL_STATUS_READY,
+//                            SessionModels::SESSION_MODEL_STATUS_OPERATING
+//                        ]
+//                    ]
+//                ]);
+//            }
 //            $sessModels = $sessModels->andFilterWhere([
 //                'or',
 //                ['is_unique' => SessionModels::IS_UNIQUE_NO,],
