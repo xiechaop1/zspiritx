@@ -37,6 +37,11 @@ $this->registerMetaTag([
   <div id="tips"></div>
 </div>
 </div>
+<script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode:'3d66e948d9c6ebc21ee6d90470ce405e',
+        }
+</script>
 <script type="text/javascript"
         src="https://webapi.amap.com/maps?v=1.4.15&key=c86c9e45ba1226a8777f3e90dfceab3d"></script>
 
