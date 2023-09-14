@@ -510,7 +510,7 @@ class DoApi extends ApiAction
                     'story_model_id' => (int)$preStoryModelId,
                     'session_id'    => (int)$sessionId,
 //                    'story_id'      => (int)$storyId,
-                    'is_pickup'     => SessionModels::IS_PICKUP_YES,
+//                    'is_pickup'     => SessionModels::IS_PICKUP_YES,
                 ])
                 ->one();
             if (empty($preModel)) {
@@ -611,15 +611,20 @@ class DoApi extends ApiAction
 //                'is_pickup' => SessionModels::IS_PICKUP_NO,
 //                'session_model_status' => SessionModels::SESSION_MODEL_STATUS_PICKUP
             ])
-            ->andFilterWhere([
-                'session_model_status' => [
-                    SessionModels::SESSION_MODEL_STATUS_PICKUP,
-                    SessionModels::SESSION_MODEL_STATUS_OPERATING,
-                ],
-            ])
+//            ->andFilterWhere([
+//                'session_model_status' => [
+//                    SessionModels::SESSION_MODEL_STATUS_PICKUP,
+//                    SessionModels::SESSION_MODEL_STATUS_OPERATING,
+//                ],
+//            ])
             ->one();
 
         if (empty($sessionModel)) {
+            return $this->fail('没有找到物品', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+        }
+
+        if (!empty($sessionModel)) {
+
             if ($sessionModel->last_operator_id != $userId
                 && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_OPERATING
             ) {
@@ -632,6 +637,7 @@ class DoApi extends ApiAction
 
 //        $sessionModel->is_pickup = SessionModels::IS_PICKUP_YES;
         $sessionModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_PICKUP;
+        $sessionModel->last_operator_id = $userId;
         try {
             $ret = $sessionModel->save();
 
