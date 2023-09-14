@@ -12,6 +12,13 @@ namespace common\models;
 class StoryStages extends \common\models\gii\StoryStages
 {
 
+    const SCAN_TYPE_IMAGE = 1;  // 图像识别
+    const SCAN_TYPE_LATLNG = 2; // 经纬度识别
+
+    public static $scanType2Name = [
+        self::SCAN_TYPE_IMAGE => '图像识别',
+        self::SCAN_TYPE_LATLNG => '经纬度识别',
+    ];
 
     public function behaviors()
     {
@@ -24,6 +31,10 @@ class StoryStages extends \common\models\gii\StoryStages
 
     public function getNextstage() {
         return $this->hasMany('common\models\StoryStages', ['id' => 'pre_stage_id']);
+    }
+
+    public function getStory() {
+        return $this->hasOne('common\models\Story', ['id' => 'story_id']);
     }
 
 
