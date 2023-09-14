@@ -469,7 +469,8 @@ class DoApi extends ApiAction
 //                $models = [];
                 foreach ($sessionModels as $sessionModel) {
                     $sessModel = $sessionModel;
-                    $storyModel = json_decode($sessModel['snapshot'], true);
+//                    $storyModel = json_decode($sessModel['snapshot'], true);
+                    $storyModel = $sessionModel->storymodel;
                     $models[] = [
                         'session_model' => $sessionModel,
                         'story_model' => $storyModel,
