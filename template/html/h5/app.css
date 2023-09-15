@@ -13,6 +13,9 @@ html, body {
 .bg-black{
     background-color: #1F2628 !important;
 }
+.bg-333{
+    background-color: #333333 !important;
+}
 .title-box-border{
     background: rgba(31,38,40,0.8);
     border-radius: 48px;
