@@ -49,13 +49,14 @@ $this->title = 'AR剧本杀';
       <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
       <div class="text-content">
         <div class="fs-30 bold w-100 text-FF">
-          标题：小猫有100块钱，
+          森林守护者
         </div>
         <div class="fs-24  w-100 text-FF m-t-30">
-          内容：适应显示多个点标记 html, body, container { height: 100%; width: 100%; } .amap-icon img{ width: 25px; height: 34px; } 地图自适
+          通过千⾟万苦，你踏进传说中的知识森林，感受到森林的神秘和宁静。这⾥的空⽓清新，阳光透过树叶投下斑驳的光影。<br>
+          你来此的⽬的正是为了寻找拥有渊博智慧的森林守护者，向他请教有关于保护环境的⽅法。根据位置提⽰去寻找他吧，在路上遇到的动物们会与你交流，引导你思考和学习。你不仅能得到宝贵的知识财富，说不定还能和他们成为朋友~
         </div>
         <div class="btn-m-green m-t-30 float-right m-r-20">
-          查看游戏
+          进入游戏
           <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
         </div>
       </div>

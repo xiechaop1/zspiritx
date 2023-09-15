@@ -386,9 +386,6 @@ class UserApi extends ApiAction
 
         }
 
-
-
-
         return $userTeamLoc;
     }
 
