@@ -32,5 +32,5 @@ $this->title = 'AR剧本杀';
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <div class="w-100 m-auto">
 
-<img src="<?= $image ?>">
+<a href=" " onclick="Unity.call('WebViewOff&StartARScene');"><img src="<?= $image ?>" width="450" height="600"></a >
 </div>
