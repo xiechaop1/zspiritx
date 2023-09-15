@@ -11,7 +11,8 @@
  */
 
 
-\frontend\assets\IndexAsset::register($this);
+\frontend\assets\Qah5Asset::register($this);
+
 
 $this->registerMetaTag([
     'name' => 'referrer',
