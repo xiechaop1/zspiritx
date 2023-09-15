@@ -445,7 +445,7 @@ class UserApi extends ApiAction
         if ($teamId > 0) {
             $ret->andFilterWhere(['team_id' => $teamId]);
         }
-        $ret = $ret->with('user')
+        $ret = $ret->with(['user', 'userLoc'])
             ->asArray()
             ->all();
 
