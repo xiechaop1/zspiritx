@@ -21,6 +21,18 @@ html, body {
     padding: 40px 40px;
     position: relative;
 }
+.btn-m-green{
+    border-radius: 64px 24px 64px 24px;
+    border: 2px solid #DAFC70;
+    background-color: #DAFC70;
+    font-size: 32px;
+    font-weight: 500;
+    color: #1F2628;
+    line-height: 19px;
+    display: inline-block;
+    padding: 6px 30px;
+    vertical-align: top;
+}
 .npc-name{
     border-radius: 64px 24px 64px 24px ;
     border: 2px solid #DAFC70;
@@ -132,6 +144,10 @@ rem{
 }
 .img-140{
     width: 140px;
+}
+.img-w-100{
+    width: 100%;
+    height: auto;
 }
 .border-radius-r-5{
     border-top-right-radius: 5px;
@@ -291,6 +307,13 @@ input[type="radio"]:checked+label::before {
     background-repeat: no-repeat;
     border: 8px solid #53BDB3;
     background-color: #ffffff;
+}
+.text-content{
+    width: 100%;
+    padding: 40px 20px 50px 20px;
+    position: absolute;
+    bottom:0;
+    background-color: #333333;
 }
 @media (min-width: 576px){
     .modal-dialog {
