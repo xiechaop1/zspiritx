@@ -27,11 +27,11 @@ class IndexAsset extends AssetBundle
     ];
 
     public $js = [
-        'html/index/searchSuggestion.js',
+//        'html/index/searchSuggestion.js',
 
-        'html/index/index-0630.js',
-        'html/index/favorite.js',
-        'js/favorite.js',
+//        'html/index/index-0630.js',
+//        'html/index/favorite.js',
+//        'js/favorite.js',
         //'js/toTop2.js'
     ];
 
