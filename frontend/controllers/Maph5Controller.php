@@ -14,7 +14,7 @@ use yii\web\Controller;
 
 class Maph5Controller extends Controller
 {
-    public $layout = '@frontend/views/layouts/main_h5.php';
+    public $layout = '@frontend/views/layouts/main_map.php';
 
     public function actions()
     {
