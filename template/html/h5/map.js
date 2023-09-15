@@ -5,7 +5,7 @@ $(function () {
         zoom: 13
     });
 
-    map.clearMap();  // 清除地图覆盖物
+    // map.clearMap();  // 清除地图覆盖物
 
     var markers = [{
         icon: '../../img/qa/btn_播放1_sel@2x.png',
@@ -108,7 +108,8 @@ $(function () {
     };
 
     function removeMarkers(){
-        map.remove(markers);
+        map.clearMap();
+        // map.remove(markers);
     }
 
     function drawPoi(markers){
