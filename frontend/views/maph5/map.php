@@ -44,7 +44,7 @@ $this->registerMetaTag([
         }
 </script>
 <script type="text/javascript"
-        src="https://webapi.amap.com/maps?v=1.4.15&key=c86c9e45ba1226a8777f3e90dfceab3d"></script>
+        src="https://webapi.amap.com/maps?v=1.4.15&key=4262d2f5e02f805f61b1027be27e3480"></script>
 
 
 
