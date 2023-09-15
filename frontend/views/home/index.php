@@ -51,12 +51,12 @@ $this->title = 'AR剧本杀';
         <div class="fs-30 bold w-100 text-FF">
           标题：小猫有100块钱，
         </div>
-        <div class="fs-24  w-100 text-FF m-t-20">
+        <div class="fs-24  w-100 text-FF m-t-30">
           内容：适应显示多个点标记 html, body, container { height: 100%; width: 100%; } .amap-icon img{ width: 25px; height: 34px; } 地图自适
         </div>
-        <div class="btn-m-green m-t-20 float-right m-r-20">
+        <div class="btn-m-green m-t-30 float-right m-r-20">
           查看游戏
-          <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
         </div>
       </div>
     </div>
