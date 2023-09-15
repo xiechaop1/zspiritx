@@ -441,8 +441,11 @@ class UserApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
         $ret = UserStory::find()
-            ->where(['team_id' => $teamId, 'session_id' => $sessionId, 'story_id' => $storyId])
-            ->with('user')
+            ->where(['session_id' => $sessionId, 'story_id' => $storyId]);
+        if ($teamId > 0) {
+            $ret->andFilterWhere(['team_id' => $teamId]);
+        }
+        $ret = $ret->with('user')
             ->asArray()
             ->all();
 
