@@ -669,7 +669,11 @@ class DoApi extends ApiAction
                 $userModel->model_id = $sessionModel->model_id;
                 $userModel->story_model_id = $storyModelId;
                 $userModel->session_model_id = $sessionModel->id;
+                $userModelBaggage->use_ct = 1;
                 $ret = $userModel->save();
+            } else {
+                $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+                $ret = $userModelBaggage->save();
             }
             $transaction->commit();
 

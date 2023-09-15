@@ -9,7 +9,7 @@
 namespace common\models;
 
 
-class UserModels extends \common\models\gii\UserModels
+class UserModels extends \common\models\gii\Us\erModels
 {
     public function behaviors()
     {

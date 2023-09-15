@@ -14,6 +14,10 @@ use Yii;
  * @property int $session_id
  * @property int $team_id
  * @property int $building_id
+ * @property int $buff
+ * @property int $debuff
+ * @property int $buff_expiretime
+ * @property int $debuff_expiretime
  * @property string $goal
  * @property string $goal_right
  * @property int $status
@@ -36,7 +40,10 @@ class UserStory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'role_id', 'story_id', 'session_id', 'team_id', 'building_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'role_id', 'story_id',
+                'session_id', 'team_id', 'building_id',
+                'buff', 'debuff', 'buff_expiretime', 'debuff_expiretime',
+                'status', 'created_at', 'updated_at'], 'integer'],
             [['goal', 'goal_correct'], 'string'],
         ];
     }
