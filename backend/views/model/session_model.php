@@ -21,7 +21,7 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/model/story_model_edit', [
+            <?= \yii\bootstrap\Html::a('添加', '/model/session_model_edit', [
                 'class' => 'btn btn-primary pull-right',
             ]) ?>
         </div>
@@ -67,8 +67,8 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'title',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->story->title) ?
-                                $model->story->title : '未知';
+                            return !empty($model->storymodel->story->title) ?
+                                $model->storymodel->story->title : '未知';
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
@@ -77,8 +77,8 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => 'Stage ID',
                     ],
                     [
-                        'attribute' => 'model_inst_u_id',
-                        'label' => 'Model Inst UnityID',
+                        'attribute' => 'story_model_id',
+                        'label' => 'Story Model ID',
                     ],
                     [
                         'label' => '模型',
@@ -90,25 +90,22 @@ echo \dmstr\widgets\Alert::widget();
                         },
                     ],
                     [
-                        'attribute' => 'scan_image_id',
-                        'label' => 'Scan Image ID',
-                    ],
-                    [
-                        'label' => 'Scan Image Type',
-                        'attribute' => 'scan_type',
+                        'label' => '最后操作人',
+                        'attribute' => 'last_operator_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty(\common\models\StoryModels::$scanImageType2Name[$model->scan_type]) ?
-                                \common\models\StoryModels::$scanImageType2Name[$model->scan_type] : '未知';
+                            return !empty($model->lastoperator->user_name) ?
+                                $model->lastoperator->user_name : '未知';
                         },
                     ],
                     [
-                        'attribute' => 'lat',
-                        'label' => '经度',
-                    ],
-                    [
-                        'attribute' => 'lng',
-                        'label' => '纬度',
+                        'label' => '模型状态',
+                        'attribute' => 'session_model_status',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\SessionModels::$sessionModelStatus2Name[$model->session_model_status]) ?
+                                \common\models\SessionModels::$sessionModelStatus2Name[$model->session_model_status] : '未知';
+                        },
                     ],
                     [
                         'label' => '更新时间',
@@ -124,7 +121,7 @@ echo \dmstr\widgets\Alert::widget();
                         'template' => '{lines} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['model/story_model_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['model/session_model_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
                             },
 //                            'detail' => function ($url, $model, $key) {
 //                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);

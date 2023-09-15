@@ -49,4 +49,8 @@ class SessionModels extends \common\models\gii\SessionModels
     public function getStorymodel() {
         return $this->hasOne('common\models\StoryModels',  ['id' => 'story_model_id']);
     }
+
+    public function getLastoperator() {
+        return $this->hasOne('common\models\Users',  ['id' => 'last_operator_id']);
+    }
 }

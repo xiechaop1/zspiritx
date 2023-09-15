@@ -19,14 +19,13 @@ use yii;
 
 class HomeController extends Controller
 {
-    public $layout = '@frontend/views/layouts/main_n.php';
+    public $layout = '@frontend/views/layouts/main_h5.php';
 
     public function actions()
     {
         return [
-            'banner' => [
-                'class'     => 'frontend\actions\home\HomeApi',
-                'action'    => 'banner',
+            'index' => [
+                'class'     => 'frontend\actions\home\Index',
             ],
         ];
     }
