@@ -28,6 +28,7 @@ $this->registerMetaTag([
 ?>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <div class="w-100 m-auto">
+<div id="container"></div>
 <div class="input-card">
   <h4>地图自适应</h4>
   <input id="setFitView" type="button" class="btn" value="地图自适应显示" />
