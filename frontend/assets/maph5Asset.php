@@ -36,7 +36,6 @@ class maph5Asset extends AssetBundle
         'js/Popper/Popper.js',
         'js/bootstrap/bootstrap.min.js',
         'js/bootoast/bootoast.js',
-        'html/h5/app.js',
         'js/alert.js',
         'js/myslideup.js',
         'js/dropdown/dropdown.js',
