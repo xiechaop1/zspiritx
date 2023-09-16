@@ -313,7 +313,7 @@ input[type="radio"]:checked+label::before {
 }
 .text-content{
     width: 100%;
-    padding: 0 0 60px 0;
+    padding: 0 0 0 0;
     position: absolute;
     bottom: 0;
 }
@@ -323,10 +323,32 @@ input[type="radio"]:checked+label::before {
     opacity: 1;
 }
 .p-l-40{
-    padding: 0 40px  60px 40px;
+    padding: 0 40px  140px 40px;
     background-color: #333333;
 
 }
+.owl-dots{
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+}
+.owl-carousel button.owl-dot {
+    width: 120px;
+    height: 4px;
+    background: #ffffff;
+    border-radius: 0px 0px 0px 0px;
+    opacity: 1;
+    margin-right: 10px;
+}
+.owl-carousel button.owl-dot.active {
+    width: 120px;
+    height: 4px;
+    background: #DAFC70;
+    border-radius: 0px 0px 0px 0px;
+    opacity: 1;
+}
+
 @media (min-width: 576px){
     .modal-dialog {
         max-width: 600px;
