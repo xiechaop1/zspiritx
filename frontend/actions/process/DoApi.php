@@ -79,6 +79,7 @@ class DoApi extends ApiAction
                 }
             }
 
+            $passwordCode = !empty($this->_get['password_code']) ? $this->_get['password_code'] : '';
             $this->_userSessionInfo = Session::find()
                 ->where([
                     'user_id' => (int)$this->_userId,
@@ -88,12 +89,19 @@ class DoApi extends ApiAction
                         Session::SESSION_STATUS_READY,
                         Session::SESSION_STATUS_START,
                     ],
-                ])
-                ->one();
+                ]);
+            if (!empty($passwordCode)) {
+                $this->_userSessionInfo = $this->_userSessionInfo->andFilterWhere(['password_code' => $passwordCode]);
+            }
+            $this->_userSessionInfo = $this->_userSessionInfo->one();
 
             if (!empty($this->_sessionId)) {
                 $this->_sessionInfo = Session::find()
                     ->where(['id' => $this->_sessionId])
+                    ->one();
+            } else if (!empty($passwordCode)) {
+                $this->_sessionInfo = Session::find()
+                    ->where(['password_code' => $passwordCode])
                     ->one();
             }
 
@@ -138,7 +146,6 @@ class DoApi extends ApiAction
 
         return $this->success($ret);
     }
-
 
     /**
      * 初始化
