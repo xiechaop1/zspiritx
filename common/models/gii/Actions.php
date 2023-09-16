@@ -12,6 +12,7 @@ use Yii;
  * @property int $sender_id 发送者id
  * @property int $to_user 接收者id
  * @property int $action_type 动作类型
+ * @property int $expire_time 过期时间
  * @property string $action_detail 动作详情
  * @property int $action_status 动作状态
  * @property int $is_delete
@@ -34,7 +35,9 @@ class Actions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['session_id', 'sender_id', 'to_user', 'action_type', 'action_status', 'is_delete', 'created_at', 'updated_at'], 'integer'],
+            [['session_id', 'sender_id', 'to_user',
+                'action_type', 'action_status', 'expire_time',
+                'is_delete', 'created_at', 'updated_at'], 'integer'],
             [['action_detail', ], 'string'],
         ];
     }

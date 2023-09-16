@@ -26,6 +26,7 @@ return [
         'verificationCode' => 'common\services\VerificationCode',
         'wechat'    => 'common\services\Wechat',
         'oplog'     => 'common\services\Log',
+        'act'       => 'common\services\Actions',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',

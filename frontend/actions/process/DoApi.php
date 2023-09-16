@@ -11,6 +11,7 @@ namespace frontend\actions\process;
 
 use common\definitions\ErrorCode;
 use common\helpers\Attachment;
+use common\models\Actions;
 use common\models\Log;
 use common\models\Order;
 use common\models\Qa;
@@ -119,6 +120,9 @@ class DoApi extends ApiAction
                     break;
                 case 'get_baggage_models':
                     $ret = $this->getBaggageModels();
+                    break;
+                case 'get_action_by_user':
+                    $ret = $this->getActionByUser();
                     break;
                 case 'finish':
                     $ret = $this->finish();
@@ -340,6 +344,7 @@ class DoApi extends ApiAction
 
             if ($this->_checkSessionRole()) {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
+                Yii::$app->act->add($this->_sessionId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
             } else {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
             }
@@ -398,6 +403,8 @@ class DoApi extends ApiAction
                 $userStory->goal_correct = '结论错误，正确结论：' . $storyGoals->goal;
             }
             $ret = $userStory->save();
+
+            Yii::$app->act->add($this->_sessionId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
 
             $transaction->commit();
         } catch (\Exception $e) {
@@ -605,6 +612,31 @@ class DoApi extends ApiAction
 
         return $sessModels;
 
+    }
+
+    public function getActionByUser() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+
+        $actions = Actions::find()
+            ->where([
+                'session_id' => (int)$sessionId,
+            ])
+            ->andFilterWhere([
+                'or',
+                ['to_user' => (int)$userId],
+                ['to_user' => 0],
+            ])
+            ->andFilterWhere([
+                'or',
+                ['expire_time' => (int)0],
+                ['>', 'expire_time', time()],
+            ])
+//            ->createCommand()->getRawSql();
+//        var_dump($actions);exit;
+            ->all();
+
+        return $actions;
     }
 
     public function pickupModels() {
