@@ -48,6 +48,9 @@ $this->title = 'AR剧本杀';
     <div class="item active" onclick="Unity.call('WebViewOff&StartARScene');">
       <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
       <div class="text-content">
+      <div class="text-bg">
+      </div>
+      <div class='p-l-40'>
         <div class="fs-30 bold w-100 text-FF">
           森林守护者
         </div>
@@ -58,6 +61,7 @@ $this->title = 'AR剧本杀';
         <div class="btn-m-green m-t-30 float-right m-r-20">
           进入游戏
           <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+        </div>
         </div>
       </div>
     </div>
