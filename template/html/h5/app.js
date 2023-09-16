@@ -84,7 +84,7 @@ $(function () {
     })
 
     var height = $(window).height();
-    $("#myCarousel .item,.owl-carouse").css('height',height+'px')
+    $("#myCarousel .item,#banner .item").css('height',height+'px')
 
     $('.owl-carousel').owlCarousel({
         loop:true,
