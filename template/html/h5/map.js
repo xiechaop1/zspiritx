@@ -1,9 +1,9 @@
 $(function () {
-    var map = new BMapGL.Map("container");
-    var point = new BMapGL.Point(116.404, 39.915);
-    map.centerAndZoom(point, 15);
+    // var map = new BMapGL.Map("container");
+    // var point = new BMapGL.Point(116.404, 39.915);
+    // map.centerAndZoom(point, 15);
 
- /*   
+ /*
     var map = new AMap.Map('container', {
         resizeEnable: true,
         center: [116.397428, 39.90923],
