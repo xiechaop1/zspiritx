@@ -124,7 +124,7 @@ $(function () {
     };
 
     $(document).ready(function() {
-        setInterval(getPoi(),1000)
+        // setInterval(getPoi(),1000)
 
     });
 })
