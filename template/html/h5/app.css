@@ -313,10 +313,9 @@ input[type="radio"]:checked+label::before {
 }
 .text-content{
     width: 100%;
-    padding: 50px 0 60px 0;
+    padding: 0 0 0 0;
     position: absolute;
     bottom: 0;
-    background-color: #333333;
 }
 .text-bg{
     height: 80px;
@@ -324,7 +323,9 @@ input[type="radio"]:checked+label::before {
     opacity: 1;
 }
 .p-l-40{
-    padding: 0 40px  0 40px;
+    padding: 0 40px  60px 40px;
+    background-color: #333333;
+
 }
 @media (min-width: 576px){
     .modal-dialog {
