@@ -50,6 +50,10 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'finish',
             ],
+            'get_action_by_user' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'get_action_by_user',
+            ],
         ];
     }
 }
