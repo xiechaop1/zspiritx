@@ -24,6 +24,11 @@ use frontend\assets\AppAsset;
     
     <?php $this->head() ?>
      <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+<style type="text/css">
+    html{height:100%}
+    body{height:100%;margin:0px;padding:0px}
+    #container{height:100%}
+</style>
 </head>
 <body class="bg-black" >
 <?php $this->beginBody() ?>

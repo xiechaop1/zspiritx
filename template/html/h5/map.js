@@ -1,4 +1,9 @@
 $(function () {
+    var map = new BMapGL.Map("container");
+    var point = new BMapGL.Point(116.404, 39.915);
+    map.centerAndZoom(point, 15);
+
+ /*   
     var map = new AMap.Map('container', {
         resizeEnable: true,
         center: [116.397428, 39.90923],
@@ -40,7 +45,8 @@ $(function () {
         var newCenter = map.setFitView();
         document.getElementById('centerCoord').innerHTML = '当前中心点坐标：' + newCenter.getCenter();
         document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
-    });
+    });*/
+
     function getPoi(){
         var user_id=$("input[name='user_id']").val();
         var session_id=$("input[name='session_id']").val();
