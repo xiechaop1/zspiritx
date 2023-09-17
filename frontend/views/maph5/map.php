@@ -46,6 +46,41 @@ $this->registerMetaTag([
         }
 </script>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=c86c9e45ba1226a8777f3e90dfceab3d"></script>
+<script type="text/javascript">
+    var position = new AMap.LngLat(116.397428, 39.90923);
+
+    // 创建地图实例
+    var map = new AMap.Map("container", {
+        zoom: 13,
+        center: position,
+        resizeEnable: true
+    });
+
+    // 点标记显示内容，HTML要素字符串
+    var markerContent = '' +
+        '<div class="custom-content-marker">' +
+        '   <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">' +
+        '   <div class="close-btn" onclick="clearMarker()">X</div>' +
+        '</div>';
+
+    var marker = new AMap.Marker({
+        position: position,
+        // 将 html 传给 content
+        content: markerContent,
+        // 以 icon 的 [center bottom] 为原点
+        offset: new AMap.Pixel(-13, -30)
+    });
+
+    // 将 markers 添加到地图
+    map.add(marker);
+
+    // 清除 marker
+    function clearMarker() {
+
+        map.remove(marker);
+    }
+</script>
+
 <!--
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=DcvMM0wWt8NZAQFcDmGsfeZiVqHEdaB2">
 </script>
