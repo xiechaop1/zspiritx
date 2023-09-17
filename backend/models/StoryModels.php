@@ -23,9 +23,9 @@ class StoryModels extends \common\models\StoryModels
             [['is_unique', 'story_stage_id', 'story_id',
                 'building_id', 'poi_id', 'timebegin', 'timeend',
                 'rate', 'scan_type', 'pre_story_model_id', 'model_id',
-                'misrange', 'act_misrange', 'direction', 'sort_by', 'status'], 'integer'],
+                'misrange', 'act_misrange', 'active_type', 'direction', 'sort_by', 'status'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
-            [['scan_image_id', 'model_inst_u_id'], 'string'],
+            [['scan_image_id', 'model_inst_u_id', 'active_next'], 'string'],
         ];
     }
 

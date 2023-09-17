@@ -69,6 +69,8 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'show_y')->textInput(['value' => $storyModel->show_y])->label('坐标Y');
             echo $form->field($storyModel, 'show_z')->textInput(['value' => $storyModel->show_z])->label('坐标Z');
             echo $form->field($storyModel, 'is_unique')->textInput(['value' => $storyModel->is_unique])->label('是否唯一');
+            echo $form->field($storyModel, 'active_next')->textarea(['value' => \common\helpers\Active::decodeActiveToShow($storyModel->active_next)])->label('动作内容');
+            echo $form->field($storyModel, 'active_expiretime')->textInput(['value' => $storyModel->active_expiretime])->label('动作过期时间');
 
 
 //            echo $form->field($storyModel, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [
@@ -94,49 +96,3 @@ echo \dmstr\widgets\Alert::widget();
 
         </div>
     </div>
-
-
-<script>
-    $(document).ready(function () {
-        console.log($('#view_city'));
-        $("#view_city").select2({
-            //tags: true
-        })
-        ;
-
-        $("#view_city").on("select2:select", function (evt) {
-            console.log($(this));
-            var element = evt.params.data.element;
-            var $element = $(element);
-
-            window.setTimeout(function () {
-                console.log($("select#view_city"));
-                console.log($("select#view_city").find(":selected"));
-                console.log($("select#view_city").find(":selected").length);
-                if ($("select#view_city").find(":selected").length > 1) {
-                    var $second = $("select#view_city").find(":selected").eq(-1);
-                    console.log($second);
-                    console.log($element);
-                    if ($second.val() != $element.val()) {
-                        $element.detach();
-                        $second.after($element);
-                    }
-                } else {
-                    $element.detach();
-                    $("select#view_city").prepend($element);
-                }
-
-                $("select#view_city").trigger("change");
-            }, 1);
-        });
-
-//        $("select#view_city").on("select2:unselect", function (evt) {
-//            if ($("select#view_city").find(":selected").length) {
-//                var element = evt.params.data.element;
-//                var $element = $(element);
-//                $
-//                ("select#view_city").find(":selected").after($element);
-//            }
-//        });
-    });
-</script>

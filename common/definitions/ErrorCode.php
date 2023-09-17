@@ -50,4 +50,8 @@ class ErrorCode extends Api
 
     const QA_SAVE_FAILED            = -70002;   // 问答保存失败
 
+    const USER_MODEL_NOT_FOUND      = -80001;   // 用户模型不存在
+    const USER_MODEL_NOT_ENOUGH     = -80002;   // 用户模型不足
+    const USER_MODEL_BUFF_NOT_FOUND = -80003;   // 用户模型buff不存在
+
 }

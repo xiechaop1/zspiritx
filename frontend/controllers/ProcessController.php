@@ -38,6 +38,10 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'get_session_stages',
             ],
+            'use_model' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'use_model',
+            ],
             'pickup' => [
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'pickup',

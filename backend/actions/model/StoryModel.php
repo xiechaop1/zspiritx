@@ -20,7 +20,6 @@ use yii\helpers\ArrayHelper;
 class StoryModel extends Action
 {
 
-    
     public function run()
     {
         $storyModelId = Net::post('id');

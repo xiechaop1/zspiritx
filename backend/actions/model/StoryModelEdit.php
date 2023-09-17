@@ -10,6 +10,7 @@ namespace backend\actions\model;
 
 
 use common\definitions\Common;
+use common\helpers\Active;
 use common\helpers\Attachment;
 use common\helpers\Time;
 use common\models\Category;
@@ -68,6 +69,8 @@ class StoryModelEdit extends Action
         if (Yii::$app->request->isPost) {
 
             $model->load(Yii::$app->request->post());
+
+            $model->active_next = Active::encodeActive($model->active_next);
 
             if ($model->validate()) {
 

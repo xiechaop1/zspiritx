@@ -9,7 +9,7 @@
 namespace common\models;
 
 
-class UserModels extends \common\models\gii\Us\erModels
+class UserModels extends \common\models\gii\UserModels
 {
     public function behaviors()
     {
@@ -24,8 +24,16 @@ class UserModels extends \common\models\gii\Us\erModels
         return $this->hasOne('common\models\Models',  ['id' => 'model_id']);
     }
 
-    public function getSessionModels(){
+    public function getSessionModel(){
         return $this->hasOne('common\models\SessionModels',  ['id' => 'session_model_id']);
+    }
+
+    public function getStoryModel(){
+        return $this->hasOne('common\models\StoryModels',  ['id' => 'story_model_id']);
+    }
+
+    public function getBuff(){
+        return $this->hasOne('common\models\Buff',  ['id' => 'active_next'])->onCondition(['active_type' => StoryModels::ACTIVE_TYPE_BUFF]);
     }
 
 }

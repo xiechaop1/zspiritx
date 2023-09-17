@@ -34,6 +34,26 @@ class StoryModels extends \common\models\gii\StoryModels
         self::DIRECTION_TO_USER => '朝向用户',
     ];
 
+    const ACTIVE_TYPE_CHAT      = 1;    // 聊天
+    const ACTIVE_TYPE_BUFF      = 2;    // BUFF
+    public static $activeType2Name = [
+        self::ACTIVE_TYPE_CHAT => '聊天',
+        self::ACTIVE_TYPE_BUFF => 'BUFF',
+    ];
+
+    const ACTIVE_BUFF_HIDDEN    = 1;    // 隐身
+    const ACTIVE_BUFF_SHIELD    = 2;    // 护盾
+    const ACTIVE_BUFF_DETOXIFY  = 3;    // 解毒
+    const ACTIVE_BUFF_SHOW_MAP  = 4;    // 显示地图
+    const ACTIVE_BUFF_RADARA    = 5;    // 雷达
+
+    public static $activeBuff2Name = [
+        self::ACTIVE_BUFF_HIDDEN => '隐身',
+        self::ACTIVE_BUFF_SHIELD => '护盾',
+        self::ACTIVE_BUFF_DETOXIFY => '解毒',
+        self::ACTIVE_BUFF_SHOW_MAP => '显示地图',
+        self::ACTIVE_BUFF_RADARA => '雷达',
+    ];
 
     public function behaviors()
     {

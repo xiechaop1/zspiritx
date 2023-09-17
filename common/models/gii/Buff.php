@@ -5,18 +5,20 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%story_model}}".
+ * This is the model class for table "{{%qa}}".
  *
+ * @property int $id
+ * @property int $created_at
+ * @property int $updated_at
  */
-class StoryModels extends \yii\db\ActiveRecord
+class Buff extends \yii\db\ActiveRecord
 {
-
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%story_model}}';
+        return '{{%buff}}';
     }
 
     /**
@@ -25,13 +27,8 @@ class StoryModels extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lat', 'lng', 'show_x', 'show_y', 'show_z' ], 'number'],
-            [['is_unique', 'story_stage_id', 'story_id',
-                'building_id', 'poi_id', 'timebegin', 'timeend',
-                'rate', 'scan_type', 'pre_story_model_id', 'model_id',
-                'misrange', 'act_misrange', 'active_type', 'direction', 'sort_by', 'status'], 'integer'],
-            [['created_at', 'updated_at',], 'integer'],
-            [['scan_image_id', 'model_inst_u_id', 'active_next'], 'string'],
+            [['buff_type', 'expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['buff_name', 'buff_desc', ], 'string'],
         ];
     }
 
@@ -52,8 +49,5 @@ class StoryModels extends \yii\db\ActiveRecord
                 }
             }
         }
-
-        return $ret;
-
     }
 }

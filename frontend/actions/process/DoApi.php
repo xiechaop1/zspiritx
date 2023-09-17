@@ -10,6 +10,7 @@ namespace frontend\actions\process;
 
 
 use common\definitions\ErrorCode;
+use common\helpers\Active;
 use common\helpers\Attachment;
 use common\models\Actions;
 use common\models\Log;
@@ -125,6 +126,9 @@ class DoApi extends ApiAction
                     break;
                 case 'pickup':
                     $ret = $this->pickupModels();
+                    break;
+                case 'use_model':
+                    $ret = $this->useModel();
                     break;
                 case 'get_baggage_models':
                     $ret = $this->getBaggageModels();
@@ -644,6 +648,67 @@ class DoApi extends ApiAction
             ->all();
 
         return $actions;
+    }
+
+    public function useModel() {
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
+        $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
+        $userModelId = !empty($this->_get['user_model_id']) ? $this->_get['user_model_id'] : 0;
+
+        $bagageModel = UserModels::find()
+            ->where([
+                'id' => (int)$userModelId,
+//                'user_id' => (int)$userId,
+//                'session_id' => (int)$sessionId,
+            ])
+            ->one();
+
+        if (empty($bagageModel)) {
+            return $this->fail('背包中没有该道具', ErrorCode::USER_MODEL_NOT_FOUND);
+        }
+
+        if ($bagageModel->use_ct <= 0) {
+            return $this->fail('该道具使用次数已用完', ErrorCode::USER_MODEL_NOT_ENOUGH);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $storyModel = $bagageModel->storyModel();
+            if (empty($storyModel)) {
+                return $this->fail('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
+            }
+
+//            $activeArray = Active::decodeActive($storyModel->activeNext);
+            if ($storyModel->active_type == StoryModels::ACTIVE_TYPE_BUFF) {
+                $userStory = UserStory::findOne([
+                    'user_id' => (int)$userId,
+                    'session_id' => (int)$sessionId,
+                    'story_id' => (int)$storyId,
+                ]);
+
+                if (!empty($userStory)
+                    && !empty($userStory->buff)
+                ) {
+                    $userStory->buff = $storyModel->buff->id;
+                    $userStory->buff_expiretime = time() + $storyModel->buff->expire_time;
+                    $userStory->save();
+                } else {
+                    throw new \yii\base\Exception('执行出现问题', ErrorCode::USER_MODEL_BUFF_NOT_FOUND);
+                }
+            }
+
+            $bagageModel->use_ct -= 1;
+            $bagageModel->save();
+            $transaction->commit();
+
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return $this->fail($e->getMessage(), $e->getCode());
+        }
+
     }
 
     public function pickupModels() {
