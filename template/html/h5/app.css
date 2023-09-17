@@ -323,13 +323,13 @@ input[type="radio"]:checked+label::before {
     opacity: 1;
 }
 .p-l-40{
-    padding: 0 40px  140px 40px;
+    padding: 0 40px  160px 40px;
     background-color: #333333;
 
 }
 .owl-dots{
     position: absolute;
-    top: 20px;
+    bottom: 20px;
     width: 100%;
     text-align: center;
 }
