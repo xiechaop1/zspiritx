@@ -43,7 +43,7 @@ class maph5Asset extends AssetBundle
         'js/jqueryToast/js/toast.script.js',
         'js/getOptions.js',
         'js/jquery.SuperSlide.2.1.3.js',
-       
+        'html/h5/map.js',
         ];
 
 
