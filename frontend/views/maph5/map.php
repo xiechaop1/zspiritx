@@ -38,21 +38,22 @@ $this->registerMetaTag([
   <div id="tips"></div>
 </div>
 </div>
-<!--
+
 <script type="text/javascript">
         window._AMapSecurityConfig = {
-            securityJsCode:'3d66e948d9c6ebc21ee6d90470ce405e',
+            serviceHost:'https://h5.zspiritx.com.cn/_AMapService',
+            // 例如 ：serviceHost:'http://1.1.1.1:80/_AMapService',
         }
 </script>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=c86c9e45ba1226a8777f3e90dfceab3d"></script>
--->
+<!--
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=DcvMM0wWt8NZAQFcDmGsfeZiVqHEdaB2">
 </script>
 <script>
 var map = new BMapGL.Map('container'); // 创建Map实例
 map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 12); // 初始化地图,设置中心点坐标和地图级别
 map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
-</script>
+</script>-->
 
 
 
