@@ -33,6 +33,7 @@ $this->title = $qa['topic'];
   您的浏览器不支持 audio 元素。
 </audio>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
+<input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <div class="w-100 m-auto">
 
     <div class="p-20 bg-black">

@@ -14,7 +14,7 @@ use yii\web\Controller;
 
 class Baggageh5Controller extends Controller
 {
-    public $layout = '@frontend/views/layouts/main_w.php';
+    public $layout = '@frontend/views/layouts/main_h5.php';
 
     public function actions()
     {

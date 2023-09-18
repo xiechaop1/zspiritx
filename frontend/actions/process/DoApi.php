@@ -676,7 +676,7 @@ class DoApi extends ApiAction
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $storyModel = $bagageModel->storyModel();
+            $storyModel = $bagageModel->storyModel;
             if (empty($storyModel)) {
                 return $this->fail('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
             }
@@ -690,7 +690,7 @@ class DoApi extends ApiAction
                 ]);
 
                 if (!empty($userStory)
-                    && !empty($userStory->buff)
+                    && !empty($storyModel->buff)
                 ) {
                     $userStory->buff = $storyModel->buff->id;
                     $userStory->buff_expiretime = time() + $storyModel->buff->expire_time;
@@ -767,14 +767,14 @@ class DoApi extends ApiAction
                 ])
                 ->one();
             if (empty($userModelBaggage)) {
-                $userModel = new UserModels();
-                $userModel->user_id = $userId;
-                $userModel->session_id = $sessionId;
-                $userModel->model_id = $sessionModel->model_id;
-                $userModel->story_model_id = $storyModelId;
-                $userModel->session_model_id = $sessionModel->id;
+                $userModelBaggage = new UserModels();
+                $userModelBaggage->user_id = $userId;
+                $userModelBaggage->session_id = $sessionId;
+                $userModelBaggage->model_id = $sessionModel->model_id;
+                $userModelBaggage->story_model_id = $storyModelId;
+                $userModelBaggage->session_model_id = $sessionModel->id;
                 $userModelBaggage->use_ct = 1;
-                $ret = $userModel->save();
+                $ret = $userModelBaggage->save();
             } else {
                 $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
                 $ret = $userModelBaggage->save();
@@ -783,7 +783,14 @@ class DoApi extends ApiAction
 
             $this->_get['pre_story_model_id'] = $storyModelId;
 
-            $ret = $this->getSessionModels();
+            $ret['data'] = $this->getSessionModels();
+
+            $storyModel = StoryModels::find()
+                ->with('buff')
+                ->where(['id' => (int)$storyModelId])
+                ->one();
+
+
 
         } catch (\Exception $e) {
             $transaction->rollBack();
