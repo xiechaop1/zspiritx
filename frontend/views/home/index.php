@@ -80,7 +80,7 @@ $this->title = 'AR剧本杀';
 
 </div>
 
-<div id="loginform" class="w-100 m-auto" style="display: none; position: absolute; left: 10px; top: 50px; z-index: 99999999">
+<div id="loginform" class="w-100 m-auto" style="display: none; position: absolute; left: 0px; top: 50px; z-index: 99999999">
 
   <div class="p-20 bg-black">
     <div class="w-100 p-30  m-b-10">
