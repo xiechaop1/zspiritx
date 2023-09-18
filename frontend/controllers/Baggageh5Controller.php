@@ -22,7 +22,7 @@ class Baggageh5Controller extends Controller
 
         return [
             'all' => [
-                'class' => 'frontend\actions\baggageH5\Baggage',
+                'class' => 'frontend\actions\baggageh5\Baggage',
             ],
 
         ];
