@@ -791,21 +791,22 @@ class DoApi extends ApiAction
 
             $this->_get['pre_story_model_id'] = $storyModelId;
 
-            $ret['data'] = $this->getSessionModels();
+            $result['data'] = $this->getSessionModels();
 
             $storyModel = StoryModels::find()
                 ->with('buff')
                 ->where(['id' => (int)$storyModelId])
                 ->one();
 
-
+            $result['msg'] = '获取成功';
 
         } catch (\Exception $e) {
+//            var_dump($e);
             $transaction->rollBack();
             return $this->fail($e->getMessage(), $e->getCode());
         }
 
-        return $ret;
+        return $result;
     }
 
     /**
