@@ -8,26 +8,26 @@ $(function () {
     // map.clearMap();  // 清除地图覆盖物
 
     var markers = [{
-        icon: '../../img/qa/btn_播放1_sel@2x.png',
+        icon: '../../img/map/marker_1.png',
         position: [116.205467, 39.907761]
     }, {
-        icon: '../../img/qa/btn_播放1_sel@2x.png',
+        icon: '../../img/map/marker_1.png',
         position: [116.368904, 39.913423]
     }, {
-        icon: '../../img/qa/btn_播放1_sel@2x.png',
+        icon: '../../img/map/marker_1.png',
         position: [116.305467, 39.807761]
     }];
 
     // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
-    // drawPoi(markers)
-    // markers.forEach(function(marker) {
-    //     new AMap.Marker({
-    //         map: map,
-    //         icon: marker.icon,
-    //         position: [marker.position[0], marker.position[1]],
-    //         offset: new AMap.Pixel(-13, -30)
-    //     });
-    // });
+    drawPoi(markers)
+    markers.forEach(function(marker) {
+        new AMap.Marker({
+            map: map,
+            // icon: marker.icon,
+            position: [marker.position[0], marker.position[1]],
+            offset: new AMap.Pixel(-13, -30)
+        });
+    });
 
     var center = map.getCenter();
 
@@ -59,7 +59,7 @@ $(function () {
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
-            url: 'https://h5.zspiritx.com.cn/user/get_user_loc_by_team',
+            url: 'user/get_user_loc_by_team',
             data:{
                 user_id:user_id,
                 session_id:session_id,
@@ -82,13 +82,13 @@ $(function () {
                     var markers = [];
                     for (var i in obj.data) {
                         var marker = {
-                            iconPath: url,
+                            // iconPath: url,
                             id: obj.data[i].id || 0,
                             name: obj.data[i].user_id || '',
                             latitude: obj.data[i].lat,
                             longitude: obj.data[i].lng,
-                            width: 25,
-                            height: 48
+                            width: 80,
+                            height: 80
                         };
                         markers.push(marker)
                     }
@@ -125,7 +125,7 @@ $(function () {
     };
 
     $(document).ready(function() {
-        // setInterval(getPoi(),1000)
+        setInterval(getPoi(),1000)
 
     });
 })
