@@ -45,8 +45,8 @@ $this->title = '我的背包';
             <div class="row" id="answer-box">
                 <?php
                 foreach ($model as $item) {
-                    $label = !empty($item->model->model_name) ? $item->model->model_name : '未知';
-                    $txt = !empty($item->model->model_desc) ? $item->model->model_desc : ' - ';
+                    $label = !empty($item->storymodel->story_model_name) ? $item->storymodel->story_model_name : $item->model->model_name;
+                    $txt = !empty($item->storymodel->story_model_desc) ? $item->storymodel->story_model_desc : $item->model->model_desc;
                     $txt = $label .  '： ' . $txt;
                 echo '
                 <div class="m-t-30 col-sm-12 col-md-12">
