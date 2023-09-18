@@ -33,7 +33,6 @@
 <div class="map-info-box" id="map-info-box">
   <img decoding="async"  src="../../img/map/x.png" alt="First slide" class="map-info-close">
   <div class="map-text-context">
-    textxxx
 
   </div>
 </div>
@@ -58,5 +57,16 @@
 <script src="../../js/toTopH5.js"></script>
 <script type="text/javascript"
         src="map.js"></script>
+<script>
+  function showPoiDetail() {
+    var e=$(this);
+    var text=e.find('.marker_text').attr("data-id");
+    text=e.attr("data-id");
+    text=$(this).attr('data-id');
+    $("#map-info-box").show();
+    console.log(text,e)
+    $("#map-info-box .map-text-context").empty().text(text);
+  }
+</script>
 </body>
 </html>
