@@ -9,6 +9,7 @@
 namespace frontend\actions\process;
 
 
+use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\helpers\Active;
 use common\helpers\Attachment;
@@ -661,6 +662,7 @@ class DoApi extends ApiAction
         $bagageModel = UserModels::find()
             ->where([
                 'id' => (int)$userModelId,
+                'is_delete' => Common::STATUS_NORMAL,
 //                'user_id' => (int)$userId,
 //                'session_id' => (int)$sessionId,
             ])
@@ -701,6 +703,9 @@ class DoApi extends ApiAction
             }
 
             $bagageModel->use_ct -= 1;
+            if ($bagageModel->use_ct <= 0) {
+                $bagageModel->is_delete = Common::STATUS_DELETED;
+            }
             $bagageModel->save();
             $transaction->commit();
 
@@ -774,9 +779,11 @@ class DoApi extends ApiAction
                 $userModelBaggage->story_model_id = $storyModelId;
                 $userModelBaggage->session_model_id = $sessionModel->id;
                 $userModelBaggage->use_ct = 1;
+                $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             } else {
                 $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+                $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             }
             $transaction->commit();
