@@ -348,7 +348,35 @@ input[type="radio"]:checked+label::before {
     border-radius: 0px 0px 0px 0px;
     opacity: 1;
 }
+.marker_text{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    display: inline-block;
+    line-height: 30px;
+    font-size: 16px;
+    color:#ffffff;
+    background-image: url("../../img/map/marker_1.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.map-info-box{
+    position: absolute;
+    bottom: 0;
+    background: #ffffff;
+    width: 100%;
+    padding: 20px 20px 50px 20px;
+    display:none;
+}
+.map-info-close{
+    width: 20px;
+    height: 20px;
+    float: right;
 
+}
+.map-text-context{
+    font-size: 20px;
+}
 @media (min-width: 576px){
     .modal-dialog {
         max-width: 600px;

@@ -1,4 +1,10 @@
 $(function () {
+    $(".map-info-close").on('click',function (){
+        var me=$(this);
+        $("#map-info-box").hide();
+    })
+
+
     var map = new AMap.Map('container', {
         resizeEnable: true,
         center: [116.397428, 39.90923],
@@ -8,26 +14,52 @@ $(function () {
     // map.clearMap();  // 清除地图覆盖物
 
     var markers = [{
-        icon: '../../img/map/marker_1.png',
+        // icon: '../../img/map/marker_1.png',
         position: [116.205467, 39.907761]
     }, {
-        icon: '../../img/map/marker_1.png',
+        // icon: '../../img/map/marker_1.png',
         position: [116.368904, 39.913423]
     }, {
-        icon: '../../img/map/marker_1.png',
+        // icon: '../../img/map/marker_1.png',
         position: [116.305467, 39.807761]
     }];
 
     // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
-    drawPoi(markers)
+    // drawPoi(markers)
+/*
     markers.forEach(function(marker) {
-        new AMap.Marker({
+        var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  data-id="text id 1">1' +
+            '</span>';
+       var marker= new AMap.Marker({
+            content: markerContent,
             map: map,
-            // icon: marker.icon,
+            icon: marker.icon,
             position: [marker.position[0], marker.position[1]],
             offset: new AMap.Pixel(-13, -30)
         });
+        marker.on('click', function(e){
+            showPoiDetail(e);
+        });
+
+        // marker.on('click', mapEvent => {
+        //     console.log(mapEvent.target);
+        //     console.log(mapEvent.target.dom.getElementsByClassName('marker_text')[0].getAttribute('data-id'))
+        //
+        // })
     });
+*/
+
+    function  showPoiDetail(e){
+        var e=$(this);
+        var text=e.find('.marker_text').attr("data-id");
+        text=e.attr("data-id");
+        // text=mapEvent.target.dom.getElementsByClassName('marker_text')[0].getAttribute('data-id');
+        $("#map-info-box").show();
+        console.log(text,e)
+        $("#map-info-box .map-text-context").text(text);
+
+    }
+
 
     var center = map.getCenter();
 
@@ -39,7 +71,7 @@ $(function () {
     AMap.event.addDomListener(document.getElementById('setFitView'), 'click', function() {
         var newCenter = map.setFitView();
         document.getElementById('centerCoord').innerHTML = '当前中心点坐标：' + newCenter.getCenter();
-        document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
+        // document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
     });
 
     function getPoi(){
@@ -88,7 +120,8 @@ $(function () {
                             latitude: obj.data[i].lat,
                             longitude: obj.data[i].lng,
                             width: 80,
-                            height: 80
+                            height: 80,
+                            title:obj.data[i].id || 0
                         };
                         markers.push(marker)
                     }
@@ -115,14 +148,20 @@ $(function () {
 
     function drawPoi(markers){
         markers.forEach(function(marker) {
-            new AMap.Marker({
+            var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
+                '</span>';
+            var marker= new AMap.Marker({
+                // content: markerContent,
                 map: map,
-                icon: marker.icon,
+                // icon: marker.icon,
                 position: [marker.position[0], marker.position[1]],
                 offset: new AMap.Pixel(-13, -30)
             });
+            marker.on('click', function(e){
+                showPoiDetail();
+            });
         });
-    };
+    }
 
     $(document).ready(function() {
         setInterval(getPoi(),1000)
