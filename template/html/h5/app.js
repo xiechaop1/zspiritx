@@ -203,13 +203,14 @@ $(function () {
                     console.log(obj);
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
-                    var params = {
-                        'WebViewOff':1,
-                        'DebugInfo':isDebug,
-                        'UserId': obj.data.id,
-                        'StoryId': storyId
-                    }
                     if(obj["code"]==200){
+                        var params = {
+                            'WebViewOff':1,
+                            'DebugInfo':isDebug,
+                            'UserId': obj.data.id,
+                            'StoryId': storyId
+                        }
+
                         // Unity.call('{'WebViewOff':1, 'DebugInfo':isDebug, 'UserId': obj.data.id, 'StoryId': storyId }');
                         Unity.call(JSON.stringify(params));
                     }
