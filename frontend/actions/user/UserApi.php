@@ -51,6 +51,9 @@ class UserApi extends ApiAction
                 case 'login':
                     $ret = $this->login();
                     break;
+                case 'login_and_reg_by_mobile':
+                    $ret = $this->loginAndRegByMobile();
+                    break;
                 case 'update_user':
                     $this->valToken();
                     $ret = $this->updateUser();
@@ -122,6 +125,42 @@ class UserApi extends ApiAction
         return $userInfo;
     }
 
+    public function loginAndRegByMobile() {
+        $mobile = !empty($this->_get['mobile']) ? $this->_get['mobile'] : '';
+//        $userPass = !empty($this->_get['user_pass']) ? $this->_get['user_pass'] : '';
+
+        if (empty($mobile)
+//            || empty($userPass)
+        ) {
+            throw new \Exception('手机号或密码不能为空', ErrorCode::USER_PARAMETERS_INVALID);
+        }
+
+        $userInfo = User::findOne([
+            'mobile' =>  $mobile,
+//            'user_pass' =>  Yii::$app->security->generatePasswordHash($userPass),
+//            'user_status'   => User::USER_STATUS_NORMAL,
+        ]);
+
+        if (empty($userInfo)) {
+            $userInfo = new User();
+            $userInfo->mobile = $mobile;
+            $userInfo->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4);
+            $userInfo->user_pass = Yii::$app->security->generatePasswordHash($mobile);
+            $userInfo->user_status = User::USER_STATUS_NORMAL;
+            $userInfo->save();
+            $userModel['id'] = Yii::$app->db->getLastInsertId();
+        } else {
+
+            if ($userInfo['user_status'] == User::USER_STATUS_FORBIDDEN) {
+                throw new \Exception('用户已被禁用', ErrorCode::USER_FORBIDDEN);
+            }
+        }
+
+        $_SESSION['user_info'] = $userInfo;
+
+        return $userInfo;
+    }
+
     public function wxlogin() {
         $code = $this->_get['code'];
         $userInfo = $this->_get['user_info'];
@@ -186,7 +225,7 @@ class UserApi extends ApiAction
 
             return $userModel;
         } catch (\Exception $e) {
-            var_dump($e);
+//            var_dump($e);
             throw new \Exception('注册失败', ErrorCode::USER_REGISTER_FAIL);
         }
     }

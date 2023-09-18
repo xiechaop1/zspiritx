@@ -26,6 +26,7 @@ $this->registerMetaTag([
 $this->title = 'AR剧本杀';
 
 ?>
+<!---->
 <audio autoplay loop>
   <source src="<?= $voice ?>" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
@@ -33,7 +34,10 @@ $this->title = 'AR剧本杀';
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 
 <div class="owl-carousel owl-theme" id="banner">
-  <div class="item" onclick="Unity.call('WebViewOff&StartARScene');">
+  <div class="item">
+    <input type="hidden" name="isDebug" value="0">
+    <input type="hidden" name="storyId" value="1">
+    <!-- Unity.call('WebViewOff&StartARScene'); -->
     <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
       <div class="text-bg">
@@ -73,6 +77,38 @@ $this->title = 'AR剧本杀';
       </div>
     </div>
   </div>
+
+</div>
+
+<div id="loginform" class="w-100 m-auto" style="display: none; position: absolute; left: 10px; top: 10px; z-index: 99999999">
+
+  <div class="p-20 bg-black">
+    <div class="w-100 p-30  m-b-10">
+      <div class="w-1-0 d-flex">
+        <div class="fs-30 bold w-100 text-FF title-box-border">
+          <div class="npc-name">
+            注册 / 登录
+          </div>
+
+          <div class="row" id="answer-box">
+            <div class="m-t-30 col-sm-12 col-md-12">
+              <div class="answer-border">
+                手机号：<input class="answer-border" type="text" name="mobile" value="" id="mobile" >
+                <input type="hidden" name="is_debug" id="login_is_debug" value="">
+                <input type="hidden" name="story_id" id="login_story_id" value="">
+                <div class="btn-m-green m-t-30 float-right m-r-20" id="login_btn">
+                  进入游戏
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
 
 </div>
 

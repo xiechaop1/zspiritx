@@ -167,4 +167,60 @@ $(function () {
         // }
     })
 
+
+    $(".owl-carousel .item").click(function() {
+        var t = $(this);
+        var isDebug = t.find("input[name='isDebug']").val();
+        var storyId = t.find("input[name='storyId']").val();
+        $('#login_is_debug').val(isDebug);
+        $('#login_story_id').val(storyId);
+        $('#loginform').show();
+    });
+    $("#login_btn").click(function ()
+    {
+        var mobile=$("input[name='mobile']").val();
+        var isDebug = $('#login_is_debug').val();
+        var storyId = $('#login_story_id').val();
+
+        if(mobile!=null){
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: false,
+                url: '/user/login_and_reg_by_mobile',
+                data:{
+                    mobile:mobile,
+                    is_test:1
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    var dataContent=data;
+                    var dataCon=$.toJSON(dataContent);
+                    var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    console.log(obj);
+                    //console.log("ajax请求成功:"+data.toString())
+                    //新消息获取成功
+                    var params = {
+                        'WebViewOff':1,
+                        'DebugInfo':isDebug,
+                        'UserId': obj.data.id,
+                        'StoryId': storyId
+                    }
+                    if(obj["code"]==200){
+                        // Unity.call('{'WebViewOff':1, 'DebugInfo':isDebug, 'UserId': obj.data.id, 'StoryId': storyId }');
+                        Unity.call(JSON.stringify(params));
+                    }
+                    //新消息获取失败
+                    else{
+                        $.alert(obj.msg)
+                    }
+
+                }
+            });
+        }
+    })
+
 })
