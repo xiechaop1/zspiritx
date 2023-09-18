@@ -359,6 +359,7 @@ class DoApi extends ApiAction
                 Yii::$app->act->add($this->_sessionId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
             } else {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
+                Yii::$app->act->add($this->_sessionId, 0, '新玩家加入，等待开始', Actions::ACTION_TYPE_ACTION);
             }
 
             $this->_sessionInfo->save();
