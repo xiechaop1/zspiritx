@@ -26,28 +26,26 @@ $(function () {
 
     // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
     // drawPoi(markers)
-/*
-    markers.forEach(function(marker) {
-        var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  data-id="text id 1">1' +
-            '</span>';
-       var marker= new AMap.Marker({
-            content: markerContent,
-            map: map,
-            icon: marker.icon,
-            position: [marker.position[0], marker.position[1]],
-            offset: new AMap.Pixel(-13, -30)
-        });
-        marker.on('click', function(e){
-            showPoiDetail(e);
-        });
-
-        // marker.on('click', mapEvent => {
-        //     console.log(mapEvent.target);
-        //     console.log(mapEvent.target.dom.getElementsByClassName('marker_text')[0].getAttribute('data-id'))
-        //
-        // })
-    });
-*/
+    // markers.forEach(function(marker) {
+    //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="clearMarker()" data-id="text id 1">1' +
+    //         '</span>';
+    //    var marker= new AMap.Marker({
+    //         content: markerContent,
+    //         map: map,
+    //         icon: marker.icon,
+    //         position: [marker.position[0], marker.position[1]],
+    //         offset: new AMap.Pixel(-13, -30)
+    //     });
+    //     // marker.on('click', function(e){
+    //     //     showPoiDetail(e);
+    //     // });
+    //
+    //     // marker.on('click', mapEvent => {
+    //     //     console.log(mapEvent.target);
+    //     //     console.log(mapEvent.target.dom.getElementsByClassName('marker_text')[0].getAttribute('data-id'))
+    //     //
+    //     // })
+    // });
 
     function  showPoiDetail(e){
         var e=$(this);
@@ -91,7 +89,7 @@ $(function () {
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
-            url: 'user/get_user_loc_by_team',
+            url: 'https://h5.zspiritx.com.cn/user/get_user_loc_by_team',
             data:{
                 user_id:user_id,
                 session_id:session_id,
