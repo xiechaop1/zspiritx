@@ -210,8 +210,8 @@ $(function () {
                             'UserId': obj.data.id,
                             'StoryId': storyId
                         }
-                        var paramsjson=$.toJSON(params);
-                        var data = eval( "(" + paramsjson + ")" );
+                        var data=$.toJSON(params);
+                        // var data = eval( "{" + paramsjson + "}" );
 
                         // Unity.call('{'WebViewOff':1, 'DebugInfo':isDebug, 'UserId': obj.data.id, 'StoryId': storyId }');
                         Unity.call(data);

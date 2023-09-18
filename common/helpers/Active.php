@@ -38,14 +38,22 @@ class Active
      * OunputFormat: Key1:Value1,Key2:Value2
      */
     public static function decodeActiveToShow($active) {
+        if (empty($active)) {
+            return $active;
+        }
+
         if (Common::isJson($active)) {
             $activeArr = json_decode($active, true);
 
 //            $activeTmp = [];
-            foreach ($activeArr as $key => $act) {
-                $activeTmp[] = $key . ':' . $act;
+            if (is_array($activeArr)) {
+                foreach ($activeArr as $key => $act) {
+                    $activeTmp[] = $key . ':' . $act;
+                }
+                $active = implode(',', $activeTmp);
+            } else {
+                $active = $activeArr;
             }
-            $active = implode(',', $activeTmp);
         }
 
         return $active;

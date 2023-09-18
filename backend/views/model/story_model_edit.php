@@ -30,6 +30,7 @@ echo \dmstr\widgets\Alert::widget();
                 'layout' => 'horizontal',
                 'enableClientValidation' => true,
             ]);
+
             echo $form->field($storyModel, 'story_id')->widget('\kartik\select2\Select2', [
                 'data' => $stories,
                 'options' => [
@@ -43,6 +44,9 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('模型');
+            echo $form->field($storyModel, 'story_model_name')->textInput(['value' => $storyModel->story_model_name])->label('剧本模型名称');
+            echo $form->field($storyModel, 'story_model_desc')->textarea(['value' => $storyModel->story_model_desc])->label('剧本模型描述');
+
             echo $form->field($storyModel, 'story_stage_id')->textInput(['value' => $storyModel->story_stage_id])->label('Stage ID');
             echo $form->field($storyModel, 'model_inst_u_id')->textInput(['value' => $storyModel->model_inst_u_id])->label('Model Inst UID');
             echo $form->field($storyModel, 'scan_image_id')->textInput(['value' => $storyModel->scan_image_id])->label('Scan Image ID');
