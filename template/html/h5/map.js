@@ -149,13 +149,13 @@ $(function () {
             var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
                 '</span>';
             var marker= new AMap.Marker({
-                // content: markerContent,
+                content: markerContent,
                 map: map,
                 // icon: marker.icon,
-                position: [marker.position[0], marker.position[1]],
+                position: [marker.longitude, marker.latitude],
                 offset: new AMap.Pixel(-13, -30)
             });
-            marker.on('click', function(e){
+            markers.on('click', function(e){
                 showPoiDetail();
             });
         });
