@@ -7,7 +7,7 @@ $(function () {
 
     var map = new AMap.Map('container', {
         resizeEnable: true,
-        center: [116.397428, 39.90923],
+        // center: [116.397428, 39.90923],
         zoom: 13
     });
 
@@ -155,9 +155,9 @@ $(function () {
                 position: [marker.longitude, marker.latitude],
                 offset: new AMap.Pixel(-13, -30)
             });
-            marker.on('click', function(e){
-                showPoiDetail(e);
-            });
+            // marker.on('click', function(e){
+            //     showPoiDetail(e);
+            // });
         });
         // markers.forEach(function(marker) {
         //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
