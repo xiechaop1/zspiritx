@@ -45,6 +45,10 @@ class UserController extends Controller
                 'class' => 'frontend\actions\user\UserApi',
                 'action' => 'login',
             ],
+            'login_and_reg_by_mobile' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'login_and_reg_by_mobile',
+            ],
             'new_user' => [
                 'class' => 'frontend\actions\user\UserApi',
                 'action' => 'new_user',

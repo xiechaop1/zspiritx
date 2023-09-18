@@ -9,6 +9,7 @@
 namespace frontend\actions\process;
 
 
+use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\helpers\Active;
 use common\helpers\Attachment;
@@ -358,6 +359,7 @@ class DoApi extends ApiAction
                 Yii::$app->act->add($this->_sessionId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
             } else {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
+                Yii::$app->act->add($this->_sessionId, 0, '新玩家加入，等待开始', Actions::ACTION_TYPE_ACTION);
             }
 
             $this->_sessionInfo->save();
@@ -661,6 +663,7 @@ class DoApi extends ApiAction
         $bagageModel = UserModels::find()
             ->where([
                 'id' => (int)$userModelId,
+                'is_delete' => Common::STATUS_NORMAL,
 //                'user_id' => (int)$userId,
 //                'session_id' => (int)$sessionId,
             ])
@@ -676,7 +679,7 @@ class DoApi extends ApiAction
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $storyModel = $bagageModel->storyModel();
+            $storyModel = $bagageModel->storyModel;
             if (empty($storyModel)) {
                 return $this->fail('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
             }
@@ -690,7 +693,7 @@ class DoApi extends ApiAction
                 ]);
 
                 if (!empty($userStory)
-                    && !empty($userStory->buff)
+                    && !empty($storyModel->buff)
                 ) {
                     $userStory->buff = $storyModel->buff->id;
                     $userStory->buff_expiretime = time() + $storyModel->buff->expire_time;
@@ -701,6 +704,9 @@ class DoApi extends ApiAction
             }
 
             $bagageModel->use_ct -= 1;
+            if ($bagageModel->use_ct <= 0) {
+                $bagageModel->is_delete = Common::STATUS_DELETED;
+            }
             $bagageModel->save();
             $transaction->commit();
 
@@ -767,30 +773,40 @@ class DoApi extends ApiAction
                 ])
                 ->one();
             if (empty($userModelBaggage)) {
-                $userModel = new UserModels();
-                $userModel->user_id = $userId;
-                $userModel->session_id = $sessionId;
-                $userModel->model_id = $sessionModel->model_id;
-                $userModel->story_model_id = $storyModelId;
-                $userModel->session_model_id = $sessionModel->id;
+                $userModelBaggage = new UserModels();
+                $userModelBaggage->user_id = $userId;
+                $userModelBaggage->session_id = $sessionId;
+                $userModelBaggage->model_id = $sessionModel->model_id;
+                $userModelBaggage->story_model_id = $storyModelId;
+                $userModelBaggage->session_model_id = $sessionModel->id;
                 $userModelBaggage->use_ct = 1;
-                $ret = $userModel->save();
+                $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
+                $ret = $userModelBaggage->save();
             } else {
                 $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+                $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             }
             $transaction->commit();
 
             $this->_get['pre_story_model_id'] = $storyModelId;
 
-            $ret = $this->getSessionModels();
+            $result['data'] = $this->getSessionModels();
+
+            $storyModel = StoryModels::find()
+                ->with('buff')
+                ->where(['id' => (int)$storyModelId])
+                ->one();
+
+            $result['msg'] = '获取成功';
 
         } catch (\Exception $e) {
+//            var_dump($e);
             $transaction->rollBack();
             return $this->fail($e->getMessage(), $e->getCode());
         }
 
-        return $ret;
+        return $result;
     }
 
     /**

@@ -33,6 +33,7 @@ $this->title = $qa['topic'];
   您的浏览器不支持 audio 元素。
 </audio>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
+<input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <div class="w-100 m-auto">
 
     <div class="p-20 bg-black">
@@ -215,7 +216,7 @@ $this->title = $qa['topic'];
             <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
                 <div>
                     <div class="fs-36 text-F6 text-center bold">
-                        很稀罕，打错了
+                        很遗憾，打错了
                     </div>
                     <div class="m-t-40 bg-F5 p-20 fs-26 text-orange border-radius-r-5 border-radius-l-5">
                         <?php echo $qa['st_answer']; ?>

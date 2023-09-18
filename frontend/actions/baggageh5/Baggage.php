@@ -29,9 +29,10 @@ class Baggage extends Action
     {
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
+        $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
         $model = UserModels::find()
-            ->with('storyModel', 'sessionModel')
+            ->with('model', 'storyModel', 'sessionModel')
             ->where([
                 'user_id'       => $userId,
                 'session_id'    => $sessionId,
@@ -39,11 +40,12 @@ class Baggage extends Action
             ->all();
 
 
-        return $this->controller->render('bagage', [
-            'bagage'        => $model,
+        return $this->controller->render('baggage', [
+            'model'         => $model,
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
+            'storyId'       => $storyId,
         ]);
     }
 }

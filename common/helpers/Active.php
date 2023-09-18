@@ -16,6 +16,9 @@ class Active
      * OunputFormat: {"Key1":"Value1","Key2":"Value2"}
      */
     public static function encodeActive($active) {
+        if (empty($active)) {
+            return $active;
+        }
         if (Common::isJson($active)) {
             return $active;
         }

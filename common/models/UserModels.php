@@ -20,7 +20,7 @@ class UserModels extends \common\models\gii\UserModels
         ];
     }
 
-    public function getModels(){
+    public function getModel(){
         return $this->hasOne('common\models\Models',  ['id' => 'model_id']);
     }
 
@@ -32,8 +32,8 @@ class UserModels extends \common\models\gii\UserModels
         return $this->hasOne('common\models\StoryModels',  ['id' => 'story_model_id']);
     }
 
-    public function getBuff(){
-        return $this->hasOne('common\models\Buff',  ['id' => 'active_next'])->onCondition(['active_type' => StoryModels::ACTIVE_TYPE_BUFF]);
-    }
+//    public function getBuff(){
+//        return $this->hasOne('common\models\Buff',  ['id' => 'active_next'])->onCondition(['active_type' => StoryModels::ACTIVE_TYPE_BUFF]);
+//    }
 
 }
