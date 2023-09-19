@@ -66,11 +66,11 @@ $(function () {
     document.getElementById('tips').innerHTML = '成功添加三个点标记，其中有两个在当前地图视野外！';
 
     // 添加事件监听, 使地图自适应显示到合适的范围
-    AMap.event.addDomListener(document.getElementById('setFitView'), 'click', function() {
+/*    AMap.event.addDomListener(document.getElementById('setFitView'), 'click', function() {
         var newCenter = map.setFitView();
         document.getElementById('centerCoord').innerHTML = '当前中心点坐标：' + newCenter.getCenter();
         // document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
-    });
+    });*/
 
     function getPoi(){
         var user_id=$("input[name='user_id']").val();
