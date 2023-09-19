@@ -44,7 +44,7 @@ $this->registerMetaTag([
   <div id="tips"></div>
 </div>
 <div class="map-info-box" id="map-info-box">
-  <img decoding="async"  src="../../img/map/x.png" alt="First slide" class="map-info-close">
+  <img decoding="async"  src="../../static/img/map/x.png" alt="First slide" class="map-info-close">
   <div class="map-text-context">
 
   </div>

@@ -27,7 +27,7 @@ $(function () {
     // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
     //  drawPoi(markers)
     // markers.forEach(function(marker) {
-    //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail()" data-id="text id 1">1' +
+    //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail(1)" data-id="text id 1">1' +
     //         '</span>';
     //    var marker= new AMap.Marker({
     //         content: markerContent,
@@ -47,14 +47,14 @@ $(function () {
     //     // })
     // });
 
-    function  showPoiDetail(e){
-        var e=$(this);
-        var text=e.find('.marker_text').attr("data-id");
-        text=e.attr("data-id");
+    function  showPoiDetail(n){
+        var me=$(this);
+        var text=me.find('.marker_text').attr("data-id");
+        text=me.attr("data-id");
         // text=mapEvent.target.dom.getElementsByClassName('marker_text')[0].getAttribute('data-id');
         $("#map-info-box").show();
-        console.log(text,e)
-        $("#map-info-box .map-text-context").text(text);
+        console.log(text,n,me)
+        $("#map-info-box .map-text-context").text(n);
 
     }
 
@@ -146,7 +146,7 @@ $(function () {
 
     function drawPoi(markers){
         markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail()" data-id="text id 1">1' +
+            var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">1' +
                 '</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -176,17 +176,18 @@ $(function () {
     }
 
     $(document).ready(function() {
-        setInterval(getPoi(),1000)
+        setInterval(getPoi(),200)
 
     });
 })
 
-function showPoiDetail() {
-    var e=$(this);
-    var text=e.find('.marker_text').attr("data-id");
-    text=e.attr("data-id");
+function showPoiDetail(n) {
+    var me=$(this);
+    var text=me.find('.marker_text').attr("data-id");
+    text=me.attr("data-id");
     text=$(this).attr('data-id');
     $("#map-info-box").show();
-    console.log(text,e)
-    $("#map-info-box .map-text-context").empty().text(text);
+    console.log(text,me,n)
+    $("#map-info-box .map-text-context").empty().text(n);
+
 }

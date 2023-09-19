@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+  <meta name="viewport" content="width=750,user-scalable=no, target-densitydpi=device-dpi">
   <title>自适应显示多个点标记</title>
   <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
   <link rel="stylesheet" href="app.css"/>
@@ -55,18 +55,6 @@
 <script src="../../js/datePicker/bootstrap-datepicker.zh-CN.min.js"></script>
 <script src="../../js/datePicker.js"></script>
 <script src="../../js/toTopH5.js"></script>
-<script type="text/javascript"
-        src="map.js"></script>
-<script>
-  function showPoiDetail() {
-    var e=$(this);
-    var text=e.find('.marker_text').attr("data-id");
-    text=e.attr("data-id");
-    text=$(this).attr('data-id');
-    $("#map-info-box").show();
-    console.log(text,e)
-    $("#map-info-box .map-text-context").empty().text(text);
-  }
-</script>
+<script type="text/javascript"  src="map.js"></script>
 </body>
 </html>
