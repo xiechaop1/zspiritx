@@ -152,7 +152,7 @@ $(function () {
                 content: markerContent,
                 map: map,
                 icon: marker.icon,
-                position: [marker.latitude,marker.longitude],
+                position: [marker.longitude,marker.latitude],
                 offset: new AMap.Pixel(-13, -30)
             });
             // marker.on('click', function(e){
