@@ -27,7 +27,7 @@ $(function () {
     // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
     //  drawPoi(markers)
     // markers.forEach(function(marker) {
-    //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="clearMarker()" data-id="text id 1">1' +
+    //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail()" data-id="text id 1">1' +
     //         '</span>';
     //    var marker= new AMap.Marker({
     //         content: markerContent,
@@ -152,7 +152,7 @@ $(function () {
                 content: markerContent,
                 map: map,
                 icon: marker.icon,
-                position: [marker.longitude, marker.latitude],
+                position: [marker.latitude,marker.longitude],
                 offset: new AMap.Pixel(-13, -30)
             });
             // marker.on('click', function(e){
@@ -180,3 +180,13 @@ $(function () {
 
     });
 })
+
+function showPoiDetail() {
+    var e=$(this);
+    var text=e.find('.marker_text').attr("data-id");
+    text=e.attr("data-id");
+    text=$(this).attr('data-id');
+    $("#map-info-box").show();
+    console.log(text,e)
+    $("#map-info-box .map-text-context").empty().text(text);
+}
