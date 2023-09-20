@@ -62,7 +62,7 @@ $this->registerMetaTag([
             serviceHost:'https://h5.zspiritx.com.cn/_AMapService',
         }
 </script>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=c86c9e45ba1226a8777f3e90dfceab3d"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=af1d4bafe8f99e4c53e02ba0eef6087c"></script>
 
 
 

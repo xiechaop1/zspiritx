@@ -234,7 +234,7 @@ $(function () {
     }
 
     $(document).ready(function() {
-        // setInterval(getPoi(),200)
+        setInterval(getPoi(),200)
 
     });
 })
