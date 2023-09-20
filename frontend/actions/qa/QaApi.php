@@ -186,7 +186,7 @@ class QaApi extends ApiAction
 
 
             if (!empty($sessionId)) {
-                $sessionQa = SessionQa::find()->where(['session_id' => $sessionId, 'qa_id' => $qaId])->asArray()->one();
+                $sessionQa = SessionQa::find()->where(['session_id' => $sessionId, 'qa_id' => $qaId])->one();
                 $sessionQa->is_answer = SessionQa::SESSION_QA_STATUS_IS_ANSWER;
                 $sessionQa->is_right = $isRight;
                 $ret = $sessionQa->save();

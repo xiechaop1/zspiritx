@@ -208,7 +208,7 @@ $(function () {
                             'WebViewOff':1,
                             'DebugInfo':isDebug,
                             'UserId': obj.data.id,
-                            'StoryId': storyId
+                            'StoryId': storyIdvad
                         }
                         var data=$.toJSON(params);
                         // var data = eval( "{" + paramsjson + "}" );
