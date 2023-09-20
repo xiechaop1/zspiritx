@@ -61,9 +61,9 @@ $(function () {
 
     var center = map.getCenter();
 
-    var centerText = '当前中心点坐标：' + center.getLng() + ',' + center.getLat();
-    document.getElementById('centerCoord').innerHTML = centerText;
-    document.getElementById('tips').innerHTML = '成功添加三个点标记，其中有两个在当前地图视野外！';
+    // var centerText = '当前中心点坐标：' + center.getLng() + ',' + center.getLat();
+    // document.getElementById('centerCoord').innerHTML = centerText;
+    // document.getElementById('tips').innerHTML = '成功添加三个点标记，其中有两个在当前地图视野外！';
 
     // 添加事件监听, 使地图自适应显示到合适的范围
 /*    AMap.event.addDomListener(document.getElementById('setFitView'), 'click', function() {

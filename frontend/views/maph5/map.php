@@ -42,11 +42,11 @@ $this->registerMetaTag([
 <!--<div class="input-card">
   <h4>地图自适应</h4>
   <input id="setFitView" type="button" class="btn" value="地图自适应显示" />
-</div>-->
+</div>
 <div class="info">
   <div id="centerCoord"></div>
   <div id="tips"></div>
-</div>
+</div>-->
 <div class="map-info-box" id="map-info-box">
   <img decoding="async"  src="../../static/img/map/x.png" alt="First slide" class="map-info-close">
   <div class="map-text-context">
