@@ -116,6 +116,9 @@ class DoApi extends ApiAction
                 case 'join':
                     $ret = $this->join();
                     break;
+                case 'get_story_models':
+                    $ret = $this->getStoryModels();
+                    break;
                 case 'get_session_stages':
                     $ret = $this->getSessionStages();
                     break;
@@ -558,6 +561,49 @@ class DoApi extends ApiAction
             $sql .= ' AND (o_session_model.is_unique = ' . SessionModels::IS_UNIQUE_NO . ' OR o_session_model.session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_READY . ' OR o_session_model.session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_SET . ')';
             if (!empty($storyStageId)) {
                 $sql .= ' AND o_session_model.story_stage_id = ' . $storyStageId;
+            }
+            $sql .= ' ORDER BY dist ASC;';
+//            var_dump($sql);
+            $storyModels = Yii::$app->db->createCommand($sql)->queryAll();
+        } else {
+
+
+            $storyModels = StoryModels::find()
+                ->with('sessionModel, model')
+                ->where([
+                    'story_id'  => (int)$storyId,
+                ]);
+            if (!empty($storyStageId)) {
+                $storyModels = $storyModels->andFilterWhere([
+                    'story_stage_id'  => $storyStageId,
+                ]);
+            }
+
+
+            $storyModels = $storyModels->all();
+        }
+
+
+        return $storyModels;
+
+    }
+
+    public function getStoryModels(){
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
+
+        $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+        $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
+        $disRange = !empty($this->_get['dis_range']) ? $this->_get['dis_range'] : 0;
+
+        if ($disRange > 0) {
+            $sql = 'SELECT *, st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_story_model WHERE story_id = ' . $storyId;
+            $sql .= ' AND st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
+            if (!empty($storyStageId)) {
+                $sql .= ' AND story_stage_id = ' . $storyStageId;
             }
             $sql .= ' ORDER BY dist ASC;';
 //            var_dump($sql);

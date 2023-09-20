@@ -64,4 +64,8 @@ class StoryModels extends \common\models\gii\StoryModels
         return $this->hasOne('common\models\Buff',  ['id' => 'active_next']);
     }
 
+    public function getSessionModel(){
+        return $this->hasOne('common\models\SessionModel',  ['story_id' => 'id']);
+    }
+
 }
