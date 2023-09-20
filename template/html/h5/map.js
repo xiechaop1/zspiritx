@@ -78,13 +78,16 @@ $(function () {
         var user_lng=$("input[name='user_lng']").val();
         var user_lat=$("input[name='user_lat']").val();
         var dis_range=$("input[name='dis_range']").val();
+        var story_stage_id=$("input[name='story_stage_id']").val();
 
-        var user_id=1;
-        var session_id=5;
-        var user_lng=118.3726;
-        var user_lat=39.3442;
-        var dis_range=1000;
-        var img_url='../../img/qa/btn_播放1_sel@2x.png';
+        user_id.length()>0?'':user_id=1;
+        session_id.length()>0?'':session_id=5;
+        user_lng.length()>0?'':user_lng=118.3726;
+        user_lat.length()>0?'':user_lat=39.3442;
+        dis_range.length()>0?'':dis_range=1000;
+        story_stage_id.length()>0?'':story_stage_id=1;
+
+
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -119,7 +122,61 @@ $(function () {
                             longitude: obj.data[i].lng,
                             width: 80,
                             height: 80,
-                            title:obj.data[i].id || 0
+                            title:人
+                        };
+                        markers.push(marker)
+                    }
+                    removeMarkers();
+
+                    drawPoi(markers);
+
+
+
+                }
+                //新消息获取失败
+                else{
+                    $.alert(obj.msg)
+                }
+
+            }
+        });
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: 'https://api.zspiritx.com.cn/process/get_session_models',
+            data:{
+                user_id:user_id,
+                session_id:session_id,
+                user_lng:user_lng,
+                user_lat:user_lat,
+                dis_range:dis_range,
+                story_stage_id:story_stage_id
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                //新消息获取成功
+                if(obj["code"]==200){
+                    var markers = [];
+                    for (var i in obj.data) {
+                        var marker = {
+                            // iconPath: url,
+                            id: obj.data[i].id || 0,
+                            name: obj.data[i].user_id || '',
+                            latitude: obj.data[i].lat,
+                            longitude: obj.data[i].lng,
+                            width: 80,
+                            height: 80,
+                            title:物
                         };
                         markers.push(marker)
                     }
@@ -146,8 +203,8 @@ $(function () {
 
     function drawPoi(markers){
         markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">1' +
-                '</span>';
+            var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+                marker.title+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
                 map: map,
