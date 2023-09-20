@@ -80,12 +80,12 @@ $(function () {
         var dis_range=$("input[name='dis_range']").val();
         var story_stage_id=$("input[name='story_stage_id']").val();
 
-        user_id.length()>0?'':user_id=1;
-        session_id.length()>0?'':session_id=5;
-        user_lng.length()>0?'':user_lng=118.3726;
-        user_lat.length()>0?'':user_lat=39.3442;
-        dis_range.length()>0?'':dis_range=1000;
-        story_stage_id.length()>0?'':story_stage_id=1;
+        user_id!=null&&user_id!=undefined>0?'':user_id=1;
+        session_id!=null&&session_id!=undefined?'':session_id=5;
+        user_lng!=null&&user_lng!=undefined?'':user_lng=118.3726;
+        user_lat!=null&&user_lat!=undefined?'':user_lat=39.3442;
+        dis_range!=null&&dis_range!=undefined?'':dis_range=1000;
+        story_stage_id!=null&&story_stage_id!=undefined?'':story_stage_id=1;
 
 
         $.ajax({

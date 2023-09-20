@@ -33,7 +33,7 @@ $this->registerMetaTag([
 <input type="hidden" name="story_stage_id" value="<?= $storyStageId ?>">
 <input type="hidden" name="user_lng" value="<?= $userLng ?>">
 <input type="hidden" name="user_lat" value="<?= $userLat ?>">
-<input type="hidden" name="udis_range" value="<?= $disRange ?>">
+<input type="hidden" name="dis_range" value="<?= $disRange ?>">
 
 
 
