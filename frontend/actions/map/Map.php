@@ -37,6 +37,12 @@ class Map extends Action
 
         return $this->controller->render('map', [
             'userId'    => $userId,
+            'sessionId' => $sessionId,
+            'teamId'    => $teamId,
+            'userLng'   => $userLng,
+            'userLat'   => $userLat,
+            'storyStageId' => $storyStageId,
+            'disRange'  => $disRange,
         ]);
     }
 }
