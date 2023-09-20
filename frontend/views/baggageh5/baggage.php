@@ -34,7 +34,7 @@ $this->title = '我的背包';
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <div class="w-100 m-auto">
 
-    <div class="p-20 bg-black">
+    <div class="p-20 bg-black" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
@@ -101,6 +101,9 @@ $this->title = '我的背包';
                     </div>
                 </div>
 -->
+                <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
+                    返回
+                </div>
             </div>
                 </div>
             </div>
