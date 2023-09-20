@@ -527,7 +527,7 @@ class DoApi extends ApiAction
         return $ret;
     }
 
-    public function getSessionModels(){
+    public function getStoryModels(){
         $preStoryModelId = !empty($this->_get['pre_story_model_id']) ? $this->_get['pre_story_model_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
@@ -588,7 +588,7 @@ class DoApi extends ApiAction
 
     }
 
-    public function getStoryModels(){
+    public function getSessionModels(){
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
