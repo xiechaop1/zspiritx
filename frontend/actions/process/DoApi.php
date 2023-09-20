@@ -553,11 +553,11 @@ class DoApi extends ApiAction
         }
 
         if ($disRange > 0) {
-            $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_session_model WHERE session_id = ' . $sessionId;
-            $sql .= ' AND st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
-            $sql .= ' AND (is_unique = ' . SessionModels::IS_UNIQUE_NO . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_READY . ' OR session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_SET . ')';
+            $sql = 'SELECT *, st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_session_model left join o_story_model on o_session_model.story_model_id = o_story_model.id WHERE o_session_model.session_id = ' . $sessionId;
+            $sql .= ' AND st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
+            $sql .= ' AND (o_session_model.is_unique = ' . SessionModels::IS_UNIQUE_NO . ' OR o_session_model.session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_READY . ' OR o_session_model.session_model_status = ' . SessionModels::SESSION_MODEL_STATUS_SET . ')';
             if (!empty($storyStageId)) {
-                $sql .= ' AND story_stage_id = ' . $storyStageId;
+                $sql .= ' AND o_session_model.story_stage_id = ' . $storyStageId;
             }
             $sql .= ' ORDER BY dist ASC;';
 //            var_dump($sql);
