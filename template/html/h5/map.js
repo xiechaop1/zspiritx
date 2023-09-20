@@ -145,7 +145,7 @@ $(function () {
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
-            url: 'https://api.zspiritx.com.cn/process/get_session_models',
+            url: 'https://h5.zspiritx.com.cn/process/get_session_models',
             data:{
                 user_id:user_id,
                 session_id:session_id,
