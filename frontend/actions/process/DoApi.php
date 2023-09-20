@@ -356,10 +356,10 @@ class DoApi extends ApiAction
 
             if ($this->_checkSessionRole()) {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
-                Yii::$app->act->add($this->_sessionId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, '游戏开始，去找一个"M"标志的地方看看吧', Actions::ACTION_TYPE_ACTION);
             } else {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
-                Yii::$app->act->add($this->_sessionId, 0, '新玩家加入，等待开始', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, '新玩家加入，去找一个"M"标志的地方看看吧', Actions::ACTION_TYPE_ACTION);
             }
 
             $this->_sessionInfo->save();

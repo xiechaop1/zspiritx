@@ -27,10 +27,12 @@ $this->registerMetaTag([
 
 ?>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
-<input type="hidden" name="session_id" value="<?= $userId ?>">
-<input type="hidden" name="user_lng" value="<?= $userId ?>">
-<input type="hidden" name="user_lat" value="<?= $userId ?>">
-<input type="hidden" name="udis_range" value="<?= $userId ?>">
+<input type="hidden" name="session_id" value="<?= $sessionId ?>">
+<input type="hidden" name="team_id" value="<?= $teamId ?>">
+<input type="hidden" name="story_stage_id" value="<?= $storyStageId ?>">
+<input type="hidden" name="user_lng" value="<?= $userLng ?>">
+<input type="hidden" name="user_lat" value="<?= $userLat ?>">
+<input type="hidden" name="udis_range" value="<?= $disRange ?>">
 
 
 <div id="container"></div>

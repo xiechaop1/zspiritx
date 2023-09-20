@@ -28,6 +28,12 @@ class Map extends Action
     {
         $get = \Yii::$app->request->get();
         $userId = !empty($get['user_id']) ? $get['user_id'] : 0;
+        $sessionId = !empty($get['session_id']) ? $get['session_id'] : 0;
+        $teamId = !empty($get['team_id']) ? $get['team_id'] : 0;
+        $userLng = !empty($get['user_lng']) ? $get['user_lng'] : 0;
+        $userLat = !empty($get['user_lat']) ? $get['user_lat'] : 0;
+        $storyStageId = !empty($get['story_stage_id']) ? $get['story_stage_id'] : 0;
+        $disRange = 2000;
 
         return $this->controller->render('map', [
             'userId'    => $userId,
