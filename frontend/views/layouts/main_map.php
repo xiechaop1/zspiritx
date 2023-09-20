@@ -28,7 +28,7 @@ use frontend\assets\AppAsset;
     html, body {
       height: 100%;
       width: 100%;
-      padding: 40px 0;
+      padding: 20px 0;
     }
      #container {
           height: 100%;

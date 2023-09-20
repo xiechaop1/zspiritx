@@ -152,7 +152,8 @@ $(function () {
                 user_lng:user_lng,
                 user_lat:user_lat,
                 dis_range:dis_range,
-                story_stage_id:story_stage_id
+                story_stage_id:story_stage_id,
+                is_test:1
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
@@ -233,7 +234,7 @@ $(function () {
     }
 
     $(document).ready(function() {
-        setInterval(getPoi(),200)
+        // setInterval(getPoi(),200)
 
     });
 })
