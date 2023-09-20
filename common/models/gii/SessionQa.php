@@ -32,7 +32,7 @@ class SessionQa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['session_id', 'story_id', 'qa_type', 'qa_id', 'is_right', 'is_answer', 'answer_user_id', 'created_at', 'updated_at'], 'integer'],
+            [['session_id','is_answer', 'story_id', 'qa_type', 'qa_id', 'is_right', 'is_answer', 'answer_user_id', 'created_at', 'updated_at'], 'integer'],
             [['snapshot', ], 'string'],
         ];
     }
