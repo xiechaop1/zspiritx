@@ -93,9 +93,9 @@ $this->title = 'AR剧本杀';
           <div class="row" id="answer-box">
             <div class="m-t-30 col-sm-12 col-md-12">
               <div class="answer-border">
-                手机号：<input class="answer-border" type="text" name="mobile" value="" id="mobile" >
-                验证码：<input class="answer-border" type="text" name="verifycode" value="" id="verifycode" >
-                <input type="checbox" id="agreement" name="agreement"> <a href="zspiritx_useragreement.docx">用户协议</a>
+                手机号：<input class="answer-border" type="text" name="mobile" value="" id="mobile" ><br>
+                验证码：<input class="answer-border" type="text" name="verifycode" value="" id="verifycode" ><br>
+                <input type="checkbox" style="z-index: 99999999; opacity: inherit; position: relative;" id="agreement" name="agreement"> <a href="zspiritx_useragreement.docx">用户协议</a>
                 <input type="hidden" name="is_debug" id="login_is_debug" value="">
                 <input type="hidden" name="story_id" id="login_story_id" value="">
                 <div class="btn-m-green m-t-30 float-right m-r-20" id="login_btn">

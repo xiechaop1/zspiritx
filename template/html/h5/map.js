@@ -249,3 +249,11 @@ function showPoiDetail(n) {
     $("#map-info-box .map-text-context").empty().text(n);
 
 }
+
+$("#return_btn").click(function (){
+    var params = {
+        'WebViewOff':1,
+    }
+    var data=$.toJSON(params);
+    Unity.call(data);
+});
