@@ -87,8 +87,14 @@ $(function () {
         document.getElementById('centerCoord').innerHTML = '当前中心点坐标：' + newCenter.getCenter();
         // document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
     });*/
+    $.extend({
+        getLocation:function (lat,lng){
+           getLocation(lat,lng);
+           getPoi();
+        }
+    })
 
-    function getPoi(){
+    function getPoi(lng,lat){
         var user_id=$("input[name='user_id']").val();
         var story_id=$("input[name='story_id']").val();
         var session_id=$("input[name='session_id']").val();
