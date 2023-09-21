@@ -74,6 +74,7 @@ $(function () {
 
     function getPoi(){
         var user_id=$("input[name='user_id']").val();
+        var story_id=$("input[name='story_id']").val();
         var session_id=$("input[name='session_id']").val();
         var user_lng=$("input[name='user_lng']").val();
         var user_lat=$("input[name='user_lat']").val();
@@ -81,11 +82,12 @@ $(function () {
         var story_stage_id=$("input[name='story_stage_id']").val();
 
         user_id!=null&&user_id!=undefined>0?'':user_id=1;
+        story_id!=null&&story_id!=undefined>0?'':story_id=1;
         session_id!=null&&session_id!=undefined?'':session_id=5;
-        user_lng!=null&&user_lng!=undefined?'':user_lng=118.3726;
-        user_lat!=null&&user_lat!=undefined?'':user_lat=39.3442;
-        dis_range!=null&&dis_range!=undefined?'':dis_range=1000;
-        story_stage_id!=null&&story_stage_id!=undefined?'':story_stage_id=1;
+        user_lng!=null&&user_lng!=undefined&&user_lng!=0?'':user_lng=118.3726;
+        user_lat!=null&&user_lat!=undefined&&user_lat!=0?'':user_lat=39.3442;
+        dis_range!=null&&dis_range!=undefined&&dis_range!=0?'':dis_range=1000;
+        story_stage_id!=null&&story_stage_id!=undefined&&story_stage_id!=0?'':story_stage_id=1;
 
 
         $.ajax({
@@ -148,6 +150,7 @@ $(function () {
             url: 'https://h5.zspiritx.com.cn/process/get_session_models',
             data:{
                 user_id:user_id,
+                story_id:story_id,
                 session_id:session_id,
                 user_lng:user_lng,
                 user_lat:user_lat,
@@ -234,7 +237,7 @@ $(function () {
     }
 
     $(document).ready(function() {
-        // setInterval(getPoi(),200)
+        setInterval(getPoi(),200)
 
     });
 })
