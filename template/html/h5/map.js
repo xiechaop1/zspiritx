@@ -163,7 +163,7 @@ $(function () {
                             longitude: obj.data[i].lng,
                             width: 80,
                             height: 80,
-                            title:人
+                            title:1
                         };
                         markers.push(marker)
                     }
@@ -219,7 +219,7 @@ $(function () {
                             longitude: obj.data[i].lng,
                             width: 80,
                             height: 80,
-                            title:物
+                            title:2
                         };
                         markers.push(marker)
                     }
