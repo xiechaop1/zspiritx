@@ -25,13 +25,13 @@ html, body {
     padding: 40px 40px;
     position: relative;
 }
-/*#map-page .btn-m-green{
+#map-page .btn-m-green{
     position: absolute;
-    top: -10px;
-    left: 10px;
-    font-size: 18px;
-    padding: 10px 15px;
-}*/
+    top: 10px;
+    left: 30px;
+    /*font-size: 18px;*/
+    /*padding: 10px 15px;*/
+}
 .btn-m-green{
     border-radius: 64px 24px 64px 24px;
     border: 2px solid #DAFC70;
