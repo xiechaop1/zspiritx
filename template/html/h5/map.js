@@ -1,4 +1,12 @@
 $(function () {
+    $("#return_btn").click(function (){
+        var params = {
+            'WebViewOff':1,
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
+vvvb
     $(".map-info-close").on('click',function (){
         var me=$(this);
         $("#map-info-box").hide();
@@ -253,10 +261,3 @@ function showPoiDetail(n) {
 
 }
 
-$("#return_btn").click(function (){
-    var params = {
-        'WebViewOff':1,
-    }
-    var data=$.toJSON(params);
-    Unity.call(data);
-});
