@@ -174,13 +174,34 @@ $(function () {
         var storyId = t.find("input[name='storyId']").val();
         $('#login_is_debug').val(isDebug);
         $('#login_story_id').val(storyId);
-        $('#loginform').show();
+
+        var userId = $('#user_id').val();
+
+        if (userId != 0) {
+            var params = {
+                'WebViewOff':1,
+                'DebugInfo':isDebug,
+                'UserId': userId,
+                'StoryId': storyId
+            }
+            var data=$.toJSON(params);
+            Unity.call(data);
+        } else {
+            $('#loginform').show();
+        }
     });
     $("#login_btn").click(function ()
     {
         var mobile=$("input[name='mobile']").val();
         var isDebug = $('#login_is_debug').val();
         var storyId = $('#login_story_id').val();
+        var userId = $('#user_id').val();
+        var isagree = $('#agreement').val();
+
+        if (isagree == false) {
+            $.alert('请勾选用户协议');
+            return false;
+        }
 
         if(mobile!=null){
             $.ajax({

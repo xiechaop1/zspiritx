@@ -31,8 +31,10 @@ class Index extends Action
         $image = 'img/home/index_image.jpg';
         $image = Attachment::completeUrl($image, true);
 
+        $userId = !empty($_SESSION['user_info']['id']) ? $_SESSION['user_info']['id'] : 0;
+
         return $this->controller->render('index', [
-            'userId'    => 1,
+            'userId'    => $userId,
             'voice' => '',
             'image' => $image,
         ]);
