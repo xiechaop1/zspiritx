@@ -36,7 +36,7 @@ use frontend\assets\AppAsset;
         }
 </style>
 </head>
-<body class="bg-black" >
+<body class="bg-black"  id="map-page">
 <?php $this->beginBody() ?>
 
         <?= $content ?>
