@@ -33,7 +33,7 @@ $this->registerMetaTag([
 <input type="hidden" name="story_stage_id" value="<?= $storyStageId ?>">
 <input type="hidden" name="user_lng" value="<?= $userLng ?>">
 <input type="hidden" name="user_lat" value="<?= $userLat ?>">
-<input type="hidden" name="udis_range" value="<?= $disRange ?>">
+<input type="hidden" name="dis_range" value="<?= $disRange ?>">
 
 
 
@@ -42,11 +42,11 @@ $this->registerMetaTag([
 <!--<div class="input-card">
   <h4>地图自适应</h4>
   <input id="setFitView" type="button" class="btn" value="地图自适应显示" />
-</div>-->
+</div>
 <div class="info">
   <div id="centerCoord"></div>
   <div id="tips"></div>
-</div>
+</div>-->
 <div class="map-info-box" id="map-info-box">
   <img decoding="async"  src="../../static/img/map/x.png" alt="First slide" class="map-info-close">
   <div class="map-text-context">
@@ -62,7 +62,7 @@ $this->registerMetaTag([
             serviceHost:'https://h5.zspiritx.com.cn/_AMapService',
         }
 </script>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=c86c9e45ba1226a8777f3e90dfceab3d"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=af1d4bafe8f99e4c53e02ba0eef6087c"></script>
 
 
 
