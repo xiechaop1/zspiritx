@@ -1,4 +1,6 @@
 $(function () {
+    var location=[];
+
     $("#return_btn").click(function (){
         var params = {
             'WebViewOff':1,
@@ -6,11 +8,17 @@ $(function () {
         var data=$.toJSON(params);
         Unity.call(data);
     });
-vvvb
     $(".map-info-close").on('click',function (){
         var me=$(this);
         $("#map-info-box").hide();
-    })
+    });
+
+    function getLocation(lat,lng){
+        location[1]=lat;
+        location[0]=lng;
+        return location;
+    }
+
 
 
     var map = new AMap.Map('container', {
@@ -67,7 +75,7 @@ vvvb
     }
 
 
-    var center = map.getCenter();
+
 
     // var centerText = '当前中心点坐标：' + center.getLng() + ',' + center.getLat();
     // document.getElementById('centerCoord').innerHTML = centerText;
@@ -92,11 +100,28 @@ vvvb
         user_id!=null&&user_id!=undefined>0?'':user_id=1;
         story_id!=null&&story_id!=undefined>0?'':story_id=1;
         session_id!=null&&session_id!=undefined?'':session_id=5;
-        user_lng!=null&&user_lng!=undefined&&user_lng!=0?'':user_lng=118.3726;
-        user_lat!=null&&user_lat!=undefined&&user_lat!=0?'':user_lat=39.3442;
         dis_range!=null&&dis_range!=undefined&&dis_range!=0?'':dis_range=1000;
         story_stage_id!=null&&story_stage_id!=undefined&&story_stage_id!=0?'':story_stage_id=1;
 
+
+        var center = map.getCenter();
+        h5_lng=center.getLng();
+        h5_lat=center.getLat();
+        if(location[0]!=null&&location[0]!=undefined&&location[0]!=null&&location[0]!=undefined){
+            user_lng=location[0];
+            user_lat=location[1];
+        }
+        else if(user_lng!=null&&user_lng!=undefined&&user_lng!=0&&user_lat!=null&&user_lat!=undefined&&user_lat!=0){
+
+        }
+        else if(h5_lng!=null&&h5_lng!=undefined&&h5_lng!=0&&h5_lat!=null&&uh5_lat!=undefined&&h5_lat!=0){
+            user_lng=h5_lng;
+            user_lat=h5_lat;
+        }
+        else{
+            user_lng=118.3726;
+            user_lat=39.3442;
+        }
 
         $.ajax({
             type: "GET", //用POST方式传输
