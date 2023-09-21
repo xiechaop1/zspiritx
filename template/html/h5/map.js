@@ -240,7 +240,7 @@ $(function () {
         setInterval(getPoi(),200)
 
     });
-})
+});
 
 function showPoiDetail(n) {
     var me=$(this);
