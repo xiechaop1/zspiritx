@@ -31,7 +31,7 @@ $this->title = 'AR剧本杀';
   <source src="<?= $voice ?>" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
 </audio>
-<input type="hidden" name="user_id" value="<?= $userId ?>">
+<input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>">
 
 <div class="owl-carousel owl-theme" id="banner">
   <div class="item">
@@ -94,6 +94,8 @@ $this->title = 'AR剧本杀';
             <div class="m-t-30 col-sm-12 col-md-12">
               <div class="answer-border">
                 手机号：<input class="answer-border" type="text" name="mobile" value="" id="mobile" >
+                验证码：<input class="answer-border" type="text" name="verifycode" value="" id="verifycode" >
+                <input type="checbox" id="agreement" name="agreement"> <a href="zspiritx_useragreement.docx">用户协议</a>
                 <input type="hidden" name="is_debug" id="login_is_debug" value="">
                 <input type="hidden" name="story_id" id="login_story_id" value="">
                 <div class="btn-m-green m-t-30 float-right m-r-20" id="login_btn">
