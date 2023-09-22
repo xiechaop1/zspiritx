@@ -29,8 +29,8 @@ html, body {
     position: absolute;
     top: 10px;
     left: 30px;
-    /*font-size: 18px;*/
-    /*padding: 10px 15px;*/
+    font-size: 18px;
+    padding: 10px 15px;
 }
 .btn-m-green{
     border-radius: 64px 24px 64px 24px;

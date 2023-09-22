@@ -27,16 +27,16 @@ $(function () {
         zoom: 25
     });
 
-    // AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
-    //
-    //
-    //     //缩放控件，显示Zoom值
-    //     map.addControl(new BasicControl.Zoom({
-    //         position: 'rb',
-    //
-    //     }));
-    //
-    // });
+    AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
+
+
+        //缩放控件，显示Zoom值
+        map.addControl(new BasicControl.Zoom({
+            position: 'rb',
+
+        }));
+
+    });
 
     // map.clearMap();  // 清除地图覆盖物
 
