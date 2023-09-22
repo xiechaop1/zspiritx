@@ -106,6 +106,24 @@
                         ]
                     ],
                     [
+                        'label' => '知识管理',
+                        'icon' => 'folder-open',
+                        'items' => [
+                            [
+                                'label' => '知识列表',
+                                'url' => ['/knowledge/knowledge'],
+                                'active' => in_array($this->context->route, ['knowledge/knowledge', 'knowledge/edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
+                                'label' => '用户知识',
+                                'url' => ['/knowledge/user_knowledge'],
+                                'active' => in_array($this->context->route, ['knowledge/user_knowledge', ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                        ]
+                    ],
+                    [
                         'label' => '分类管理',
                         'icon' => 'cubes',
                         'url' => ['/base/categories'],

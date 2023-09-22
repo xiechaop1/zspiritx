@@ -36,4 +36,8 @@ class Qa extends \common\models\gii\Qa
         return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
     }
 
+    public function getKnowledge(){
+        return $this->hasOne('common\models\Knowledge',  ['id' => 'knowledge_id']);
+    }
+
 }

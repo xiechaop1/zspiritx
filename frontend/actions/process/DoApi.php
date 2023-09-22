@@ -14,6 +14,7 @@ use common\definitions\ErrorCode;
 use common\helpers\Active;
 use common\helpers\Attachment;
 use common\models\Actions;
+use common\models\Knowledge;
 use common\models\Log;
 use common\models\Order;
 use common\models\Qa;
@@ -28,6 +29,7 @@ use common\models\StoryModels;
 use common\models\StoryRole;
 use common\models\StoryStages;
 use common\models\User;
+use common\models\UserKnowledge;
 use common\models\UserStory;
 use common\models\UserModels;
 use frontend\actions\ApiAction;
@@ -279,6 +281,33 @@ class DoApi extends ApiAction
                 $sessionQa->snapshot = json_encode($qaModel->toArray(), true);
                 $sessionQa->save();
             }
+
+            $knowledge = Knowledge::find()
+                ->where([
+                    'story_id'  => (int)$this->_storyId,
+                ])
+                ->sortBy(['sort_by' => SORT_ASC])
+                ->one();
+
+            $userKnowledge = UserKnowledge::find()
+                ->where([
+                    'session_id'  => (int)$this->_userSessionInfo['id'],
+                    'user_id'   => (int)$this->_userId,
+                    'knowledge_id'  => (int)$knowledge['id'],
+                ])
+                ->one();
+
+            if (!empty($userKnowledge)) {
+                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+            } else {
+                $userKnowledge = new UserKnowledge();
+                $userKnowledge->knowledge_id = $knowledge['id'];
+                $userKnowledge->session_id = $this->_userSessionInfo['id'];
+                $userKnowledge->user_id = $this->_userId;
+                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+            }
+            $userKnowledge->save();
+
 
 
 

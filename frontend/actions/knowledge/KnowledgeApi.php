@@ -11,6 +11,7 @@ namespace frontend\actions\qa;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\models\Actions;
 use common\models\Knowledge;
 use common\models\Qa;
 use common\models\Session;
@@ -111,21 +112,36 @@ class KnowledgeApi extends ApiAction
         }
 
         // 更新新知识点
-        $sortBy = $knowledge->sort_by;
-
-        $nextKnowledge = Knowledge::find()
+        $nextKnowledges = Knowledge::find()
             ->where(['story_id' => $this->_storyId])
-            ->andWhere(['>', 'sort_by', $sortBy])
-            ->orderBy('sort_by asc')
-            ->one();
+            ->andWhere(['pre_knowledge_id' => $knowledge->id])
+            ->all();
 
         if (!empty($nextKnowledge)) {
             try {
-                $nextKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
-                $nextKnowledge->save();
+                foreach ($nextKnowledges as $nextKnowledge) {
+                    $nextUserKnowledge = UserKnowledge::find()
+                        ->where([
+                            'user_id' => $this->_userId,
+                            'knowledge_id' => $nextKnowledge->id,
+                            'session_id' => $this->_sessionId,
+                        ])->one();
+                    if (empty($nextUserKnowledge)) {
+                        $nextUserKnowledge = new UserKnowledge();
+                        $nextUserKnowledge->user_id = $this->_userId;
+                        $nextUserKnowledge->knowledge_id = $nextKnowledge->id;
+                        $nextUserKnowledge->session_id = $this->_sessionId;
+                    }
+                    $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                    $nextUserKnowledge->save();
+                }
+
+                Yii::$app->act->add($this->_sessionId, $this->_userId, '可以去寻找下一个任务：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
             } catch (\Exception $e) {
                 throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
             }
+        } else {
+            Yii::$app->act->add($this->_sessionId, $this->_userId, '任务全部完成啦！', Actions::ACTION_TYPE_ACTION);
         }
     }
 
