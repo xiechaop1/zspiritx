@@ -8,6 +8,10 @@ use Yii;
  * This is the model class for table "{{%knowledge}}".
  *
  * @property int $id
+ * @property int $user_id
+ * @property int $session_id
+ * @property int $knowledge_id
+ * @property int $knowledge_status
  * @property int $created_at
  * @property int $updated_at
  */
@@ -27,7 +31,7 @@ class UserKnowledge extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'session_id', 'knowledge', 'knowledge_status', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'session_id', 'knowledge_id', 'knowledge_status', 'created_at', 'updated_at'], 'integer'],
         ];
     }
 
