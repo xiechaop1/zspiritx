@@ -255,4 +255,17 @@ $(function () {
         Unity.call(data);
     });
 
+    $(".knowledge-title").click(function (){
+        var tobj = $(this).parent().find(".knowledge-content");
+        var allobj = $(".knowledge-content");
+
+        if (tobj.is(':hidden')) {
+            allobj.hide();
+           tobj.show();
+       } else {
+           tobj.hide();
+       }
+        // $(".knowledge-content").hide();
+    });
+
 })

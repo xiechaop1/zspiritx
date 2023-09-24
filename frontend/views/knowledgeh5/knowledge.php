@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = '我的背包';
+$this->title = '知识库';
 
 ?>
 
@@ -48,7 +48,7 @@ $this->title = '我的背包';
                 <?php
                 foreach ($model as $item) {
                     $label = !empty($item->title) ? $item->title : $item->content;
-                    $txt = !empty($item->content) ? $item->content : '-';
+                    $content = !empty($item->content) ? $item->content : '-';
 
                     $status = \common\models\UserKnowledge::KNOWLDEGE_STATUS_INIT;
                     if (!empty($userKnowledgeMap[$item->id])) {
@@ -73,12 +73,14 @@ $this->title = '我的背包';
                 echo '
                 <div class="m-t-30 col-sm-12 col-md-12">
                     <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="baggage" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $item->id . '">
+                        <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
+                        <label class="form-check-label fs-30 answer-btn knowledge-title" for="legal_person_yes_' . $item->id . '">
                             <span class="answer-tag">' . $showSort . '</span>
-                    '. $showTxt . '
+                    '. $showTxt .  '
                     </label>
-                    </div>
+                   
+                    ' . '<div class="knowledge-content" style="font-size: 18px; display: none;"><hr style="color: #ffffff; border: 1px;">' . $content . '</div>' . '
+                     </div>
                 </div>
                 ';
                 }
