@@ -108,7 +108,10 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => '顺序',
                         'attribute' => 'sort_by',
                     ],
-
+                    [
+                        'label' => '上一ID',
+                        'attribute' => 'pre_knowledge_id',
+                    ],
 //                    [
 //                        'label' => '封面图片',
 //                        'attribute' => 'verse_url',
