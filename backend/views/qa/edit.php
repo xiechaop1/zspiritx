@@ -67,6 +67,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('剧本');
+            echo $form->field($qaModel, 'knowledge_id')->widget('\kartik\select2\Select2', [
+                'data' => $knowledges,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('知识点');
 
             echo $form->field($qaModel, 'qa_type')->widget('\kartik\select2\Select2', [
                 'data' => $qaTypes,

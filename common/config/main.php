@@ -27,6 +27,7 @@ return [
         'wechat'    => 'common\services\Wechat',
         'oplog'     => 'common\services\Log',
         'act'       => 'common\services\Actions',
+        'knowledge' => 'common\services\Knowledge',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',

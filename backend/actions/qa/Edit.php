@@ -14,6 +14,7 @@ use common\helpers\Attachment;
 use common\helpers\Time;
 use common\models\Category;
 use common\models\Image;
+use common\models\Knowledge;
 use common\models\Music;
 use common\models\MusicCategory;
 use common\models\Qa;
@@ -97,10 +98,17 @@ class Edit extends Action
             $model->selected = json_decode($model->selected, true);
         }
 
+        $knowledgeDatas = Knowledge::find()->all();
+        $knowledgeTmps = ArrayHelper::map($knowledgeDatas, 'id', 'title');
+
+        $knowledges = ['0' => '无'] + $knowledgeTmps;
+
+
         return $this->controller->render('edit', [
             'qaModel'    => $model,
             'qaTypes'    => $qaTypes,
             'stories'   => $stories,
+            'knowledges'    => $knowledges,
         ]);
     }
 }
