@@ -286,7 +286,7 @@ class DoApi extends ApiAction
                 ->where([
                     'story_id'  => (int)$this->_storyId,
                 ])
-                ->sortBy(['sort_by' => SORT_ASC])
+                ->orderBy(['sort_by' => SORT_ASC])
                 ->one();
 
             $userKnowledge = UserKnowledge::find()

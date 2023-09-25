@@ -87,45 +87,6 @@ $this->title = '知识库';
                 ?>
 
 
-<!--
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_A" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_A">
-                            <span class="answer-tag">A</span>
-                            8跟
-                        </label>
-                    </div>
-                </div>
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_B" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_B">
-                            <span class="answer-tag">B</span>
-                            6跟
-                        </label>
-                    </div>
-                </div>
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_C" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_C">
-                            <span class="answer-tag">C</span>
-                            5跟
-                        </label>
-                    </div>
-                </div>
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_D" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_D">
-                            <span class="answer-tag">D</span>
-                            3跟
-                        </label>
-                    </div>
-                </div>
--->
-
             </div>
 <!--                    <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
                         返回
