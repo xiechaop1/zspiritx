@@ -76,7 +76,7 @@ $this->title = '知识库';
                         <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                         <label class="form-check-label fs-30 answer-btn knowledge-title" for="legal_person_yes_' . $item->id . '">
                             <span class="answer-tag">' . $showSort . '</span>
-                    '. $showTxt .  '
+                    <span style="padding-left: 90px; ">'. $showTxt .  '</span>
                     </label>
                    
                     ' . '<div class="knowledge-content" style="font-size: 18px; display: none;"><hr style="color: #ffffff; border: 1px;">' . $content . '</div>' . '
