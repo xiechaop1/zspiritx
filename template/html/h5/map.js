@@ -131,7 +131,7 @@ $(function () {
         else if(user_lng!=null&&user_lng!=undefined&&user_lng!=0&&user_lat!=null&&user_lat!=undefined&&user_lat!=0){
 
         }
-        else if(h5_lng!=null&&h5_lng!=undefined&&h5_lng!=0&&h5_lat!=null&&uh5_lat!=undefined&&h5_lat!=0){
+        else if(h5_lng!=null&&h5_lng!=undefined&&h5_lng!=0&&h5_lat!=null&&h5_lat!=undefined&&h5_lat!=0){
             user_lng=h5_lng;
             user_lat=h5_lat;
         }
