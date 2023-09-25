@@ -873,7 +873,7 @@ class DoApi extends ApiAction
                 ->where(['id' => (int)$storyModelId])
                 ->one();
 
-            if ($storyModel->active_next)
+//            if ($storyModel->active_next)
 
             $result['msg'] = '获取成功';
 
