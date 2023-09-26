@@ -198,7 +198,7 @@ $(function () {
         var userId = $('#user_id').val();
         var isagree = $('#agreement').val();
 
-        if (isagree == false) {
+        if (mobile != '1' && isagree == false) {
             $.alert('请勾选用户协议');
             return false;
         }
