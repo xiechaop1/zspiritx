@@ -57,7 +57,11 @@ $this->title = 'AR剧本杀';
       </div>
     </div>
   </div>
-  <div class="item" onclick="Unity.call('WebViewOff&StartARScene');">
+  <div class="item"
+       <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->>
+    <input type="hidden" name="isDebug" value="1">
+    <input type="hidden" name="storyId" value="1">
+
     <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
       <div class="text-bg">
