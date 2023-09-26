@@ -12,6 +12,7 @@ namespace backend\actions\model;
 use common\definitions\Common;
 use common\helpers\Active;
 use common\helpers\Attachment;
+use common\helpers\Model;
 use common\helpers\Time;
 use common\models\Category;
 use common\models\Image;
@@ -70,7 +71,9 @@ class StoryModelEdit extends Action
 
             $model->load(Yii::$app->request->post());
 
-            $model->active_next = Active::encodeActive($model->active_next);
+            $model->active_next = Model::encodeActive($model->active_next);
+
+            $model->dialog = Model::encodeDialog($model->dialog);
 
             if ($model->validate()) {
 

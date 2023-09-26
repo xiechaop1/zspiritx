@@ -62,6 +62,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('模型朝向');
+            echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': ''])->label('对话');
             echo $form->field($storyModel, 'misrange')->textInput(['value' => $storyModel->misrange])->label('误差');
             echo $form->field($storyModel, 'act_misrange')->textInput(['value' => $storyModel->act_misrange])->label('动作误差距离');
             echo $form->field($storyModel, 'lat')->textInput(['value' => $storyModel->lat])->label('经度');
@@ -74,7 +75,7 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'show_z')->textInput(['value' => $storyModel->show_z])->label('坐标Z');
             echo $form->field($storyModel, 'is_unique')->textInput(['value' => $storyModel->is_unique])->label('是否唯一');
             echo $form->field($storyModel, 'is_visable')->textInput(['value' => $storyModel->is_visable])->label('是否显示');
-            echo $form->field($storyModel, 'active_next')->textarea(['value' => \common\helpers\Active::decodeActiveToShow($storyModel->active_next)])->label('动作内容');
+            echo $form->field($storyModel, 'active_next')->textarea(['value' => \common\helpers\Model::decodeActiveToShow($storyModel->active_next)])->label('动作内容');
             echo $form->field($storyModel, 'active_expiretime')->textInput(['value' => $storyModel->active_expiretime])->label('动作过期时间');
 
 

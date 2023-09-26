@@ -759,7 +759,7 @@ class DoApi extends ApiAction
                 return $this->fail('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
             }
 
-//            $activeArray = Active::decodeActive($storyModel->activeNext);
+//            $activeArray = \common\helpers\Model::decodeActive($storyModel->activeNext);
             if ($storyModel->active_type == StoryModels::ACTIVE_TYPE_BUFF) {
                 $userStory = UserStory::findOne([
                     'user_id' => (int)$userId,
