@@ -20,12 +20,26 @@ $(function () {
     }
 
 
+    var user_lng=$("input[name='user_lng']").val();
+    var user_lat=$("input[name='user_lat']").val();
 
-    var map = new AMap.Map('container', {
-        resizeEnable: true,
-        // center: [116.397428, 39.90923],
-        zoom: 25
-    });
+    if(user_lng!=null&&user_lng!=undefined&&user_lng!=0&&user_lat!=null&&user_lat!=undefined&&user_lat!=0){
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            center: [user_lng, user_lat],
+            zoom: 25
+        });
+    }
+    else{
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            // center: [116.397428, 39.90923],
+            zoom: 25
+        });
+    }
+
+
+
 
     AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
 
