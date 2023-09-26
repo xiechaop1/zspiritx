@@ -62,7 +62,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('模型朝向');
-            echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': ''])->label('对话');
+            echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
             echo $form->field($storyModel, 'misrange')->textInput(['value' => $storyModel->misrange])->label('误差');
             echo $form->field($storyModel, 'act_misrange')->textInput(['value' => $storyModel->act_misrange])->label('动作误差距离');
             echo $form->field($storyModel, 'lat')->textInput(['value' => $storyModel->lat])->label('经度');
