@@ -197,6 +197,7 @@ class QaApi extends ApiAction
             $transaction->commit();
 
         } catch (\Exception $e) {
+            var_dump($e);
             $transaction->rollBack();
             throw new \Exception('添加用户问答失败', ErrorCode::QA_SAVE_FAILED);
         }

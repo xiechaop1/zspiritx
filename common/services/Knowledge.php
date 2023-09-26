@@ -34,8 +34,8 @@ class Knowledge extends Component
         $sessionInfo = Session::findOne($sessionId);
 
         if (empty($sessionInfo)
-            || ($sessionInfo->session_status = Session::SESSION_STATUS_CANCEL
-                or $sessionInfo->session_status = Session::SESSION_STATUS_FINISH
+            || ($sessionInfo->session_status == Session::SESSION_STATUS_CANCEL
+                or $sessionInfo->session_status == Session::SESSION_STATUS_FINISH
             )
         ) {
             throw new \Exception('场次不存在', ErrorCode::SESSION_NOT_FOUND);
