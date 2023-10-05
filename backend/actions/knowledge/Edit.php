@@ -85,11 +85,11 @@ class Edit extends Action
             return $this->controller->refresh();
         }
 
-        $knowledgeTypes = array_reverse( Knowledge::$knowledgeType2Name, TRUE);
+        $knowledgeTypes = Knowledge::$knowledgeType2Name, TRUE;
 
         $storyDatas = Story::find()->all();
 
-        $stories = ArrayHelper::map($storyDatas, 'id', 'title');
+        $stories = array_reverse(ArrayHelper::map($storyDatas, 'id', 'title'));
 
 
         return $this->controller->render('edit', [
