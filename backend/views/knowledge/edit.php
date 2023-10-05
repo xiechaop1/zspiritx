@@ -31,7 +31,7 @@ echo \dmstr\widgets\Alert::widget();
                 'enableClientValidation' => true,
             ]);
             echo $form->field($knowledgeModel, 'title')->textInput(['value' => $knowledgeModel->title])->label('标题');
-            echo $form->field($knowledgeModel, 'content')->textarea()->label('内容');
+            echo $form->field($knowledgeModel, 'content')->textarea(['rows' => 20])->label('内容');
 
 //            echo $form->field($knowledgeModel, '')->widget('\liyifei\uploadOSS\FileUploadOSS', [
 //                'multiple' => false,
