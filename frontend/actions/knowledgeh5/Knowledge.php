@@ -61,6 +61,7 @@ class Knowledge extends Action
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
+            'knowledgeClass' => $knowledgeClassId,
         ]);
     }
 }

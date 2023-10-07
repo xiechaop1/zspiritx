@@ -44,7 +44,7 @@ $this->title = '知识库';
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
                     <div class="npc-name">
-                        知识库
+                        <?= $knowledgeClass == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL ? '知识' : '任务'; ?>
                     </div>
 
             <div class="row" id="answer-box">
