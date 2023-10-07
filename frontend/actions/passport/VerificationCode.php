@@ -12,6 +12,7 @@ namespace frontend\actions\passport;
 use common\helpers\Email;
 use common\helpers\Sms;
 use common\models\Member;
+use common\models\User;
 use liyifei\base\actions\ApiAction;
 use liyifei\base\helpers\Net;
 use yii\web\BadRequestHttpException;
@@ -29,8 +30,11 @@ class VerificationCode extends ApiAction
     {
         $timeout = 300; // 秒
         if ($this->way == 'mobile') {
-            $mobileSection = Net::post('mobile_section');
-            $mobile = Net::post('mobile');
+//            $mobileSection = Net::post('mobile_section');
+//            $mobile = Net::post('mobile');
+
+            $mobile = $_GET['mobile'];
+            $mobileSection = !empty($_GET['mobile_section']) ? $_GET['mobile_section'] : '+86';
 
             $this->type = empty($this->type) ? \common\definitions\VerificationCode::TYPE_REGISTER : $this->type;
 
@@ -44,7 +48,7 @@ class VerificationCode extends ApiAction
 //                    }
                     break;
                 case \common\definitions\VerificationCode::TYPE_FINDBACK;
-                    if (!Member::find()->where(['mobile' => $mobile, 'mobile_section' => $mobileSection])->exists()) {
+                    if (User::find()->where(['mobile' => $mobile])->exists()) {
                         return $this->fail('该手机号尚未绑定任何账号');
                     }
                     break;
@@ -69,16 +73,16 @@ class VerificationCode extends ApiAction
             try {
 
                 if (!YII_DEBUG) {
-                    $ret = Yii::$app->sms->sendSms('verificationCode', $mobile, [
-                        $vcAr->code,
-                        intval($timeout / 60) . '分钟',
-                    ]);
-
-                    $retJson = json_decode($ret, TRUE);
-                    if (!isset($retJson['code']) || $retJson['code'] != '000000') {
-
-                    }
+                    Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
+//                    $ret = Yii::$app->sms->sendSms('verificationCode', $mobile, [
+//                        $vcAr->code,
+//                        intval($timeout / 60) . '分钟',
+//                    ]);
+                } else {
+                    Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
                 }
+
+//                Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
 //                Sms::sendVerifycodeSms($mobile, $vcAr->code, '5分钟');
 //                if ($mobileSection == '+86') {
 //                    Yii::$app->internalVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
@@ -96,34 +100,34 @@ class VerificationCode extends ApiAction
         } elseif ($this->way == 'email') {
             $email = Net::post('email');
 
-            switch ($this->type) {
-//                case \common\definitions\VerificationCode::TYPE_CHANGE_MOBILE:
-//                case \common\definitions\VerificationCode::TYPE_CHANGE_EMAIL:
-                case \common\definitions\VerificationCode::TYPE_REGISTER:
-                    if (Yii::$app->member->checkEmailExists($email)) {
-                        return $this->fail(Yii::t('web', 'email already exists'));
-                    }
-                    break;
-                case \common\definitions\VerificationCode::TYPE_FINDBACK;
-                    if (!Member::find()->where(['email' => $email])->exists()) {
-                        return $this->fail('该邮箱尚未绑定任何账号');
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            $vcAr = Yii::$app->verificationCode->generate($email, $this->type);
-            // 发送注册邮件
-            $ret = Yii::$app->email->sendMail('verificationCode', $email, [
-                $vcAr->code,
-                intval($timeout / 60) . '分钟',
-            ]);
-
-            $retJson = json_decode($ret, TRUE);
-            if (!isset($retJson['code']) || $retJson['code'] != '000000') {
-
-            }
+//            switch ($this->type) {
+////                case \common\definitions\VerificationCode::TYPE_CHANGE_MOBILE:
+////                case \common\definitions\VerificationCode::TYPE_CHANGE_EMAIL:
+//                case \common\definitions\VerificationCode::TYPE_REGISTER:
+//                    if (Yii::$app->member->checkEmailExists($email)) {
+//                        return $this->fail(Yii::t('web', 'email already exists'));
+//                    }
+//                    break;
+//                case \common\definitions\VerificationCode::TYPE_FINDBACK;
+//                    if (!Member::find()->where(['email' => $email])->exists()) {
+//                        return $this->fail('该邮箱尚未绑定任何账号');
+//                    }
+//                    break;
+//                default:
+//                    break;
+//            }
+//
+//            $vcAr = Yii::$app->verificationCode->generate($email, $this->type);
+//            // 发送注册邮件
+//            $ret = Yii::$app->email->sendMail('verificationCode', $email, [
+//                $vcAr->code,
+//                intval($timeout / 60) . '分钟',
+//            ]);
+//
+//            $retJson = json_decode($ret, TRUE);
+//            if (!isset($retJson['code']) || $retJson['code'] != '000000') {
+//
+//            }
 //            Email::verificationCode($email, $vcAr->code);
 
         } else {

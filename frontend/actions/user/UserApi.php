@@ -144,7 +144,7 @@ class UserApi extends ApiAction
         if (empty($userInfo)) {
             $userInfo = new User();
             $userInfo->mobile = $mobile;
-            $userInfo->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4);
+            $userInfo->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4) . rand(1000,9999);
             $userInfo->user_pass = Yii::$app->security->generatePasswordHash($mobile);
             $userInfo->user_status = User::USER_STATUS_NORMAL;
             $userInfo->save();
