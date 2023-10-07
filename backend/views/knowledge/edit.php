@@ -65,7 +65,13 @@ echo \dmstr\widgets\Alert::widget();
                 'options' => [
                     'multiple' => false
                 ],
-            ])->label('类型');
+            ])->label('知识类型');
+            echo $form->field($knowledgeModel, 'knowledge_class')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Knowledge::$knowledgeClass2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('分类');
             echo $form->field($knowledgeModel, 'sort_by')->textInput(['value' => $knowledgeModel->sort_by])->label('排序');
             echo $form->field($knowledgeModel, 'pre_knowledge_id')->textInput(['value' => $knowledgeModel->pre_knowledge_id])->label('上一ID');
 

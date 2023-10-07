@@ -72,7 +72,7 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
-                        'label' => '知识分类',
+                        'label' => '知识类型',
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
@@ -82,6 +82,23 @@ echo \dmstr\widgets\Alert::widget();
 
                             $ret = !empty(\common\models\Knowledge::$knowledgeType2Name[$model->knowledge_type])
                                 ? \common\models\Knowledge::$knowledgeType2Name[$model->knowledge_type]
+                                : '未知';
+
+                            return $ret;
+
+                        }
+                    ],
+                    [
+                        'label' => '分类',
+                        'format' => 'raw',
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'knowledge_class',
+                            $knowledgeTypes, ["class" => "form-control ", 'value' => !empty($params['Knowledge']['knowledge_class']) ? $params['Knowledge']['knowledge_class'] : '']),
+                        'value' => function ($model) {
+
+                            $ret = !empty(\common\models\Knowledge::$knowledgeClass2Name[$model->knowledge_class])
+                                ? \common\models\Knowledge::$knowledgeClass2Name[$model->knowledge_class]
                                 : '未知';
 
                             return $ret;
