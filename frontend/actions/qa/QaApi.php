@@ -193,7 +193,9 @@ class QaApi extends ApiAction
             }
 
             if ($isRight == 1) {
-                Yii::$app->knowledge->complete($qa['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+                if (!empty($qa['knowledge_id'])) {
+                    Yii::$app->knowledge->complete($qa['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+                }
             }
 
             $transaction->commit();
