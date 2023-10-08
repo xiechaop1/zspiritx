@@ -83,4 +83,15 @@ class Model
         return json_decode($dialogJson, true);
     }
 
+    public static function formatDialog($dialog, $params = []) {
+        $ret = $dialog;
+        if (!empty($params['user_id'])) {
+            $ret = str_replace('{$user_id}', $params['user_id'], $ret);
+        }
+        if (!empty($params['session_id'])) {
+            $ret = str_replace('{$session_id}', $params['session_id'], $ret);
+        }
+        return $ret;
+    }
+
 }

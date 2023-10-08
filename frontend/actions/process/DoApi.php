@@ -13,6 +13,7 @@ use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\helpers\Active;
 use common\helpers\Attachment;
+use common\helpers\Model;
 use common\models\Actions;
 use common\models\Knowledge;
 use common\models\Log;
@@ -514,6 +515,13 @@ class DoApi extends ApiAction
             ->all();
 
         $ret = [];
+
+        $params = [
+            'session_id' => $this->_sessionId,
+            'user_id' => $this->_userId,
+            'story_id' => $this->_storyId,
+        ];
+
         foreach ($sessoinStages as $sessionStage) {
             $sessionModels = $sessionStage->models;
             $models = [];
@@ -523,6 +531,7 @@ class DoApi extends ApiAction
                     $sessModel = $sessionModel;
 //                    $storyModel = json_decode($sessModel['snapshot'], true);
                     $storyModel = $sessionModel->storymodel;
+                    $storyModel->dialog = Model::formatDialog($storyModel->dialog, $params);
                     $models[] = [
                         'session_model' => $sessionModel,
                         'story_model' => $storyModel,
