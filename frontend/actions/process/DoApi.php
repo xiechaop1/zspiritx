@@ -526,7 +526,7 @@ class DoApi extends ApiAction
                     $models[] = [
                         'session_model' => $sessionModel,
                         'story_model' => $storyModel,
-                        'model' => $sessionModel->model,
+                        'model' => $storyModel->model,
                     ];
                 }
             }
