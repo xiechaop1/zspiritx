@@ -69,6 +69,9 @@ class Model
     }
 
     public static function encodeDialog($dialog) {
+        if (empty($dialog)) {
+            return $dialog;
+        }
         eval('$dialog = ' . $dialog);
         if (is_array($dialog)) {
             return json_encode($dialog);
