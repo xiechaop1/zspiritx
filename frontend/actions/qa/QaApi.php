@@ -192,7 +192,9 @@ class QaApi extends ApiAction
                 $ret = $sessionQa->save();
             }
 
-            Yii::$app->knowledge->complete($qa['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+            if ($isRight == 1) {
+                Yii::$app->knowledge->complete($qa['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+            }
 
             $transaction->commit();
 
