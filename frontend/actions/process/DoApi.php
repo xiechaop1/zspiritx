@@ -852,8 +852,8 @@ class DoApi extends ApiAction
                     'user_id'           => (int)$userId,
                     'session_id'        => (int)$sessionId,
                     'model_id'          => $sessionModel->model_id,
-                    'story_model_id'    => (int)$storyModelId,
-                    'session_model_id'  => $sessionModel->id,
+//                    'story_model_id'    => (int)$storyModelId,
+//                    'session_model_id'  => $sessionModel->id,
                 ])
                 ->one();
             if (empty($userModelBaggage)) {
