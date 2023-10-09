@@ -92,7 +92,7 @@ class Edit extends Action
 
         $storyDatas = Story::find()->all();
 
-        $stories = ArrayHelper::map($storyDatas, 'id', 'title');
+        $stories = array_reverse(ArrayHelper::map($storyDatas, 'id', 'title'), TRUE);
 
         if (\common\helpers\Common::isJson($model->selected)) {
             $model->selected = json_decode($model->selected, true);
