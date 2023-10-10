@@ -149,30 +149,8 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {normal} {forbidden} {edit} {delete}',
+                        'template' => '{lines} {edit} {delete}',
                         'buttons' => [
-                            'normal' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('恢复正常', 'javascript:void(0)', [
-                                    'class' => 'btn btn-primary btn-xs ajax-status-btn',
-                                    'request-confirm' => '确认恢复正常吗?',
-                                    'request-url' => '',
-                                    'request-type' => 'POST',
-                                    'data-action' => 'normal',
-                                    'data-id' => $model->id,
-                                    'data-value' => '',
-                                ]);
-                            },
-                            'forbidden' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('封禁', 'javascript:void(0)', [
-                                    'class' => 'btn btn-primary btn-xs ajax-status-btn',
-                                    'request-confirm' => '确认封禁吗?',
-                                    'request-url' => '',
-                                    'request-type' => 'POST',
-                                    'data-action' => 'forbidden',
-                                    'data-id' => $model->id,
-                                    'data-value' => '',
-                                ]);
-                            },
                             'edit' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
                                     'class' => 'btn btn-xs btn-primary',
