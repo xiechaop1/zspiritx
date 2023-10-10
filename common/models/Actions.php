@@ -22,6 +22,16 @@ class Actions extends \common\models\gii\Actions
         self::ACTION_TYPE_CHANGE_STAGE => '切换场景',
     ];
 
+    const ACTION_STATUS_NORMAL = 0; // 正常
+    const ACTION_STATUS_READ   = 1; // 已读
+    const ACTION_STATUS_EXPIRED = 99; // 过期
+
+    public static $actionStatus2Name = [
+        self::ACTION_STATUS_NORMAL => '正常',
+        self::ACTION_STATUS_READ   => '已读',
+        self::ACTION_STATUS_EXPIRED => '过期',
+    ];
+
     public function behaviors()
     {
         return [

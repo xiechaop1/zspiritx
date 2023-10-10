@@ -73,14 +73,15 @@ class VerificationCode extends ApiAction
             try {
 
                 if (!YII_DEBUG) {
-                    Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
+                    $ret = Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
 //                    $ret = Yii::$app->sms->sendSms('verificationCode', $mobile, [
 //                        $vcAr->code,
 //                        intval($timeout / 60) . '分钟',
 //                    ]);
                 } else {
-                    Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
+                    $ret = Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
                 }
+                var_dump($ret);
 
 //                Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
 //                Sms::sendVerifycodeSms($mobile, $vcAr->code, '5分钟');
