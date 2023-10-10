@@ -190,6 +190,9 @@ $(function () {
             $('#loginform').show();
         }
     });
+    $("#login_return_btn").click(function() {
+        $("#loginform").hide();
+    });
     $("#login_btn").click(function ()
     {
         var mobile=$("input[name='mobile']").val();

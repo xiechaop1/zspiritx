@@ -189,6 +189,9 @@ $this->title = 'AR剧本杀';
                 <div class="btn-m-green m-t-30 float-right m-r-20" id="login_btn">
                   进入游戏
                 </div>
+                <div class="btn-m-green m-t-30 float-right m-r-20" id="login_return_btn">
+                  返回
+                </div>
               </div>
             </div>
           </div>
