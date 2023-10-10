@@ -64,7 +64,7 @@ class Knowledge extends Component
         }
 
         // 更新新知识点
-        $nextKnowledges = Knowledge::find()
+        $nextKnowledges = \common\models\Knowledge::find()
             ->where(['story_id' => $storyId])
             ->andWhere(['pre_knowledge_id' => $knowledge->id])
             ->all();
