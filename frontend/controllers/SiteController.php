@@ -47,25 +47,25 @@ class SiteController extends ViewController
         }
 
 //        如果未登录，则直接返回
-        if(Yii::$app->user->isGuest){
-//            var_dump(Yii::$app->request->referrer);exit;
-            return $this->goHome();
-        }
+//        if(Yii::$app->user->isGuest){
+////            var_dump(Yii::$app->request->referrer);exit;
+//            return $this->goHome();
+//        }
 
-        $identity = Yii::$app->user->identity;
-        if (!empty($identity->web_session_id) &&
-            (
-                !empty($identity->login_time) && time() - $identity->login_time <= DefMember::LOGIN_EXPIRE_AT
-            )
-            &&
-            (
-                (Client::isMobile() && $identity->wap_session_id != Yii::$app->session->id)
-                || (!Client::isMobile() && $identity->web_session_id != Yii::$app->session->id)
-            )
-        ){
-            Yii::$app->user->logout();
-            return $this->goHome();
-        }
+//        $identity = Yii::$app->user->identity;
+//        if (!empty($identity->web_session_id) &&
+//            (
+//                !empty($identity->login_time) && time() - $identity->login_time <= DefMember::LOGIN_EXPIRE_AT
+//            )
+//            &&
+//            (
+//                (Client::isMobile() && $identity->wap_session_id != Yii::$app->session->id)
+//                || (!Client::isMobile() && $identity->web_session_id != Yii::$app->session->id)
+//            )
+//        ){
+//            Yii::$app->user->logout();
+//            return $this->goHome();
+//        }
 
         //获取路径
         $path = Yii::$app->request->pathInfo;
@@ -80,9 +80,9 @@ class SiteController extends ViewController
 //        } else {
 //            throw new ForbiddenHttpException(Yii::t('app', 'message 401'));
 //        }
-        if (!empty(Yii::$app->user->identity) && Yii::$app->user->identity->member_status != Member::MEMBER_STATUS_NORMAL) {
-//            return $this->goRegister();
-        }
+//        if (!empty(Yii::$app->user->identity) && Yii::$app->user->identity->member_status != Member::MEMBER_STATUS_NORMAL) {
+////            return $this->goRegister();
+//        }
 
         return true;
     }
@@ -149,7 +149,7 @@ class SiteController extends ViewController
                 'class' => 'frontend\actions\site\Index',
             ],
             'index_not_login' => [
-                'class' => 'frontend\actions\site\IndexNotLogin',
+                'class' => 'frontend\actions\site\Index',
             ],
             'index_api' => [
                 'class' => 'frontend\actions\site\GetJobListApi',
