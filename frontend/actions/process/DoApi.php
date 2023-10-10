@@ -442,6 +442,12 @@ class DoApi extends ApiAction
                 'session_id'    =>  (int)$sessionId,
             ]);
 
+            if (empty($userStory)) {
+                $userStory = new UserStory();
+                $userStory->user_id = $userId;
+                $userStory->story_id = $this->_storyId;
+                $userStory->session_id = $sessionId;
+            }
             $userStory->goal = $goal;
 
             if ($goal == $storyGoals->goal) {
@@ -925,7 +931,7 @@ class DoApi extends ApiAction
         }
 
         foreach ($roleCt as $roleId => $ct) {
-            if ($ct < $sRole[$roleId]) {
+            if (!empty($sRole[$roleId]) && $ct < $sRole[$roleId]) {
                 return false;
             }
         }
