@@ -450,10 +450,12 @@ class DoApi extends ApiAction
             }
             $userStory->goal = $goal;
 
-            if ($goal == $storyGoals->goal) {
-                $userStory->goal_correct = '结论正确';
-            } else {
-                $userStory->goal_correct = '结论错误，正确结论：' . $storyGoals->goal;
+            if (!empty($storyGoals)) {
+                if ($goal == $storyGoals->goal) {
+                    $userStory->goal_correct = '结论正确';
+                } else {
+                    $userStory->goal_correct = '结论错误，正确结论：' . $storyGoals->goal;
+                }
             }
             $ret = $userStory->save();
 
