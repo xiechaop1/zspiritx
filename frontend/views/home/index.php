@@ -140,7 +140,7 @@ $this->title = 'AR剧本杀';
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
 
     <input type="hidden" name="isDebug" value="1">
-    <input type="text" name="storyId" value="4">
+    <input type="text" name="storyId" value="4" style="color: white;">
 
     <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
@@ -148,7 +148,7 @@ $this->title = 'AR剧本杀';
       </div>
       <div class='p-l-40'>
         <div class="fs-30 bold w-100 text-FF">
-          侏罗纪-时间裂痕（测试）
+          侏罗纪-时间裂痕（家里测试）
         </div>
         <div class="fs-24  w-100 text-FF m-t-30">
           在大峡谷内，忽然产生了一段奇妙的故事。<br>
