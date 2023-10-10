@@ -140,7 +140,6 @@ $this->title = 'AR剧本杀';
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
 
     <input type="hidden" name="isDebug" value="1">
-    <input type="text" name="storyId" value="4" style="color: white;">
 
     <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
@@ -158,6 +157,7 @@ $this->title = 'AR剧本杀';
           传说只要集齐七颗水晶，就可以让他们穿越回去并且修复裂痕而！<br>
           冒险家，需要你们的帮助，去收集这些水晶了
         </div>
+        <input type="text" name="storyId" value="4" style="color: white;">
         <div class="btn-m-green m-t-30 float-right m-r-20">
           进入游戏
           <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
