@@ -14,6 +14,7 @@ use common\definitions\ErrorCode;
 use common\models\Actions;
 use common\models\Qa;
 use common\models\SessionQa;
+use common\models\StoryStages;
 use common\models\UserQa;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
@@ -199,7 +200,8 @@ class QaApi extends ApiAction
                 }
 
                 if (!empty($qa['story_stage_id'])) {
-                    Yii::$app->act->add($sessionId, $userId, $qa['story_stage_id'], Actions::ACTION_TYPE_CHANGE_STAGE);
+                    $storyStage = StoryStages::findOne($qa['story_stage_id']);
+                    Yii::$app->act->add($sessionId, $userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE);
                 }
             }
 
