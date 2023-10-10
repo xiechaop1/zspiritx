@@ -309,7 +309,7 @@ class DoApi extends ApiAction
             }
             $userKnowledge->save();
 
-            Yii::$app->act->add((int)$this->_userSessionInfo['id'], (int)$this->_userId, '开启任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+            Yii::$app->act->add((int)$this->_userSessionInfo['id'], (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
 
 
             $transaction->commit();
