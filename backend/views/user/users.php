@@ -21,7 +21,7 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::button('添加白名单', [
+            <?= \yii\bootstrap\Html::button('添加用户', [
                 'class' => 'btn btn-primary pull-right',
                 'data-toggle' => "modal",
                 'data-target' => '#add-form'
@@ -55,10 +55,7 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
-                    echo $form->field($userModel, 'remarks')->textInput(['value' => $model->remarks])->label('备注名');
                     echo $form->field($userModel, 'mobile')->textInput(['value' => $model->mobile])->label('手机号');
-                    echo $form->field($userModel, 'max_lock_ct')->textInput(['value' => $model->max_lock_ct])->label('最多锁定数');
-                    echo $form->field($userModel, 'user_type')->inline(true)->radioList(\common\models\User::$userTypeNameMap, ['value' => $model->user_type])->label('用户类型');
                     ?>
                     <div class="form-group">
                         <label class="control-label col-sm-2"></label>
@@ -90,11 +87,6 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
-                        'label' => '备注名',
-                        'attribute' => 'remarks',
-                        'filter'    => Html::activeInput('text', $searchModel, 'remarks',['placeholder'=>'备注名']),
-                    ],
-                    [
                         'label' => '手机号',
                         'attribute' => 'mobile',
                         'filter'    => Html::activeInput('text', $searchModel, 'mobile',['placeholder'=>'手机号']),
@@ -113,21 +105,6 @@ echo \dmstr\widgets\Alert::widget();
 //                    ],
 
                     [
-                        'attribute' => 'user_type',
-                        'label' => '用户类型',
-                        'value' => function($model) {
-                            return
-                                isset (\common\models\User::$userTypeNameMap[$model->user_type]) ?
-                                    \common\models\User::$userTypeNameMap[$model->user_type] :
-                                    '未知'
-                                ;
-                        },
-                        'filter' => Html::activeDropDownList(
-                            $searchModel,
-                            'user_type',
-                            \common\models\User::$userTypeNameMap, ['prompt' => '全部', "class" => "form-control ", 'value' => !empty($params['User']['user_type']) ? $params['User']['user_type'] : ''])
-                    ],
-                    [
                         'attribute' => 'user_status',
                         'label' => '用户状态',
                         'value' => function($model) {
@@ -142,33 +119,14 @@ echo \dmstr\widgets\Alert::widget();
                             'user_status',
                             \common\models\User::$userStatus, ["class" => "form-control ", 'value' => !empty($params['User']['user_status']) ? $params['User']['user_status'] : ''])
                     ],
-                    [
-                        'attribute' => 'is_delete',
-                        'label' => '是否删除',
-                        'value' => function($model) {
-                            switch($model->is_delete) {
-                                case \common\definitions\Common::STATUS_DELETED:
-                                    $r = '已删除';
-                                    break;
-                                case \common\definitions\Common::STATUS_NORMAL:
-                                    $r = '正常';
-                                    break;
-                                default:
-                                    $r = '未知';
-                            }
-                            return $r;
-                        },
-                    ],
+
                     [
                         'label' => '用户行为数据',
                         'format' => 'raw',
                         'filter'    => false,
                         'value' => function ($model) {
-                            $str =  Html::a('锁定：' . $model->getUserLockCount(), '/order/orders?Order[order_status]=' . \common\models\Order::ORDER_STATUS_LOCK . '&Order[user_id]=' . $model->id) . '<br>';
-                            $str .= Html::a('喜欢：' . $model->getUserFavCount(), '/user/usermusiclist?list_type=' . \common\models\UserList::LIST_TYPE_FAV . '&id=' . $model->id) . '<br>';
-                            $str .= Html::a('浏览：' . $model->getUserViewCount(), '/user/usermusiclist?list_type=' . \common\models\UserList::LIST_TYPE_VIEW . '&id=' . $model->id) . '<br>';
-                            $str .= Html::a('购买：' . $model->getUserOrderCompletedCount(), '/order/orders?Order[order_status]=' . \common\models\Order::ORDER_STATUS_COMPLETED . '&Order[user_id]=' . $model->id) . '<br>';
-                            $str .= Html::a('取消锁定：' . $model->getUserOrderCanceledCount(), '/order/orders?Order[order_status]=' . \common\models\Order::ORDER_STATUS_CANCELED . '&Order[user_id]=' . $model->id) . '<br>';
+                            $str = 'Last Login Geo: ' . $model->last_login_geo_lat . ',' . $model->last_login_geo_lng . '<br>';
+                            $str .= 'Last Login Time: ' . $model->last_login_time;
                             return $str;
                         }
                     ],
@@ -260,10 +218,7 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
-echo $form->field($userModel, 'remarks')->label('备注名');
 echo $form->field($userModel, 'mobile')->label('手机号');
-echo $form->field($userModel, 'max_lock_ct')->textInput(['value' => 3])->label('最多锁定数');
-echo $form->field($userModel, 'user_type')->inline(true)->radioList(\common\models\User::$userTypeNameMap)->label('用户类型');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>

@@ -19,14 +19,9 @@ class User extends \common\models\User
     public function rules()
     {
         return [
-            [['user_status', 'user_type', 'status', 'last_login_time', 'max_lock_ct', 'created_at', 'updated_at'], 'integer'],
-            [['wx_openid', 'remarks', 'wx_unionid', 'wx_token', 'avatar'], 'string'],
-//            [['user_name'], 'unique', 'targetClass' => 'common\models\User', 'targetAttribute' => 'user_name', 'filter' => ['<>', 'id', $this->id], 'message' => '已经存在相同的用户名了'],
-            [['mobile'], 'unique', 'targetClass' => 'common\models\User', 'targetAttribute' => 'mobile', 'filter' => function ($query) {
-                $query->andWhere(['<>', 'id', $this->id]);
-                $query->andFilterWhere(['is_delete' => Common::STATUS_NORMAL]);
-            }, 'message' => '该手机号已经被其他用户使用了'],
-
+            [['user_status', 'status', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['user_name', 'user_pass', 'nick_name', 'user_pass', 'wx_openid', 'wx_unionid', 'wx_token', 'mobile', 'avatar', ], 'string'],
+            [['last_login_geo_lat', 'last_login_geo_lng'], 'number'],
         ];
     }
 
@@ -49,13 +44,6 @@ class User extends \common\models\User
             'like', 'mobile', $this->mobile
         ]);
 
-//        $query->andFilterWhere([
-//            'like', 'user_name', $this->user_name
-//        ]);
-
-        $query->andFilterWhere([
-            'like', 'remarks', $this->remarks
-        ]);
 
         // 判断ID
         if (!empty($params['User']['id'])) {
@@ -64,27 +52,11 @@ class User extends \common\models\User
             ]);
         }
 
-        // 判断用户状态
-        if (isset($params['User']['user_type']) && $params['User']['user_type'] > 0) {
-            $query->andFilterWhere([
-                'user_type'  => $params['User']['user_type']
-            ]);
-        }
 
         // 判断用户状态
         if (isset($params['User']['user_status']) && $params['User']['user_status'] >= 0) {
             $query->andFilterWhere([
                 'user_status'  => $params['User']['user_status']
-            ]);
-        }
-
-        if (empty($params['is_delete'])) {
-            $query->andFilterWhere([
-                'is_delete' => Common::STATUS_NORMAL
-            ]);
-        } else {
-            $query->andFilterWhere([
-                'is_delete' => $params['is_delete']
             ]);
         }
 
