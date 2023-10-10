@@ -20,6 +20,7 @@ use common\models\MusicCategory;
 use common\models\Qa;
 use common\models\Singer;
 use common\models\Story;
+use common\models\StoryStages;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
 use yii\base\Action;
@@ -98,11 +99,10 @@ class Edit extends Action
             $model->selected = json_decode($model->selected, true);
         }
 
-        $knowledgeDatas = Knowledge::find()->all();
+        $knowledgeDatas = Knowledge::find()->orderBy(['id' => SORT_DESC])->all();
         $knowledgeTmps = ArrayHelper::map($knowledgeDatas, 'id', 'title');
 
         $knowledges = ['0' => '无'] + $knowledgeTmps;
-
 
         return $this->controller->render('edit', [
             'qaModel'    => $model,
