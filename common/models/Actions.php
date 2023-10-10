@@ -14,10 +14,12 @@ class Actions extends \common\models\gii\Actions
 
     const ACTION_TYPE_ACTION = 1;   // 动作
     const ACTION_TYPE_MSG    = 2;   // 消息
+    const ACTION_TYPE_CHANGE_STAGE = 11; // 切换场景
 
     public static $actionType2Name = [
         self::ACTION_TYPE_ACTION => '动作',
         self::ACTION_TYPE_MSG    => '消息',
+        self::ACTION_TYPE_CHANGE_STAGE => '切换场景',
     ];
 
     public function behaviors()

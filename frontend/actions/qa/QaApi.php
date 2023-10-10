@@ -11,6 +11,7 @@ namespace frontend\actions\qa;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\models\Actions;
 use common\models\Qa;
 use common\models\SessionQa;
 use common\models\UserQa;
@@ -195,6 +196,10 @@ class QaApi extends ApiAction
             if ($isRight == 1) {
                 if (!empty($qa['knowledge_id'])) {
                     Yii::$app->knowledge->complete($qa['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+                }
+
+                if (!empty($qa['story_stage_id'])) {
+                    Yii::$app->act->add($sessionId, $userId, $qa['story_stage_id'], Actions::ACTION_TYPE_CHANGE_STAGE);
                 }
             }
 
