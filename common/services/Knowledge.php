@@ -69,7 +69,7 @@ class Knowledge extends Component
             ->andWhere(['pre_knowledge_id' => $knowledge->id])
             ->all();
 
-        if (!empty($nextKnowledge)) {
+        if (!empty($nextKnowledges)) {
             try {
                 foreach ($nextKnowledges as $nextKnowledge) {
                     $nextUserKnowledge = UserKnowledge::find()
