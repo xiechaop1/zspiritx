@@ -9,6 +9,7 @@
 namespace frontend\actions\passport;
 
 
+use common\definitions\ErrorCode;
 use common\helpers\Email;
 use common\helpers\Sms;
 use common\models\Member;
@@ -81,7 +82,6 @@ class VerificationCode extends ApiAction
                 } else {
                     $ret = Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
                 }
-                var_dump($ret);
 
 //                Yii::$app->loginVerifyCodeSms->sendSms($mobile, ['code' => $vcAr->code]);
 //                Sms::sendVerifycodeSms($mobile, $vcAr->code, '5分钟');
@@ -95,6 +95,7 @@ class VerificationCode extends ApiAction
             } catch (\Exception $e) {
                 Yii::warning(ltrim($mobileSection, '+') . $mobile);
                 Yii::warning('Send sms fail, error: ' . $e->getMessage());
+                return $this->fail($e->getMessage(), ErrorCode::SMS_FAILED);
             }
 
 
@@ -135,6 +136,6 @@ class VerificationCode extends ApiAction
             throw new BadRequestHttpException();
         }
 
-        return $this->success();
+        return $this->success($ret);
     }
 }
