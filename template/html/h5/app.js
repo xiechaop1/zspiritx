@@ -236,6 +236,7 @@ $(function () {
     $("#login_btn").click(function ()
     {
         var mobile=$("input[name='mobile']").val();
+        var verifycode=$("input[name='verifycode']").val();
         var isDebug = $('#login_is_debug').val();
         var storyId = $('#login_story_id').val();
         var userId = $('#user_id').val();
@@ -254,6 +255,7 @@ $(function () {
                 url: '/user/login_and_reg_by_mobile',
                 data:{
                     mobile:mobile,
+                    verify_code:verifycode,
                     is_test:1
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {

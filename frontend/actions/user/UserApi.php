@@ -127,12 +127,20 @@ class UserApi extends ApiAction
 
     public function loginAndRegByMobile() {
         $mobile = !empty($this->_get['mobile']) ? $this->_get['mobile'] : '';
+        $verifyCode = !empty($this->_get['verify_code']) ? $this->_get['verify_code'] : '';
 //        $userPass = !empty($this->_get['user_pass']) ? $this->_get['user_pass'] : '';
 
         if (empty($mobile)
 //            || empty($userPass)
         ) {
             throw new \Exception('手机号或密码不能为空', ErrorCode::USER_PARAMETERS_INVALID);
+        }
+
+        if ($mobile != '1' && !YII_DEBUG) {
+            $verifyVal = Yii::$app->verificationCode->validate($mobile, $verifyCode, \common\definitions\VerificationCode::TYPE_REGISTER);
+            if (!$verifyVal) {
+                throw new \Exception('验证码错误', ErrorCode::USER_PARAMETERS_INVALID);
+            }
         }
 
         $userInfo = User::findOne([
