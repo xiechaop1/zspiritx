@@ -193,6 +193,46 @@ $(function () {
     $("#login_return_btn").click(function() {
         $("#loginform").hide();
     });
+    $('#get_verifycode').click(function() {
+        var par = $(this).parent();
+        // 30秒倒计时
+        var mobile=$("input[name='mobile']").val();
+        if (mobile == "" || mobile == null) {
+            alert("请输入手机号");
+            return false;
+        }
+        if(mobile!=null){
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                async: false,
+                url: '/passport/verification-code',
+                data:{
+                    mobile:mobile,
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    alert("验证码已发送，请注意查收");
+                    par.find('a').addClass('disabled');
+                    var time = 30;
+                    var timer = setInterval(function() {
+                        if (time > 0) {
+                            time--;
+                            par.find('a').text(time + '秒后重新获取');
+                        } else {
+                            clearInterval(timer);
+                            par.find('a').text('获取验证码');
+                            par.find('a').removeClass('disabled');
+                        }
+                    }, 1000);
+
+                }
+            });
+        }
+    });
     $("#login_btn").click(function ()
     {
         var mobile=$("input[name='mobile']").val();
