@@ -193,6 +193,7 @@ echo $form->field($itemKnowledgeModel, 'knowledge_id')->label('知识ID');
 echo $form->field($itemKnowledgeModel, 'item_id')->label('关联ID');
 echo $form->field($itemKnowledgeModel, 'item_type')->dropDownList(\common\models\ItemKnowledge::$itemType2Name)->label('关联数据类型');
 echo $form->field($itemKnowledgeModel, 'story_id')->dropDownList($stories)->label('剧本');
+echo $form->field($itemKnowledgeModel, 'knowledge_set_status')->label('知识设置状态');
 
 ?>
 
