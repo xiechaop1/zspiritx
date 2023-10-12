@@ -119,7 +119,8 @@ echo \dmstr\widgets\Alert::widget();
                         'filter'    => false,
                         'value' => function ($model) {
                             return Html::A($model->linkurl, $model->linkurl);
-                        }
+                        },
+                        'size' => 10
                     ],
                     [
                         'label' => '顺序',
