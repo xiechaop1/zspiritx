@@ -96,8 +96,8 @@ class Model
 
         if (!empty($jsonTmp['Dialog'])) {
             foreach ($jsonTmp['Dialog'] as &$dia) {
-                if (!empty($dia['voice'])) {
-                    $dia['voice'] = Attachment::completeUrl($dia['voice'], false);
+                if (!empty($dia['sentenceClipURL'])) {
+                    $dia['sentenceClipURL'] = Attachment::completeUrl($dia['sentenceClipURL'], false);
                 }
             }
         }
