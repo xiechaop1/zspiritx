@@ -380,7 +380,12 @@ class UserApi extends ApiAction
         $stageId = !empty($this->_get['stage_id']) ? $this->_get['stage_id'] : 0;
 
         // 更新任务
-        Yii::$app->knowledge->setByItem($stageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $userId, $storyId, 'process');
+        try {
+            Yii::$app->knowledge->setByItem($stageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $userId, $storyId);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return $this->success();
     }
 
     public function updateUserLoc() {
