@@ -101,7 +101,7 @@ class Edit extends Action
 
         $knowledgeDatas = Knowledge::find()->orderBy(['id' => SORT_DESC])->all();
         foreach ($knowledgeDatas as $id => $knowledge) {
-            $knowledgeTmps[$id] = $knowledge->title . ' ' . $knowledge->id . ' ' . $knowledge->pre_knowledge_id;
+            $knowledgeTmps[$id] = $knowledge->title . ' ' . $knowledge->id . '(' . $knowledge->pre_knowledge_id . ')';
         }
 //        $knowledgeTmps = ArrayHelper::map($knowledgeDatas, 'id', 'title');
 
