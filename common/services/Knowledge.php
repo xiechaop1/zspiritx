@@ -129,7 +129,7 @@ class Knowledge extends Component
         }
     }
 
-    public function completeByItem($itemId, $itemType, $sessionId, $userId, $storyId) {
+    public function setByItem($itemId, $itemType, $sessionId, $userId, $storyId) {
         $itemKnowledgeList = ItemKnowledge::find()
             ->where([
                 'item_id' => $itemId,

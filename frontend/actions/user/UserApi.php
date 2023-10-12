@@ -385,7 +385,7 @@ class UserApi extends ApiAction
         } catch (\Exception $e) {
             throw $e;
         }
-        return $this->success();
+        return true;
     }
 
     public function updateUserLoc() {
