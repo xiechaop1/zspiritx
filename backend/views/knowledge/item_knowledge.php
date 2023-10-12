@@ -33,7 +33,7 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($itemKnowledgeModel) {
+                'afterRow' => function ($model, $key, $index) use ($itemKnowledgeModel, $stories) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '编辑',
@@ -74,7 +74,10 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'story_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return $model->story->title;
+                            return !empty($model->story->title)
+                                ? $model->story->title
+                                : ''
+                                ;
                         },
                         'filter' => false
                     ],
