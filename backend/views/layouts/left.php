@@ -116,6 +116,12 @@
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
+                                'label' => '知识关联列表',
+                                'url' => ['/knowledge/item_knowledge'],
+                                'active' => in_array($this->context->route, ['knowledge/item_knowledge' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
                                 'label' => '用户知识',
                                 'url' => ['/knowledge/user_knowledge'],
                                 'active' => in_array($this->context->route, ['knowledge/user_knowledge', ]),

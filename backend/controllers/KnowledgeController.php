@@ -23,7 +23,7 @@ class KnowledgeController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['knowledge', 'edit', 'user_knowledge'],
+                        'actions' => ['knowledge', 'edit', 'user_knowledge', 'item_knowledge'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -43,6 +43,9 @@ class KnowledgeController extends ViewController
             ],
             'user_knowledge' => [
                 'class' => 'backend\actions\knowledge\UserKnowledge',
+            ],
+            'item_knowledge' => [
+                'class' => 'backend\actions\knowledge\ItemKnowledge',
             ],
         ]);
     }
