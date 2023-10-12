@@ -91,6 +91,18 @@ class Model
         if (!empty($params['session_id'])) {
             $ret = str_replace('{$session_id}', $params['session_id'], $ret);
         }
+
+        $jsonTmp = json_decode($ret, true);
+
+        if (!empty($jsonTmp['Dialog'])) {
+            foreach ($jsonTmp['Dialog'] as &$dia) {
+                if (!empty($dia['voice'])) {
+                    $dia['voice'] = Attachment::completeUrl($dia['voice']);
+                }
+            }
+        }
+        $ret = json_encode($jsonTmp);
+
         return $ret;
     }
 
