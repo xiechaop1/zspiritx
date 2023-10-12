@@ -59,6 +59,7 @@ echo \dmstr\widgets\Alert::widget();
                     echo $form->field($itemKnowledgeModel, 'item_id')->textInput(['value' => $model->item_id])->label('关联数据ID');
                     echo $form->field($itemKnowledgeModel, 'item_type')->dropDownList(\common\models\ItemKnowledge::$itemType2Name, ['value' => $model->item_type])->label('关联数据类型');
                     echo $form->field($itemKnowledgeModel, 'story_id')->dropDownList($stories, ['value' => $model->story_id])->label('剧本');
+                    echo $form->field($itemKnowledgeModel, 'knowledge_set_status')->textInput(['value' => $model->knowledge_set_status])->label('知识设置状态');
 
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
@@ -111,7 +112,10 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => '关联数据ID',
                         'attribute' => 'item_id',
                     ],
-
+                    [
+                        'label' => '知识执行状态',
+                        'attribute' => 'knowledge_set_status',
+                    ],
                     [
                         'label' => '创建时间',
                         'format' => 'raw',

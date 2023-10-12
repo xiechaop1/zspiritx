@@ -11,6 +11,7 @@ namespace frontend\actions\user;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\models\ItemKnowledge;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
 use common\models\UserList;
@@ -61,6 +62,9 @@ class UserApi extends ApiAction
 
                 case 'update_user_loc':
                     $ret = $this->updateUserLoc();
+                    break;
+                case 'update_user_stage':
+                    $ret = $this->updateUserStage();
                     break;
                 case 'get_user_loc':
                     $ret = $this->getUserLoc();
@@ -367,6 +371,16 @@ class UserApi extends ApiAction
             throw $e;
 //            return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
+    }
+
+    public function updateUserStage() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $stageId = !empty($this->_get['stage_id']) ? $this->_get['stage_id'] : 0;
+
+        // 更新任务
+        Yii::$app->knowledge->setByItem($stageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $userId, $storyId, 'process');
     }
 
     public function updateUserLoc() {

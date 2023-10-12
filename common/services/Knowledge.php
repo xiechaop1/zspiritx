@@ -11,6 +11,7 @@ namespace common\services;
 
 use common\definitions\ErrorCode;
 use common\models\Actions;
+use common\models\ItemKnowledge;
 use common\models\Session;
 use common\models\UserKnowledge;
 use yii\base\Component;
@@ -19,7 +20,7 @@ use yii;
 class Knowledge extends Component
 {
 
-    public function complete($knowledgeId, $sessionId, $userId, $storyId) {
+    public function set($knowledgeId, $sessionId, $userId, $storyId, $act = 'complete') {
 
         $knowledge = \common\models\Knowledge::findOne($knowledgeId);
 
@@ -60,61 +61,88 @@ class Knowledge extends Component
             }
             $userKnowledge->save();
 
-            if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
-                Yii::$app->act->add($sessionId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
-            } else {
-                Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+            if ($act == 'complete') {
+                if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                    Yii::$app->act->add($sessionId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                } else {
+                    Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                }
+            } elseif ($act == 'process') {
+                if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                    Yii::$app->act->add($sessionId, $userId, '您开启了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                } else {
+                    Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                }
             }
 
         } catch (\Exception $e) {
             throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
         }
 
-        // 更新新知识点
-        $nextKnowledges = \common\models\Knowledge::find()
-            ->where(['story_id' => $storyId])
-            ->andWhere(['pre_knowledge_id' => $knowledge->id])
+        if ($act == 'complete') {
+            // 更新新知识点
+            $nextKnowledges = \common\models\Knowledge::find()
+                ->where(['story_id' => $storyId])
+                ->andWhere(['pre_knowledge_id' => $knowledge->id])
+                ->all();
+
+            if (!empty($nextKnowledges)) {
+                try {
+                    foreach ($nextKnowledges as $nextKnowledge) {
+                        $nextUserKnowledge = UserKnowledge::find()
+                            ->where([
+                                'user_id' => $userId,
+                                'knowledge_id' => $nextKnowledge->id,
+                                'session_id' => $sessionId,
+                            ])->one();
+                        if (empty($nextUserKnowledge)) {
+                            $nextUserKnowledge = new UserKnowledge();
+                            $nextUserKnowledge->user_id = $userId;
+                            $nextUserKnowledge->knowledge_id = $nextKnowledge->id;
+                            $nextUserKnowledge->session_id = $sessionId;
+                        }
+                        if ($nextKnowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                            $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                        } else {
+                            $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
+                        }
+                        $nextUserKnowledge->save();
+
+                        if ($nextKnowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION
+                            && empty($nextMission)
+                        ) {
+                            $nextMission = $nextKnowledge;
+                        } else {
+                            Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
+                        }
+                    }
+
+                    if (!empty($nextMission)) {
+                        Yii::$app->act->add($sessionId, $userId, '可以去寻找下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
+                    }
+                } catch (\Exception $e) {
+                    throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
+                }
+            } else {
+//            Yii::$app->act->add($sessionId, $userId, '任务全部完成啦！', Actions::ACTION_TYPE_ACTION);
+            }
+        }
+    }
+
+    public function completeByItem($itemId, $itemType, $sessionId, $userId, $storyId) {
+        $itemKnowledgeList = ItemKnowledge::find()
+            ->where([
+                'item_id' => $itemId,
+                'item_type' => $itemType,
+                'story_id' => $storyId,
+            ])
+            ->asArray()
             ->all();
 
-        if (!empty($nextKnowledges)) {
-            try {
-                foreach ($nextKnowledges as $nextKnowledge) {
-                    $nextUserKnowledge = UserKnowledge::find()
-                        ->where([
-                            'user_id' => $userId,
-                            'knowledge_id' => $nextKnowledge->id,
-                            'session_id' => $sessionId,
-                        ])->one();
-                    if (empty($nextUserKnowledge)) {
-                        $nextUserKnowledge = new UserKnowledge();
-                        $nextUserKnowledge->user_id = $userId;
-                        $nextUserKnowledge->knowledge_id = $nextKnowledge->id;
-                        $nextUserKnowledge->session_id = $sessionId;
-                    }
-                    if ($nextKnowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
-                        $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
-                    } else {
-                        $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
-                    }
-                    $nextUserKnowledge->save();
-
-                    if ($nextKnowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION
-                        && empty($nextMission)
-                    ) {
-                        $nextMission = $nextKnowledge;
-                    } else {
-                        Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
-                    }
-                }
-
-                if (!empty($nextMission)) {
-                    Yii::$app->act->add($sessionId, $userId, '可以去寻找下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
-                }
-            } catch (\Exception $e) {
-                throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
+        if (!empty($itemKnowledgeList)) {
+            foreach ($itemKnowledgeList as $itemKnowledge) {
+                $this->set($itemKnowledge['knowledge_id'], $sessionId, $userId, $storyId, $itemKnowledge['knowledge_set_status']);
             }
-        } else {
-//            Yii::$app->act->add($sessionId, $userId, '任务全部完成啦！', Actions::ACTION_TYPE_ACTION);
         }
     }
 

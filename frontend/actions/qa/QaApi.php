@@ -198,23 +198,25 @@ class QaApi extends ApiAction
 
             if ($isRight == 1) {
                 if (!empty($qa['knowledge_id'])) {
-                    Yii::$app->knowledge->complete($qa['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+                    Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $userId, $qa['story_id'], 'complete');
                 }
 
-                $itemKnowledgeList = ItemKnowledge::find()
-                    ->where([
-                        'item_id' => $qa['id'],
-                        'item_type' => ItemKnowledge::ITEM_TYPE_QA,
-                        'story_id' => $qa['story_id'],
-                    ])
-                    ->asArray()
-                    ->all();
+                Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $userId, $qa['story_id']);
 
-                if (!empty($itemKnowledgeList)) {
-                    foreach ($itemKnowledgeList as $itemKnowledge) {
-                        Yii::$app->knowledge->complete($itemKnowledge['knowledge_id'], $sessionId, $userId, $qa['story_id']);
-                    }
-                }
+//                $itemKnowledgeList = ItemKnowledge::find()
+//                    ->where([
+//                        'item_id' => $qa['id'],
+//                        'item_type' => ItemKnowledge::ITEM_TYPE_QA,
+//                        'story_id' => $qa['story_id'],
+//                    ])
+//                    ->asArray()
+//                    ->all();
+//
+//                if (!empty($itemKnowledgeList)) {
+//                    foreach ($itemKnowledgeList as $itemKnowledge) {
+//                        Yii::$app->knowledge->complete($itemKnowledge['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+//                    }
+//                }
 
                 if (!empty($qa['story_stage_id'])) {
                     $storyStage = StoryStages::findOne($qa['story_stage_id']);

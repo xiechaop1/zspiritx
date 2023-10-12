@@ -27,6 +27,7 @@ class ItemKnowledge extends \yii\db\ActiveRecord
         return [
             [['item_id', 'item_type', 'knowledge_id', 'story_id'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
+            [['knowledge_set_status'], 'string'],
         ];
     }
 
