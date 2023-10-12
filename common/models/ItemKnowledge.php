@@ -30,5 +30,9 @@ class ItemKnowledge extends \common\models\gii\ItemKnowledge
         return $this->hasOne('common\models\Knowledge', ['id' => 'knowledge_id']);
     }
 
+    public function getStory() {
+        return $this->hasOne('common\models\Story', ['id' => 'story_id']);
+    }
+
 
 }

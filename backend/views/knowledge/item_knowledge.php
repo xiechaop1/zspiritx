@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = [
     'label' => '知识管理',
 ];
 
-$this->title = '知识g关联列表';
+$this->title = '知识关联列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
@@ -58,6 +58,7 @@ echo \dmstr\widgets\Alert::widget();
                     echo $form->field($itemKnowledgeModel, 'knowledge_id')->textInput(['value' => $model->knowledge_id])->label('知识ID');
                     echo $form->field($itemKnowledgeModel, 'item_id')->textInput(['value' => $model->item_id])->label('关联数据ID');
                     echo $form->field($itemKnowledgeModel, 'item_type')->dropDownList(\common\models\ItemKnowledge::$itemType2Name, ['value' => $model->item_type])->label('关联数据类型');
+                    echo $form->field($itemKnowledgeModel, 'story_id')->dropDownList($stories, ['value' => $model->story_id])->label('剧本');
 
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
@@ -67,6 +68,15 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'attribute' => 'id',
 //                        'filter'    => Html::activeInput('text', $searchModel, 'id'),
+                    ],
+                    [
+                        'label' => '剧本',
+                        'attribute' => 'story_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return $model->story->title;
+                        },
+                        'filter' => false
                     ],
                     [
                         'label' => '知识',
@@ -175,6 +185,7 @@ $form = ActiveForm::begin([
 echo $form->field($itemKnowledgeModel, 'knowledge_id')->label('知识ID');
 echo $form->field($itemKnowledgeModel, 'item_id')->label('关联ID');
 echo $form->field($itemKnowledgeModel, 'item_type')->dropDownList(\common\models\ItemKnowledge::$itemType2Name)->label('关联数据类型');
+echo $form->field($itemKnowledgeModel, 'story_id')->dropDownList($stories)->label('剧本');
 
 ?>
 

@@ -85,7 +85,7 @@ $this->title = '知识库';
                     <span style="padding-left: 90px; ">'. $showTxt .  '</span>
                     </label>
                    
-                    ' . '<div class="knowledge-content" style="font-size: 18px; display: none;"><hr style="color: #ffffff; border: 1px;">' . $content . '</div>' . '
+                    ' . '<div class="knowledge-content" style="text-align: left; font-size: 18px; display: none;"><hr style="color: #ffffff; border: 1px;">' . $content . '</div>' . '
                      </div>
                 </div>
                 ';

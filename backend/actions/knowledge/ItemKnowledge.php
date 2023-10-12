@@ -75,6 +75,8 @@ class ItemKnowledge extends Action
         $searchModel = new \backend\models\ItemKnowledge();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
+        $stories = ArrayHelper::map(\common\models\Story::find()->orderBy('id desc')->all(), 'id', 'title');
+
 //        $knowledgeDatas = \common\models\Knowledge::find()->orderBy('id desc')->all();
 //        $knowledges = ArrayHelper::map($knowledgeDatas, 'id', 'title');
 
@@ -82,6 +84,7 @@ class ItemKnowledge extends Action
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
             'itemKnowledgeModel'    => $model,
+            'stories'       => $stories,
 //            'knowledges'    => $knowledges,
             'params'        => $_GET,
         ]);

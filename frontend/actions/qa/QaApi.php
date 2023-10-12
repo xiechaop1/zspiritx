@@ -153,6 +153,7 @@ class QaApi extends ApiAction
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $answer = !empty($this->_get['answer']) ? $this->_get['answer'] : '';
         $qaId = !empty($this->_get['qa_id']) ? $this->_get['qa_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
 
@@ -203,7 +204,8 @@ class QaApi extends ApiAction
                 $itemKnowledgeList = ItemKnowledge::find()
                     ->where([
                         'item_id' => $qa['id'],
-                        'item_type' => ItemKnowledge::ITEM_TYPE_QA
+                        'item_type' => ItemKnowledge::ITEM_TYPE_QA,
+                        'story_id' => $qa['story_id'],
                     ])
                     ->asArray()
                     ->all();
