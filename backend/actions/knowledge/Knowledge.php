@@ -36,8 +36,8 @@ class Knowledge extends Action
             switch (Net::post('action')) {
                 case 'delete':
                     if ($knowledge) {
-                        $knowledge->is_delete = Common::STATUS_DELETED;
-                        if ($knowledge->save()) {
+//                        $knowledge->is_delete = Common::STATUS_DELETED;
+                        if ($knowledge->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
