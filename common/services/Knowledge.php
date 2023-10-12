@@ -84,11 +84,23 @@ class Knowledge extends Component
                         $nextUserKnowledge->knowledge_id = $nextKnowledge->id;
                         $nextUserKnowledge->session_id = $sessionId;
                     }
-                    $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                    if ($nextKnowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                        $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                    } else {
+                        $nextUserKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
+                    }
                     $nextUserKnowledge->save();
+
+                    if ($nextKnowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION
+                        && empty($nextMission)
+                    ) {
+                        $nextMission = $nextKnowledge;
+                    }
                 }
 
-                Yii::$app->act->add($sessionId, $userId, '可以去寻找下一个任务：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
+                if (!empty($nextMission)) {
+                    Yii::$app->act->add($sessionId, $userId, '可以去寻找下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
+                }
             } catch (\Exception $e) {
                 throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
             }
