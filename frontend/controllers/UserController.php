@@ -58,6 +58,10 @@ class UserController extends Controller
                 'class' => 'frontend\actions\user\UserApi',
                 'action' => 'update_user_loc',
             ],
+            'update_user_stage' => [
+                'class' => 'frontend\actions\user\UserApi',
+                'action' => 'update_user_stage',
+            ],
             'get_user_loc_by_team' => [
                 'class' => 'frontend\actions\user\UserApi',
                 'action' => 'get_user_loc_by_team',
