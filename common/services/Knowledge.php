@@ -59,6 +59,13 @@ class Knowledge extends Component
                 $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
             }
             $userKnowledge->save();
+
+            if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                Yii::$app->act->add($sessionId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+            } else {
+                Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+            }
+
         } catch (\Exception $e) {
             throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
         }
@@ -95,6 +102,8 @@ class Knowledge extends Component
                         && empty($nextMission)
                     ) {
                         $nextMission = $nextKnowledge;
+                    } else {
+                        Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
                     }
                 }
 
