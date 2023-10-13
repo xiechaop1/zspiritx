@@ -41,9 +41,9 @@ $this->title = '拾取';
                     </div>
                     <?= $msg ?>
                 </div>
-                <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
-                    返回
-                </div>
+            </div>
+            <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
+                返回
             </div>
         </div>
         </div>
