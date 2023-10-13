@@ -300,6 +300,16 @@ $(function () {
         Unity.call(data);
     });
 
+    $("#msg_return_btn").click(function (){
+        Unity.call('WebViewOff&TrueAnswer');
+        //
+        // var params = {
+        //     'WebViewOff':1,
+        // }
+        // var data=$.toJSON(params);
+        // Unity.call(data);
+    });
+
     $(".knowledge-title").click(function (){
         var tobj = $(this).parent().find(".knowledge-content");
         var allobj = $(".knowledge-content");
