@@ -23,7 +23,7 @@ class StoryController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['story', 'edit', 'session_edit', 'user_story_edit', 'session', 'user_story',],
+                        'actions' => ['story', 'role', 'edit', 'session_edit', 'user_story_edit', 'session', 'user_story',],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -40,6 +40,9 @@ class StoryController extends ViewController
             ],
             'session' => [
                 'class' => 'backend\actions\story\Session',
+            ],
+            'role' => [
+                'class' => 'backend\actions\story\Role',
             ],
             'user_story_edit' => [
                 'class' => 'backend\actions\story\UserStoryEdit',

@@ -20,4 +20,8 @@ class StoryRole extends \common\models\gii\StoryRole
         ];
     }
 
+    public function getStory(){
+        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
+    }
+
 }

@@ -11,18 +11,20 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '用户剧本管理',
+    'label' => '剧本管理',
 ];
 
-$this->title = '用户剧本列表';
+$this->title = '剧本角色列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/story/user_story_edit', [
+            <?= \yii\bootstrap\Html::button('添加', [
                 'class' => 'btn btn-primary pull-right',
+                'data-toggle' => "modal",
+                'data-target' => '#add-form'
             ]) ?>
         </div>
         <div class="box-body">
@@ -31,10 +33,10 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($userStoryModel) {
+                'afterRow' => function ($model, $key, $index) use ($roleModel, $stories) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
-                        'header' => '查看日志',
+                        'header' => '编辑角色',
                         'options' => [
                             'id' => 'case-form-' . $model->id
                         ]]);
@@ -53,6 +55,10 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
+                    echo $form->field($roleModel, 'role_name')->textInput(['value' => $model->role_name])->label('角色名称');
+                    echo $form->field($roleModel, 'role_desc')->textInput(['value' => $model->role_desc])->label('角色描述');
+                    echo $form->field($roleModel, 'role_max_ct')->textInput(['value' => $model->role_max_ct])->label('最大数');
+                    echo $form->field($roleModel, 'story_id')->dropDownList($stories, ['value' => $model->story_id])->label('剧本');
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
@@ -72,37 +78,17 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
-                        'label' => '用户',
-                        'attribute' => 'user_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return !empty($model->user->user_name) ? $model->user->user_name : '未知';
-                        },
-                        'filter' => false
+                        'label' => '角色名称',
+                        'attribute' => 'role_name',
                     ],
                     [
-                        'label' => '场次',
-                        'attribute' => 'session_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return !empty($model->session->session_name)
-                                ? $model->session->session_name . ' [' . \common\models\Session::$sessionStats2Name[$model->session->session_status] . ']'
-                                : '未知';
-                        },
-                        'filter' => false
+                        'label' => '角色描述',
+                        'attribute' => 'role_desc',
                     ],
                     [
-                        'label' => '角色',
-                        'attribute' => 'role_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return !empty($model->role->role_name)
-                                ? $model->role->role_name
-                                : '未知';
-                        },
-                        'filter' => false
+                        'label' => '最大数',
+                        'attribute' => 'role_max_ct',
                     ],
-                    ['attribute' => 'goal', 'label' => '结论'],
                     [
                         'label' => '创建时间',
                         'format' => 'raw',
@@ -125,14 +111,15 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {delete}',
+                        'template' => '{lines} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['story/user_story_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
+                                    'class' => 'btn btn-xs btn-primary',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#case-form-' . $model->id
+                                ]);
                             },
-//                            'detail' => function ($url, $model, $key) {
-//                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
-//                            },
                             'delete' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::button('删除', [
                                     'class' => 'btn btn-xs btn-danger delete_single_btn',
@@ -172,6 +159,10 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
+echo $form->field($roleModel, 'role_name')->label('角色名称');
+echo $form->field($roleModel, 'role_desc')->label('角色介绍');
+echo $form->field($roleModel, 'role_max_ct')->label('最大数');
+echo $form->field($roleModel, 'story_id')->dropDownList($stories)->label('剧本');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>
