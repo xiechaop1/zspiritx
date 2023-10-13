@@ -28,10 +28,6 @@ $this->registerMetaTag([
 $this->title = '拾取';
 
 ?>
-<audio autoplay loop>
-  <source src="<?= $qa['voice'] ?>" type="audio/mpeg">
-  您的浏览器不支持 audio 元素。
-</audio>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <div class="w-100 m-auto">
