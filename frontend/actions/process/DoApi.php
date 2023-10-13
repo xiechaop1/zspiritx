@@ -738,6 +738,9 @@ class DoApi extends ApiAction
                 ['expire_time' => (int)0],
                 ['>', 'expire_time', time()],
             ])
+            ->andFilterWhere([
+                'action_status' => Actions::ACTION_STATUS_NORMAL
+            ])
 //            ->createCommand()->getRawSql();
 //        var_dump($actions);exit;
             ->all();
