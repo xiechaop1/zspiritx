@@ -53,6 +53,7 @@ class Actions extends Component
                 $r = $model->save();
             } catch (\Exception $e) {
                 Yii::error($e->getMessage());
+                throw $e;
             }
         }
 

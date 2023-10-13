@@ -41,6 +41,11 @@ class Pickup extends Action
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
         $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
 
+        $needAction = !empty($this->_get['need_action']) ? $this->_get['need_action'] : 0;
+        $actDetail = !empty($this->_get['act_detail']) ? $this->_get['act_detail'] : 0;
+        $actType = !empty($this->_get['act_type']) ? $this->_get['act_type'] : \common\models\Actions::ACTION_TYPE_MSG;
+        $expirationInterval = !empty($this->_get['expiration_interval']) ? $this->_get['expiration_interval'] : 0;
+
         $transaction = Yii::$app->db->beginTransaction();
         $sessionModel = SessionModels::find()
             ->where([
@@ -131,6 +136,10 @@ class Pickup extends Action
 
             $storyModelName = !empty($storyModel->story_model_name) ? $storyModel->story_model_name : '未知物品';
             $msg = '您成功获取了 ' . $storyModelName;
+
+            if ($needAction == 1) {
+                $ret = Yii::$app->act->add($sessionId, $userId, $actDetail, $actType, $expirationInterval);
+            }
 
         } catch (\Exception $e) {
 //            var_dump($e);
