@@ -17,7 +17,14 @@ use yii;
 class Actions extends Component
 {
 
-    public function add($sessionId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expireTime = 0, $senderId = 0) {
+    public function add($sessionId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
+
+        if ($expirationInterval >= 0) {
+            $expireTime = time() + $expirationInterval;
+        } else {
+            $expireTime = 0;
+        }
+
         $model = \common\models\Actions::find()
         ->where([
             'session_id' => $sessionId,
