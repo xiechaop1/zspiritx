@@ -47,6 +47,10 @@ class Knowledge extends \common\models\Knowledge
             'like', 'title', $this->title
         ]);
 
+        $query->andFilterWhere([
+            'story_id' => $this->story_id,
+        ]);
+
         return $dataProvider;
     }
 }
