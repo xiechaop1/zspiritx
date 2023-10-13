@@ -346,7 +346,7 @@ class DoApi extends ApiAction
                 'user_id' => (int)$this->_userId,
                 'session_id' => (int)$this->_sessionId,
                 'story_id'  => (int)$this->_storyId,
-                'building_id' => (int)$this->_buildingId,
+//                'building_id' => (int)$this->_buildingId,
 //                'role_id' => (int)$roleId,
             ])->one();
 
@@ -365,7 +365,7 @@ class DoApi extends ApiAction
                 'story_id' => (int)$this->_storyId,
                 'session_id' => (int)$this->_sessionId,
                 'role_id' => (int)$roleId,
-                'building_id' => (int)$this->_buildingId,
+//                'building_id' => (int)$this->_buildingId,
             ])
             ->count();
 
@@ -383,7 +383,7 @@ class DoApi extends ApiAction
         $userStory->story_id = $this->_storyId;
         $userStory->session_id = $this->_sessionId;
         $userStory->role_id = $roleId;
-        $userStory->building_id = $this->_buildingId;
+//        $userStory->building_id = $this->_buildingId;
         $userStory->team_id = $teamId;
         try {
             $ret = $userStory->save();
