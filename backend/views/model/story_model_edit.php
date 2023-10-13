@@ -56,18 +56,19 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('扫描类型');
+            echo $form->field($storyModel, 'misrange')->textInput(['value' => $storyModel->misrange])->label('误差');
+            echo $form->field($storyModel, 'trigger_misrange')->textInput(['value' => $storyModel->trigger_misrange])->label('触发误差距离');
+            echo $form->field($storyModel, 'act_misrange')->textInput(['value' => $storyModel->act_misrange])->label('动作误差距离');
+            echo $form->field($storyModel, 'lat')->textInput(['value' => $storyModel->lat])->label('经度');
+            echo $form->field($storyModel, 'lng')->textInput(['value' => $storyModel->lng])->label('纬度');
             echo $form->field($storyModel, 'direction')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$direction2Name,
                 'options' => [
                     'multiple' => false
                 ],
             ])->label('模型朝向');
+            echo $form->field($storyModel, 'is_visable')->textInput(['value' => $storyModel->is_visable])->label('是否显示');
             echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
-            echo $form->field($storyModel, 'misrange')->textInput(['value' => $storyModel->misrange])->label('误差');
-            echo $form->field($storyModel, 'trigger_misrange')->textInput(['value' => $storyModel->trigger_misrange])->label('触发误差距离');
-            echo $form->field($storyModel, 'act_misrange')->textInput(['value' => $storyModel->act_misrange])->label('动作误差距离');
-            echo $form->field($storyModel, 'lat')->textInput(['value' => $storyModel->lat])->label('经度');
-            echo $form->field($storyModel, 'lng')->textInput(['value' => $storyModel->lng])->label('纬度');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');
             echo $form->field($storyModel, 'timebegin')->textInput(['value' => $storyModel->timebegin])->label('开始时间');
             echo $form->field($storyModel, 'timeend')->textInput(['value' => $storyModel->timeend])->label('结束时间');
@@ -75,7 +76,6 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'show_y')->textInput(['value' => $storyModel->show_y])->label('坐标Y(高)');
             echo $form->field($storyModel, 'show_z')->textInput(['value' => $storyModel->show_z])->label('坐标Z(前)');
             echo $form->field($storyModel, 'is_unique')->textInput(['value' => $storyModel->is_unique])->label('是否唯一');
-            echo $form->field($storyModel, 'is_visable')->textInput(['value' => $storyModel->is_visable])->label('是否显示');
             echo $form->field($storyModel, 'active_next')->textarea(['value' => \common\helpers\Model::decodeActiveToShow($storyModel->active_next)])->label('动作内容');
             echo $form->field($storyModel, 'active_expiretime')->textInput(['value' => $storyModel->active_expiretime])->label('动作过期时间');
 
