@@ -69,7 +69,7 @@ echo \dmstr\widgets\Alert::widget();
                         'value' => function ($model) {
                             return $model->story->title;
                         },
-                        'filter' => false
+                        'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
                     [
                         'label' => '题目分类',
