@@ -39,16 +39,10 @@ $this->title = '拾取';
                     <div class="npc-name">
                         消息
                     </div>
+                    <?= $msg ?>
                 </div>
-            </div>
-            <div class="row" id="answer-box">
-                <div class="m-t-30 col-sm-12 col-md-12">
-                    <div class="answer-border">
-                        <?= $msg ?>
-                        <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
-                            返回
-                        </div>
-                    </div>
+                <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
+                    返回
                 </div>
             </div>
         </div>
