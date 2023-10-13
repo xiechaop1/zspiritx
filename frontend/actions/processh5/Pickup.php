@@ -134,7 +134,7 @@ class Pickup extends Action
 
 //            if ($storyModel->active_next)
 
-            $storyModelName = !empty($storyModel->model->story_model_name) ? $storyModel->model->story_model_name : '未知物品';
+            $storyModelName = !empty($storyModel->model->model_name) ? $storyModel->model->model_name : '未知物品';
             $msg = '您成功获取了 ' . $storyModelName;
 
             if ($needAction == '1') {
