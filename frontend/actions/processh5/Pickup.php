@@ -186,6 +186,7 @@ class Pickup extends Action
             'params'        => $_GET,
             'userId'        => $params['user_id'],
             'sessionId'     => $params['session_id'],
+            'msg'           => $msg,
         ]);
     }
 }
