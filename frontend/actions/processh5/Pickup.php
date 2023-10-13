@@ -129,7 +129,8 @@ class Pickup extends Action
 
 //            if ($storyModel->active_next)
 
-            $msg = '获取成功';
+            $storyModelName = !empty($storyModel->story_model_name) ? $storyModel->story_model_name : '未知物品';
+            $msg = '您成功获取了 ' . $storyModelName;
 
         } catch (\Exception $e) {
 //            var_dump($e);
@@ -140,43 +141,6 @@ class Pickup extends Action
 
         return $this->pickupRender(0, $msg, $this->_params);
 
-//        return $this->controller->render('pickup', [
-////            'pickup'            => $model,
-//            'params'        => $_GET,
-//            'userId'        => $userId,
-//            'sessionId'     => $sessionId,
-//            'msg'           => $msg,
-//        ]);
-//
-//        $pickupId = Net::get('id');
-//        if ($pickupId) {
-//            $model = \common\models\Qa::findOne($pickupId);
-//        }
-//
-//        if (empty($model)) {
-////            $this->controller->render('pickupone', [
-////                'err_text'  => '没有找到问答信息，请您刷新重试',
-////            ]);
-//            throw new NotFoundHttpException();
-//        }
-//
-//        $model = $model->toArray();
-//
-//        $model['pickup_type_name'] = !empty(Qa::$pickupType2Name[$model['pickup_type']]) ? Qa::$pickupType2Name[$model['pickup_type']] : '未知';
-//        $model['story'] = Story::findOne($model['story_id']);
-//
-//        $model['selected_json'] = \common\helpers\Common::isJson($model['selected']) ? json_decode($model['selected'], true) : $model['selected'];
-//        $model['attachment'] = \common\helpers\Attachment::completeUrl($model['attachment'], true);
-//
-//        $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
-//        $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
-//
-//        return $this->controller->render('pickupone', [
-//            'pickup'            => $model,
-//            'params'        => $_GET,
-//            'userId'        => $userId,
-//            'sessionId'     => $sessionId,
-//        ]);
     }
 
     public function pickupRender($code = 0, $msg = '', $params) {

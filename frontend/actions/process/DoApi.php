@@ -745,6 +745,15 @@ class DoApi extends ApiAction
 //        var_dump($actions);exit;
             ->all();
 
+        try {
+            foreach ($actions as $tempAct) {
+                $tempAct->action_status = Actions::ACTION_STATUS_READ;
+                $ret = $tempAct->save();
+            }
+        } catch (\Exception $e) {
+//            return $this->fail($e->getMessage(), $e->getCode());
+        }
+
         return $actions;
     }
 
