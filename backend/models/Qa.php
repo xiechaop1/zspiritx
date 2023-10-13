@@ -47,6 +47,10 @@ class Qa extends \common\models\Qa
             'like', 'topic', $this->topic
         ]);
 
+        $query->andFilterWhere([
+            'story_id' => $this->story_id,
+        ]);
+
         return $dataProvider;
     }
 }
