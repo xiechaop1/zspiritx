@@ -25,6 +25,7 @@ class Actions extends Component
             'to_user' => $toUser,
             'action_type' => $actType,
             'action_detail' => $actDetail,
+            'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
         ])
             ->andFilterWhere([
                 '<', 'expire_time', time()

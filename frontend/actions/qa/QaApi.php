@@ -220,7 +220,8 @@ class QaApi extends ApiAction
 
                 if (!empty($qa['story_stage_id'])) {
                     $storyStage = StoryStages::findOne($qa['story_stage_id']);
-                    Yii::$app->act->add($sessionId, $userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE);
+                    $expireSec = 60;        // 消息超时时间
+                    Yii::$app->act->add($sessionId, $userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, time() + $expireSec);
                 }
             }
 
