@@ -110,7 +110,7 @@ $this->title = 'AR剧本杀';
   <div class="item">
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
 
-    <input type="hidden" name="isDebug" value="1">
+    <input type="hidden" name="isDebug" value="0">
     <input type="hidden" name="storyId" value="3">
 
     <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
@@ -120,6 +120,35 @@ $this->title = 'AR剧本杀';
       <div class='p-l-40'>
         <div class="fs-30 bold w-100 text-FF">
           侏罗纪-时间裂痕
+        </div>
+        <div class="fs-24  w-100 text-FF m-t-30">
+          在大峡谷内，忽然产生了一段奇妙的故事。<br>
+          因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。
+          <br>
+          他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>
+          传说只要集齐七颗水晶，就可以让他们穿越回去并且修复裂痕而！<br>
+          冒险家，需要你们的帮助，去收集这些水晶了
+        </div>
+        <div class="btn-m-green m-t-30 float-right m-r-20">
+          进入游戏
+          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="item">
+    <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
+
+    <input type="hidden" name="isDebug" value="1">
+    <input type="hidden" name="storyId" value="3">
+
+    <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
+    <div class="text-content">
+      <div class="text-bg">
+      </div>
+      <div class='p-l-40'>
+        <div class="fs-30 bold w-100 text-FF">
+          侏罗纪-时间裂痕（场内测试）
         </div>
         <div class="fs-24  w-100 text-FF m-t-30">
           在大峡谷内，忽然产生了一段奇妙的故事。<br>
@@ -182,7 +211,7 @@ $this->title = 'AR剧本杀';
             <div class="m-t-30 col-sm-12 col-md-12">
               <div class="answer-border">
                 手机号：<input class="answer-border" type="text" name="mobile" value="" id="mobile" style="margin: 5px;" ><br>
-                验证码：<input class="answer-border" type="text" name="verifycode" value="" id="verifycode" size="10" style="margin: 5px;" ><span><a href="javascript:void(0);" id="get_verifycode">获取验证码</a></span><br>
+                验证码：<input class="answer-border" type="text" name="verifycode" value="" id="verifycode" size="6" style="margin: 5px;" ><span><a href="javascript:void(0);" id="get_verifycode">获取验证码</a></span><br>
                 <input type="checkbox" style="z-index: 99999999; opacity: inherit; position: relative;" id="agreement" name="agreement"> <a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/zspiritx_useragreement.docx">用户协议</a>
                 <input type="hidden" name="is_debug" id="login_is_debug" value="">
                 <input type="hidden" name="story_id" id="login_story_id" value="">
