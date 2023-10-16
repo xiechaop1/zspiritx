@@ -32,8 +32,11 @@ class Knowledge extends Action
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
+        $knowledgeClassId = !empty($_GET['knowledge_class_id']) ? $_GET['knowledge_class_id'] : \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL;
+
         $model = \common\models\Knowledge::find()
             ->where([
+                'knowledge_class' => $knowledgeClassId,
                 'story_id'  => $storyId,
                 'is_delete' => Common::STATUS_NORMAL,
             ])
@@ -58,6 +61,7 @@ class Knowledge extends Action
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
+            'knowledgeClass' => $knowledgeClassId,
         ]);
     }
 }

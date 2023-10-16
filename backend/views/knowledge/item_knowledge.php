@@ -11,17 +11,17 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '用户管理',
+    'label' => '知识管理',
 ];
 
-$this->title = '用户列表';
+$this->title = '知识关联列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::button('添加用户', [
+            <?= \yii\bootstrap\Html::button('添加', [
                 'class' => 'btn btn-primary pull-right',
                 'data-toggle' => "modal",
                 'data-target' => '#add-form'
@@ -33,10 +33,10 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($userModel) {
+                'afterRow' => function ($model, $key, $index) use ($itemKnowledgeModel, $stories) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
-                        'header' => '编辑用户',
+                        'header' => '编辑',
                         'options' => [
                             'id' => 'case-form-' . $model->id
                         ]]);
@@ -55,15 +55,12 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
-                    echo $form->field($userModel, 'mobile')->textInput(['value' => $model->mobile])->label('手机号');
-                    ?>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2"></label>
-                        <div class="col-sm-6">
-                            <button type="submit" class="btn btn-primary">提交</button>
-                        </div>
-                    </div>
-                    <?php
+                    echo $form->field($itemKnowledgeModel, 'knowledge_id')->textInput(['value' => $model->knowledge_id])->label('知识ID');
+                    echo $form->field($itemKnowledgeModel, 'item_id')->textInput(['value' => $model->item_id])->label('关联数据ID');
+                    echo $form->field($itemKnowledgeModel, 'item_type')->dropDownList(\common\models\ItemKnowledge::$itemType2Name, ['value' => $model->item_type])->label('关联数据类型');
+                    echo $form->field($itemKnowledgeModel, 'story_id')->dropDownList($stories, ['value' => $model->story_id])->label('剧本');
+                    echo $form->field($itemKnowledgeModel, 'knowledge_set_status')->textInput(['value' => $model->knowledge_set_status])->label('知识设置状态');
+
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
@@ -71,79 +68,71 @@ echo \dmstr\widgets\Alert::widget();
                 'columns' => [
                     [
                         'attribute' => 'id',
-//                        'filter'    => Html::activeInput('text', $searchModel, 'id', ['size' => '5']),
-                        'filter'    => false,
+//                        'filter'    => Html::activeInput('text', $searchModel, 'id'),
                     ],
                     [
-                        'label' => '头像',
-                        'attribute' => 'avatar',
+                        'label' => '剧本',
+                        'attribute' => 'story_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            $img = $model->avatar;
-                            $ret = Html::img($img, ['width' => 75, 'height' => 75]);
-
-                            return $ret;
+                            return !empty($model->story->title)
+                                ? $model->story->title
+                                : ''
+                                ;
                         },
                         'filter' => false
                     ],
                     [
-                        'label' => '手机号',
-                        'attribute' => 'mobile',
-                        'filter'    => Html::activeInput('text', $searchModel, 'mobile',['placeholder'=>'手机号']),
-                    ],
-//                    [
-//                        'label' => '封面图片',
-//                        'attribute' => 'verse_url',
-//                        'format'    => 'raw',
-//                        'value' => function ($model) {
-//                            $img = \common\helpers\Attachment::completeUrl($model->verse_url);
-//                            $ret = Html::img($img, ['width' => 150, 'height' => 75]);
-//
-//                            return $ret;
-//                        },
-//                        'filter' => false
-//                    ],
-
-                    [
-                        'attribute' => 'user_status',
-                        'label' => '用户状态',
-                        'value' => function($model) {
-                            return
-                                isset (\common\models\User::$userStatus[$model->user_status]) ?
-                                    \common\models\User::$userStatus[$model->user_status] :
-                                    '未知'
-                                ;
+                        'label' => '知识',
+                        'attribute' => 'knowledge_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return $model->knowledge->title;
                         },
+                        'filter' => false
+                    ],
+                    [
+                        'label' => '关联数据类型',
+                        'format' => 'raw',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
-                            'user_status',
-                            \common\models\User::$userStatus, ["class" => "form-control ", 'value' => !empty($params['User']['user_status']) ? $params['User']['user_status'] : ''])
-                    ],
-
-                    [
-                        'label' => '用户行为数据',
-                        'format' => 'raw',
-                        'filter'    => false,
+                            'item_type',
+                            \common\models\ItemKnowledge::$itemType2Name, ["class" => "form-control ", 'value' => !empty($params['ItemKnowledge']['item_type']) ? $params['ItemKnowledge']['item_type'] : '']),
                         'value' => function ($model) {
-                            $str = 'Last Login Geo: ' . $model->last_login_geo_lat . ',' . $model->last_login_geo_lng . '<br>';
-                            $str .= 'Last Login Time: ' . $model->last_login_time;
-                            return $str;
+
+                            $ret = !empty(\common\models\ItemKnowledge::$itemType2Name[$model->item_type])
+                                ? \common\models\ItemKnowledge::$itemType2Name[$model->item_type]
+                                : '未知';
+
+                            return $ret;
+
                         }
+                    ],
+                    [
+                        'label' => '关联数据ID',
+                        'attribute' => 'item_id',
+                    ],
+                    [
+                        'label' => '知识执行状态',
+                        'attribute' => 'knowledge_set_status',
                     ],
                     [
                         'label' => '创建时间',
                         'format' => 'raw',
-                        'filter'    => false,
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'date_range',
+                            \common\definitions\Common::$dateRange, ["class" => "form-control ", 'value' => !empty($params['Music']['date_range']) ? $params['Music']['date_range'] : '']),
                         'value' => function ($model) {
                             return Date('Y-m-d H:i:s', $model->created_at);
-                        }
+                        },
                     ],
                     [
-                        'label' => '最后登录时间',
+                        'label' => '更新时间',
                         'format' => 'raw',
                         'filter'    => false,
                         'value' => function ($model) {
-                            return Date('Y-m-d H:i:s', $model->last_login_time);
+                            return Date('Y-m-d H:i:s', $model->updated_at);
                         }
                     ],
                     [
@@ -158,6 +147,9 @@ echo \dmstr\widgets\Alert::widget();
                                     'data-target' => '#case-form-' . $model->id
                                 ]);
                             },
+//                            'detail' => function ($url, $model, $key) {
+//                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['knowledge/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+//                            },
                             'delete' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::button('删除', [
                                     'class' => 'btn btn-xs btn-danger delete_single_btn',
@@ -167,6 +159,7 @@ echo \dmstr\widgets\Alert::widget();
                                     'data-id' => $model->id
                                 ]);
                             },
+
                         ],
                     ]
                 ],
@@ -196,8 +189,14 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
-echo $form->field($userModel, 'mobile')->label('手机号');
+echo $form->field($itemKnowledgeModel, 'knowledge_id')->label('知识ID');
+echo $form->field($itemKnowledgeModel, 'item_id')->label('关联ID');
+echo $form->field($itemKnowledgeModel, 'item_type')->dropDownList(\common\models\ItemKnowledge::$itemType2Name)->label('关联数据类型');
+echo $form->field($itemKnowledgeModel, 'story_id')->dropDownList($stories)->label('剧本');
+echo $form->field($itemKnowledgeModel, 'knowledge_set_status')->label('知识设置状态');
+
 ?>
+
     <div class="form-group">
         <label class="control-label col-sm-2"></label>
         <div class="col-sm-9">

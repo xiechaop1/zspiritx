@@ -6,7 +6,7 @@
  * Time: 1:51 PM
  */
 
-namespace backend\actions\knowledge;
+namespace backend\actions\story;
 
 
 use common\definitions\Common;
@@ -17,41 +17,31 @@ use liyifei\base\helpers\Net;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class Knowledge extends Action
+class Role extends Action
 {
 
     
     public function run()
     {
-        $knowledgeId = Net::post('id');
-        if ($knowledgeId) {
-            $model = \common\models\Knowledge::findOne($knowledgeId);
+        $roleId = Net::post('id');
+        if ($roleId) {
+            $model = \common\models\StoryRole::findOne($roleId);
         } else {
-            $model = new \common\models\Knowledge();
+            $model = new \common\models\StoryRole();
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $knowledge = \common\models\Knowledge::findOne($id);
+            $role = \common\models\StoryRole::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
-                    if ($knowledge) {
-//                        $knowledge->is_delete = Common::STATUS_DELETED;
-                        if ($knowledge->delete()) {
+                    if ($role) {
+                        if ($role->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
                         }
                     }
-                    break;
-                case 'reset':
-                    if ($knowledge) {
-                        $knowledge->is_delete = Common::STATUS_NORMAL;
-                        if ($knowledge->save()) {
-
-                        }
-                    }
-                    Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 default:
                     Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
@@ -73,17 +63,17 @@ class Knowledge extends Action
             return $this->controller->refresh();
         }
 
-        $searchModel = new \backend\models\Knowledge();
+        $searchModel = new \backend\models\StoryRole();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $knowledgeTypes = \common\models\Knowledge::$knowledgeType2Name;
+        $stories = \common\models\Story::find()->select(['id', 'title'])->orderBy(['id' => SORT_DESC])->asArray()->all();
 
-        return $this->controller->render('knowledgelist', [
+        return $this->controller->render('role', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
-            'knowledgeTypes'   => $knowledgeTypes,
-            'knowledgeModel'    => $model,
+            'roleModel'    => $model,
             'params'        => $_GET,
+            'stories'       => ArrayHelper::map($stories, 'id', 'title'),
         ]);
     }
 }

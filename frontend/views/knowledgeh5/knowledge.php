@@ -33,15 +33,18 @@ $this->title = '知识库';
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <div class="w-100 m-auto">
+    <div class="btn-m-green m-t-30  m-l-30">
+        <a href="/myh5/my?user_id=<?=$userId?>&session_id=<?=$sessionId?>&story_id=<?=$storyId?>">上一页</a>
+    </div>
     <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
-                        返回
+        退出
     </div>
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
                     <div class="npc-name">
-                        知识库
+                        <?= $knowledgeClass == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL ? '知识' : '任务'; ?>
                     </div>
 
             <div class="row" id="answer-box">
@@ -53,6 +56,9 @@ $this->title = '知识库';
                     $status = \common\models\UserKnowledge::KNOWLDEGE_STATUS_INIT;
                     if (!empty($userKnowledgeMap[$item->id])) {
                         $status = $userKnowledgeMap[$item->id];
+                    } else {
+                        // 临时这么处理，这样就只会显示正在进行和已经完成的任务/知识了
+                        continue;
                     }
 
                     if ($status == \common\models\UserKnowledge::KNOWLDEGE_STATUS_INIT) {
@@ -79,7 +85,7 @@ $this->title = '知识库';
                     <span style="padding-left: 90px; ">'. $showTxt .  '</span>
                     </label>
                    
-                    ' . '<div class="knowledge-content" style="font-size: 18px; display: none;"><hr style="color: #ffffff; border: 1px;">' . $content . '</div>' . '
+                    ' . '<div class="knowledge-content" style="text-align: left; font-size: 18px; display: none;"><hr style="color: #ffffff; border: 1px;">' . $content . '</div>' . '
                      </div>
                 </div>
                 ';

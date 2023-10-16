@@ -89,7 +89,7 @@ class Edit extends Action
 
         $storyDatas = Story::find()->all();
 
-        $stories = ArrayHelper::map($storyDatas, 'id', 'title');
+        $stories = array_reverse(ArrayHelper::map($storyDatas, 'id', 'title'), TRUE);
 
 
         return $this->controller->render('edit', [

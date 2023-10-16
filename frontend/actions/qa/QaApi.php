@@ -11,8 +11,11 @@ namespace frontend\actions\qa;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\models\Actions;
+use common\models\ItemKnowledge;
 use common\models\Qa;
 use common\models\SessionQa;
+use common\models\StoryStages;
 use common\models\UserQa;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
@@ -150,6 +153,7 @@ class QaApi extends ApiAction
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $answer = !empty($this->_get['answer']) ? $this->_get['answer'] : '';
         $qaId = !empty($this->_get['qa_id']) ? $this->_get['qa_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
 
@@ -192,7 +196,34 @@ class QaApi extends ApiAction
                 $ret = $sessionQa->save();
             }
 
-            Yii::$app->knowledge->complete($qa['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+            if ($isRight == 1) {
+                if (!empty($qa['knowledge_id'])) {
+                    Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $userId, $qa['story_id'], 'complete');
+                }
+
+                Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $userId, $qa['story_id']);
+
+//                $itemKnowledgeList = ItemKnowledge::find()
+//                    ->where([
+//                        'item_id' => $qa['id'],
+//                        'item_type' => ItemKnowledge::ITEM_TYPE_QA,
+//                        'story_id' => $qa['story_id'],
+//                    ])
+//                    ->asArray()
+//                    ->all();
+//
+//                if (!empty($itemKnowledgeList)) {
+//                    foreach ($itemKnowledgeList as $itemKnowledge) {
+//                        Yii::$app->knowledge->complete($itemKnowledge['knowledge_id'], $sessionId, $userId, $qa['story_id']);
+//                    }
+//                }
+
+                if (!empty($qa['story_stage_id'])) {
+                    $storyStage = StoryStages::findOne($qa['story_stage_id']);
+                    $expirationInterval = 60;        // 消息超时时间
+                    Yii::$app->act->add($sessionId, $userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
+                }
+            }
 
             $transaction->commit();
 

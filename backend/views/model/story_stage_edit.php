@@ -36,7 +36,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('剧本');
-
+            echo $form->field($storyStage, 'stage_name')->textInput(['value' => $storyStage->stage_name])->label('场景名称');
             echo $form->field($storyStage, 'pre_stage_id')->textInput(['value' => $storyStage->pre_stage_id])->label('前置Stage ID');
             echo $form->field($storyStage, 'stage_u_id')->textInput(['value' => $storyStage->stage_u_id])->label('Stage UnityID');
             echo $form->field($storyStage, 'scan_image_id')->textInput(['value' => $storyStage->scan_image_id])->label('Scan Image ID');

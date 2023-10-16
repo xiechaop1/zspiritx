@@ -17,6 +17,8 @@ class ErrorCode extends Api
 
     const UNKNOWN_ERROR = -1000;     // 未知错误
 
+    const SMS_FAILED = -1010;
+
     const USER_PARAMETERS_INVALID   = -10001;   // 用户参数校验失败
 
     const USER_NOT_FOUND            = -10002;   // 用户不存在
@@ -56,5 +58,7 @@ class ErrorCode extends Api
 
     const USER_KNOWLEDGE_NOT_FOUND      = -90001;   // 知识不存在
     const USER_KNOWLEDGE_OPERATE_FAILED = -90002;   // 知识操作失败
+
+
 
 }

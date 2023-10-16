@@ -91,6 +91,17 @@ echo \dmstr\widgets\Alert::widget();
                         },
                         'filter' => false
                     ],
+                    [
+                        'label' => '角色',
+                        'attribute' => 'role_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty($model->role->role_name)
+                                ? $model->role->role_name
+                                : '未知';
+                        },
+                        'filter' => false
+                    ],
                     ['attribute' => 'goal', 'label' => '结论'],
                     [
                         'label' => '创建时间',

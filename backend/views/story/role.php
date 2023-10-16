@@ -11,18 +11,20 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '用户问答管理',
+    'label' => '剧本管理',
 ];
 
-$this->title = '用户问答列表';
+$this->title = '剧本角色列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/qa/edit', [
+            <?= \yii\bootstrap\Html::button('添加', [
                 'class' => 'btn btn-primary pull-right',
+                'data-toggle' => "modal",
+                'data-target' => '#add-form'
             ]) ?>
         </div>
         <div class="box-body">
@@ -31,10 +33,10 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($userQaModel) {
+                'afterRow' => function ($model, $key, $index) use ($roleModel, $stories) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
-                        'header' => '查看日志',
+                        'header' => '编辑角色',
                         'options' => [
                             'id' => 'case-form-' . $model->id
                         ]]);
@@ -53,6 +55,10 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
+                    echo $form->field($roleModel, 'role_name')->textInput(['value' => $model->role_name])->label('角色名称');
+                    echo $form->field($roleModel, 'role_desc')->textInput(['value' => $model->role_desc])->label('角色描述');
+                    echo $form->field($roleModel, 'role_max_ct')->textInput(['value' => $model->role_max_ct])->label('最大数');
+                    echo $form->field($roleModel, 'story_id')->dropDownList($stories, ['value' => $model->story_id])->label('剧本');
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
@@ -72,66 +78,17 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
-                        'label' => '用户',
-                        'attribute' => 'user_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return !empty($model->user->user_name) ? $model->user->user_name : '未知';
-                        },
-                        'filter' => false
+                        'label' => '角色名称',
+                        'attribute' => 'role_name',
                     ],
                     [
-                        'label' => '场次',
-                        'attribute' => 'session_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return !empty($model->session->session_name) ? $model->session->session_name : '未知';
-                        },
-                        'filter' => false
+                        'label' => '角色描述',
+                        'attribute' => 'role_desc',
                     ],
                     [
-                        'label' => '题目',
-                        'attribute' => 'qa_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return !empty($model->qa->topic) ? $model->qa->topic : '未知';
-                        },
-                        'filter' => false
+                        'label' => '最大数',
+                        'attribute' => 'role_max_ct',
                     ],
-                    [
-                        'label' => '用户答案',
-                        'attribute' => 'answer',
-                        'filter'    => false,
-                    ],
-                    [
-                        'label' => '标答选项',
-                        'format' => 'raw',
-                        'filter'    => false,
-                        'value' => function ($model) {
-                            return \common\helpers\Common::isJson($model->qa->st_selected) ? json_decode($model->qa->st_selected, true) : $model->qa->st_selected;
-                        }
-                    ],
-                    [
-                        'label' => '是否正确',
-                        'format' => 'raw',
-                        'filter'    => false,
-                        'value' => function ($model) {
-                            return $model->is_right == 1 ? '<span style="color: green">正确</span>' : '<span style="color: red">错误</span>';
-                        }
-                    ],
-
-//                    [
-//                        'label' => '封面图片',
-//                        'attribute' => 'verse_url',
-//                        'format'    => 'raw',
-//                        'value' => function ($model) {
-//                            $img = \common\helpers\Attachment::completeUrl($model->verse_url);
-//                            $ret = Html::img($img, ['width' => 150, 'height' => 75]);
-//
-//                            return $ret;
-//                        },
-//                        'filter' => false
-//                    ],
                     [
                         'label' => '创建时间',
                         'format' => 'raw',
@@ -154,14 +111,15 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {delete}',
+                        'template' => '{lines} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['qa/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
+                                    'class' => 'btn btn-xs btn-primary',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#case-form-' . $model->id
+                                ]);
                             },
-//                            'detail' => function ($url, $model, $key) {
-//                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
-//                            },
                             'delete' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::button('删除', [
                                     'class' => 'btn btn-xs btn-danger delete_single_btn',
@@ -201,6 +159,10 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
+echo $form->field($roleModel, 'role_name')->label('角色名称');
+echo $form->field($roleModel, 'role_desc')->label('角色介绍');
+echo $form->field($roleModel, 'role_max_ct')->label('最大数');
+echo $form->field($roleModel, 'story_id')->dropDownList($stories)->label('剧本');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>

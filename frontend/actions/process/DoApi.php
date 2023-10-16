@@ -13,6 +13,7 @@ use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\helpers\Active;
 use common\helpers\Attachment;
+use common\helpers\Model;
 use common\models\Actions;
 use common\models\Knowledge;
 use common\models\Log;
@@ -285,6 +286,7 @@ class DoApi extends ApiAction
             $knowledge = Knowledge::find()
                 ->where([
                     'story_id'  => (int)$this->_storyId,
+                    'knowledge_class' => Knowledge::KNOWLEDGE_CLASS_MISSSION
                 ])
                 ->orderBy(['sort_by' => SORT_ASC])
                 ->one();
@@ -308,7 +310,7 @@ class DoApi extends ApiAction
             }
             $userKnowledge->save();
 
-
+            Yii::$app->act->add((int)$this->_userSessionInfo['id'], (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
 
 
             $transaction->commit();
@@ -344,7 +346,7 @@ class DoApi extends ApiAction
                 'user_id' => (int)$this->_userId,
                 'session_id' => (int)$this->_sessionId,
                 'story_id'  => (int)$this->_storyId,
-                'building_id' => (int)$this->_buildingId,
+//                'building_id' => (int)$this->_buildingId,
 //                'role_id' => (int)$roleId,
             ])->one();
 
@@ -363,7 +365,7 @@ class DoApi extends ApiAction
                 'story_id' => (int)$this->_storyId,
                 'session_id' => (int)$this->_sessionId,
                 'role_id' => (int)$roleId,
-                'building_id' => (int)$this->_buildingId,
+//                'building_id' => (int)$this->_buildingId,
             ])
             ->count();
 
@@ -381,17 +383,17 @@ class DoApi extends ApiAction
         $userStory->story_id = $this->_storyId;
         $userStory->session_id = $this->_sessionId;
         $userStory->role_id = $roleId;
-        $userStory->building_id = $this->_buildingId;
+//        $userStory->building_id = $this->_buildingId;
         $userStory->team_id = $teamId;
         try {
             $ret = $userStory->save();
 
             if ($this->_checkSessionRole()) {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
-                Yii::$app->act->add($this->_sessionId, 0, '游戏开始，去找一个"M"标志的地方看看吧', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
             } else {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
-                Yii::$app->act->add($this->_sessionId, 0, '新玩家加入，去找一个"M"标志的地方看看吧', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, '新玩家加入', Actions::ACTION_TYPE_ACTION);
             }
 
             $this->_sessionInfo->save();
@@ -440,12 +442,20 @@ class DoApi extends ApiAction
                 'session_id'    =>  (int)$sessionId,
             ]);
 
+            if (empty($userStory)) {
+                $userStory = new UserStory();
+                $userStory->user_id = $userId;
+                $userStory->story_id = $this->_storyId;
+                $userStory->session_id = $sessionId;
+            }
             $userStory->goal = $goal;
 
-            if ($goal == $storyGoals->goal) {
-                $userStory->goal_correct = '结论正确';
-            } else {
-                $userStory->goal_correct = '结论错误，正确结论：' . $storyGoals->goal;
+            if (!empty($storyGoals)) {
+                if ($goal == $storyGoals->goal) {
+                    $userStory->goal_correct = '结论正确';
+                } else {
+                    $userStory->goal_correct = '结论错误，正确结论：' . $storyGoals->goal;
+                }
             }
             $ret = $userStory->save();
 
@@ -514,6 +524,13 @@ class DoApi extends ApiAction
             ->all();
 
         $ret = [];
+
+        $params = [
+            'session_id' => $this->_sessionId,
+            'user_id' => $this->_userId,
+            'story_id' => $this->_storyId,
+        ];
+
         foreach ($sessoinStages as $sessionStage) {
             $sessionModels = $sessionStage->models;
             $models = [];
@@ -523,10 +540,11 @@ class DoApi extends ApiAction
                     $sessModel = $sessionModel;
 //                    $storyModel = json_decode($sessModel['snapshot'], true);
                     $storyModel = $sessionModel->storymodel;
+                    $storyModel->dialog = Model::formatDialog($storyModel->dialog, $params);
                     $models[] = [
                         'session_model' => $sessionModel,
                         'story_model' => $storyModel,
-                        'model' => $sessionModel->model,
+                        'model' => $storyModel->model,
                     ];
                 }
             }
@@ -720,9 +738,21 @@ class DoApi extends ApiAction
                 ['expire_time' => (int)0],
                 ['>', 'expire_time', time()],
             ])
+            ->andFilterWhere([
+                'action_status' => Actions::ACTION_STATUS_NORMAL
+            ])
 //            ->createCommand()->getRawSql();
 //        var_dump($actions);exit;
             ->all();
+
+        try {
+            foreach ($actions as $tempAct) {
+                $tempAct->action_status = Actions::ACTION_STATUS_READ;
+                $ret = $tempAct->save();
+            }
+        } catch (\Exception $e) {
+//            return $this->fail($e->getMessage(), $e->getCode());
+        }
 
         return $actions;
     }
@@ -843,8 +873,8 @@ class DoApi extends ApiAction
                     'user_id'           => (int)$userId,
                     'session_id'        => (int)$sessionId,
                     'model_id'          => $sessionModel->model_id,
-                    'story_model_id'    => (int)$storyModelId,
-                    'session_model_id'  => $sessionModel->id,
+//                    'story_model_id'    => (int)$storyModelId,
+//                    'session_model_id'  => $sessionModel->id,
                 ])
                 ->one();
             if (empty($userModelBaggage)) {
@@ -915,7 +945,7 @@ class DoApi extends ApiAction
         }
 
         foreach ($roleCt as $roleId => $ct) {
-            if ($ct < $sRole[$roleId]) {
+            if (!empty($sRole[$roleId]) && $ct < $sRole[$roleId]) {
                 return false;
             }
         }

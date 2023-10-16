@@ -5,10 +5,10 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%story_model}}".
+ * This is the model class for table "{{%item_knowledge}}".
  *
  */
-class StoryModels extends \yii\db\ActiveRecord
+class ItemKnowledge extends \yii\db\ActiveRecord
 {
 
     /**
@@ -16,7 +16,7 @@ class StoryModels extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%story_model}}';
+        return '{{%item_knowledge}}';
     }
 
     /**
@@ -25,13 +25,9 @@ class StoryModels extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lat', 'lng', 'show_x', 'show_y', 'show_z' ], 'number'],
-            [['is_unique', 'is_visable', 'story_stage_id', 'story_id',
-                'building_id', 'poi_id', 'timebegin', 'timeend',
-                'rate', 'scan_type', 'pre_story_model_id', 'model_id',
-                'misrange', 'trigger_misrange', 'act_misrange', 'active_type', 'direction', 'sort_by', 'status'], 'integer'],
+            [['item_id', 'item_type', 'knowledge_id', 'story_id'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
-            [['scan_image_id', 'model_inst_u_id', 'active_next', 'story_model_name', 'story_model_desc', 'dialog', ], 'string'],
+            [['knowledge_set_status'], 'string'],
         ];
     }
 

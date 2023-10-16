@@ -87,7 +87,7 @@ class Story extends Action
 
         $storyTypes = \common\models\Story:: $storyType2Name;
 
-        return $this->controller->render('qalist', [
+        return $this->controller->render('story', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
             'storyTypes'   => $storyTypes,

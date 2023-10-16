@@ -16,6 +16,10 @@ use yii;
 
 class VerificationCode extends Component
 {
+
+    const TYPE_REGISTER = 1;
+    const TYPE_FORGET_PASSWORD = 3;
+
     /**
      * @desc 生成注册验证码
      * @param $data related data mobile or email

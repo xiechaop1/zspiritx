@@ -13,16 +13,15 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class Story extends \common\models\Story
+class ItemKnowledge extends \common\models\ItemKnowledge
 {
-
 
     public function rules()
     {
         return [
-            [['title', 'desc', 'thumbnail', 'cover_image', 'image', ], 'string'],
-            [['persons_ct', 'roles_ct', 'story_type', 'status'], 'integer'],
-            [[ 'created_at', 'updated_at',], 'integer'],
+            [['item_id', 'item_type', 'knowledge_id', 'story_id'], 'integer'],
+            [['created_at', 'updated_at',], 'integer'],
+            [['knowledge_set_status'], 'string'],
         ];
     }
 
@@ -33,7 +32,7 @@ class Story extends \common\models\Story
 
     public function search($params)
     {
-        $query = \common\models\Story::find();
+        $query = \common\models\ItemKnowledge::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
@@ -48,6 +47,18 @@ class Story extends \common\models\Story
 
         if (!$this->validate()) {
             return $dataProvider;
+        }
+
+        if (!empty($this->knowledge_id)) {
+            $query->andFilterWhere(['knowledge_id' => $this->knowledge_id]);
+        }
+
+        if (!empty($this->item_id)) {
+            $query->andFilterWhere(['item_id' => $this->item_id]);
+        }
+
+        if (!empty($this->item_type)) {
+            $query->andFilterWhere(['item_type' => $this->item_type]);
         }
 
         return $dataProvider;

@@ -11,11 +11,11 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '问答管理',
+    'label' => '剧本管理',
 ];
 use yii\web\JsExpression;
 
-$this->title = '问答编辑';
+$this->title = '剧本编辑';
 echo \dmstr\widgets\Alert::widget();
 
 ?>
@@ -30,59 +30,36 @@ echo \dmstr\widgets\Alert::widget();
                 'layout' => 'horizontal',
                 'enableClientValidation' => true,
             ]);
-            echo $form->field($qaModel, 'topic')->textInput(['value' => $qaModel->topic])->label('题目');
-            echo $form->field($qaModel, 'attachment')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-                'multiple' => false,
-                'isImage' => true,
-                'ossHost' => Yii::$app->params['oss.host'],
-                'signatureAction' => ['/site/oss-signature?dir=qa/attachment/' . Date('Y/m/')],
-                'clientOptions' => ['autoUpload' => true],
-                'options' => ['value' => $qaModel->attachment],
-//                'directory' => 'cover/' . Date('Y/m/')
-            ])->label('附件');
-            //            echo $form->field($qaModel, 'cover_thumbnail')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-            //                'multiple' => false,
-            //                'isImage' => true,
-            //                'ossHost' => Yii::$app->params['oss.host'],
-            //                'signatureAction' => ['/site/oss-signature?dir=thumb/' . Date('Y/m/')],
-            //                'clientOptions' => ['autoUpload' => true],
-            //                'options' => ['value' => $qaModel->cover_thumbnail],
-            ////                'directory' => 'cover_thumb/' . Date('Y/m/')
-            //            ])->label('缩略图');
-            echo $form->field($qaModel, 'selected')->textarea()->label('选项');
-            echo $form->field($qaModel, 'st_answer')->textarea()->label('标答');
-            echo $form->field($qaModel, 'st_selected')->textInput(['value' => $qaModel->st_selected])->label('标准选项');
-            echo $form->field($qaModel, 'voice')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-                'multiple' => false,
-                'isImage' => false,
-                'ossHost' => Yii::$app->params['oss.host'],
-                'signatureAction' => ['/site/oss-signature?dir=qa/voice/' . Date('Y/m/')],
-                'clientOptions' => ['autoUpload' => true],
-                'options' => ['value' => $qaModel->voice],
-//                'directory' => 'cover/' . Date('Y/m/')
-            ])->label('配音');
-            echo $form->field($qaModel, 'story_id')->widget('\kartik\select2\Select2', [
-                'data' => $stories,
-                'options' => [
-                    'multiple' => false
-                ],
-            ])->label('剧本');
-
-            echo $form->field($qaModel, 'qa_type')->widget('\kartik\select2\Select2', [
-                'data' => $qaTypes,
+            echo $form->field($storyModel, 'title')->textInput(['value' => $storyModel->title])->label('标题');
+            echo $form->field($storyModel, 'desc')->textarea()->label('简介');
+            echo $form->field($storyModel, 'story_type')->widget('\kartik\select2\Select2', [
+                'data' => $storyTypes,
                 'options' => [
                     'multiple' => false
                 ],
             ])->label('类型');
-//            echo $form->field($qaModel, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-//                'multiple' => false,
-//                'isImage' => false,
-//                'ossHost' => Yii::$app->params['oss.host'],
-//                'signatureAction' => ['/site/oss-signature?dir=chorus/' . Date('Y/m/')],
-//                'clientOptions' => ['autoUpload' => true],
-//                'options' => ['value' => $qaModel->chorus_url],
-////                'directory' => 'chorus_music/' . Date('Y/m/')
-//            ])->label('副歌');
+            echo $form->field($storyModel, 'thumbnail')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => true,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=story/thumbnail/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $storyModel->thumbnail],
+//                'directory' => 'cover/' . Date('Y/m/')
+            ])->label('缩略图');
+            echo $form->field($storyModel, 'image')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => true,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=story/image/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $storyModel->thumbnail],
+//                'directory' => 'cover/' . Date('Y/m/')
+            ])->label('封面图');
+
+            echo $form->field($storyModel, 'persons_ct')->textInput(['value' => $storyModel->persons_ct])->label('人数');
+            echo $form->field($storyModel, 'roles_ct')->textInput(['value' => $storyModel->roles_ct])->label('角色数');
+
             ?>
 
             <div class="form-group">
@@ -98,48 +75,3 @@ echo \dmstr\widgets\Alert::widget();
         </div>
     </div>
 
-
-<script>
-    $(document).ready(function () {
-        console.log($('#view_city'));
-        $("#view_city").select2({
-            //tags: true
-        })
-        ;
-
-        $("#view_city").on("select2:select", function (evt) {
-            console.log($(this));
-            var element = evt.params.data.element;
-            var $element = $(element);
-
-            window.setTimeout(function () {
-                console.log($("select#view_city"));
-                console.log($("select#view_city").find(":selected"));
-                console.log($("select#view_city").find(":selected").length);
-                if ($("select#view_city").find(":selected").length > 1) {
-                    var $second = $("select#view_city").find(":selected").eq(-1);
-                    console.log($second);
-                    console.log($element);
-                    if ($second.val() != $element.val()) {
-                        $element.detach();
-                        $second.after($element);
-                    }
-                } else {
-                    $element.detach();
-                    $("select#view_city").prepend($element);
-                }
-
-                $("select#view_city").trigger("change");
-            }, 1);
-        });
-
-//        $("select#view_city").on("select2:unselect", function (evt) {
-//            if ($("select#view_city").find(":selected").length) {
-//                var element = evt.params.data.element;
-//                var $element = $(element);
-//                $
-//                ("select#view_city").find(":selected").after($element);
-//            }
-//        });
-    });
-</script>

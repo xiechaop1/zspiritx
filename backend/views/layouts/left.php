@@ -55,6 +55,12 @@
                                 'active' => in_array($this->context->route, ['story/session', 'story/session_edit']),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
+                            [
+                                'label' => '角色',
+                                'url' => ['/story/role'],
+                                'active' => in_array($this->context->route, ['story/role', ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
                         ]
                     ],
                     [
@@ -113,6 +119,12 @@
                                 'label' => '知识列表',
                                 'url' => ['/knowledge/knowledge'],
                                 'active' => in_array($this->context->route, ['knowledge/knowledge', 'knowledge/edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
+                                'label' => '知识关联列表',
+                                'url' => ['/knowledge/item_knowledge'],
+                                'active' => in_array($this->context->route, ['knowledge/item_knowledge' ]),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [

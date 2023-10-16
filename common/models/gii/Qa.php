@@ -32,7 +32,7 @@ class Qa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['qa_type', 'story_id', 'knowledge_id', 'created_at', 'updated_at'], 'integer'],
+            [['qa_type', 'story_id', 'knowledge_id', 'story_stage_id', 'created_at', 'updated_at'], 'integer'],
             [['topic', 'voice', 'attachment', 'st_answer', 'st_selected', 'selected'], 'string'],
         ];
     }

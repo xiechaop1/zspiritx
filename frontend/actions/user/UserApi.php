@@ -11,6 +11,7 @@ namespace frontend\actions\user;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\models\ItemKnowledge;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
 use common\models\UserList;
@@ -61,6 +62,9 @@ class UserApi extends ApiAction
 
                 case 'update_user_loc':
                     $ret = $this->updateUserLoc();
+                    break;
+                case 'update_user_stage':
+                    $ret = $this->updateUserStage();
                     break;
                 case 'get_user_loc':
                     $ret = $this->getUserLoc();
@@ -127,12 +131,20 @@ class UserApi extends ApiAction
 
     public function loginAndRegByMobile() {
         $mobile = !empty($this->_get['mobile']) ? $this->_get['mobile'] : '';
+        $verifyCode = !empty($this->_get['verify_code']) ? $this->_get['verify_code'] : '';
 //        $userPass = !empty($this->_get['user_pass']) ? $this->_get['user_pass'] : '';
 
         if (empty($mobile)
 //            || empty($userPass)
         ) {
             throw new \Exception('手机号或密码不能为空', ErrorCode::USER_PARAMETERS_INVALID);
+        }
+
+        if ($mobile != '1' && !YII_DEBUG) {
+            $verifyVal = Yii::$app->verificationCode->validate($mobile, $verifyCode, \common\definitions\VerificationCode::TYPE_REGISTER);
+            if (!$verifyVal) {
+                throw new \Exception('验证码错误', ErrorCode::USER_PARAMETERS_INVALID);
+            }
         }
 
         $userInfo = User::findOne([
@@ -144,7 +156,7 @@ class UserApi extends ApiAction
         if (empty($userInfo)) {
             $userInfo = new User();
             $userInfo->mobile = $mobile;
-            $userInfo->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4);
+            $userInfo->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4) . rand(1000,9999);
             $userInfo->user_pass = Yii::$app->security->generatePasswordHash($mobile);
             $userInfo->user_status = User::USER_STATUS_NORMAL;
             $userInfo->save();
@@ -359,6 +371,21 @@ class UserApi extends ApiAction
             throw $e;
 //            return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
+    }
+
+    public function updateUserStage() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
+
+        // 更新任务
+        try {
+            Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $userId, $storyId);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return true;
     }
 
     public function updateUserLoc() {

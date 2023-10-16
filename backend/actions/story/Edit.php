@@ -6,18 +6,9 @@
  * Time: 下午8:29
  */
 
-namespace backend\actions\qa;
+namespace backend\actions\story;
 
 
-use common\definitions\Common;
-use common\helpers\Attachment;
-use common\helpers\Time;
-use common\models\Category;
-use common\models\Image;
-use common\models\Music;
-use common\models\MusicCategory;
-use common\models\Qa;
-use common\models\Singer;
 use common\models\Story;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
@@ -32,21 +23,21 @@ class Edit extends Action
         $id = Net::get('id');
 
         if ($id) {
-            $model = \backend\models\Qa::findOne($id);
+            $model = \backend\models\Story::findOne($id);
             $isNew = false;
         } else {
-            $model = new \backend\models\Qa();
+            $model = new \backend\models\Story();
             $isNew = true;
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $qaModel = \backend\models\Qa::findOne($id);
+            $storyModel = \backend\models\Story::findOne($id);
 
             switch (Net::post('action')) {
                 case 'delete':
-                    if ($qaModel) {
-                        if ($qaModel->delete()) {
+                    if ($storyModel) {
+                        if ($storyModel->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
@@ -68,10 +59,6 @@ class Edit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-                if (!\common\helpers\Common::isJson($model->selected)) {
-                    $model->selected = json_encode($model->selected);
-                }
-                
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');
@@ -87,20 +74,11 @@ class Edit extends Action
             return $this->controller->refresh();
         }
 
-        $qaTypes = Qa::$qaType2Name;
-
-        $storyDatas = Story::find()->all();
-
-        $stories = ArrayHelper::map($storyDatas, 'id', 'title');
-
-        if (\common\helpers\Common::isJson($model->selected)) {
-            $model->selected = json_decode($model->selected, true);
-        }
+        $storyTypes = Story::$storyType2Name;
 
         return $this->controller->render('edit', [
-            'qaModel'    => $model,
-            'qaTypes'    => $qaTypes,
-            'stories'   => $stories,
+            'storyModel'    => $model,
+            'storyTypes'    => $storyTypes,
         ]);
     }
 }

@@ -69,6 +69,9 @@ class Model
     }
 
     public static function encodeDialog($dialog) {
+        if (empty($dialog)) {
+            return $dialog;
+        }
         eval('$dialog = ' . $dialog);
         if (is_array($dialog)) {
             return json_encode($dialog);
@@ -78,6 +81,29 @@ class Model
 
     public static function decodeDialog($dialogJson) {
         return json_decode($dialogJson, true);
+    }
+
+    public static function formatDialog($dialog, $params = []) {
+        $ret = $dialog;
+        if (!empty($params['user_id'])) {
+            $ret = str_replace('{$user_id}', $params['user_id'], $ret);
+        }
+        if (!empty($params['session_id'])) {
+            $ret = str_replace('{$session_id}', $params['session_id'], $ret);
+        }
+
+        $jsonTmp = json_decode($ret, true);
+
+        if (!empty($jsonTmp['Dialog'])) {
+            foreach ($jsonTmp['Dialog'] as &$dia) {
+                if (!empty($dia['sentenceClipURL'])) {
+                    $dia['sentenceClipURL'] = Attachment::completeUrl($dia['sentenceClipURL'], false);
+                }
+            }
+        }
+        $ret = json_encode($jsonTmp);
+
+        return $ret;
     }
 
 }

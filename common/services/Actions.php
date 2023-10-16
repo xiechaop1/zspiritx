@@ -17,22 +17,47 @@ use yii;
 class Actions extends Component
 {
 
-    public function add($sessionId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expireTime = 0, $senderId = 0) {
-        $model = new \common\models\Actions();
-        $model->session_id  = $sessionId;
-        $model->to_user     = $toUser;
-        $model->sender_id   = $senderId;
-        $model->action_type = $actType;
-        $model->action_detail = $actDetail;
-        $model->expire_time = $expireTime;
+    public function add($sessionId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
 
-        try {
-            $r = $model->save();
-        } catch (\Exception $e) {
-            Yii::error($e->getMessage());
+        if ($expirationInterval >= 0) {
+            $expireTime = time() + $expirationInterval;
+        } else {
+            $expireTime = 0;
         }
 
-        return $r;
+        $model = \common\models\Actions::find()
+        ->where([
+            'session_id' => $sessionId,
+            'sender_id' => $senderId,
+            'to_user' => $toUser,
+            'action_type' => $actType,
+            'action_detail' => $actDetail,
+            'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
+        ])
+            ->andFilterWhere([
+                '<', 'expire_time', time()
+            ])
+            ->one();
+
+        if (empty($model)) {
+            $model = new \common\models\Actions();
+            $model->session_id = $sessionId;
+            $model->to_user = $toUser;
+            $model->sender_id = $senderId;
+            $model->action_type = $actType;
+            $model->action_detail = $actDetail;
+            $model->expire_time = $expireTime;
+
+
+            try {
+                $r = $model->save();
+            } catch (\Exception $e) {
+                Yii::error($e->getMessage());
+                throw $e;
+            }
+        }
+
+        return $model;
     }
 
 }

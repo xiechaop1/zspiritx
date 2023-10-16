@@ -190,9 +190,53 @@ $(function () {
             $('#loginform').show();
         }
     });
+    $("#login_return_btn").click(function() {
+        $("#loginform").hide();
+    });
+    $('#get_verifycode').click(function() {
+        var par = $(this).parent();
+        // 30秒倒计时
+        var mobile=$("input[name='mobile']").val();
+        if (mobile == "" || mobile == null) {
+            alert("请输入手机号");
+            return false;
+        }
+        if(mobile!=null){
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                async: false,
+                url: '/passport/verification-code',
+                data:{
+                    mobile:mobile,
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    alert("验证码已发送，请注意查收");
+                    par.find('a').addClass('disabled');
+                    var time = 30;
+                    var timer = setInterval(function() {
+                        if (time > 0) {
+                            time--;
+                            par.find('a').text(time + '秒后重新获取');
+                        } else {
+                            clearInterval(timer);
+                            par.find('a').text('获取验证码');
+                            par.find('a').removeClass('disabled');
+                        }
+                    }, 1000);
+
+                }
+            });
+        }
+    });
     $("#login_btn").click(function ()
     {
         var mobile=$("input[name='mobile']").val();
+        var verifycode=$("input[name='verifycode']").val();
         var isDebug = $('#login_is_debug').val();
         var storyId = $('#login_story_id').val();
         var userId = $('#user_id').val();
@@ -211,6 +255,7 @@ $(function () {
                 url: '/user/login_and_reg_by_mobile',
                 data:{
                     mobile:mobile,
+                    verify_code:verifycode,
                     is_test:1
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -253,6 +298,16 @@ $(function () {
         }
         var data=$.toJSON(params);
         Unity.call(data);
+    });
+
+    $("#msg_return_btn").click(function (){
+        Unity.call('WebViewOff&TrueAnswer');
+        //
+        // var params = {
+        //     'WebViewOff':1,
+        // }
+        // var data=$.toJSON(params);
+        // Unity.call(data);
     });
 
     $(".knowledge-title").click(function (){

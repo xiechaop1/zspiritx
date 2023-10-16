@@ -17,27 +17,26 @@ use liyifei\base\helpers\Net;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class Knowledge extends Action
+class ItemKnowledge extends Action
 {
 
     
     public function run()
     {
-        $knowledgeId = Net::post('id');
-        if ($knowledgeId) {
-            $model = \common\models\Knowledge::findOne($knowledgeId);
+        $userKnowledgeId = Net::post('id');
+        if ($userKnowledgeId) {
+            $model = \common\models\ItemKnowledge::findOne($userKnowledgeId);
         } else {
-            $model = new \common\models\Knowledge();
+            $model = new \common\models\ItemKnowledge();
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $knowledge = \common\models\Knowledge::findOne($id);
+            $ItemKnowledge = \common\models\ItemKnowledge::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
-                    if ($knowledge) {
-//                        $knowledge->is_delete = Common::STATUS_DELETED;
-                        if ($knowledge->delete()) {
+                    if ($ItemKnowledge) {
+                        if ($ItemKnowledge->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
@@ -45,9 +44,9 @@ class Knowledge extends Action
                     }
                     break;
                 case 'reset':
-                    if ($knowledge) {
-                        $knowledge->is_delete = Common::STATUS_NORMAL;
-                        if ($knowledge->save()) {
+                    if ($ItemKnowledge) {
+                        $ItemKnowledge->is_delete = Common::STATUS_NORMAL;
+                        if ($ItemKnowledge->save()) {
 
                         }
                     }
@@ -73,16 +72,20 @@ class Knowledge extends Action
             return $this->controller->refresh();
         }
 
-        $searchModel = new \backend\models\Knowledge();
+        $searchModel = new \backend\models\ItemKnowledge();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $knowledgeTypes = \common\models\Knowledge::$knowledgeType2Name;
+        $stories = ArrayHelper::map(\common\models\Story::find()->orderBy('id desc')->all(), 'id', 'title');
 
-        return $this->controller->render('knowledgelist', [
+//        $knowledgeDatas = \common\models\Knowledge::find()->orderBy('id desc')->all();
+//        $knowledges = ArrayHelper::map($knowledgeDatas, 'id', 'title');
+
+        return $this->controller->render('item_knowledge', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
-            'knowledgeTypes'   => $knowledgeTypes,
-            'knowledgeModel'    => $model,
+            'itemKnowledgeModel'    => $model,
+            'stories'       => $stories,
+//            'knowledges'    => $knowledges,
             'params'        => $_GET,
         ]);
     }
