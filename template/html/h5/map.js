@@ -13,12 +13,12 @@ $(function () {
         $("#map-info-box").hide();
     });
 
-    function getLocation(lat,lng){
-        location[1]=lat;
-        location[0]=lng;
-        return location;
-    }
-
+    // function getLocation(lat,lng){
+    //     location[1]=lat;
+    //     location[0]=lng;
+    //     return location;
+    // }
+    //
 
     var user_lng=$("input[name='user_lng']").val();
     var user_lat=$("input[name='user_lat']").val();
@@ -112,12 +112,12 @@ $(function () {
         document.getElementById('centerCoord').innerHTML = '当前中心点坐标：' + newCenter.getCenter();
         // document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
     });*/
-    $.extend({
-        getLocation:function (lat,lng){
-           getLocation(lat,lng);
-           getPoi();
-        }
-    })
+    // $.extend({
+    //     getLocation:function (lat,lng){
+    //        getLocation(lat,lng);
+    //        getPoi();
+    //     }
+    // })
 
     function getPoi(lng,lat){
         var user_id=$("input[name='user_id']").val();
@@ -306,6 +306,15 @@ $(function () {
     });
 });
 
+function getLocation(lat,lng){
+    if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            center: [lng, lat],
+        });
+    }
+
+}
 function showPoiDetail(n) {
     var me=$(this);
     var text=me.find('.marker_text').attr("data-id");
