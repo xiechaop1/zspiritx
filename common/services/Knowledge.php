@@ -118,7 +118,7 @@ class Knowledge extends Component
                     }
 
                     if (!empty($nextMission)) {
-                        Yii::$app->act->add($sessionId, $userId, '可以去寻找下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
+                        Yii::$app->act->add($sessionId, $userId, '下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
                     }
                 } catch (\Exception $e) {
                     throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);

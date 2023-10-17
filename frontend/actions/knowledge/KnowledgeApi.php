@@ -140,7 +140,7 @@ class KnowledgeApi extends ApiAction
                     }
                 }
 
-                Yii::$app->act->add($this->_sessionId, $this->_userId, '可以去寻找下一个任务：' . $lastKnowledge->title, Actions::ACTION_TYPE_MSG);
+                Yii::$app->act->add($this->_sessionId, $this->_userId, '下一个任务：' . $lastKnowledge->title, Actions::ACTION_TYPE_MSG);
             } catch (\Exception $e) {
                 throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
             }
