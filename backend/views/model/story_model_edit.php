@@ -59,6 +59,7 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'misrange')->textInput(['value' => $storyModel->misrange])->label('误差');
             echo $form->field($storyModel, 'trigger_misrange')->textInput(['value' => $storyModel->trigger_misrange])->label('触发误差距离');
             echo $form->field($storyModel, 'act_misrange')->textInput(['value' => $storyModel->act_misrange])->label('动作误差距离');
+            echo $form->field($storyModel, 'scale')->textInput(['value' => $storyModel->scale])->label('缩放比例');
             echo $form->field($storyModel, 'lat')->textInput(['value' => $storyModel->lat])->label('经度');
             echo $form->field($storyModel, 'lng')->textInput(['value' => $storyModel->lng])->label('纬度');
             echo $form->field($storyModel, 'direction')->widget('\kartik\select2\Select2', [
