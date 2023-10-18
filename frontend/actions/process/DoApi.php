@@ -736,7 +736,7 @@ class DoApi extends ApiAction
             ->andFilterWhere([
                 'or',
                 ['expire_time' => (int)0],
-                ['>', 'expire_time', time()],
+                ['>=', 'expire_time', time()],
             ])
             ->andFilterWhere([
                 'action_status' => Actions::ACTION_STATUS_NORMAL
