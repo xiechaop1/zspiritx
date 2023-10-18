@@ -84,7 +84,7 @@ class StoryStageEdit extends Action
 
         $scanImageTypes = StoryStages::$scanType2Name;
 
-        $storyDatas = Story::find()->all();
+        $storyDatas = Story::find()->orderBy(['id' => SORT_DESC])->all();
 
         $stories = ArrayHelper::map($storyDatas, 'id', 'title');
 
