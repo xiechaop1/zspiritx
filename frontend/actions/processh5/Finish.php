@@ -115,7 +115,7 @@ class Finish extends Action
             return $this->fail($e->getMessage(), $e->getCode());
         }
 
-        $msg = '感谢您参与 ' . $storyModel->title . ' 游戏，期待您下次再来，我们还有很多精彩的游戏等着您！';
+        $msg = '感谢您参与这场 ' . $storyModel->title . ' 游戏，期待您下次再来，我们还有很多精彩的游戏等着您！';
 
         return $this->succ($this->_params, $msg);
 
