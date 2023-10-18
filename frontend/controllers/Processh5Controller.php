@@ -21,6 +21,9 @@ class Processh5Controller extends Controller
             'pickup' => [
                 'class'     => 'frontend\actions\processh5\Pickup',
             ],
+            'finish' => [
+                'class'     => 'frontend\actions\processh5\Finish',
+            ],
         ];
     }
 }
