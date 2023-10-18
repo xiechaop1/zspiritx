@@ -35,7 +35,12 @@ class Actions extends Component
             'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
         ])
             ->andFilterWhere([
-                '<', 'expire_time', time()
+                'or',
+                ['expire_time' => (int)0],
+                ['>=', 'expire_time', time()],
+            ])
+            ->andFilterWhere([
+                'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL
             ])
             ->one();
 

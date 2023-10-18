@@ -44,7 +44,7 @@ class Pickup extends Action
         $needAction = !empty($this->_get['need_action']) ? $this->_get['need_action'] : 0;
         $actDetail = !empty($this->_get['act_detail']) ? $this->_get['act_detail'] : 0;
         $actType = !empty($this->_get['act_type']) ? $this->_get['act_type'] : \common\models\Actions::ACTION_TYPE_MSG;
-        $expirationInterval = !empty($this->_get['expiration_interval']) ? $this->_get['expiration_interval'] : 0;
+        $expirationInterval = !empty($this->_get['expiration_interval']) ? $this->_get['expiration_interval'] : -1;
 
         $transaction = Yii::$app->db->beginTransaction();
         $sessionModel = SessionModels::find()
