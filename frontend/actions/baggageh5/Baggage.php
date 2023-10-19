@@ -36,7 +36,9 @@ class Baggage extends Action
             ->where([
                 'user_id'       => $userId,
                 'session_id'    => $sessionId,
+                'is_delete'     => Common::STATUS_NORMAL,
             ])
+            ->orderBy(['updated_at' => SORT_DESC])
             ->all();
 
 
