@@ -48,13 +48,16 @@ $this->title = '我的背包';
                 <?php
                 foreach ($model as $item) {
                     $label = !empty($item->storyModel->story_model_name) ? $item->storyModel->story_model_name : $item->model->model_name;
-                    $txt = !empty($item->storyModel->story_model_desc) ? $item->storyModel->story_model_desc : $item->model->model_desc;
-                    $txt = $label .  '： ' . $txt;
+                    $desc = !empty($item->storyModel->story_model_desc) ? $item->storyModel->story_model_desc : $item->model->model_desc;
+                    $txt = $label;
+                    if (!empty($desc)) {
+                        $txt .= '： ' . $desc;
+                    }
                 echo '
                 <div class="m-t-30 col-sm-12 col-md-12">
                     <div class="answer-border">
                         <input class="form-check-input" type="radio" name="baggage" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $item->id . '">
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $item->id . '" style="padding-left: 90px;">
                             <span class="answer-tag">' . $item->use_ct . '</span>
                     '. $txt . '
                     </label>
