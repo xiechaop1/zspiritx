@@ -61,18 +61,25 @@ $this->title = '知识库';
                         continue;
                     }
 
-                    if ($status == \common\models\UserKnowledge::KNOWLDEGE_STATUS_INIT) {
-                        $spanTxtTpl = '<span style="color: white">%t</span>';
-                        $spanSortTpl = '<span style="color: white">%t</span>';
-                    } elseif ($status == \common\models\UserKnowledge::KNOWLDEGE_STATUS_PROCESS) {
-                        $spanTxtTpl = '<span style="color: red">%t</span>';
-                        $spanSortTpl = '<span style="color: red">%t</span>';
-                    } elseif ($status == \common\models\UserKnowledge::KNOWLDEGE_STATUS_COMPLETE) {
-                        $spanTxtTpl = '<span style="color: grey">%t</span>';
-                        $spanSortTpl = '<span style="color: grey">%t</span>';
+                    if ($knowledgeClass == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL) {
+                            $spanTxtTpl = '<span style="color: white">%t</span>';
+                            $spanSortTpl = '<span style="color: white">%t</span>';
+                    } else {
+                        if ($status == \common\models\UserKnowledge::KNOWLDEGE_STATUS_INIT) {
+                            $spanTxtTpl = '<span style="color: white">%t</span>';
+                            $spanSortTpl = '<span style="color: white">%t</span>';
+                        } elseif ($status == \common\models\UserKnowledge::KNOWLDEGE_STATUS_PROCESS) {
+                            $spanTxtTpl = '<span style="color: red">%t</span>';
+                            $spanSortTpl = '<span style="color: red">%t</span>';
+                        } elseif ($status == \common\models\UserKnowledge::KNOWLDEGE_STATUS_COMPLETE) {
+                            $spanTxtTpl = '<span style="color: grey">%t</span>';
+                            $spanSortTpl = '<span style="color: grey">%t</span>';
+                        }
                     }
                     $txt = $label;
-                    $sortBy = $item->sort_by;
+//                    $sortBy = $item->sort_by;
+
+                    $sortBy = '💡';
 
                     $showTxt = str_replace('%t', $txt, $spanTxtTpl);
                     $showSort = str_replace('%t', $sortBy, $spanSortTpl);
