@@ -19,6 +19,16 @@ use yii;
 
 class Knowledge extends Component
 {
+    public function get($knowledgeId, $sessionId, $userId) {
+        $userKnowledge = UserKnowledge::find()
+            ->where([
+                'user_id' => $userId,
+                'knowledge_id' => $knowledgeId,
+                'session_id' => $sessionId,
+            ])->one();
+
+        return $userKnowledge;
+    }
 
     public function set($knowledgeId, $sessionId, $userId, $storyId, $act = 'complete') {
 
@@ -127,6 +137,8 @@ class Knowledge extends Component
 //            Yii::$app->act->add($sessionId, $userId, '任务全部完成啦！', Actions::ACTION_TYPE_ACTION);
             }
         }
+
+        return $userKnowledge;
     }
 
     public function setByItem($itemId, $itemType, $sessionId, $userId, $storyId) {

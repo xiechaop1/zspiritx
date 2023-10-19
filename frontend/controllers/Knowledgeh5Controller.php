@@ -24,6 +24,9 @@ class Knowledgeh5Controller extends Controller
             'all' => [
                 'class' => 'frontend\actions\knowledgeh5\Knowledge',
             ],
+            'set' => [
+                'class' => 'frontend\actions\knowledgeh5\Set',
+            ],
 
         ];
     }
