@@ -68,7 +68,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('模型朝向');
-            echo $form->field($storyModel, 'is_visable')->textInput(['value' => $storyModel->is_visable])->label('是否显示');
+            echo $form->field($storyModel, 'is_visable')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$visible2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('是否显示');
             echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');
             echo $form->field($storyModel, 'timebegin')->textInput(['value' => $storyModel->timebegin])->label('开始时间');

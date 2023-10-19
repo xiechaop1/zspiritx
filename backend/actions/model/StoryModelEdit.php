@@ -101,9 +101,12 @@ class StoryModelEdit extends Action
         $modelDatas = Models::find()->orderBy(['id' => SORT_DESC])->all();
         $models = ArrayHelper::map($modelDatas, 'id', 'model_name');
 
+        $visibleSelection = StoryModels::$visible2Name;
+
         return $this->controller->render('story_model_edit', [
             'storyModel'    => $model,
             'scanImageTypes'    => $scanImageTypes,
+            'visibleSelection' => $visibleSelection,
             'stories'   => $stories,
             'models'    => $models,
         ]);

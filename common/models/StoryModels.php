@@ -43,6 +43,14 @@ class StoryModels extends \common\models\gii\StoryModels
         self::ACTIVE_TYPE_MODEL => '模型',
     ];
 
+    const VISIBLE_SHOW        = 0;    // 显示
+    const VISIBLE_HIDE        = 1;    // 隐藏
+
+    public static $visible2Name = [
+        self::VISIBLE_SHOW => '显示',
+        self::VISIBLE_HIDE => '隐藏',
+    ];
+
     public function behaviors()
     {
         return [
