@@ -79,19 +79,19 @@ class Finish extends Action
             $ret = $sessionInfo->save();
 
             $storyGoals = StoryGoal::find()
-                ->where(['story_id' => (int)$this->_storyId])
+                ->where(['story_id' => (int)$storyId])
                 ->one();
 
             $userStory = UserStory::findOne([
                 'user_id'       =>  (int)$userId,
-                'story_id'      =>  (int)$this->_storyId,
+                'story_id'      =>  (int)$storyId,
                 'session_id'    =>  (int)$sessionId,
             ]);
 
             if (empty($userStory)) {
                 $userStory = new UserStory();
                 $userStory->user_id = $userId;
-                $userStory->story_id = $this->_storyId;
+                $userStory->story_id = $storyId;
                 $userStory->session_id = $sessionId;
             }
             $userStory->goal = $goal;
@@ -107,7 +107,7 @@ class Finish extends Action
 
             $this->_params['user_story'] = $userStory;
 
-            Yii::$app->act->add($this->_sessionId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
+            Yii::$app->act->add($sessionId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
 
             $transaction->commit();
         } catch (\Exception $e) {
