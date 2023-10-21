@@ -46,7 +46,16 @@ class Set extends Action
             $userKnowledge = Yii::$app->knowledge->set($knowledgeId, $sessionId, $userId, $storyId, $act);
         }
 
-        $msg = '您成功获得了知识 ' . $knowledge->title . '，可以到"我的"->"知识"中查看';
+        if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL) {
+            $msg = '您成功获得了知识 ' . $knowledge->title . '，可以到"我的"->"知识"中查看';
+        } else {
+            if ($act == 'completed') {
+                $actionTxt = '您已经完成了任务 ';
+            }  else {
+                $actionTxt = '您正在进行任务 ';
+            }
+            $msg = $actionTxt . $knowledge->title . '，可以到"我的"->"任务"中查看';
+        }
 
         return $this->controller->render('set', [
             'userKnowledge' => $userKnowledge,
