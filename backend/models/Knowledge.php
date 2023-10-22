@@ -23,7 +23,7 @@ class Knowledge extends \common\models\Knowledge
     {
         return [
             [[ 'story_id', 'pre_knowledge_id', 'sort_by', 'is_delete', 'knowledge_class', 'knowledge_type', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'content', 'voice', 'linkurl' ], 'string'],
+            [['title', 'content', 'voice', 'linkurl', 'image' ], 'string'],
         ];
     }
 

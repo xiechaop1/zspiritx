@@ -33,15 +33,15 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($knowledgeModel, 'title')->textInput(['value' => $knowledgeModel->title])->label('标题');
             echo $form->field($knowledgeModel, 'content')->textarea(['rows' => 20])->label('内容');
 
-//            echo $form->field($knowledgeModel, '')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-//                'multiple' => false,
-//                'isImage' => true,
-//                'ossHost' => Yii::$app->params['oss.host'],
-//                'signatureAction' => ['/site/oss-signature?dir=knowledge/attachment/' . Date('Y/m/')],
-//                'clientOptions' => ['autoUpload' => true],
-//                'options' => ['value' => $knowledgeModel->attachment],
-////                'directory' => 'cover/' . Date('Y/m/')
-//            ])->label('附件');
+            echo $form->field($knowledgeModel, '')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => true,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=knowledge/image/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $knowledgeModel->image],
+//                'directory' => 'cover/' . Date('Y/m/')
+            ])->label('图片');
 
             echo $form->field($knowledgeModel, 'linkurl')->textarea()->label('链接');
             echo $form->field($knowledgeModel, 'voice')->widget('\liyifei\uploadOSS\FileUploadOSS', [
