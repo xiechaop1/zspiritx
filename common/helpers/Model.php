@@ -74,6 +74,13 @@ class Model
         }
         eval('$dialog = ' . $dialog);
         if (is_array($dialog)) {
+            if (!empty($dialog['Dialog'])) {
+                $tmpDialog = [];
+                foreach ($dialog['Dialog'] as $dia) {
+                    $tmpDialog[] = $dia;
+                }
+                $dialog['Dialog'] = $tmpDialog;
+            }
             return json_encode($dialog);
         }
         return $dialog;
