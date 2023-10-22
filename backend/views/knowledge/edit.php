@@ -33,7 +33,7 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($knowledgeModel, 'title')->textInput(['value' => $knowledgeModel->title])->label('标题');
             echo $form->field($knowledgeModel, 'content')->textarea(['rows' => 20])->label('内容');
 
-            echo $form->field($knowledgeModel, '')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+            echo $form->field($knowledgeModel, 'image')->widget('\liyifei\uploadOSS\FileUploadOSS', [
                 'multiple' => false,
                 'isImage' => true,
                 'ossHost' => Yii::$app->params['oss.host'],
