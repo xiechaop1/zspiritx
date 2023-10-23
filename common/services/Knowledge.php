@@ -73,19 +73,19 @@ class Knowledge extends Component
 
             if ($act == 'complete') {
                 if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
-                    Yii::$app->act->add($sessionId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
 
                     if (!empty($sessionStageId)) {
                         Yii::$app->act->read($sessionId, $userId, $sessionStageId);
                     }
                 } else {
-                    Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 }
             } elseif ($act == 'process') {
                 if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
-                    Yii::$app->act->add($sessionId, $userId, '您开启了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您开启了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 } else {
-                    Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 }
             }
 
@@ -127,12 +127,12 @@ class Knowledge extends Component
                         ) {
                             $nextMission = $nextKnowledge;
                         } else {
-                            Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
+                            Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您获得了知识：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
                         }
                     }
 
                     if (!empty($nextMission)) {
-                        Yii::$app->act->add($sessionId, $userId, '下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
+                        Yii::$app->act->add($sessionId, $sessionStageId, $userId, '下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
                     }
                 } catch (\Exception $e) {
                     throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);

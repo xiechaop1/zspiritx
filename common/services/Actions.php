@@ -17,7 +17,7 @@ use yii;
 class Actions extends Component
 {
 
-    public function add($sessionId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
+    public function add($sessionId, $sessionStageId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
 
         if ($expirationInterval > 0) {
             $expireTime = time() + $expirationInterval;
@@ -28,6 +28,7 @@ class Actions extends Component
         $model = \common\models\Actions::find()
         ->where([
             'session_id' => $sessionId,
+            'session_stage_id' => $sessionStageId,
             'sender_id' => $senderId,
             'to_user' => $toUser,
             'action_type' => $actType,
@@ -47,6 +48,7 @@ class Actions extends Component
         if (empty($model)) {
             $model = new \common\models\Actions();
             $model->session_id = $sessionId;
+            $model->session_stage_id = $sessionStageId;
             $model->to_user = $toUser;
             $model->sender_id = $senderId;
             $model->action_type = $actType;

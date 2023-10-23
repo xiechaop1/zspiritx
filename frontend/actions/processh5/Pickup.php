@@ -41,6 +41,8 @@ class Pickup extends Action
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
         $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
 
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         $needAction = !empty($this->_get['need_action']) ? $this->_get['need_action'] : 0;
         $actDetail = !empty($this->_get['act_detail']) ? $this->_get['act_detail'] : 0;
         $actType = !empty($this->_get['act_type']) ? $this->_get['act_type'] : \common\models\Actions::ACTION_TYPE_MSG;
@@ -138,7 +140,7 @@ class Pickup extends Action
             $msg = '您成功获取了 ' . $storyModelName;
 
             if ($needAction == '1') {
-                $ret = Yii::$app->act->add($sessionId, $userId, $actDetail, $actType, $expirationInterval);
+                $ret = Yii::$app->act->add($sessionId, $sessionStageId, $userId, $actDetail, $actType, $expirationInterval);
             }
 
         } catch (\Exception $e) {

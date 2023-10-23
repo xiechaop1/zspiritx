@@ -45,6 +45,8 @@ class Finish extends Action
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
         $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
 
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         $goal = !empty($this->_get['goal']) ? $this->_get['goal'] : '';
 
         $this->_params['user_id'] = $userId;
@@ -107,7 +109,7 @@ class Finish extends Action
 
             $this->_params['user_story'] = $userStory;
 
-            Yii::$app->act->add($sessionId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
+            Yii::$app->act->add($sessionId,$sessionStageId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
 
             $transaction->commit();
         } catch (\Exception $e) {

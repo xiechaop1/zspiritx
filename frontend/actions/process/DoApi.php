@@ -203,6 +203,9 @@ class DoApi extends ApiAction
                 $checkSessionStage = $checkSessionStage->one();
 
                 if (!empty($checkSessionStage)) {
+                    if (empty($firstSessionStageId)) {
+                        $firstSessionStageId = $checkSessionStage['id'];
+                    }
                     continue;
                 }
 
@@ -212,6 +215,10 @@ class DoApi extends ApiAction
                 $sessionStageObj->story_id = $this->_storyId;
                 $sessionStageObj->snapshot = json_encode($sessionStageObj->toArray(), true);
                 $sessionStageObj->save();
+
+                if (empty($firstSessionStageId)) {
+                    $firstSessionStageId = Yii::$app->db->getLastInsertID();
+                }
             }
 
             $storyModels = StoryModels::find()
@@ -310,7 +317,7 @@ class DoApi extends ApiAction
             }
             $userKnowledge->save();
 
-            Yii::$app->act->add((int)$this->_userSessionInfo['id'], (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
+            Yii::$app->act->add((int)$this->_userSessionInfo['id'], $firstSessionStageId, (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
 
 
             $transaction->commit();
@@ -390,10 +397,10 @@ class DoApi extends ApiAction
 
             if ($this->_checkSessionRole()) {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
-                Yii::$app->act->add($this->_sessionId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
             } else {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
-                Yii::$app->act->add($this->_sessionId, 0, '新玩家加入', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, 0, '新玩家加入', Actions::ACTION_TYPE_ACTION);
             }
 
             $this->_sessionInfo->save();
@@ -414,6 +421,8 @@ class DoApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
 
         $goal = !empty($this->_get['goal']) ? $this->_get['goal'] : '';
+
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
         $transaction = Yii::$app->db->beginTransaction();
 
@@ -459,7 +468,7 @@ class DoApi extends ApiAction
             }
             $ret = $userStory->save();
 
-            Yii::$app->act->add($this->_sessionId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
+            Yii::$app->act->add($this->_sessionId, $sessionStageId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
 
             $transaction->commit();
         } catch (\Exception $e) {

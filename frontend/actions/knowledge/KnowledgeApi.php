@@ -69,6 +69,8 @@ class KnowledgeApi extends ApiAction
     public function completeKnowledge() {
         $knowledgeId = !empty($this->_get['knowledge_id']) ? $this->_get['knowledge_id'] : 0;
 
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         $knowledge = Knowledge::findOne($knowledgeId);
 
         if (empty($knowledge)) {
@@ -140,12 +142,12 @@ class KnowledgeApi extends ApiAction
                     }
                 }
 
-                Yii::$app->act->add($this->_sessionId, $this->_userId, '下一个任务：' . $lastKnowledge->title, Actions::ACTION_TYPE_MSG);
+                Yii::$app->act->add($this->_sessionId, $sessionStageId, $this->_userId, '下一个任务：' . $lastKnowledge->title, Actions::ACTION_TYPE_MSG);
             } catch (\Exception $e) {
                 throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
             }
         } else {
-            Yii::$app->act->add($this->_sessionId, $this->_userId, '任务全部完成啦！', Actions::ACTION_TYPE_ACTION);
+            Yii::$app->act->add($this->_sessionId, $sessionStageId, $this->_userId, '任务全部完成啦！', Actions::ACTION_TYPE_ACTION);
         }
     }
 

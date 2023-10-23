@@ -44,8 +44,10 @@ class Actions extends Action
         $actType = !empty($this->_get['act_type']) ? $this->_get['act_type'] : \common\models\Actions::ACTION_TYPE_MSG;
         $expirationInterval = !empty($this->_get['expiration_interval']) ? $this->_get['expiration_interval'] : 0;
 
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         try {
-            $ret = Yii::$app->act->add($sessionId, $userId, $actDetail, $actType, $expirationInterval);
+            $ret = Yii::$app->act->add($sessionId, $sessionStageId, $userId, $actDetail, $actType, $expirationInterval);
             $msg = '消息成功发送';
         } catch (\Exception $e) {
             $msg = $e->getMessage();
