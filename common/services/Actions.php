@@ -65,4 +65,47 @@ class Actions extends Component
         return $model;
     }
 
+    public function read($sessionId, $toUser, $sessionStageId, $actType = 0, $senderId = 0) {
+
+        $models = \common\models\Actions::find()
+            ->where([
+                'session_id' => $sessionId,
+                'sender_id' => $senderId,
+                'to_user' => $toUser,
+                'session_stage_id' => $sessionStageId,
+                'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
+            ])
+            ->andFilterWhere([
+                'or',
+                ['expire_time' => (int)0],
+                ['>=', 'expire_time', time()],
+            ])
+            ->andFilterWhere([
+                'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL
+            ]);
+
+        if (!empty($models)) {
+            $models->andFilterWhere([
+                'action_type' => $actType,
+            ]);
+        }
+
+        $models = $models->all();
+
+        if (empty($models)) {
+
+            try {
+                foreach ($models as $model) {
+                    $model->action_status = \common\models\Actions::ACTION_STATUS_READ;
+                    $r = $model->save();
+                }
+            } catch (\Exception $e) {
+                Yii::error($e->getMessage());
+                throw $e;
+            }
+        }
+
+        return $model;
+    }
+
 }

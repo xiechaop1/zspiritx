@@ -32,6 +32,7 @@ class Set extends Action
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
+        $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
 
         $knowledgeClassId = !empty($_GET['knowledge_class_id']) ? $_GET['knowledge_class_id'] : \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL;
         $act = !empty($_GET['act']) ? $_GET['act'] : 'completed';
@@ -43,7 +44,7 @@ class Set extends Action
         $userKnowledge = Yii::$app->knowledge->get($knowledgeId, $sessionId, $userId);
 
         if (empty($userKnowledge)) {
-            $userKnowledge = Yii::$app->knowledge->set($knowledgeId, $sessionId, $userId, $storyId, $act);
+            $userKnowledge = Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act);
         }
 
         if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL) {

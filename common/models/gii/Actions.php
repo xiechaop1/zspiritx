@@ -36,7 +36,7 @@ class Actions extends \yii\db\ActiveRecord
     {
         return [
             [['session_id', 'sender_id', 'to_user',
-                'action_type', 'action_status', 'expire_time',
+                'action_type', 'action_status', 'expire_time', 'session_stage_id',
                 'is_delete', 'created_at', 'updated_at'], 'integer'],
             [['action_detail', ], 'string'],
         ];

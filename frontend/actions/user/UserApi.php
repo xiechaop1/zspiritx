@@ -378,10 +378,11 @@ class UserApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
         // 更新任务
         try {
-            Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $userId, $storyId);
+            Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
         } catch (\Exception $e) {
             throw $e;
         }

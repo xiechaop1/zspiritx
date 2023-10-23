@@ -529,6 +529,7 @@ class DoApi extends ApiAction
             'session_id' => $this->_sessionId,
             'user_id' => $this->_userId,
             'story_id' => $this->_storyId,
+            'session_stage_id'  => $sessionStageId,
         ];
 
         foreach ($sessoinStages as $sessionStage) {
@@ -747,7 +748,7 @@ class DoApi extends ApiAction
 
         try {
             foreach ($actions as $tempAct) {
-                if (in_array($tempAct->action_Type, [
+                if (in_array($tempAct->action_type, [
                     Actions::ACTION_TYPE_MSG,
                     Actions::ACTION_TYPE_ACTION,
                 ])) {

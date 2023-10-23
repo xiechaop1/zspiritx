@@ -98,6 +98,9 @@ class Model
         if (!empty($params['session_id'])) {
             $ret = str_replace('{$session_id}', $params['session_id'], $ret);
         }
+        if (!empty($params['session_stage_id'])) {
+            $ret = str_replace('{$session_stage_id}', $params['session_stage_id'], $ret);
+        }
 
         $jsonTmp = json_decode($ret, true);
 

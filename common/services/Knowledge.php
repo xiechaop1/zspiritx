@@ -30,7 +30,7 @@ class Knowledge extends Component
         return $userKnowledge;
     }
 
-    public function set($knowledgeId, $sessionId, $userId, $storyId, $act = 'complete') {
+    public function set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act = 'complete') {
 
         $knowledge = \common\models\Knowledge::findOne($knowledgeId);
 
@@ -74,6 +74,10 @@ class Knowledge extends Component
             if ($act == 'complete') {
                 if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
                     Yii::$app->act->add($sessionId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+
+                    if (!empty($sessionStageId)) {
+                        Yii::$app->act->read($sessionId, $userId, $sessionStageId);
+                    }
                 } else {
                     Yii::$app->act->add($sessionId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 }
@@ -141,7 +145,7 @@ class Knowledge extends Component
         return $userKnowledge;
     }
 
-    public function setByItem($itemId, $itemType, $sessionId, $userId, $storyId) {
+    public function setByItem($itemId, $itemType, $sessionId, $sessionStageId, $userId, $storyId) {
         $itemKnowledgeList = ItemKnowledge::find()
             ->where([
                 'item_id' => $itemId,
@@ -153,7 +157,7 @@ class Knowledge extends Component
 
         if (!empty($itemKnowledgeList)) {
             foreach ($itemKnowledgeList as $itemKnowledge) {
-                $this->set($itemKnowledge['knowledge_id'], $sessionId, $userId, $storyId, $itemKnowledge['knowledge_set_status']);
+                $this->set($itemKnowledge['knowledge_id'], $sessionId, $sessionStageId, $userId, $storyId, $itemKnowledge['knowledge_set_status']);
             }
         }
     }

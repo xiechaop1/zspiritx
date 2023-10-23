@@ -155,6 +155,8 @@ class QaApi extends ApiAction
         $qaId = !empty($this->_get['qa_id']) ? $this->_get['qa_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
 
         if (empty($qa)) {
@@ -198,10 +200,10 @@ class QaApi extends ApiAction
 
             if ($isRight == 1) {
                 if (!empty($qa['knowledge_id'])) {
-                    Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $userId, $qa['story_id'], 'complete');
+                    Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $sessionStageId, $userId, $qa['story_id'], 'complete');
                 }
 
-                Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $userId, $qa['story_id']);
+                Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $sessionStageId, $userId, $qa['story_id']);
 
 //                $itemKnowledgeList = ItemKnowledge::find()
 //                    ->where([
