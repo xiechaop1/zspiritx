@@ -242,10 +242,10 @@ $(function () {
         var isDebug = $('#login_is_debug').val();
         var storyId = $('#login_story_id').val();
         var userId = $('#user_id').val();
-        var isagree = $('#agreement').val();
+        var isagree = $('#agreement').is(':checked');
 
         if (mobile != '1' && isagree == false) {
-            $.alert('请勾选用户协议');
+            alert('请勾选用户协议');
             return false;
         }
 
