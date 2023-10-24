@@ -48,12 +48,14 @@ class QaOne extends Action
 
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
+        $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
 
         return $this->controller->render('qaone', [
             'qa'            => $model,
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
+            'sessionStageId'    => $sessionStageId,
         ]);
     }
 }

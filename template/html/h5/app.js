@@ -25,6 +25,7 @@ $(function () {
         var story_id=that.attr("data-story");
         var user_id=$("input[name='user_id']").val();
         var session_id=$("input[name='session_id']").val();
+        var session_stage_id=$("input[name='session_stage_id']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
         var v_select=$("input[name='answer']:checked").val();
@@ -45,7 +46,8 @@ $(function () {
                     qa_id:qa_id,
                     answer:v_select,
                     story_id:story_id,
-                    session_id:session_id
+                    session_id:session_id,
+                    session_stage_id:session_stage_id
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);

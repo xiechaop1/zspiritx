@@ -34,6 +34,7 @@ $this->title = $qa['topic'];
 </audio>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
+<input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
 <div class="w-100 m-auto">
 
     <div class="p-20 bg-black">
