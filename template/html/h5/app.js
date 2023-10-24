@@ -223,7 +223,7 @@ $(function () {
                     var timer = setInterval(function() {
                         if (time > 0) {
                             time--;
-                            par.find('a').text(time + '秒后重新获取');
+                            par.find('a').text(time);
                         } else {
                             clearInterval(timer);
                             par.find('a').text('获取验证码');
