@@ -76,7 +76,10 @@ class Knowledge extends Component
                     Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
 
 //                    if (!empty($sessionStageId)) {
-                        Yii::$app->act->read($sessionId, $sessionStageId, $userId);
+                        Yii::$app->act->read($sessionId, $sessionStageId, $userId, [
+                            Actions::ACTION_TYPE_ACTION,
+                            Actions::ACTION_TYPE_MSG,
+                        ]);
 //                    }
                 } else {
                     Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
