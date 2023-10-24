@@ -75,9 +75,9 @@ class Knowledge extends Component
                 if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
                     Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
 
-                    if (!empty($sessionStageId)) {
+//                    if (!empty($sessionStageId)) {
                         Yii::$app->act->read($sessionId, $sessionStageId, $userId);
-                    }
+//                    }
                 } else {
                     Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 }

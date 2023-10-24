@@ -74,7 +74,7 @@ class Actions extends Component
                 'session_id' => $sessionId,
                 'sender_id' => $senderId,
                 'to_user' => $toUser,
-                'session_stage_id' => $sessionStageId,
+//                'session_stage_id' => $sessionStageId,
                 'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
             ])
             ->andFilterWhere([
@@ -86,8 +86,14 @@ class Actions extends Component
                 'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL
             ]);
 
-        if (!empty($models)) {
-            $models->andFilterWhere([
+        if (!empty($sessionStageId)) {
+            $models = $models->andFilterWhere([
+                'session_stage_id'  => $sessionStageId,
+            ]);
+        }
+
+        if (!empty($actType)) {
+            $models = $models->andFilterWhere([
                 'action_type' => $actType,
             ]);
         }
