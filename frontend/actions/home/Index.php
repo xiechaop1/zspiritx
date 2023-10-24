@@ -31,12 +31,19 @@ class Index extends Action
         $image = 'img/home/index_image.jpg';
         $image = Attachment::completeUrl($image, true);
 
+        $banner = [
+            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
+            'taoranting' => Attachment::completeUrl('img/home/taoranting1.jpg', true),
+            'senlin' => Attachment::completeUrl('img/home/index_image.jpg', true),
+        ];
+
         $userId = !empty($_SESSION['user_info']['id']) ? $_SESSION['user_info']['id'] : 0;
 
         return $this->controller->render('index', [
             'userId'    => $userId,
             'voice' => '',
             'image' => $image,
+            'banner' => $banner,
         ]);
     }
 }
