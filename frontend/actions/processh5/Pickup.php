@@ -43,6 +43,8 @@ class Pickup extends Action
 
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
+        $knowledgeId = !empty($this->_get['knowledge_id']) ? $this->_get['knowledge_id'] : 0;
+
         $needAction = !empty($this->_get['need_action']) ? $this->_get['need_action'] : 0;
         $actDetail = !empty($this->_get['act_detail']) ? $this->_get['act_detail'] : 0;
         $actType = !empty($this->_get['act_type']) ? $this->_get['act_type'] : \common\models\Actions::ACTION_TYPE_MSG;
@@ -138,6 +140,10 @@ class Pickup extends Action
 
             $storyModelName = !empty($storyModel->story_model_name) ? $storyModel->story_model_name : $storyModel->model->model_name;
             $msg = '您成功获取了 ' . $storyModelName;
+
+            if (!empty($knowledgeId)) {
+                Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId);
+            }
 
             if ($needAction == '1') {
                 if ($actType == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
