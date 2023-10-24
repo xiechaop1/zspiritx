@@ -100,7 +100,7 @@ class Actions extends Component
 
         $models = $models->all();
 
-        if (empty($models)) {
+        if (!empty($models)) {
 
             try {
                 foreach ($models as $model) {
