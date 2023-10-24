@@ -75,7 +75,7 @@ class Actions extends Component
                 'sender_id' => $senderId,
                 'to_user' => $toUser,
 //                'session_stage_id' => $sessionStageId,
-                'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
+//                'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
             ])
             ->andFilterWhere([
                 'or',
