@@ -11,7 +11,9 @@ namespace frontend\actions\user;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\models\Actions;
 use common\models\ItemKnowledge;
+use common\models\StoryStages;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
 use common\models\UserList;
@@ -380,8 +382,21 @@ class UserApi extends ApiAction
         $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
+        $storyStage = StoryStages::find()
+            ->where([
+                'id'    => $storyStageId
+            ])
+            ->one();
+
+        if (!empty($storyStage)) {
+            $stageName = $storyStage->stage_name;
+        } else {
+            $stageName = '未知之地';
+        }
+
         // 更新任务
         try {
+            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
             Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
         } catch (\Exception $e) {
             throw $e;
