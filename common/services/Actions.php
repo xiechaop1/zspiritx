@@ -86,10 +86,13 @@ class Actions extends Component
                 'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL
             ]);
 
+        $noSessionStage = false;
         if (!empty($sessionStageId)) {
             $models = $models->andFilterWhere([
                 'session_stage_id'  => $sessionStageId,
             ]);
+        } else {
+            $noSessionStage = true;
         }
 
         if (!empty($actType)) {
@@ -104,6 +107,9 @@ class Actions extends Component
 
             try {
                 foreach ($models as $model) {
+                    if ($noSessionStage && $model->action_type == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
+                        continue;
+                    }
                     $model->action_status = \common\models\Actions::ACTION_STATUS_READ;
                     $r = $model->save();
                 }
