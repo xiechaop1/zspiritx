@@ -107,7 +107,7 @@ class Actions extends Component
             }
         }
 
-        return $model;
+        return $models;
     }
 
 }
