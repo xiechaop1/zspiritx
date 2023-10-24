@@ -67,7 +67,7 @@ class Actions extends Component
         return $model;
     }
 
-    public function read($sessionId, $toUser, $sessionStageId, $actType = 0, $senderId = 0) {
+    public function read($sessionId, $sessionStageId, $toUser, $actType = 0, $senderId = 0) {
 
         $models = \common\models\Actions::find()
             ->where([
