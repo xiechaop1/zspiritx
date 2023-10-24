@@ -109,7 +109,7 @@ class Finish extends Action
 
             $this->_params['user_story'] = $userStory;
 
-            Yii::$app->act->add($sessionId,$sessionStageId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
+            Yii::$app->act->add($sessionId,$sessionStageId, $storyId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
 
             $transaction->commit();
         } catch (\Exception $e) {

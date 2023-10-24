@@ -317,7 +317,7 @@ class DoApi extends ApiAction
             }
             $userKnowledge->save();
 
-            Yii::$app->act->add((int)$this->_userSessionInfo['id'], $firstSessionStageId, (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
+            Yii::$app->act->add((int)$this->_userSessionInfo['id'], $firstSessionStageId, (int)$this->_storyId, (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
 
 
             $transaction->commit();
@@ -397,10 +397,10 @@ class DoApi extends ApiAction
 
             if ($this->_checkSessionRole()) {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
-                Yii::$app->act->add($this->_sessionId, 0, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, $this->_storyId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
             } else {
                 $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
-                Yii::$app->act->add($this->_sessionId, 0, 0, '新玩家加入', Actions::ACTION_TYPE_ACTION);
+                Yii::$app->act->add($this->_sessionId, 0, $this->_storyId, 0, '新玩家加入', Actions::ACTION_TYPE_ACTION);
             }
 
             $this->_sessionInfo->save();
@@ -468,7 +468,7 @@ class DoApi extends ApiAction
             }
             $ret = $userStory->save();
 
-            Yii::$app->act->add($this->_sessionId, $sessionStageId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
+            Yii::$app->act->add($this->_sessionId, $sessionStageId, $this->_storyId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
 
             $transaction->commit();
         } catch (\Exception $e) {

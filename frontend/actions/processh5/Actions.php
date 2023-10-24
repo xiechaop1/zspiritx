@@ -47,7 +47,7 @@ class Actions extends Action
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
         try {
-            $ret = Yii::$app->act->add($sessionId, $sessionStageId, $userId, $actDetail, $actType, $expirationInterval);
+            $ret = Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $actDetail, $actType, $expirationInterval);
             $msg = '消息成功发送';
         } catch (\Exception $e) {
             $msg = $e->getMessage();

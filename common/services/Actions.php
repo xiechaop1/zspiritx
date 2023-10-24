@@ -20,7 +20,7 @@ use yii;
 class Actions extends Component
 {
 
-    public function add($sessionId, $sessionStageId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
+    public function add($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
 
         if ($expirationInterval > 0) {
             $expireTime = time() + $expirationInterval;
@@ -33,14 +33,14 @@ class Actions extends Component
         if ($actType == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
             $stageUId = $actDetail;
 
-            $session = Session::find()
-                ->where(['id' => $sessionId])
-                ->one();
-
-            if (!empty($session)) {
+//            $session = Session::find()
+//                ->where(['id' => $sessionId])
+//                ->one();
+//
+//            if (!empty($session)) {
                 $storyStage = StoryStages::find()
                     ->where([
-                        'story_id' => $session->story_id,
+                        'story_id' => $storyId,
                         'stage_u_id' => $stageUId,
                     ])
                     ->one();
@@ -49,7 +49,7 @@ class Actions extends Component
                         ->where([
                             'session_id' => $sessionId,
                             'story_stage_id' => $storyStage->id,
-                            'story_id' => $session->story_id,
+                            'story_id' => $storyId,
                         ])
                         ->one();
 
@@ -57,7 +57,7 @@ class Actions extends Component
                         $sessionStageId = $sessionStage->id;
                     }
                 }
-            }
+//            }
 
         }
 

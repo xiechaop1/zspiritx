@@ -143,7 +143,7 @@ class Pickup extends Action
                 if ($actType == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
                     Yii::$app->act->read($sessionId, $sessionStageId, $userId, $actType);
                 }
-                $ret = Yii::$app->act->add($sessionId, $sessionStageId, $userId, $actDetail, $actType, $expirationInterval);
+                $ret = Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $actDetail, $actType, $expirationInterval);
             }
 
         } catch (\Exception $e) {
