@@ -85,8 +85,9 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'model_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->model->model_name) ?
+                            $modelName = !empty($model->model->model_name) ?
                                 $model->model->model_name : '未知';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
                         },
                     ],
                     [

@@ -28,6 +28,13 @@ $this->registerMetaTag([
 $this->title = '知识库';
 
 ?>
+<style>
+    impo {
+        font-weight: bold;
+        font-size: 24px;
+        color: red;
+    }
+</style>
 
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
