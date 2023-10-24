@@ -244,7 +244,7 @@ $(function () {
         var userId = $('#user_id').val();
         var isagree = $('#agreement').is(':checked');
 
-        if (mobile != '1' && isagree == false) {
+        if (mobile.length > 3 && isagree == false) {
             alert('请勾选用户协议');
             return false;
         }
