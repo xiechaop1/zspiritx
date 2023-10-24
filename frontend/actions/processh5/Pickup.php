@@ -140,6 +140,9 @@ class Pickup extends Action
             $msg = '您成功获取了 ' . $storyModelName;
 
             if ($needAction == '1') {
+                if ($actType == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
+                    Yii::$app->act->read($sessionId, $sessionStageId, $userId, $actType);
+                }
                 $ret = Yii::$app->act->add($sessionId, $sessionStageId, $userId, $actDetail, $actType, $expirationInterval);
             }
 

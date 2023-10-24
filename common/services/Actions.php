@@ -9,6 +9,9 @@
 namespace common\services;
 
 
+use common\models\Session;
+use common\models\SessionStages;
+use common\models\StoryStages;
 use common\services\Curl;
 use common\models\User;
 use yii\base\Component;
@@ -25,6 +28,39 @@ class Actions extends Component
             $expireTime = 0;
         }
 
+        // 如果类型是转场
+        // $sessionStageId 获取为新StageID
+        if ($actType == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
+            $stageUId = $actDetail;
+
+            $session = Session::find()
+                ->where(['id' => $sessionId])
+                ->one();
+
+            if (!empty($session)) {
+                $storyStage = StoryStages::find()
+                    ->where([
+                        'story_id' => $session->story_id,
+                        'stage_u_id' => $stageUId,
+                    ])
+                    ->one();
+                if (!empty($storyStage)) {
+                    $sessionStage = SessionStages::find()
+                        ->where([
+                            'session_id' => $sessionId,
+                            'story_stage_id' => $storyStage->id,
+                            'story_id' => $session->story_id,
+                        ])
+                        ->one();
+
+                    if (!empty($sessionStage)) {
+                        $sessionStageId = $sessionStage->id;
+                    }
+                }
+            }
+
+        }
+
         $model = \common\models\Actions::find()
         ->where([
             'session_id' => $sessionId,
@@ -33,7 +69,7 @@ class Actions extends Component
             'to_user' => $toUser,
             'action_type' => $actType,
             'action_detail' => $actDetail,
-            'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
+//            'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
         ])
             ->andFilterWhere([
                 'or',
@@ -107,9 +143,9 @@ class Actions extends Component
 
             try {
                 foreach ($models as $model) {
-                    if ($noSessionStage && $model->action_type == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
-                        continue;
-                    }
+//                    if ($noSessionStage && $model->action_type == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
+//                        continue;
+//                    }
                     $model->action_status = \common\models\Actions::ACTION_STATUS_READ;
                     $r = $model->save();
                 }
