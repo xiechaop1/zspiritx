@@ -109,6 +109,16 @@ class KnowledgeApi extends ApiAction
                 $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
             }
             $userKnowledge->save();
+
+            if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                Yii::$app->act->add($this->_sessionId, $sessionStageId, $this->_userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+
+                if (!empty($sessionStageId)) {
+                    Yii::$app->act->read($this->_sessionId, $sessionStageId, $this->_userId);
+                }
+            } else {
+                Yii::$app->act->add($this->_sessionId, $sessionStageId, $this->_userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+            }
         } catch (\Exception $e) {
             throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
         }
