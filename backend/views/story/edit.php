@@ -47,11 +47,11 @@ echo \dmstr\widgets\Alert::widget();
                 'options' => ['value' => $storyModel->thumbnail],
 //                'directory' => 'cover/' . Date('Y/m/')
             ])->label('缩略图');
-            echo $form->field($storyModel, 'image')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+            echo $form->field($storyModel, 'cover_image')->widget('\liyifei\uploadOSS\FileUploadOSS', [
                 'multiple' => false,
                 'isImage' => true,
                 'ossHost' => Yii::$app->params['oss.host'],
-                'signatureAction' => ['/site/oss-signature?dir=story/image/' . Date('Y/m/')],
+                'signatureAction' => ['/site/oss-signature?dir=story/cover_image/' . Date('Y/m/')],
                 'clientOptions' => ['autoUpload' => true],
                 'options' => ['value' => $storyModel->thumbnail],
 //                'directory' => 'cover/' . Date('Y/m/')
