@@ -45,7 +45,7 @@ $this->title = $qa['topic'];
                         问题
                     </div>
                     <div class="npc-name" style="right: 60px;" id="return_btn">
-                        关闭
+                        X
                     </div>
                      <?= $qa['topic'] ?>
                     <div>
