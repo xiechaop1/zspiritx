@@ -131,12 +131,12 @@ class Knowledge extends Component
                         ) {
                             $nextMission = $nextKnowledge;
                         } else {
-                            Yii::$app->act->add($sessionId, $sessionStageId, $userId, '您获得了知识：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
+                            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $nextKnowledge->title, Actions::ACTION_TYPE_MSG);
                         }
                     }
 
                     if (!empty($nextMission)) {
-                        Yii::$app->act->add($sessionId, $sessionStageId, $userId, '下一个任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
+                        Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '开启任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
                     }
                 } catch (\Exception $e) {
                     throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
