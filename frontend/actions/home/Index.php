@@ -41,6 +41,7 @@ class Index extends Action
 
         $stories = Story::find()
             ->where(['story_status' => Story::STORY_STATUS_ONLINE])
+            ->orderBy(['sort_by' => SORT_ASC])
             ->all();
 
         return $this->controller->render('index', [

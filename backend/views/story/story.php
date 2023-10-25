@@ -88,6 +88,7 @@ echo \dmstr\widgets\Alert::widget();
                     ['attribute' => 'persons_ct', 'label' => '参与人数'],
                     ['attribute' => 'roles_ct', 'label' => '角色数'],
                     ['attribute' => 'is_debug', 'label' => '是否测试'],
+                    ['attribute' => 'sort_by', 'label' => '排序'],
                     [
                         'label' => '剧本状态',
                         'format' => 'raw',
