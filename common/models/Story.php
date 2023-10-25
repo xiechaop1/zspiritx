@@ -22,6 +22,14 @@ class Story extends \common\models\gii\Story
         self::STORY_TYPE_RUNNING    => '跑团剧本',
     ];
 
+    const STORY_STATUS_ONLINE  = 1; // 上架
+    const STORY_STATUS_OFFLINE = 0; // 下架
+
+    public static $storyStatus2Name = [
+        self::STORY_STATUS_ONLINE  => '上架',
+        self::STORY_STATUS_OFFLINE => '下架',
+    ];
+
     public function behaviors()
     {
         return [

@@ -73,7 +73,7 @@ echo \dmstr\widgets\Alert::widget();
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
-                            'qa_type',
+                            'story_type',
                             $storyTypes, ["class" => "form-control ", 'value' => !empty($params['Story']['story_type']) ? $params['Story']['story_type'] : '']),
                         'value' => function ($model) {
 
@@ -87,7 +87,24 @@ echo \dmstr\widgets\Alert::widget();
                     ],
                     ['attribute' => 'persons_ct', 'label' => '参与人数'],
                     ['attribute' => 'roles_ct', 'label' => '角色数'],
+                    ['attribute' => 'is_debug', 'label' => '是否测试'],
+                    [
+                        'label' => '剧本状态',
+                        'format' => 'raw',
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'story_status',
+                            \common\models\Story::$storyStatus2Name, ["class" => "form-control ", 'value' => !empty($params['Story']['story_status']) ? $params['Story']['story_status'] : '']),
+                        'value' => function ($model) {
 
+                            $ret = !empty(\common\models\Story::$storyStatus2Name[$model->story_status])
+                                ? \common\models\Story::$storyStatus2Name[$model->story_status]
+                                : '未知';
+
+                            return $ret;
+
+                        }
+                    ],
                     [
                         'label' => '创建时间',
                         'format' => 'raw',

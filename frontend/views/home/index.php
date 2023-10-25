@@ -34,27 +34,34 @@ $this->title = 'AR剧本杀';
 <input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>">
 
 <div class="owl-carousel owl-theme" id="banner">
+  <?php
+  if (!empty($stories)) {
+    foreach ($stories as $story) {
+
+  ?>
   <div class="item">
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
 
-    <input type="hidden" name="isDebug" value="0">
-    <input type="hidden" name="storyId" value="3">
+    <input type="hidden" name="isDebug" value="<?= $story->is_debug ?>">
+    <input type="hidden" name="storyId" value="<?= $story->id ?>">
 
-    <img decoding="async"  src="<?= $banner['zhuluoji'] ?>" alt="First slide" class="img-w-100">
+    <img decoding="async"  src="<?= $story->cover_image ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
       <div class="text-bg">
       </div>
       <div class='p-l-40'>
         <div class="fs-30 bold w-100 text-FF">
-          侏罗纪-时间裂痕
+          <?= $story->title ?>
+<!--          侏罗纪-时间裂痕-->
         </div>
         <div class="fs-24  w-100 text-FF m-t-30">
-          <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：凯德茂·大峡谷</span><br>
+          <?= $story->desc ?>
+          <!-- <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：凯德茂·大峡谷</span><br>
           在大峡谷内，忽然产生了一段奇妙的故事。<br>
           因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。
           <br>
           他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>
-          传说只要集齐5颗宝石，就可以让他们穿越回去并且修复裂痕！ 冒险家，需要你们的帮助，去收集这些宝石了
+          传说只要集齐5颗宝石，就可以让他们穿越回去并且修复裂痕！ 冒险家，需要你们的帮助，去收集这些宝石了 -->
         </div>
         <div class="btn-m-green m-t-30 float-right m-r-20">
           进入游戏
@@ -63,111 +70,109 @@ $this->title = 'AR剧本杀';
       </div>
     </div>
   </div>
-  <div class="item">
-    <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
+  <?php
 
-    <input type="hidden" name="isDebug" value="1">
-    <input type="hidden" name="storyId" value="3">
-
-    <img decoding="async"  src="<?= $banner['zhuluoji'] ?>" alt="First slide" class="img-w-100">
-    <div class="text-content">
-      <div class="text-bg">
-      </div>
-      <div class='p-l-40'>
-        <div class="fs-30 bold w-100 text-FF">
-          侏罗纪-时间裂痕（场内测试）
-        </div>
-        <div class="fs-24  w-100 text-FF m-t-30">
-          <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：凯德茂·大峡谷</span><br>
-          在大峡谷内，忽然产生了一段奇妙的故事。<br>
-          因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。
-          <br>
-          他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>
-          传说只要集齐七颗水晶，就可以让他们穿越回去并且修复裂痕而！<br>
-          冒险家，需要你们的帮助，去收集这些水晶了
-        </div>
-        <div class="btn-m-green m-t-30 float-right m-r-20">
-          进入游戏
-          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="item">
-    <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
-
-    <input type="hidden" name="isDebug" value="0">
-    <input type="hidden" name="storyId" value="2">
-
-    <img decoding="async"  src="<?= $banner['taoranting'] ?>" alt="First slide" class="img-w-100">
-    <div class="text-content">
-      <div class="text-bg">
-      </div>
-      <div class='p-l-40'>
-        <div class="fs-30 bold w-100 text-FF">
-          陶然亭文化之旅
-        </div>
-        <div class="fs-24  w-100 text-FF m-t-30">
-          <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：陶然亭</span><br>
-          看看是谁来了，一位坠入梦境的旅人。<br>
-          去寻找属于你的山海残卷吧~
-        </div>
-        <div class="btn-m-green m-t-30 float-right m-r-20">
-          进入游戏
-          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="item">
-    <input type="hidden" name="isDebug" value="0">
-    <input type="hidden" name="storyId" value="1">
-    <!-- Unity.call('WebViewOff&StartARScene'); -->
-    <img decoding="async"  src="<?= $banner['senlin'] ?>" alt="First slide" class="img-w-100">
-    <div class="text-content">
-      <div class="text-bg">
-      </div>
-      <div class='p-l-40'>
-        <div class="fs-30 bold w-100 text-FF">
-          森林守护者
-        </div>
-        <div class="fs-24  w-100 text-FF m-t-30">
-          通过千⾟万苦，你踏进传说中的知识森林，感受到森林的神秘和宁静。这⾥的空⽓清新，阳光透过树叶投下斑驳的光影。<br>
-          你来此的⽬的正是为了寻找拥有渊博智慧的森林守护者，向他请教有关于保护环境的⽅法。根据位置提⽰去寻找他吧，在路上遇到的动物们会与你交流，引导你思考和学习。你不仅能得到宝贵的知识财富，说不定还能和他们成为朋友~
-        </div>
-        <div class="btn-m-green m-t-30 float-right m-r-20">
-          进入游戏
-          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="item">
-    <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
-
-    <input type="hidden" name="isDebug" value="1">
-    <input type="hidden" name="storyId" value="1">
-
-    <img decoding="async"  src="<?= $banner['senlin'] ?>" alt="First slide" class="img-w-100">
-    <div class="text-content">
-      <div class="text-bg">
-      </div>
-      <div class='p-l-40'>
-        <div class="fs-30 bold w-100 text-FF">
-          森林守护者
-        </div>
-        <div class="fs-24  w-100 text-FF m-t-30">
-          通过千⾟万苦，你踏进传说中的知识森林，感受到森林的神秘和宁静。这⾥的空⽓清新，阳光透过树叶投下斑驳的光影。<br>
-          你来此的⽬的正是为了寻找拥有渊博智慧的森林守护者，向他请教有关于保护环境的⽅法。根据位置提⽰去寻找他吧，在路上遇到的动物们会与你交流，引导你思考和学习。你不仅能得到宝贵的知识财富，说不定还能和他们成为朋友~
-        </div>
-        <div class="btn-m-green m-t-30 float-right m-r-20">
-          进入游戏
-          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
-        </div>
-      </div>
-    </div>
-  </div>
+    }
+  }
+  ?>
+<!--  <div class="item">-->
+<!--    <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->-->
+<!---->
+<!--    <input type="hidden" name="isDebug" value="1">-->
+<!--    <input type="hidden" name="storyId" value="3">-->
+<!---->
+<!--    <img decoding="async"  src="--><?php //= $banner['zhuluoji'] ?><!--" alt="First slide" class="img-w-100">-->
+<!--    <div class="text-content">-->
+<!--      <div class="text-bg">-->
+<!--      </div>-->
+<!--      <div class='p-l-40'>-->
+<!--        <div class="fs-30 bold w-100 text-FF">-->
+<!--          侏罗纪-时间裂痕（场内测试）-->
+<!--        </div>-->
+<!--        <div class="fs-24  w-100 text-FF m-t-30">-->
+<!--          <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：凯德茂·大峡谷</span><br>-->
+<!--          在大峡谷内，忽然产生了一段奇妙的故事。<br>-->
+<!--          因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。-->
+<!--          <br>-->
+<!--          他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>-->
+<!--          传说只要集齐七颗水晶，就可以让他们穿越回去并且修复裂痕而！<br>-->
+<!--          冒险家，需要你们的帮助，去收集这些水晶了-->
+<!--        </div>-->
+<!--        <div class="btn-m-green m-t-30 float-right m-r-20">-->
+<!--          进入游戏-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="item">-->
+<!---->
+<!--    <input type="hidden" name="isDebug" value="0">-->
+<!--    <input type="hidden" name="storyId" value="2">-->
+<!---->
+<!--    <img decoding="async"  src="--><?php //= $banner['taoranting'] ?><!--" alt="First slide" class="img-w-100">-->
+<!--    <div class="text-content">-->
+<!--      <div class="text-bg">-->
+<!--      </div>-->
+<!--      <div class='p-l-40'>-->
+<!--        <div class="fs-30 bold w-100 text-FF">-->
+<!--          陶然亭文化之旅-->
+<!--        </div>-->
+<!--        <div class="fs-24  w-100 text-FF m-t-30">-->
+<!--          <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：陶然亭</span><br>-->
+<!--          看看是谁来了，一位坠入梦境的旅人。<br>-->
+<!--          去寻找属于你的山海残卷吧~-->
+<!--        </div>-->
+<!--        <div class="btn-m-green m-t-30 float-right m-r-20">-->
+<!--          进入游戏-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!---->
+<!--  <div class="item">-->
+<!--    <input type="hidden" name="isDebug" value="0">-->
+<!--    <input type="hidden" name="storyId" value="1">-->
+<!--    <img decoding="async"  src="--><?php //= $banner['senlin'] ?><!--" alt="First slide" class="img-w-100">-->
+<!--    <div class="text-content">-->
+<!--      <div class="text-bg">-->
+<!--      </div>-->
+<!--      <div class='p-l-40'>-->
+<!--        <div class="fs-30 bold w-100 text-FF">-->
+<!--          森林守护者-->
+<!--        </div>-->
+<!--        <div class="fs-24  w-100 text-FF m-t-30">-->
+<!--          通过千⾟万苦，你踏进传说中的知识森林，感受到森林的神秘和宁静。这⾥的空⽓清新，阳光透过树叶投下斑驳的光影。<br>-->
+<!--          你来此的⽬的正是为了寻找拥有渊博智慧的森林守护者，向他请教有关于保护环境的⽅法。根据位置提⽰去寻找他吧，在路上遇到的动物们会与你交流，引导你思考和学习。你不仅能得到宝贵的知识财富，说不定还能和他们成为朋友~-->
+<!--        </div>-->
+<!--        <div class="btn-m-green m-t-30 float-right m-r-20">-->
+<!--          进入游戏-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="item">-->
+<!---->
+<!--    <input type="hidden" name="isDebug" value="1">-->
+<!--    <input type="hidden" name="storyId" value="1">-->
+<!---->
+<!--    <img decoding="async"  src="--><?php //= $banner['senlin'] ?><!--" alt="First slide" class="img-w-100">-->
+<!--    <div class="text-content">-->
+<!--      <div class="text-bg">-->
+<!--      </div>-->
+<!--      <div class='p-l-40'>-->
+<!--        <div class="fs-30 bold w-100 text-FF">-->
+<!--          森林守护者-->
+<!--        </div>-->
+<!--        <div class="fs-24  w-100 text-FF m-t-30">-->
+<!--          通过千⾟万苦，你踏进传说中的知识森林，感受到森林的神秘和宁静。这⾥的空⽓清新，阳光透过树叶投下斑驳的光影。<br>-->
+<!--          你来此的⽬的正是为了寻找拥有渊博智慧的森林守护者，向他请教有关于保护环境的⽅法。根据位置提⽰去寻找他吧，在路上遇到的动物们会与你交流，引导你思考和学习。你不仅能得到宝贵的知识财富，说不定还能和他们成为朋友~-->
+<!--        </div>-->
+<!--        <div class="btn-m-green m-t-30 float-right m-r-20">-->
+<!--          进入游戏-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
   <div class="item">
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
 

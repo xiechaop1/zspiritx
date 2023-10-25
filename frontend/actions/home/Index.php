@@ -39,8 +39,13 @@ class Index extends Action
 
         $userId = !empty($_SESSION['user_info']['id']) ? $_SESSION['user_info']['id'] : 0;
 
+        $stories = Story::find()
+            ->where(['story_status' => Story::STORY_STATUS_ONLINE])
+            ->all();
+
         return $this->controller->render('index', [
             'userId'    => $userId,
+            'stories'   => $stories,
             'voice' => '',
             'image' => $image,
             'banner' => $banner,

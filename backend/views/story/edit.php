@@ -59,6 +59,13 @@ echo \dmstr\widgets\Alert::widget();
 
             echo $form->field($storyModel, 'persons_ct')->textInput(['value' => $storyModel->persons_ct])->label('人数');
             echo $form->field($storyModel, 'roles_ct')->textInput(['value' => $storyModel->roles_ct])->label('角色数');
+            echo $form->field($storyModel, 'is_debug')->textInput(['value' => $storyModel->is_debug])->label('是否测试');
+            echo $form->field($storyModel, 'story_status')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Story::$storyStatus2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('剧本状态');
 
             ?>
 
