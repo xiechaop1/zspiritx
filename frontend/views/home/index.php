@@ -45,7 +45,7 @@ $this->title = 'AR剧本杀';
     <input type="hidden" name="isDebug" value="<?= $story->is_debug ?>">
     <input type="hidden" name="storyId" value="<?= $story->id ?>">
 
-    <img decoding="async"  src="<?= $story->cover_image ?>" alt="First slide" class="img-w-100">
+    <img decoding="async"  src="<?= \common\helpers\Attachment::completeUrl($story->cover_image) ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
       <div class="text-bg">
       </div>
