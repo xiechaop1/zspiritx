@@ -44,6 +44,9 @@ $this->title = $qa['topic'];
                     <div class="npc-name">
                         问题
                     </div>
+                    <div class="npc-name" style="right: 60px;" id="return_btn">
+                        关闭
+                    </div>
                      <?= $qa['topic'] ?>
                     <div>
                      <img src=" <?= $qa['attachment'] ?>" alt="" class="img-responsive d-block"/>
