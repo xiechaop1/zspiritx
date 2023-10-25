@@ -44,7 +44,7 @@ $this->title = '知识库';
         <a href="/myh5/my?user_id=<?=$userId?>&session_id=<?=$sessionId?>&story_id=<?=$storyId?>">上一页</a>
     </div>
     <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
-        退出
+        返回
     </div>
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
