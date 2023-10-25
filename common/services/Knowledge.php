@@ -75,7 +75,9 @@ class Knowledge extends Component
                 if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
 
 //                    if (!empty($sessionStageId)) {
-                        Yii::$app->act->read($sessionId, $sessionStageId, $userId, [
+                    // $sessionStageId
+                    // $sessionStageId 变量先提出来，用0全覆盖试试，要不总是有很多漏网数据不能被read，就还提示出来
+                        Yii::$app->act->read($sessionId, 0, $userId, [
                             Actions::ACTION_TYPE_ACTION,
                             Actions::ACTION_TYPE_MSG,
                         ]);
