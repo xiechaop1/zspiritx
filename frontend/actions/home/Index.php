@@ -11,6 +11,7 @@ namespace frontend\actions\home;
 
 use common\definitions\Common;
 use common\helpers\Attachment;
+use common\helpers\Cookie;
 use common\models\Story;
 use yii\base\Action;
 use kartik\form\ActiveForm;
@@ -27,17 +28,23 @@ class Index extends Action
     
     public function run()
     {
+//var_dump($_SESSION);
 
         $image = 'img/home/index_image.jpg';
         $image = Attachment::completeUrl($image, true);
 
-        $banner = [
-            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
-            'taoranting' => Attachment::completeUrl('img/home/taoranting1.jpg', true),
-            'senlin' => Attachment::completeUrl('img/home/index_image.jpg', true),
-        ];
+//        $banner = [
+//            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
+//            'taoranting' => Attachment::completeUrl('img/home/taoranting1.jpg', true),
+//            'senlin' => Attachment::completeUrl('img/home/index_image.jpg', true),
+//        ];
 
-        $userId = !empty($_SESSION['user_info']['id']) ? $_SESSION['user_info']['id'] : 0;
+//        $userId = !empty($_SESSION['user_info']['id']) ? $_SESSION['user_info']['id'] : 0;
+
+        $userId = Cookie::getCookie('user_id');
+        if (empty($userId)) {
+            header('Location: /passport/weblogin');
+        }
 
         $stories = Story::find()
             ->where(['story_status' => Story::STORY_STATUS_ONLINE])
@@ -49,7 +56,7 @@ class Index extends Action
             'stories'   => $stories,
             'voice' => '',
             'image' => $image,
-            'banner' => $banner,
+//            'banner' => $banner,
         ]);
     }
 }

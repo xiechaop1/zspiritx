@@ -11,6 +11,7 @@ namespace frontend\actions\user;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\helpers\Cookie;
 use common\models\Actions;
 use common\models\ItemKnowledge;
 use common\models\StoryStages;
@@ -171,6 +172,7 @@ class UserApi extends ApiAction
         }
 
         $_SESSION['user_info'] = $userInfo;
+        Cookie::setCookie('user_id', $userInfo['id'], 3600 * 24 * 30);
 
         return $userInfo;
     }
