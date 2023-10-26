@@ -338,10 +338,13 @@ $(function () {
         // });
     }
 
-    $(document).ready(function() {
-        setInterval(getPoi(),200)
 
-    });
+    setInterval(getPoi(),500);
+
+    // $(document).ready(function() {
+    //     setInterval(getPoi(),200)
+    //
+    // });
 });
 
 /*function getLocation(lat,lng){
