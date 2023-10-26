@@ -181,7 +181,9 @@ $(function () {
                 $.alert("网络异常，请检查网络情况");
             },
             success: function (data, status){
-                //console.log("ajax请求成功:"+data.toString())
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //新消息获取成功
                 if(obj["code"]==200){
                     location.href='/passport/web_login';
