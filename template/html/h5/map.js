@@ -285,8 +285,8 @@ $(function () {
 
                 //新消息获取成功
                 if(obj["code"]==200){
-                    var lat=obj.data[0].lat;
-                    var lng=obj.data[0].lng;
+                    var lat=obj.data.lat;
+                    var lng=obj.data.lng;
 
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         map.setCenter([lng, lat]);
