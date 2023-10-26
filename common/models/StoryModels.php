@@ -25,7 +25,7 @@ class StoryModels extends \common\models\gii\StoryModels
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE => '随机平面',
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE_AFTER_SCAN => '扫描后随机平面',
         self::SCAN_IMAGE_TYPE_FIX_PLANE_AFTER_SCAN => '扫描后固定平面',
-        self::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_AFTER_SCAN => '随机在用户周围放置',
+        self::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_AFTER_SCAN => '扫描后随机在用户周围放置',
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG => '经纬度随机平面',
         self::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG => '经纬度固定平面',
         self::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_LATLNG => '经纬度随机在用户周围放置',
