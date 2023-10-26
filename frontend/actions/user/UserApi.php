@@ -58,6 +58,9 @@ class UserApi extends ApiAction
                 case 'login_and_reg_by_mobile':
                     $ret = $this->loginAndRegByMobile();
                     break;
+                case 'logout':
+                    $ret = $this->logout();
+                    break;
                 case 'update_user':
                     $this->valToken();
                     $ret = $this->updateUser();
@@ -130,6 +133,12 @@ class UserApi extends ApiAction
         $_SESSION['user_info'] = $userInfo;
 
         return $userInfo;
+    }
+
+    public function logout() {
+        Cookie::unsetCookie('user_id');
+
+        return true;
     }
 
     public function loginAndRegByMobile() {

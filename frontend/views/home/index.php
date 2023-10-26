@@ -70,7 +70,10 @@ $this->title = 'AR剧本杀';
           他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>
           传说只要集齐5颗宝石，就可以让他们穿越回去并且修复裂痕！ 冒险家，需要你们的帮助，去收集这些宝石了 -->
         </div>
-        <div class="btn-m-green m-t-30 float-right m-r-20">
+        <div class="btn-m-green m-t-30 float-right m-r-20 logout_btn">
+          退出
+        </div>
+        <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
           <?php
           if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED) {
             echo '进入游戏';

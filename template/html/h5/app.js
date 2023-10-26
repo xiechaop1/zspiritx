@@ -169,9 +169,34 @@ $(function () {
         // }
     })
 
+    $(".owl-carousel .logout_btn").click(function() {
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/user/logout',
+            data:{},
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                //console.log("ajax请求成功:"+data.toString())
+                //新消息获取成功
+                if(obj["code"]==200){
+                    location.href='/passport/web_login';
+                }
+                //新消息获取失败
+                else{
+                    alert(obj.msg)
+                }
 
-    $(".owl-carousel .item").click(function() {
-        var t = $(this);
+            }
+        });
+
+    });
+    $(".owl-carousel .play_btn").click(function() {
+        var t = $(this).parent().parent().parent();
         var isDebug = t.find("input[name='isDebug']").val();
         var storyId = t.find("input[name='storyId']").val();
         var userId = $('#user_id').val();
@@ -213,6 +238,7 @@ $(function () {
                                 'StoryId': storyId
                             }
                             var data=$.toJSON(params);
+                            console.log(data);
                             Unity.call(data);
                         } else {
                             // 执行支付唤醒
@@ -238,6 +264,7 @@ $(function () {
                 'StoryId': storyId
             }
             var data=$.toJSON(params);
+            console.log(data);
             Unity.call(data);
         } else {
             $('#loginform').show();
