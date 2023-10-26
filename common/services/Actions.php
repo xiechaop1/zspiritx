@@ -39,7 +39,8 @@ class Actions extends Component
                 'action_status' => $actionStatus
             ])
             ->orderBy([
-                'updated_at' => SORT_DESC
+                'updated_at' => SORT_DESC,
+                'id' => SORT_ASC,
             ])
 //            ->createCommand()->getRawSql();
 //        var_dump($actions);exit;
