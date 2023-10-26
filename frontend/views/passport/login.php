@@ -27,7 +27,7 @@ $this->title = 'AR儿童剧本杀';
 
 ?>
 <!---->
-<div id="loginform" class="w-100 m-auto">
+<div id="loginform" class="w-100 m-auto" style="top: 50px;">
 
   <div class="p-20 bg-black">
     <div class="w-100 p-30  m-b-10">
