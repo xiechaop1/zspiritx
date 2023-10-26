@@ -15,6 +15,8 @@ class StoryModels extends \common\models\gii\StoryModels
     const SCAN_IMAGE_TYPE_RANDOM_PLANE = 1; // 随机平面
     const SCAN_IMAGE_TYPE_RANDOM_PLANE_AFTER_SCAN = 11; // 扫描后随机平面
     const SCAN_IMAGE_TYPE_FIX_PLANE_AFTER_SCAN = 12; // 扫描后固定平面
+
+    const SCAN_IMAGE_TYPE_RANDOM_ROUND_USER     = 14;   // 随机在用户周围放置
     const SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG = 21; // 经纬度随机平面
     const SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG = 22; // 经纬度固定平面
 
@@ -22,6 +24,7 @@ class StoryModels extends \common\models\gii\StoryModels
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE => '随机平面',
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE_AFTER_SCAN => '扫描后随机平面',
         self::SCAN_IMAGE_TYPE_FIX_PLANE_AFTER_SCAN => '扫描后固定平面',
+        self::SCAN_IMAGE_TYPE_RANDOM_ROUND_USER => '随机在用户周围放置',
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG => '经纬度随机平面',
         self::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG => '经纬度固定平面',
     ];
