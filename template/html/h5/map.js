@@ -339,7 +339,7 @@ $(function () {
     }
 
 
-    setInterval(getPoi,500);
+    setInterval(getPoi,1000);
 
     // $(document).ready(function() {
     //     setInterval(getPoi(),200)
