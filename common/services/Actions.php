@@ -38,6 +38,9 @@ class Actions extends Component
             ->andFilterWhere([
                 'action_status' => $actionStatus
             ])
+            ->orderBy([
+                'updated_at' => SORT_DESC
+            ])
 //            ->createCommand()->getRawSql();
 //        var_dump($actions);exit;
             ->all();
@@ -115,7 +118,7 @@ class Actions extends Component
             $model->action_type = $actType;
             $model->action_detail = $actDetail;
             $model->expire_time = $expireTime;
-
+        }
 
             try {
                 $r = $model->save();
@@ -123,7 +126,7 @@ class Actions extends Component
                 Yii::error($e->getMessage());
                 throw $e;
             }
-        }
+
 
         return $model;
     }
