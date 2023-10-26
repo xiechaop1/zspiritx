@@ -16,7 +16,7 @@ class StoryExtend extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%story_extend}}';
+        return '{{%story_extends}}';
     }
 
     /**
@@ -27,7 +27,7 @@ class StoryExtend extends \yii\db\ActiveRecord
         return [
             [['price', 'curr_price', ], 'number'],
             [['story_id', 'buy_ct', 'com_ct', 'open_ct', 'status'], 'integer'],
-            [['is_delete', 'created_at', 'updated_at',], 'integer'],
+            [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }
 

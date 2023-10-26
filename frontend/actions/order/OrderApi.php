@@ -121,7 +121,7 @@ class OrderApi extends ApiAction
             throw $e;
         }
 
-        return $ret;
+        return $order;
     }
 
     public function pay() {
@@ -152,7 +152,7 @@ class OrderApi extends ApiAction
             throw $e;
         }
 
-        return $ret;
+        return $order;
     }
 
     public function cancel() {
@@ -184,7 +184,7 @@ class OrderApi extends ApiAction
             throw $e;
         }
 
-        return $ret;
+        return $order;
 
     }
 

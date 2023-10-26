@@ -22,10 +22,8 @@ class StoryExtend extends \common\models\gii\StoryExtend
         ];
     }
 
-    public function exec() {
-
-        $ret = $this->save();
-        return $ret;
+    public function getStory(){
+        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
     }
 
 
