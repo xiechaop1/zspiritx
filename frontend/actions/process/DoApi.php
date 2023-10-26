@@ -317,7 +317,18 @@ class DoApi extends ApiAction
             }
             $userKnowledge->save();
 
-            Yii::$app->act->add((int)$this->_userSessionInfo['id'], $firstSessionStageId, (int)$this->_storyId, (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
+            $actions = Yii::$app->act->get($this->_userSessionInfo['id'], $this->_userId);
+            $maxStage = 0;
+            if (!empty($actions)) {
+                foreach ($actions as $act) {
+                    if ($act->session_stage_id > $maxStage) {
+                        $maxStage = $act->session_stage_id;
+                    }
+                }
+            }
+            if ($firstSessionStageId > $maxStage) {
+                Yii::$app->act->add((int)$this->_userSessionInfo['id'], $firstSessionStageId, (int)$this->_storyId, (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
+            }
 
 
             $transaction->commit();
@@ -734,26 +745,28 @@ class DoApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
 
-        $actions = Actions::find()
-            ->where([
-                'session_id' => (int)$sessionId,
-            ])
-            ->andFilterWhere([
-                'or',
-                ['to_user' => (int)$userId],
-                ['to_user' => 0],
-            ])
-            ->andFilterWhere([
-                'or',
-                ['expire_time' => (int)0],
-                ['>=', 'expire_time', time()],
-            ])
-            ->andFilterWhere([
-                'action_status' => Actions::ACTION_STATUS_NORMAL
-            ])
-//            ->createCommand()->getRawSql();
-//        var_dump($actions);exit;
-            ->all();
+        $actions = Yii::$app->act->get($sessionId, $userId);
+
+//        $actions = Actions::find()
+//            ->where([
+//                'session_id' => (int)$sessionId,
+//            ])
+//            ->andFilterWhere([
+//                'or',
+//                ['to_user' => (int)$userId],
+//                ['to_user' => 0],
+//            ])
+//            ->andFilterWhere([
+//                'or',
+//                ['expire_time' => (int)0],
+//                ['>=', 'expire_time', time()],
+//            ])
+//            ->andFilterWhere([
+//                'action_status' => Actions::ACTION_STATUS_NORMAL
+//            ])
+////            ->createCommand()->getRawSql();
+////        var_dump($actions);exit;
+//            ->all();
 
 //        try {
 //            foreach ($actions as $tempAct) {

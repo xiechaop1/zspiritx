@@ -20,6 +20,31 @@ use yii;
 class Actions extends Component
 {
 
+    public function get($sessionId, $userId, $actionStatus = \common\models\Actions::ACTION_STATUS_NORMAL) {
+        $actions = \common\models\Actions::find()
+            ->where([
+                'session_id' => (int)$sessionId,
+            ])
+            ->andFilterWhere([
+                'or',
+                ['to_user' => (int)$userId],
+                ['to_user' => 0],
+            ])
+            ->andFilterWhere([
+                'or',
+                ['expire_time' => (int)0],
+                ['>=', 'expire_time', time()],
+            ])
+            ->andFilterWhere([
+                'action_status' => $actionStatus
+            ])
+//            ->createCommand()->getRawSql();
+//        var_dump($actions);exit;
+            ->all();
+
+        return $actions;
+    }
+
     public function add($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
 
         if ($expirationInterval > 0) {
