@@ -26,7 +26,12 @@ $this->registerMetaTag([
 $this->title = 'AR剧本杀';
 
 ?>
-<!---->
+<style>
+  .text-line-through {
+    text-decoration: line-through;
+    color: grey;
+  }
+</style>
 <audio autoplay loop>
   <source src="<?= $voice ?>" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
@@ -35,15 +40,17 @@ $this->title = 'AR剧本杀';
 
 <div class="owl-carousel owl-theme" id="banner">
   <?php
+
   if (!empty($stories)) {
     foreach ($stories as $story) {
-
+      $orderStatus = !empty($ordersMap[$story->id]) ? $ordersMap[$story->id] : \common\models\Order::ORDER_STATUS_WAIT;
   ?>
   <div class="item">
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
 
     <input type="hidden" name="isDebug" value="<?= $story->is_debug ?>">
     <input type="hidden" name="storyId" value="<?= $story->id ?>">
+    <input type="hidden" name="orderStatus" value="<?= !empty($ordersMap[$story->id]) ? $ordersMap[$story->id] : 0 ?>">
 
     <img decoding="async"  src="<?= \common\helpers\Attachment::completeUrl($story->cover_image) ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
@@ -64,7 +71,22 @@ $this->title = 'AR剧本杀';
           传说只要集齐5颗宝石，就可以让他们穿越回去并且修复裂痕！ 冒险家，需要你们的帮助，去收集这些宝石了 -->
         </div>
         <div class="btn-m-green m-t-30 float-right m-r-20">
-          进入游戏
+          <?php
+          if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED) {
+            echo '进入游戏';
+          } else {
+            if ($story->extend->curr_price == 0) {
+              echo '限免';
+            } else {
+              if ($story->extend->curr_price != $story->extend->price) {
+                echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
+              } else {
+                echo '￥' . $story->extend->price;
+              }
+            }
+          }
+
+          ?>
           <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
         </div>
       </div>

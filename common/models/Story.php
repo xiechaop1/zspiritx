@@ -46,7 +46,7 @@ class Story extends \common\models\gii\Story
     }
 
     public function getExtend(){
-        return $this->hasOne('common\models\StoryExtend',  ['id' => 'story_id']);
+        return $this->hasOne('common\models\StoryExtend',  ['story_id' => 'id']);
     }
 
     public function getRoles(){

@@ -12,6 +12,7 @@ namespace frontend\actions\home;
 use common\definitions\Common;
 use common\helpers\Attachment;
 use common\helpers\Cookie;
+use common\models\Order;
 use common\models\Story;
 use yii\base\Action;
 use kartik\form\ActiveForm;
@@ -51,9 +52,22 @@ class Index extends Action
             ->orderBy(['sort_by' => SORT_ASC])
             ->all();
 
+        $orders = Order::find()
+            ->where([
+                'user_id'   => $userId,
+            ])
+            ->all();
+
+        $ordersMap = [];
+        foreach ($orders as $order) {
+            $ordersMap[$order->story_id] = $order->order_status;
+        }
+
         return $this->controller->render('index', [
             'userId'    => $userId,
             'stories'   => $stories,
+            'orders'    => $orders,
+            'ordersMap' => $ordersMap,
             'voice' => '',
             'image' => $image,
 //            'banner' => $banner,
