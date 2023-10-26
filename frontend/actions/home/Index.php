@@ -44,7 +44,7 @@ class Index extends Action
 
         $userId = Cookie::getCookie('user_id');
         if (empty($userId)) {
-            header('Location: /passport/weblogin');
+            header('Location: /passport/web_login');
         }
 
         $stories = Story::find()
