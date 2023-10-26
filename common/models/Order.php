@@ -23,10 +23,19 @@ class Order extends \common\models\gii\Order
     public static $orderStatus = [
         self::ORDER_STATUS_ALL          => '全部',
         self::ORDER_STATUS_WAIT         => '待支付',
-        self::ORDER_STATUS_PAIED        => '购买中',
+        self::ORDER_STATUS_PAIED        => '购买完成',
         self::ORDER_STATUS_COMPLETED    => '已结束',
         self::ORDER_STATUS_CANCELED     => '已取消',
     ];
+
+    const PAY_METHOD_WECHAT = 1; // 微信支付
+    const PAY_METHOD_ALIPAY = 2; // 支付宝支付
+
+    public static $payMethod2Name = [
+        self::PAY_METHOD_WECHAT => '微信支付',
+        self::PAY_METHOD_ALIPAY => '支付宝支付',
+    ];
+
     public function behaviors()
     {
         return [

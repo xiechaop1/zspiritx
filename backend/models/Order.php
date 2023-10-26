@@ -26,16 +26,16 @@ class Order extends \common\models\Order
     public function rules()
     {
         return [
-            [['user_id', 'music_id', 'pay_method', 'order_status', 'order_permission', 'status', 'expire_time', 'created_at', 'updated_at'], 'integer'],
-            [['price', 'amount'], 'number'],
-            [['attach'], 'string'],
+            [['user_id', 'story_id', 'pay_method', 'order_status', 'status', 'expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['story_price', 'amount'], 'number'],
+//            [['attach', ], 'string'],
         ];
     }
 
     public function search($params)
     {
         $query = \common\models\Order::find();
-        $query->with('user', 'music');
+        $query->with('user');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
@@ -61,30 +61,6 @@ class Order extends \common\models\Order
 
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
-        }
-
-        if (!empty($params['Order']['title'])) {
-            $query->joinWith(['music' => function($model) use ($params) {
-                return $model->andFilterWhere(['like', 'o_music.title', $params['Order']['title']]);
-            }]);
-        }
-
-        if (!empty($params['Order']['singer'])) {
-            $query->joinWith(['music' => function($model) use ($params) {
-                return $model->andFilterWhere(['like', 'o_music.singer', $params['Order']['singer']]);
-            }]);
-        }
-
-        if (!empty($params['Order']['lyricist'])) {
-            $query->joinWith(['music' => function($model) use ($params) {
-                return $model->andFilterWhere(['like', 'o_music.lyricist', $params['Order']['lyricist']]);
-            }]);
-        }
-
-        if (!empty($params['Order']['composer'])) {
-            $query->joinWith(['music' => function($model) use ($params) {
-                return $model->andFilterWhere(['like', 'o_music.composer', $params['Order']['composer']]);
-            }]);
         }
 
         if (!empty($params['Order']['mobile'])) {

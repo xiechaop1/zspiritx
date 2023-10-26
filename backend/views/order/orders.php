@@ -59,14 +59,6 @@ echo \dmstr\widgets\Alert::widget();
                             'value' => $model->order_status,
                         ],
                     ])->label('订单状态');
-                    echo $form->field($orderModel, 'attach')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-                        'multiple' => false,
-                        'isImage' => false,
-                        'ossHost' => Yii::$app->params['oss.host'],
-                        'signatureAction' => ['/site/oss-signature?dir=attach/contract/' . Date('Y/m/')],
-                        'clientOptions' => ['autoUpload' => true],
-                        'options' => ['value' => $model->attach],
-                    ])->label('合同附件');
                     ?>
                     <div class="form-group">
                         <label class="control-label col-sm-2"></label>
@@ -85,66 +77,46 @@ echo \dmstr\widgets\Alert::widget();
                         'filter'    => Html::activeInput('text', $searchModel, 'id', ['size' => 5]),
                     ],
                     [
-                        'label' => '音乐',
-                        'attribute' => 'music_id',
+                        'label' => '剧本',
+                        'attribute' => 'story_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            $img = !empty($model->musicwithoutstatus->cover_image) ? \common\helpers\Attachment::completeUrl($model->musicwithoutstatus->cover_image) : '';
-                            $ret = Html::img($img, ['width' => 75, 'height' => 75]);
-
-                            $musicName = !empty($model->musicwithoutstatus->title) ? $model->musicwithoutstatus->title : '';
-                            $ret .= " " . $musicName;
-
-                            return $ret;
+                            return $model->story->title;
                         },
-                        'filter'    => Html::activeInput('text', $searchModel, 'title', ['value' => !empty($params['Order']['title']) ? $params['Order']['title'] : '']),
-                    ],
-                    [
-                        'label' => '歌手',
-                        'attribute' => 'music_singer',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return $model->musicwithoutstatus->singer;
-                        },
-                        'filter'    => Html::activeInput('text', $searchModel, 'singer', ['value' => !empty($params['Order']['singer']) ? $params['Order']['singer'] : '']),
-                    ],
-                    [
-                        'label' => '词作者',
-                        'attribute' => 'music_lyricist',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return $model->musicwithoutstatus->lyricist;
-                        },
-                        'filter'    => Html::activeInput('text', $searchModel, 'lyricist', ['value' => !empty($params['Order']['lyricist']) ? $params['Order']['lyricist'] : '']),
-                    ],
-                    [
-                        'label' => '曲作者',
-                        'attribute' => 'music_composer',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return $model->musicwithoutstatus->composer;
-                        },
-                        'filter'    => Html::activeInput('text', $searchModel, 'composer', ['value' => !empty($params['Order']['composer']) ? $params['Order']['composer'] : '']),
-                    ],
-                    [
-                        'label' => '备注名',
-                        'attribute' => 'user_id',
-                        'format'    => 'raw',
-                        'value' => function ($model) {
-                            return $model->user->remarks;
-                        },
-                        'filter'    => false,
+                        'filter'    => Html::activeInput('text', $searchModel, 'story_id', ['value' => !empty($params['Order']['story_id']) ? $params['Order']['story_id'] : '']),
                     ],
                     [
                         'label' => '手机号',
                         'attribute' => 'user_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return $model->user->mobile;
+                            return '[ID: ' . $model->user_id .'] ' . $model->user->mobile;
                         },
-                        'filter'    => Html::activeInput('text', $searchModel, 'mobile', ['value' => !empty($params['Order']['mobile']) ? $params['Order']['mobile'] : '']),
+                        'filter'    => Html::activeInput('text', $searchModel, 'user_id', ['value' => !empty($params['Order']['user_id']) ? $params['Order']['user_id'] : '']),
                     ],
-
+                    [
+                        'label' => '支付金额',
+                        'attribute' => 'amount',
+                    ],
+                    [
+                        'label' => '剧本原金额',
+                        'attribute' => 'story_price',
+                    ],
+                    [
+                        'attribute' => 'pay_method',
+                        'label' => '支付方式',
+                        'value' => function($model) {
+                            return
+                                isset (\common\models\Order::$payMethod2Name[$model->pay_method]) ?
+                                    \common\models\Order::$payMethod2Name[$model->pay_method] :
+                                    '未知'
+                                ;
+                        },
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'pay_method',
+                            \common\models\Order::$payMethod2Name, ["class" => "form-control ", 'value' => isset($params['Order']['pay_method']) ? $params['Order']['pay_method'] : ''])
+                    ],
                     [
                         'attribute' => 'order_status',
                         'label' => '订单状态',
@@ -176,17 +148,6 @@ echo \dmstr\widgets\Alert::widget();
                             }
                             return $r;
                         },
-                    ],
-                    [
-                        'label' => '合同',
-                        'format' => 'raw',
-                        'filter'    => false,
-                        'value' => function ($model) {
-                            if (!empty($model->attach)) {
-                                $url = \common\helpers\Attachment::completeUrl($model->attach);
-                                return Html::a('浏览合同', $url);
-                            }
-                        }
                     ],
                     [
                         'label' => '过期时间',
@@ -296,14 +257,6 @@ echo $form->field($orderModel, 'order_status')->widget('\kartik\select2\Select2'
         'multiple' => false
     ],
 ])->label('订单状态');
-echo $form->field($orderModel, 'attach')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-    'multiple' => false,
-    'isImage' => false,
-    'ossHost' => Yii::$app->params['oss.host'],
-    'signatureAction' => ['/site/oss-signature?dir=attach/contract/' . Date('Y/m/')],
-    'clientOptions' => ['autoUpload' => true],
-    'options' => ['value' => $orderModel->attach],
-])->label('合同附件');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>
