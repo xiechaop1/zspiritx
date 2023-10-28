@@ -108,24 +108,24 @@ class Model
 
         $jsonTmp = json_decode($ret, true);
 
+        // 拼装互斥
+        if (
+            empty($jsonTmp['ActionOnPlaced']['hideModels'])
+            && sizeof($storyModel->groupStoryModels) > 1
+        ) {
+            $dia = self::createActionOnPlaced($jsonTmp, $storyModel->model_group);
+            foreach ($storyModel->groupStoryModels as $groupStoryModel) {
+                if ($groupStoryModel->id != $storyModel->id) {
+                    $jsonTmp['ActionOnPlaced']['hideModels'][] = $groupStoryModel->model_inst_u_id;
+                }
+            }
+        }
+
         if (!empty($jsonTmp['Dialog'])) {
             foreach ($jsonTmp['Dialog'] as &$dia) {
                 // 格式化URL
                 if (!empty($dia['sentenceClipURL'])) {
                     $dia['sentenceClipURL'] = Attachment::completeUrl($dia['sentenceClipURL'], false);
-                }
-
-                // 拼装互斥
-                if (
-                    empty($dia['ActionOnPlaced']['hideModels'])
-                    && sizeof($storyModel->groupStoryModels) > 1
-                ) {
-                    $dia = self::createActionOnPlaced($dia, $storyModel->model_group);
-                    foreach ($storyModel->groupStoryModels as $groupStoryModel) {
-                        if ($groupStoryModel->id != $storyModel->id) {
-                            $dia['ActionOnPlaced']['hideModels'][] = $groupStoryModel->model_inst_u_id;
-                        }
-                    }
                 }
             }
         }
