@@ -25,4 +25,8 @@ class StoryModelDetail extends \common\models\gii\StoryModelDetail
         return $this->hasOne('common\models\Story',  ['id' => 'story_model_id']);
     }
 
+    public function getStory(){
+        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
+    }
+
 }

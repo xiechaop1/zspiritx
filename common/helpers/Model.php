@@ -134,6 +134,9 @@ class Model
     }
 
     public static function combineStoryModelWithDetail($storyModel) {
+        $blackList = [
+            'story_id',
+        ];
         if (!empty($storyModel->detail)) {
 
             $detail = $storyModel->detail;
@@ -141,7 +144,9 @@ class Model
                 if (!empty($val)
                 && isset($storyModel->key)
                 ) {
-                    $storyModel->$key = $val;
+                    if (!in_array($key, $blackList)) {
+                        $storyModel->$key = $val;
+                    }
                 }
             }
 

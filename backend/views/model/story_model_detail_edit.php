@@ -31,6 +31,13 @@ echo \dmstr\widgets\Alert::widget();
                 'enableClientValidation' => true,
             ]);
 
+            echo $form->field($storyModel, 'story_id')->widget('\kartik\select2\Select2', [
+                'data' => $stories,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('剧本');
+
             echo $form->field($storyModelDetailModel, 'title')->textInput(['value' => $storyModelDetailModel->title])->label('详情名称');
             echo $form->field($storyModelDetailModel, 'direction')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$direction2Name,

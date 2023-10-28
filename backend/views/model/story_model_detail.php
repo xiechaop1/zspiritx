@@ -63,6 +63,16 @@ echo \dmstr\widgets\Alert::widget();
 //                        'filter'    => Html::activeInput('text', $searchModel, 'id'),
                     ],
                     [
+                        'label' => '剧本',
+                        'attribute' => 'title',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty($model->story->title) ?
+                                $model->story->title : '未知';
+                        },
+                        'filter' => Html::activeInput('text', $searchModel, 'story_id'),
+                    ],
+                    [
                         'label' => '详情名称',
                         'attribute' => 'title',
                         'filter' => Html::activeInput('text', $searchModel, 'title'),
