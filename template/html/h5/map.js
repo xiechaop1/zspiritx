@@ -1,3 +1,5 @@
+var map = new AMap.Map('container', {
+});
 $(function () {
     var location=[];
 
@@ -262,6 +264,42 @@ $(function () {
 
             }
         });
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: 'https://h5.zspiritx.com.cn/user/get_user_loc',
+            data:{
+                user_id:user_id,
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                //新消息获取成功
+                if(obj["code"]==200){
+                    var lat=obj.data.lat;
+                    var lng=obj.data.lng;
+
+                    if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
+                        map.setCenter([lng, lat]);
+                    }
+                    console.log("地图中心",lat,lng)
+                }
+                //新消息获取失败
+                else{
+                    // $.alert(obj.msg)
+                }
+
+            }
+        });
     };
 
     function removeMarkers(){
@@ -300,21 +338,23 @@ $(function () {
         // });
     }
 
-    $(document).ready(function() {
-        setInterval(getPoi(),200)
 
-    });
+    setInterval(getPoi,1000);
+
+    // $(document).ready(function() {
+    //     setInterval(getPoi(),200)
+    //
+    // });
 });
 
-function getLocation(lat,lng){
+/*function getLocation(lat,lng){
     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
-        var map = new AMap.Map('container', {
-            resizeEnable: true,
-            center: [lng, lat],
-        });
+        map.setCenter([lng, lat]);
     }
+    console.log("定时调用getLocation")
 
 }
+setTimeout(getLocation(39.3442,118.3726),1000);*/
 function showPoiDetail(n) {
     var me=$(this);
     var text=me.find('.marker_text').attr("data-id");
