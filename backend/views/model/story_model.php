@@ -91,6 +91,20 @@ echo \dmstr\widgets\Alert::widget();
                         },
                     ],
                     [
+                        'label' => '模型详情',
+                        'attribute' => 'story_model_detail_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            $modelName = !empty($model->detail->title) ?
+                                $model->detail->title : '未知/无';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_detail', 'id' => $model->story_model_detail_id]));
+                        },
+                    ],
+                    [
+                        'attribute' => 'model_group',
+                        'label' => '模型组',
+                    ],
+                    [
                         'attribute' => 'scan_image_id',
                         'label' => 'Scan Image ID',
                     ],
