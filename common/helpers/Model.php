@@ -90,8 +90,9 @@ class Model
         return json_decode($dialogJson, true);
     }
 
-    public static function formatDialog($dialog, $params = []) {
-        $ret = $dialog;
+    public static function formatDialog($storyModel, $params = []) {
+        $ret = $storyModel->dialog;
+
         if (!empty($params['user_id'])) {
             $ret = str_replace('{$user_id}', $params['user_id'], $ret);
         }
@@ -109,14 +110,44 @@ class Model
 
         if (!empty($jsonTmp['Dialog'])) {
             foreach ($jsonTmp['Dialog'] as &$dia) {
+                // 格式化URL
                 if (!empty($dia['sentenceClipURL'])) {
                     $dia['sentenceClipURL'] = Attachment::completeUrl($dia['sentenceClipURL'], false);
+                }
+
+                // 拼装互斥
+                if (
+                    empty($dia['ActionOnPlaced']['hideModels'])
+                    && sizeof($storyModel->groupStoryModels) > 1
+                ) {
+                    foreach ($storyModel->groupStoryModels as $groupStoryModel) {
+                        if ($groupStoryModel->id != $storyModel->id) {
+                            $dia['ActionOnPlaced']['hideModels'][] = $groupStoryModel->model_inst_u_id;
+                        }
+                    }
                 }
             }
         }
         $ret = json_encode($jsonTmp);
 
         return $ret;
+    }
+
+    public static function combineStoryModelWithDetail($storyModel) {
+        if (!empty($storyModel->detail)) {
+
+            $detail = $storyModel->detail;
+            foreach ($detail as $key => $val) {
+                if (!empty($val)
+                && isset($storyModel->key)
+                ) {
+                    $storyModel->$key = $val;
+                }
+            }
+
+        }
+
+        return $storyModel;
     }
 
 }

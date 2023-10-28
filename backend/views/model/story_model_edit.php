@@ -62,6 +62,14 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'scale')->textInput(['value' => $storyModel->scale])->label('缩放比例');
             echo $form->field($storyModel, 'lat')->textInput(['value' => $storyModel->lat])->label('经度');
             echo $form->field($storyModel, 'lng')->textInput(['value' => $storyModel->lng])->label('纬度');
+//            echo $form->field($storyModel, 'story_model_detail_id')->textInput(['value' => $storyModel->story_model_detail_id])->label('模型详细ID');
+            echo $form->field($storyModel, 'story_model_detail_id')->widget('\kartik\select2\Select2', [
+                'data' => $storyModelDetails,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('模型详细ID');
+            echo $form->field($storyModel, 'model_group')->textInput(['value' => $storyModel->model_group])->label('互斥模型分组');
             echo $form->field($storyModel, 'direction')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$direction2Name,
                 'options' => [

@@ -13,19 +13,16 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class StoryModels extends \common\models\StoryModels
+class StoryModelDetail extends \common\models\StoryModelDetail
 {
 
     public function rules()
     {
         return [
-            [['lat', 'lng', 'show_x', 'show_y', 'show_z', 'misrange', 'trigger_misrange', 'act_misrange', 'scale' ], 'number'],
-            [['is_unique', 'is_visable', 'can_use', 'story_stage_id', 'story_id', 'story_model_detail_id',
-                'building_id', 'poi_id', 'timebegin', 'timeend',
-                'rate', 'scan_type', 'pre_story_model_id', 'model_id',
+            [['is_unique', 'pre_story_model_id',
                 'active_type', 'direction', 'sort_by', 'status'], 'integer'],
-            [['created_at', 'updated_at',], 'integer'],
-            [['scan_image_id', 'model_inst_u_id', 'active_next', 'story_model_name', 'story_model_desc', 'dialog', 'model_group', ], 'string'],
+            [['active_expiretime', 'created_at', 'updated_at',], 'integer'],
+            [['active_next', 'dialog', 'title' ], 'string'],
         ];
     }
 
@@ -36,7 +33,7 @@ class StoryModels extends \common\models\StoryModels
 
     public function search($params)
     {
-        $query = \common\models\StoryModels::find();
+        $query = \common\models\StoryModelDetail::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
@@ -51,10 +48,6 @@ class StoryModels extends \common\models\StoryModels
 
         if (!$this->validate()) {
             return $dataProvider;
-        }
-
-        if (!empty($this->story_id)) {
-            $query->andFilterWhere(['story_id' => $this->story_id]);
         }
 
         return $dataProvider;

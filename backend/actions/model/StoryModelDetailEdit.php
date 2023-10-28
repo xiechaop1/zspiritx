@@ -29,23 +29,23 @@ use yii\base\Action;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class StoryModelEdit extends Action
+class StoryModelDetailEdit extends Action
 {
     public function run()
     {
         $id = Net::get('id');
 
         if ($id) {
-            $model = \backend\models\StoryModels::findOne($id);
+            $model = \backend\models\StoryModelDetail::findOne($id);
             $isNew = false;
         } else {
-            $model = new \backend\models\StoryModels();
+            $model = new \backend\models\StoryModelDetail();
             $isNew = true;
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $qaModel = \backend\models\StoryModels::findOne($id);
+            $qaModel = \backend\models\StoryModelDetail::findOne($id);
 
             switch (Net::post('action')) {
                 case 'delete':
@@ -92,28 +92,9 @@ class StoryModelEdit extends Action
             return $this->controller->refresh();
         }
 
-        $scanImageTypes = StoryModels::$scanImageType2Name;
 
-        $storyDatas = Story::find()->orderBy(['id' => SORT_DESC])->all();
-
-        $stories = ArrayHelper::map($storyDatas, 'id', 'title');
-
-        $modelDatas = Models::find()->orderBy(['id' => SORT_DESC])->all();
-        $models = ArrayHelper::map($modelDatas, 'id', 'model_name');
-
-        $visibleSelection = StoryModels::$visible2Name;
-
-        $storyModelDetailRet = \common\models\StoryModelDetail::find()->orderBy(['id' => SORT_DESC])->all();
-        $storyModelDetails = ArrayHelper::map($storyModelDetailRet, 'id', 'title');
-        array_unshift($storyModelDetails, '无');
-
-        return $this->controller->render('story_model_edit', [
-            'storyModel'    => $model,
-            'scanImageTypes'    => $scanImageTypes,
-            'visibleSelection' => $visibleSelection,
-            'stories'   => $stories,
-            'models'    => $models,
-            'storyModelDetails' => $storyModelDetails,
+        return $this->controller->render('story_model_detail_edit', [
+            'storyModelDetailModel'    => $model,
         ]);
     }
 }

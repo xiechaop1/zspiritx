@@ -81,4 +81,12 @@ class StoryModels extends \common\models\gii\StoryModels
         return $this->hasOne('common\models\SessionModel',  ['story_id' => 'id']);
     }
 
+    public function getDetail(){
+        return $this->hasOne('common\models\StoryModelDetail',  ['id' => 'story_model_detail_id']);
+    }
+
+    public function getGroupStoryModels(){
+        return $this->hasMany('common\models\StoryModels',  ['model_group' => 'model_group', 'story_id' => 'story_id']);
+    }
+
 }

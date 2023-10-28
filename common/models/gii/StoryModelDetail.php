@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "{{%story_model}}".
  *
  */
-class StoryModels extends \yii\db\ActiveRecord
+class StoryModelDetail extends \yii\db\ActiveRecord
 {
 
     /**
@@ -16,7 +16,7 @@ class StoryModels extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%story_model}}';
+        return '{{%story_model_detail}}';
     }
 
     /**
@@ -25,13 +25,10 @@ class StoryModels extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lat', 'lng', 'show_x', 'show_y', 'show_z', 'misrange', 'trigger_misrange', 'act_misrange', 'scale' ], 'number'],
-            [['is_unique', 'is_visable', 'can_use', 'story_stage_id', 'story_id', 'story_model_detail_id',
-                'building_id', 'poi_id', 'timebegin', 'timeend',
-                'rate', 'scan_type', 'pre_story_model_id', 'model_id',
+            [['is_unique', 'pre_story_model_id',
                  'active_type', 'direction', 'sort_by', 'status'], 'integer'],
-            [['created_at', 'updated_at',], 'integer'],
-            [['scan_image_id', 'model_inst_u_id', 'active_next', 'story_model_name', 'story_model_desc', 'dialog', 'model_group', ], 'string'],
+            [['active_expiretime', 'created_at', 'updated_at',], 'integer'],
+            [['active_next', 'dialog', 'title' ], 'string'],
         ];
     }
 

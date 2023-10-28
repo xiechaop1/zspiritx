@@ -80,6 +80,12 @@
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
+                                'label' => '剧本模型详情列表',
+                                'url' => ['/model/story_model_detail'],
+                                'active' => in_array($this->context->route, ['model/story_model_detail', 'model/story_model_detail_edit']),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
                                 'label' => '模型列表',
                                 'url' => ['/model/models'],
                                 'active' => in_array($this->context->route, ['model/models', 'model/models_edit']),
