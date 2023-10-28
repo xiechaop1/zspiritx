@@ -31,7 +31,7 @@ echo \dmstr\widgets\Alert::widget();
                 'enableClientValidation' => true,
             ]);
 
-            echo $form->field($storyModel, 'story_id')->widget('\kartik\select2\Select2', [
+            echo $form->field($storyModelDetailModel, 'story_id')->widget('\kartik\select2\Select2', [
                 'data' => $stories,
                 'options' => [
                     'multiple' => false
