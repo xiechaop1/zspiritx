@@ -120,6 +120,7 @@ class Model
                     empty($dia['ActionOnPlaced']['hideModels'])
                     && sizeof($storyModel->groupStoryModels) > 1
                 ) {
+                    $dia = self::createActionOnPlaced($dia, $storyModel->model_group);
                     foreach ($storyModel->groupStoryModels as $groupStoryModel) {
                         if ($groupStoryModel->id != $storyModel->id) {
                             $dia['ActionOnPlaced']['hideModels'][] = $groupStoryModel->model_inst_u_id;
@@ -131,6 +132,15 @@ class Model
         $ret = json_encode($jsonTmp);
 
         return $ret;
+    }
+
+    public static function createActionOnPlaced($dialog, $tag = '') {
+        if (empty($dialog['ActionOnPlaced'])) {
+            $dialog['ActionOnPlaced'] = [
+                'localID'   => $tag . '-OnPlaced'
+            ];
+        }
+        return $dialog;
     }
 
     public static function combineStoryModelWithDetail($storyModel) {
