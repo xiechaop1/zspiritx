@@ -562,7 +562,9 @@ class DoApi extends ApiAction
 //                    $storyModel = json_decode($sessModel['snapshot'], true);
                     $storyModel = $sessionModel->storymodel;
                     $storyModel = Model::combineStoryModelWithDetail($storyModel);
-                    $storyModel->dialog = Model::formatDialog($storyModel, $params);
+                    if (!empty($storyModel->dialog)) {
+                        $storyModel->dialog = Model::formatDialog($storyModel, $params);
+                    }
                     $models[] = [
                         'session_model' => $sessionModel,
                         'story_model' => $storyModel,
