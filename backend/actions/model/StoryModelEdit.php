@@ -105,7 +105,7 @@ class StoryModelEdit extends Action
 
         $storyModelDetailRet = \common\models\StoryModelDetail::find()->orderBy(['id' => SORT_DESC])->all();
         $storyModelDetails = ArrayHelper::map($storyModelDetailRet, 'id', 'title');
-        array_unshift($storyModelDetails, '无');
+        $storyModelDetails = ['0' => '无'] + $storyModelDetails;
 
         return $this->controller->render('story_model_edit', [
             'storyModel'    => $model,

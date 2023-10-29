@@ -91,7 +91,11 @@ class Model
     }
 
     public static function formatDialog($storyModel, $params = []) {
-        $ret = $storyModel->dialog;
+        if (!empty($storyModel->dialog)) {
+            $ret = $storyModel->dialog;
+        } else {
+            return '';
+        }
 
         if (!empty($params['user_id'])) {
             $ret = str_replace('{$user_id}', $params['user_id'], $ret);
