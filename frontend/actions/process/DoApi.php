@@ -561,15 +561,17 @@ class DoApi extends ApiAction
                     $sessModel = $sessionModel;
 //                    $storyModel = json_decode($sessModel['snapshot'], true);
                     $storyModel = $sessionModel->storymodel;
-                    $storyModel = Model::combineStoryModelWithDetail($storyModel);
-                    if (!empty($storyModel->dialog)) {
-                        $storyModel->dialog = Model::formatDialog($storyModel, $params);
+                    if (!empty($storyModel)) {
+                        $storyModel = Model::combineStoryModelWithDetail($storyModel);
+                        if (!empty($storyModel->dialog)) {
+                            $storyModel->dialog = Model::formatDialog($storyModel, $params);
+                        }
+                        $models[] = [
+                            'session_model' => $sessionModel,
+                            'story_model' => $storyModel,
+                            'model' => $storyModel->model,
+                        ];
                     }
-                    $models[] = [
-                        'session_model' => $sessionModel,
-                        'story_model' => $storyModel,
-                        'model' => $storyModel->model,
-                    ];
                 }
             }
             $stage = $sessionStage->stage;
