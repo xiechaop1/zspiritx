@@ -75,7 +75,11 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'label' => '详情名称',
                         'attribute' => 'title',
+                        'format' => 'raw',
                         'filter' => Html::activeInput('text', $searchModel, 'title'),
+                        'value' => function ($model) {
+                            return \yii\helpers\Html::a($model->title, \yii\helpers\Url::to(['model/story_model_detail_edit', 'id' => $model->id]));
+                        }
                     ],
                     [
                         'label' => '更新时间',
