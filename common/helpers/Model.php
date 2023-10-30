@@ -156,7 +156,7 @@ class Model
             $detail = $storyModel->detail;
             foreach ($detail as $key => $val) {
                 if (!empty($val)
-                && isset($storyModel->key)
+                && isset($storyModel->$key)
                 ) {
                     if (!in_array($key, $blackList)) {
                         $storyModel->$key = $val;
