@@ -11,9 +11,11 @@ namespace frontend\actions\home;
 
 use common\definitions\Common;
 use common\helpers\Attachment;
+use common\helpers\Client;
 use common\helpers\Cookie;
 use common\models\Order;
 use common\models\Story;
+use common\models\User;
 use yii\base\Action;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
@@ -57,6 +59,18 @@ class Index extends Action
                 'user_id'   => $userId,
             ])
             ->all();
+
+        try {
+            $user = User::find()
+                ->where(['id' => $userId])
+                ->one();
+
+            $user->last_login_time = time();
+            $user->last_login_device = Client::getAgent();
+            $user->save();
+        } catch (\Exception $e) {
+            //Yii::error($e->getMessage());
+        }
 
         $ordersMap = [];
         foreach ($orders as $order) {
