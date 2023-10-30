@@ -337,14 +337,11 @@ $(function () {
         //     });
         // });
     }
+    getPoi();
 
 
-    setInterval(getPoi,1000);
-
-    // $(document).ready(function() {
-    //     setInterval(getPoi(),200)
-    //
-    // });
+    // setInterval(getPoi,1000);
+    
 });
 
 /*function getLocation(lat,lng){
