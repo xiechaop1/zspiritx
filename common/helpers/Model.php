@@ -149,7 +149,7 @@ class Model
 
     public static function combineStoryModelWithDetail($storyModel) {
         $blackList = [
-            'story_id',
+            'story_id', 'id',
         ];
         if (!empty($storyModel->detail)) {
 
