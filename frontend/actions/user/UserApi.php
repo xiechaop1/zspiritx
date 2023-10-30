@@ -11,6 +11,7 @@ namespace frontend\actions\user;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\helpers\Client;
 use common\helpers\Cookie;
 use common\models\Actions;
 use common\models\ItemKnowledge;
@@ -171,14 +172,20 @@ class UserApi extends ApiAction
             $userInfo->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4) . rand(1000,9999);
             $userInfo->user_pass = Yii::$app->security->generatePasswordHash($mobile);
             $userInfo->user_status = User::USER_STATUS_NORMAL;
+            $userInfo->last_login_time = time();
+            $userInfo->last_login_device = Client::getAgent();
             $userInfo->save();
             $userModel['id'] = Yii::$app->db->getLastInsertId();
         } else {
+            $userInfo->last_login_time = time();
+            $userInfo->last_login_device = Client::getAgent();
+            $userInfo->save();
 
             if ($userInfo['user_status'] == User::USER_STATUS_FORBIDDEN) {
                 throw new \Exception('用户已被禁用', ErrorCode::USER_FORBIDDEN);
             }
         }
+
 
         $_SESSION['user_info'] = $userInfo;
         Cookie::setCookie('user_id', $userInfo['id'], 3600 * 24 * 30);

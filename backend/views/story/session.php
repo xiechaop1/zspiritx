@@ -116,6 +116,10 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
+                        'label' => 'User Agent',
+                        'attribute' => 'user_agent',
+                    ],
+                    [
                         'label' => '创建时间',
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(

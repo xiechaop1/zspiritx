@@ -13,6 +13,7 @@ use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\helpers\Active;
 use common\helpers\Attachment;
+use common\helpers\Client;
 use common\helpers\Model;
 use common\models\Actions;
 use common\models\Knowledge;
@@ -176,6 +177,7 @@ class DoApi extends ApiAction
                 $sessionObj->user_id = $this->_userId;
                 $sessionObj->story_id = $this->_storyId;
                 $sessionObj->session_status = Session::SESSION_STATUS_INIT;
+                $sessionObj->user_agent = Client::getAgent();
                 if (!empty($this->_get['need_code'])) {
                     if (!empty($this->_get['password_code'])) {
                         $sessionObj->password_code = $this->_get['password_code'];

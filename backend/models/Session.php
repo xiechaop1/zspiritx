@@ -21,7 +21,7 @@ class Session extends \common\models\Session
     {
         return [
             [['user_id', 'story_id', 'session_status', 'created_at', 'updated_at'], 'integer'],
-            [['session_name', 'password_code'], 'string'],
+            [['session_name', 'password_code', 'user_agent'], 'string'],
         ];
     }
 
