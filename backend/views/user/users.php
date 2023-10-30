@@ -131,6 +131,10 @@ echo \dmstr\widgets\Alert::widget();
                         }
                     ],
                     [
+                        'label' => 'User Agent',
+                        'attribute' => 'last_login_device',
+                    ],
+                    [
                         'label' => '创建时间',
                         'format' => 'raw',
                         'filter'    => false,

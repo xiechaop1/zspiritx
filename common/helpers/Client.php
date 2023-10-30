@@ -13,6 +13,10 @@ use yii\web\Cookie as CookieBase;
 
 class Client
 {
+    public static function getAgent() {
+        return $_SERVER['HTTP_USER_AGENT'];
+    }
+
     public static function isMobile()
     {
         // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
