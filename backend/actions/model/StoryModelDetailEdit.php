@@ -96,9 +96,14 @@ class StoryModelDetailEdit extends Action
 
         $stories = ArrayHelper::map($storyDatas, 'id', 'title');
 
+        $modelDatas = Models::find()->orderBy(['id' => SORT_DESC])->all();
+        $models = ArrayHelper::map($modelDatas, 'id', 'model_name');
+
+
         return $this->controller->render('story_model_detail_edit', [
             'storyModelDetailModel'    => $model,
             'stories'                   => $stories,
+            'models'    => $models,
         ]);
     }
 }
