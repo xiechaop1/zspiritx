@@ -801,7 +801,9 @@ class DoApi extends ApiAction
 
 
         $targetStoryModelId = !empty($this->_get['target_story_model_id']) ? $this->_get['target_story_model_id'] : 0;
+        $targetStoryModelDetailId = !empty($this->_get['target_story_model_detail_id']) ? $this->_get['target_story_model_detail_id'] : 0;
         $userModelId = !empty($this->_get['user_model_id']) ? $this->_get['user_model_id'] : 0;
+
 
         $bagageModel = UserModels::find()
             ->where([
@@ -809,8 +811,9 @@ class DoApi extends ApiAction
                 'is_delete' => Common::STATUS_NORMAL,
 //                'user_id' => (int)$userId,
 //                'session_id' => (int)$sessionId,
-            ])
-            ->one();
+            ]);
+
+        $bagageModel = $bagageModel->one();
 
         if (empty($bagageModel)) {
             return $this->fail('背包中没有该道具', ErrorCode::USER_MODEL_NOT_FOUND);
@@ -858,14 +861,29 @@ class DoApi extends ApiAction
                     ) {
                         throw new \yii\base\Exception('您需要选择一个对象', ErrorCode::USER_MODEL_NO_TARGET);
                     }
-                    
+
+//                    $targetStoryModel = StoryModels::find()
+//                        ->where([
+//                            'id' => (int)$targetStoryModelId,
+//                        ])
+//                        ->one();
+
                     $storyModelLinks = StoryModelsLink::find()
                         ->where([
                             'story_id'          => $storyId,
-                            'story_model_id'    => $storyModel->id,
+//                            'story_model_id'    => $storyModel->id,
 //                            'story_model_id2'   => $targetStoryModelId,
-                        ])
-                        ->all();
+                        ]);
+                    if (!empty($storyModel->story_model_detail_id)) {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_detail_id' => $storyModel->story_model_detail_id,
+                        ]);
+                    } else {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_id' => $storyModel->story_model_id,
+                        ]);
+                    }
+                    $storyModelLinks = $storyModelLinks->all();
 
                         if (empty($storyModelLinks)) {
                             $ret = json_encode([
@@ -879,7 +897,11 @@ class DoApi extends ApiAction
                                 if ($storyModelLink->story_model_id2 == '-1') {
                                     $noFoundRet = $storyModelLink->eff_exec;
                                     $noFoundType = $storyModelLink->eff_type;
-                                } else if ($storyModelLink->story_model_id2 == $targetStoryModelId) {
+                                } else if (
+                                    (!empty($targetStoryModelDetailId) && $storyModelLink->story_model_detail_id2 == $targetStoryModelDetailId)
+                                    ||
+                                    (empty($targetStoryModelDetailId) && $storyModelLink->story_model_id2 == $targetStoryModelId)
+                                ) {
                                     $ret = $storyModelLink->eff_exec;
                                     $type = $storyModelLink->eff_type;
                                     break;
@@ -964,6 +986,16 @@ class DoApi extends ApiAction
         $sessionModel->last_operator_id = $userId;
         try {
             $ret = $sessionModel->save();
+
+            $userModelBaggage = UserModels::find()
+                ->where([
+                    'user_id'           => (int)$userId,
+                    'session_id'        => (int)$sessionId,
+                    'model_id'          => $sessionModel->model_id,
+//                    'story_model_id'    => (int)$storyModelId,
+//                    'session_model_id'  => $sessionModel->id,
+                ])
+                ->one();
 
             $userModelBaggage = UserModels::find()
                 ->where([

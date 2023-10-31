@@ -19,8 +19,10 @@ class StoryModelsLink extends \common\models\StoryModelsLink
     public function rules()
     {
         return [
-            [['story_model_id', 'story_model_id2', 'story_id'], 'integer'],
+            [['story_id', 'story_model_id', 'story_model_detail_id',
+                'story_model_id2', 'story_model_detail_id2', 'eff_type'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
+            [['eff_exec' ], 'string'],
         ];
     }
 
