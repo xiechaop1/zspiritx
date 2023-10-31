@@ -37,7 +37,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('剧本');
-            echo $form->field($storyModel, 'model_id')->widget('\kartik\select2\Select2', [
+            echo $form->field($storyModelDetailModel, 'model_id')->widget('\kartik\select2\Select2', [
                 'data' => $models,
                 'options' => [
                     'multiple' => false
