@@ -126,11 +126,16 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
-                        // if(v_ture==v_select){
+                        if (obj.data.type == 1) {
+                            var params = obj.data.ret;
+                            Unity.call(params);
+                        } else {
+                            // if(v_ture==v_select){
                             $.alert('使用成功！');
-                        setTimeout(function (){
-                            window.location.reload();
-                        },3000)
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 3000);
+                        }
 
                         // }
                         // else{
