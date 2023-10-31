@@ -21,6 +21,14 @@ class StoryModelDetail extends \common\models\gii\StoryModelDetail
         ];
     }
 
+    public function getModel(){
+        return $this->hasOne('common\models\Models',  ['id' => 'model_id']);
+    }
+
+    public function getBuff(){
+        return $this->hasOne('common\models\Buff',  ['id' => 'active_next']);
+    }
+
     public function getStoryModel(){
         return $this->hasOne('common\models\Story',  ['id' => 'story_model_id']);
     }

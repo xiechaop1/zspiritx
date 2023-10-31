@@ -73,6 +73,16 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
                     [
+                        'label' => '模型',
+                        'attribute' => 'model_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            $modelName = !empty($model->model->model_name) ?
+                                $model->model->model_name : '未知';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_detail_edit', 'id' => $model->id]));
+                        },
+                    ],
+                    [
                         'label' => '详情名称',
                         'attribute' => 'title',
                         'format' => 'raw',
