@@ -63,14 +63,21 @@ class StoryModelLink extends Action
             }
 
             $storyModel = \common\models\StoryModels::findOne($model->story_model_id);
-            $storyModel2 = \common\models\StoryModels::findOne($model->story_model_id2);
 
-            if (empty($storyModel) || empty($storyModel2)) {
+            if (empty($storyModel)) {
                 Yii::$app->session->setFlash('danger', '模型没找到，操作失败');
                 return $this->controller->refresh();
             }
             $model->story_model_detail_id = $storyModel->story_model_detail_id;
-            $model->story_model_detail_id2 = $storyModel2->story_model_detail_id;
+            
+            if ($model->story_model_id2 >= 0) {
+                $storyModel2 = \common\models\StoryModels::findOne($model->story_model_id2);
+                if (empty($storyModel) || empty($storyModel2)) {
+                    Yii::$app->session->setFlash('danger', '目标模型没找到，操作失败');
+                    return $this->controller->refresh();
+                }
+                $model->story_model_detail_id2 = $storyModel2->story_model_detail_id;
+            }
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', '操作成功');
