@@ -26,7 +26,7 @@ class StoryModels extends \yii\db\ActiveRecord
     {
         return [
             [['lat', 'lng', 'show_x', 'show_y', 'show_z', 'misrange', 'trigger_misrange', 'act_misrange', 'scale' ], 'number'],
-            [['is_unique', 'is_visable', 'can_use', 'story_stage_id', 'story_id', 'story_model_detail_id',
+            [['is_unique', 'is_visable', 'use_allow', 'story_stage_id', 'story_id', 'story_model_detail_id',
                 'building_id', 'poi_id', 'timebegin', 'timeend',
                 'rate', 'scan_type', 'pre_story_model_id', 'model_id',
                  'active_type', 'direction', 'sort_by', 'status'], 'integer'],

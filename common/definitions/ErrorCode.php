@@ -56,6 +56,9 @@ class ErrorCode extends Api
     const USER_MODEL_NOT_ENOUGH     = -80002;   // 用户模型不足
     const USER_MODEL_BUFF_NOT_FOUND = -80003;   // 用户模型buff不存在
 
+    const USER_MODEL_NO_TARGET      = -80004;   // 用户模型没有目标
+    const USER_MODEL_NOT_ALLOW      = -80005;   // 用户模型不允许使用
+
     const USER_KNOWLEDGE_NOT_FOUND      = -90001;   // 知识不存在
     const USER_KNOWLEDGE_OPERATE_FAILED = -90002;   // 知识操作失败
 

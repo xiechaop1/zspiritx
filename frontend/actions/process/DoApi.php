@@ -28,6 +28,7 @@ use common\models\Story;
 use common\models\StoryExtend;
 use common\models\StoryGoal;
 use common\models\StoryModels;
+use common\models\StoryModelsLink;
 use common\models\StoryRole;
 use common\models\StoryStages;
 use common\models\User;
@@ -797,7 +798,9 @@ class DoApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
-        $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
+
+
+        $targetStoryModelId = !empty($this->_get['target_story_model_id']) ? $this->_get['target_story_model_id'] : 0;
         $userModelId = !empty($this->_get['user_model_id']) ? $this->_get['user_model_id'] : 0;
 
         $bagageModel = UserModels::find()
@@ -824,24 +827,81 @@ class DoApi extends ApiAction
                 return $this->fail('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
             }
 
-//            $activeArray = \common\helpers\Model::decodeActive($storyModel->activeNext);
-            if ($storyModel->active_type == StoryModels::ACTIVE_TYPE_BUFF) {
-                $userStory = UserStory::findOne([
-                    'user_id' => (int)$userId,
-                    'session_id' => (int)$sessionId,
-                    'story_id' => (int)$storyId,
-                ]);
-
-                if (!empty($userStory)
-                    && !empty($storyModel->buff)
-                ) {
-                    $userStory->buff = $storyModel->buff->id;
-                    $userStory->buff_expiretime = time() + $storyModel->buff->expire_time;
-                    $userStory->save();
-                } else {
-                    throw new \yii\base\Exception('执行出现问题', ErrorCode::USER_MODEL_BUFF_NOT_FOUND);
-                }
+            if ($storyModel->use_allow == StoryModels::USE_ALLOW_NOT) {
+                return $this->fail('该道具不允许使用', ErrorCode::USER_MODEL_NOT_ALLOW);
             }
+
+//            $activeArray = \common\helpers\Model::decodeActive($storyModel->activeNext);
+            switch ($storyModel->active_type)
+            {
+                case StoryModels::ACTIVE_TYPE_BUFF:
+                    $userStory = UserStory::findOne([
+                        'user_id' => (int)$userId,
+                        'session_id' => (int)$sessionId,
+                        'story_id' => (int)$storyId,
+                    ]);
+
+                    if (!empty($userStory)
+                        && !empty($storyModel->buff)
+                    ) {
+                        $userStory->buff = $storyModel->buff->id;
+                        $userStory->buff_expiretime = time() + $storyModel->buff->expire_time;
+                        $userStory->save();
+                    } else {
+                        throw new \yii\base\Exception('执行出现问题', ErrorCode::USER_MODEL_BUFF_NOT_FOUND);
+                    }
+                    $res = '';
+                    break;
+                case StoryModels::ACTIVE_TYPE_MODEL:
+                    if ($storyModel->use_allow == StoryModels::USE_ALLOW_NEED_TARGET
+                        && empty($targetStoryModelId)
+                    ) {
+                        throw new \yii\base\Exception('您需要选择一个对象', ErrorCode::USER_MODEL_NO_TARGET);
+                    }
+                    
+                    $storyModelLinks = StoryModelsLink::find()
+                        ->where([
+                            'story_id'          => $storyId,
+                            'story_model_id'    => $storyModel->id,
+//                            'story_model_id2'   => $targetStoryModelId,
+                        ])
+                        ->all();
+
+                        if (empty($storyModelLinks)) {
+                            $ret = json_encode([
+                                'WebViewOff'    => 1,
+                                'GotoAction'    => 'dialog-empty',
+                            ]);
+                            $type = StoryModelsLink::EFF_TYPE_DIALOG;
+                        } else {
+                            $ret = '';
+                            foreach ($storyModelLinks as $storyModelLink) {
+                                if ($storyModelLink->story_model_id2 == '-1') {
+                                    $noFoundRet = $storyModelLink->eff_exec;
+                                    $noFoundType = $storyModelLink->eff_type;
+                                } else if ($storyModelLink->story_model_id2 == $targetStoryModelId) {
+                                    $ret = $storyModelLink->eff_exec;
+                                    $type = $storyModelLink->eff_type;
+                                    break;
+                                }
+                            }
+                            if (empty($ret)) {
+                                $ret = $noFoundRet;
+                                $type = $noFoundType;
+                            }
+                        }
+                        $res = '';
+                        if ($type == StoryModelsLink::EFF_TYPE_DIALOG) {
+                            $res = [
+                                'type'  => $type,
+                                'ret'   => $ret,
+                            ];
+                        }
+                    break;
+                default:
+                    break;
+            }
+
 
             $bagageModel->use_ct -= 1;
             if ($bagageModel->use_ct <= 0) {
@@ -849,6 +909,8 @@ class DoApi extends ApiAction
             }
             $bagageModel->save();
             $transaction->commit();
+
+            return $this->success($res);
 
         } catch (\Exception $e) {
             $transaction->rollBack();

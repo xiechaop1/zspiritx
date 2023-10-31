@@ -57,6 +57,11 @@ class StoryModelLink extends Action
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
 
+            if (!\common\helpers\Common::isJson($model->eff_exec)) {
+                eval('$tmp = ' . $model->eff_exec);
+                $model->eff_exec = json_encode($tmp);
+            }
+
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', '操作成功');
             } else {

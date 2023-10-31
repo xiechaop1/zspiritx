@@ -83,6 +83,18 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('是否显示');
             echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
+            echo $form->field($storyModel, 'active_type')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$activeType2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('动作类型');
+            echo $form->field($storyModel, 'use_allow')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$useAllow2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('使用规范');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');
             echo $form->field($storyModel, 'timebegin')->textInput(['value' => $storyModel->timebegin])->label('开始时间');
             echo $form->field($storyModel, 'timeend')->textInput(['value' => $storyModel->timeend])->label('结束时间');

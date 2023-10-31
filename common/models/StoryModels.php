@@ -45,7 +45,7 @@ class StoryModels extends \common\models\gii\StoryModels
     public static $activeType2Name = [
         self::ACTIVE_TYPE_CHAT => '聊天',
         self::ACTIVE_TYPE_BUFF => 'BUFF',
-        self::ACTIVE_TYPE_MODEL => '模型',
+        self::ACTIVE_TYPE_MODEL => '对模型',
     ];
 
     const VISIBLE_SHOW        = 0;    // 显示
@@ -54,6 +54,16 @@ class StoryModels extends \common\models\gii\StoryModels
     public static $visible2Name = [
         self::VISIBLE_SHOW => '显示',
         self::VISIBLE_HIDE => '隐藏',
+    ];
+
+    const USE_ALLOW_NOT             = 0;    // 不允许被使用
+    const USE_ALLOW_TO_SELF         = 1;    // 允许自己使用
+    const USE_ALLOW_NEED_TARGET     = 2;    // 需要目标使用
+
+    public static $useAllow2Name = [
+        self::USE_ALLOW_NOT => '不允许被使用',
+        self::USE_ALLOW_TO_SELF => '允许自己使用',
+        self::USE_ALLOW_NEED_TARGET => '需要目标使用',
     ];
 
     public function behaviors()

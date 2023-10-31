@@ -62,7 +62,7 @@ echo \dmstr\widgets\Alert::widget();
                     echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList, ['value' => $model->story_model_id])->label('模型');
                     echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList, ['value' => $model->story_model_id2])->label('关联模型');
                     echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name, ['value' => $model->eff_type])->label('类型');
-                    echo $form->field($storyModelLink, 'eff_exec')->textInput(['value' => $model->eff_exec])->label('执行');
+                    echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => var_export(json_decode($model->eff_exec, true), true), 'rows' => 15])->label('执行');
                     ?>
                     <div class="form-group">
                         <label class="control-label col-sm-2"></label>
@@ -101,10 +101,13 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
                     [
-                        'label' => '关联模型',
+                        'label' => '关联模型(未匹配填-1)',
                         'attribute' => 'story_model_id2',
                         'format'    => 'raw',
                         'value' => function ($model) {
+                            if ($model->story_model_id2 == '-1') {
+                                return '未匹配';
+                            }
                             return !empty($model->storyModel2->story_model_name) ?
                                 $model->storyModel2->story_model_name : $model->storyModel2->model->model_name;
                         },
@@ -196,7 +199,7 @@ echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList)->label(
 echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList)->label('模型');
 echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList)->label('关联模型');
 echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name)->label('类型');
-echo $form->field($storyModelLink, 'eff_exec')->label('执行');
+echo $form->field($storyModelLink, 'eff_exec')->textarea(['rows' => 15])->label('执行');
 
 ?>
     <div class="form-group">
