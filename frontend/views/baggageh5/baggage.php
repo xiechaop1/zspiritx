@@ -56,11 +56,11 @@ $this->title = '我的背包';
 
 
                     if (!empty($item->storyModel)
-                        && $item->storyModel->can_use == 1
+                        && $item->storyModel->use_allow == \common\models\StoryModels::USE_ALLOW_NOT
                     ) {
-                        $baggageName = 'baggage';
-                    } else {
                         $baggageName = 'baggage_nouse';
+                    } else {
+                        $baggageName = 'baggage';
                     }
                 echo '
                 <div class="m-t-30 col-sm-12 col-md-12">
