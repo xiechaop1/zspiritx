@@ -84,7 +84,7 @@ class StoryModelLink extends Action
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
         $storyModelDatas = \common\models\StoryModels::find()->orderBy(['id' => SORT_DESC])->all();
-        $storyModelList = [];
+        $storyModelList = ['-1' => '无'];
         foreach ($storyModelDatas as $storyModel) {
             $storyModelList[$storyModel->id] = !empty($storyModel->story_model_name)
                 ? $storyModel->story_model_name :
