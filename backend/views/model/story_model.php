@@ -81,6 +81,10 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => 'Model Inst UnityID',
                     ],
                     [
+                        'attribute' => 'story_model_name',
+                        'label' => '剧本模型',
+                    ],
+                    [
                         'label' => '模型',
                         'attribute' => 'model_id',
                         'format'    => 'raw',
