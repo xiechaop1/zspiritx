@@ -98,7 +98,8 @@ class StoryModelLink extends Action
         $storyModelDatas = \common\models\StoryModels::find()->orderBy(['id' => SORT_DESC])->all();
         $storyModelList = ['-1' => '无'];
         foreach ($storyModelDatas as $storyModel) {
-            $storyModelList[$storyModel->id] = $storyModel->story->title . ' ' .
+            $storyModelList[$storyModel->id] = $storyModel->story->title;
+            $storyModelList[$storyModel->id] .= ' ' .
                 !empty($storyModel->story_model_name)
                 ? $storyModel->story_model_name . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' :
                     !empty($storyModel->model->model_name)
