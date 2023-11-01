@@ -862,11 +862,11 @@ class DoApi extends ApiAction
                         throw new \yii\base\Exception('您需要选择一个对象', ErrorCode::USER_MODEL_NO_TARGET);
                     }
 
-//                    $targetStoryModel = StoryModels::find()
-//                        ->where([
-//                            'id' => (int)$targetStoryModelId,
-//                        ])
-//                        ->one();
+                    $targetStoryModel = StoryModels::find()
+                        ->where([
+                            'id' => (int)$targetStoryModelId,
+                        ])
+                        ->one();
 
                     $storyModelLinks = StoryModelsLink::find()
                         ->where([
@@ -874,13 +874,13 @@ class DoApi extends ApiAction
 //                            'story_model_id'    => $storyModel->id,
 //                            'story_model_id2'   => $targetStoryModelId,
                         ]);
-                    if (!empty($storyModel->story_model_detail_id)) {
+                    if (!empty($targetStoryModel->story_model_detail_id)) {
                         $storyModelLinks = $storyModelLinks->andFilterWhere([
-                            'story_model_detail_id' => $storyModel->story_model_detail_id,
+                            'story_model_detail_id2' => $targetStoryModel->story_model_detail_id,
                         ]);
                     } else {
                         $storyModelLinks = $storyModelLinks->andFilterWhere([
-                            'story_model_id' => $storyModel->id,
+                            'story_model_id2' => $targetStoryModel->id,
                         ]);
                     }
                     $storyModelLinks = $storyModelLinks->all();
@@ -895,13 +895,13 @@ class DoApi extends ApiAction
                         } else {
                             $ret = '';
                             foreach ($storyModelLinks as $storyModelLink) {
-                                if ($storyModelLink->story_model_id2 == '-1') {
+                                if ($storyModelLink->story_model_id == '-1') {
                                     $noFoundRet = $storyModelLink->eff_exec;
                                     $noFoundType = $storyModelLink->eff_type;
                                 } else if (
-                                    (!empty($targetStoryModelDetailId) && $storyModelLink->story_model_detail_id2 == $targetStoryModelDetailId)
+                                    (!empty($storyModel->story_model_detail_id) && $storyModelLink->story_model_detail_id == $storyModel->story_model_detail_id)
                                     ||
-                                    (empty($targetStoryModelDetailId) && $storyModelLink->story_model_id2 == $targetStoryModelId)
+                                    (empty($storyModel->story_model_id) && $storyModelLink->story_model_id == $storyModel->story_model_id)
                                 ) {
                                     $ret = $storyModelLink->eff_exec;
                                     $type = $storyModelLink->eff_type;
