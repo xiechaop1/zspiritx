@@ -32,6 +32,9 @@ $this->title = '我的背包';
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
+<input type="hidden" name="target_story_model_id" value="<?= $targetStoryModelId ?>">
+<input type="hidden" name="target_model_id" value="<?= $targetStoryModelDetailId ?>">
+<input type="hidden" name="target_story_model_detail_id" value="<?= $modelId ?>">
 <div class="w-100 m-auto">
     <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
                         返回

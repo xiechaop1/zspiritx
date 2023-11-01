@@ -31,6 +31,10 @@ class Baggage extends Action
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
+        $targetStoryModelId = !empty($_GET['target_story_model_id']) ? $_GET['target_story_model_id'] : 0;
+        $targetStoryModelDetailId = !empty($_GET['target_story_model_detail_id']) ? $_GET['target_story_model_detail_id'] : 0;
+        $targetModelId = !empty($_GET['target_model_id']) ? $_GET['target_model_id'] : 0;
+
         $model = UserModels::find()
             ->with('model', 'storyModel', 'sessionModel')
             ->where([
@@ -48,6 +52,9 @@ class Baggage extends Action
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
+            'targetStoryModelId' => $targetStoryModelId,
+            'targetStoryModelDetailId' => $targetStoryModelDetailId,
+            'targetModelId' => $targetModelId,
         ]);
     }
 }
