@@ -932,7 +932,7 @@ class DoApi extends ApiAction
             $bagageModel->save();
             $transaction->commit();
 
-            return $this->success($res);
+            return $res;
 
         } catch (\Exception $e) {
             $transaction->rollBack();
