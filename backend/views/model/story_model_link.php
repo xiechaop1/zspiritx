@@ -95,6 +95,9 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'story_model_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
+                            if ($model->story_model_id == '-1') {
+                                return '未匹配';
+                            }
                             $modelName = !empty($model->storyModel->story_model_name) ?
                                 $model->storyModel->story_model_name : $model->storyModel->model->model_name;
                             $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
