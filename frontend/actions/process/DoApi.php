@@ -886,11 +886,12 @@ class DoApi extends ApiAction
                     $storyModelLinks = $storyModelLinks->all();
 
                         if (empty($storyModelLinks)) {
-                            $ret = json_encode([
-                                'WebViewOff'    => 1,
-                                'GotoAction'    => 'dialog-empty',
-                            ]);
-                            $type = StoryModelsLink::EFF_TYPE_DIALOG;
+//                            $ret = json_encode([
+//                                'WebViewOff'    => 1,
+//                                'GotoAction'    => 'dialog-empty',
+//                            ]);
+//                            $type = StoryModelsLink::EFF_TYPE_DIALOG;
+                            throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
                         } else {
                             $ret = '';
                             foreach ($storyModelLinks as $storyModelLink) {
