@@ -57,7 +57,12 @@ class StoryModelLink extends Action
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
 
-            if (!\common\helpers\Common::isJson($model->eff_exec)) {
+            if (!\common\helpers\Common::isJson($model->eff_exec)
+             && !empty($model->eff_exec)
+            ) {
+                if (strpos($model->eff_exec, -1) != ';') {
+                    $model->eff_exec .= ';';
+                }
                 eval('$tmp = ' . $model->eff_exec);
                 $model->eff_exec = json_encode($tmp);
             }
@@ -94,9 +99,9 @@ class StoryModelLink extends Action
         $storyModelList = ['-1' => '无'];
         foreach ($storyModelDatas as $storyModel) {
             $storyModelList[$storyModel->id] = !empty($storyModel->story_model_name)
-                ? $storyModel->story_model_name :
+                ? $storyModel->story_model_name . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' :
                     !empty($storyModel->model->model_name)
-                        ? $storyModel->model->model_name : ''
+                        ? $storyModel->model->model_name . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' : '[' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']';
             ;
         }
 

@@ -112,6 +112,7 @@ class Pickup extends Action
                 $userModelBaggage = new UserModels();
                 $userModelBaggage->user_id = $userId;
                 $userModelBaggage->session_id = $sessionId;
+                $userModelBaggage->story_id = $storyId;
                 $userModelBaggage->model_id = $sessionModel->model_id;
                 $userModelBaggage->story_model_id = $storyModelId;
                 $userModelBaggage->session_model_id = $sessionModel->id;

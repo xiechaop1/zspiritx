@@ -86,6 +86,12 @@
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
+                                'label' => '用户模型（背包）列表',
+                                'url' => ['/model/user_model'],
+                                'active' => in_array($this->context->route, ['model/user_model', 'model/user_model_edit']),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
                                 'label' => '模型列表',
                                 'url' => ['/model/models'],
                                 'active' => in_array($this->context->route, ['model/models', 'model/models_edit']),

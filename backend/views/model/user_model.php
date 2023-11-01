@@ -11,24 +11,19 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '剧本模型管理',
+    'label' => '模型管理',
 ];
 
-$this->title = '剧本模型关联列表';
+$this->title = '用户模型列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::button('添加', [
+            <?= \yii\bootstrap\Html::a('添加', '/model/story_model_edit', [
                 'class' => 'btn btn-primary pull-right',
-                'data-toggle' => "modal",
-                'data-target' => '#add-form'
             ]) ?>
-<!--            --><?php //= \yii\bootstrap\Html::a('添加', '/model/story_stage_edit', [
-//                'class' => 'btn btn-primary pull-right',
-//            ]) ?>
         </div>
         <div class="box-body">
             <?php
@@ -36,7 +31,7 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($storyModelLink, $storyList, $storyModelList) {
+                'afterRow' => function ($model, $key, $index) use ($userModel) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '查看详情',
@@ -58,19 +53,6 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
-                    echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList, ['value' => $model->story_id])->label('剧本');
-                    echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList, ['value' => $model->story_model_id])->label('模型');
-                    echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList, ['value' => $model->story_model_id2])->label('关联模型');
-                    echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name, ['value' => $model->eff_type])->label('类型');
-                    echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => var_export(json_decode($model->eff_exec, true), true), 'rows' => 15])->label('执行');
-                    ?>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2"></label>
-                        <div class="col-sm-6">
-                            <button type="submit" class="btn btn-primary">提交</button>
-                        </div>
-                    </div>
-                    <?php
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
@@ -85,52 +67,89 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'title',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->story->title) ?
-                                $model->story->title : '-';
+                            $storyName = !empty($model->story->title) ?
+                                $model->story->title : '未知';
+                            $storyName .= ' [' . $model->story_id . ']';
+                            return $storyName;
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
                     [
+                        'label' => '用户',
+                        'attribute' => 'user_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            $userName = !empty($model->user->user_name) ?
+                                $model->user->user_name : '未知';
+                            $userName .= ' [' . $model->user_id . ']';
+                            return $userName;
+                        },
+                    ],
+                    [
                         'label' => '模型',
+                        'attribute' => 'model_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            $modelName = !empty($model->model->model_name) ?
+                                $model->model->model_name : '未知';
+                            $modelName .= ' [' . $model->model_id . ']';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/user_model_edit', 'id' => $model->id]));
+                        },
+                    ],
+                    [
+                        'label' => '剧本模型',
                         'attribute' => 'story_model_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
                             $modelName = !empty($model->storyModel->story_model_name) ?
-                                $model->storyModel->story_model_name : $model->storyModel->model->model_name;
-                            $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
-                            return $modelName;
+                                $model->storyModel->story_model_name : '未知';
+                            $modelName .= ' [' . $model->story_model_id . ']';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/user_model_edit', 'id' => $model->id]));
                         },
-                        'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
                     [
-                        'label' => '关联模型(未匹配填-1)',
-                        'attribute' => 'story_model_id2',
+                        'label' => '模型详情',
+                        'attribute' => 'story_model_detail_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            if ($model->story_model_id2 == '-1') {
-                                return '未匹配';
+                            $modelName = !empty($model->storyModel->detail->title) ?
+                                $model->storyModel->detail->title : '未知/无';
+                            $modelName .= ' [' . $model->story_model_detail_id . ']';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_detail', 'id' => $model->storyModel->story_model_detail_id]));
+                        },
+                    ],
+                    [
+                        'attribute' => 'session_id',
+                        'label' => '场次ID',
+                    ],
+                    [
+                        'attribute' => 'session_model_id',
+                        'label' => '场次模型ID',
+                    ],
+                    [
+                        'attribute' => 'use_ct',
+                        'label' => '剩余次数',
+                    ],
+                    [
+                        'label' => '是否删除',
+                        'attribute' => 'is_delete',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            if ($model->is_delete == \common\definitions\Common::STATUS_DELETED) {
+                                return '是';
+                            } else {
+                                return '否';
                             }
-                            $modelName = !empty($model->storyModel2->story_model_name) ?
-                                $model->storyModel2->story_model_name : $model->storyModel2->model->model_name;
-                            $modelName .= ' [' . $model->story_model_id2 . '|' . $model->story_model_detail_id2 . ']';
-                            return $modelName;
+//                            return $model->is_delete == 0 ? '否' : '是';
                         },
-                        'filter' => Html::activeInput('text', $searchModel, 'story_model_id2'),
                     ],
                     [
-                        'label' => '效果类型',
-                        'attribute' => 'eff_type',
-                        'format'    => 'raw',
+                        'label' => '创建时间',
+                        'format' => 'raw',
+                        'filter'    => false,
                         'value' => function ($model) {
-                            return !empty(\common\models\StoryModelsLink::$effType2Name[$model->eff_type]) ?
-                                \common\models\StoryModelsLink::$effType2Name[$model->eff_type] : ' - ';
-                        },
-                        'filter' => Html::activeInput('text', $searchModel, 'eff_type'),
-                    ],
-                    [
-                        'label' => '执行',
-                        'attribute' => 'eff_exec',
-                        'filter' => false,
+                            return Date('Y-m-d H:i:s', $model->created_at);
+                        }
                     ],
                     [
                         'label' => '更新时间',
@@ -143,18 +162,11 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {edit} {delete}',
+                        'template' => '{lines} {edit} {delete} {reset}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
-                                    'class' => 'btn btn-xs btn-primary',
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#case-form-' . $model->id
-                                ]);
+                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['model/user_model_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
                             },
-//                            'edit' => function ($url, $model, $key) {
-//                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['model/story_stage_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
-//                            },
 //                            'detail' => function ($url, $model, $key) {
 //                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
 //                            },
@@ -164,6 +176,15 @@ echo \dmstr\widgets\Alert::widget();
                                     'request-url' => '',
                                     'request-type' => 'POST',
                                     'data-action' => 'delete',
+                                    'data-id' => $model->id
+                                ]);
+                            },
+                            'reset' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::button('恢复', [
+                                    'class' => 'btn btn-xs btn-success ajax_single_btn',
+                                    'request-url' => '',
+                                    'request-type' => 'POST',
+                                    'data-action' => 'reset',
                                     'data-id' => $model->id
                                 ]);
                             },
@@ -197,14 +218,6 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
-?>
-<?php
-echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList)->label('剧本');
-echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList)->label('模型');
-echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList)->label('关联模型');
-echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name)->label('类型');
-echo $form->field($storyModelLink, 'eff_exec')->textarea(['rows' => 15])->label('执行');
-
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>
