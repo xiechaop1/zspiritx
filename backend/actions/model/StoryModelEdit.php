@@ -75,6 +75,18 @@ class StoryModelEdit extends Action
 
             $model->dialog = Model::encodeDialog($model->dialog);
 
+            if (empty($model->story_model_name)) {
+                if (!empty($model->model_id)) {
+                    $modelModel = Model::find()
+                        ->where(['id' => $model->id])
+                        ->one();
+
+                    if ($modelModel) {
+                        $model->story_model_name = $modelModel->model_name;
+                    }
+                }
+            }
+
             if ($model->validate()) {
 
                 if ($model->save()) {
