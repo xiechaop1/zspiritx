@@ -105,6 +105,9 @@ $(function () {
         var user_id=$("input[name='user_id']").val();
         var story_id=$("input[name='story_id']").val();
         var session_id=$("input[name='session_id']").val();
+        var target_story_model_id=$("input[name='target_story_model_id']").val();
+        var target_story_model_detail_id=$("input[name='target_story_model_detail_id']").val();
+        var target_model_id=$("input[name='target_model_id']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
         var v_select=$("input[name='baggage']:checked").val();
@@ -125,6 +128,9 @@ $(function () {
                     story_id:story_id,
                     session_id:session_id,
                     user_model_id:v_select,
+                    target_story_model_id:target_story_model_id,
+                    target_story_model_detail_id:target_story_model_detail_id,
+                    target_model_id:target_model_id,
                     is_test:1
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
