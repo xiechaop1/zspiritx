@@ -83,6 +83,12 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'attribute' => 'story_model_name',
                         'label' => '剧本模型',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            $modelName = !empty($model->story_model_name) ?
+                                $model->story_model_name : '未知';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_edit', 'id' => $model->id]));
+                        },
                     ],
                     [
                         'label' => '模型',
