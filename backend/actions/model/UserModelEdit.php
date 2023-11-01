@@ -101,7 +101,10 @@ class UserModelEdit extends Action
         $storyModelData = StoryModels::find()->orderBy(['id' => SORT_DESC])->all();
         $storyModelDatas = [];
         foreach ($storyModelData as $smd) {
-            $storyModelDatas[$smd->id] = $smd->story_model_name . ' [' . $smd->id . '|' . $smd->story_model_detail_id . ']';
+            $storyModelDatas[$smd->id] = !empty($smd->story_model_name)
+                    ? $smd->story_model_name
+                    : !empty($smd->model->model_name) ? $smd->model->model_name : '未知';
+            $storyModelDatas[$smd->id] .= ' [' . $smd->id . '|' . $smd->story_model_detail_id . ']';
         }
 
         $userData = \common\models\User::find()->orderBy(['id' => SORT_DESC])->all();

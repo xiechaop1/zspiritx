@@ -21,7 +21,7 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/model/story_model_edit', [
+            <?= \yii\bootstrap\Html::a('添加', '/model/user_model_edit', [
                 'class' => 'btn btn-primary pull-right',
             ]) ?>
         </div>
