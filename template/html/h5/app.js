@@ -388,6 +388,10 @@ $(function () {
         Unity.call(data);
     });
 
+    $("#qa_return_btn").click(function (){
+        Unity.call('WebViewOff&FalseAnswer');
+    });
+
     $("#msg_return_btn").click(function (){
         Unity.call('WebViewOff&TrueAnswer');
         //

@@ -69,7 +69,7 @@ class StoryModelLink extends Action
                 return $this->controller->refresh();
             }
             $model->story_model_detail_id = $storyModel->story_model_detail_id;
-            
+
             if ($model->story_model_id2 >= 0) {
                 $storyModel2 = \common\models\StoryModels::findOne($model->story_model_id2);
                 if (empty($storyModel) || empty($storyModel2)) {
