@@ -936,7 +936,8 @@ class DoApi extends ApiAction
 
         } catch (\Exception $e) {
             $transaction->rollBack();
-            return $this->fail($e->getMessage(), $e->getCode());
+            throw $e;
+//            return $this->fail($e->getMessage(), $e->getCode());
         }
 
     }
@@ -1039,7 +1040,8 @@ class DoApi extends ApiAction
         } catch (\Exception $e) {
 //            var_dump($e);
             $transaction->rollBack();
-            return $this->fail($e->getMessage(), $e->getCode());
+            throw $e;
+//            return $this->fail($e->getMessage(), $e->getCode());
         }
 
         return $result;
