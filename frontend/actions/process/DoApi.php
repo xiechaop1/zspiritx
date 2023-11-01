@@ -880,7 +880,7 @@ class DoApi extends ApiAction
                         ]);
                     } else {
                         $storyModelLinks = $storyModelLinks->andFilterWhere([
-                            'story_model_id' => $storyModel->story_model_id,
+                            'story_model_id' => $storyModel->id,
                         ]);
                     }
                     $storyModelLinks = $storyModelLinks->all();
