@@ -65,7 +65,13 @@ $(function () {
                             $("#answer-right-box").removeClass('hide');
                             // $("#h5-right").modal('show');
                             setTimeout(function (){
-                                Unity.call('WebViewOff&TrueAnswer');
+                                // Unity.call('WebViewOff&TrueAnswer');
+                                var params = {
+                                    'WebViewOff':1,
+                                    'AnswerType':1
+                                }
+                                var data=$.toJSON(params);
+                                Unity.call(data);
                             },3000)
                         }
                         else{
@@ -73,7 +79,13 @@ $(function () {
                             $("#answer-error-box").removeClass('hide');
                             // $("#h5-worry").modal('show');
                             setTimeout(function (){
-                                Unity.call('WebViewOff&FalseAnswer');
+                                // Unity.call('WebViewOff&FalseAnswer');
+                                var params = {
+                                    'WebViewOff':1,
+                                    'AnswerType':2
+                                }
+                                var data=$.toJSON(params);
+                                Unity.call(data);
                             },3000)
                         }
                     }
@@ -382,21 +394,27 @@ $(function () {
 
     $("#return_btn").click(function (){
         var params = {
-            'WebViewOff':1,
+            'WebViewOff':1
         }
         var data=$.toJSON(params);
         Unity.call(data);
     });
 
     $("#qa_return_btn").click(function (){
-        Unity.call('WebViewOff&FalseAnswer');
+        // Unity.call('WebViewOff&FalseAnswer');
+        var params = {
+            'WebViewOff':1,
+            'AnswerType':2
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
     });
 
     $("#msg_return_btn").click(function (){
         // Unity.call('WebViewOff&TrueAnswer');
 
         var params = {
-            'WebViewOff':1,
+            'WebViewOff':1
         }
         var data=$.toJSON(params);
         Unity.call(data);
