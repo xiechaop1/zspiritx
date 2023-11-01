@@ -403,8 +403,8 @@ $(function () {
     $("#qa_return_btn").click(function (){
         // Unity.call('WebViewOff&FalseAnswer');
         var params = {
-            'WebViewOff':1,
-            'AnswerType':2
+            'WebViewOff':1
+            // 'AnswerType':2
         }
         var data=$.toJSON(params);
         Unity.call(data);
