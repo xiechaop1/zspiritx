@@ -79,7 +79,7 @@ class StoryModelLink extends Action
 
             if ($model->story_model_id2 >= 0) {
                 $storyModel2 = \common\models\StoryModels::findOne($model->story_model_id2);
-                if (empty($storyModel) || empty($storyModel2)) {
+                if (empty($storyModel2)) {
                     Yii::$app->session->setFlash('danger', '目标模型没找到，操作失败');
                     return $this->controller->refresh();
                 }
