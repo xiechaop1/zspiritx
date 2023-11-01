@@ -89,6 +89,7 @@ echo \dmstr\widgets\Alert::widget();
                                 $model->story_model_name : '未知';
                             return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_edit', 'id' => $model->id]));
                         },
+//                        'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
                     [
                         'label' => '模型',

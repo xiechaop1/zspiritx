@@ -57,6 +57,30 @@ class StoryModels extends \common\models\StoryModels
             $query->andFilterWhere(['story_id' => $this->story_id]);
         }
 
+        if (!empty($this->story_model_name)) {
+            $query->andFilterWhere(['like', 'story_model_name', $this->story_model_name]);
+        }
+
+        if (!empty($this->model_inst_u_id)) {
+            $query->andFilterWhere(['like', 'model_inst_u_id', $this->model_inst_u_id]);
+        }
+
+        if (!empty($this->model_id)) {
+            $query->andFilterWhere(['model_id' => $this->model_id]);
+        }
+
+        if (!empty($this->story_stage_id)) {
+            $query->andFilterWhere(['story_stage_id' => $this->story_stage_id]);
+        }
+
+        if (!empty($this->story_model_detail_id)) {
+            $query->andFilterWhere(['story_model_detail_id' => $this->story_model_detail_id]);
+        }
+
+        if (!empty($this->model_group)) {
+            $query->andFilterWhere(['like', 'model_group', $this->model_group]);
+        }
+
         return $dataProvider;
     }
 }
