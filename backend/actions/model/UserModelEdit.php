@@ -11,6 +11,7 @@ namespace backend\actions\model;
 
 use common\helpers\Model;
 use common\models\Models;
+use common\models\SessionModels;
 use common\models\Story;
 use common\models\StoryModels;
 use common\models\UserModels;
@@ -71,6 +72,19 @@ class UserModelEdit extends Action
             if (!empty($storyModel)) {
                 $model->story_model_detail_id = $storyModel->story_model_detail_id;
             }
+
+//            if (empty($model->model_id)) {
+                $model->model_id = $storyModel->model_id;
+//            }
+
+            $sessionModel = SessionModels::find()
+                ->where([
+                    'session_id' => $model->session_id,
+                    'story_model_id'    => $model->story_model_id,
+                ])
+                ->one();
+
+            $model->session_model_id = $sessionModel->id;
 
             if ($model->validate()) {
 

@@ -44,12 +44,12 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('用户');
 
-            echo $form->field($userModel, 'model_id')->widget('\kartik\select2\Select2', [
-                'data' => $models,
-                'options' => [
-                    'multiple' => false
-                ],
-            ])->label('模型');
+//            echo $form->field($userModel, 'model_id')->widget('\kartik\select2\Select2', [
+//                'data' => $models,
+//                'options' => [
+//                    'multiple' => false
+//                ],
+//            ])->label('模型');
             echo $form->field($userModel, 'session_id')->widget('\kartik\select2\Select2', [
                 'data' => $sessions,
                 'options' => [
