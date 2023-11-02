@@ -38,7 +38,7 @@ class Users extends Action
             switch (Net::post('action')) {
                 case 'delete':
                     if ($user) {
-                        $user->is_delete = Common::STATUS_DELETED;
+                        $user->user_status = User::USER_STATUS_DELETED;
                         if ($user->save()) {
 
                         }
@@ -47,7 +47,7 @@ class Users extends Action
                     break;
                 case 'reset':
                     if ($user) {
-                        $user->is_delete = Common::STATUS_NORMAL;
+                        $user->user_status = User::USER_STATUS_NORMAL;
                         if ($user->save()) {
 
                         }

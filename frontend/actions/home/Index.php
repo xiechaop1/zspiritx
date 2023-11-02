@@ -86,6 +86,7 @@ class Index extends Action
 
         return $this->controller->render('index', [
             'userId'    => $userId,
+            'user'      => $user,
             'stories'   => $stories,
             'orders'    => $orders,
             'ordersMap' => $ordersMap,

@@ -200,6 +200,7 @@ class UserApi extends ApiAction
             $userInfo->user_status = User::USER_STATUS_NORMAL;
             $userInfo->last_login_time = time();
             $userInfo->last_login_device = Client::getAgent();
+            $userInfo->user_type = User::USER_TYPE_NORMAL;
             $userInfo->save();
             $userInfo['id'] = Yii::$app->db->getLastInsertId();
         } else {

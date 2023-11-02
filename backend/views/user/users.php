@@ -56,6 +56,7 @@ echo \dmstr\widgets\Alert::widget();
                     ?>
                     <?php
                     echo $form->field($userModel, 'mobile')->textInput(['value' => $model->mobile])->label('手机号');
+                    echo $form->field($userModel, 'user_type')->dropDownList(\common\models\User::$userTypeNameMap, ['value' => $model->user_type])->label('用户类型');
                     ?>
                     <div class="form-group">
                         <label class="control-label col-sm-2"></label>
@@ -104,6 +105,21 @@ echo \dmstr\widgets\Alert::widget();
 //                        'filter' => false
 //                    ],
 
+                    [
+                        'attribute' => 'user_type',
+                        'label' => '用户类型',
+                        'value' => function($model) {
+                            return
+                                isset (\common\models\User::$userTypeNameMap[$model->user_type]) ?
+                                    \common\models\User::$userTypeNameMap[$model->user_type] :
+                                    '未知'
+                                ;
+                        },
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'user_type',
+                            \common\models\User::$userTypeNameMap, ["class" => "form-control ", 'value' => !empty($params['User']['user_type']) ? $params['User']['user_type'] : ''])
+                    ],
                     [
                         'attribute' => 'user_status',
                         'label' => '用户状态',
@@ -171,6 +187,15 @@ echo \dmstr\widgets\Alert::widget();
                                     'data-id' => $model->id
                                 ]);
                             },
+                            'reset' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::button('恢复', [
+                                    'class' => 'btn btn-xs btn-success',
+                                    'request-url' => '',
+                                    'request-type' => 'POST',
+                                    'data-action' => 'delete',
+                                    'data-id' => $model->id
+                                ]);
+                            },
                         ],
                     ]
                 ],
@@ -201,6 +226,7 @@ $form = ActiveForm::begin([
     ],
 ]);
 echo $form->field($userModel, 'mobile')->label('手机号');
+echo $form->field($userModel, 'user_type')->dropDownList(\common\models\User::$userTypeNameMap)->label('用户类型');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>
