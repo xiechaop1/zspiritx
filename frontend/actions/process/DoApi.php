@@ -567,6 +567,7 @@ class DoApi extends ApiAction
                     if (!empty($storyModel)) {
                         $storyModel = Model::combineStoryModelWithDetail($storyModel);
                         if (!empty($storyModel->dialog)) {
+                            $params['story_model_id'] = $storyModel->id;
                             $storyModel->dialog = Model::formatDialog($storyModel, $params);
                         }
                         $models[] = [
@@ -835,6 +836,13 @@ class DoApi extends ApiAction
             }
 
 //            $activeArray = \common\helpers\Model::decodeActive($storyModel->activeNext);
+
+            // Todo: 临时处理物品使用以后减少数量逻辑
+            // 理论上应该放在StoryDetailModel中做一个配置
+            // 然后其他模块诸如StoryModelLink作为是否发生的开关
+            // 然后再进行效果验证
+            // 因为开发时间太少，先写死
+            $minCt = 1;      // 允许使用以后被减少的个数
             switch ($storyModel->active_type)
             {
                 case StoryModels::ACTIVE_TYPE_BUFF:
@@ -911,6 +919,7 @@ class DoApi extends ApiAction
                             if (empty($ret)) {
                                 $ret = $noFoundRet;
                                 $type = $noFoundType;
+                                $minCt = 0;
                             }
                         }
                         $res = '';
@@ -925,12 +934,13 @@ class DoApi extends ApiAction
                     break;
             }
 
-
-            $bagageModel->use_ct -= 1;
-            if ($bagageModel->use_ct <= 0) {
-                $bagageModel->is_delete = Common::STATUS_DELETED;
+            if ($minCt != 0) {
+                $bagageModel->use_ct -= $minCt;
+                if ($bagageModel->use_ct <= 0) {
+                    $bagageModel->is_delete = Common::STATUS_DELETED;
+                }
+                $bagageModel->save();
             }
-            $bagageModel->save();
             $transaction->commit();
 
             return $res;

@@ -33,7 +33,7 @@ $this->title = 'AR剧本杀';
   }
 </style>
 <audio autoplay loop>
-  <source src="<?= $voice ?>" type="audio/mpeg">
+  <source src="<?= $bgSound ?>" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
 </audio>
 <input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>">

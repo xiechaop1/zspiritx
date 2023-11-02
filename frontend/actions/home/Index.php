@@ -77,6 +77,8 @@ class Index extends Action
             $ordersMap[$order->story_id] = $order->order_status;
         }
 
+        $bgm = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/bgm/home/home_bgm.mp3';
+
         return $this->controller->render('index', [
             'userId'    => $userId,
             'stories'   => $stories,
@@ -84,6 +86,7 @@ class Index extends Action
             'ordersMap' => $ordersMap,
             'voice' => '',
             'image' => $image,
+            'bgSound' => $bgm,
 //            'banner' => $banner,
         ]);
     }

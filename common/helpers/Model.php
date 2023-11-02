@@ -109,6 +109,9 @@ class Model
         if (!empty($params['story_id'])) {
             $ret = str_replace('{$story_id}', $params['story_id'], $ret);
         }
+        if (!empty($params['story_model_id'])) {
+            $ret = str_replace('{$story_model_id}', $params['story_model_id'], $ret);
+        }
 
         $jsonTmp = json_decode($ret, true);
 
