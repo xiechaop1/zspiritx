@@ -9,6 +9,7 @@
 namespace frontend\actions\site;
 
 
+use common\helpers\Attachment;
 use common\helpers\Common;
 use common\helpers\Cookie;
 use common\models\Banner;
@@ -32,9 +33,15 @@ class Index extends Action
     {
         $this->controller->layout = '@frontend/views/layouts/main_h5.php';
 
+        $qrCode = [
+            'huawei'    => Attachment::completeUrl('/img/home/qrcode/QRCode_Huawei_v1.png'),
+            'xiaomi'    => '',
+            'ios'     => '',
+        ];
+
         return $this->controller->render(
             'index', [
-//                'qr_code'                   => Common::createQrWithUrl(),
+                'qrCode'                   => $qrCode,
             ]
         );
     }
