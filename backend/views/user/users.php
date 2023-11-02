@@ -192,7 +192,7 @@ echo \dmstr\widgets\Alert::widget();
                                     'class' => 'btn btn-xs btn-success',
                                     'request-url' => '',
                                     'request-type' => 'POST',
-                                    'data-action' => 'delete',
+                                    'data-action' => 'reset',
                                     'data-id' => $model->id
                                 ]);
                             },
