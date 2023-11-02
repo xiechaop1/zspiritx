@@ -27,6 +27,9 @@ class HomeController extends Controller
             'index' => [
                 'class'     => 'frontend\actions\home\Index',
             ],
+            'userprivacyagreement' => [
+                'class'     => 'frontend\actions\home\Userprivacyagreement',
+            ],
         ];
     }
 }
