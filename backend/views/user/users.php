@@ -169,7 +169,7 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {edit} {delete}',
+                        'template' => '{lines} {edit} {delete} {reset}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
