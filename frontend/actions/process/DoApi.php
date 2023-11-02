@@ -901,7 +901,7 @@ class DoApi extends ApiAction
                                 } else if (
                                     (!empty($storyModel->story_model_detail_id) && $storyModelLink->story_model_detail_id == $storyModel->story_model_detail_id)
                                     ||
-                                    (empty($storyModel->story_model_id) && $storyModelLink->story_model_id == $storyModel->story_model_id)
+                                    (!empty($storyModel->id) && $storyModelLink->story_model_id == $storyModel->id)
                                 ) {
                                     $ret = $storyModelLink->eff_exec;
                                     $type = $storyModelLink->eff_type;
