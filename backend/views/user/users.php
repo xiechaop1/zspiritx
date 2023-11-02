@@ -189,7 +189,7 @@ echo \dmstr\widgets\Alert::widget();
                             },
                             'reset' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::button('恢复', [
-                                    'class' => 'btn btn-xs btn-success',
+                                    'class' => 'btn btn-xs btn-success ajax_single_btn',
                                     'request-url' => '',
                                     'request-type' => 'POST',
                                     'data-action' => 'reset',
