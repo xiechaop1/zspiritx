@@ -62,6 +62,9 @@ class UserApi extends ApiAction
                 case 'logout':
                     $ret = $this->logout();
                     break;
+                case 'delete':
+                    $ret = $this->delete();
+                    break;
                 case 'update_user':
                     $this->valToken();
                     $ret = $this->updateUser();
@@ -142,6 +145,27 @@ class UserApi extends ApiAction
         return true;
     }
 
+    public function delete() {
+
+        $userId = Cookie::getCookie('user_id');
+
+        $userInfo = User::findOne([
+            'id'    => $userId,
+            'user_status'   => User::USER_STATUS_NORMAL
+        ]);
+
+        if (!empty($userInfo)) {
+            $userInfo->user_status = User::USER_STATUS_DELETED;
+            $userInfo->save();
+        } else {
+            throw new \Exception('用户未找到，或可能被禁用或删除', ErrorCode::USER_NOT_FOUND);
+        }
+
+        Cookie::unsetCookie('user_id');
+
+        return $userInfo;
+    }
+
     public function loginAndRegByMobile() {
         $mobile = !empty($this->_get['mobile']) ? $this->_get['mobile'] : '';
         $verifyCode = !empty($this->_get['verify_code']) ? $this->_get['verify_code'] : '';
@@ -166,7 +190,9 @@ class UserApi extends ApiAction
 //            'user_status'   => User::USER_STATUS_NORMAL,
         ]);
 
-        if (empty($userInfo)) {
+        if (empty($userInfo)
+            || $userInfo['user_status'] == User::USER_STATUS_DELETED
+        ) {
             $userInfo = new User();
             $userInfo->mobile = $mobile;
             $userInfo->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4) . rand(1000,9999);
@@ -175,15 +201,16 @@ class UserApi extends ApiAction
             $userInfo->last_login_time = time();
             $userInfo->last_login_device = Client::getAgent();
             $userInfo->save();
-            $userModel['id'] = Yii::$app->db->getLastInsertId();
+            $userInfo['id'] = Yii::$app->db->getLastInsertId();
         } else {
+            if ($userInfo['user_status'] == User::USER_STATUS_FORBIDDEN) {
+                throw new \Exception('用户已被禁用', ErrorCode::USER_FORBIDDEN);
+            }
+
             $userInfo->last_login_time = time();
             $userInfo->last_login_device = Client::getAgent();
             $userInfo->save();
 
-            if ($userInfo['user_status'] == User::USER_STATUS_FORBIDDEN) {
-                throw new \Exception('用户已被禁用', ErrorCode::USER_FORBIDDEN);
-            }
         }
 
 

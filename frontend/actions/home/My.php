@@ -25,24 +25,12 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-class Index extends Action
+class My extends Action
 {
 
     
     public function run()
     {
-//var_dump($_SESSION);
-
-        $image = 'img/home/index_image.jpg';
-        $image = Attachment::completeUrl($image, true);
-
-//        $banner = [
-//            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
-//            'taoranting' => Attachment::completeUrl('img/home/taoranting1.jpg', true),
-//            'senlin' => Attachment::completeUrl('img/home/index_image.jpg', true),
-//        ];
-
-//        $userId = !empty($_SESSION['user_info']['id']) ? $_SESSION['user_info']['id'] : 0;
 
         $userId = Cookie::getCookie('user_id');
         if (empty($userId)) {
@@ -66,32 +54,15 @@ class Index extends Action
             //Yii::error($e->getMessage());
         }
 
-        $stories = Story::find()
-            ->where(['story_status' => Story::STORY_STATUS_ONLINE])
-            ->orderBy(['sort_by' => SORT_ASC])
-            ->all();
+        $urls = [
+            'privacy'   => '',
+            'agreement' => '',
+        ];
 
-        $orders = Order::find()
-            ->where([
-                'user_id'   => $userId,
-            ])
-            ->all();
-
-        $ordersMap = [];
-        foreach ($orders as $order) {
-            $ordersMap[$order->story_id] = $order->order_status;
-        }
-
-        $bgm = '';
-
-        return $this->controller->render('index', [
+        return $this->controller->render('my', [
             'userId'    => $userId,
-            'stories'   => $stories,
-            'orders'    => $orders,
-            'ordersMap' => $ordersMap,
-            'voice' => '',
-            'image' => $image,
-            'bgSound' => $bgm,
+            'userInfo'  => $user,
+            'urls'       => $urls
 //            'banner' => $banner,
         ]);
     }

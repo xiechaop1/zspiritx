@@ -439,4 +439,69 @@ $(function () {
         // $(".knowledge-content").hide();
     });
 
+
+    $("#logout_btn").click(function() {
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/user/logout',
+            data:{},
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //新消息获取成功
+                if(obj["code"]==200){
+                    location.href='/passport/web_login';
+                }
+                //新消息获取失败
+                else{
+                    alert(obj.msg)
+                }
+
+            }
+        });
+
+    });
+
+    $("#delete_btn").click(function() {
+        if (!window.confirm('您确认注销您的账号吗？注销以后，数据将全部丢失！')) {
+            return false;
+        }
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/user/delete',
+            data:{},
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                console.log(obj);
+                
+                //新消息获取成功
+                if(obj["code"]==200){
+                    location.href='/passport/web_login';
+                }
+                //新消息获取失败
+                else{
+                    alert(obj.msg);
+                    location.href='/passport/web_login';
+                }
+
+            }
+        });
+
+    });
+
 })
