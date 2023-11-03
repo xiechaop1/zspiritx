@@ -63,7 +63,6 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('剧本模型');
             echo $form->field($userModel, 'use_ct')->textInput(['value' => $userModel->use_ct])->label('剩余次数');
-
             ?>
 
             <div class="form-group">
