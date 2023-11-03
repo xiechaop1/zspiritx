@@ -77,7 +77,7 @@ class StoryModelEdit extends Action
 
             if (empty($model->story_model_name)) {
                 if (!empty($model->model_id)) {
-                    $modelModel = \common\models\Model::find()
+                    $modelModel = \common\models\Models::find()
                         ->where(['id' => $model->id])
                         ->one();
 
