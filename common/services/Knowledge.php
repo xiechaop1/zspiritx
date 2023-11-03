@@ -37,11 +37,11 @@ class Knowledge extends Component
                 'session_id' => $sessionId,
             ]);
         if (!empty($knowledgeClass)) {
-            $userKnowledge->andFilterWhere([
+            $userKnowledge = $userKnowledge->andFilterWhere([
                 'knowledge_class' => $knowledgeClass
             ]);
         }
-            $userKnowledge->orderBy([
+        $userKnowledge= $userKnowledge->orderBy([
                 'id'    => SORT_DESC
             ])
             ->offset($offset)
