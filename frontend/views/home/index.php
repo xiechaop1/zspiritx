@@ -197,7 +197,9 @@ $this->title = 'AR剧本杀';
 <!--    </div>-->
 <!--  </div>-->
   <?php
-  if ($user->user_type == \common\models\User::USER_TYPE_NORMAL) {
+  if (
+      !empty($user) &&
+      $user->user_type == \common\models\User::USER_TYPE_NORMAL) {
   ?>
   <div class="item">
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
