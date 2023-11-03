@@ -32,13 +32,14 @@ class Knowledge extends Component
 
     public function getAllByDesc($sessionId, $userId, $knowledgeClass = 0, $offset = 0, $limit = 20) {
         $userKnowledge = UserKnowledge::find()
+            ->joinWith('knowledge')
             ->where([
                 'user_id' => $userId,
                 'session_id' => $sessionId,
             ]);
         if (!empty($knowledgeClass)) {
             $userKnowledge = $userKnowledge->andFilterWhere([
-                'knowledge_class' => $knowledgeClass
+                'o_knowledge.knowledge_class' => $knowledgeClass
             ]);
         }
         $userKnowledge= $userKnowledge->orderBy([
