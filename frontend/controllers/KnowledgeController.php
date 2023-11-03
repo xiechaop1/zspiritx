@@ -25,6 +25,10 @@ class KnowledgeController extends Controller
                 'class' => 'frontend\actions\knowledge\KnowledgeApi',
                 'action' => 'complete_knowledge',
             ],
+            'get_knowledge_by_user' => [
+                'class' => 'frontend\actions\knowledge\KnowledgeApi',
+                'action' => 'get_knowledge_by_user',
+            ],
 
         ];
     }

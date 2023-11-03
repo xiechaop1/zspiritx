@@ -6,7 +6,7 @@
  * Time: 4:57 PM
  */
 
-namespace frontend\actions\qa;
+namespace frontend\actions\knowledge;
 
 
 use common\definitions\Common;
@@ -53,6 +53,9 @@ class KnowledgeApi extends ApiAction
                 case 'complete_knowledge':
                     $ret = $this->completeKnowledge();
                     break;
+                case 'get_knowledge_by_user':
+                    $ret = $this->getKnowledgeByUser();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -65,6 +68,41 @@ class KnowledgeApi extends ApiAction
         return $this->success($ret);
     }
 
+    public function getKnowledgeByUser() {
+        $knowledgeClass = !empty($this->_get['knowledge_class']) ? $this->_get['knowledge_class'] : 0;
+
+        $userKnowledge = Yii::$app->knowledge->getAllByDesc($this->_sessionId, $this->_userId, $knowledgeClass, 0, 1);
+
+        $ret = [
+            'user_knowledge' => [],
+            'knowledge' => [],
+            'msg' => '当前没有任务'
+        ];
+        if (!empty($userKnowledge)) {
+            $userKnowledge = current($userKnowledge);
+
+            if (!empty($userKnowledge)) {
+                $strTag = '';
+                if ($userKnowledge->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE) {
+                    $strTag = '已完成：';
+                } else {
+                    $strTag = '当前任务：';
+                }
+
+                $str = !empty($userKnowledge->knowledge->title) ? $userKnowledge->knowledge->title : '无';
+                $knowledge = !empty($userKnowledge->knowledge) ? $userKnowledge->knowledge : [];
+
+                $ret = [
+                    'user_knowledge' => $userKnowledge,
+                    'knowledge' => $knowledge,
+                    'msg' => $strTag . $str
+                ];
+            }
+
+        }
+
+        return $ret;
+    }
 
     public function completeKnowledge() {
         $knowledgeId = !empty($this->_get['knowledge_id']) ? $this->_get['knowledge_id'] : 0;
@@ -77,7 +115,7 @@ class KnowledgeApi extends ApiAction
             $sessionStageId,
             $this->_userId,
             $this->_storyId,
-            'complete',
+            'complete'
         );
 
 //        $knowledge = Knowledge::findOne($knowledgeId);

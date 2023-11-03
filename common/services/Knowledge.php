@@ -30,6 +30,27 @@ class Knowledge extends Component
         return $userKnowledge;
     }
 
+    public function getAllByDesc($sessionId, $userId, $knowledgeClass = 0, $offset = 0, $limit = 20) {
+        $userKnowledge = UserKnowledge::find()
+            ->where([
+                'user_id' => $userId,
+                'session_id' => $sessionId,
+            ]);
+        if (!empty($knowledgeClass)) {
+            $userKnowledge->andFilterWhere([
+                'knowledge_class' => $knowledgeClass
+            ]);
+        }
+            $userKnowledge->orderBy([
+                'id'    => SORT_DESC
+            ])
+            ->offset($offset)
+            ->limit($limit)
+            ->all();
+
+        return $userKnowledge;
+    }
+
     public function set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act = 'complete') {
 
         $knowledge = \common\models\Knowledge::findOne($knowledgeId);
