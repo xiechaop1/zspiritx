@@ -74,7 +74,7 @@ $this->title = '灵镜新世界-我的';
                         <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                         <label class="form-check-label fs-30 answer-btn">
                             <!--                  <span class="answer-tag"></span>-->
-                            <span style="padding-left: 90px; "><a href="/home/index" id="logout_btn">返回</a></span>
+                            <span style="padding-left: 90px; "><a href="/home/index">返回</a></span>
                         </label>
                     </div>
                 </div>
