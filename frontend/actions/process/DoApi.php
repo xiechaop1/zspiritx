@@ -999,25 +999,26 @@ class DoApi extends ApiAction
         try {
             $ret = $sessionModel->save();
 
-            $userModelBaggage = UserModels::find()
-                ->where([
-                    'user_id'           => (int)$userId,
-                    'session_id'        => (int)$sessionId,
-                    'model_id'          => $sessionModel->model_id,
-//                    'story_model_id'    => (int)$storyModelId,
-//                    'session_model_id'  => $sessionModel->id,
-                ])
-                ->one();
+            $storyModelDetailId = !empty($storyModel->story_model_detail_id) ? $storyModel->story_model_detail_id : 0;
 
             $userModelBaggage = UserModels::find()
                 ->where([
                     'user_id'           => (int)$userId,
                     'session_id'        => (int)$sessionId,
-                    'model_id'          => $sessionModel->model_id,
+//                    'model_id'          => $sessionModel->model_id,
 //                    'story_model_id'    => (int)$storyModelId,
 //                    'session_model_id'  => $sessionModel->id,
-                ])
-                ->one();
+                ]);
+            if (!empty($storyModelDetailId)) {
+                $userModelBaggage->andFilterWhere([
+                    'story_model_detail_id' => $storyModelDetailId,
+                ]);
+            } else {
+                $userModelBaggage->andFilterWhere([
+                    'story_model_id' => $storyModelId,
+                ]);
+            }
+            $userModelBaggage = $userModelBaggage->one();
             if (empty($userModelBaggage)) {
                 $userModelBaggage = new UserModels();
                 $userModelBaggage->user_id = $userId;
@@ -1025,6 +1026,7 @@ class DoApi extends ApiAction
                 $userModelBaggage->story_id = $storyId;
                 $userModelBaggage->model_id = $sessionModel->model_id;
                 $userModelBaggage->story_model_id = $storyModelId;
+                $userModelBaggage->story_model_detail_id = $storyModelDetailId;
                 $userModelBaggage->session_model_id = $sessionModel->id;
                 $userModelBaggage->use_ct = 1;
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;

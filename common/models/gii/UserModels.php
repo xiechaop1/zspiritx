@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property int $user_id
  * @property int $story_model_id
+ * @property int $story_model_detail_id
  * @property int $session_model_id
  * @property int $session_id
  * @property int $model_id

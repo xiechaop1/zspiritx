@@ -79,6 +79,7 @@ class Pickup extends Action
         ];
 
         $code = 0;
+        $msg = '';
         if (empty($storyModel)) {
             $msg = '没有找到物品';
             $code = ErrorCode::DO_MODELS_PICK_UP_FAIL;
@@ -93,21 +94,27 @@ class Pickup extends Action
             return $this->pickupRender($code, $msg, $this->_params);
         }
 
-
         $sessionModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_PICKUP;
         $sessionModel->last_operator_id = $userId;
         try {
             $ret = $sessionModel->save();
 
+            $storyModelDetailId = !empty($storyModel->story_model_detail_id) ? $storyModel->story_model_detail_id : 0;
+
             $userModelBaggage = UserModels::find()
                 ->where([
                     'user_id'           => (int)$userId,
                     'session_id'        => (int)$sessionId,
-                    'model_id'          => $sessionModel->model_id,
+//                    'model_id'          => $sessionModel->model_id,
 //                    'story_model_id'    => (int)$storyModelId,
 //                    'session_model_id'  => $sessionModel->id,
-                ])
-                ->one();
+                ]);
+            if (!empty($storyModelDetailId)) {
+                $userModelBaggage->andFilterWhere(['story_model_detail_id' => $storyModelDetailId]);
+            } else {
+                $userModelBaggage->andFilterWhere(['story_model_id' => (int)$storyModelId]);
+            }
+                $userModelBaggage = $userModelBaggage->one();
             if (empty($userModelBaggage)) {
                 $userModelBaggage = new UserModels();
                 $userModelBaggage->user_id = $userId;
@@ -115,6 +122,7 @@ class Pickup extends Action
                 $userModelBaggage->story_id = $storyId;
                 $userModelBaggage->model_id = $sessionModel->model_id;
                 $userModelBaggage->story_model_id = $storyModelId;
+                $userModelBaggage->story_model_detail_id = $storyModelDetailId;
                 $userModelBaggage->session_model_id = $sessionModel->id;
                 $userModelBaggage->use_ct = 1;
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
