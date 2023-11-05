@@ -523,7 +523,6 @@ class UserApi extends ApiAction
 
         // 判断一下兜底模型是否进入经纬度范围
         $underTake = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
-        $underTakeReady = Cookie::getCookie(Cookies::UNDERTAKE_MODEL_READY);
 //        $underTake = json_decode($underTakeJson, true);
         $updateCt = 0;
         if (!empty($underTake)) {
@@ -532,23 +531,23 @@ class UserApi extends ApiAction
                 $triggerMisRange = $item['trigger_misrange'];
                 $modelInstUId = $item['model_inst_u_id'];
 
-                if (empty($underTakeReady[$item['story_model_id']]) || $underTakeReady[$item['story_model_id']] != true) {
+                if (empty($item['is_ready']) || $item['is_ready'] != true) {
                     if (!empty($item['lat']) && !empty($item['lng'])) {
                         $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
 
                         if ($distance <= $triggerMisRange) {
-                            $underTakeReady[$underTake['story_model_id']] = true;
+                            $underTake[$key]['is_ready'] = true;
                             $updateCt++;
                         }
                     } else {
-                        $underTakeReady[$underTake['story_model_id']] = true;
+                        $underTake[$key]['is_ready'] = true;
                         $updateCt++;
                     }
                 }
             }
 //            $underTakeJson = json_encode($underTake, true);
             if ($updateCt > 0) {
-                Cookie::setCookie(Cookies::UNDERTAKE_MODEL_READY, $underTakeReady);
+                Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, 60 * 60);
             }
         }
         return $userLoc;

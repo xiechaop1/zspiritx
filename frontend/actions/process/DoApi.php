@@ -776,8 +776,8 @@ class DoApi extends ApiAction
             $cookieStoryStageId = $stageCookie['story_stage_id'];
             $cookieSessionStageId = $stageCookie['session_stage_id'];
             $cookieStoryId = $stageCookie['story_id'];
-            Yii::info('Undertake ts' . (time() - $ts));
-            if (time() - $ts > $execTime) {
+            Yii::info('Undertake userKeepAlive ii: ' . (time() - $ts));
+            if ((time() - $ts) > $execTime) {
                 $userKeepAlive = Cookie::getCookie(Cookies::USER_KEEP_ALIVE);
                 Yii::info('Undertake userKeepAlive: ' . $userKeepAlive);
                 if ($userKeepAlive > $keepAlive) {
@@ -792,13 +792,12 @@ class DoApi extends ApiAction
 //                        ])
 //                        ->all();
                     $sessModels = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
-                    $sessModelsReady = Cookie::getCookie(Cookies::UNDERTAKE_MODEL_READY);
 
                     if (!empty($sessModels)) {
 //                        $sessModels = json_decode($sessModelJson, true);
                         $underTakeIds = [];
                         foreach ($sessModels as $sessModel) {
-                            if (!empty($sessModelsReady[$sessModel['story_model_id']]) && $sessModelsReady[$sessModel['story_model_id']] == true) {
+                            if (!empty($sessModel['is_ready']) && $sessModel['is_ready'] == true) {
                                 $ret = Yii::$app->act->set($sessionId, $cookieSessionStageId, $cookieStoryId, $userId, $sessModel['model_inst_u_id'], Actions::ACTION_TYPE_MODEL_DISPLAY);
                                 $underTakeIds[] = $ret->id;
                                 $isUndertake = true;
