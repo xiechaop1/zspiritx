@@ -56,6 +56,14 @@ class StoryModels extends \common\models\gii\StoryModels
         self::VISIBLE_HIDE => '隐藏',
     ];
 
+    const IS_UNDERTAKE_NOT        = 0;    // 不承接
+    const IS_UNDERTAKE_YES        = 1;    // 承接
+
+    public static $isUndertake2Name = [
+        self::IS_UNDERTAKE_NOT => '否',
+        self::IS_UNDERTAKE_YES => '是',
+    ];
+
     const USE_ALLOW_NOT             = 0;    // 不允许被使用
     const USE_ALLOW_TO_SELF         = 1;    // 允许自己使用
     const USE_ALLOW_NEED_TARGET     = 2;    // 需要目标使用
