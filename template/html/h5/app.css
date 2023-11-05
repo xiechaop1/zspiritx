@@ -45,6 +45,14 @@ html, body {
     vertical-align: top;
     text-align: center;
 }
+.logo-t{
+    color: white;
+    margin-bottom: 50px;
+    font-size: 60px;
+    text-align: left;
+    font-weight: bold;
+    padding: 20px 0 0 40px;
+}
 .npc-name{
     border-radius: 64px 24px 64px 24px ;
     border: 2px solid #DAFC70;

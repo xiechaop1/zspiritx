@@ -36,7 +36,7 @@ $this->title = 'AR儿童剧本杀';
             <img class="img-responsive " src="../../static/image/logo.png" />
         </div>
          <div class="col-md-6 col-sm-6">
-            <h1 style="text-align: center; color:white; padding: 10px; margin-bottom: 50px; font-size: 50px;">灵镜</h1>
+            <h1 class="logo-t">灵镜</h1>
          </div>
       </div>
 
