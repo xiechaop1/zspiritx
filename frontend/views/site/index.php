@@ -24,9 +24,9 @@ $this->title = '庄生科技';
                 <!-- logo -->
                 <div class="logo">
                     <a href="index.html">
-                        <img class="l-black" src="image/logo.png" />
-                        <img class="l-white" src="image/logo.png" />
-                        <img class="l-color" src="image/logo.png" />
+                        <img class="l-black" src="../../static/image/logo.png" />
+                        <img class="l-white" src="../../static/image/logo.png" />
+                        <img class="l-color" src="../../static/image/logo.png" />
                     </a>
                 </div>
                 <!--End logo-->

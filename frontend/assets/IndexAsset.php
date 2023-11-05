@@ -51,7 +51,4 @@ class IndexAsset extends AssetBundle
           'site/js/navigation.js',
     ];
 
-    public $depends = [
-        'frontend\assets\AppAsset'
-    ];
 }
