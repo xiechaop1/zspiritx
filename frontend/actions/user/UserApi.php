@@ -459,7 +459,7 @@ class UserApi extends ApiAction
             $timeoutMax = 60 * 60;   // 60分钟（按兜底策略5分钟计算）
 
             Cookie::setCookie(Cookies::UPDATE_STAGE_TIME, json_encode($stageCookie, true), $timeoutMax);
-            Yii::info('Update User Stage', json_encode($stageCookie, true));
+            Yii::info('Update User Stage' . json_encode($stageCookie, true));
 
             // 读取场景下兜底模型
             $sessModels = SessionModels::find()
@@ -490,7 +490,7 @@ class UserApi extends ApiAction
                     }
                 }
                 Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, $timeoutMax);
-                Yii::info('Update User Undertake model', json_encode($underTake, true));
+                Yii::info('Update User Undertake model' . json_encode($underTake, true));
             }
         } catch (\Exception $e) {
             throw $e;
