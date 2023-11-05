@@ -791,12 +791,13 @@ class DoApi extends ApiAction
 //                        ])
 //                        ->all();
                     $sessModels = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+                    $sessModelsReady = Cookie::getCookie(Cookies::UNDERTAKE_MODEL_READY);
 
                     if (!empty($sessModels)) {
 //                        $sessModels = json_decode($sessModelJson, true);
                         $underTakeIds = [];
                         foreach ($sessModels as $sessModel) {
-                            if (!empty($sessModel['is_ready']) && $sessModel['is_ready'] == true) {
+                            if (!empty($sessModelsReady[$sessModel['story_model_id']]) && $sessModelsReady[$sessModel['story_model_id']] == true) {
                                 $ret = Yii::$app->act->set($sessionId, $cookieSessionStageId, $cookieStoryId, $userId, $sessModel['model_inst_u_id'], Actions::ACTION_TYPE_MODEL_DISPLAY);
                                 $underTakeIds[] = $ret->id;
                                 $isUndertake = true;
