@@ -776,6 +776,7 @@ class DoApi extends ApiAction
             $cookieStoryStageId = $stageCookie['story_stage_id'];
             $cookieSessionStageId = $stageCookie['session_stage_id'];
             $cookieStoryId = $stageCookie['story_id'];
+            Yii::info('Undertake ts' . (time() - $ts));
             if (time() - $ts > $execTime) {
                 $userKeepAlive = Cookie::getCookie(Cookies::USER_KEEP_ALIVE);
                 Yii::info('Undertake userKeepAlive: ' . $userKeepAlive);
