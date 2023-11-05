@@ -69,12 +69,12 @@ $this->title = '庄生科技';
                                     </div>
                                     <div class="col-md-9 col-xs-8">
                                         <p class="logo-t-h1">
-                                            灵镜AR游戏
+                                            灵镜AR新世界
                                         </p>
                                     </div>
                                     <div class="col-md-12 ma-t-50 col-xs-12" >
                                         <p class="white text-left  content-t-1">
-                                            庄生科技，全面打造AR剧本杀，主要面向儿童群体，打造儿童AR剧本杀<br>
+                                            庄生科技，全面打造AR新世界新娱乐方式，主要面向儿童群体，打造儿童AR寓教于乐平台<br>
                                             目前<span class="color-red">陶然亭、凯德茂大峡谷</span>等项目正在建设中，敬请期待！
 
                                         </p>
