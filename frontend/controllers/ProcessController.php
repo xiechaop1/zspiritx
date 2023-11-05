@@ -58,6 +58,10 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'get_action_by_user',
             ],
+            'update_story_model' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'update_story_model',
+            ],
         ];
     }
 }

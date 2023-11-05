@@ -147,6 +147,9 @@ class DoApi extends ApiAction
                 case 'get_action_by_user':
                     $ret = $this->getActionByUser();
                     break;
+                case 'update_story_model':
+                    $ret = $this->updateStoryModel();
+                    break;
                 case 'finish':
                     $ret = $this->finish();
                     break;
@@ -752,6 +755,10 @@ class DoApi extends ApiAction
 
     }
 
+    public function updateStoryModel() {
+        return '';
+    }
+
     public function getActionByUser() {
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
@@ -766,6 +773,7 @@ class DoApi extends ApiAction
 
         // 兜底策略
         $stageCookieJson = Cookie::getCookie(Cookies::UPDATE_STAGE_TIME);
+        //Todo 这个需要放到配置中
         $execTime = 5 * 60; // 执行兜底，5分钟
         $keepAlive = 60; // 保活时间，1分钟
         $isUndertake = false;
