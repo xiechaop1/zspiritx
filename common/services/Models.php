@@ -69,6 +69,7 @@ class Models extends Component
 
                     $underTake[] = [
                         'story_model_id' => $sessStoryModel->id,
+                        'story_model_detail_id' => $sessStoryModel->story_model_detail_id,
                         'model_inst_u_id' => $sessStoryModel->model_inst_u_id,
                         'lat' => $sessStoryModel->lat,
                         'lng' => $sessStoryModel->lng,
