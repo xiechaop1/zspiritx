@@ -798,7 +798,7 @@ class DoApi extends ApiAction
                         $underTakeIds = [];
                         foreach ($sessModels as $sessModel) {
                             if (!empty($sessModel['is_ready']) && $sessModel['is_ready'] == true) {
-                                $ret = Yii::$app->act->set($sessionId, $cookieSessionStageId, $cookieStoryId, $userId, $sessModel['model_inst_u_id'], Actions::ACTION_TYPE_MODEL_DISPLAY);
+                                $ret = Yii::$app->act->add($sessionId, $cookieSessionStageId, $cookieStoryId, $userId, $sessModel['model_inst_u_id'], Actions::ACTION_TYPE_MODEL_DISPLAY);
                                 $underTakeIds[] = $ret->id;
                                 $isUndertake = true;
                             }
