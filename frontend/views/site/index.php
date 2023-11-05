@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-\frontend\assets\Qah5Asset::register($this);
+\frontend\assets\IndexAsset::register($this);
 
 $this->title = '庄生科技';
 ?>
