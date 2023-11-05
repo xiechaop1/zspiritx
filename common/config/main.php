@@ -28,6 +28,7 @@ return [
         'oplog'     => 'common\services\Log',
         'act'       => 'common\services\Actions',
         'knowledge' => 'common\services\Knowledge',
+        'models'    => 'common\services\Models',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',

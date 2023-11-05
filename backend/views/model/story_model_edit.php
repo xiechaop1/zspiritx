@@ -88,6 +88,8 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('是否兜底');
+            echo $form->field($storyModel, 'undertake_trigger_timeout')->textInput(['value' => $storyModel->undertake_trigger_timeout])->label('兜底执行时间（s）');
+            echo $form->field($storyModel, 'undertake_alive_timeout')->textInput(['value' => $storyModel->undertake_alive_timeout])->label('兜底持续时间（s）');
             echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
             echo $form->field($storyModel, 'active_type')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$activeType2Name,

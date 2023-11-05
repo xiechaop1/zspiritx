@@ -455,44 +455,48 @@ class UserApi extends ApiAction
                 'ts'    => time(),
             ];
 
-            // 兜底Cookie时间
-            $timeoutMax = 60 * 60;   // 60分钟（按兜底策略5分钟计算）
+            Yii::$app->models->setUnderTakeStage($stageCookie);
 
-            Cookie::setCookie(Cookies::UPDATE_STAGE_TIME, json_encode($stageCookie, true), $timeoutMax);
-            Yii::info('Update User Stage' . json_encode($stageCookie, true));
+            // 兜底Cookie时间
+//            $timeoutMax = 60 * 60;   // 60分钟（按兜底策略5分钟计算）
+//
+//            Cookie::setCookie(Cookies::UPDATE_STAGE_TIME, json_encode($stageCookie, true), $timeoutMax);
+//            Yii::info('Update User Stage' . json_encode($stageCookie, true));
+
+            Yii::$app->models->putUnderTakeModelsToCookie($sessionId, $storyStageId);
 
             // 读取场景下兜底模型
-            $sessModels = SessionModels::find()
-                ->joinWith('storymodel')
-                ->where([
-                    'session_id' => (int)$sessionId,
-                    'o_story_model.story_stage_id'  => $storyStageId,
-                ])
-                ->andFilterWhere([
-                    'o_story_model.is_undertake' => StoryModels::IS_UNDERTAKE_YES
-                ])
-                ->all();
-
-            $underTake = [];
-            if (!empty($sessModels)) {
-                foreach ($sessModels as $sessModel) {
-                    if (!empty($sessModel->storymodel)) {
-                        $sessStoryModel = $sessModel->storymodel;
-
-                        $underTake[] = [
-                            'story_model_id' => $sessStoryModel->id,
-                            'model_inst_u_id' => $sessStoryModel->model_inst_u_id,
-                            'lat' => $sessStoryModel->lat,
-                            'lng' => $sessStoryModel->lng,
-                            'misrange' => $sessStoryModel->misrange,
-                            'trigger_misrange' => $sessStoryModel->trigger_misrange,
-//                            'is_ready' => false,
-                        ];
-                    }
-                }
-                Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, $timeoutMax);
-                Yii::info('Update User Undertake model' . json_encode($underTake, true));
-            }
+//            $sessModels = SessionModels::find()
+//                ->joinWith('storymodel')
+//                ->where([
+//                    'session_id' => (int)$sessionId,
+//                    'o_story_model.story_stage_id'  => $storyStageId,
+//                ])
+//                ->andFilterWhere([
+//                    'o_story_model.is_undertake' => StoryModels::IS_UNDERTAKE_YES
+//                ])
+//                ->all();
+//
+//            $underTake = [];
+//            if (!empty($sessModels)) {
+//                foreach ($sessModels as $sessModel) {
+//                    if (!empty($sessModel->storymodel)) {
+//                        $sessStoryModel = $sessModel->storymodel;
+//
+//                        $underTake[] = [
+//                            'story_model_id' => $sessStoryModel->id,
+//                            'model_inst_u_id' => $sessStoryModel->model_inst_u_id,
+//                            'lat' => $sessStoryModel->lat,
+//                            'lng' => $sessStoryModel->lng,
+//                            'misrange' => $sessStoryModel->misrange,
+//                            'trigger_misrange' => $sessStoryModel->trigger_misrange,
+////                            'is_ready' => false,
+//                        ];
+//                    }
+//                }
+//                Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, $timeoutMax);
+//                Yii::info('Update User Undertake model' . json_encode($underTake, true));
+//            }
         } catch (\Exception $e) {
             throw $e;
         }
@@ -522,34 +526,36 @@ class UserApi extends ApiAction
         }
 
         // 判断一下兜底模型是否进入经纬度范围
-        $underTake = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+        $underTake = Yii::$app->models->getUnderTakeModelsFromCookie();
+//        $underTake = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
 //        $underTake = json_decode($underTakeJson, true);
-        $updateCt = 0;
-        if (!empty($underTake)) {
-            foreach ($underTake as $key => $item) {
-                $misRange = $item['misrange'];
-                $triggerMisRange = $item['trigger_misrange'];
-                $modelInstUId = $item['model_inst_u_id'];
-
-                if (empty($item['is_ready']) || $item['is_ready'] != true) {
-                    if (!empty($item['lat']) && !empty($item['lng'])) {
-                        $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
-
-                        if ($distance <= $triggerMisRange) {
-                            $underTake[$key]['is_ready'] = true;
-                            $updateCt++;
-                        }
-                    } else {
-                        $underTake[$key]['is_ready'] = true;
-                        $updateCt++;
-                    }
-                }
-            }
-//            $underTakeJson = json_encode($underTake, true);
-            if ($updateCt > 0) {
-                Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, 60 * 60);
-            }
-        }
+        Yii::$app->models->updateUnderTakeReady($underTake, $lat, $lng);
+//        $updateCt = 0;
+//        if (!empty($underTake)) {
+//            foreach ($underTake as $key => $item) {
+//                $misRange = $item['misrange'];
+//                $triggerMisRange = $item['trigger_misrange'];
+//                $modelInstUId = $item['model_inst_u_id'];
+//
+//                if (empty($item['is_ready']) || $item['is_ready'] != true) {
+//                    if (!empty($item['lat']) && !empty($item['lng'])) {
+//                        $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
+//
+//                        if ($distance <= $triggerMisRange) {
+//                            $underTake[$key]['is_ready'] = true;
+//                            $updateCt++;
+//                        }
+//                    } else {
+//                        $underTake[$key]['is_ready'] = true;
+//                        $updateCt++;
+//                    }
+//                }
+//            }
+////            $underTakeJson = json_encode($underTake, true);
+//            if ($updateCt > 0) {
+//                Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, 60 * 60);
+//            }
+//        }
         return $userLoc;
 
     }
