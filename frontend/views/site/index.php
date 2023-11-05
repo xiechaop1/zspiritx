@@ -136,7 +136,7 @@ $this->title = '庄生科技';
                 <!--Footer Info -->
                 <div class="row footer-info text-center">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <span class="margin-10 footer-m-span white">Copyright © 2004-2023 庄生科技 zspiritx.com.cn 版权所有</span>
+                        <span class="margin-10 footer-m-span white">Copyright © 2023-2023 庄生科技 zspiritx.com.cn 版权所有</span>
                         <span class="margin-10 footer-m-span"><a href="https://beian.miit.gov.cn" class="white">京ICP备2023021255号</a></span>
                     </div>
                 </div>
