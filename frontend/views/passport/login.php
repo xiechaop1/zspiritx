@@ -31,7 +31,7 @@ $this->title = 'AR儿童剧本杀';
 
   <div class="p-20 bg-black">
     <div class="w-100 p-30  m-b-10" style="position: absolute; top: 100px;">
-      <div class="row">
+      <div class="row m-b-40">
         <div class="col-md-6 col-sm-6">
             <img class="img-responsive " src="../../static/image/logo.png" />
         </div>
@@ -50,18 +50,24 @@ $this->title = 'AR儿童剧本杀';
 
           <div class="row" id="answer-box">
             <div class="m-t-30 col-sm-12 col-md-12">
-              <div class="answer-border">
-                手机号：<br><input class="answer-border" type="text" name="mobile" value="" id="mobile" style="margin: 5px;" ><br>
-                验证码：<br><input class="answer-border" type="text" name="verifycode" value="" id="verifycode" size="10" style="margin: 5px;" >&nbsp;<span><a href="javascript:void(0);" id="get_verifycode">获取验证码</a></span><br>
-                  <input type="checkbox" style="z-index: 99999999; opacity: inherit; position: relative;" id="agreement" name="agreement"> <a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/zspiritx_useragreement.docx">用户协议</a><br>&nbsp;
+              <div class="login-box">
+                手机号：<br><input class="answer-border w-100 m-b-10" type="text" name="mobile" value="" id="mobile" style="margin: 5px;" ><br>
+                验证码：<br><input class="answer-border w-50 m-b-10" type="text" name="verifycode" value="" id="verifycode" size="10" style="margin: 5px;" >&nbsp;<span><a href="javascript:void(0);" id="get_verifycode">获取验证码</a></span><br>
+
+                 <div class="form-check form-check-inline m-t-5">
+                     <input class="form-check-input" type="checkbox" name="agreement" value="2" id="agreement1">
+                     <label class="form-check-label fs-30 text-66" for="agreement1">
+                         <span></span>
+                     </label>
+                     <a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/zspiritx_useragreement.docx">用户协议</a><br>
+                 </div>
+
                 <input type="hidden" name="is_debug" id="login_is_debug" value="">
                 <input type="hidden" name="story_id" id="login_story_id" value="">
                 <div class="btn-m-green m-t-30 float-right m-r-20" id="login_btn">
                   提交
                 </div>
-<!--                <div class="btn-m-green m-t-30 float-right m-r-20" id="login_return_btn">-->
-<!--                  返回-->
-<!--                </div>-->
+                
               </div>
             </div>
           </div>
