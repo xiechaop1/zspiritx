@@ -147,7 +147,7 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {edit} {delete}',
+                        'template' => '{lines} {edit} {copy} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['model/story_model_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
@@ -162,6 +162,16 @@ echo \dmstr\widgets\Alert::widget();
                                     'request-type' => 'POST',
                                     'data-action' => 'delete',
                                     'data-id' => $model->id
+                                ]);
+                            },
+                            'copy' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::a('复制', 'javascript:void(0)', [
+                                    'class' => 'btn btn-primary btn-xs ajax-status-btn',
+                                    'request-confirm' => '确认复制一份吗?',
+                                    'request-url' => '',
+                                    'request-type' => 'POST',
+                                    'data-action' => 'copy',
+                                    'data-id' => $model->id,
                                 ]);
                             },
 

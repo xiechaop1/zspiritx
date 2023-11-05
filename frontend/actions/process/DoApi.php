@@ -10,10 +10,12 @@ namespace frontend\actions\process;
 
 
 use common\definitions\Common;
+use common\definitions\Cookies;
 use common\definitions\ErrorCode;
 use common\helpers\Active;
 use common\helpers\Attachment;
 use common\helpers\Client;
+use common\helpers\Cookie;
 use common\helpers\Model;
 use common\models\Actions;
 use common\models\Knowledge;
@@ -754,7 +756,66 @@ class DoApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
 
+        // 保活
+        $userKeepAlive = Cookie::getCookie(Cookies::USER_KEEP_ALIVE);
+        if (!empty($userKeepAlive)) {
+            Cookie::setCookie(Cookies::USER_KEEP_ALIVE, $userKeepAlive + 1, 10);
+        } else {
+            Cookie::setCookie(Cookies::USER_KEEP_ALIVE, 1, 10);
+        }
+
+        // 兜底策略
+        $stageCookieJson = Cookie::getCookie(Cookies::UPDATE_STAGE_TIME);
+        $execTime = 5 * 60; // 执行兜底，5分钟
+        $keepAlive = 60; // 保活时间，1分钟
+        $isUndertake = false;
+        if (!empty($stageCookieJson)) {
+            $stageCookie = json_decode($stageCookieJson, true);
+            $ts = $stageCookie['ts'];
+            $cookieStoryStageId = $stageCookie['story_stage_id'];
+            $cookieSessionStageId = $stageCookie['session_stage_id'];
+            $cookieStoryId = $stageCookie['story_id'];
+            if ($ts - time() > $execTime) {
+                $userKeepAlive = Cookie::getCookie(Cookies::USER_KEEP_ALIVE);
+                if ($userKeepAlive > $keepAlive) {
+//                    $sessModels = SessionModels::find()
+//                        ->joinWith('storymodel')
+//                        ->where([
+//                            'session_id' => (int)$sessionId,
+//                            'story_stage_id'  => $stageCookie['story_stage_id'],
+//                        ])
+//                        ->andFilterWhere([
+//                            'o_story_model.is_undertake' => StoryModels::IS_UNDERTAKE_YES
+//                        ])
+//                        ->all();
+                    $sessModelJson = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+
+                    if (!empty($sessModelJson)) {
+                        $sessModels = json_decode($sessModelJson, true);
+                        $underTakeIds = [];
+                        foreach ($sessModels as $sessModel) {
+                            if ($sessModel['is_ready'] == true) {
+                                $ret = Yii::$app->act->set($sessionId, $cookieSessionStageId, $cookieStoryId, $userId, $sessModel['model_inst_u_id'], Actions::ACTION_TYPE_MODEL_DISPLAY);
+                                $underTakeIds[] = $ret->id;
+                            }
+                        }
+                    }
+                    $isUndertake = true;
+                }
+            }
+        }
+
         $actions = Yii::$app->act->get($sessionId, $userId);
+
+        if ($isUndertake) {
+            if (!empty($underTakeIds)) {
+                foreach ($underTakeIds as $actId) {
+                    Yii::$app->act->readOne($actId);
+                }
+                Cookie::unsetCookie(Cookies::UPDATE_STAGE_TIME);
+                Cookie::unsetCookie(Cookies::UNDERTAKE_MODEL);
+            }
+        }
 
 //        $actions = Actions::find()
 //            ->where([

@@ -123,11 +123,28 @@ class Actions extends Component
 
             try {
                 $r = $model->save();
+
+                $model->id = Yii::$app->db->getLastInsertID();
             } catch (\Exception $e) {
                 Yii::error($e->getMessage());
                 throw $e;
             }
 
+
+        return $model;
+    }
+
+    public function readOne($actionId) {
+        $model = \common\models\Actions::find()
+            ->where([
+                'id' => $actionId,
+            ])
+            ->one();
+
+        if (!empty($model)) {
+            $model->action_status = \common\models\Actions::ACTION_STATUS_READ;
+            $r = $model->save();
+        }
 
         return $model;
     }

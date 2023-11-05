@@ -11,6 +11,9 @@ namespace common\helpers;
 
 class Common
 {
+    const PI = 3.1415926535898;
+    const EARTH_RADIUS=6378.137;
+
     public static function getRealIP()
     {
         $ip = '';
@@ -129,6 +132,33 @@ class Common
     public static function isJson($str) {
         json_decode($str);
         return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    /**
+     * @param $lat1
+     * @param $lng1
+     * @param $lat2
+     * @param $lng2
+     * @param int $lenType 1 - 米; 1000 - 千米
+     * @param int $decimal
+     * @return float
+     */
+    public static function computeDistanceWithLatLng($lat1, $lng1, $lat2, $lng2, $lenType = 1, $decimal = 2) {
+        $radLat1 = $lat1 * self::PI / 180.0;
+        $radLat2 = $lat2 * self::PI / 180.0;
+        $a = $radLat1 - $radLat2;
+        $b = $lng1 * self::PI / 180.0 - $lng2 * self::PI / 180.0;
+        $s = 2 * asin(sqrt(pow(sin($a / 2), 2) +
+                cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2)));
+        $s = $s * self::EARTH_RADIUS;
+        $s = round($s * 1000);
+
+        if ($lenType > 1) {
+            $s /= $lenType;
+        }
+
+        return round($s, $decimal);
+
     }
 
 

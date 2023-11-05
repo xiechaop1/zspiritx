@@ -61,6 +61,24 @@ class StoryModel extends Action
                     }
                     Yii::$app->session->setFlash('success', '操作成功');
                     break;
+                case 'copy':
+                    if ($storyModel) {
+                        $newStoryModel = new \common\models\StoryModels();
+                        $blackKeyList = ['id', 'status', 'created_at', 'updated_at'];
+                        foreach ($storyModel as $key => $value) {
+                            if (in_array($key, $blackKeyList)) {
+                                continue;
+                            }
+                            $newStoryModel->$key = $value;
+                        }
+                        $newStoryModel->story_model_name = $newStoryModel->story_model_name . '_copy';
+                        if ($newStoryModel->save()) {
+                            Yii::$app->session->setFlash('success', '操作成功');
+                        } else {
+                            Yii::$app->session->setFlash('danger', '操作失败');
+                        }
+                    }
+                    break;
                 default:
                     Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
                     $model->load(Yii::$app->request->post());
