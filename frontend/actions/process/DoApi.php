@@ -769,6 +769,7 @@ class DoApi extends ApiAction
         $execTime = 5 * 60; // 执行兜底，5分钟
         $keepAlive = 60; // 保活时间，1分钟
         $isUndertake = false;
+        Yii::info('stageCookie: ' . $stageCookieJson);
         if (!empty($stageCookieJson)) {
             $stageCookie = json_decode($stageCookieJson, true);
             $ts = $stageCookie['ts'];
@@ -777,6 +778,7 @@ class DoApi extends ApiAction
             $cookieStoryId = $stageCookie['story_id'];
             if ($ts - time() > $execTime) {
                 $userKeepAlive = Cookie::getCookie(Cookies::USER_KEEP_ALIVE);
+                Yii::info('userKeepAlive: ' . $userKeepAlive);
                 if ($userKeepAlive > $keepAlive) {
 //                    $sessModels = SessionModels::find()
 //                        ->joinWith('storymodel')
