@@ -790,10 +790,10 @@ class DoApi extends ApiAction
 //                            'o_story_model.is_undertake' => StoryModels::IS_UNDERTAKE_YES
 //                        ])
 //                        ->all();
-                    $sessModelJson = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+                    $sessModels = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
 
-                    if (!empty($sessModelJson)) {
-                        $sessModels = json_decode($sessModelJson, true);
+                    if (!empty($sessModels)) {
+//                        $sessModels = json_decode($sessModelJson, true);
                         $underTakeIds = [];
                         foreach ($sessModels as $sessModel) {
                             if ($sessModel['is_ready'] == true) {

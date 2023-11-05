@@ -521,8 +521,8 @@ class UserApi extends ApiAction
         }
 
         // 判断一下兜底模型是否进入经纬度范围
-        $underTakeJson = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
-        $underTake = json_decode($underTakeJson, true);
+        $underTake = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+//        $underTake = json_decode($underTakeJson, true);
         if (!empty($underTake)) {
             foreach ($underTake as $key => $item) {
                 $misRange = $item['misrange'];
