@@ -33,6 +33,7 @@ class Models extends Component
 
 //        $stageCookieJson = Cookie::getCookie(Cookies::UPDATE_STAGE_TIME);
         $models = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+        Yii::info('Undertake models: ' . json_encode($models));
 
         return $models;
 
