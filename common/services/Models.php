@@ -27,6 +27,8 @@ class Models extends Component
 
     const TIMEOUT_MAX = 60 * 60;
 
+    const KEEP_ALIVE_TIMEOUT = 10;
+
     public function getUnderTakeModelsFromCookie(){
 
 //        $stageCookieJson = Cookie::getCookie(Cookies::UPDATE_STAGE_TIME);
@@ -38,7 +40,7 @@ class Models extends Component
 
     public function setUnderTakeStage($stageCookie){
         Cookie::setCookie(Cookies::UPDATE_STAGE_TIME, $stageCookie, self::TIMEOUT_MAX);
-        Yii::info('Update User Stage' . json_encode($stageCookie, true));
+        Yii::info('Undertake: Update User Stage' . json_encode($stageCookie, true));
     }
 
     public function getUnderTakeStage() {
@@ -79,7 +81,7 @@ class Models extends Component
                 }
             }
             Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, self::TIMEOUT_MAX);
-            Yii::info('Update User Undertake model' . json_encode($underTake, true));
+            Yii::info('Undertake: Update User model: ' . json_encode($underTake, true));
         }
     }
 
@@ -108,16 +110,18 @@ class Models extends Component
 //            $underTakeJson = json_encode($underTake, true);
             if ($updateCt > 0) {
                 Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, self::TIMEOUT_MAX);
+                Yii::info('Undertake: Update Undertake ready: ' . json_encode($underTake, true));
             }
         }
     }
 
     public function setKeepAlive(){
+        $timeout = self::KEEP_ALIVE_TIMEOUT;
         $userKeepAlive = Cookie::getCookie(Cookies::USER_KEEP_ALIVE);
         if (!empty($userKeepAlive)) {
-            Cookie::setCookie(Cookies::USER_KEEP_ALIVE, $userKeepAlive + 1, 10);
+            Cookie::setCookie(Cookies::USER_KEEP_ALIVE, $userKeepAlive + 1, $timeout);
         } else {
-            Cookie::setCookie(Cookies::USER_KEEP_ALIVE, 1, 10);
+            Cookie::setCookie(Cookies::USER_KEEP_ALIVE, 1, $timeout);
         }
         return true;
     }
@@ -129,10 +133,6 @@ class Models extends Component
 
     public function setAction($sessionId, $userId, ) {
         $stageCookie = $this->getUnderTakeStage();
-        //Todo 这个需要放到配置中
-        $execTime = 5 * 60; // 执行兜底，5分钟
-        $keepAlive = 60; // 保活时间，1分钟
-        $isUndertake = false;
         Yii::info('Undertake stageCookie: ' . json_encode($stageCookie));
 
         $underTakeIds = [];
@@ -145,6 +145,7 @@ class Models extends Component
 
             $underTakeModels = $this->getUnderTakeModelsFromCookie();
 
+            $timeInterval = time() - $ts;
             if (!empty($underTakeModels)) {
                 $userKeepAlive = $this->getKeepAlive();
                 foreach ($underTakeModels as $model) {
@@ -154,9 +155,8 @@ class Models extends Component
                     $undertakeAliveTimeout = $model['undertake_alive_timeout'];
                     $isReady = !empty($model['is_ready']) ? $model['is_ready'] : false;
                     if ($isReady) {
-                        $timeInterval = time() - $ts;
-                        if ($timeInterval > $timeInterval
-                            && $userKeepAlive > $keepAlive
+                        if ($timeInterval > $undertakeTriggerTimeout
+                            && $userKeepAlive > $undertakeAliveTimeout
                         ) {
                             $ret = Yii::$app->act->add($sessionId, $cookieSessionStageId, $cookieStoryId, $userId, $modelInstUId, Actions::ACTION_TYPE_MODEL_DISPLAY);
                             $underTakeIds[] = $ret->id;
