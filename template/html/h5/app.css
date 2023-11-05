@@ -127,6 +127,17 @@ html, body {
     color: #FFFFFF;
     position: relative;
 }
+.login-box{
+    background: rgba(31,38,40,0.8);
+    border-radius: 48px;
+    opacity: 1;
+    padding: 12px 30px 12px 20px;
+    text-align: left;
+    font-size: 32px;
+    font-weight: 600;
+    color: #FFFFFF;
+    position: relative;
+}
 .hide{
     display: none;
 }

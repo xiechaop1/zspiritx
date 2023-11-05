@@ -1344,8 +1344,8 @@ input[type="checkbox"] + label::before{
     border: 1px solid #dfdfdf;
     color: #FFF;
     background-color: #FFF;
-    width: 15px;
-    height: 15px;
+    width: 30px;
+    height: 25px;
     margin-right: 7px;
     font-family: "iconfont" !important;
     border-radius: 3px;
@@ -1367,9 +1367,9 @@ input[type="checkbox"]:checked + label::before{
     border: 1px solid #53BDB3;
     background-color: #53BDB3;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 20px;
     text-align: center;
-    line-height: 15px;
+    line-height: 25px;
     border-radius: 2px;
 }
 input[type="checkbox"].noStyle + label::before{
