@@ -515,15 +515,14 @@ class UserApi extends ApiAction
 
         try {
             $ret = $userLoc->save();
-            return $userLoc;
         } catch (\Exception $e) {
             throw $e;
 //            return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 
         // 判断一下兜底模型是否进入经纬度范围
-        $underTake = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
-//        $underTake = json_decode($underTakeJson, true);
+        $underTakeJson = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+        $underTake = json_decode($underTakeJson, true);
         if (!empty($underTake)) {
             foreach ($underTake as $key => $item) {
                 $misRange = $item['misrange'];
@@ -543,6 +542,7 @@ class UserApi extends ApiAction
 //            $underTakeJson = json_encode($underTake, true);
             Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake);
         }
+        return $userLoc;
 
     }
 
