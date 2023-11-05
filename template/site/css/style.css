@@ -2352,10 +2352,18 @@ height:100%;
     background-image: url("../img/banner_customer.jpg");
 }
 
+
 .bg-img29 {
     background-image: url("../img/full/29.jpg");
 }
 
+.bg-imgbg {
+    background-image: url(../image/bg.png);
+    background-repeat: no-repeat;
+    /* background-attachment: fixed; */
+    background-size: contain;
+    background-position: center;
+}
 .bg-develop-history{
     background-image: url("../img/banner_aboutus_02.jpg");
     background-repeat: no-repeat;
