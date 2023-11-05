@@ -476,8 +476,8 @@ class UserApi extends ApiAction
             $underTake = [];
             if (!empty($sessModels)) {
                 foreach ($sessModels as $sessModel) {
-                    if (!empty($sessModel->storyModel)) {
-                        $sessStoryModel = $sessModel->storyModel;
+                    if (!empty($sessModel->storymodel)) {
+                        $sessStoryModel = $sessModel->storymodel;
 
                         $underTake[] = [
                             'model_inst_u_id' => $sessStoryModel->model_inst_u_id,
