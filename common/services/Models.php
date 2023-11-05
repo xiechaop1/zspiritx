@@ -132,7 +132,7 @@ class Models extends Component
         return $userKeepAlive;
     }
 
-    public function setAction($sessionId, $userId, ) {
+    public function setAction($sessionId, $userId ) {
         $stageCookie = $this->getUnderTakeStage();
         Yii::info('Undertake stageCookie: ' . json_encode($stageCookie));
 

@@ -823,7 +823,7 @@ class DoApi extends ApiAction
 
         $actions = Yii::$app->act->get($sessionId, $userId);
 
-        Yii::$app->models->readActionAndUnsetCookie();
+        Yii::$app->models->readActionAndUnsetCookie($underTakeIds);
 
 //        if (!empty($underTakeIds)) {
 //            foreach ($underTakeIds as $actId) {
