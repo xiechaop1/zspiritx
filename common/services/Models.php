@@ -133,7 +133,7 @@ class Models extends Component
         return $userKeepAlive;
     }
 
-    public function setAction($sessionId, $userId ) {
+    public function setUndertakeAction($sessionId, $userId ) {
         $stageCookie = $this->getUnderTakeStage();
         Yii::info('Undertake stageCookie: ' . json_encode($stageCookie));
 
@@ -143,8 +143,6 @@ class Models extends Component
             $cookieStoryStageId = $stageCookie['story_stage_id'];
             $cookieSessionStageId = $stageCookie['session_stage_id'];
             $cookieStoryId = $stageCookie['story_id'];
-            Yii::info('Undertake userKeepAlive ii: ' . (time() - $ts));
-
             $underTakeModels = $this->getUnderTakeModelsFromCookie();
 
             $timeInterval = time() - $ts;
@@ -156,6 +154,7 @@ class Models extends Component
                     $undertakeTriggerTimeout = $model['undertake_trigger_timeout'];
                     $undertakeAliveTimeout = $model['undertake_alive_timeout'];
                     $isReady = !empty($model['is_ready']) ? $model['is_ready'] : false;
+                    Yii::info('Undertake timeInterval ' . $timeInterval . ' keep-alive: ' . $userKeepAlive . ' isReady: ' . $isReady);
                     if ($isReady) {
                         if ($timeInterval > $undertakeTriggerTimeout
                             && $userKeepAlive > $undertakeAliveTimeout
@@ -201,7 +200,7 @@ class Models extends Component
         return $underTakeIds;
     }
 
-    public function readActionAndUnsetCookie($underTakeIds) {
+    public function readUndertakeActionAndUnsetCookie($underTakeIds) {
         if (!empty($underTakeIds)) {
             foreach ($underTakeIds as $actId) {
                 Yii::$app->act->readOne($actId);
@@ -211,6 +210,17 @@ class Models extends Component
         }
     }
 
-
+    public function removeUndertakeModelFromCookie($storyModelDetailId) {
+        $underTake = $this->getUnderTakeModelsFromCookie();
+        if (!empty($underTake)) {
+            foreach ($underTake as $key => $item) {
+                if ($item['story_model_detail_id'] == $storyModelDetailId) {
+                    unset($underTake[$key]);
+                }
+            }
+            Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, self::TIMEOUT_MAX);
+            Yii::info('Undertake: Remove model from cookie: ' . json_encode($underTake, true));
+        }
+    }
 
 }

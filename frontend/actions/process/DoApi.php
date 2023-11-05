@@ -756,7 +756,13 @@ class DoApi extends ApiAction
     }
 
     public function updateStoryModel() {
-        return '';
+        $storyModelDetailId = !empty($this->_get['story_model_detail_id']) ? $this->_get['story_model_detail_id'] : 0;
+
+        // 清理兜底中模型
+        if (!empty($storyModelDetailId)) {
+            Yii::$app->models->removeUndertakeModelFromCookie($storyModelDetailId);
+        }
+        return true;
     }
 
     public function getActionByUser() {
@@ -772,7 +778,7 @@ class DoApi extends ApiAction
 //        }
         Yii::$app->models->setKeepAlive();
 
-        $underTakeIds = Yii::$app->models->setAction($sessionId, $userId);
+        $underTakeIds = Yii::$app->models->setUndertakeAction($sessionId, $userId);
 
 //
 //
@@ -823,7 +829,7 @@ class DoApi extends ApiAction
 
         $actions = Yii::$app->act->get($sessionId, $userId);
 
-        Yii::$app->models->readActionAndUnsetCookie($underTakeIds);
+        Yii::$app->models->readUndertakeActionAndUnsetCookie($underTakeIds);
 
 //        if (!empty($underTakeIds)) {
 //            foreach ($underTakeIds as $actId) {
