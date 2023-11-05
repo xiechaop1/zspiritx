@@ -31,7 +31,7 @@ class Index extends Action
 {
     public function run()
     {
-        $this->controller->layout = '@frontend/views/layouts/main_h5.php';
+        $this->controller->layout = '@frontend/views/layouts/main_w.php';
 
         $qrCode = [
             'huawei'    => Attachment::completeUrl('/img/home/qrcode/QRCode_Huawei_v1.png'),

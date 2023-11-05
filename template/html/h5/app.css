@@ -57,6 +57,19 @@ html, body {
     padding: 20px 30px;
     top:-30px;
 }
+.btn-mid{
+    border-radius: 64px 24px 64px 24px ;
+    border: 2px solid #DAFC70;
+    background-color:#DAFC70;
+    font-size: 32px;
+    font-weight: 500;
+    color: #1F2628;
+    line-height: 19px;
+    display: inline-block;
+    padding: 20px 30px;
+    margin: 20px auto 20px auto;
+
+}
 .hpa-ctr{
     padding: 12px 30px;
     background: #DAFC70;
