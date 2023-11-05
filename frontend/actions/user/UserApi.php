@@ -530,7 +530,7 @@ class UserApi extends ApiAction
                 $modelInstUId = $item['model_inst_u_id'];
 
                 if (!empty($item['lat']) && !empty($item['lng'])) {
-                    $distance = $this->getDistance($lat, $lng, $item['lat'], $item['lng']);
+                    $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
 
                     if ($distance <= $triggerMisRange) {
                         $underTake[$key]['is_ready'] = true;
