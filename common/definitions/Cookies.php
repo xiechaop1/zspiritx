@@ -17,6 +17,7 @@ class Cookies extends Api
 
     const UNDERTAKE_MODEL = 'undertake_model';
 
+    const UNDERTAKE_MODEL_READY = 'undertake_model_ready';
     const CURRENT_STAGE = 'current_stage';
 
     const USER_KEEP_ALIVE = 'user_keep_alive';

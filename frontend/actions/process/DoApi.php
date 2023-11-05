@@ -769,14 +769,16 @@ class DoApi extends ApiAction
         $execTime = 5 * 60; // 执行兜底，5分钟
         $keepAlive = 60; // 保活时间，1分钟
         $isUndertake = false;
+        Yii::info('Undertake stageCookie: ' . $stageCookieJson);
         if (!empty($stageCookieJson)) {
             $stageCookie = json_decode($stageCookieJson, true);
             $ts = $stageCookie['ts'];
             $cookieStoryStageId = $stageCookie['story_stage_id'];
             $cookieSessionStageId = $stageCookie['session_stage_id'];
             $cookieStoryId = $stageCookie['story_id'];
-            if ($ts - time() > $execTime) {
+            if (time() - $ts > $execTime) {
                 $userKeepAlive = Cookie::getCookie(Cookies::USER_KEEP_ALIVE);
+                Yii::info('Undertake userKeepAlive: ' . $userKeepAlive);
                 if ($userKeepAlive > $keepAlive) {
 //                    $sessModels = SessionModels::find()
 //                        ->joinWith('storymodel')
@@ -788,19 +790,19 @@ class DoApi extends ApiAction
 //                            'o_story_model.is_undertake' => StoryModels::IS_UNDERTAKE_YES
 //                        ])
 //                        ->all();
-                    $sessModelJson = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
+                    $sessModels = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
 
-                    if (!empty($sessModelJson)) {
-                        $sessModels = json_decode($sessModelJson, true);
+                    if (!empty($sessModels)) {
+//                        $sessModels = json_decode($sessModelJson, true);
                         $underTakeIds = [];
                         foreach ($sessModels as $sessModel) {
-                            if ($sessModel['is_ready'] == true) {
+                            if (!empty($sessModel['is_ready']) && $sessModel['is_ready'] == true) {
                                 $ret = Yii::$app->act->set($sessionId, $cookieSessionStageId, $cookieStoryId, $userId, $sessModel['model_inst_u_id'], Actions::ACTION_TYPE_MODEL_DISPLAY);
                                 $underTakeIds[] = $ret->id;
+                                $isUndertake = true;
                             }
                         }
                     }
-                    $isUndertake = true;
                 }
             }
         }

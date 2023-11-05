@@ -485,7 +485,7 @@ class UserApi extends ApiAction
                             'lng' => $sessStoryModel->lng,
                             'misrange' => $sessStoryModel->misrange,
                             'trigger_misrange' => $sessStoryModel->trigger_misrange,
-                            'is_ready' => false,
+//                            'is_ready' => false,
                         ];
                     }
                 }
@@ -515,7 +515,6 @@ class UserApi extends ApiAction
 
         try {
             $ret = $userLoc->save();
-            return $userLoc;
         } catch (\Exception $e) {
             throw $e;
 //            return $this->fail($e->getCode() . ': ' . $e->getMessage());
@@ -524,25 +523,33 @@ class UserApi extends ApiAction
         // 判断一下兜底模型是否进入经纬度范围
         $underTake = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
 //        $underTake = json_decode($underTakeJson, true);
+        $updateCt = 0;
         if (!empty($underTake)) {
             foreach ($underTake as $key => $item) {
                 $misRange = $item['misrange'];
                 $triggerMisRange = $item['trigger_misrange'];
                 $modelInstUId = $item['model_inst_u_id'];
 
-                if (!empty($item['lat']) && !empty($item['lng'])) {
-                    $distance = $this->getDistance($lat, $lng, $item['lat'], $item['lng']);
+                if (empty($item['is_ready']) || $item['is_ready'] != true) {
+                    if (!empty($item['lat']) && !empty($item['lng'])) {
+                        $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
 
-                    if ($distance <= $triggerMisRange) {
+                        if ($distance <= $triggerMisRange) {
+                            $underTake[$key]['is_ready'] = true;
+                            $updateCt++;
+                        }
+                    } else {
                         $underTake[$key]['is_ready'] = true;
+                        $updateCt++;
                     }
-                } else {
-                    $underTake[$key]['is_ready'] = true;
                 }
             }
 //            $underTakeJson = json_encode($underTake, true);
-            Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake);
+            if ($updateCt > 0) {
+                Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake);
+            }
         }
+        return $userLoc;
 
     }
 
