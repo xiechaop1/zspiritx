@@ -485,7 +485,7 @@ class UserApi extends ApiAction
                             'lng' => $sessStoryModel->lng,
                             'misrange' => $sessStoryModel->misrange,
                             'trigger_misrange' => $sessStoryModel->trigger_misrange,
-                            'is_ready' => false,
+//                            'is_ready' => false,
                         ];
                     }
                 }
@@ -530,7 +530,7 @@ class UserApi extends ApiAction
                 $triggerMisRange = $item['trigger_misrange'];
                 $modelInstUId = $item['model_inst_u_id'];
 
-                if ($item['is_ready'] == false) {
+                if (empty($item['is_ready']) || $item['is_ready'] != true) {
                     if (!empty($item['lat']) && !empty($item['lng'])) {
                         $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
 
