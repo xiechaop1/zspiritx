@@ -801,8 +801,8 @@ class DoApi extends ApiAction
                                 $underTakeIds[] = $ret->id;
                             }
                         }
+                        $isUndertake = true;
                     }
-                    $isUndertake = true;
                 }
             }
         }
