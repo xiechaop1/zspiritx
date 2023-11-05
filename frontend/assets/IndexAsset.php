@@ -22,7 +22,7 @@ class IndexAsset extends AssetBundle
 
     public $css = [
          'site/css/style.css',
-         'css/bootstrap.css',
+         'site/css/bootstrap.css',
          'site/css/plugin/jPushMenu.css',
          'site/css/plugin/animate.css',
     ];

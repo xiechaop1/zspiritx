@@ -31,7 +31,17 @@ $this->title = 'AR儿童剧本杀';
 
   <div class="p-20 bg-black">
     <div class="w-100 p-30  m-b-10" style="position: absolute; top: 100px;">
-      <h1 style="text-align: center; color:white; padding: 10px; margin-bottom: 50px; font-size: 50px;">灵镜</h1>
+      <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <img class="img-responsive " src="../../static/image/logo.png" />
+        </div>
+         <div class="col-md-6 col-sm-6">
+            <h1 style="text-align: center; color:white; padding: 10px; margin-bottom: 50px; font-size: 50px;">灵镜</h1>
+         </div>
+      </div>
+
+
+
       <div class="w-1-0 d-flex">
         <div class="fs-30 bold w-100 text-FF title-box-border">
           <div class="npc-name">

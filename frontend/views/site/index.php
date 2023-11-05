@@ -31,6 +31,7 @@ $this->title = '庄生科技';
                 </div>
                 <!--End logo-->
                 <!-- Navigation Menu -->
+                <!--
                 <nav class='navigation'>
                     <ul>
                         <li>
@@ -44,7 +45,7 @@ $this->title = '庄生科技';
                         </li>
 
                     </ul>
-                </nav>
+                </nav>-->
                 <!--End Navigation Menu -->
 
             </div>
@@ -54,7 +55,7 @@ $this->title = '庄生科技';
         <!-- CONTENT --------------------------------------------------------------------------------->
 
         <!--About Section-->
-        <section id="about" class="wow ptb ptb-sm-40 dark-bg">
+        <section id="about" class="wow ptb ptb-sm-40 dark-bg bg-imgbg">
             <div class="container" style="margin-bottom: 30px;">
                 <div class="row text-center ma-t-50">
                     <div class="col-md-10 col-md-offset-1">
