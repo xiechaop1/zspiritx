@@ -21,7 +21,6 @@ class IndexAsset extends AssetBundle
     public $sourcePath = '@runtime/../../template';
 
     public $css = [
-
          'site/css/style.css',
          'css/bootstrap.css',
          'site/css/plugin/jPushMenu.css',
