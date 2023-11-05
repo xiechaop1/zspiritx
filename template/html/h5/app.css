@@ -43,6 +43,7 @@ html, body {
     display: inline-block;
     padding: 20px 30px;
     vertical-align: top;
+    text-align: center;
 }
 .npc-name{
     border-radius: 64px 24px 64px 24px ;
@@ -127,7 +128,7 @@ html, body {
     color: #FFFFFF;
     position: relative;
 }
-.login-box{
+.login-box-sm{
     background: rgba(31,38,40,0.8);
     border-radius: 48px;
     opacity: 1;
