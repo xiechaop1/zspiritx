@@ -453,7 +453,7 @@ class UserApi extends ApiAction
                 'session_stage_id' => $sessionStageId,
                 'story_id'    => $storyId,
 //                'ts'    => time(),
-                'ts'    => 0,
+//                'ts'    => 0,
             ];
 
             Yii::$app->models->setUnderTakeStage($stageCookie);
