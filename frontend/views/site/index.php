@@ -69,7 +69,7 @@ $this->title = '庄生科技';
                                     </div>
                                     <div class="col-md-9 col-xs-8">
                                         <p class="logo-t-h1">
-                                            灵镜AR新世界
+                                            灵镜新世界
                                         </p>
                                     </div>
                                     <div class="col-md-12 ma-t-50 col-xs-12" >

@@ -36,6 +36,10 @@ class Index extends Action
         $image = 'img/home/index_image.jpg';
         $image = Attachment::completeUrl($image, true);
 
+//        \common\helpers\Common::generateMazeImage(400, 400, 40);
+//        echo \common\helpers\Common::generateWordPuzzle('上二楼转到对面找迅猛龙', '你是我的风我是你的沙');
+//        exit;
+
 //        $banner = [
 //            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
 //            'taoranting' => Attachment::completeUrl('img/home/taoranting1.jpg', true),
