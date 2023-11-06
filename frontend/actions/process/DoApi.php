@@ -573,6 +573,7 @@ class DoApi extends ApiAction
                         $storyModel = Model::combineStoryModelWithDetail($storyModel);
                         if (!empty($storyModel->dialog)) {
                             $params['story_model_id'] = $storyModel->id;
+                            $params['model_inst_u_id'] = $storyModel->model_inst_u_id;
                             $storyModel->dialog = Model::formatDialog($storyModel, $params);
                         }
                         $models[] = [
