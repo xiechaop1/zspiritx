@@ -40,6 +40,7 @@ class Models extends Component
     }
 
     public function setUnderTakeStage($stageCookie){
+        Cookie::unsetCookie(Cookies::UPDATE_STAGE_TIME);
         Cookie::setCookie(Cookies::UPDATE_STAGE_TIME, $stageCookie, self::TIMEOUT_MAX);
         Yii::info('Undertake: Update User Stage' . json_encode($stageCookie, true));
     }
