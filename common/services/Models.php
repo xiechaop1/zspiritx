@@ -87,7 +87,7 @@ class Models extends Component
         }
     }
 
-    public function updateUnderTakeReady($underTake, $lat, $lng) {
+    public function updateUnderTakeReady($underTake, $underTakeStage, $lat, $lng) {
         $updateCt = 0;
         if (!empty($underTake)) {
             foreach ($underTake as $key => $item) {
@@ -95,24 +95,32 @@ class Models extends Component
                 $triggerMisRange = $item['trigger_misrange'];
                 $modelInstUId = $item['model_inst_u_id'];
 
-                if (empty($item['is_ready']) || $item['is_ready'] != true) {
-                    if (!empty($item['lat']) && !empty($item['lng'])) {
-                        $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
-
-                        if ($distance <= $triggerMisRange) {
+                if (!empty($item['lat']) && !empty($item['lng'])) {
+                    $distance = \common\helpers\Common::computeDistanceWithLatLng($lat, $lng, $item['lat'], $item['lng']);
+                    if ($distance <= $triggerMisRange) {
+                        if (empty($item['is_ready']) || $item['is_ready'] != true) {
                             $underTake[$key]['is_ready'] = true;
                             $updateCt++;
                         }
-                    } else {
+                        if (empty($underTakeStage['ts']) || $underTakeStage['ts'] == 0) {
+                            $underTakeStage['ts'] = time();
+                        }
+                    }
+                }   else {
+                    if (empty($item['is_ready']) || $item['is_ready'] != true) {
                         $underTake[$key]['is_ready'] = true;
                         $updateCt++;
+                    }
+                    if (empty($underTakeStage['ts']) || $underTakeStage['ts'] == 0) {
+                        $underTakeStage['ts'] = time();
                     }
                 }
             }
 //            $underTakeJson = json_encode($underTake, true);
             if ($updateCt > 0) {
                 Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, self::TIMEOUT_MAX);
-                Yii::info('Undertake: Update Undertake ready: ' . json_encode($underTake, true));
+                $this->setUnderTakeStage($underTakeStage);
+                Yii::info('Undertake: Update Undertake ready: ' . json_encode($underTake, true) . ' ' . json_encode($underTakeStage));
             }
         }
     }
@@ -140,6 +148,9 @@ class Models extends Component
         $underTakeIds = [];
         if (!empty($stageCookie)) {
             $ts = $stageCookie['ts'];
+            if (empty($ts)) {
+                return [];
+            }
             $cookieStoryStageId = $stageCookie['story_stage_id'];
             $cookieSessionStageId = $stageCookie['session_stage_id'];
             $cookieStoryId = $stageCookie['story_id'];

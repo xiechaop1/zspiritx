@@ -452,7 +452,8 @@ class UserApi extends ApiAction
                 'story_stage_id' => $storyStageId,
                 'session_stage_id' => $sessionStageId,
                 'story_id'    => $storyId,
-                'ts'    => time(),
+//                'ts'    => time(),
+                'ts'    => 0,
             ];
 
             Yii::$app->models->setUnderTakeStage($stageCookie);
@@ -527,9 +528,11 @@ class UserApi extends ApiAction
 
         // 判断一下兜底模型是否进入经纬度范围
         $underTake = Yii::$app->models->getUnderTakeModelsFromCookie();
+        $underTakeStage = Yii::$app->models->getUnderTakeStage();
+
 //        $underTake = Cookie::getCookie(Cookies::UNDERTAKE_MODEL);
 //        $underTake = json_decode($underTakeJson, true);
-        Yii::$app->models->updateUnderTakeReady($underTake, $lat, $lng);
+        Yii::$app->models->updateUnderTakeReady($underTake, $underTakeStage, $lat, $lng);
 //        $updateCt = 0;
 //        if (!empty($underTake)) {
 //            foreach ($underTake as $key => $item) {
