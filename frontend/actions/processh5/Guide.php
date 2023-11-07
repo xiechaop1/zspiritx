@@ -67,7 +67,7 @@ class Guide extends Action
             [
                 'title' => '游戏介绍-发现',
                 'content' => '当您看到<font color="red"><b>"周围发生了变化，在四周找找看吧"</b></font>，说明已经有NPC或者物品出现了，请您用手机环顾四周，可以找到物品/NPC，并继续游戏',
-                'image' => 'img/guide/3/6-1.png',
+                'image' => 'img/guide/3/lookforaround.png',
             ],
             [
                 'title' => '游戏介绍-对话',
