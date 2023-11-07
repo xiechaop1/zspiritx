@@ -38,12 +38,12 @@ class Picture extends Action
         $blockSize = 200;
         $rows = 4;
         $cols = 4;
-//        $pictures = \common\helpers\Puzzle::cutImage($image, $blockSize, $rows, $cols);
+        $pictures = \common\helpers\Puzzle::cutImage($image, $blockSize, $rows, $cols);
 //
-//        $picId = !empty($_GET['pic_id']) ? $_GET['pic_id'] : 0;
+        $picId = !empty($_GET['pic_id']) ? $_GET['pic_id'] : 0;
 //
 //        $gameImage = imagecreatetruecolor($blockSize * $cols, $blockSize * $rows);
-////        $gameImage = imagecreatetruecolor($blockSize, $blockSize);
+//        $gameImage = imagecreatetruecolor($blockSize, $blockSize);
 //
 //        $block = 0;
 //        shuffle($pictures);
@@ -54,10 +54,10 @@ class Picture extends Action
 //            }
 //        }
 //        imagecopy($gameImage, $pictures[$picId]['image'], 0, 0, 0, 0, $blockSize, $blockSize);
-//
-//        header('Content-Type: image/jpeg');
-//        imagejpeg($gameImage);
 
-        \common\helpers\Common::createPuzzle($image, 200, 4, 4,100);
+        header('Content-Type: image/jpeg');
+        imagejpeg($pictures);
+
+//        \common\helpers\Common::createPuzzle($image, 200, 4, 4,100);
     }
 }

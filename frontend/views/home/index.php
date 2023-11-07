@@ -40,6 +40,69 @@ $this->title = 'AR剧本杀';
 
 <div class="owl-carousel owl-theme" id="banner">
   <?php
+  if (
+      !empty($user) &&
+      $user->user_type == \common\models\User::USER_TYPE_INNER) {
+    ?>
+    <div class="item">
+      <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
+
+      <input type="hidden" name="isDebug" value="1">
+      <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
+      <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
+        <a href="/home/my">我的</a>
+      </div>
+
+      <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
+      <div class="text-content">
+        <div class="text-bg">
+        </div>
+        <div class='p-l-40'>
+          <div class="fs-30 bold w-100 text-FF">
+            审核剧本
+          </div>
+          <div class="fs-24  w-100 text-FF m-t-30">
+            这是用于审核的剧本
+          </div>
+          <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
+            进入游戏
+            <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
+
+      <input type="hidden" name="isDebug" value="1">
+      <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
+        <a href="/home/my">我的</a>
+      </div>
+
+      <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
+      <div class="text-content">
+        <div class="text-bg">
+        </div>
+        <div class='p-l-40'>
+          <div class="fs-30 bold w-100 text-FF">
+            测试剧本
+          </div>
+          <div class="fs-24  w-100 text-FF m-t-30">
+            这是用于测试的剧本
+          </div>
+          SID: <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
+          <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
+            进入游戏
+            <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php
+
+  }
+  ?>
+  <?php
 
   if (!empty($stories)) {
     foreach ($stories as $story) {
@@ -196,44 +259,6 @@ $this->title = 'AR剧本杀';
 <!--      </div>-->
 <!--    </div>-->
 <!--  </div>-->
-  <?php
-  if (
-      !empty($user) &&
-      $user->user_type == \common\models\User::USER_TYPE_NORMAL) {
-  ?>
-  <div class="item">
-    <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
-
-    <input type="hidden" name="isDebug" value="1">
-
-    <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
-    <div class="text-content">
-      <div class="text-bg">
-      </div>
-      <div class='p-l-40'>
-        <div class="fs-30 bold w-100 text-FF">
-          侏罗纪-时间裂痕（家里测试）
-        </div>
-        <div class="fs-24  w-100 text-FF m-t-30">
-          在大峡谷内，忽然产生了一段奇妙的故事。<br>
-          因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。
-          <br>
-          他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>
-          传说只要集齐七颗水晶，就可以让他们穿越回去并且修复裂痕而！<br>
-          冒险家，需要你们的帮助，去收集这些水晶了
-        </div>
-        SID: <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
-        <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
-          进入游戏
-          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
-        </div>
-      </div>
-    </div>
-  </div>
-  <?php
-
-  }
-  ?>
 
 </div>
 

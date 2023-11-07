@@ -141,14 +141,19 @@ class Puzzle
 
         for ($x = 0; $x < $rows; $x++) {
             for ($y = 0; $y < $cols; $y++) {
-                $blockImages[] = [
-                    'image' => imagecrop($image, ['x' => $x * $blockSize, 'y' => $y * $blockSize, 'width' => $blockSize, 'height' => $blockSize]),
-                    'blockSize' => $blockSize,
-                ];
+                $gameImage = imagecreatetruecolor($blockSize, $blockSize);
+                imagecopy($gameImage, $image, 0, 0, $x * $blockSize, $y * $blockSize, $blockSize, $blockSize);
+//
+//                $blockImages[] = [
+////                    'image' => imagecrop($image, ['x' => $x * $blockSize, 'y' => $y * $blockSize, 'width' => $blockSize, 'height' => $blockSize]),
+//                    'image' => $gameImage,
+//                    'blockSize' => $blockSize,
+//                ];
+                imagejpeg($gameImage, 'puzzle_image_' . $x . '_' . $y . '.jpg');
             }
         }
 
-        return $blockImages;
+//        return $blockImages;
     }
 
     public static function createPuzzle($imagePath, $blockSize = 10, $rows = 2, $cols = 2, $shuffleCount = 2) {

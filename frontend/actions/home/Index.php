@@ -62,6 +62,10 @@ class Index extends Action
             } else {
                 header('Location: /passport/web_login');
             }
+
+            if (strlen($user->mobile) < 3) {
+                $user->user_type = User::USER_TYPE_INNER;
+            }
         } catch (\Exception $e) {
             //Yii::error($e->getMessage());
         }
