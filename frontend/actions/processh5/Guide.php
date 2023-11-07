@@ -62,12 +62,12 @@ class Guide extends Action
             [
                 'title' => '游戏介绍-发现',
                 'content' => '当您所处一个场景中，请您按照线索仔细寻找，当出现提示<font color="red"><b>"正在扫描构建环境，请使用手机缓慢扫描地面"</b></font>的时候，请您将手机对准地面或者平面，让物品/NPC有个落脚点',
-                'image' => 'img/guide/3/5-1.png',
+                'image' => 'img/guide/3/6-1.png',
             ],
             [
                 'title' => '游戏介绍-发现',
                 'content' => '当您看到<font color="red"><b>"周围发生了变化，在四周找找看吧"</b></font>，说明已经有NPC或者物品出现了，请您用手机环顾四周，可以找到物品/NPC，并继续游戏',
-                'image' => 'img/guide/3/6-1.png',
+                'image' => 'img/guide/3/5-1.png',
             ],
             [
                 'title' => '游戏介绍-对话',
