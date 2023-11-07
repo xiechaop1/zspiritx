@@ -24,6 +24,9 @@ class Processh5Controller extends Controller
             'finish' => [
                 'class'     => 'frontend\actions\processh5\Finish',
             ],
+            'guide' => [
+                'class'     => 'frontend\actions\processh5\Guide',
+            ],
         ];
     }
 }

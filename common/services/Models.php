@@ -223,12 +223,18 @@ class Models extends Component
         }
     }
 
-    public function removeUndertakeModelFromCookie($storyModelDetailId) {
+    public function removeUndertakeModelFromCookie($storyModelDetailId, $storyModelId) {
         $underTake = $this->getUnderTakeModelsFromCookie();
         if (!empty($underTake)) {
             foreach ($underTake as $key => $item) {
-                if ($item['story_model_detail_id'] == $storyModelDetailId) {
-                    unset($underTake[$key]);
+                if ( !empty($item['story_model_detail_id']) ) {
+                    if ($item['story_model_detail_id'] == $storyModelDetailId) {
+                        unset($underTake[$key]);
+                    }
+                } else {
+                    if ($item['story_model_id'] == $storyModelId) {
+                        unset($underTake[$key]);
+                    }
                 }
             }
             Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, self::TIMEOUT_MAX);

@@ -758,10 +758,13 @@ class DoApi extends ApiAction
 
     public function updateStoryModel() {
         $storyModelDetailId = !empty($this->_get['story_model_detail_id']) ? $this->_get['story_model_detail_id'] : 0;
+        $storyModelId = !empty($this->_get['story_model_detail_id']) ? $this->_get['story_model_detail_id'] : 0;
 
         // 清理兜底中模型
-        if (!empty($storyModelDetailId)) {
-            Yii::$app->models->removeUndertakeModelFromCookie($storyModelDetailId);
+        if (!empty($storyModelDetailId)
+        || !empty($storyModelId)
+        ) {
+            Yii::$app->models->removeUndertakeModelFromCookie($storyModelDetailId, $storyModelId);
         }
         return true;
     }
