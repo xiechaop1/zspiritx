@@ -96,8 +96,12 @@ class Guide extends Action
             ],
             [
                 'title' => '游戏介绍-QA',
+                'content' => '如果您的物品/NPC无法识别出现，或者物品拾取不到等任何问题，您都可以<span style="color:red; font-weight: bold;">杀掉进程，重新进入</span>，我们会在1小时内<span style="color:red; font-weight: bold;">保留您之前场景的结果</span>，您从当前场景重新游戏即可',
+            ],
+            [
+                'title' => '游戏介绍-QA',
                 'content' => '如果您有任何问题，欢迎<span style="color:red; font-weight: bold;">您和管理员联系：18500041193（可以加微信）</span>。最后祝您玩儿的开心！灵镜新世界，感谢您的到来！',
-                'image' => 'img/guide/3/12-1.png',
+                'image' => 'img/guide/3/13-1.png',
             ],
         ];
 
