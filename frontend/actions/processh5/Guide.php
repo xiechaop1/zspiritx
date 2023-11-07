@@ -82,7 +82,7 @@ class Guide extends Action
             [
                 'title' => '游戏介绍-投喂',
                 'content' => '当您需要投喂恐龙的时候，您先和恐龙对话，看到<span style="font-weight: bold; color: red;">屏幕顶部有恐龙的名字</span>，然后打开<span style="font-weight: bold; color: red;">"背包"</span>找到对应的食物，并点击食物可以投喂，如果是恐龙爱吃的，那么他将会给您新的指引。',
-                'image' => 'img/guide/3/9-1.png',
+                'image' => 'img/guide/3/top_target.png',
             ],
             [
                 'title' => '游戏介绍-答题',
