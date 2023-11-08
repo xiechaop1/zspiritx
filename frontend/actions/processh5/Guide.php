@@ -57,12 +57,12 @@ class Guide extends Action
             [
                 'title' => '游戏介绍',
                 'content' => '右侧是游戏画面，下面有辅助栏，包括：当前的任务和物品/NPC距您的距离',
-                'image' => 'img/guide/3/4-1.png',
+                'image' => 'img/guide/3/toolbar_bottom.png',
             ],
             [
                 'title' => '游戏介绍-发现',
                 'content' => '当您所处一个场景中，请您按照线索仔细寻找，当出现提示<font color="red"><b>"正在扫描构建环境，请使用手机缓慢扫描地面"</b></font>的时候，请您将手机对准地面或者平面，让物品/NPC有个落脚点',
-                'image' => 'img/guide/3/5-1.png',
+                'image' => 'img/guide/3/scan_image.png',
             ],
             [
                 'title' => '游戏介绍-发现',
