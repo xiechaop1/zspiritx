@@ -179,11 +179,10 @@ class UserApi extends ApiAction
         ) {
             throw new \Exception('手机号或密码不能为空', ErrorCode::USER_PARAMETERS_INVALID);
         }
-
         if (strlen($mobile) > 3 && !YII_DEBUG) {
             $verifyVal = Yii::$app->verificationCode->validate($mobile, $verifyCode, \common\definitions\VerificationCode::TYPE_REGISTER);
-            if (!$verifyVal) {
-                throw new \Exception('验证码错误', ErrorCode::USER_PARAMETERS_INVALID);
+            if ($verifyVal !== true) {
+                throw new \Exception($verifyVal, ErrorCode::USER_PARAMETERS_INVALID);
             }
         }
 
