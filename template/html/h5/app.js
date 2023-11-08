@@ -320,19 +320,26 @@ $(function () {
                     alert("网络异常，请检查网络情况");
                 },
                 success: function (data, status){
-                    alert("验证码已发送，请注意查收");
-                    par.find('a').addClass('disabled');
-                    var time = 30;
-                    var timer = setInterval(function() {
-                        if (time > 0) {
-                            time--;
-                            par.find('a').text(time);
-                        } else {
-                            clearInterval(timer);
-                            par.find('a').text('获取验证码');
-                            par.find('a').removeClass('disabled');
-                        }
-                    }, 1000);
+                    var dataContent=data;
+                    var dataCon=$.toJSON(dataContent);
+                    var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    if (data["code"] == 200) {
+                        alert("验证码已发送，请注意查收");
+                        par.find('a').addClass('disabled');
+                        var time = 30;
+                        var timer = setInterval(function () {
+                            if (time > 0) {
+                                time--;
+                                par.find('a').text(time);
+                            } else {
+                                clearInterval(timer);
+                                par.find('a').text('获取验证码');
+                                par.find('a').removeClass('disabled');
+                            }
+                        }, 1000);
+                    } else {
+                        alert(data["msg"]);
+                    }
 
                 }
             });
