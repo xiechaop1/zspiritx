@@ -345,7 +345,7 @@ $(function () {
         var isDebug = $('#login_is_debug').val();
         var storyId = $('#login_story_id').val();
         var userId = $('#user_id').val();
-        var isagree = $('#agreement').is(':checked');
+        var isagree = $('#agreement1').is(':checked');
 
         if (mobile.length > 3 && isagree == false) {
             alert('请勾选用户协议');
