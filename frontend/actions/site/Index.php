@@ -36,7 +36,7 @@ class Index extends Action
         $qrCode = [
             'huawei'    => Attachment::completeUrl('/img/home/qrcode/QRCode_Huawei_v1.png'),
             'xiaomi'    => '',
-            'ios'     => '',
+            'ios'     => Attachment::completeUrl('/img/home/qrcode/QRCode_iOS_v1.png'),
         ];
 
         return $this->controller->render(

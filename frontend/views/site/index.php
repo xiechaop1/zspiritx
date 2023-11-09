@@ -89,7 +89,15 @@ $this->title = '庄生科技';
                                         <div class="row">
                                             <div class="col-md-6 col-xs-6">
                                                 <p class="text-left">
-                                                    华为下载
+                                                    iPhone下载（支持iPhone8以上机型）
+                                                </p>
+                                                <div class="qr-box-1">
+                                                    <img src="<?= $qrCode['ios']; ?>" class="img-responsive"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-xs-6">
+                                                <p class="text-left">
+                                                    华为下载（支持Mate20以上机型）
                                                 </p>
                                                 <div class="qr-box-1">
                                                     <img src="<?= $qrCode['huawei']; ?>" class="img-responsive"/>
@@ -100,9 +108,6 @@ $this->title = '庄生科技';
                                                     敬请期待
                                                 </p>
 
-                                                <div class="margin-top-30">
-                                                    <img src="../../static/image/ios.png" class="img-responsive"/>
-                                                </div>
                                                 <div class="margin-top-20">
                                                     <img src="../../static/image/xiaochengxu.png" class="img-responsive"/>
                                                 </div>
