@@ -150,6 +150,7 @@ class Puzzle
 //                    'blockSize' => $blockSize,
 //                ];
                 imagejpeg($gameImage, 'puzzle_image_' . $x . '_' . $y . '.jpg');
+//                 $blockImages[] = $gameImage;
             }
         }
 

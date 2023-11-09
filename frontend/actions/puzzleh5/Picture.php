@@ -56,7 +56,7 @@ class Picture extends Action
 //        imagecopy($gameImage, $pictures[$picId]['image'], 0, 0, 0, 0, $blockSize, $blockSize);
 
         header('Content-Type: image/jpeg');
-        imagejpeg($pictures);
+        imagejpeg($pictures[$picId]);
 
 //        \common\helpers\Common::createPuzzle($image, 200, 4, 4,100);
     }
