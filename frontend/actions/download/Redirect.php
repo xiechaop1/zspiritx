@@ -32,5 +32,9 @@ class Redirect extends Action
 
         header('location: ' . $uri);
 
+        return $this->controller->render('redirect', [
+            'uri' => $uri,
+        ]);
+
     }
 }
