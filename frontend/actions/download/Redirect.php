@@ -9,39 +9,28 @@
 namespace frontend\actions\download;
 
 
-use common\helpers\Cookie;
-use common\models\Member;
-use common\models\MemberInvite;
-use common\models\MemberInviteCode;
-use common\models\Music;
-use common\services\HewaApi;
-use frontend\models\MemberIdentity;
-use liyifei\base\actions\ApiAction;
+use common\helpers\Common;
+
 use yii\base\Action;
-use yii\web\BadRequestHttpException;
-use yii;
 
 class Redirect extends Action
 {
 
     public function run()
     {
-        // 判断有url字段，就按照url跳转
-        if (!empty(Yii::$app->request->get('url'))) {
-            header('Location: ' . Yii::$app->request->get('url'));
-            exit;
+        $system = Common::chooseSystem();
+
+        switch ($system) {
+            case 'ios':
+                $uri = 'https://apps.apple.com/cn/app/%E7%81%B5%E9%95%9C%E6%96%B0%E4%B8%96%E7%95%8C/id6471038525';
+                break;
+            case 'android':
+            default:
+                $uri = 'https://download.zspiritx.com.cn/download/lingjing_huawei_v1.apk';
+                break;
         }
 
-        // 读取歌曲里的物料地址
-        $music = Music::findOne(['id' => Yii::$app->request->get('music_id')]);
-        if (!empty($music['resource_download_url'])) {
-            if (strpos($music['resource_download_url'], 'http') === false) {
-                $music['resource_download_url'] = 'http://' . $music['resource_download_url'];
-            }
-            header('Location: ' . $music['resource_download_url']);
-        } else {
-            echo '没有找到资源地址';
-        }
+        header('location: ' . $uri);
 
     }
 }

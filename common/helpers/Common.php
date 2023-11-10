@@ -30,6 +30,17 @@ class Common
         return $ip;
     }
 
+    public static function chooseSystem() {
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if(strpos($agent, 'iphone') || strpos($agent, 'ipad')){
+            return 'ios';
+        }elseif(strpos($agent, 'android')){
+            return 'android';
+        }else{
+            echo 'other';
+        }
+    }
+
     /**
      * @param int $len
      * @param int $type ( 0 - 混合; 1 - 小写; 2 - 大写; 3 - 数字 )
@@ -66,27 +77,6 @@ class Common
         return $str;
 
     }
-    public static function createWechatSign($url = null) {
-        if (empty($url)) {
-            $url = \Yii::$app->request->getUrl();
-        }
-        if (substr($url, 0, 1) == '/') {
-            $hostInfo = \Yii::$app->request->hostInfo;
-            $url = $hostInfo . $url;
-        }
-        $sign = \Yii::$app->hewaApi->getWechatSign([
-            'url' => $url,
-        ]);
-
-        $ret = !empty($sign['code']) && $sign['code'] == 200 ? $sign['data'] : '';
-
-        if ( is_string($ret) && strpos($ret, 'invalid signature') !== false) {
-            return [];
-        } else {
-            return $ret;
-        }
-    }
-
     public static function showList($array, $val, $default = '')
     {
 
