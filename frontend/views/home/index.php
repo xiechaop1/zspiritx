@@ -136,16 +136,20 @@ $this->title = 'AR剧本杀';
         </div>
         <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
           <?php
-          if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED) {
-            echo '进入游戏';
+          if ($story->story_status == \common\models\Story::STORY_STATUS_OPEN_WAIT) {
+            echo '等待开放';
           } else {
-            if ($story->extend->curr_price == 0) {
-              echo '限免';
+            if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED) {
+              echo '进入游戏';
             } else {
-              if ($story->extend->curr_price != $story->extend->price) {
-                echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
+              if ($story->extend->curr_price == 0) {
+                echo '限免';
               } else {
-                echo '￥' . $story->extend->price;
+                if ($story->extend->curr_price != $story->extend->price) {
+                  echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
+                } else {
+                  echo '￥' . $story->extend->price;
+                }
               }
             }
           }

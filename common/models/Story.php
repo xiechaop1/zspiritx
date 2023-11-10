@@ -25,9 +25,12 @@ class Story extends \common\models\gii\Story
     const STORY_STATUS_ONLINE  = 1; // 上架
     const STORY_STATUS_OFFLINE = 0; // 下架
 
+    const STORY_STATUS_OPEN_WAIT = 2; // 开放等待
+
     public static $storyStatus2Name = [
         self::STORY_STATUS_ONLINE  => '上架',
         self::STORY_STATUS_OFFLINE => '下架',
+        self::STORY_STATUS_OPEN_WAIT => '开放等待',
     ];
 
     public function behaviors()
