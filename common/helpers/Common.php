@@ -34,6 +34,8 @@ class Common
         $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
         if(strpos($agent, 'iphone') || strpos($agent, 'ipad')){
             return 'ios';
+        }elseif(strpos($agent, 'micromessage')){
+            return 'wechat';
         }elseif(strpos($agent, 'android')){
             return 'android';
         }else{
