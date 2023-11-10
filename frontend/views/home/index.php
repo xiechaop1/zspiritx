@@ -134,7 +134,7 @@ $this->title = 'AR剧本杀';
           他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>
           传说只要集齐5颗宝石，就可以让他们穿越回去并且修复裂痕！ 冒险家，需要你们的帮助，去收集这些宝石了 -->
         </div>
-        <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
+        <div class="btn-m-green m-t-30 float-right m-r-20 <?= $story->story_status == \common\models\Story::STORY_STATUS_ONLINE ? 'play_btn' : ''; ?>">
           <?php
           if ($story->story_status == \common\models\Story::STORY_STATUS_OPEN_WAIT) {
             echo '等待开放';
