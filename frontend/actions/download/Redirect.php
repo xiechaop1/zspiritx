@@ -21,6 +21,7 @@ class Redirect extends Action
         $system = Common::chooseSystem();
 
         $downloadAllow = 0;
+        $uri = '';
         switch ($system) {
             case 'ios':
                 $uri = 'https://apps.apple.com/cn/app/%E7%81%B5%E9%95%9C%E6%96%B0%E4%B8%96%E7%95%8C/id6471038525';
