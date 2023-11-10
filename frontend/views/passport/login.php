@@ -32,13 +32,10 @@ $this->title = 'AR儿童剧本杀';
   <div class="p-20 bg-black">
     <div class="w-100 p-30  m-b-10" style="position: absolute; top: 100px;">
       <div class="row m-b-40">
-          <div class="col-md-1 col-sm-6">
-              <img class="img-responsive " src="../../static/image/logo.png" />
-          </div>
-        <div class="col-md-1 col-sm-6">
+        <div class="col-md-1 col-sm-3" style="margin-left: 20px;">
             <img class="img-responsive " src="../../static/image/lingjing_icon.png" style="width: 120px; height: 120px;" />
         </div>
-         <div class="col-md-3 col-sm-6">
+         <div class="col-md-6 col-sm-8">
             <h1 class="logo-t">灵镜新世界</h1>
          </div>
       </div>
@@ -80,9 +77,29 @@ $this->title = 'AR儿童剧本杀';
         </div>
       </div>
 
-    </div>
-  </div>
+<div class="row" style="margin-top: 20px;">
+        <div class="col-md-1 col-sm-2">
+            <img class="img-responsive " src="../../static/image/logo.png" />
+        </div>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <!--Footer Info -->
+                <div class="row footer-info text-center">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <span class="margin-10 footer-m-span white">Copyright © 2023-2023 庄生科技 zspiritx.com.cn 版权所有</span><br>
+                        <span class="margin-10 footer-m-span"><a href="https://beian.miit.gov.cn" class="white">京ICP备2023021255号</a></span>
+                    </div>
+                </div>
+                <!-- End Footer Info -->
+            </div>
+        </footer>
+        <!-- END FOOTER -->
+</div>
 
+    </div>
+
+  </div>
 </div>
 
 </div>
