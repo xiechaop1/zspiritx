@@ -35,10 +35,10 @@ $this->title = 'AR儿童剧本杀';
           <div class="col-md-1 col-sm-6">
               <img class="img-responsive " src="../../static/image/logo.png" />
           </div>
-        <div class="col-md-1 col-sm-6" style="margin-left: 50px;">
+        <div class="col-md-1 col-sm-6">
             <img class="img-responsive " src="../../static/image/lingjing_icon.png" style="width: 120px; height: 120px;" />
         </div>
-         <div class="col-md-6 col-sm-6">
+         <div class="col-md-3 col-sm-6">
             <h1 class="logo-t">灵镜新世界</h1>
          </div>
       </div>
