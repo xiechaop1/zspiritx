@@ -71,7 +71,7 @@ class Index extends Action
         }
 
         $stories = Story::find()
-            ->where(['story_status' => Story::STORY_STATUS_ONLINE])
+            ->where(['story_status' => [Story::STORY_STATUS_ONLINE, Story::STORY_STATUS_OPEN_WAIT]])
             ->orderBy(['sort_by' => SORT_ASC])
             ->all();
 
