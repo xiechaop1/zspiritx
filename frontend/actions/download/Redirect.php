@@ -30,8 +30,8 @@ class Redirect extends Action
                 break;
         }
 
-        header('location: ' . $uri);
 
+        header('location: ' . $uri);
         return $this->controller->render('redirect', [
             'uri' => $uri,
         ]);

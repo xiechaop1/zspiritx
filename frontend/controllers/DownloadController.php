@@ -17,7 +17,7 @@ use yii\web\Controller;
 
 class DownloadController extends Controller
 {
-    public $layout = '@frontend/views/layouts/main_login.php';
+    public $layout = '@frontend/views/layouts/main_h5.php';
 
     public function init()
     {
