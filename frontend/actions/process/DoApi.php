@@ -389,17 +389,6 @@ class DoApi extends ApiAction
                 return $this->fail('密码错误', ErrorCode::SESSION_PASSWORD_ERROR);
             }
 
-            $sessionStage = SessionStages::find()
-                ->where([
-                    'story_id'      => (int)$this->_storyId,
-                    'session_id'    => (int)$this->_sessionId,
-                ])
-                ->andFilterWhere(['>', 'sort_by', 0])
-                ->one();
-
-            $lastStoryStageId   = $sessionStage->story_stage_id;
-            $lastSessionStageId = $sessionStage->id;
-
             $userRoleCt = UserStory::find()
                 ->where([
 //                'user_id' => (int)$this->_userId,
@@ -444,6 +433,22 @@ class DoApi extends ApiAction
                 $transaction->rollBack();
                 return $this->fail($e->getMessage(), $e->getCode());
             }
+        }
+
+        if ( empty($lastSessionStageId)
+            || empty($lastStoryStageId)
+        ) {
+            $sessionStage = SessionStages::find()
+                ->where([
+                    'story_id'      => (int)$this->_storyId,
+                    'session_id'    => (int)$this->_sessionId,
+                ])
+                ->andFilterWhere(['>', 'sort_by', 0])
+                ->one();
+
+            $lastStoryStageId   = $sessionStage->story_stage_id;
+            $lastSessionStageId = $sessionStage->id;
+
         }
 
         Yii::$app->knowledge->setByItem($lastStoryStageId, ItemKnowledge::ITEM_TYPE_STAGE, (int)$this->_sessionId, $lastSessionStageId, (int)$this->_userId, (int)$this->_storyId);
