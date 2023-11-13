@@ -23,7 +23,7 @@ class Session extends Action
     
     public function run()
     {
-        $sessionId = Net::post('id');
+        $sessionId = Net::post('data-id');
         if ($sessionId) {
             $model = \common\models\Session::findOne($sessionId);
         } else {
@@ -31,7 +31,7 @@ class Session extends Action
         }
 
         if (Yii::$app->request->isAjax) {
-            $id = Net::post('id');
+            $id = Net::post('data-id');
             $session = \common\models\Session::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
