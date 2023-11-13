@@ -54,13 +54,17 @@ class Knowledge extends \common\models\Knowledge
             'story_id' => $this->story_id,
         ]);
 
-        $query->andFilterWhere([
-            'knowledge_class' => $this->knowledge_class,
-        ]);
+        if (!empty($this->knowledge_class)) {
+            $query->andFilterWhere([
+                'knowledge_class' => $this->knowledge_class,
+            ]);
+        }
 
-        $query->andFilterWhere([
-            'knowledge_type' => $this->knowledge_type,
-        ]);
+        if (!empty($this->knowledge_type)) {
+            $query->andFilterWhere([
+                'knowledge_type' => $this->knowledge_type,
+            ]);
+        }
 
         return $dataProvider;
     }
