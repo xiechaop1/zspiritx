@@ -94,7 +94,12 @@ class Edit extends Action
 
         $storyStageDatas = StoryStages::find()->orderBy(['id' => SORT_DESC])->all();
 
-        $storyStages = ArrayHelper::map($storyStageDatas, 'id', 'stage_name');
+        $storyStages = [];
+        foreach ($storyStageDatas as $storyStage) {
+            $storyStages[$storyStage->id] = $storyStage->stage_name . ' [' . $storyStage->stage_u_id . ']';
+        }
+
+//        $storyStages = ArrayHelper::map($storyStageDatas, 'id', 'stage_name');
 //        $storyStages = ['0' => '无'] + $storyStages;
 
 
