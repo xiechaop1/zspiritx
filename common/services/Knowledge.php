@@ -211,7 +211,7 @@ class Knowledge extends Component
     }
 
     public function remove($knowledgeId, $sessionId, $userId, $storyId, $isForce = false) {
-        $knowledge = Knowledge::findOne($knowledgeId);
+        $knowledge = \common\models\Knowledge::findOne($knowledgeId);
         if (empty($knowledge)
             && !$isForce
         ) {
