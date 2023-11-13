@@ -103,7 +103,7 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeDropDownList(
                             $searchModel,
                             'knowledge_class',
-                            \common\models\Knowledge::$knowledgeClass2Name, ["class" => "form-control ", 'value' => !empty($params['Knowledge']['knowledge_class']) ? $params['Knowledge']['knowledge_class'] : '']),
+                            $knowledgeClass, ["class" => "form-control ", 'value' => !empty($params['Knowledge']['knowledge_class']) ? $params['Knowledge']['knowledge_class'] : '']),
                         'value' => function ($model) {
 
                             $ret = !empty(\common\models\Knowledge::$knowledgeClass2Name[$model->knowledge_class])

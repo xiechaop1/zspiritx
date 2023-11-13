@@ -76,12 +76,15 @@ class Knowledge extends Action
         $searchModel = new \backend\models\Knowledge();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $knowledgeTypes = \common\models\Knowledge::$knowledgeType2Name;
+        $knowledgeTypes = [0 => '全部'] + \common\models\Knowledge::$knowledgeType2Name;
+
+        $knowledgeClass = [0 => '全部'] + \common\models\Knowledge::$knowledgeClass2Name;
 
         return $this->controller->render('knowledgelist', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
             'knowledgeTypes'   => $knowledgeTypes,
+            'knowledgeClass'   => $knowledgeClass,
             'knowledgeModel'    => $model,
             'params'        => $_GET,
         ]);
