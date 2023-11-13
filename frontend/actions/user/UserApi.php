@@ -452,14 +452,19 @@ class UserApi extends ApiAction
 
         // 更新任务
         try {
+            // Todo: 算是特殊处理，如果是第一关，那么就不更新
+            if ($storyStage->sort_by > 0) {
 
-            $userStory->last_story_stage_id = $storyStageId;
-            $userStory->last_session_stage_id = $sessionStageId;
-            $userStory->save();
+                $userStory->last_story_stage_id = $storyStageId;
+                $userStory->last_session_stage_id = $sessionStageId;
+                $userStory->save();
 
-            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
-            Yii::$app->knowledge->removeByStage($storyStageId, $sessionId, $userId, $storyId);
-            Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
+
+                Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
+                Yii::$app->knowledge->removeByStage($storyStageId, $sessionId, $userId, $storyId);
+                Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
+
+            }
 
             $stageCookie = [
                 'story_stage_id' => $storyStageId,
