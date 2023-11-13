@@ -190,12 +190,16 @@ class Knowledge extends Component
         }
     }
 
-    public function removeByStage($storyStageId, $sessionId, $sessionStageId, $userId, $storyId) {
+    public function removeByStage($storyStageId, $sessionId, $userId, $storyId) {
         if (empty($storyStageId)) {
             return false;
         }
-        $knowledgeList = Knowledge::find()
-            ->where(['story_stage_id' => $storyStageId])
+        $knowledgeList = \common\models\Knowledge::find()
+            ->where([
+                'story_stage_id' => $storyStageId,
+                'knowledge_class' => \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION,
+                'story_id'  => $storyId,
+            ])
             ->asArray()
             ->all();
 
@@ -212,7 +216,7 @@ class Knowledge extends Component
             && !$isForce
         ) {
             throw new \Exception('知识点不存在', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
-        } else {
+        } elseif (empty($knowledge) && $isForce) {
             return false;
         }
 
@@ -227,7 +231,10 @@ class Knowledge extends Component
             && !$isForce
         ) {
             throw new \Exception('知识点不存在', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
-        } else {
+        } elseif (
+            empty($userKnowledge)
+            && $isForce
+        ) {
             return false;
         }
 
