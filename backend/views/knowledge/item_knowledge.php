@@ -67,7 +67,7 @@ echo \dmstr\widgets\Alert::widget();
                             <button type="submit" class="btn btn-primary">提交</button>
                         </div>
                     </div>
-                    <?
+                    <?php
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
