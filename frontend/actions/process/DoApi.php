@@ -452,7 +452,7 @@ class DoApi extends ApiAction
 
         }
 
-        Yii::$app->knowledge->setByItem($lastStoryStageId, ItemKnowledge::ITEM_TYPE_STAGE, (int)$this->_sessionId, $lastSessionStageId, (int)$this->_userId, (int)$this->_storyId);
+//        Yii::$app->knowledge->setByItem($lastStoryStageId, ItemKnowledge::ITEM_TYPE_STAGE, (int)$this->_sessionId, $lastSessionStageId, (int)$this->_userId, (int)$this->_storyId);
 
         $storyStage = StoryStages::findOne($lastStoryStageId);
         $expirationInterval = 60;        // 消息超时时间
