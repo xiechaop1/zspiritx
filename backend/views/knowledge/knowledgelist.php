@@ -72,6 +72,15 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
                     [
+                        'label' => '场景',
+                        'attribute' => 'story_stage_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return $model->story_stage_id;
+                        },
+                        'filter' => Html::activeInput('text', $searchModel, 'story_stage_id'),
+                    ],
+                    [
                         'label' => '知识类型',
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(

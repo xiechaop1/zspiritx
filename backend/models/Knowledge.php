@@ -42,6 +42,9 @@ class Knowledge extends \common\models\Knowledge
 
         $this->load($params);
 
+        $query->andFilterWhere([
+            'story_stage_id' => $this->story_stage_id,
+        ]);
 
         $query->andFilterWhere([
             'like', 'title', $this->title
