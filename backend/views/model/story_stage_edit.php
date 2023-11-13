@@ -55,7 +55,7 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyStage, 'show_x')->textInput(['value' => $storyStage->show_x])->label('坐标X');
             echo $form->field($storyStage, 'show_y')->textInput(['value' => $storyStage->show_y])->label('坐标Y');
             echo $form->field($storyStage, 'show_z')->textInput(['value' => $storyStage->show_z])->label('坐标Z');
-            echo $form->field($storyStage, 'sort_by')->textInput(['value' => $storyStage->sort_by])->label('排序');
+            echo $form->field($storyStage, 'sort_by')->textInput(['value' => $storyStage->sort_by])->label('排序(0-Unity默认场景，>=1故事场景)');
             echo $form->field($storyStage, 'bgm')->widget('\liyifei\uploadOSS\FileUploadOSS', [
                 'multiple' => false,
                 'isImage' => false,

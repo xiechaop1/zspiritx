@@ -394,6 +394,7 @@ class DoApi extends ApiAction
                     'story_id'      => (int)$this->_storyId,
                     'session_id'    => (int)$this->_sessionId,
                 ])
+                ->andFilterWhere(['>', 'sort_by', 0])
                 ->one();
 
             $lastStoryStageId   = $sessionStage->story_stage_id;
