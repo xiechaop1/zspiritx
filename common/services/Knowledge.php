@@ -190,4 +190,57 @@ class Knowledge extends Component
         }
     }
 
+    public function removeByStage($storyStageId, $sessionId, $sessionStageId, $userId, $storyId) {
+        if (empty($storyStageId)) {
+            return false;
+        }
+        $knowledgeList = Knowledge::find()
+            ->where(['story_stage_id' => $storyStageId])
+            ->asArray()
+            ->all();
+
+        if (!empty($knowledgeList)) {
+            foreach ($knowledgeList as $knowledge) {
+                $this->remove($knowledge['id'], $sessionId, $userId, $storyId, true);
+            }
+        }
+    }
+
+    public function remove($knowledgeId, $sessionId, $userId, $storyId, $isForce = false) {
+        $knowledge = Knowledge::findOne($knowledgeId);
+        if (empty($knowledge)
+            && !$isForce
+        ) {
+            throw new \Exception('知识点不存在', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
+        } else {
+            return false;
+        }
+
+        $userKnowledge = UserKnowledge::find()
+            ->where([
+                'user_id' => $userId,
+                'knowledge_id' => $knowledgeId,
+                'session_id' => $sessionId,
+            ])->one();
+
+        if (empty($userKnowledge)
+            && !$isForce
+        ) {
+            throw new \Exception('知识点不存在', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
+        } else {
+            return false;
+        }
+
+        try {
+//            $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_REMOVE;
+//            $userKnowledge->save();
+            $userKnowledge->delete();
+
+        } catch (\Exception $e) {
+            throw new \Exception('删除进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
+        }
+
+        return true;
+    }
+
 }

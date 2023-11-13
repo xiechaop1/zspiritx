@@ -18,6 +18,7 @@ use common\helpers\Client;
 use common\helpers\Cookie;
 use common\helpers\Model;
 use common\models\Actions;
+use common\models\ItemKnowledge;
 use common\models\Knowledge;
 use common\models\Log;
 use common\models\Order;
@@ -298,45 +299,45 @@ class DoApi extends ApiAction
                 $sessionQa->save();
             }
 
-            $knowledge = Knowledge::find()
-                ->where([
-                    'story_id'  => (int)$this->_storyId,
-                    'knowledge_class' => Knowledge::KNOWLEDGE_CLASS_MISSSION
-                ])
-                ->orderBy(['sort_by' => SORT_ASC])
-                ->one();
-
-            $userKnowledge = UserKnowledge::find()
-                ->where([
-                    'session_id'  => (int)$this->_userSessionInfo['id'],
-                    'user_id'   => (int)$this->_userId,
-                    'knowledge_id'  => (int)$knowledge['id'],
-                ])
-                ->one();
-
-            if (!empty($userKnowledge)) {
-                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
-            } else {
-                $userKnowledge = new UserKnowledge();
-                $userKnowledge->knowledge_id = $knowledge['id'];
-                $userKnowledge->session_id = $this->_userSessionInfo['id'];
-                $userKnowledge->user_id = $this->_userId;
-                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
-            }
-            $userKnowledge->save();
-
-            $actions = Yii::$app->act->get($this->_userSessionInfo['id'], $this->_userId);
-            $maxStage = 0;
-            if (!empty($actions)) {
-                foreach ($actions as $act) {
-                    if ($act->session_stage_id > $maxStage) {
-                        $maxStage = $act->session_stage_id;
-                    }
-                }
-            }
-            if ($firstSessionStageId > $maxStage) {
-                Yii::$app->act->add((int)$this->_userSessionInfo['id'], $firstSessionStageId, (int)$this->_storyId, (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
-            }
+//            $knowledge = Knowledge::find()
+//                ->where([
+//                    'story_id'  => (int)$this->_storyId,
+//                    'knowledge_class' => Knowledge::KNOWLEDGE_CLASS_MISSSION
+//                ])
+//                ->orderBy(['sort_by' => SORT_ASC])
+//                ->one();
+//
+//            $userKnowledge = UserKnowledge::find()
+//                ->where([
+//                    'session_id'  => (int)$this->_userSessionInfo['id'],
+//                    'user_id'   => (int)$this->_userId,
+//                    'knowledge_id'  => (int)$knowledge['id'],
+//                ])
+//                ->one();
+//
+//            if (!empty($userKnowledge)) {
+//                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+//            } else {
+//                $userKnowledge = new UserKnowledge();
+//                $userKnowledge->knowledge_id = $knowledge['id'];
+//                $userKnowledge->session_id = $this->_userSessionInfo['id'];
+//                $userKnowledge->user_id = $this->_userId;
+//                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+//            }
+//            $userKnowledge->save();
+//
+//            $actions = Yii::$app->act->get($this->_userSessionInfo['id'], $this->_userId);
+//            $maxStage = 0;
+//            if (!empty($actions)) {
+//                foreach ($actions as $act) {
+//                    if ($act->session_stage_id > $maxStage) {
+//                        $maxStage = $act->session_stage_id;
+//                    }
+//                }
+//            }
+//            if ($firstSessionStageId > $maxStage) {
+//                Yii::$app->act->add((int)$this->_userSessionInfo['id'], $firstSessionStageId, (int)$this->_storyId, (int)$this->_userId, '开启任务：' . $knowledge['title'], Actions::ACTION_TYPE_MSG);
+//            }
 
 
             $transaction->commit();
@@ -367,7 +368,7 @@ class DoApi extends ApiAction
             return $this->fail('请您给出角色信息', ErrorCode::ROLE_NOT_FOUND);
         }
 
-        $userSession = UserStory::find()
+        $userStory = UserStory::find()
             ->where([
                 'user_id' => (int)$this->_userId,
                 'session_id' => (int)$this->_sessionId,
@@ -376,61 +377,78 @@ class DoApi extends ApiAction
 //                'role_id' => (int)$roleId,
             ])->one();
 
-        if (!empty($userSession)) {
-            return $this->fail('玩家已经存在', ErrorCode::PLAYER_EXIST);
-        }
+        if (!empty($userStory)) {
+//            return $this->fail('玩家已经存在', ErrorCode::PLAYER_EXIST);
+            $lastStoryStageId = $userStory->last_story_stage_id;
+            $lastSessionStageId = $userStory->last_session_stage_id;
+        } else {
 
-        if (!empty($this->_sessionInfo['password_code'])
-            && $this->_sessionInfo['password_code'] != $this->_get['password_code']) {
-            return $this->fail('密码错误', ErrorCode::SESSION_PASSWORD_ERROR);
-        }
-
-        $userRoleCt = UserStory::find()
-            ->where([
-//                'user_id' => (int)$this->_userId,
-                'story_id' => (int)$this->_storyId,
-                'session_id' => (int)$this->_sessionId,
-                'role_id' => (int)$roleId,
-//                'building_id' => (int)$this->_buildingId,
-            ])
-            ->count();
-
-        $storyRole = StoryRole::find()
-            ->where(['id' => (int)$roleId])
-            ->one();
-
-        if ($userRoleCt >= $storyRole['role_max_ct']) {
-            return $this->fail('角色已满', ErrorCode::ROLE_FULL);
-        }
-
-        $transaction = Yii::$app->db->beginTransaction();
-        $userStory = new UserStory();
-        $userStory->user_id = $this->_userId;
-        $userStory->story_id = $this->_storyId;
-        $userStory->session_id = $this->_sessionId;
-        $userStory->role_id = $roleId;
-//        $userStory->building_id = $this->_buildingId;
-        $userStory->team_id = $teamId;
-        try {
-            $ret = $userStory->save();
-
-            if ($this->_checkSessionRole()) {
-                $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
-                Yii::$app->act->add($this->_sessionId, 0, $this->_storyId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
-            } else {
-                $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
-                Yii::$app->act->add($this->_sessionId, 0, $this->_storyId, 0, '新玩家加入', Actions::ACTION_TYPE_ACTION);
+            if (!empty($this->_sessionInfo['password_code'])
+                && $this->_sessionInfo['password_code'] != $this->_get['password_code']) {
+                return $this->fail('密码错误', ErrorCode::SESSION_PASSWORD_ERROR);
             }
 
-            $this->_sessionInfo->save();
+            $sessionStage = SessionStages::find()
+                ->where([
+                    'story_id'      => (int)$this->_storyId,
+                    'session_id'    => (int)$this->_sessionId,
+                ])
+                ->one();
 
-            $transaction->commit();
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            return $this->fail($e->getMessage(), $e->getCode());
+            $lastStoryStageId   = $sessionStage->story_stage_id;
+            $lastSessionStageId = $sessionStage->id;
+
+            $userRoleCt = UserStory::find()
+                ->where([
+//                'user_id' => (int)$this->_userId,
+                    'story_id' => (int)$this->_storyId,
+                    'session_id' => (int)$this->_sessionId,
+                    'role_id' => (int)$roleId,
+//                'building_id' => (int)$this->_buildingId,
+                ])
+                ->count();
+
+            $storyRole = StoryRole::find()
+                ->where(['id' => (int)$roleId])
+                ->one();
+
+            if ($userRoleCt >= $storyRole['role_max_ct']) {
+                return $this->fail('角色已满', ErrorCode::ROLE_FULL);
+            }
+
+            $transaction = Yii::$app->db->beginTransaction();
+            $userStory = new UserStory();
+            $userStory->user_id = $this->_userId;
+            $userStory->story_id = $this->_storyId;
+            $userStory->session_id = $this->_sessionId;
+            $userStory->role_id = $roleId;
+//        $userStory->building_id = $this->_buildingId;
+            $userStory->team_id = $teamId;
+            try {
+                $ret = $userStory->save();
+
+                if ($this->_checkSessionRole()) {
+                    $this->_sessionInfo->session_status = Session::SESSION_STATUS_START;
+                    Yii::$app->act->add($this->_sessionId, 0, $this->_storyId, 0, '游戏开始', Actions::ACTION_TYPE_ACTION);
+                } else {
+                    $this->_sessionInfo->session_status = Session::SESSION_STATUS_READY;
+                    Yii::$app->act->add($this->_sessionId, 0, $this->_storyId, 0, '新玩家加入', Actions::ACTION_TYPE_ACTION);
+                }
+
+                $this->_sessionInfo->save();
+
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                return $this->fail($e->getMessage(), $e->getCode());
+            }
         }
 
+        Yii::$app->knowledge->setByItem($lastStoryStageId, ItemKnowledge::ITEM_TYPE_STAGE, (int)$this->_sessionId, $lastSessionStageId, (int)$this->_userId, (int)$this->_storyId);
 
+        $storyStage = StoryStages::findOne($lastStoryStageId);
+        $expirationInterval = 60;        // 消息超时时间
+        Yii::$app->act->add((int)$this->_sessionId, $lastSessionStageId, (int)$this->_storyId, (int)$this->_userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
 
         return $userStory;
     }

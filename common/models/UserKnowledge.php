@@ -15,10 +15,13 @@ class UserKnowledge extends \common\models\gii\UserKnowledge
     const KNOWLDEGE_STATUS_PROCESS = 1;     // 进行中
     const KNOWLDEGE_STATUS_COMPLETE = 2;    // 完成
 
+    const KNOWLDEGE_STATUS_REMOVE = 99;     // 删除
+
     public static $knowledgeStatus2Name = [
         self::KNOWLDEGE_STATUS_INIT => '未开始',
         self::KNOWLDEGE_STATUS_PROCESS => '进行中',
         self::KNOWLDEGE_STATUS_COMPLETE => '已完成',
+        self::KNOWLDEGE_STATUS_REMOVE   => '已删除',
     ];
 
     public function behaviors()

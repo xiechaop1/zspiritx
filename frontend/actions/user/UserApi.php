@@ -442,9 +442,23 @@ class UserApi extends ApiAction
             $stageName = '未知之地';
         }
 
+        $userStory = UserStory::find()
+            ->where([
+                'user_id'   => $userId,
+                'story_id'  => $storyId,
+                'session_id'    => $sessionId,
+            ])
+            ->one();
+
         // 更新任务
         try {
+
+            $userStory->last_story_stage_id = $storyStageId;
+            $userStory->last_session_stage_id = $sessionStageId;
+            $userStory->save();
+
             Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
+            Yii::$app->knowledge->removeByStage($storyStageId, $sessionId, $userId, $storyId);
             Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
 
             $stageCookie = [
