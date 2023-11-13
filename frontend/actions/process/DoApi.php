@@ -556,6 +556,10 @@ class DoApi extends ApiAction
                 'story_id'  => (int)$storyId,
             ])
             ->with('stage')
+            ->orderBy([
+                'sort_by' => SORT_ASC,
+                'id' => SORT_ASC,
+            ])
             ->all();
 
         if (!empty($sessionStages)) {
