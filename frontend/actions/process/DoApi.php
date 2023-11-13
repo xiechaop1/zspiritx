@@ -200,7 +200,8 @@ class DoApi extends ApiAction
             }
 
             $storyStages = StoryStages::find()
-                ->where(['story_id' => (int)$this->_storyId]);
+                ->where(['story_id' => (int)$this->_storyId])
+                ->orderBy(['sort_by' => SORT_ASC]);
             $storyStages = $storyStages->all();
 
             foreach ($storyStages as $storyStage) {

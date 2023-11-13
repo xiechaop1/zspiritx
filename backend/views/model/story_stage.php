@@ -102,6 +102,10 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => '纬度',
                     ],
                     [
+                        'attribute' => 'sort_by',
+                        'label' => '排序',
+                    ],
+                    [
                         'label' => '更新时间',
                         'format' => 'raw',
                         'filter'    => false,
