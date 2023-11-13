@@ -223,6 +223,7 @@ class DoApi extends ApiAction
                 $sessionStageObj->story_stage_id = $storyStage['id'];
                 $sessionStageObj->session_id = $this->_userSessionInfo['id'];
                 $sessionStageObj->story_id = $this->_storyId;
+                $sessionStageObj->sort_by = $storyStage['sort_by'];
                 $sessionStageObj->snapshot = json_encode($sessionStageObj->toArray(), true);
                 $sessionStageObj->save();
 
