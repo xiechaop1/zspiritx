@@ -73,7 +73,7 @@ echo \dmstr\widgets\Alert::widget();
 
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
-                        'header' => '查看场次玩家',
+                        'header' => '编辑场次',
                         'options' => [
                             'id' => 'case-form-' . $model->id
                         ]]);
@@ -93,7 +93,7 @@ echo \dmstr\widgets\Alert::widget();
                     ?>
                     <?php
                     echo $form->field($sessionModel, 'password_code')->textInput(['value' => $model->password_code])->label('密码');
-                    echo $form->field($sessionModel, 'session_status')->dropDownList(\common\models\SessionModels::$sessionModelStatus2Name, ['value' => $model->session_status])->label('场次状态');
+                    echo $form->field($sessionModel, 'session_status')->dropDownList(\common\models\Session::$sessionStats2Name, ['value' => $model->session_status])->label('场次状态');
 ?>
                     <div class="form-group">
                         <label class="control-label col-sm-2"></label>
