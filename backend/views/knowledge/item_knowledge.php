@@ -60,7 +60,14 @@ echo \dmstr\widgets\Alert::widget();
                     echo $form->field($itemKnowledgeModel, 'item_type')->dropDownList(\common\models\ItemKnowledge::$itemType2Name, ['value' => $model->item_type])->label('关联数据类型');
                     echo $form->field($itemKnowledgeModel, 'story_id')->dropDownList($stories, ['value' => $model->story_id])->label('剧本');
                     echo $form->field($itemKnowledgeModel, 'knowledge_set_status')->textInput(['value' => $model->knowledge_set_status])->label('知识设置状态');
-
+?>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                    <?
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
