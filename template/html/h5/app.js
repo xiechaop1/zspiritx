@@ -423,6 +423,17 @@ $(function () {
         Unity.call(data);
     });
 
+    $("#guide_confirm_return_btn").click(function (){
+        // Unity.call('WebViewOff&TrueAnswer');
+
+        var params = {
+            'AnswerType':1,
+            'WebViewOff':1
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
+
     $("#msg_return_btn").click(function (){
         // Unity.call('WebViewOff&TrueAnswer');
 
