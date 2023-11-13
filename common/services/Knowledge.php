@@ -82,14 +82,23 @@ class Knowledge extends Component
             ])->one();
 
         try {
+            switch ($act) {
+                case 'process':
+                    $userKnowledgeStatus= UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                    break;
+                case 'complete':
+                default:
+                    $userKnowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
+                    break;
+            }
             if (!empty($userKnowledge)) {
-                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
+                $userKnowledge->knowledge_status = $userKnowledgeStatus;
             } else {
                 $userKnowledge = new UserKnowledge();
                 $userKnowledge->user_id = $userId;
                 $userKnowledge->knowledge_id = $knowledgeId;
                 $userKnowledge->session_id = $sessionId;
-                $userKnowledge->knowledge_status = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
+                $userKnowledge->knowledge_status = $userKnowledgeStatus;
             }
             $userKnowledge->save();
 
