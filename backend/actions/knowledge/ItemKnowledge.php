@@ -23,7 +23,7 @@ class ItemKnowledge extends Action
     
     public function run()
     {
-        $userKnowledgeId = Net::post('id');
+        $userKnowledgeId = Net::post('data-id');
         if ($userKnowledgeId) {
             $model = \common\models\ItemKnowledge::findOne($userKnowledgeId);
         } else {
@@ -31,7 +31,7 @@ class ItemKnowledge extends Action
         }
 
         if (Yii::$app->request->isAjax) {
-            $id = Net::post('id');
+            $id = Net::post('data-id');
             $ItemKnowledge = \common\models\ItemKnowledge::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
