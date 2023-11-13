@@ -19,6 +19,7 @@ use common\models\MusicCategory;
 use common\models\Knowledge;
 use common\models\Singer;
 use common\models\Story;
+use common\models\StoryStages;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
 use yii\base\Action;
@@ -87,15 +88,21 @@ class Edit extends Action
 
         $knowledgeTypes = Knowledge::$knowledgeType2Name;
 
-        $storyDatas = Story::find()->all();
+        $storyDatas = Story::find()->orderBy(['id' => SORT_DESC])->all();
 
-        $stories = array_reverse(ArrayHelper::map($storyDatas, 'id', 'title'), TRUE);
+        $stories = ArrayHelper::map($storyDatas, 'id', 'title');
+
+        $storyStageDatas = StoryStages::find()->orderBy(['id' => SORT_DESC])->all();
+
+        $storyStages = ArrayHelper::map($storyStageDatas, 'id', 'stage_name');
+//        $storyStages = ['0' => '无'] + $storyStages;
 
 
         return $this->controller->render('edit', [
             'knowledgeModel'    => $model,
             'knowledgeTypes'    => $knowledgeTypes,
             'stories'   => $stories,
+            'storyStages'   => $storyStages,
         ]);
     }
 }

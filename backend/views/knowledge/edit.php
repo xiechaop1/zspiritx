@@ -59,6 +59,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('剧本');
+            echo $form->field($knowledgeModel, 'story_stage_id')->widget('\kartik\select2\Select2', [
+                'data' => $storyStages,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('场景');
 
             echo $form->field($knowledgeModel, 'knowledge_type')->widget('\kartik\select2\Select2', [
                 'data' => $knowledgeTypes,
