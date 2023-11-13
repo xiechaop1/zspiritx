@@ -20,7 +20,7 @@ use yii;
 class Actions extends Component
 {
 
-    public function get($sessionId, $userId, $actionStatus = \common\models\Actions::ACTION_STATUS_NORMAL) {
+    public function get($sessionId, $userId, $actionStatus = \common\models\Actions::ACTION_STATUS_NORMAL, $isRead = 0) {
         $actions = \common\models\Actions::find()
             ->where([
                 'session_id' => (int)$sessionId,
@@ -45,6 +45,13 @@ class Actions extends Component
 //            ->createCommand()->getRawSql();
 //        var_dump($actions);exit;
             ->all();
+
+        if ($isRead == 1) {
+            foreach ($actions as $act) {
+                $act->action_status = \common\models\Actions::ACTION_STATUS_READ;
+                $act->save();
+            }
+        }
 
         return $actions;
     }
