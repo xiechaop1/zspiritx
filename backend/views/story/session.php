@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = [
     'label' => '场次管理',
 ];
 
-$this->title = '场次s列表';
+$this->title = '场次列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
@@ -36,7 +36,7 @@ echo \dmstr\widgets\Alert::widget();
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '查看场次玩家',
                         'options' => [
-                            'id' => 'case-form-' . $model->id
+                            'id' => 'session-form-' . $model->id
                         ]]);
                     $form = ActiveForm::begin([
                         'layout' => 'horizontal',
@@ -67,6 +67,41 @@ echo \dmstr\widgets\Alert::widget();
                             echo '玩家ID：' . $sessionUser->user_id . ' 队伍ID：' . $sessionUser->team_id;
                         }
                     }
+                    echo Html::hiddenInput('data-id', $model->id);
+                    ActiveForm::end();
+                    Modal::end();
+
+                    Modal::begin([
+                        'size' => Modal::SIZE_DEFAULT,
+                        'header' => '查看场次玩家',
+                        'options' => [
+                            'id' => 'case-form-' . $model->id
+                        ]]);
+                    $form = ActiveForm::begin([
+                        'layout' => 'horizontal',
+                        'enableClientValidation' => true,
+                        'enableAjaxValidation' => true,
+                        'enableClientScript' => true,
+                        'fieldConfig' => [
+                            'horizontalCssClasses' => [
+                                'label' => 'col-sm-2',
+                                'offset' => 'col-sm-offset-1',
+                                'wrapper' => 'col-sm-6',
+                            ],
+                        ],
+                    ]);
+                    ?>
+                    <?php
+                    echo $form->field($sessionModel, 'password_code')->textInput(['value' => $model->password_code])->label('密码');
+                    echo $form->field($sessionModel, 'session_status')->dropDownList(\common\models\SessionModels::$sessionModelStatus2Name, ['value' => $model->session_status])->label('场次状态');
+?>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                    <?php
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
@@ -144,13 +179,17 @@ echo \dmstr\widgets\Alert::widget();
                         'template' => '{lines} {edit} {userslist} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['story/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
+                                    'class' => 'btn btn-xs btn-primary',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#case-form-' . $model->id
+                                ]);
                             },
                             'userslist' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::a('玩家列表', 'javascript:void(0);', [
                                     'class' => 'btn btn-xs btn-primary',
                                     'data-toggle' => 'modal',
-                                    'data-target' => '#case-form-' . $model->id
+                                    'data-target' => '#session-form-' . $model->id
                                 ]);
                             },
 //                            'detail' => function ($url, $model, $key) {
