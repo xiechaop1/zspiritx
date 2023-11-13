@@ -96,7 +96,7 @@ class Edit extends Action
 
         $storyStages = [];
         foreach ($storyStageDatas as $storyStage) {
-            $storyStages[$storyStage->id] = $storyStage->stage_name . ' [' . $storyStage->stage_u_id . ']';
+            $storyStages[$storyStage->id] = $storyStage->story->title . ': ' . $storyStage->stage_name . ' [' . $storyStage->stage_u_id . ']';
         }
 
 //        $storyStages = ArrayHelper::map($storyStageDatas, 'id', 'stage_name');
