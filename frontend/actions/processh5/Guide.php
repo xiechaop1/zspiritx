@@ -54,6 +54,7 @@ class Guide extends Action
                 'storyId'       => $storyId,
                 'pageCount'     => 0,
                 'content'           => '',
+                'type'          => $type,
             ]);
         }
 
@@ -159,6 +160,7 @@ class Guide extends Action
             'pageCount'   => sizeof($txt),
             'storyId'     => $storyId,
             'content'     => $txt[$page],
+            'type'          => $type,
         ]);
 
     }
