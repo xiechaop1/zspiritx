@@ -437,9 +437,19 @@ $(function () {
     $("#msg_return_btn").click(function (){
         // Unity.call('WebViewOff&TrueAnswer');
 
-        var params = {
-            'WebViewOff':1
+        var answerType = $(this).attr('answer_type');
+        if (answerType == undefined) {
+
+            var params = {
+                'WebViewOff': 1
+            }
+        } else {
+            var params = {
+                'WebViewOff': 1,
+                'AnswerType': answerType
+            }
         }
+        // console.log(params);
         var data=$.toJSON(params);
         Unity.call(data);
     });
