@@ -53,6 +53,16 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
+                    echo $form->field($userStoryModel, 'last_story_stage_id')->textarea(['value' => $model->last_story_stage_id])->label('最后场景');
+                    echo $form->field($userStoryModel, 'last_session_stage_id')->textarea(['value' => $model->last_session_stage_id])->label('最后场次场景');
+                    ?>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                    <?php
                     echo Html::hiddenInput('data-id', $model->id);
                     ActiveForm::end();
                     Modal::end();
@@ -102,6 +112,8 @@ echo \dmstr\widgets\Alert::widget();
                         },
                         'filter' => false
                     ],
+                    ['attribute' => 'last_story_stage_id', 'label' => '最后场景'],
+                    ['attribute' => 'last_session_stage_id', 'label' => '最后场次场景'],
                     ['attribute' => 'goal', 'label' => '结论'],
                     [
                         'label' => '创建时间',
@@ -125,10 +137,14 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {delete}',
+                        'template' => '{lines} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['story/user_story_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
+                                    'class' => 'btn btn-xs btn-primary',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#case-form-' . $model->id
+                                ]);
                             },
 //                            'detail' => function ($url, $model, $key) {
 //                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);

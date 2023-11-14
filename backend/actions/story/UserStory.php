@@ -23,7 +23,7 @@ class UserStory extends Action
     
     public function run()
     {
-        $userStoryId = Net::post('id');
+        $userStoryId = Net::post('data-id');
         if ($userStoryId) {
             $model = \common\models\UserStory::findOne($userStoryId);
         } else {
@@ -31,7 +31,7 @@ class UserStory extends Action
         }
 
         if (Yii::$app->request->isAjax) {
-            $id = Net::post('id');
+            $id = Net::post('data-id');
             $userStory = \common\models\UserStory::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
