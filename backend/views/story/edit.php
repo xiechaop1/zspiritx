@@ -31,7 +31,7 @@ echo \dmstr\widgets\Alert::widget();
                 'enableClientValidation' => true,
             ]);
             echo $form->field($storyModel, 'title')->textInput(['value' => $storyModel->title])->label('标题');
-            echo $form->field($storyModel, 'desc')->textarea()->label('简介');
+            echo $form->field($storyModel, 'desc')->textarea(['value' => $storyModel->desc, 'rows' => 15])->label('简介');
             echo $form->field($storyModel, 'story_type')->widget('\kartik\select2\Select2', [
                 'data' => $storyTypes,
                 'options' => [
@@ -56,7 +56,8 @@ echo \dmstr\widgets\Alert::widget();
                 'options' => ['value' => $storyModel->thumbnail],
 //                'directory' => 'cover/' . Date('Y/m/')
             ])->label('封面图');
-
+            echo $form->field($storyModel, 'story_bg')->textarea(['value' => $storyModel->story_bg, 'rows' => 15])->label('故事背景(json)');
+            echo $form->field($storyModel, 'guide')->textarea(['value' => $storyModel->guide, 'rows' => 15])->label('游戏方式介绍(json)');
             echo $form->field($storyModel, 'persons_ct')->textInput(['value' => $storyModel->persons_ct])->label('人数');
             echo $form->field($storyModel, 'roles_ct')->textInput(['value' => $storyModel->roles_ct])->label('角色数');
             echo $form->field($storyModel, 'is_debug')->textInput(['value' => $storyModel->is_debug])->label('是否测试');

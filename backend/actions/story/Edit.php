@@ -58,6 +58,16 @@ class Edit extends Action
 
             $model->load(Yii::$app->request->post());
 
+            if (!empty($model->guide)) {
+                eval('$guideTmp = ' . $model->guide);
+                $model->guide = json_encode($guideTmp, true);
+            }
+
+            if (!empty($model->story_bg)) {
+                eval('$storyBgTmp = ' . $model->story_bg);
+                $model->story_bg = json_encode($storyBgTmp, true);
+            }
+
             if ($model->validate()) {
                 if ($model->save()) {
 
@@ -75,6 +85,13 @@ class Edit extends Action
         }
 
         $storyTypes = Story::$storyType2Name;
+
+        $model->guide = !empty($model->guide)
+            ? var_export(json_decode($model->guide, true), true) . ';' : '';
+
+        $model->story_bg = !empty($model->story_bg)
+            ? var_export(json_decode($model->story_bg, true), true) . ';' : '';
+
 
         return $this->controller->render('edit', [
             'storyModel'    => $model,
