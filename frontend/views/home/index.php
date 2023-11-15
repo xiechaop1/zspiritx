@@ -42,6 +42,7 @@ $this->title = 'AR剧本杀';
   <?php
   if (
       !empty($user) &&
+      $userId >= 90 && $userId <= 100 &&
       $user->user_type == \common\models\User::USER_TYPE_INNER) {
     ?>
     <div class="item">
@@ -71,10 +72,14 @@ $this->title = 'AR剧本杀';
         </div>
       </div>
     </div>
+    <?php
+    }else if (!empty($user) &&
+      $user->user_type == \common\models\User::USER_TYPE_INNER)
+  {
+    ?>
     <div class="item">
       <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
 
-      <input type="hidden" name="isDebug" value="1">
       <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
         <a href="/home/my">我的</a>
       </div>
@@ -90,6 +95,7 @@ $this->title = 'AR剧本杀';
           <div class="fs-24  w-100 text-FF m-t-30">
             这是用于测试的剧本
           </div>
+          IS DEBUG:<input type="text" name="isDebug" value="1">
           SID: <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
           <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
             进入游戏
