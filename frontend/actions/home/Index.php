@@ -88,6 +88,8 @@ class Index extends Action
 
         $bgm = '';
 
+        $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
+
         return $this->controller->render('index', [
             'userId'    => $userId,
             'user'      => $user,
@@ -97,6 +99,7 @@ class Index extends Action
             'voice' => '',
             'image' => $image,
             'bgSound' => $bgm,
+            'unityVersion' => $unityVersion,
 //            'banner' => $banner,
         ]);
     }

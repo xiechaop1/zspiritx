@@ -306,6 +306,18 @@ $this->title = 'AR剧本杀';
   </div>
 
 </div>
-
+<footer class="footer">
+  <div class="container">
+    <!--Footer Info -->
+    <div class="row footer-info text-center">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <span class="margin-10 footer-m-span white" style="color: white;"><?= !empty($unityVersion) ? '版本号：' . $unityVersion : ''?> &nbsp; 联系我们：18500041193</span><br>
+        <span class="margin-10 footer-m-span white" style="color: white;">Copyright © 2023-2023 庄生科技 zspiritx.com.cn 版权所有</span><br>
+        <span class="margin-10 footer-m-span"><a href="https://beian.miit.gov.cn" class="white">京ICP备2023021255号</a></span>
+      </div>
+    </div>
+    <!-- End Footer Info -->
+  </div>
+</footer>
 </div>
 
