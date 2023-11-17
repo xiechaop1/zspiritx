@@ -13,6 +13,8 @@ class StoryModels extends \common\models\gii\StoryModels
 {
 
     const SCAN_IMAGE_TYPE_RANDOM_PLANE = 1; // 随机平面
+
+    const SCAN_IMAGE_TYPE_ROUND_USER   = 2; // 围绕用户
     const SCAN_IMAGE_TYPE_RANDOM_PLANE_AFTER_SCAN = 11; // 扫描后随机平面
     const SCAN_IMAGE_TYPE_FIX_PLANE_AFTER_SCAN = 12; // 扫描后固定平面
     const SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_AFTER_SCAN     = 14;   // 扫描随机在用户周围放置
@@ -23,6 +25,7 @@ class StoryModels extends \common\models\gii\StoryModels
 
     public static $scanImageType2Name = [
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE => '随机平面',
+        self::SCAN_IMAGE_TYPE_ROUND_USER => '围绕用户',
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE_AFTER_SCAN => '扫描后随机平面',
         self::SCAN_IMAGE_TYPE_FIX_PLANE_AFTER_SCAN => '扫描后固定平面',
         self::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_AFTER_SCAN => '扫描后随机在用户周围放置',
