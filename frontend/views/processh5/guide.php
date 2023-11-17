@@ -59,11 +59,11 @@ $this->title = '向导';
                     ?>
                 </div>
             </div>
-            <div class="btn-m-green m-t-30 float-right m-r-20" id="guide_confirm_return_btn">
-                继续
-            </div>
+<!--            <div class="btn-m-green m-t-30 float-right m-r-20" id="guide_confirm_return_btn">-->
+<!--                继续-->
+<!--            </div>-->
             <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn" answer_type="2">
-                返回
+                继续
             </div>
         </div>
         </div>
