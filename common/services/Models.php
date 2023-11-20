@@ -16,6 +16,7 @@ use common\models\SessionModels;
 use common\models\SessionStages;
 use common\models\StoryModels;
 use common\models\StoryStages;
+use common\models\UserModelsUsed;
 use common\services\Curl;
 use common\models\User;
 use common\helpers\Cookie;
@@ -240,6 +241,289 @@ class Models extends Component
             Cookie::setCookie(Cookies::UNDERTAKE_MODEL, $underTake, self::TIMEOUT_MAX);
             Yii::info('Undertake: Remove model from cookie: ' . json_encode($underTake, true));
         }
+    }
+
+    /**
+     * 检查storyModelsLink（模型关联列表）是否已经被使用（userMuodelsUsedData）
+     * 且检查storyModelsLink是否包含storyModel，并本次被使用
+     * 如果没有包含，则返回3
+     * 如果包含了，但是还有storyModelsLink里没有被使用的，则返回4
+     * 如果包含了，且storyModelsLink里全都被使用了，则返回2
+     * @param $storyModel
+     * @param $storyModelsLink
+     * @param $userModelsUsedData
+     * @param $userId
+     * @param $storyId
+     * @param $sessionId
+     * @return array|mixed
+     */
+    public function checkUserModelUsedByModels($storyModel, $storyModelsLink, $userModelsUsedData, $userId, $storyId, $sessionId) {
+//        $targetStoryModelDetailId = $storyModelsLink->story_model_detail_id2;
+//        $targetStoryModelId = $storyModelsLink->story_model_id2;
+//        $userModelsUsedData = $this->getUserModelUsedByTarget($targetStoryModelDetailId, $targetStoryModelId, $userId, $storyId, $sessionId);
+
+        $userModelUseds = [];
+        if (!empty($userModelsUsedData)) {
+            foreach ($userModelsUsedData as $userModelUsedData) {
+                $userModelGroupName = !empty($userModelUsedData->group_name) ? $userModelUsedData->group_name : '';
+                $userModelUsedsList[$userModelGroupName][] = [
+                    'story_model_detail_id' => $userModelUsedData->story_model_detail_id,
+                    'story_model_id'        => $userModelUsedData->story_model_id,
+                ];
+            }
+        }
+
+        $matchStoryModels = [];
+        $noFoundRet = '';
+        $noFoundType = 0;
+        $partlyFoundRet = '';
+        $partlyFoundType = 0;
+//        $ret = 0;           // 尚有缺少物品
+        if (!empty($storyModelsLink)) {
+            $useStoryModel = 0;
+            foreach ($storyModelsLink as $storyModelLink) {
+                $storyModelGroupName = !empty($storyModelLink->group_name) ? $storyModelLink->group_name : '';
+                if ($storyModelLink->story_model_id == '-1') {
+                    // 如果完全没找到
+                    $noFoundRet = $groupNoFoundRet[$storyModelGroupName] = $storyModelLink->eff_exec;
+                    $noFoundType = $groupNoFoundType[$storyModelGroupName] = $storyModelLink->eff_type;
+                    continue;
+                } else if ($storyModelLink->story_model_id == '-2') {
+                    // 如果是部分完成
+                    $partlyFoundRet = $groupPartlyFoundRet[$storyModelGroupName] = $storyModelLink->eff_exec;
+                    $partlyFoundType = $groupPartlyFoundType[$storyModelGroupName] = $storyModelLink->eff_type;
+                    continue;
+                } else {
+//                if (!empty($storyModelLink->group_name)) {
+                    $tmpStoryModel = [
+                        'story_model_detail_id' => $storyModelLink->story_model_detail_id,
+                        'story_model_id'        => $storyModelLink->story_model_id,
+                    ];
+//                    if (empty($matchStoryModels[$storyModelGroupName])) {
+////                        $tmpStoryModel['is_used'] = 1;  // 默认已使用
+//                        $matchStoryModels[$storyModelGroupName] = [
+//                            'group_name' => $storyModelGroupName,
+//                            'code' => 1,
+//                            'eff_type' => 0,
+//                            'eff_exec' => '',
+//                        ];
+//                    }
+
+                    if (!empty($userModelUsedsList[$storyModelGroupName])) {
+                        // 检查使用过的里是否包含
+                        foreach ($userModelUsedsList[$storyModelGroupName] as $userModelUsed) {
+                            if (
+                                (!empty($storyModelLink->story_model_detail_id) && $userModelUsed['story_model_detail_id'] == $storyModelLink->story_model_detail_id)
+                                ||
+                                (!empty($storyModelLink->story_model_id) && $userModelUsed['story_model_id'] == $storyModelLink->story_model_id)
+                            ) {
+                                if (empty($tmpStoryModel['is_used'])) {
+                                    $tmpStoryModel['is_used'] = 1;  // 之前就已经使用了
+                                    $tmpStoryModel['group_name'] = $storyModelGroupName;
+                                    $tmpStoryModel['eff_type'] = 0;
+                                    $tmpStoryModel['eff_exec'] = '';
+                                }
+//                                if (empty($matchStoryModels[$storyModelGroupName]['code'])) {
+//                                    $matchStoryModels[$storyModelGroupName] = [
+//                                        'code' => 1,
+//                                        'group_name' => $storyModelGroupName,
+//                                        'eff_type' => 0,
+//                                        'eff_exec' => '',
+//                                    ];
+//                                }
+                                break;
+                            }
+                        }
+                    }
+                    // 检查本次提交的是否相同
+                    if (empty($tmpStoryModel['is_used'])) {
+                        if (
+                            (!empty($storyModelLink->story_model_detail_id) && $storyModel->story_model_detail_id == $storyModelLink->story_model_detail_id)
+                        ||
+                            (!empty($storyModelLink->story_model_id) && $storyModel->id == $storyModelLink->story_model_id)
+                        ) {
+                            if ($useStoryModel == 0) {
+                                $tmpStoryModel['is_used'] = 2; // 本次提交的match上，使用了
+                                $tmpStoryModel['group_name'] = $storyModelGroupName;
+                                $tmpStoryModel['eff_type'] = $storyModelLink->eff_type;
+                                $tmpStoryModel['eff_exec'] = $storyModelLink->eff_exec;
+                                $useStoryModel = 1;
+                            } else {
+                                $tmpStoryModel['is_used'] = 3; // 还有欠缺
+                                $tmpStoryModel['group_name'] = $storyModelGroupName;
+                                $tmpStoryModel['eff_type'] = 0;
+                                $tmpStoryModel['eff_exec'] = '';
+                            }
+
+//                            if ($matchStoryModels[$storyModelGroupName]['code'] == 1 && $useStoryModel == 0) {
+//                                $matchStoryModels[$storyModelGroupName] = [
+//                                    'code' => 2,
+//                                    'group_name' => $storyModelGroupName,
+//                                    'eff_type' => $storyModelLink->eff_type,
+//                                    'eff_exec' => $storyModelLink->eff_exec,
+//                                ];
+//                                $useStoryModel = 1;
+//                            }
+//                            break;
+                        } else {
+                            $tmpStoryModel['is_used'] = 3; // 还有欠缺
+                            $tmpStoryModel['group_name'] = $storyModelGroupName;
+                            $tmpStoryModel['eff_type'] = 0;
+                            $tmpStoryModel['eff_exec'] = '';
+//                            $matchStoryModels[$storyModelGroupName] = [
+//                                'code' => 3,
+//                                'group_name' => $storyModelGroupName,
+//                                'eff_type' => 0,
+//                                'eff_exec' => '',
+//                            ];
+                        }
+                    }
+
+                    $matchStoryModels[$storyModelGroupName][] = $tmpStoryModel;
+
+
+//                    if ($tmpStoryModel['is_used'] == 2) {
+//                        if ($matchStoryModels[$storyModelGroupName]['ret'] == 1) {
+//                            $matchStoryModels[$storyModelGroupName] = [
+//                                'ret' => 2,
+//                                'eff_type' => $storyModelLink->eff_type,
+//                                'eff_exec' => $storyModelLink->eff_exec,
+//                            ];        // 本次提交的match上，使用了
+//                        }
+//                    } elseif (empty($tmpStoryModel['is_used'])) {
+//                        $matchStoryModels[$storyModelGroupName] = [
+//                            'ret' => 0,
+//                            'eff_type' => 0,
+//                            'eff_exec' => '',
+//                        ];        // 还有欠缺
+//                    }
+
+//                    $matchStoryModels[$storyModelLink->group_name][] = $tmpStoryModel;
+                }
+            }
+        }
+
+        $ret = [];
+        if (!empty($matchStoryModels)) {
+            foreach ($matchStoryModels as $groupName => $matchRets) {
+                $maxIsUsed[$groupName] = 0;
+                foreach ($matchRets as $matchRet) {
+                    if ($matchRet['is_used'] > $maxIsUsed[$groupName]) {
+                        $maxIsUsed[$groupName] = $matchRet['is_used'];
+                    }
+                    if ($matchRet['is_used'] == 2) {
+                        $match2[$groupName] = $matchRet;
+                    }
+                }
+//                if ( empty($useStoryModel) || $useStoryModel != 1 ) {
+//                    // 新模型没用上
+//                    $ret = [
+//                        'code' => 0,
+//                        'eff_type' => !empty($groupNoFoundType[$groupName]) ? $groupNoFoundType[$groupName] : $noFoundType,
+//                        'eff_exec' => !empty($groupNoFoundRet[$groupName]) ? $groupNoFoundRet[$groupName] : $noFoundRet,
+//                    ];
+//                    break;
+//                } else if (!empty($matchRet['code']) && $matchRet['code'] == 2) {
+//                    $ret = $matchRet;
+//                    break;
+//                } else if (!empty($matchRet['code']) && $matchRet['code'] == 3) {
+//                    // 只有部分匹配上（或者全未匹配上）
+//                    $matchRet['eff_type'] = !empty($groupPartlyFoundType[$groupName]) ? $groupPartlyFoundType[$groupName] : $partlyFoundType;
+//                    $matchRet['eff_exec'] = !empty($groupPartlyFoundRet[$groupName]) ? $groupPartlyFoundRet[$groupName] : $partlyFoundRet;
+//                    $ret = $matchRet;
+//                    break;
+//                } else {
+//                    $ret = $matchRet;
+//                }
+            }
+
+            foreach ($matchStoryModels as $groupName => $matchRet) {
+                if (!empty($maxIsUsed[$groupName]) && $maxIsUsed[$groupName] == 2 && !empty($match2[$groupName])) {
+                    $ret = $match2[$groupName];
+                    $ret['code'] = $ret['is_used'];
+                    $ret['group_name'] = $groupName;
+                    break;
+                } else if (!empty($maxIsUsed[$groupName]) && $maxIsUsed[$groupName] == 3) {
+                    // 只有部分匹配上（或者全未匹配上）
+                    if ( !empty($match2[$groupName])) {
+                        $matchRet['code'] = 4;
+                        $matchRet['eff_type'] = !empty($groupPartlyFoundType[$groupName]) ? $groupPartlyFoundType[$groupName] : $partlyFoundType;
+                        $matchRet['eff_exec'] = !empty($groupPartlyFoundRet[$groupName]) ? $groupPartlyFoundRet[$groupName] : $partlyFoundRet;
+                        $matchRet['group_name'] = $groupName;
+                    } else {
+                        $matchRet['code'] = 3;
+                        $matchRet['eff_type'] = !empty($groupNoFoundType[$groupName]) ? $groupNoFoundType[$groupName] : $noFoundType;
+                        $matchRet['eff_exec'] = !empty($groupNoFoundRet[$groupName]) ? $groupNoFoundRet[$groupName] : $noFoundRet;
+                        $matchRet['group_name'] = $groupName;
+                    }
+                    $ret = $matchRet;
+                    break;
+                } else {
+                    $ret = [
+                        'code' => 0,
+                        'eff_type' => 0,
+                        'eff_exec' => '',
+                    ];
+                }
+            }
+        }
+
+        return $ret;
+
+
+    }
+
+    public function addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_COMPLETED_PARTLY,  $groupName = '', $effExec = '', $effType = 0) {
+        $userModelUsed = new UserModelsUsed();
+        $userModelUsed->user_id = $userId;
+        $userModelUsed->story_id = $storyId;
+        $userModelUsed->session_id = $sessionId;
+        $userModelUsed->story_model_detail_id = $storyModel->story_model_detail_id;
+        $userModelUsed->story_model_id = $storyModel->id;
+        $userModelUsed->story_model_detail_id2 = $targetStoryModel->story_model_detail_id;
+        $userModelUsed->story_model_id2 = $targetStoryModel->id;
+        $userModelUsed->group_name = $groupName;
+        $userModelUsed->eff_exec = $effExec;
+        $userModelUsed->eff_type = $effType;
+        $userModelUsed->use_status = $useStatus;
+        $userModelUsed->save();
+    }
+
+    public function updateUserModelUsedByTargetStoryModel($targetStoryModel, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_COMPLETED) {
+        $userModelUsed = $this->getUserModelUsedByTarget($targetStoryModel->story_model_detail_id, $targetStoryModel->id, $userId, $storyId, $sessionId);
+
+        if (!empty($userModelUsed)) {
+            foreach ($userModelUsed as $tmp) {
+                $tmp->use_status = $useStatus;
+                $tmp->save();
+            }
+        }
+
+        return true;
+    }
+
+    public function getUserModelUsedByTarget($targetStoryModelDetailId, $targetStoryModelId, $userId, $storyId, $sessionId) {
+        $userModelUsed = UserModelsUsed::find()
+            ->where([
+                'user_id'       => $userId,
+                'story_id'      => $storyId,
+                'session_id'    => $sessionId,
+                'use_status'    => UserModelsUsed::USE_STATUS_COMPLETED_PARTLY,
+            ]);
+
+        if (!empty($targetStoryModelDetailId)) {
+            $userModelUsed->andFilterWhere([
+                'story_model_detail_id2' => $targetStoryModelDetailId,
+            ]);
+        } else {
+            $userModelUsed->andFilterWhere([
+                'story_model_id2' => $targetStoryModelId,
+            ]);
+        }
+//var_dump($userModelUsed->createCommand()->getRawSql());exit;
+        $userModelUsed = $userModelUsed->all();
+
+        return $userModelUsed;
     }
 
 }

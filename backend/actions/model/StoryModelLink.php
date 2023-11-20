@@ -104,8 +104,9 @@ class StoryModelLink extends Action
             $storyModelList[$storyModel->id] .=
                 !empty($storyModel->story_model_name)
                 ? $storyModel->story_model_name . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' :
-                    !empty($storyModel->model->model_name)
+                    !empty($storyModel->model)
                         ? $storyModel->model->model_name
+//                    ? 'abc'
                         . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' : '[' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']';
             $storyModelList[$storyModel->id] .= '(' . $storyModel->model_inst_u_id . ')';
             ;

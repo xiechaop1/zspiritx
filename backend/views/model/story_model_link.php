@@ -61,6 +61,7 @@ echo \dmstr\widgets\Alert::widget();
                     echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList, ['value' => $model->story_id])->label('剧本');
                     echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList, ['value' => $model->story_model_id])->label('模型');
                     echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList, ['value' => $model->story_model_id2])->label('关联模型');
+                    echo $form->field($storyModelLink, 'group_name')->textInput(['value' => $model->group_name])->label('分组名称');
                     echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name, ['value' => $model->eff_type])->label('类型');
                     echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => var_export(json_decode($model->eff_exec, true), true), 'rows' => 15])->label('执行');
                     ?>
@@ -119,6 +120,11 @@ echo \dmstr\widgets\Alert::widget();
                             return $modelName;
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_model_id2'),
+                    ],
+                    [
+                        'label' => '分组',
+                        'attribute' => 'group_name',
+                        'filter' => Html::activeInput('text', $searchModel, 'group_name'),
                     ],
                     [
                         'label' => '效果类型',
@@ -205,6 +211,7 @@ $form = ActiveForm::begin([
 echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList)->label('剧本');
 echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList)->label('模型');
 echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList)->label('关联模型');
+echo $form->field($storyModelLink, 'group_name')->label('分组名称');
 echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name)->label('类型');
 echo $form->field($storyModelLink, 'eff_exec')->textarea(['rows' => 15])->label('执行');
 

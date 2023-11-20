@@ -36,6 +36,7 @@ use common\models\StoryRole;
 use common\models\StoryStages;
 use common\models\User;
 use common\models\UserKnowledge;
+use common\models\UserModelsUsed;
 use common\models\UserStory;
 use common\models\UserModels;
 use frontend\actions\ApiAction;
@@ -1008,7 +1009,9 @@ class DoApi extends ApiAction
                             'story_model_id2' => $targetStoryModel->id,
                         ]);
                     }
-                    $storyModelLinks = $storyModelLinks->all();
+                    $storyModelLinks = $storyModelLinks
+                        ->orderBy(['story_model_id' => SORT_ASC])
+                        ->all();
 
                         if (empty($storyModelLinks)) {
 //                            $ret = json_encode([
@@ -1019,32 +1022,56 @@ class DoApi extends ApiAction
                             throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
                         } else {
                             $ret = '';
-                            foreach ($storyModelLinks as $storyModelLink) {
-                                if ($storyModelLink->story_model_id == '-1') {
-                                    $noFoundRet = $storyModelLink->eff_exec;
-                                    $noFoundType = $storyModelLink->eff_type;
-                                } else if (
-                                    (!empty($storyModel->story_model_detail_id) && $storyModelLink->story_model_detail_id == $storyModel->story_model_detail_id)
-                                    ||
-                                    (!empty($storyModel->id) && $storyModelLink->story_model_id == $storyModel->id)
-                                ) {
-                                    $ret = $storyModelLink->eff_exec;
-                                    $type = $storyModelLink->eff_type;
-                                    break;
-                                }
-                            }
-                            if (empty($ret)) {
-                                $ret = $noFoundRet;
-                                $type = $noFoundType;
+//                            foreach ($storyModelLinks as $storyModelLink) {
+//                                if ($storyModelLink->story_model_id == '-1') {
+//                                    // 如果完全没找到
+//                                    $noFoundRet = $storyModelLink->eff_exec;
+//                                    $noFoundType = $storyModelLink->eff_type;
+//                                } else if ($storyModelLink->story_model_id == '-2') {
+//                                    // 如果是部分完成
+//                                    $partlyFoundRet = $storyModelLink->eff_exec;
+//                                    $partlyFoundType = $storyModelLink->eff_type;
+//                                } else if (
+//                                    (!empty($storyModel->story_model_detail_id) && $storyModelLink->story_model_detail_id == $storyModel->story_model_detail_id)
+//                                    ||
+//                                    (!empty($storyModel->id) && $storyModelLink->story_model_id == $storyModel->id)
+//                                ) {
+//                                    $ret = $storyModelLink->eff_exec;
+//                                    $type = $storyModelLink->eff_type;
+//                                    break;
+//                                }
+//                            }
+                            $userModelsUsedData = Yii::$app->models->getUserModelUsedByTarget($targetStoryModel->story_model_detail_id, $targetStoryModel->id, $userId, $storyId, $sessionId);
+
+                            $checkRet = Yii::$app->models->checkUserModelUsedByModels($storyModel, $storyModelLinks, $userModelsUsedData, $userId, $storyId, $sessionId);
+
+                            if ($checkRet['code'] == 0) {
+//                                $ret = $noFoundRet;
+//                                $type = $noFoundType;
                                 $minCt = 0;
                             }
+
+                            if ($checkRet['code'] == 2) {
+                                // 使用并产出效果
+                                Yii::$app->models->addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED, $checkRet['group_name'], $checkRet['eff_exec'], $checkRet['eff_type']);
+                                Yii::$app->models->updateUserModelUsedByTargetStoryModel($targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED);
+                                $minCt = 1;
+                            } elseif ($checkRet['code'] == 4) {
+                                // 使用，不完全，产出部分效果
+                                Yii::$app->models->addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED_PARTLY, $checkRet['group_name'], $checkRet['eff_exec'], $checkRet['eff_type']);
+                                $minCt = 1;
+                            } else {
+                                // 使用失败，没有效果
+                                $minCt = 0;
+                            }
+                            
+                            $ret = $checkRet['eff_exec'];
+                            $type = $checkRet['eff_type'];
                         }
-                        $res = '';
+                        $res = $checkRet;
                         if ($type == StoryModelsLink::EFF_TYPE_DIALOG) {
-                            $res = [
-                                'type'  => $type,
-                                'ret'   => $ret,
-                            ];
+                            $res['type']  = $type;
+                            $res['ret']   = $ret;
                         }
                     break;
                 default:
@@ -1063,6 +1090,7 @@ class DoApi extends ApiAction
             return $res;
 
         } catch (\Exception $e) {
+            var_dump($e);
             $transaction->rollBack();
             throw $e;
 //            return $this->fail($e->getMessage(), $e->getCode());

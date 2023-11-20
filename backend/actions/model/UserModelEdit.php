@@ -79,11 +79,10 @@ class UserModelEdit extends Action
 
             $sessionModel = SessionModels::find()
                 ->where([
-                    'session_id' => $model->session_id,
-                    'story_model_id'    => $model->story_model_id,
+                    'session_id' => (int)$model->session_id,
+                    'story_model_id'    => (int)$model->story_model_id,
                 ])
                 ->one();
-
             $model->session_model_id = $sessionModel->id;
 
             if ($model->validate()) {
