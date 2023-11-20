@@ -98,14 +98,15 @@ echo \dmstr\widgets\Alert::widget();
                         'format'    => 'raw',
                         'value' => function ($model) {
                             if ($model->story_model_id == '-1') {
-                                return '未匹配';
+                                $modelName = '未匹配';
                             }
-                            if ($model->story_model_id == '-2') {
-                                return '部分匹配';
+                            else if ($model->story_model_id == '-2') {
+                                $modelName = '部分匹配';
+                            } else {
+                                $modelName = !empty($model->storyModel->story_model_name) ?
+                                    $model->storyModel->story_model_name : $model->storyModel->model->model_name;
+                                $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
                             }
-                            $modelName = !empty($model->storyModel->story_model_name) ?
-                                $model->storyModel->story_model_name : $model->storyModel->model->model_name;
-                            $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
                             return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
 //                                'class' => 'btn btn-xs btn-primary',
                                 'data-toggle' => 'modal',
@@ -120,15 +121,20 @@ echo \dmstr\widgets\Alert::widget();
                         'format'    => 'raw',
                         'value' => function ($model) {
                             if ($model->story_model_id2 == '-1') {
-                                return '未匹配';
+                                $modelName = '未匹配';
                             }
-                            if ($model->story_model_id2 == '-2') {
-                                return '部分匹配';
+                            else if ($model->story_model_id2 == '-2') {
+                                $modelName = '部分匹配';
+                            } else {
+                                $modelName = !empty($model->storyModel2->story_model_name) ?
+                                    $model->storyModel2->story_model_name : $model->storyModel2->model->model_name;
+                                $modelName .= ' [' . $model->story_model_id2 . '|' . $model->story_model_detail_id2 . ']';
                             }
-                            $modelName = !empty($model->storyModel2->story_model_name) ?
-                                $model->storyModel2->story_model_name : $model->storyModel2->model->model_name;
-                            $modelName .= ' [' . $model->story_model_id2 . '|' . $model->story_model_detail_id2 . ']';
-                            return $modelName;
+                            return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
+//                                'class' => 'btn btn-xs btn-primary',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#case-form-' . $model->id
+                            ]);
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_model_id2'),
                     ],
