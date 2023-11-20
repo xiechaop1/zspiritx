@@ -98,7 +98,7 @@ class StoryModelLink extends Action
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
         $storyModelDatas = \common\models\StoryModels::find()->orderBy(['id' => SORT_DESC])->all();
-        $storyModelList = ['-1' => '无'];
+        $storyModelList = ['-1' => '无'] + ['-2' => '部分匹配'];
         foreach ($storyModelDatas as $storyModel) {
             $storyModelList[$storyModel->id] = $storyModel->story->title . ' ';
             $storyModelList[$storyModel->id] .=
