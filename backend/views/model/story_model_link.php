@@ -86,8 +86,13 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'title',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->story->title) ?
+                            $title = !empty($model->story->title) ?
                                 $model->story->title : '-';
+                            return \yii\helpers\Html::a($title, 'javascript:void(0);', [
+                                'class' => 'btn btn-xs btn-primary',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#case-form-' . $model->id
+                            ]);
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
@@ -158,13 +163,23 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {edit} {delete}',
+                        'template' => '{lines} {edit} {copy} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
                                     'class' => 'btn btn-xs btn-primary',
                                     'data-toggle' => 'modal',
                                     'data-target' => '#case-form-' . $model->id
+                                ]);
+                            },
+                            'copy' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::a('复制', 'javascript:void(0)', [
+                                    'class' => 'btn btn-primary btn-xs ajax-status-btn',
+                                    'request-confirm' => '确认复制一份吗?',
+                                    'request-url' => '',
+                                    'request-type' => 'POST',
+                                    'data-action' => 'copy',
+                                    'data-id' => $model->id,
                                 ]);
                             },
 //                            'edit' => function ($url, $model, $key) {
