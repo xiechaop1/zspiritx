@@ -88,11 +88,7 @@ echo \dmstr\widgets\Alert::widget();
                         'value' => function ($model) {
                             $title = !empty($model->story->title) ?
                                 $model->story->title : '-';
-                            return \yii\helpers\Html::a($title, 'javascript:void(0);', [
-                                'class' => 'btn btn-xs btn-primary',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#case-form-' . $model->id
-                            ]);
+                            return $title;
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
@@ -110,7 +106,11 @@ echo \dmstr\widgets\Alert::widget();
                             $modelName = !empty($model->storyModel->story_model_name) ?
                                 $model->storyModel->story_model_name : $model->storyModel->model->model_name;
                             $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
-                            return $modelName;
+                            return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
+//                                'class' => 'btn btn-xs btn-primary',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#case-form-' . $model->id
+                            ]);
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
