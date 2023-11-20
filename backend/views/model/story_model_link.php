@@ -99,6 +99,9 @@ echo \dmstr\widgets\Alert::widget();
                             if ($model->story_model_id == '-1') {
                                 return '未匹配';
                             }
+                            if ($model->story_model_id == '-2') {
+                                return '部分匹配';
+                            }
                             $modelName = !empty($model->storyModel->story_model_name) ?
                                 $model->storyModel->story_model_name : $model->storyModel->model->model_name;
                             $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
@@ -107,12 +110,15 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
                     [
-                        'label' => '关联模型(未匹配填-1)',
+                        'label' => '关联模型(未匹配填-1，部分匹配-2)',
                         'attribute' => 'story_model_id2',
                         'format'    => 'raw',
                         'value' => function ($model) {
                             if ($model->story_model_id2 == '-1') {
                                 return '未匹配';
+                            }
+                            if ($model->story_model_id2 == '-2') {
+                                return '部分匹配';
                             }
                             $modelName = !empty($model->storyModel2->story_model_name) ?
                                 $model->storyModel2->story_model_name : $model->storyModel2->model->model_name;
