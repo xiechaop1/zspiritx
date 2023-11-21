@@ -1095,7 +1095,7 @@ class DoApi extends ApiAction
             return $res;
 
         } catch (\Exception $e) {
-            var_dump($e);
+//            var_dump($e);
             $transaction->rollBack();
             throw $e;
 //            return $this->fail($e->getMessage(), $e->getCode());
