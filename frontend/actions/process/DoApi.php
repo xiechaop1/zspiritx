@@ -1009,6 +1009,11 @@ class DoApi extends ApiAction
                             'story_model_id2' => $targetStoryModel->id,
                         ]);
                     }
+                    if (!empty($storyModel->use_group_name)) {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'group_name' => $storyModel->use_group_name,
+                        ]);
+                    }
                     $storyModelLinks = $storyModelLinks
                         ->orderBy(['story_model_id' => SORT_ASC])
                         ->all();

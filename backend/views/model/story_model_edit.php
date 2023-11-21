@@ -104,6 +104,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('使用规范');
+            echo $form->field($storyModel, 'use_group_name')->textInput(['value' => $storyModel->use_group_name])->label('背包分组');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');
             echo $form->field($storyModel, 'timebegin')->textInput(['value' => $storyModel->timebegin])->label('开始时间');
             echo $form->field($storyModel, 'timeend')->textInput(['value' => $storyModel->timeend])->label('结束时间');
