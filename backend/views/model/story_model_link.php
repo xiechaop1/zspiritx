@@ -103,9 +103,11 @@ echo \dmstr\widgets\Alert::widget();
                             else if ($model->story_model_id == '-2') {
                                 $modelName = '部分匹配';
                             } else {
-                                $modelName = !empty($model->storyModel->story_model_name) ?
-                                    $model->storyModel->story_model_name : $model->storyModel->model->model_name;
-                                $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
+                                if (!empty($model->storyModel)) {
+                                    $modelName = !empty($model->storyModel->story_model_name) ?
+                                        $model->storyModel->story_model_name : $model->storyModel->model->model_name;
+                                    $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
+                                }
                             }
                             return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
 //                                'class' => 'btn btn-xs btn-primary',
@@ -126,9 +128,11 @@ echo \dmstr\widgets\Alert::widget();
                             else if ($model->story_model_id2 == '-2') {
                                 $modelName = '部分匹配';
                             } else {
-                                $modelName = !empty($model->storyModel2->story_model_name) ?
-                                    $model->storyModel2->story_model_name : $model->storyModel2->model->model_name;
-                                $modelName .= ' [' . $model->story_model_id2 . '|' . $model->story_model_detail_id2 . ']';
+                                if (!empty($model->storyModel2)) {
+                                    $modelName = !empty($model->storyModel2->story_model_name) ?
+                                        $model->storyModel2->story_model_name : $model->storyModel2->model->model_name;
+                                    $modelName .= ' [' . $model->story_model_id2 . '|' . $model->story_model_detail_id2 . ']';
+                                }
                             }
                             return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
 //                                'class' => 'btn btn-xs btn-primary',
