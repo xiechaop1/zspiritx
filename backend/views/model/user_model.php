@@ -114,8 +114,13 @@ echo \dmstr\widgets\Alert::widget();
                         'value' => function ($model) {
                             $modelName = !empty($model->storyModel->detail->title) ?
                                 $model->storyModel->detail->title : '未知/无';
-                            $modelName .= ' [' . $model->story_model_detail_id . ']';
-                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_detail', 'id' => $model->storyModel->story_model_detail_id]));
+                            if (!empty($model->storyModel)) {
+                                $storyModelDetailId = $model->story_model_detail_id;
+                            } else {
+                                $storyModelDetailId = 0;
+                            }
+                            $modelName .= ' [' . $storyModelDetailId . ']';
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_detail', 'id' => $storyModelDetailId]));
                         },
                     ],
                     [
