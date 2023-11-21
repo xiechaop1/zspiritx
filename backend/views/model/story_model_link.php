@@ -97,6 +97,7 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'story_model_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
+                            $modelName = '';
                             if ($model->story_model_id == '-1') {
                                 $modelName = '未匹配';
                             }
@@ -122,6 +123,7 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'story_model_id2',
                         'format'    => 'raw',
                         'value' => function ($model) {
+                            $modelName = '';
                             if ($model->story_model_id2 == '-1') {
                                 $modelName = '未匹配';
                             }
