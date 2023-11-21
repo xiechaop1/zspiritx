@@ -33,7 +33,7 @@ class StoryModelLink extends Action
         }
 
         if (Yii::$app->request->isAjax) {
-            $id = Net::post('data-id');
+            $id = Net::post('id');
             $storyModelLink = \common\models\StoryModelsLink::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
