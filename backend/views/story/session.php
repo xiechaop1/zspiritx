@@ -115,6 +115,13 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => '场次',
                         'attribute' => 'session_name',
                         'format'    => 'raw',
+                        'value' => function ($model) {
+                            $sessionName = !empty($model->session_name) ? $model->session_name : '未知';
+                            return \yii\helpers\Html::a($sessionName, 'javascript:void(0);', [
+                                'data-toggle' => 'modal',
+                                'data-target' => '#case-form-' . $model->id
+                            ]);
+                        },
                         'filter' => Html::activeInput('text', $searchModel, 'session_name',['placeholder'=>'标题']),
                     ],
                     [

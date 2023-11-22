@@ -77,7 +77,11 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'story_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->story->title) ? $model->story->title : '未知';
+                            $storyTitle = !empty($model->story->title) ? $model->story->title : '未知';
+                            return \yii\helpers\Html::a($storyTitle, 'javascript:void(0);', [
+                                'data-toggle' => 'modal',
+                                'data-target' => '#case-form-' . $model->id
+                            ]);
                         },
                         'filter' => false
                     ],
