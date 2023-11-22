@@ -509,12 +509,14 @@ class Models extends Component
                     // 如果完全没找到
                     $noFoundRet = $groupNoFoundRet[$userModelUsed->group_name] = $userModelUsed->eff_exec;
                     $noFoundType = $groupNoFoundType[$userModelUsed->group_name] = $userModelUsed->eff_type;
+                    $noFoundModel = $userModelUsed;
                     $modelCt--;
                     continue;
                 } else if ($userModelUsed->story_model_id == '-2') {
                     // 如果是部分完成
                     $partlyFoundRet = $groupPartlyFoundRet[$userModelUsed->group_name] = $userModelUsed->eff_exec;
                     $partlyFoundType = $groupPartlyFoundType[$userModelUsed->group_name] = $userModelUsed->eff_type;
+                    $partlyFoundModel = $userModelUsed;
                     $modelCt--;
                     continue;
                 } else {
@@ -544,6 +546,12 @@ class Models extends Component
                         }
                         $userModelUsed->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
                         $userModelUsed->save();
+
+                        $noFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                        $noFoundModel->save();
+
+                        $partlyFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                        $partlyFoundModel->save();
                         break;
                     }
                 }
@@ -610,9 +618,22 @@ class Models extends Component
                 }
                 $currentUserModelUsed = $currentUserModelUsed->all();
 
+                $currentUMUCt = 0;
+                if (!empty($currentUserModelUsed)) {
+                    foreach ($currentUserModelUsed as $userModelUsed) {
+                        if (!in_array($userModelUsed->story_model_id, [-1,-2])) {
+                            $currentUMUCt++;
+                        }
+                    }
+                }
 
-                if (empty($currentUserModelUsed)) {
-
+                if ($currentUMUCt == 0) {
+                    if (!empty($currentUserModelUsed)) {
+                        foreach ($currentUserModelUsed as $userModelUsed) {
+                            $userModelUsed->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                            $userModelUsed->save();
+                        }
+                    }
                     foreach ($storyModelLinks as $storyModelLink) {
                         $userModelUsed = new UserModelsUsed();
                         $userModelUsed->user_id = $userId;
@@ -629,6 +650,7 @@ class Models extends Component
                         $userModelUsed->save();
                     }
                 }
+
             }
             $transaction->commit();
         } catch (\Exception $e) {
