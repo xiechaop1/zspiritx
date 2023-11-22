@@ -485,8 +485,8 @@ class Models extends Component
 //                'group_name' => $storyModel->group_name,
                 'use_status' => UserModelsUsed::USE_STATUS_WAITING
             ]);
-        if (!empty($storyModel->group_name)) {
-            $matchUserModelUsed->andFilterWhere(['group_name' => $storyModel->group_name]);
+        if (!empty($storyModel->use_group_name)) {
+            $matchUserModelUsed->andFilterWhere(['group_name' => $storyModel->use_group_name]);
         }
         if (!empty($targetStoryModel->story_model_detail_id)) {
             $matchUserModelUsed->andFilterWhere(['story_model_detail_id2' => $targetStoryModel->story_model_detail_id]);
