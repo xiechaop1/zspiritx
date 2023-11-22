@@ -612,26 +612,22 @@ class Models extends Component
 
 
                 if (empty($currentUserModelUsed)) {
-                    foreach ($currentUserModelUsed as $currentUserModel) {
-                        $currentUserModel->use_status = UserModelsUsed::USE_STATUS_CANCEL;
-                        $currentUserModel->save();
-                    }
-                }
 
-                foreach ($storyModelLinks as $storyModelLink) {
-                    $userModelUsed = new UserModelsUsed();
-                    $userModelUsed->user_id = $userId;
-                    $userModelUsed->story_id = $storyId;
-                    $userModelUsed->session_id = $sessionId;
-                    $userModelUsed->group_name = $storyModelLink->group_name;
-                    $userModelUsed->use_status = $useStatus;
-                    $userModelUsed->story_model_id = $storyModelLink->story_model_id;
-                    $userModelUsed->story_model_detail_id = $storyModelLink->story_model_detail_id;
-                    $userModelUsed->story_model_id2 = $storyModelLink->story_model_id2;
-                    $userModelUsed->story_model_detail_id2 = $storyModelLink->story_model_detail_id2;
-                    $userModelUsed->eff_exec = $storyModelLink->eff_exec;
-                    $userModelUsed->eff_type = $storyModelLink->eff_type;
-                    $userModelUsed->save();
+                    foreach ($storyModelLinks as $storyModelLink) {
+                        $userModelUsed = new UserModelsUsed();
+                        $userModelUsed->user_id = $userId;
+                        $userModelUsed->story_id = $storyId;
+                        $userModelUsed->session_id = $sessionId;
+                        $userModelUsed->group_name = $storyModelLink->group_name;
+                        $userModelUsed->use_status = $useStatus;
+                        $userModelUsed->story_model_id = $storyModelLink->story_model_id;
+                        $userModelUsed->story_model_detail_id = $storyModelLink->story_model_detail_id;
+                        $userModelUsed->story_model_id2 = $storyModelLink->story_model_id2;
+                        $userModelUsed->story_model_detail_id2 = $storyModelLink->story_model_detail_id2;
+                        $userModelUsed->eff_exec = $storyModelLink->eff_exec;
+                        $userModelUsed->eff_type = $storyModelLink->eff_type;
+                        $userModelUsed->save();
+                    }
                 }
             }
             $transaction->commit();
