@@ -523,7 +523,7 @@ class Models extends Component
                         ||
                         (!empty($userModelUsed->story_model_id) && $storyModel->id == $userModelUsed->story_model_id)
                     ) {
-                        if (sizeof($matchUserModelUsed) > 1) {
+                        if ($modelCt > 1) {
                             // 部分匹配上
                             $matchRet = [
                                 'code' => 4,
