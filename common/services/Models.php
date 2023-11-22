@@ -503,16 +503,19 @@ class Models extends Component
             $noFoundRet = $partlyFoundRet = '';
             $noFoundType = $partlyFoundType = 0;
 
+            $modelCt = sizeof($matchUserModelUsed);
             foreach ($matchUserModelUsed as $userModelUsed) {
                 if ($userModelUsed->story_model_id == '-1') {
                     // 如果完全没找到
                     $noFoundRet = $groupNoFoundRet[$userModelUsed->group_name] = $userModelUsed->eff_exec;
                     $noFoundType = $groupNoFoundType[$userModelUsed->group_name] = $userModelUsed->eff_type;
+                    $modelCt--;
                     continue;
                 } else if ($userModelUsed->story_model_id == '-2') {
                     // 如果是部分完成
                     $partlyFoundRet = $groupPartlyFoundRet[$userModelUsed->group_name] = $userModelUsed->eff_exec;
                     $partlyFoundType = $groupPartlyFoundType[$userModelUsed->group_name] = $userModelUsed->eff_type;
+                    $modelCt--;
                     continue;
                 } else {
                     if (
