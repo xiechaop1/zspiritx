@@ -559,11 +559,14 @@ class Models extends Component
     }
 
     public function addPreUserModelUsedByGroup($groupName, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
-        $storyModelLinks = StoryModelsLink::find()
-            ->where([
-                'group_name'    => $groupName,
-            ])
-            ->all();
+        $storyModelLinks = StoryModelsLink::find();
+        if (!empty($groupName)) {
+            $storyModelLinks->where([
+                'group_name' => $groupName,
+            ]);
+                }
+        $storyModelLinks = $storyModelLinks->all();
+        
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
