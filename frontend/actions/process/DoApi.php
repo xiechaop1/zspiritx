@@ -252,10 +252,12 @@ class DoApi extends ApiAction
                 $checkSession = $checkSessionModel->one();
 
                 if (!empty($checkSession)) {
-                    continue;
-                }
+//                    continue;
+                    $sessionModel = $checkSession;
+                } else {
 
-                $sessionModel = new SessionModels();
+                    $sessionModel = new SessionModels();
+                }
 //                foreach ($storyModel as $key => $value) {
 //                    if (in_array($key, ['id', 'story_id'])) {
 //                        continue;

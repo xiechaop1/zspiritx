@@ -12,12 +12,14 @@ namespace common\models;
 class UserModelsUsed extends \common\models\gii\UserModelsUsed
 {
 
+    const USE_STATUS_WAITING             = 0; // 等待
     const USE_STATUS_COMPLETED_PARTLY   = 1; // 部分完成
     const USE_STATUS_COMPLETED          = 2; // 全部完成
     const USE_STATUS_TIMEOUT            = 10; // 超时
     const USE_STATUS_CANCEL             = 99; // 取消
 
     public static $useStatus2Name = [
+        self::USE_STATUS_WAITING => '等待',
         self::USE_STATUS_COMPLETED_PARTLY => '部分完成',
         self::USE_STATUS_COMPLETED => '全部完成',
         self::USE_STATUS_TIMEOUT => '超时',

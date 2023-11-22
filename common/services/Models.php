@@ -10,11 +10,13 @@ namespace common\services;
 
 
 use common\definitions\Cookies;
+use common\definitions\ErrorCode;
 use common\models\Actions;
 use common\models\Session;
 use common\models\SessionModels;
 use common\models\SessionStages;
 use common\models\StoryModels;
+use common\models\StoryModelsLink;
 use common\models\StoryStages;
 use common\models\UserModelsUsed;
 use common\services\Curl;
@@ -470,6 +472,144 @@ class Models extends Component
 
         return $ret;
 
+
+    }
+
+    public function checkUserModelUsedByStoryModel($storyModel, $userId, $storyId, $sessionId) {
+
+        $matchUserModelUsed = UserModelsUsed::find()
+            ->where([
+                'user_id' => $userId,
+                'story_id' => $storyId,
+                'session_id' => $sessionId,
+//                'group_name' => $storyModel->group_name,
+                'use_status' => UserModelsUsed::USE_STATUS_WAITING
+            ]);
+        if (!empty($groupName)) {
+            $matchUserModelUsed->andFilterWhere(['group_name' => $groupName]);
+        }
+        $matchUserModelUsed = $matchUserModelUsed->orderBy([
+            'story_model_id' => SORT_ASC
+        ])
+        ->all();
+
+
+        if (!empty($matchUserModelUsed)) {
+            $noFoundRet = $partlyFoundRet = '';
+            $noFoundType = $partlyFoundType = 0;
+
+            foreach ($matchUserModelUsed as $userModelUsed) {
+                if ($userModelUsed->story_model_id == '-1') {
+                    // 如果完全没找到
+                    $noFoundRet = $groupNoFoundRet[$userModelUsed->group_name] = $userModelUsed->eff_exec;
+                    $noFoundType = $groupNoFoundType[$userModelUsed->group_name] = $userModelUsed->eff_type;
+                    continue;
+                } else if ($userModelUsed->story_model_id == '-2') {
+                    // 如果是部分完成
+                    $partlyFoundRet = $groupPartlyFoundRet[$userModelUsed->group_name] = $userModelUsed->eff_exec;
+                    $partlyFoundType = $groupPartlyFoundType[$userModelUsed->group_name] = $userModelUsed->eff_type;
+                    continue;
+                } else {
+                    if (
+                        (!empty($userModelUsed->story_model_detail_id) && $storyModel->story_model_detail_id == $userModelUsed->story_model_detail_id)
+                        ||
+                        (!empty($userModelUsed->story_model_id) && $storyModel->id == $userModelUsed->story_model_id)
+                    ) {
+                        if (sizeof($matchUserModelUsed) > 1) {
+                            // 部分匹配上
+                            $matchRet = [
+                                'code' => 4,
+                                'eff_type' => $partlyFoundType,
+                                'eff_exec' => $partlyFoundRet,
+                                'group_name' => $userModelUsed->group_name,
+                                'min_ct' => 1,
+                            ];
+                        } else {
+                            // 完全匹配上
+                            $matchRet = [
+                                'code' => 2,
+                                'eff_type' => $userModelUsed->eff_type,
+                                'eff_exec' => $userModelUsed->eff_exec,
+                                'group_name' => $userModelUsed->group_name,
+                                'min_ct' => 1,
+                            ];
+                        }
+                        $userModelUsed->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                        $userModelUsed->save();
+                        break;
+                    }
+                }
+            }
+                if (empty($matchRet)) {
+                    // 未匹配上
+                    $matchRet = [
+                        'code' => 3,
+                        'eff_type' => $noFoundType,
+                        'eff_exec' => $noFoundRet,
+                        'group_name' => '',
+                        'min_ct' => 0,
+                    ];
+                }
+
+            return $matchRet;
+        } else {
+            throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+        }
+
+    }
+
+    public function addPreUserModelUsedByGroup($groupName, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
+        $storyModelLinks = StoryModelsLink::find()
+            ->where([
+                'group_name'    => $groupName,
+            ])
+            ->all();
+
+        try {
+            $transaction = Yii::$app->db->beginTransaction();
+            if (!empty($storyModelLinks)) {
+                $currentUserModelUsed = UserModelsUsed::find()
+                    ->where([
+                        'user_id' => $userId,
+                        'story_id' => $storyId,
+                        'session_id' => $sessionId,
+//                        'group_name' => $groupName,
+                        'use_status' => UserModelsUsed::USE_STATUS_WAITING
+                    ]);
+                if (!empty($groupName)) {
+                    $currentUserModelUsed->andFilterWhere(['group_name' => $groupName]);
+                }
+                $currentUserModelUsed = $currentUserModelUsed->all();
+
+
+                if (empty($currentUserModelUsed)) {
+                    foreach ($currentUserModelUsed as $currentUserModel) {
+                        $currentUserModel->use_status = UserModelsUsed::USE_STATUS_CANCEL;
+                        $currentUserModel->save();
+                    }
+                }
+
+                foreach ($storyModelLinks as $storyModelLink) {
+                    $userModelUsed = new UserModelsUsed();
+                    $userModelUsed->user_id = $userId;
+                    $userModelUsed->story_id = $storyId;
+                    $userModelUsed->session_id = $sessionId;
+                    $userModelUsed->group_name = $storyModelLink->group_name;
+                    $userModelUsed->use_status = $useStatus;
+                    $userModelUsed->story_model_id = $storyModelLink->story_model_id;
+                    $userModelUsed->story_model_detail_id = $storyModelLink->story_model_detail_id;
+                    $userModelUsed->story_model_id2 = $storyModelLink->story_model_id2;
+                    $userModelUsed->story_model_detail_id2 = $storyModelLink->story_model_detail_id2;
+                    $userModelUsed->eff_exec = $storyModelLink->eff_exec;
+                    $userModelUsed->eff_type = $storyModelLink->eff_type;
+                    $userModelUsed->save();
+                }
+            }
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
 
     }
 
