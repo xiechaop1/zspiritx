@@ -115,30 +115,30 @@ class StoryModelLink extends Action
         $searchModel = new \backend\models\StoryModelsLink();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $storyModelDatas = \common\models\StoryModels::find()->orderBy(['id' => SORT_DESC])->all();
-        $storyModelList = ['-1' => '无'] + ['-2' => '部分匹配'];
-        foreach ($storyModelDatas as $storyModel) {
-            $storyModelList[$storyModel->id] = $storyModel->story->title . ' ';
-            $storyModelList[$storyModel->id] .=
-                !empty($storyModel->story_model_name)
-                ? $storyModel->story_model_name . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' :
-                    !empty($storyModel->model)
-                        ? $storyModel->model->model_name
-//                    ? 'abc'
-                        . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' : '[' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']';
-            $storyModelList[$storyModel->id] .= '(' . $storyModel->model_inst_u_id . ')';
-            ;
-        }
-
-        $story = Story::find()->orderBy(['id' => SORT_DESC])->all();
-        $storyList = ArrayHelper::map($story, 'id', 'title');
+//        $storyModelDatas = \common\models\StoryModels::find()->orderBy(['id' => SORT_DESC])->all();
+//        $storyModelList = ['-1' => '无'] + ['-2' => '部分匹配'];
+//        foreach ($storyModelDatas as $storyModel) {
+//            $storyModelList[$storyModel->id] = $storyModel->story->title . ' ';
+//            $storyModelList[$storyModel->id] .=
+//                !empty($storyModel->story_model_name)
+//                ? $storyModel->story_model_name . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' :
+//                    !empty($storyModel->model)
+//                        ? $storyModel->model->model_name
+////                    ? 'abc'
+//                        . ' [' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']' : '[' . $storyModel->id . '|' . $storyModel->story_model_detail_id . ']';
+//            $storyModelList[$storyModel->id] .= '(' . $storyModel->model_inst_u_id . ')';
+//            ;
+//        }
+//
+//        $story = Story::find()->orderBy(['id' => SORT_DESC])->all();
+//        $storyList = ArrayHelper::map($story, 'id', 'title');
 
         return $this->controller->render('story_model_link', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
             'storyModelLink'    => $model,
-            'storyModelList'    => $storyModelList,
-            'storyList'         => $storyList,
+//            'storyModelList'    => $storyModelList,
+//            'storyList'         => $storyList,
             'params'        => $_GET,
         ]);
     }

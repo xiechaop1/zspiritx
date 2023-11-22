@@ -36,7 +36,9 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($storyModelLink, $storyList, $storyModelList) {
+                'afterRow' => function ($model, $key, $index) use ($storyModelLink
+//                    ,$storyList, $storyModelList
+                ) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '查看详情',
@@ -246,12 +248,12 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <?php
-echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList)->label('剧本');
-echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList)->label('模型');
-echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList)->label('关联模型');
-echo $form->field($storyModelLink, 'group_name')->label('分组名称');
-echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name)->label('类型');
-echo $form->field($storyModelLink, 'eff_exec')->textarea(['rows' => 15])->label('执行');
+//echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList)->label('剧本');
+//echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList)->label('模型');
+//echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList)->label('关联模型');
+//echo $form->field($storyModelLink, 'group_name')->label('分组名称');
+//echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name)->label('类型');
+//echo $form->field($storyModelLink, 'eff_exec')->textarea(['rows' => 15])->label('执行');
 
 ?>
     <div class="form-group">
