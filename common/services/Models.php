@@ -475,7 +475,7 @@ class Models extends Component
 
     }
 
-    public function checkUserModelUsedByStoryModel($storyModel, $userId, $storyId, $sessionId) {
+    public function checkUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId) {
 
         $matchUserModelUsed = UserModelsUsed::find()
             ->where([
@@ -487,6 +487,11 @@ class Models extends Component
             ]);
         if (!empty($groupName)) {
             $matchUserModelUsed->andFilterWhere(['group_name' => $groupName]);
+        }
+        if (!empty($targetStoryModel->story_model_detail_id)) {
+            $matchUserModelUsed->andFilterWhere(['story_model_detail_id2' => $targetStoryModel->story_model_detail_id]);
+        } else {
+            $matchUserModelUsed->andFilterWhere(['story_model_id2' => $targetStoryModel->id]);
         }
         $matchUserModelUsed = $matchUserModelUsed->orderBy([
             'story_model_id' => SORT_ASC
