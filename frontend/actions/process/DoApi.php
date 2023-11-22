@@ -1082,6 +1082,7 @@ class DoApi extends ApiAction
                             $res['type']  = $type;
                             $res['ret']   = $ret;
                         }
+                        $minCt = !empty($checkRet['min_ct']) ? $checkRet['min_ct'] : 0;
                     break;
                 default:
                     break;
