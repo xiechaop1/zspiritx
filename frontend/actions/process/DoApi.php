@@ -1048,31 +1048,31 @@ class DoApi extends ApiAction
 //                                    break;
 //                                }
 //                            }
-                            $checkRet = Yii::$app->models->checkUserModelUsedByStoryModel();
+                            $checkRet = Yii::$app->models->checkUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId);
 
-                            $userModelsUsedData = Yii::$app->models->getUserModelUsedByTarget($targetStoryModel->story_model_detail_id, $targetStoryModel->id, $userId, $storyId, $sessionId);
-
-                            $checkRet = Yii::$app->models->checkUserModelUsedByModels($storyModel, $storyModelLinks, $userModelsUsedData, $userId, $storyId, $sessionId);
-
-                            if ($checkRet['code'] == 0) {
-//                                $ret = $noFoundRet;
-//                                $type = $noFoundType;
-                                $minCt = 0;
-                            }
-
-                            if ($checkRet['code'] == 2) {
-                                // 使用并产出效果
-                                Yii::$app->models->addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED, $checkRet['group_name'], $checkRet['eff_exec'], $checkRet['eff_type']);
-                                Yii::$app->models->updateUserModelUsedByTargetStoryModel($targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED);
-                                $minCt = 1;
-                            } elseif ($checkRet['code'] == 4) {
-                                // 使用，不完全，产出部分效果
-                                Yii::$app->models->addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED_PARTLY, $checkRet['group_name'], $checkRet['eff_exec'], $checkRet['eff_type']);
-                                $minCt = 1;
-                            } else {
-                                // 使用失败，没有效果
-                                $minCt = 0;
-                            }
+//                            $userModelsUsedData = Yii::$app->models->getUserModelUsedByTarget($targetStoryModel->story_model_detail_id, $targetStoryModel->id, $userId, $storyId, $sessionId);
+//
+//                            $checkRet = Yii::$app->models->checkUserModelUsedByModels($storyModel, $storyModelLinks, $userModelsUsedData, $userId, $storyId, $sessionId);
+//
+//                            if ($checkRet['code'] == 0) {
+////                                $ret = $noFoundRet;
+////                                $type = $noFoundType;
+//                                $minCt = 0;
+//                            }
+//
+//                            if ($checkRet['code'] == 2) {
+//                                // 使用并产出效果
+//                                Yii::$app->models->addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED, $checkRet['group_name'], $checkRet['eff_exec'], $checkRet['eff_type']);
+//                                Yii::$app->models->updateUserModelUsedByTargetStoryModel($targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED);
+//                                $minCt = 1;
+//                            } elseif ($checkRet['code'] == 4) {
+//                                // 使用，不完全，产出部分效果
+//                                Yii::$app->models->addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, UserModelsUsed::USE_STATUS_COMPLETED_PARTLY, $checkRet['group_name'], $checkRet['eff_exec'], $checkRet['eff_type']);
+//                                $minCt = 1;
+//                            } else {
+//                                // 使用失败，没有效果
+//                                $minCt = 0;
+//                            }
                             
                             $ret = $checkRet['eff_exec'];
                             $type = $checkRet['eff_type'];
