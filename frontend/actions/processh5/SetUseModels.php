@@ -40,6 +40,7 @@ class SetUseModels extends Action
         $groupName = !empty($this->_get['group_name']) ? $this->_get['group_name'] : '';
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
         $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
+        $targetStoryModelId = !empty($this->_get['target_story_model_id']) ? $this->_get['target_story_model_id'] : 0;
 
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
@@ -49,7 +50,13 @@ class SetUseModels extends Action
         ];
 
         try {
-            $ret = Yii::$app->models->addPreUserModelUsedByGroup($groupName, $userId, $storyId, $sessionId);
+            $targetStoryModel = StoryModels::find()
+                ->where([
+                    'id'    => $targetStoryModelId,
+                ])
+                ->one();
+
+            $ret = Yii::$app->models->addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId);
             $msg = '我已经准备好啦，打开背包，找到物品，点击使用吧！';
         } catch (\Exception $e) {
             return $this->pickupRender($e->getCode(), $e->getMessage(), $this->_params);

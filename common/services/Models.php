@@ -558,15 +558,24 @@ class Models extends Component
 
     }
 
-    public function addPreUserModelUsedByGroup($groupName, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
+    public function addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
         $storyModelLinks = StoryModelsLink::find();
         if (!empty($groupName)) {
             $storyModelLinks->where([
                 'group_name' => $groupName,
             ]);
-                }
+        }
+        if (!empty($targetStoryModel->story_model_detail_id)) {
+            $storyModelLinks->andFilterWhere([
+                'story_model_detail_id2' => $targetStoryModel->story_model_detail_id,
+            ]);
+        } else {
+            $storyModelLinks->andFilterWhere([
+                'story_model_id2' => $targetStoryModel->id,
+            ]);
+        }
         $storyModelLinks = $storyModelLinks->all();
-        
+
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
@@ -581,6 +590,15 @@ class Models extends Component
                     ]);
                 if (!empty($groupName)) {
                     $currentUserModelUsed->andFilterWhere(['group_name' => $groupName]);
+                }
+                if (!empty($targetStoryModel->story_model_detail_id)) {
+                    $currentUserModelUsed->andFilterWhere([
+                        'story_model_detail_id2' => $targetStoryModel->story_model_detail_id,
+                    ]);
+                } else {
+                    $currentUserModelUsed->andFilterWhere([
+                        'story_model_id2' => $targetStoryModel->id,
+                    ]);
                 }
                 $currentUserModelUsed = $currentUserModelUsed->all();
 
