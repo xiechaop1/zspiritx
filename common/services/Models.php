@@ -475,7 +475,7 @@ class Models extends Component
 
     }
 
-    public function checkUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId) {
+    public function checkUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, $userModelId = 0) {
 
         $matchUserModelUsed = UserModelsUsed::find()
             ->where([
@@ -543,15 +543,17 @@ class Models extends Component
                                 'group_name' => $userModelUsed->group_name,
                                 'min_ct' => 1,
                             ];
+
+                            $noFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                            $noFoundModel->save();
+
+                            $partlyFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                            $partlyFoundModel->save();
                         }
+                        $userModelUsed->user_model_id = $userModelId;
                         $userModelUsed->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
                         $userModelUsed->save();
 
-                        $noFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
-                        $noFoundModel->save();
-
-                        $partlyFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
-                        $partlyFoundModel->save();
                         break;
                     }
                 }

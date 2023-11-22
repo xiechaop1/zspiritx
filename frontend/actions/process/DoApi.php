@@ -1048,7 +1048,7 @@ class DoApi extends ApiAction
 //                                    break;
 //                                }
 //                            }
-                            $checkRet = Yii::$app->models->checkUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId);
+                            $checkRet = Yii::$app->models->checkUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, $userModelId);
 
 //                            $userModelsUsedData = Yii::$app->models->getUserModelUsedByTarget($targetStoryModel->story_model_detail_id, $targetStoryModel->id, $userId, $storyId, $sessionId);
 //
