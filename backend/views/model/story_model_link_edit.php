@@ -51,15 +51,15 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('关联模型');
 
-            echo $form->field($storyModel, 'group_name')->textInput(['value' => $storyModelLink->group_name])->label('分组');
+            echo $form->field($storyModelLink, 'group_name')->textInput(['value' => $storyModelLink->group_name])->label('分组');
 
-            echo $form->field($storyModel, 'eff_type')->widget('\kartik\select2\Select2', [
+            echo $form->field($storyModelLink, 'eff_type')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModelsLink::$effType2Name,
                 'options' => [
                     'multiple' => false
                 ],
             ])->label('执行类型');
-            echo $form->field($storyModel, 'eff_exec')->textarea(['value' => !empty($storyModelLink->eff_exec) ? var_export(json_decode($storyModelLink->eff_exec, true), true) : '', 'rows' => 15])->label('执行');
+            echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => !empty($storyModelLink->eff_exec) ? var_export(json_decode($storyModelLink->eff_exec, true), true) : '', 'rows' => 15])->label('执行');
 
             ?>
 
