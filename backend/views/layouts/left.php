@@ -76,7 +76,7 @@
                             [
                                 'label' => '剧本模型关联列表',
                                 'url' => ['/model/story_model_link'],
-                                'active' => in_array($this->context->route, ['model/story_model_link']),
+                                'active' => in_array($this->context->route, ['model/story_model_link', 'model/story_model_link_edit']),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [

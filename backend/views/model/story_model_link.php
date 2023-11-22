@@ -21,14 +21,14 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::button('添加', [
-                'class' => 'btn btn-primary pull-right',
-                'data-toggle' => "modal",
-                'data-target' => '#add-form'
-            ]) ?>
-<!--            --><?php //= \yii\bootstrap\Html::a('添加', '/model/story_stage_edit', [
+<!--            --><?php //= \yii\bootstrap\Html::button('添加', [
 //                'class' => 'btn btn-primary pull-right',
+//                'data-toggle' => "modal",
+//                'data-target' => '#add-form'
 //            ]) ?>
+            <?= \yii\bootstrap\Html::a('添加', '/model/story_model_link_edit', [
+                'class' => 'btn btn-primary pull-right',
+            ]) ?>
         </div>
         <div class="box-body">
             <?php
@@ -58,12 +58,12 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     ?>
                     <?php
-                    echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList, ['value' => $model->story_id])->label('剧本');
-                    echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList, ['value' => $model->story_model_id])->label('模型');
-                    echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList, ['value' => $model->story_model_id2])->label('关联模型');
-                    echo $form->field($storyModelLink, 'group_name')->textInput(['value' => $model->group_name])->label('分组名称');
-                    echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name, ['value' => $model->eff_type])->label('类型');
-                    echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => var_export(json_decode($model->eff_exec, true), true), 'rows' => 15])->label('执行');
+//                    echo $form->field($storyModelLink, 'story_id')->dropDownList($storyList, ['value' => $model->story_id])->label('剧本');
+//                    echo $form->field($storyModelLink, 'story_model_id')->dropDownList($storyModelList, ['value' => $model->story_model_id])->label('模型');
+//                    echo $form->field($storyModelLink, 'story_model_id2')->dropDownList($storyModelList, ['value' => $model->story_model_id2])->label('关联模型');
+//                    echo $form->field($storyModelLink, 'group_name')->textInput(['value' => $model->group_name])->label('分组名称');
+//                    echo $form->field($storyModelLink, 'eff_type')->dropDownList(\common\models\StoryModelsLink::$effType2Name, ['value' => $model->eff_type])->label('类型');
+//                    echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => var_export(json_decode($model->eff_exec, true), true), 'rows' => 15])->label('执行');
                     ?>
                     <div class="form-group">
                         <label class="control-label col-sm-2"></label>
@@ -110,11 +110,12 @@ echo \dmstr\widgets\Alert::widget();
                                     $modelName .= ' [' . $model->story_model_id . '|' . $model->story_model_detail_id . ']';
                                 }
                             }
-                            return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
-//                                'class' => 'btn btn-xs btn-primary',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#case-form-' . $model->id
-                            ]);
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_link_edit', 'id' => $model->id]));
+//                            return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
+////                                'class' => 'btn btn-xs btn-primary',
+//                                'data-toggle' => 'modal',
+//                                'data-target' => '#case-form-' . $model->id
+//                            ]);
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
@@ -136,11 +137,12 @@ echo \dmstr\widgets\Alert::widget();
                                     $modelName .= ' [' . $model->story_model_id2 . '|' . $model->story_model_detail_id2 . ']';
                                 }
                             }
-                            return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
-//                                'class' => 'btn btn-xs btn-primary',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#case-form-' . $model->id
-                            ]);
+                            return \yii\helpers\Html::a($modelName, \yii\helpers\Url::to(['model/story_model_link_edit', 'id' => $model->id]));
+//                            return \yii\helpers\Html::a($modelName, 'javascript:void(0);', [
+////                                'class' => 'btn btn-xs btn-primary',
+//                                'data-toggle' => 'modal',
+//                                'data-target' => '#case-form-' . $model->id
+//                            ]);
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_model_id2'),
                     ],
@@ -177,12 +179,15 @@ echo \dmstr\widgets\Alert::widget();
                         'header' => '操作',
                         'template' => '{lines} {edit} {copy} {delete}',
                         'buttons' => [
+//                            'edit' => function ($url, $model, $key) {
+//                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
+//                                    'class' => 'btn btn-xs btn-primary',
+//                                    'data-toggle' => 'modal',
+//                                    'data-target' => '#case-form-' . $model->id
+//                                ]);
+//                            },
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
-                                    'class' => 'btn btn-xs btn-primary',
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#case-form-' . $model->id
-                                ]);
+                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['model/story_model_link_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
                             },
                             'copy' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::a('复制', 'javascript:void(0)', [
