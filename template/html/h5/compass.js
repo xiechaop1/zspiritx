@@ -13,10 +13,10 @@
     }
     var zoom = 1;
     //compass div 宽高
-    var paperWidth = 300;
-    var paperHeight = 300;
-    var crLong = 130 * zoom;
-    var crShort = 100 * zoom;
+    var paperWidth = 600;
+    var paperHeight = 600;
+    var crLong = 260 * zoom;
+    var crShort = 200 * zoom;
     var cdiff = paperHeight / 2 - crLong;
     var initX = (pageWidth - paperWidth) > 0 ? (pageWidth - paperWidth) / 2 : 0;
     var initY = (pageHeight - paperHeight) > 0 ? (pageHeight - paperHeight) / 2 : 0;
@@ -151,18 +151,68 @@
 
 
     $(function (){
-        var lnglat1 = new AMap.LngLat(116, 39);
-        var lnglat2 = new AMap.LngLat(117, 39);
+        var user_lng=$("input[name='user_lng']").val();
+        var user_lat=$("input[name='user_lat']").val();
+        var target_lng=$("input[name='user_lng']").val();
+        var target_lat=$("input[name='user_lat']").val();
+
+        var lnglat1 = new AMap.LngLat(target_lng, target_lat);
+        var lnglat2 = new AMap.LngLat(user_lng, user_lat);
         var distance = lnglat1.distance(lnglat2);//计算lnglat1到lnglat2之间的实际距离(m)
         distance=Math.round(distance)
         $(".compass-text .color-red").empty().text(distance+"米");
 
+
         function getDistance(){
-            var lnglat1 = new AMap.LngLat(116, 29);
-            var lnglat2 = new AMap.LngLat(117, 39);
-            var distance = lnglat1.distance(lnglat2);//计算lnglat1到lnglat2之间的实际距离(m)
-            distance=Math.round(distance)
-            $(".compass-text .color-red").empty().text(distance+"米");
+            var user_id=$("input[name='user_id']").val();
+            var target_lng=$("input[name='user_lng']").val();
+            var target_lat=$("input[name='user_lat']").val();
+            var lnglat1 = new AMap.LngLat(target_lng, target_lat);
+
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: false,
+                url: 'https://h5.zspiritx.com.cn/user/get_user_loc',
+                data:{
+                    user_id:user_id,
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    var dataContent=data;
+                    var dataCon=$.toJSON(dataContent);
+                    var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    //console.log("ajax请求成功:"+data.toString())
+
+                    //新消息获取成功
+                    if(obj["code"]==200){
+                        var lat=obj.data.lat;
+                        var lng=obj.data.lng;
+
+                        if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
+                            var lnglat2 = new AMap.LngLat(lng, lat);
+                            var distance = lnglat1.distance(lnglat2);//计算lnglat1到lnglat2之间的实际距离(m)
+                            distance=Math.round(distance)
+                            $(".compass-text .color-red").empty().text(distance+"米");
+                        }
+
+                    }
+                    //新消息获取失败
+                    else{
+                        // $.alert(obj.msg)
+                    }
+
+                }
+            });
+
+
+
+
+
+
         }
 
         setInterval(getDistance,1000);

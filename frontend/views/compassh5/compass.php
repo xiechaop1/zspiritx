@@ -35,7 +35,12 @@ $this->title = '罗盘';
 <input type="hidden" name="story_stage_id" value="<?= $storyStageId ?>">
 <input type="hidden" name="user_lng" value="<?= $userLng ?>">
 <input type="hidden" name="user_lat" value="<?= $userLat ?>">
+<input type="hidden" name="target_lng" value="<?= $userLng ?>">
+<input type="hidden" name="target_lat" value="<?= $userLat ?>">
+
 <input type="hidden" name="dis_range" value="<?= $disRange ?>">
+
+
 <div class="compass-text">
   距离<span class="color-red">24.m</span>
 </div>

@@ -424,10 +424,11 @@ input[type="radio"]:checked+label::before {
 }
 .compass-text{
     text-align: center;
-    width: 50%;
+    width: 100%;
     display: block;
     margin-top: 50px;
-    font-size: 20px;
+    font-size: 36px;
+    color: #ffffff;
 }
 @media (min-width: 576px){
     .modal-dialog {
