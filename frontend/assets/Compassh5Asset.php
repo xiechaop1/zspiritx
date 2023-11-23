@@ -11,7 +11,7 @@ namespace frontend\assets;
 
 use yii\web\AssetBundle;
 
-class Qah5Asset extends AssetBundle
+class Compassh5Asset extends AssetBundle
 {
     public $sourcePath = '@runtime/../../template';
 
