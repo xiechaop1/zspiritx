@@ -21,7 +21,7 @@ class Compasseh5Controller extends Controller
         $request = \Yii::$app->request;
 
         return [
-            'compasss' => [
+            'compass' => [
                 'class' => 'frontend\actions\compassh5\Compass',
             ],
 
