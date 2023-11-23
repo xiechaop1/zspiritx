@@ -333,7 +333,7 @@ input[type="radio"] {
 }
 input[type="radio"]+label::before {
     content: "";
-    display: inline-block;
+    /*display: inline-block;*/
     position: absolute;
     left: 0px;
     top: 0px;
@@ -344,6 +344,7 @@ input[type="radio"]+label::before {
     border-radius: 50%;
     border: 1.5px solid rgb(214, 211, 211);
     background-color: #FFF;
+    display: none;
 
 }
 input[type="radio"]:checked+label::before {

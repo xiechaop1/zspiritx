@@ -148,3 +148,23 @@
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
     }
+
+
+    $(function (){
+        var lnglat1 = new AMap.LngLat(116, 39);
+        var lnglat2 = new AMap.LngLat(117, 39);
+        var distance = lnglat1.distance(lnglat2);//计算lnglat1到lnglat2之间的实际距离(m)
+        distance=Math.round(distance)
+        $(".compass-text .color-red").empty().text(distance+"米");
+
+        function getDistance(){
+            var lnglat1 = new AMap.LngLat(116, 29);
+            var lnglat2 = new AMap.LngLat(117, 39);
+            var distance = lnglat1.distance(lnglat2);//计算lnglat1到lnglat2之间的实际距离(m)
+            distance=Math.round(distance)
+            $(".compass-text .color-red").empty().text(distance+"米");
+        }
+
+        setInterval(getDistance,1000);
+
+    })
