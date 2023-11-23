@@ -18,7 +18,6 @@ class Qah5Asset extends AssetBundle
     public $css = [
         'html/h5/app.css',
         'html/h5/qa.css'
-
     ];
     public $js = [
         'js/jquery/jQuery-2.1.3.min.js',

@@ -36,7 +36,9 @@ $this->title = $qa['topic'];
 <input type="hidden" name="user_lng" value="<?= $userLng ?>">
 <input type="hidden" name="user_lat" value="<?= $userLat ?>">
 <input type="hidden" name="dis_range" value="<?= $disRange ?>">
-
+<div class="compass-text">
+  距离<span class="color-red">24.m</span>
+</div>
 <div id="compass"></div>
 
 
