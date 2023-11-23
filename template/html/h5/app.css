@@ -418,6 +418,13 @@ input[type="radio"]:checked+label::before {
 .map-text-context{
     font-size: 20px;
 }
+.compass-text{
+    text-align: center;
+    width: 50%;
+    display: block;
+    margin-top: 50px;
+    font-size: 20px;
+}
 @media (min-width: 576px){
     .modal-dialog {
         max-width: 600px;
