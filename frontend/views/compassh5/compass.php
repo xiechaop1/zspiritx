@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = $qa['topic'];
+$this->title = '罗盘';
 
 ?>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
