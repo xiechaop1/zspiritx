@@ -544,11 +544,15 @@ class Models extends Component
                                 'min_ct' => 1,
                             ];
 
-                            $noFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
-                            $noFoundModel->save();
+                            if (!empty($noFoundModel)) {
+                                $noFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                                $noFoundModel->save();
+                            }
 
-                            $partlyFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
-                            $partlyFoundModel->save();
+                            if (!empty($partlyFoundModel)) {
+                                $partlyFoundModel->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
+                                $partlyFoundModel->save();
+                            }
                         }
                         $userModelUsed->user_model_id = $userModelId;
                         $userModelUsed->use_status = UserModelsUsed::USE_STATUS_COMPLETED;
