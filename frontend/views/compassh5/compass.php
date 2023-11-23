@@ -46,6 +46,8 @@ $this->title = '罗盘';
 </div>
 <div id="compass"></div>
 
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=af1d4bafe8f99e4c53e02ba0eef6087c"></script>
+<script src="//webapi.amap.com/ui/1.1/main.js?v=1.1.1"></script>
 
 
 
