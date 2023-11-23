@@ -347,6 +347,9 @@ input[type="radio"]+label::before {
     display: none;
 
 }
+.answer-border input[type="radio"]+label::before{
+    display: none;
+}
 input[type="radio"]:checked+label::before {
     background-position: 50%;
     background-repeat: no-repeat;
