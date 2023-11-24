@@ -28,17 +28,27 @@ $this->registerMetaTag([
 $this->title = '罗盘';
 
 ?>
+
+<!--用户的ID，实时获取经纬度使用-->
 <input type="hidden" name="user_id" value="<?= $userId ?>">
+
+<!--用户的经纬度，可以为空-->
+<input type="hidden" name="user_lng" value="<?= $userLng ?>">
+<input type="hidden" name="user_lat" value="<?= $userLat ?>">
+
+<!--目的地的经纬度-->
+<input type="hidden" name="target_lng" value="<?= $userLng ?>">
+<input type="hidden" name="target_lat" value="<?= $userLat ?>">
+
+
+<!--目的地的经纬度-->
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="team_id" value="<?= $teamId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="story_stage_id" value="<?= $storyStageId ?>">
-<input type="hidden" name="user_lng" value="<?= $userLng ?>">
-<input type="hidden" name="user_lat" value="<?= $userLat ?>">
-<input type="hidden" name="target_lng" value="<?= $userLng ?>">
-<input type="hidden" name="target_lat" value="<?= $userLat ?>">
-
 <input type="hidden" name="dis_range" value="<?= $disRange ?>">
+
+
 <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
     返回
 </div>
