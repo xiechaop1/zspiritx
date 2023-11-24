@@ -39,7 +39,9 @@ $this->title = '罗盘';
 <input type="hidden" name="target_lat" value="<?= $userLat ?>">
 
 <input type="hidden" name="dis_range" value="<?= $disRange ?>">
-
+<div class="btn-m-green m-t-30  m-l-30" id="return_btn">
+    返回
+</div>
 
 <div class="compass-text">
   距离<span class="color-red">24.m</span>

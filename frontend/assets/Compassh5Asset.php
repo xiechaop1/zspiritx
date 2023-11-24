@@ -26,6 +26,7 @@ class Compassh5Asset extends AssetBundle
         'html/h5/rap.js',
         'html/h5/hammer.js',
         'html/h5/compass.js',
+        'html/h5/app.js',
         ];
 
 
