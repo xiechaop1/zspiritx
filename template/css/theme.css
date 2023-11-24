@@ -1345,10 +1345,10 @@ input[type="checkbox"] + label::before{
     color: #FFF;
     background-color: #FFF;
     width: 30px;
-    height: 25px;
+    height: 30px;
     margin-right: 7px;
     font-family: "iconfont" !important;
-    border-radius: 3px;
+    border-radius: 4px !important;
 }
 input:disabled[type="checkbox"] + label::before {
     content: '';

@@ -78,6 +78,16 @@ $this->title = '我的背包';
                 ';
                 }
                 ?>
+                <!--checkbox -->
+                <!--
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="checkbox" name="answer" value="1" id="checkbox_1" >
+                        <label class="form-check-label fs-30 answer-btn" for="checkbox_1">
+                            8跟
+                        </label>
+                    </div>
+                </div>-->
 
 
 <!--
