@@ -56,7 +56,7 @@
             strokeWidth = 2
             degText = compassPaper.text(paperWidth / 2, (paperHeight / 2 - crShort) * 4 / 5, i).attr({
                 fill: 'white',
-                'font-size': '16rem'
+                'font-size': '20rem'
             }).transform('R' + i + ', ' + paperWidth / 2 + ', ' + paperHeight / 2)
             degText.degPosition = i
             compass.push(degText)
@@ -89,7 +89,7 @@
     redTriangle.degPosition = 0
     compass.push(redTriangle)
 
-    var alphaText = compassPaper.text((paperWidth / 2), 440, '0°').attr({
+    var alphaText = compassPaper.text((paperWidth / 2), 880, '0°').attr({
         fill: 'white',
         'font-size': '30rem'
     })
@@ -145,12 +145,14 @@
     //手机是否支持重力事件
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 30))
+        // alert(" support Device Orientation");
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
     }
 
 
     $(function (){
+        //初始化距离信息
         var user_lng=$("input[name='user_lng']").val();
         var user_lat=$("input[name='user_lat']").val();
         var target_lng=$("input[name='user_lng']").val();
@@ -160,9 +162,10 @@
         var lnglat2 = new AMap.LngLat(user_lng, user_lat);
         var distance = lnglat1.distance(lnglat2);//计算lnglat1到lnglat2之间的实际距离(m)
         distance=Math.round(distance)
-        $(".compass-text .color-red").empty().text(distance+"米");
+        $(".compass-text .color-red").empty().text(distance+" 米");
 
 
+        //更具用户经纬度获取和目的地的信息
         function getDistance(){
             var user_id=$("input[name='user_id']").val();
             var target_lng=$("input[name='user_lng']").val();
@@ -215,6 +218,7 @@
 
         }
 
+        //定时更新距离信息
         setInterval(getDistance,1000);
 
     })
