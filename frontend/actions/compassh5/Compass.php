@@ -32,6 +32,8 @@ class Compass extends Action
         $teamId = !empty($_GET['team_id']) ? $_GET['team_id'] : 0;
         $userLng = !empty($_GET['user_lng']) ? $_GET['user_lng'] : 0;
         $userLat = !empty($_GET['user_lat']) ? $_GET['user_lat'] : 0;
+        $targetLng = !empty($_GET['target_lng']) ? $_GET['target_lng'] : 0;
+        $targetLat = !empty($_GET['target_lat']) ? $_GET['target_lat'] : 0;
         $disRange = !empty($_GET['dis_range']) ? $_GET['dis_range'] : 0;
 
         return $this->controller->render('compass', [
@@ -42,6 +44,8 @@ class Compass extends Action
             'teamId'        => $teamId,
             'userLng'       => $userLng,
             'userLat'       => $userLat,
+            'targetLng'     => $targetLng,
+            'targetLat'     => $targetLat,
             'disRange'      => $disRange,
         ]);
     }

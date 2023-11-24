@@ -37,8 +37,8 @@ $this->title = '罗盘';
 <input type="hidden" name="user_lat" value="<?= $userLat ?>">
 
 <!--目的地的经纬度-->
-<input type="hidden" name="target_lng" value="<?= $userLng ?>">
-<input type="hidden" name="target_lat" value="<?= $userLat ?>">
+<input type="hidden" name="target_lng" value="<?= $targetLng ?>">
+<input type="hidden" name="target_lat" value="<?= $targetLat ?>">
 
 
 <!--目的地的经纬度-->
