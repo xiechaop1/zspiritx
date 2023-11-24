@@ -53,9 +53,9 @@ $this->title = '我的背包';
                     $label = !empty($item->storyModel->story_model_name) ? $item->storyModel->story_model_name : $item->model->model_name;
                     $desc = !empty($item->storyModel->story_model_desc) ? $item->storyModel->story_model_desc : $item->model->model_desc;
                     $txt = $label;
-                    if (!empty($desc)) {
-                        $txt .= '： ' . $desc;
-                    }
+//                    if (!empty($desc)) {
+//                        $txt .= '： ' . $desc;
+//                    }
 
 
                     if (!empty($item->storyModel)
