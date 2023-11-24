@@ -56,7 +56,7 @@
             strokeWidth = 2
             degText = compassPaper.text(paperWidth / 2, (paperHeight / 2 - crShort) * 4 / 5, i).attr({
                 fill: 'white',
-                'font-size': '20rem'
+                'font-size': '24rem'
             }).transform('R' + i + ', ' + paperWidth / 2 + ', ' + paperHeight / 2)
             degText.degPosition = i
             compass.push(degText)
@@ -75,7 +75,7 @@
     ['北', '东', '南', '西'].forEach(function(direction, index) {
         var directionText = compassPaper.text(paperWidth / 2, (paperHeight / 2 - crShort + crShort / 3), direction).attr({
             fill: 'white',
-            'font-size': '20rem'
+            'font-size': '30rem'
         }).transform('R' + index * 90 + ', ' + (paperWidth / 2) + ',' + paperHeight / 2)
         directionText.degPosition = index * 90
         compass.push(directionText)
@@ -116,6 +116,9 @@
     function deviceOrientationListener(event) {
 
         var alpha = event.webkitCompassHeading || event.alpha;
+
+        $("#compass-motion").empty().text(event+","+alpha);
+
         alphaText.attr({
             text: parseInt(alpha) + '°'
         });
@@ -144,7 +147,7 @@
 
     //手机是否支持重力事件
     if (window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 30))
+        window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 10))
         // alert(" support Device Orientation");
     } else {
         alert("Sorry your browser doesn't support Device Orientation");

@@ -54,8 +54,11 @@ $this->title = '罗盘';
 </div>
 
 <div class="compass-text">
-  距离<span class="color-red">24.m</span>
+  距离 <span class="color-red">-- 米</span>
 </div>
+<div id="compass-motion">
+</div>
+
 <div id="compass"></div>
 
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=af1d4bafe8f99e4c53e02ba0eef6087c"></script>
