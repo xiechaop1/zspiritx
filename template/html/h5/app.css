@@ -405,6 +405,18 @@ input[type="radio"]:checked+label::before {
     background-repeat: no-repeat;
     background-size: contain;
 }
+.marker_user{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    display: inline-block;
+    line-height: 30px;
+    font-size: 16px;
+    color:#ffffff;
+    background-image: url("../../img/map/marker_2.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
 .map-info-box{
     position: absolute;
     bottom: 0;
