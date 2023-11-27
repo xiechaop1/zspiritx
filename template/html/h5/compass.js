@@ -117,7 +117,7 @@
 
         var alpha = event.webkitCompassHeading || event.alpha;
 
-        $("#compass-motion").empty().text(event+","+alpha);
+        $("#compass-motion").empty().text("event:"+event+", alpha:"+alpha);
 
         alphaText.attr({
             text: parseInt(alpha) + '°'
@@ -148,7 +148,8 @@
     //手机是否支持重力事件
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 10))
-        // alert(" support Device Orientation");
+        alert(" support Device Orientation");
+
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
     }
