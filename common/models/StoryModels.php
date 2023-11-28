@@ -46,10 +46,13 @@ class StoryModels extends \common\models\gii\StoryModels
     const ACTIVE_TYPE_CHAT      = 1;    // 聊天
     const ACTIVE_TYPE_BUFF      = 2;    // BUFF
     const ACTIVE_TYPE_MODEL     = 3;    // 模型
+    const ACTIVE_TYPE_MODEL_DISPLAY = 4;    // 模型展示
+
     public static $activeType2Name = [
         self::ACTIVE_TYPE_CHAT => '聊天',
         self::ACTIVE_TYPE_BUFF => 'BUFF',
         self::ACTIVE_TYPE_MODEL => '对模型',
+        self::ACTIVE_TYPE_MODEL_DISPLAY => '模型展示',
     ];
 
     const VISIBLE_SHOW        = 0;    // 显示
