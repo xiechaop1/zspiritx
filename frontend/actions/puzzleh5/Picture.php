@@ -35,10 +35,18 @@ class Picture extends Action
         $image = 'img/home/index_image.jpg';
         $image = Attachment::completeUrl($image, false);
 
-        $blockSize = 200;
-        $rows = 4;
-        $cols = 4;
-        $pictures = \common\helpers\Puzzle::cutImage($image, $blockSize, $rows, $cols);
+        $image = 'http://test.zspiritx.com:8089/hb.jpg';
+
+//        $blockSize = 200;
+//        $rows = 4;
+//        $cols = 4;
+
+        $prefix = !empty($_GET['prefix']) ? $_GET['prefix'] : 0;
+        $rows = !empty($_GET['rows']) ? $_GET['rows'] : 0;
+        $cols = !empty($_GET['cols']) ? $_GET['cols'] : 0;
+        $blockSize = !empty($_GET['block_size']) ? $_GET['block_size'] : 200;
+        $image = !empty($_GET['image']) ? $_GET['image'] : '';
+        $pictures = \common\helpers\Puzzle::cutImage($image, $blockSize, $rows, $cols, $prefix);
 //
         $picId = !empty($_GET['pic_id']) ? $_GET['pic_id'] : 0;
 //
@@ -55,8 +63,8 @@ class Picture extends Action
 //        }
 //        imagecopy($gameImage, $pictures[$picId]['image'], 0, 0, 0, 0, $blockSize, $blockSize);
 
-        header('Content-Type: image/jpeg');
-        imagejpeg($pictures[$picId]);
+//        header('Content-Type: image/jpeg');
+//        imagejpeg($pictures[$picId]);
 
 //        \common\helpers\Common::createPuzzle($image, 200, 4, 4,100);
     }

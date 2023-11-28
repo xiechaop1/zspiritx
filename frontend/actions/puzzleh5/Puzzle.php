@@ -35,12 +35,20 @@ class Puzzle extends Action
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
 
+        $rows = !empty($_GET['rows']) ? $_GET['rows'] : 0;
+        $cols = !empty($_GET['cols']) ? $_GET['cols'] : 0;
+        $imgWidth = !empty($_GET['img_width']) ? $_GET['img_width'] : 0;
+        $prefix = !empty($_GET['prefix']) ? $_GET['prefix'] : 0;
 
         return $this->controller->render('puzzle', [
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'sessionStageId'    => $sessionStageId,
+            'rows'          => $rows,
+            'cols'          => $cols,
+            'prefix'        => $prefix,
+            'imgWidth'      => $imgWidth,
         ]);
     }
 }

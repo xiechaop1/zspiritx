@@ -28,6 +28,23 @@ $this->registerMetaTag([
 $this->title = 'Puzzle';
 
 ?>
+<style>
+    .puzzle_item_active {
+        border: 2px solid red;
+    }
+    .puzzle_item {
+        border: 2px solid white;
+    }
+    .puzzle_item_end {
+        border: 0px;
+    }
+    .answer-right {
+        position: absolute;
+        top: 150px;
+        left: 35px;
+        background: #9999;
+    }
+</style>
 <audio autoplay loop>
   <source src="" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
@@ -39,6 +56,9 @@ $this->title = 'Puzzle';
 
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
+<!--            <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">-->
+<!--                返回-->
+<!--            </div>-->
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
                     <div class="npc-name">
@@ -47,14 +67,28 @@ $this->title = 'Puzzle';
                     <div class="npc-name" style="right: 60px;" id="qa_return_btn">
                         X
                     </div>
-                    <div>
-                        <?php
-                        for ($i=0; $i<16; $i++) {
+
+                    <?php
+                    $iList = [];
+                    for ($i=0; $i<$rows * $cols; $i++) {
+                        $iList[] = $i;
+                    }
+                    shuffle($iList);
+
+                    ?>
+                    <div style="clear: both;">
+                    <?php
+                    for ($i=0; $i<sizeof($iList); $i++) {
                         ?>
-                        <img src="/puzzleh5/picture?pic_id=<?= $i?>" width="200" alt=""/>
-                            <?php
+                        <div class="puzzle_item" i="<?= $iList[$i] ?>" id="puzzle_image_<?= $iList[$i] ?>" style="float: left;">
+                        <img src="<?= \common\helpers\Attachment::completeUrl($prefix . $iList[$i] . '.jpg', true, $imgWidth) ?>"  width="<?= $imgWidth ?>" alt=""/>
+                        </div>
+                    <?php
+                        if (($i+1)%$cols==0) {
+                            echo '</div><div>';
                         }
-                        ?>
+                    }
+                    ?>
                     </div>
                     <!--<div class="hpa-ctr">
                         <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
@@ -65,11 +99,11 @@ $this->title = 'Puzzle';
             <div class="row" id="answer-box">
 
             </div>
-            <div class="row hide" id="answer-right-box">
+            <div class="row hide answer-right" id="answer-right-box">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
                     <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
                     <div class="answer-title m-t-40">
-
+                        恭喜您答对了
                     </div>
                     <div class="answer-detail m-t-40">
 
@@ -88,9 +122,9 @@ $this->title = 'Puzzle';
             </div>
 
                     <div class="text-center m-t-30">
-
-                提交
-            </label>
+<!--            <label class="btn-m-green" id="submit_btn">-->
+<!--                提交-->
+<!--            </label>-->
         </div>
         </div>
 

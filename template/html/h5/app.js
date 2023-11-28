@@ -532,4 +532,95 @@ $(function () {
 
     });
 
+    var oldI = -1;
+    var tarI = -1;
+    $('.puzzle_item').click(function() {
+        // console.log($(this).attr('i'));
+        var thisI = $(this).attr('i');
+
+        if (oldI == '-1') {
+            oldI = thisI;
+            $(this).removeClass('puzzle_item');
+            $(this).addClass('puzzle_item_active');
+            console.log(oldI);
+        } else {
+            var oldDiv = $('#puzzle_image_'+oldI);
+            var newDiv = $('#puzzle_image_'+thisI);
+
+            oldDiv.removeClass('puzzle_item_active');
+            oldDiv.addClass('puzzle_item');
+
+            var tempDiv = newDiv.html();
+            var tempDivId = newDiv.attr('id');
+            var tempDivI = newDiv.attr('i');
+            newDiv.html(oldDiv.html());
+            newDiv.attr('id', oldDiv.attr('id'));
+            newDiv.attr('i', oldDiv.attr('i'));
+            oldDiv.html(tempDiv);
+            oldDiv.attr('id', tempDivId);
+            oldDiv.attr('i', tempDivI);
+            oldI = -1;
+            // var oldImg = $('#puzzle_image_'+oldI).attr('src');
+            // var
+            //     // .find('img').attr('src');
+            // // console.log(newImg);
+            // var tempI = thisI;
+            // var newI = oldI;
+            // oldI = tempI;
+
+            // $(this).removeClass('puzzle_item_active');
+            // $(this).addClass('puzzle_item');
+        }
+
+        var items = $('.puzzle_item');
+        var ct = 0;
+        var right = 1;
+        items.each(function() {
+            var eachI = $(this).attr('i');
+            if (eachI != ct) {
+                console.log('eachI' + eachI);
+                console.log('ct' + ct);
+                right = 0;
+                return false;
+            }
+            ct++;
+        });
+        console.log('right = ' + right);
+        if (right == 1) {
+            console.log(right);
+            $('.puzzle_item').unbind('click');
+            $('.puzzle_item').removeClass('puzzle_item');
+            $('.puzzle_item').addClass('puzzle_item_end');
+            $("#answer-box").hide();
+            $("#answer-right-box").removeClass('hide');
+            // $("#h5-right").modal('show');
+            // setTimeout(function (){
+            //     // Unity.call('WebViewOff&TrueAnswer');
+            //     var params = {
+            //         'WebViewOff':1,
+            //         'AnswerType':1
+            //     }
+            //     var data=$.toJSON(params);
+            //     Unity.call(data);
+            // },3000)
+            setTimeout(function (){
+                // Unity.call('WebViewOff&TrueAnswer');
+                // var params = {
+                //     'WebViewOff':1,
+                //     'AnswerType':1
+                // }
+                // var data=$.toJSON(params);
+                // Unity.call(data);
+                $("#answer-right-box").addClass('hide');
+            }, 4000);
+        }
+        // for (itemI in items) {
+        //     // if (items[i].attr('i')) {
+        //     //     tarI = i;
+        //     // }
+        //     console.log(itemI);
+        //     // console.log($(i).attr('i'));
+        // }
+    });
+
 })
