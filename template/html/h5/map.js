@@ -337,10 +337,41 @@ $(function () {
         //     });
         // });
     }
+    function drawUser(markers){
+        markers.forEach(function(marker) {
+            var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+                marker.title+'</span>';
+            var marker= new AMap.Marker({
+                content: markerContent,
+                map: map,
+                icon: marker.icon,
+                position: [marker.longitude,marker.latitude],
+                offset: new AMap.Pixel(-13, -30)
+            });
+            // marker.on('click', function(e){
+            //     showPoiDetail(e);
+            // });
+        });
+        // markers.forEach(function(marker) {
+        //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
+        //         '</span>';
+        //     var marker= new AMap.Marker({
+        //         content: markerContent,
+        //         map: map,
+        //         // icon: marker.icon,
+        //         position: [marker.longitude, marker.latitude],
+        //         offset: new AMap.Pixel(-13, -30)
+        //     });
+        //     markers.on('click', function(e){
+        //         showPoiDetail();
+        //     });
+        // });
+    }
+
     getPoi();
 
 
-    // setInterval(getPoi,1000);
+    setInterval(getPoi,2000);
     
 });
 

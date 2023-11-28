@@ -16,6 +16,7 @@ class Compassh5Asset extends AssetBundle
     public $sourcePath = '@runtime/../../template';
 
     public $css = [
+        'css/theme.css',
         'html/h5/app.css',
         'html/h5/qa.css'
     ];
