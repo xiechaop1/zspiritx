@@ -106,7 +106,7 @@ $this->title = 'Puzzle';
                         恭喜您答对了
                     </div>
                     <div class="answer-detail m-t-40">
-
+                        现在去找找这张图吧~
                     </div>
                 </div>
 
