@@ -96,8 +96,10 @@ $this->title = 'Puzzle';
                     </div>-->
                 </div>
             </div>
-            <div class="row" id="answer-box">
-
+            <div class="row hide" id="answer-box">
+                <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn" answer_type="1">
+                    确定
+                </div>
             </div>
             <div class="row hide answer-right" id="answer-right-box">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">

@@ -591,7 +591,7 @@ $(function () {
             $('.puzzle_item').unbind('click');
             $('.puzzle_item').removeClass('puzzle_item');
             $('.puzzle_item').addClass('puzzle_item_end');
-            $("#answer-box").hide();
+            $("#answer-box").removeClass('hide');
             $("#answer-right-box").removeClass('hide');
             // $("#h5-right").modal('show');
             // setTimeout(function (){
