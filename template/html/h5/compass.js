@@ -117,7 +117,7 @@
 
         var alpha = event.webkitCompassHeading || event.alpha;
 
-        $("#compass-motion").empty().text(event+","+alpha);
+        $("#compass-motion").empty().text("event:"+event+", alpha:"+alpha);
 
         alphaText.attr({
             text: parseInt(alpha) + '°'
@@ -145,10 +145,66 @@
         })
     }
 
+    // 是否是iOS手机
+    function getIos() {
+        var u = window.navigator.userAgent;
+        return !! u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    }
+
+    function requestPermissionsIOS() {
+        requestDeviceMotionIOS();
+        requestDeviceOrientationIOS();
+    }
+
+    
+    function requestDeviceMotionIOS() {
+
+        if (typeof(DeviceMotionEvent).requestPermission === 'function') {
+            (DeviceMotionEvent).requestPermission().then(permissionState =>{
+
+                if (permissionState === 'granted') {
+                    window.addEventListener('devicemotion', () =>{
+
+                    });
+                }
+            }).
+            catch((err) =>{
+                alert(JSON.stringify(err))
+                alert("用户未允许权限");
+            })
+        } else {
+            // handle regular non iOS 13+ devices
+        }
+    }
+
+    // requesting device orientation permission
+    function requestDeviceOrientationIOS() {
+
+        if (typeof(DeviceOrientationEvent).requestPermission === 'function') { (DeviceOrientationEvent).requestPermission().then(permissionState =>{
+            if (permissionState === 'granted') {
+                window.addEventListener('deviceorientation', () =>{
+
+                });
+            }
+        }).
+        catch((err) =>{
+            alert(JSON.stringify(err))
+            alert("用户未允许权限");
+        })
+        } else {
+            // handle regular non iOS 13+ devices
+        }
+    }
+
+    function addPermission() {
+        requestPermissionsIOS();
+    }
+
     //手机是否支持重力事件
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 10))
         // alert(" support Device Orientation");
+
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
     }

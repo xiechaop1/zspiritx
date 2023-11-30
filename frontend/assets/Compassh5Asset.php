@@ -24,6 +24,7 @@ class Compassh5Asset extends AssetBundle
         'js/jquery/jQuery-2.1.3.min.js',
         'js/jquery/jquery.json.min.js',
         'js/bootstrap/bootstrap.min.js',
+        'js/owl.carousel/owl.carousel.js',
         'html/h5/rap.js',
         'html/h5/hammer.js',
         'html/h5/compass.js',

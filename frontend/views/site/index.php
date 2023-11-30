@@ -23,7 +23,7 @@ $this->title = '庄生科技';
 
                 <!-- logo -->
                 <div class="logo">
-                    <a href="index.html">
+                    <a href="">
                         <img class="l-black" src="../../static/image/logo.png" />
                         <img class="l-white" src="../../static/image/logo.png" />
                         <img class="l-color" src="../../static/image/logo.png" />
@@ -84,10 +84,10 @@ $this->title = '庄生科技';
                                         </p>
                                     </div>
                                 </div>
-                                <div class="row ma-t-50">
+                                <div class="row m-t-20">
                                     <div class="col-md-8 xs-m-b-40">
                                         <div class="row">
-                                            <div class="col-md-6 col-xs-6">
+                                            <div class="col-md-6 col-xs-6 m-t-20">
                                                 <p class="text-left">
                                                     iPhone下载（支持iPhone8以上机型）
                                                 </p>
@@ -95,7 +95,7 @@ $this->title = '庄生科技';
                                                     <img src="<?= $qrCode['ios']; ?>" class="img-responsive"/>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-xs-6">
+                                            <div class="col-md-6 col-xs-6 m-t-20">
                                                 <p class="text-left">
                                                     华为下载（支持Mate20以上机型）
                                                 </p>
@@ -103,7 +103,7 @@ $this->title = '庄生科技';
                                                     <img src="<?= $qrCode['huawei']; ?>" class="img-responsive"/>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-xs-6">
+                                            <div class="col-md-6 col-xs-6 m-t-20">
                                                 <p class="text-left">
                                                     敬请期待
                                                 </p>
