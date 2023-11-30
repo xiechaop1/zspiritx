@@ -1088,6 +1088,7 @@ class DoApi extends ApiAction
                     $modelUId = $storyModel->model_u_id;
                     $expirationInterval = 3600;
                     Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $modelUId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
+                    $minCt = 0;
                     break;
                 default:
                     break;
