@@ -84,7 +84,7 @@ $this->title = '庄生科技';
                                         </p>
                                     </div>
                                 </div>
-                                <div class="row ma-t-50">
+                                <div class="row m-t-20">
                                     <div class="col-md-8 xs-m-b-40">
                                         <div class="row">
                                             <div class="col-md-6 col-xs-6 m-t-20">
