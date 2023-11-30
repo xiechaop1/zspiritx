@@ -141,6 +141,7 @@ class Puzzle
 
         $width = $imageSize[0];
         $height = $imageSize[1];
+        echo 'width: ' . $width . ' ' . 'height: ' . $height . '<br>';
 
         $blockSizeX = intval($width / $cols);
         $blockSizeY = intval($height / $rows);

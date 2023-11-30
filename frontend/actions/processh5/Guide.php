@@ -159,7 +159,7 @@ class Guide extends Action
             'page'        => $page,
             'pageCount'   => sizeof($txt),
             'storyId'     => $storyId,
-            'content'     => $txt[$page],
+            'content'     => $txt[$page - 1],
             'type'          => $type,
         ]);
 

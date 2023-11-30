@@ -37,6 +37,12 @@ class Picture extends Action
 
         $image = 'http://test.zspiritx.com:8089/hb.jpg';
 
+        $image = !empty($_GET['image']) ? $_GET['image'] : '';
+
+        if (strpos($image, 4) != 'http') {
+            $image = 'http://test.zspiritx.com:8089/' . $image;
+        }
+
 //        $blockSize = 200;
 //        $rows = 4;
 //        $cols = 4;
