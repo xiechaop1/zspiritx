@@ -1085,7 +1085,7 @@ class DoApi extends ApiAction
                         $minCt = !empty($checkRet['min_ct']) ? $checkRet['min_ct'] : 0;
                     break;
                 case StoryModels::ACTIVE_TYPE_MODEL_DISPLAY:
-                    $modelUId = $storyModel->model_u_id;
+                    $modelUId = $storyModel->model_inst_u_id;
                     $expirationInterval = 3600;
                     Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $modelUId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
                     $minCt = 0;
