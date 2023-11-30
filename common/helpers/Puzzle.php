@@ -135,21 +135,32 @@ class Puzzle
 // 调用生成迷宫图片函数
 //generateMazeImage(400, 400, 40);
 
-    public static function cutImage($imagePath, $blockSize = 200, $rows = 4, $cols = 4) {
+    public static function cutImage($imagePath, $blockSize = 200, $rows = 4, $cols = 4, $prefix = 'puzzle_image_') {
         $image = imagecreatefromjpeg($imagePath);
         $imageSize = getimagesize($imagePath);
 
-        for ($x = 0; $x < $rows; $x++) {
-            for ($y = 0; $y < $cols; $y++) {
-                $gameImage = imagecreatetruecolor($blockSize, $blockSize);
-                imagecopy($gameImage, $image, 0, 0, $x * $blockSize, $y * $blockSize, $blockSize, $blockSize);
+        $width = $imageSize[0];
+        $height = $imageSize[1];
+        echo 'width: ' . $width . ' ' . 'height: ' . $height . '<br>';
+
+        $blockSizeX = intval($width / $cols);
+        $blockSizeY = intval($height / $rows);
+
+        $ct = 0;
+        for ($y = 0; $y < $cols; $y++) {
+            for ($x = 0; $x < $rows; $x++) {
+                $gameImage = imagecreatetruecolor($blockSizeX, $blockSizeY);
+                echo $x * $blockSizeX . ' ' . $y * $blockSizeY . ' ' . $blockSizeX . ' ' . $blockSizeY . '<br>';
+                imagecopy($gameImage, $image, 0, 0, $x * $blockSizeX, $y * $blockSizeY, $blockSizeX, $blockSizeY);
 //
 //                $blockImages[] = [
 ////                    'image' => imagecrop($image, ['x' => $x * $blockSize, 'y' => $y * $blockSize, 'width' => $blockSize, 'height' => $blockSize]),
 //                    'image' => $gameImage,
 //                    'blockSize' => $blockSize,
 //                ];
-                imagejpeg($gameImage, 'puzzle_image_' . $x . '_' . $y . '.jpg');
+//                imagejpeg($gameImage, 'puzzle_image_' . $x . '_' . $y . '.jpg');
+                imagejpeg($gameImage, $prefix . $ct . '.jpg');
+                $ct++;
 //                 $blockImages[] = $gameImage;
             }
         }
