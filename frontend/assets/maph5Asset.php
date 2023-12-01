@@ -15,35 +15,36 @@ class maph5Asset extends AssetBundle
 {
     public $sourcePath = '@runtime/../../template';
 
+    CONST HOST = 'https://s.nowkey.net/zspiritx/';
     public $css = [
-    	'css/bootstrap/bootstrap.min.css',
-        'js/bootoast/bootoast.css',
-        'css/theme.css',
-        'css/dropdown/dropdowm.css',
-        'css/iconfont.css',
-        'css/datePicker/bootstrap-datepicker.css',
-        'css/bootstrap-clockpicker.css',
-        'js/jqueryToast/css/toast.styleH5.css',
-        'css/iconfont.css',
-        'css/animate.css',
-        'html/h5/app.css',
-        'html/h5/qa.css'
+        self::HOST . 'css/bootstrap/bootstrap.min.css',
+        self::HOST . 'js/bootoast/bootoast.css',
+        self::HOST . 'css/theme.css',
+        self::HOST . 'css/dropdown/dropdowm.css',
+        self::HOST . 'css/iconfont.css',
+        self::HOST . 'css/datePicker/bootstrap-datepicker.css',
+        self::HOST . 'css/bootstrap-clockpicker.css',
+        self::HOST . 'js/jqueryToast/css/toast.styleH5.css',
+        self::HOST . 'css/iconfont.css',
+        self::HOST . 'css/animate.css',
+        self::HOST . 'html/h5/app.css',
+        self::HOST . 'html/h5/qa.css'
 
     ];
     public $js = [
-    	'js/jquery/jQuery-2.1.3.min.js',
-        'js/jquery/jquery.json.min.js',
-        'js/Popper/Popper.js',
-        'js/bootstrap/bootstrap.min.js',
-        'js/bootoast/bootoast.js',
-        'js/alert.js',
-        'js/myslideup.js',
-        'js/dropdown/dropdown.js',
-        'js/datePicker/moment.js',
-        'js/jqueryToast/js/toast.script.js',
-        'js/getOptions.js',
-        'js/jquery.SuperSlide.2.1.3.js',
-        'html/h5/map.js',
+        self::HOST . 'js/jquery/jQuery-2.1.3.min.js',
+        self::HOST . 'js/jquery/jquery.json.min.js',
+        self::HOST . 'js/Popper/Popper.js',
+        self::HOST . 'js/bootstrap/bootstrap.min.js',
+        self::HOST . 'js/bootoast/bootoast.js',
+        self::HOST . 'js/alert.js',
+        self::HOST . 'js/myslideup.js',
+        self::HOST . 'js/dropdown/dropdown.js',
+        self::HOST . 'js/datePicker/moment.js',
+        self::HOST . 'js/jqueryToast/js/toast.script.js',
+        self::HOST . 'js/getOptions.js',
+        self::HOST . 'js/jquery.SuperSlide.2.1.3.js',
+        self::HOST . 'html/h5/map.js',
         ];
 
 
