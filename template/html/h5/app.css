@@ -442,6 +442,31 @@ input[type="radio"]:checked+label::before {
     font-size: 36px;
     color: #ffffff;
 }
+.box-center{
+    text-align: center;
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    margin-left: -80px;
+}
+.m-t-10{
+    margin-top: 10px;
+}
+.m-t-20{
+    margin-top: 20px;
+}
+
+.m-t-30{
+    margin-top: 30px;
+}
+
+.m-t-40{
+    margin-top: 40px;
+}
+
+.m-t-50{
+    margin-top: 50px;
+}
 @media (min-width: 576px){
     .modal-dialog {
         max-width: 600px;
