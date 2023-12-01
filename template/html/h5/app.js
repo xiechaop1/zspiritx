@@ -623,4 +623,67 @@ $(function () {
         // }
     });
 
+    $('.puzzle_word_item').click(function() {
+        // console.log($(this).attr('i'));
+        // var thisI = $(this).attr('i');
+
+        $(this).toggleClass('puzzle_word_item_active');
+
+        // $(this).removeClass('puzzle_word_item');
+        // $(this).addClass('puzzle_word_item_active');
+
+        var st_answer = $('#st_answer').val();
+        var ct = 0;
+        var right = 0;
+        var st_right = st_answer.length;
+        var items = $('.puzzle_word_item_active');
+        var ret = 0;
+        items.each(function() {
+            var eachVal = $(this).attr('val');
+            if (eachVal == 0) {
+                right = 0;
+                return false;
+            }
+            ret += parseInt(eachVal);
+            console.log(ret);
+            if (ret == st_right) {
+                right = 1;
+            }
+        });
+        console.log('right = ' + right);
+        if (right == 1) {
+            console.log(right);
+            $('.puzzle_item').unbind('click');
+            $("#answer-box").removeClass('hide');
+            $("#answer-right-box").removeClass('hide');
+            // $("#h5-right").modal('show');
+            setTimeout(function (){
+                // Unity.call('WebViewOff&TrueAnswer');
+                var params = {
+                    'WebViewOff':1,
+                    'AnswerType':1
+                }
+                var data=$.toJSON(params);
+                Unity.call(data);
+            },3000);
+            // setTimeout(function (){
+            //     // Unity.call('WebViewOff&TrueAnswer');
+            //     // var params = {
+            //     //     'WebViewOff':1,
+            //     //     'AnswerType':1
+            //     // }
+            //     // var data=$.toJSON(params);
+            //     // Unity.call(data);
+            //     $("#answer-right-box").addClass('hide');
+            // }, 4000);
+        }
+        // for (itemI in items) {
+        //     // if (items[i].attr('i')) {
+        //     //     tarI = i;
+        //     // }
+        //     console.log(itemI);
+        //     // console.log($(i).attr('i'));
+        // }
+    });
+
 })
