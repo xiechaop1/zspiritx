@@ -56,11 +56,14 @@ $this->title = '罗盘';
 <div class="compass-text">
   距离 <span class="color-red">-- 米</span>
 </div>
-<button onclick="addPermission()">
-  开启罗盘
-</button>
-<div id="compass-motion">
+<div class="box-center m-t-40">
+  <div class="btn-m-green m-t-30  m-auto"  onclick="addPermission()">
+    开启罗盘
+  </div>
 </div>
+
+<!--<div id="compass-motion">
+</div>-->
 
 <div id="compass"></div>
 
