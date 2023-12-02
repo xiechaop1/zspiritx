@@ -141,7 +141,7 @@ class Model
                 }
 
                 if (!empty($dia['passiveModels'])) {
-                    foreach ($dia['passiveModels'] as $passiveModelInstUid) {
+                    foreach ($dia['passiveModels'] as $idx => $passiveModelInstUid) {
                         if (strpos($passiveModelInstUid, '[GROUP]') !== false) {
                             $groupName = str_replace('[GROUP]', '', $passiveModelInstUid);
                             $groupStoryModels = StoryModels::find()->where(['model_group' => $groupName, 'story_id' => $storyModel->story_id])->all();
@@ -150,13 +150,13 @@ class Model
                                     $dia['passiveModels'][] = $groupStoryModel->model_inst_u_id;
                                 }
                             }
-                            unset($dia['passiveModels'], $passiveModelInstUid);
+                            unset($dia['passiveModels'][$idx]);
                         }
                     }
                 }
 
                 if (!empty($dia['activeModels'])) {
-                    foreach ($dia['activeModels'] as $activeModelInstUid) {
+                    foreach ($dia['activeModels'] as $idx => $activeModelInstUid) {
                         if (strpos($activeModelInstUid, '[GROUP]') !== false) {
                             $groupName = str_replace('[GROUP]', '', $activeModelInstUid);
                             $groupStoryModels = StoryModels::find()->where(['model_group' => $groupName, 'story_id' => $storyModel->story_id])->all();
@@ -165,7 +165,7 @@ class Model
                                     $dia['activeModels'][] = $groupStoryModel->model_inst_u_id;
                                 }
                             }
-                            unset($dia['activeModels'], $activeModelInstUid);
+                            unset($dia['activeModels'][$idx]);
                         }
                     }
                 }
