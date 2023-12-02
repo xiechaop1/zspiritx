@@ -96,14 +96,14 @@ echo \dmstr\widgets\Alert::widget();
                             return Html::a($model->topic, '/qa/edit?id=' . $model->id);
                         }
                     ],
-                    [
-                        'label' => '选项',
-                        'format' => 'raw',
-                        'filter'    => false,
-                        'value' => function ($model) {
-                            return \common\helpers\Common::isJson($model->selected) ? json_decode($model->selected, true) : $model->selected;
-                        }
-                    ],
+//                    [
+//                        'label' => '选项',
+//                        'format' => 'raw',
+//                        'filter'    => false,
+//                        'value' => function ($model) {
+//                            return \common\helpers\Common::isJson($model->selected) ? json_decode($model->selected, true) : $model->selected;
+//                        }
+//                    ],
                     [
                         'label' => '答案选项',
                         'format' => 'raw',

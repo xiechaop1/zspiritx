@@ -70,8 +70,20 @@ class Edit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-                if (!\common\helpers\Common::isJson($model->selected)) {
-                    $model->selected = json_encode($model->selected);
+                if (($model->qa_type == Qa::QA_TYPE_PUZZLE_WORD
+                    || $model->qa_type == Qa::QA_TYPE_PUZZLE_PIC)
+                    && (
+                        substr($model->selected, 0, 5) == 'Array'
+                        || substr($model->selected, 0, 5) == 'array'
+                    )) {
+                    if (substr($model->selected, 0, -1) != ';') {
+                        $model->selected .= ';';
+                    }
+                    $model->selected = json_encode(eval("return {$model->selected}"));
+                } else {
+                    if (!\common\helpers\Common::isJson($model->selected)) {
+                        $model->selected = json_encode($model->selected);
+                    }
                 }
                 
                 if ($model->save()) {
@@ -97,6 +109,9 @@ class Edit extends Action
 
         if (\common\helpers\Common::isJson($model->selected)) {
             $model->selected = json_decode($model->selected, true);
+            if (is_array($model->selected)) {
+                $model->selected = var_export($model->selected, true);
+            }
         }
 
         $knowledgeDatas = Knowledge::find()->orderBy(['id' => SORT_DESC])->all();

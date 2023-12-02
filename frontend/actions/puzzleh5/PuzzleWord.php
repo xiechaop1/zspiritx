@@ -46,11 +46,19 @@ class PuzzleWord extends Action
             ])
             ->one();
 
+        if (empty($qaOne)) {
+            throw new NotFoundHttpException('QA not found');
+        }
         $qaOne = $qaOne->toArray();
         $qaOne['selected_json'] = \common\helpers\Common::isJson($qaOne['selected']) ? json_decode($qaOne['selected'], true) : $qaOne['selected'];
         $qaOne['attachment'] = \common\helpers\Attachment::completeUrl($qaOne['attachment'], true);
 
-        $str = $qaOne['selected_json'];
+        if (!empty($qaOne['selected_json']['selected'])) {
+            $str = $qaOne['selected_json']['selected'];
+        } else {
+            $str = $qaOne['selected_json'];
+        }
+//        $str = $qaOne['selected_json'];
         $str = str_replace(chr(13), '', $str);
         $str = str_replace(chr(10), '', $str);
         $str = str_replace($qaOne['st_selected'], '', $str);
@@ -66,8 +74,11 @@ class PuzzleWord extends Action
         }
         shuffle($iList);
 
-        $totalWidth = 550;
-        $totalHeight = 400;
+        $totalWidth = !empty($qaOne['selected_json']['totalWidth']) ? $qaOne['selected_json']['totalWidth'] : 550 ;
+        $totalHeight = !empty($qaOne['selected_json']['$totalHeight']) ? $qaOne['selected_json']['$totalHeight'] :400;
+
+        $rows = !empty($qaOne['selected_json']['rows']) ? $qaOne['selected_json']['rows'] : $rows;
+        $cols = !empty($qaOne['selected_json']['cols']) ? $qaOne['selected_json']['cols'] : $cols;
 
 
         return $this->controller->render('puzzle_word', [

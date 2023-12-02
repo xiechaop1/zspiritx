@@ -40,6 +40,27 @@ class Puzzle extends Action
         $imgWidth = !empty($_GET['img_width']) ? $_GET['img_width'] : 0;
         $prefix = !empty($_GET['prefix']) ? $_GET['prefix'] : 0;
 
+        $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
+
+        $qaOne = Qa::find()
+            ->where([
+                'id'    => $qaId,
+            ])
+            ->one();
+
+        if (empty($qaOne)) {
+            throw new NotFoundHttpException('QA not found');
+        }
+        $qaOne = $qaOne->toArray();
+        $qaOne['selected_json'] = \common\helpers\Common::isJson($qaOne['selected']) ? json_decode($qaOne['selected'], true) : $qaOne['selected'];
+        $qaOne['attachment'] = \common\helpers\Attachment::completeUrl($qaOne['attachment'], true);
+
+        $rows = !empty($qaOne['selected_json']['rows']) ? $qaOne['selected_json']['rows'] : $rows;
+        $cols = !empty($qaOne['selected_json']['cols']) ? $qaOne['selected_json']['cols'] : $cols;
+        $imgWidth = !empty($qaOne['selected_json']['imgWidth']) ? $qaOne['selected_json']['imgWidth'] : $imgWidth;
+        $prefix = !empty($qaOne['selected_json']['prefix']) ? $qaOne['selected_json']['prefix'] : $prefix;
+
+
         return $this->controller->render('puzzle', [
             'params'        => $_GET,
             'userId'        => $userId,

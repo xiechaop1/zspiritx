@@ -9,6 +9,8 @@
 namespace common\helpers;
 
 
+use common\models\StoryModels;
+
 class Model
 {
     /*
@@ -136,6 +138,34 @@ class Model
                 // 格式化URL
                 if (!empty($dia['sentenceClipURL'])) {
                     $dia['sentenceClipURL'] = Attachment::completeUrl($dia['sentenceClipURL'], false);
+                }
+
+                if (!empty($dia['passiveModels'])) {
+                    foreach ($dia['passiveModels'] as $passiveModelInstUid) {
+                        if (strpos($passiveModelInstUid, '[GROUP]') !== false) {
+                            $groupStoryModel = StoryModels::findOne(['model_group' => $passiveModelInstUid]);
+                            if (!empty($groupStoryModel)) {
+                                foreach ($groupStoryModel->groupStoryModels as $groupStoryModel) {
+                                    $dia['passiveModels'][] = $groupStoryModel->model_inst_u_id;
+                                }
+                            }
+                        }
+                        unset($dia['passiveModels'], $passiveModelInstUid);
+                    }
+                }
+
+                if (!empty($dia['activeModels'])) {
+                    foreach ($dia['activeModels'] as $activeModelInstUid) {
+                        if (strpos($activeModelInstUid, '[GROUP]') !== false) {
+                            $groupStoryModel = StoryModels::findOne(['model_group' => $activeModelInstUid]);
+                            if (!empty($groupStoryModel)) {
+                                foreach ($groupStoryModel->groupStoryModels as $groupStoryModel) {
+                                    $dia['activeModels'][] = $groupStoryModel->model_inst_u_id;
+                                }
+                            }
+                        }
+                        unset($dia['activeModels'], $activeModelInstUid);
+                    }
                 }
             }
         }
