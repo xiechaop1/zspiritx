@@ -143,7 +143,8 @@ class Model
                 if (!empty($dia['passiveModels'])) {
                     foreach ($dia['passiveModels'] as $passiveModelInstUid) {
                         if (strpos($passiveModelInstUid, '[GROUP]') !== false) {
-                            $groupStoryModel = StoryModels::findOne(['model_group' => $passiveModelInstUid]);
+                            $groupName = str_replace('[GROUP]', '', $passiveModelInstUid);
+                            $groupStoryModel = StoryModels::findOne(['model_group' => $groupName]);
                             if (!empty($groupStoryModel)) {
                                 foreach ($groupStoryModel->groupStoryModels as $groupStoryModel) {
                                     $dia['passiveModels'][] = $groupStoryModel->model_inst_u_id;
@@ -157,7 +158,8 @@ class Model
                 if (!empty($dia['activeModels'])) {
                     foreach ($dia['activeModels'] as $activeModelInstUid) {
                         if (strpos($activeModelInstUid, '[GROUP]') !== false) {
-                            $groupStoryModel = StoryModels::findOne(['model_group' => $activeModelInstUid]);
+                            $groupName = str_replace('[GROUP]', '', $activeModelInstUid);
+                            $groupStoryModel = StoryModels::findOne(['model_group' => $groupName]);
                             if (!empty($groupStoryModel)) {
                                 foreach ($groupStoryModel->groupStoryModels as $groupStoryModel) {
                                     $dia['activeModels'][] = $groupStoryModel->model_inst_u_id;
