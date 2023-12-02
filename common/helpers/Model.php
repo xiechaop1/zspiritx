@@ -141,6 +141,7 @@ class Model
                 }
 
                 if (!empty($dia['passiveModels'])) {
+                    $tmpModels = [];
                     foreach ($dia['passiveModels'] as $idx => $passiveModelInstUid) {
                         if (strpos($passiveModelInstUid, '[GROUP]') !== false) {
                             $groupName = str_replace('[GROUP]', '', $passiveModelInstUid);
@@ -157,6 +158,7 @@ class Model
                 }
 
                 if (!empty($dia['activeModels'])) {
+                    $tmpModels = [];
                     foreach ($dia['activeModels'] as $idx => $activeModelInstUid) {
                         if (strpos($activeModelInstUid, '[GROUP]') !== false) {
                             $groupName = str_replace('[GROUP]', '', $activeModelInstUid);
