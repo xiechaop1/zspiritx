@@ -150,8 +150,8 @@ class Model
                                     $dia['passiveModels'][] = $groupStoryModel->model_inst_u_id;
                                 }
                             }
+                            unset($dia['passiveModels'], $passiveModelInstUid);
                         }
-                        unset($dia['passiveModels'], $passiveModelInstUid);
                     }
                 }
 
@@ -165,8 +165,8 @@ class Model
                                     $dia['activeModels'][] = $groupStoryModel->model_inst_u_id;
                                 }
                             }
+                            unset($dia['activeModels'], $activeModelInstUid);
                         }
-                        unset($dia['activeModels'], $activeModelInstUid);
                     }
                 }
             }
