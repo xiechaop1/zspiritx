@@ -147,7 +147,7 @@ class Model
                             $groupStoryModels = StoryModels::find()->where(['model_group' => $groupName, 'story_id' => $storyModel->story_id])->all();
                             if (!empty($groupStoryModels)) {
                                 foreach ($groupStoryModels as $groupStoryModel) {
-                                    $tmpModels = $groupStoryModel->model_inst_u_id;
+                                    $tmpModels[] = $groupStoryModel->model_inst_u_id;
                                 }
                             }
                             unset($dia['passiveModels'][$idx]);
@@ -163,7 +163,7 @@ class Model
                             $groupStoryModels = StoryModels::find()->where(['model_group' => $groupName, 'story_id' => $storyModel->story_id])->all();
                             if (!empty($groupStoryModels)) {
                                 foreach ($groupStoryModels as $groupStoryModel) {
-                                    $tmpModels = $groupStoryModel->model_inst_u_id;
+                                    $tmpModels[] = $groupStoryModel->model_inst_u_id;
                                 }
                             }
                             unset($dia['activeModels'][$idx]);
