@@ -46,6 +46,8 @@ class Finish extends Action
         $this->_params['user_id'] = $userId;
         $this->_params['session_id'] = $sessionId;
         $this->_params['story_id'] = $storyId;
+        $this->_params['session_stage_id'] = $sessionStageId;
+        $this->_params['story_id'] = $storyId;
 
         $transaction = Yii::$app->db->beginTransaction();
 
@@ -102,8 +104,12 @@ class Finish extends Action
             $ret = $userStory->save();
 
             $this->_params['user_story'] = $userStory;
+            $msg = '感谢您参与这场 ' . $storyModel->title . ' 游戏，期待您下次再来，我们还有很多精彩的游戏等着您！';
 
-            Yii::$app->act->add($sessionId,$sessionStageId, $storyId, 0, '游戏结束', Actions::ACTION_TYPE_ACTION);
+            Yii::$app->act->add($sessionId,$sessionStageId, $storyId, 0, $msg, Actions::ACTION_TYPE_ACTION);
+
+            sleep(3);
+            Yii::$app->act->add($sessionId,$sessionStageId, $storyId, 0, 'https://h5.zspiritx.com.cn/home/index', Actions::ACTION_TYPE_WEBVIEW);
 
             $transaction->commit();
         } catch (\Exception $e) {
@@ -111,7 +117,7 @@ class Finish extends Action
             return $this->fail($e->getMessage(), $e->getCode());
         }
 
-        $msg = '感谢您参与这场 ' . $storyModel->title . ' 游戏，期待您下次再来，我们还有很多精彩的游戏等着您！';
+//        $msg = '感谢您参与这场 ' . $storyModel->title . ' 游戏，期待您下次再来，我们还有很多精彩的游戏等着您！';
 
         return $this->succ($this->_params, $msg);
 
@@ -131,6 +137,8 @@ class Finish extends Action
             'params'        => $_GET,
             'userId'        => $params['user_id'],
             'sessionId'     => $params['session_id'],
+            'sessionStageId'=> $params['session_stage_id'],
+            'storyId'       => $params['story_id'],
             'msg'           => $msg,
         ]);
     }
