@@ -75,7 +75,7 @@ class PuzzleWord extends Action
         shuffle($iList);
 
         $totalWidth = !empty($qaOne['selected_json']['totalWidth']) ? $qaOne['selected_json']['totalWidth'] : 550 ;
-        $totalHeight = !empty($qaOne['selected_json']['$totalHeight']) ? $qaOne['selected_json']['$totalHeight'] :400;
+        $totalHeight = !empty($qaOne['selected_json']['totalHeight']) ? $qaOne['selected_json']['totalHeight'] :400;
 
         $rows = !empty($qaOne['selected_json']['rows']) ? $qaOne['selected_json']['rows'] : $rows;
         $cols = !empty($qaOne['selected_json']['cols']) ? $qaOne['selected_json']['cols'] : $cols;
