@@ -193,9 +193,11 @@ class QaApi extends ApiAction
 
             if (!empty($sessionId)) {
                 $sessionQa = SessionQa::find()->where(['session_id' => $sessionId, 'qa_id' => $qaId])->one();
-                $sessionQa->is_answer = SessionQa::SESSION_QA_STATUS_IS_ANSWER;
-                $sessionQa->is_right = $isRight;
-                $ret = $sessionQa->save();
+                if (!empty($sessionQa)) {
+                    $sessionQa->is_answer = SessionQa::SESSION_QA_STATUS_IS_ANSWER;
+                    $sessionQa->is_right = $isRight;
+                    $ret = $sessionQa->save();
+                }
             }
 
             if ($isRight == 1) {
@@ -204,6 +206,11 @@ class QaApi extends ApiAction
                 }
 
                 Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $sessionStageId, $userId, $qa['story_id']);
+
+                if (!empty($qa['score'])) {
+                    $score = $qa['score'];
+                    Yii::$app->score->add($userId, $storyId, $sessionId, $sessionStageId, $score);
+                }
 
 //                $itemKnowledgeList = ItemKnowledge::find()
 //                    ->where([

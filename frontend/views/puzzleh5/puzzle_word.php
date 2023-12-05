@@ -64,6 +64,9 @@ $this->title = 'Puzzle';
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
+<input type="hidden" name="qa_id" id="qa_id" value="<?= $qaId ?>">
+<input type="hidden" name="story_id" id="story_id" value="<?= $storyId ?>">
+
 <div class="w-100 m-auto">
 
     <div class="p-20 bg-black">

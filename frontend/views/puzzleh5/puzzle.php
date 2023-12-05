@@ -49,9 +49,11 @@ $this->title = 'Puzzle';
   <source src="" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
 </audio>
-<input type="hidden" name="user_id" value="<?= $userId ?>">
-<input type="hidden" name="session_id" value="<?= $sessionId ?>">
-<input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
+<input type="hidden" name="user_id" id="user_id" value="<?= $userId ?>">
+<input type="hidden" name="session_id" id="session_id" value="<?= $sessionId ?>">
+<input type="hidden" name="session_stage_id" id="session_stage_id" value="<?= $sessionStageId ?>">
+<input type="hidden" name="qa_id" id="qa_id" value="<?= $qaId ?>">
+<input type="hidden" name="story_id" id="story_id" value="<?= $storyId ?>">
 <div class="w-100 m-auto">
 
     <div class="p-20 bg-black">

@@ -87,15 +87,27 @@ class Score extends Component
             }
             $userScore->save();
 
+            if (!empty($userTotalScore)) {
+                $userTotalScore->score = $userTotalScore->score + $score;
+            } else {
+                $userTotalScore = new UserScore();
+                $userTotalScore->user_id = $userId;
+                $userTotalScore->story_id = 0;
+                $userTotalScore->session_id = 0;
+                $userTotalScore->team_id = 0;
+                $userTotalScore->score = $score;
+            }
+            $userTotalScore->save();
+
             if ($score >= 0) {
-                $act = '增加';
+                $act = '恭喜！获得';
             } else {
                 $act = '减少';
             }
 
             $scoreAbs = abs($score);
 
-            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您' . $act . $scoreAbs . '金币！', Actions::ACTION_TYPE_MSG);
+            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $act . $scoreAbs . '金币！', Actions::ACTION_TYPE_MSG);
 
         } catch (\Exception $e) {
             throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);

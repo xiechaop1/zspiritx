@@ -588,31 +588,70 @@ $(function () {
             console.log('right = ' + right);
             if (right == 1) {
                 console.log(right);
-                $('.puzzle_check').unbind('click');
-                $('.puzzle_check').removeClass('puzzle_item');
-                $('.puzzle_check').addClass('puzzle_item_end');
-                $("#answer-box").removeClass('hide');
-                $("#answer-right-box").removeClass('hide');
-                // $("#h5-right").modal('show');
-                // setTimeout(function (){
-                //     // Unity.call('WebViewOff&TrueAnswer');
-                //     var params = {
-                //         'WebViewOff':1,
-                //         'AnswerType':1
-                //     }
-                //     var data=$.toJSON(params);
-                //     Unity.call(data);
-                // },3000)
-                setTimeout(function () {
-                    // Unity.call('WebViewOff&TrueAnswer');
-                    // var params = {
-                    //     'WebViewOff':1,
-                    //     'AnswerType':1
-                    // }
-                    // var data=$.toJSON(params);
-                    // Unity.call(data);
-                    $("#answer-right-box").addClass('hide');
-                }, 4000);
+                var user_id=$("input[name='user_id']").val();
+                var session_id=$("input[name='session_id']").val();
+                var session_stage_id=$("input[name='session_stage_id']").val();
+                var qa_id=$("input[name='qa_id']").val();
+                var story_id=$("input[name='story_id']").val();
+
+                $.ajax({
+                    type: "GET", //用POST方式传输
+                    dataType: "json", //数据格式:JSON
+                    async: false,
+                    url: '/qa/add_user_answer',
+                    data:{
+                        user_id:user_id,
+                        qa_id:qa_id,
+                        answer:'True',
+                        story_id:story_id,
+                        session_id:session_id,
+                        session_stage_id:session_stage_id
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                        $.alert("网络异常，请检查网络情况");
+                    },
+                    success: function (data, status){
+                        var dataContent=data;
+                        var dataCon=$.toJSON(dataContent);
+                        var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                        //console.log("ajax请求成功:"+data.toString())
+                        //新消息获取成功
+                        if(obj["code"]==200){
+                                $('.puzzle_check').unbind('click');
+                                $('.puzzle_check').removeClass('puzzle_item');
+                                $('.puzzle_check').addClass('puzzle_item_end');
+                                $("#answer-box").removeClass('hide');
+                                $("#answer-right-box").removeClass('hide');
+                                // $("#h5-right").modal('show');
+                                // setTimeout(function (){
+                                //     // Unity.call('WebViewOff&TrueAnswer');
+                                //     var params = {
+                                //         'WebViewOff':1,
+                                //         'AnswerType':1
+                                //     }
+                                //     var data=$.toJSON(params);
+                                //     Unity.call(data);
+                                // },3000)
+                                setTimeout(function () {
+                                    // Unity.call('WebViewOff&TrueAnswer');
+                                    // var params = {
+                                    //     'WebViewOff':1,
+                                    //     'AnswerType':1
+                                    // }
+                                    // var data=$.toJSON(params);
+                                    // Unity.call(data);
+                                    $("#answer-right-box").addClass('hide');
+                                }, 4000);
+                        }
+                        //新消息获取失败
+                        else{
+                            $.alert(obj.msg)
+                        }
+
+                    }
+                });
+
             }
         }
         // for (itemI in items) {
@@ -654,19 +693,59 @@ $(function () {
         console.log('right = ' + right);
         if (right == 1) {
             console.log(right);
-            $('.puzzle_item').unbind('click');
-            $("#answer-box").removeClass('hide');
-            $("#answer-right-box").removeClass('hide');
-            // $("#h5-right").modal('show');
-            setTimeout(function (){
-                // Unity.call('WebViewOff&TrueAnswer');
-                var params = {
-                    'WebViewOff':1,
-                    'AnswerType':1
+            var user_id=$("input[name='user_id']").val();
+            var session_id=$("input[name='session_id']").val();
+            var session_stage_id=$("input[name='session_stage_id']").val();
+            var qa_id=$("input[name='qa_id']").val();
+            var story_id=$("input[name='story_id']").val();
+
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: false,
+                url: '/qa/add_user_answer',
+                data:{
+                    user_id:user_id,
+                    qa_id:qa_id,
+                    answer:st_answer,
+                    story_id:story_id,
+                    session_id:session_id,
+                    session_stage_id:session_stage_id
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    var dataContent=data;
+                    var dataCon=$.toJSON(dataContent);
+                    var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    //console.log("ajax请求成功:"+data.toString())
+                    //新消息获取成功
+                    if(obj["code"]==200){
+                        $('.puzzle_item').unbind('click');
+                        $("#answer-box").removeClass('hide');
+                        $("#answer-right-box").removeClass('hide');
+                        // $("#h5-right").modal('show');
+                        setTimeout(function (){
+                            // Unity.call('WebViewOff&TrueAnswer');
+                            var params = {
+                                'WebViewOff':1,
+                                'AnswerType':1
+                            }
+                            var data=$.toJSON(params);
+                            Unity.call(data);
+                        },3000);
+                    }
+                    //新消息获取失败
+                    else{
+                        $.alert(obj.msg)
+                    }
+
                 }
-                var data=$.toJSON(params);
-                Unity.call(data);
-            },3000);
+            });
+
+
             // setTimeout(function (){
             //     // Unity.call('WebViewOff&TrueAnswer');
             //     // var params = {

@@ -86,6 +86,8 @@ class PuzzleWord extends Action
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'sessionStageId'    => $sessionStageId,
+            'qaId'          => $qaId,
+            'storyId'       => $qaOne['story_id'],
             'rows'          => $rows,
             'cols'          => $cols,
             'width'         => intval($totalWidth/$cols),
