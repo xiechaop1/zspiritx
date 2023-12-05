@@ -107,7 +107,7 @@ class Score extends Component
 
             $scoreAbs = abs($score);
 
-            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $act . $scoreAbs . '金币！', Actions::ACTION_TYPE_MSG);
+//            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $act . $scoreAbs . '金币！', Actions::ACTION_TYPE_MSG);
 
         } catch (\Exception $e) {
             throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);

@@ -140,10 +140,19 @@ $this->title = $qa['topic'];
             <div class="row hide" id="answer-right-box">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
                     <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
+                    <div style="clear:both; text-align: center;">
+                        <span>
+                    <img src="../../static/img/qa/gold.gif" alt="" style="width: 125px; height: 125px;" class=""/>
+                            </span>
+
+                        <span class="answer-detail" style="color: yellow">
+                    +10枚
+                        </span>
+                    </div>
                     <div class="answer-title m-t-40">
                         <?php echo $qa['st_selected']; ?>
                     </div>
-                    <div class="answer-detail m-t-40">
+                    <div class="answer-detail m-t-40" style="line-height: 40px;">
                          <?php echo $qa['st_answer']; ?>
                     </div>
                 </div>
