@@ -72,6 +72,7 @@ class Puzzle extends Action
             'cols'          => $cols,
             'prefix'        => $prefix,
             'imgWidth'      => $imgWidth,
+            'qa'         => $qaOne,
         ]);
     }
 }
