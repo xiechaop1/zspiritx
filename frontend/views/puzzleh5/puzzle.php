@@ -80,7 +80,7 @@ $this->title = 'Puzzle';
                     <?php
                     for ($i=0; $i<sizeof($iList); $i++) {
                         ?>
-                        <div class="puzzle_item" i="<?= $iList[$i] ?>" id="puzzle_image_<?= $iList[$i] ?>" style="float: left;">
+                        <div class="puzzle_item puzzle_check" i="<?= $iList[$i] ?>" id="puzzle_image_<?= $iList[$i] ?>" style="float: left;">
                         <img src="<?= \common\helpers\Attachment::completeUrl($prefix . $iList[$i] . '.jpg', true, $imgWidth) ?>"  width="<?= $imgWidth ?>" alt=""/>
                         </div>
                     <?php

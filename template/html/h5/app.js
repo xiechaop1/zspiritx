@@ -544,8 +544,8 @@ $(function () {
             $(this).addClass('puzzle_item_active');
             console.log(oldI);
         } else {
-            var oldDiv = $('#puzzle_image_'+oldI);
-            var newDiv = $('#puzzle_image_'+thisI);
+            var oldDiv = $('#puzzle_image_' + oldI);
+            var newDiv = $('#puzzle_image_' + thisI);
 
             oldDiv.removeClass('puzzle_item_active');
             oldDiv.addClass('puzzle_item');
@@ -570,49 +570,50 @@ $(function () {
 
             // $(this).removeClass('puzzle_item_active');
             // $(this).addClass('puzzle_item');
-        }
 
-        var items = $('.puzzle_item');
-        var ct = 0;
-        var right = 1;
-        items.each(function() {
-            var eachI = $(this).attr('i');
-            if (eachI != ct) {
-                console.log('eachI' + eachI);
-                console.log('ct' + ct);
-                right = 0;
-                return false;
+
+            var items = $('.puzzle_check');
+            var ct = 0;
+            var right = 1;
+            items.each(function () {
+                var eachI = $(this).attr('i');
+                console.log('eachI:' + eachI);
+                console.log('ct:' + ct);
+                if (eachI != ct) {
+                    right = 0;
+                    return false;
+                }
+                ct++;
+            });
+            console.log('right = ' + right);
+            if (right == 1) {
+                console.log(right);
+                $('.puzzle_check').unbind('click');
+                $('.puzzle_check').removeClass('puzzle_item');
+                $('.puzzle_check').addClass('puzzle_item_end');
+                $("#answer-box").removeClass('hide');
+                $("#answer-right-box").removeClass('hide');
+                // $("#h5-right").modal('show');
+                // setTimeout(function (){
+                //     // Unity.call('WebViewOff&TrueAnswer');
+                //     var params = {
+                //         'WebViewOff':1,
+                //         'AnswerType':1
+                //     }
+                //     var data=$.toJSON(params);
+                //     Unity.call(data);
+                // },3000)
+                setTimeout(function () {
+                    // Unity.call('WebViewOff&TrueAnswer');
+                    // var params = {
+                    //     'WebViewOff':1,
+                    //     'AnswerType':1
+                    // }
+                    // var data=$.toJSON(params);
+                    // Unity.call(data);
+                    $("#answer-right-box").addClass('hide');
+                }, 4000);
             }
-            ct++;
-        });
-        console.log('right = ' + right);
-        if (right == 1) {
-            console.log(right);
-            $('.puzzle_item').unbind('click');
-            $('.puzzle_item').removeClass('puzzle_item');
-            $('.puzzle_item').addClass('puzzle_item_end');
-            $("#answer-box").removeClass('hide');
-            $("#answer-right-box").removeClass('hide');
-            // $("#h5-right").modal('show');
-            // setTimeout(function (){
-            //     // Unity.call('WebViewOff&TrueAnswer');
-            //     var params = {
-            //         'WebViewOff':1,
-            //         'AnswerType':1
-            //     }
-            //     var data=$.toJSON(params);
-            //     Unity.call(data);
-            // },3000)
-            setTimeout(function (){
-                // Unity.call('WebViewOff&TrueAnswer');
-                // var params = {
-                //     'WebViewOff':1,
-                //     'AnswerType':1
-                // }
-                // var data=$.toJSON(params);
-                // Unity.call(data);
-                $("#answer-right-box").addClass('hide');
-            }, 4000);
         }
         // for (itemI in items) {
         //     // if (items[i].attr('i')) {

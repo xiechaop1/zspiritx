@@ -29,6 +29,7 @@ return [
         'act'       => 'common\services\Actions',
         'knowledge' => 'common\services\Knowledge',
         'models'    => 'common\services\Models',
+        'score'     => 'common\services\Score',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',
