@@ -1,4 +1,5 @@
 <?php
+
 $arr = array (
   'Name' => '小犀牛Jack',
   'Intro' => 'Rhino-Jack-dialog-1',
