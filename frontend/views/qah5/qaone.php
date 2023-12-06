@@ -146,7 +146,7 @@ $this->title = $qa['topic'];
                         <div style="clear:both; text-align: center;">
                         <span>
                             <!-- ../../static/img/qa/gold.gif -->
-                    <img src="" alt="" style="width: 125px; height: 125px;" class=""/>
+                    <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
                             </span>
 
                             <span class="answer-detail" style="color: yellow">

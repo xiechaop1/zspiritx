@@ -111,7 +111,7 @@ $this->title = 'Puzzle';
                     ?>
                     <div style="clear:both; text-align: center;">
                         <span>
-                    <img src="../../static/img/qa/gold.gif" alt="" style="width: 125px; height: 125px;" class=""/>
+                    <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
                             </span>
 
                         <span class="answer-detail" style="color: yellow">
