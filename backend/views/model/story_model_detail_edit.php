@@ -50,7 +50,16 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('模型朝向');
-            echo $form->field($storyModelDetailModel, 'dialog')->textarea(['value' => !empty($storyModelDetailModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModelDetailModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
+            if (!empty($storyModelDetailModel->dialog)) {
+                $dialogTxt = var_export(\common\helpers\Model::decodeDialog($storyModelDetailModel->dialog), true);
+                // 去掉数组中下标
+                // 让数组内容在textarea中文本显示
+                $dialogTxt = preg_replace('/\s*\d+\s*=>\s*/', "\n", $dialogTxt) . ';';
+            } else {
+                $dialogTxt = '';
+            }
+            echo $form->field($storyModelDetailModel, 'dialog')->textarea(['value' => !empty($storyModelDetailModel->dialog) ? $dialogTxt: '', 'rows' => 20])->label('对话');
+//            echo $form->field($storyModelDetailModel, 'dialog')->textarea(['value' => !empty($storyModelDetailModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModelDetailModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
             echo $form->field($storyModelDetailModel, 'is_unique')->textInput(['value' => $storyModelDetailModel->is_unique])->label('是否唯一');
             echo $form->field($storyModelDetailModel, 'active_next')->textarea(['value' => \common\helpers\Model::decodeActiveToShow($storyModelDetailModel->active_next)])->label('动作内容');
             echo $form->field($storyModelDetailModel, 'active_expiretime')->textInput(['value' => $storyModelDetailModel->active_expiretime])->label('动作过期时间');
