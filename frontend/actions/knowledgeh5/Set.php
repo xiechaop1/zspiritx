@@ -9,6 +9,7 @@
 namespace frontend\actions\knowledgeh5;
 
 
+use common\models\UserKnowledge;
 use yii\base\Action;
 
 use Yii;
@@ -36,7 +37,21 @@ class Set extends Action
 
         $userKnowledge = Yii::$app->knowledge->get($knowledgeId, $sessionId, $userId);
 
-        if (empty($userKnowledge)) {
+        switch ($act) {
+            case 'completed':
+                $knowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
+                break;
+            case 'process':
+                $knowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                break;
+            default:
+                $knowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                break;
+        }
+
+        if (empty($userKnowledge)
+        || ($userKnowledge->knowledge_status != $knowledgeStatus)
+        ) {
             $userKnowledge = Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act);
         }
 
