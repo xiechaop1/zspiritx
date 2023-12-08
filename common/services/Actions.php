@@ -99,8 +99,10 @@ class Actions extends Component
         if ($actType == \common\models\Actions::ACTION_TYPE_MODEL_DISPLAY) {
             if (strpos($actDetail, ',') !== false) {
                 $actDetail = explode(',', $actDetail);
+            } else {
+                $actDetail = [$actDetail];
             }
-            $actDetail = json_encode(['showModels' => $actDetail]);
+            $actDetail = json_encode(['showModels' => $actDetail ]);
         }
 
         $model = \common\models\Actions::find()
