@@ -58,12 +58,18 @@ $(function () {
                     var dataCon=$.toJSON(dataContent);
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                     //console.log("ajax请求成功:"+data.toString())
+
+                    //audio 素材
+                    var audio_right=$("#audio_right")[0];
+                    var audio_wrong=$("#audio_wrong")[0];
+
                     //新消息获取成功
                     if(obj["code"]==200){
                         if(v_ture==v_select){
                             $("#answer-box").hide();
                             $("#answer-right-box").removeClass('hide');
                             // $("#h5-right").modal('show');
+                            audio_right.play();
                             setTimeout(function (){
                                 // Unity.call('WebViewOff&TrueAnswer');
                                 var params = {
@@ -78,6 +84,7 @@ $(function () {
                             $("#answer-box").hide();
                             $("#answer-error-box").removeClass('hide');
                             // $("#h5-worry").modal('show');
+                            audio_wrong.play();
                             setTimeout(function (){
                                 // Unity.call('WebViewOff&FalseAnswer');
                                 var params = {

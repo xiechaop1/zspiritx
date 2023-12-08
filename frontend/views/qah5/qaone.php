@@ -36,6 +36,15 @@ $this->title = $qa['topic'];
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
 <div class="w-100 m-auto">
+<audio controls id="audio_right" class="hide">
+    <source src=".../../static/audio/qa_right.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+<audio controls id="audio_wrong" class="hide">
+    <source src="../../static/audio/qa_wrong.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+
 
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
