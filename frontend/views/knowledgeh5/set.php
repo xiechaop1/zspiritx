@@ -40,6 +40,16 @@ $this->title = '获取知识';
                         消息
                     </div>
                     <?= $msg ?>
+                    <hr style="color: white; border: 1px solid white;">
+                    <span style="color: yellow"><?= $knowledge->title ?></span><br>
+                    <?php
+                    if (!empty($knowledge->image)) {
+                        ?>
+                        <img src="<?= \common\helpers\Attachment::completeUrl($knowledge->image) ?>" style="width: 100%;"><br>
+                        <?php
+                    }
+                    echo $knowledge->content;
+                    ?>
                 </div>
             </div>
             <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
