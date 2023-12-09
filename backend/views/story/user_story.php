@@ -103,7 +103,7 @@ echo \dmstr\widgets\Alert::widget();
                                 ? $model->session->session_name . ' [' . \common\models\Session::$sessionStats2Name[$model->session->session_status] . ']' . '[' . $model->session->id . ']'
                                 : '未知';
                         },
-                        'filter' => false
+                        'filter' => Html::activeInput('text', $searchModel, 'session_id'),
                     ],
                     [
                         'label' => '角色',
