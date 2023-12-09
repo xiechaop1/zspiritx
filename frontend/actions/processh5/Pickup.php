@@ -146,7 +146,7 @@ class Pickup extends Action
 //            if ($storyModel->active_next)
 
             $storyModelName = !empty($storyModel->story_model_name) ? $storyModel->story_model_name : $storyModel->model->model_name;
-            $msg = '您成功获取了 ' . $storyModelName;
+            $msg = '您成功获取了 <font color=yellow>' . $storyModelName . '</font>';
 
             if (!empty($knowledgeId)) {
                 Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId);
