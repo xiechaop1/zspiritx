@@ -1,4 +1,13 @@
 $(function () {
+
+    $("#play").click(function (){
+        var audio_right=$("#audio_right")[0];
+        var audio_wrong=$("#audio_wrong")[0];
+        // $.alert('请检查网络');
+        audio_right.play();
+
+    });
+
     var loadingHtml=`
         <div class="col-12 blank-box loading-box"  >
         <!--<i class="iconfont iconicon-shuaxin fs-60 text-44" id="loading"></i>-->

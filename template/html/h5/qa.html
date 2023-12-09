@@ -17,6 +17,19 @@
 </head>
 
 <body class="bg-black">
+<audio controls id="audio_right" class="hide">
+    <source src="../../audio/qa_right.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+<audio controls id="audio_wrong" class="hide">
+    <source src="../../audio/qa_wrong.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+
+<div id="play" style="
+    font-size: 50px;
+    color: #fff;
+">播放音乐</div>
 <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#h5-login-success">
     h5-login-success
 </button>
@@ -225,7 +238,9 @@
 <script src="../../js/datePicker/bootstrap-datepicker.min.js"></script>
 <script src="../../js/datePicker/bootstrap-datepicker.zh-CN.min.js"></script>
 <script src="../../js/datePicker.js"></script>
+<script src="../../js/owl.carousel/owl.carousel.js"></script>
 <script src="../../js/toTopH5.js"></script>
 <script src="app.js"></script>
+<script src="qa.js"></script>
 </body>
 </html>
