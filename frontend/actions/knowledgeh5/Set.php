@@ -75,6 +75,7 @@ class Set extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'knowledgeClass' => $knowledgeClassId,
+            'act'           => $act,
             'msg'           => $msg,
             'knowledge'     => $knowledge,
         ]);

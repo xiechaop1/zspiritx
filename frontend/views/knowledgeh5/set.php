@@ -40,6 +40,11 @@ $this->title = '获取知识';
                         消息
                     </div>
                     <?= $msg ?>
+
+                    <?php
+
+                    if ($act != 'completed') {
+                    ?>
                     <hr style="color: white; border: 1px solid white;">
                     <span style="color: yellow"><?= $knowledge->title ?></span><br>
                     <?php
@@ -49,6 +54,7 @@ $this->title = '获取知识';
                         <?php
                     }
                     echo $knowledge->content;
+                    }
                     ?>
                 </div>
             </div>
