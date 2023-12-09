@@ -59,6 +59,15 @@ echo \dmstr\widgets\Alert::widget();
                 $dialogTxt = '';
             }
             echo $form->field($storyModelDetailModel, 'dialog')->textarea(['value' => !empty($storyModelDetailModel->dialog) ? $dialogTxt: '', 'rows' => 20])->label('对话');
+            echo $form->field($storyModelDetailModel, 'story_model_image')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => true,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=story_model/image/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $storyModelDetailModel->story_model_image],
+//                'directory' => 'cover/' . Date('Y/m/')
+            ])->label('图片/影音文件');
 //            echo $form->field($storyModelDetailModel, 'dialog')->textarea(['value' => !empty($storyModelDetailModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModelDetailModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
             echo $form->field($storyModelDetailModel, 'is_unique')->textInput(['value' => $storyModelDetailModel->is_unique])->label('是否唯一');
             echo $form->field($storyModelDetailModel, 'active_next')->textarea(['value' => \common\helpers\Model::decodeActiveToShow($storyModelDetailModel->active_next)])->label('动作内容');

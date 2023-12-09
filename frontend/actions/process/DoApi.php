@@ -1094,6 +1094,30 @@ class DoApi extends ApiAction
                         'msg'  => 'success',
                     ];
                     break;
+                case StoryModels::ACTIVE_TYPE_SHOW:
+                    $minCt = 0;
+
+                    $title = $storyModel->story_model_name;
+                    $image = $storyModel->story_model_image;
+                    $desc = $storyModel->story_model_desc;
+
+                    $html = '';
+                    if (!empty($image)) {
+                        $html = '<img src="' . Attachment::completeUrl($image) . '" style="width: 100%; height: auto;"/>';
+                    }
+//                    $html .= '<div style="padding: 10px;">';
+//                    $html .= $desc;
+//                    $html .= '</div>';
+
+                    $minCt = 0;
+                    $res = [
+                        'code' => 0,
+                        'type' => $storyModel->active_type,
+                        'title' => $title,
+                        'html' => $html,
+                        'desc' => $desc,
+                    ];
+                    break;
                 default:
                     break;
             }

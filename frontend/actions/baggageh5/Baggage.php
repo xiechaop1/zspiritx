@@ -42,7 +42,7 @@ class Baggage extends Action
                 'session_id'    => $sessionId,
                 'is_delete'     => Common::STATUS_NORMAL,
             ])
-            ->orderBy(['updated_at' => SORT_DESC])
+            ->orderBy(['id' => SORT_DESC])
             ->all();
 
 

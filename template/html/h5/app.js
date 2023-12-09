@@ -99,7 +99,7 @@ $(function () {
         }
     })
 
-    $("input[name='baggage']").change(function ()
+    $("input[name='baggage']").click(function ()
     {
         var that=$("#answer-info");
         var user_id=$("input[name='user_id']").val();
@@ -144,15 +144,29 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
+                        console.log(obj);
                         if (obj.data.type == 1) {
                             var params = obj.data.ret;
                             Unity.call(params);
+                        } else if (obj.data.type == 5) {
+                            // 如果是展现，则直接展现
+                            $('#baggage_title').html(obj.data.title);
+                            $('#baggage_html').html(obj.data.html);
+                            $('#baggage_desc').html(obj.data.desc);
+                            var obj = $('#baggage_detail');
+                            // $('#baggage_detail_back').modal('show');
+                            // obj.show();
+                            obj.modal('show');
                         } else {
                             // if(v_ture==v_select){
                             $.alert('使用成功！');
-                            setTimeout(function () {
-                                window.location.reload();
-                            }, 3000);
+                            var params = {
+                                'WebViewOff': 1,
+                            }
+                            Unity.call(params);
+                            // setTimeout(function () {
+                            //     window.location.reload();
+                            // }, 3000);
                         }
 
                         // }
@@ -403,6 +417,13 @@ $(function () {
                 }
             });
         }
+    });
+
+    $("#dialog_return_btn").click(function (){
+        var tar_id = $(this).attr('target_id');
+        var dialog = $('#' + tar_id);
+        // dialog.hide();
+        dialog.modal('hide');
     });
 
     $("#return_btn").click(function (){

@@ -22,7 +22,7 @@ class StoryModelDetail extends \common\models\StoryModelDetail
             [['is_unique', 'pre_story_model_id', 'story_id', 'model_id',
                 'active_type', 'direction', 'sort_by', 'status'], 'integer'],
             [['active_expiretime', 'created_at', 'updated_at',], 'integer'],
-            [['active_next', 'dialog', 'title' ], 'string'],
+            [['active_next', 'dialog', 'title', 'story_model_image', ], 'string'],
         ];
     }
 
