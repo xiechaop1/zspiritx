@@ -58,14 +58,16 @@ class Set extends Action
         if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL) {
 //            $msg = '您成功获得了知识 ' . $knowledge->title . '，可以到"我的"->"知识"中查看';
             $actionTxt = '您成功获得了知识 ';
+            $actionTypeTxt = '知识';
         } else {
             if ($act == 'completed') {
                 $actionTxt = '您已经完成了任务 ';
             } else {
                 $actionTxt = '您正在进行任务 ';
             }
+            $actionTypeTxt = '任务';
         }
-        $msg = $actionTxt . '<span style="color: yellow">' . $knowledge->title . '</span>，可以到<span style="color: yellow">"我的"->"任务"</span>中查看';
+        $msg = $actionTxt . '<span style="color: yellow">' . $knowledge->title . '</span>，可以到<span style="color: yellow">"我的"->"' . $actionTypeTxt . '"</span>中查看';
         $msg .= '<br><a style="color:yellow;" href="/knowledgeh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&knowledge_class_id=' . $knowledgeClassId . '&show_knowledge_id=' . $knowledgeId . '">[查看任务]</a><br><br>';
 
         return $this->controller->render('set', [
