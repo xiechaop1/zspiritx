@@ -100,7 +100,7 @@ echo \dmstr\widgets\Alert::widget();
                         'format'    => 'raw',
                         'value' => function ($model) {
                             return !empty($model->session->session_name)
-                                ? $model->session->session_name . ' [' . \common\models\Session::$sessionStats2Name[$model->session->session_status] . ']'
+                                ? $model->session->session_name . ' [' . \common\models\Session::$sessionStats2Name[$model->session->session_status] . ']' . '[' . $model->session->id . ']'
                                 : '未知';
                         },
                         'filter' => false
