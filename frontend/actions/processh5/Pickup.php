@@ -10,6 +10,7 @@ namespace frontend\actions\processh5;
 
 
 use common\definitions\ErrorCode;
+use common\models\Knowledge;
 use common\models\SessionModels;
 use common\models\StoryModels;
 use common\models\UserModels;
@@ -150,6 +151,11 @@ class Pickup extends Action
 
             if (!empty($knowledgeId)) {
                 Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId);
+                $knowledge = Knowledge::find()
+                    ->where(['id' => $knowledgeId])
+                    ->one();
+
+                $this->_params['knowledge'] = $knowledge;
             }
 
             if ($needAction == '1') {
