@@ -64,6 +64,7 @@ class Set extends Action
                 $actionTxt = '您正在进行任务 ';
             }
             $msg = $actionTxt . $knowledge->title . '，可以到"我的"->"任务"中查看';
+            $msg .= '<br><a href="/knowledgeh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&knowledge_class_id=' . $knowledgeClassId . '&show_knowledge_id=' . $knowledgeId . '">[查看任务]</a>';
         }
 
         return $this->controller->render('set', [

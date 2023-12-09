@@ -117,28 +117,7 @@ $this->title = '我的背包';
             </div>
         </div>
     </div>
-    <div class="p-20 bg-black w-100 m-t-80 hide" style="position: absolute; left: 0px; top: 5px;" id="baggage_detail1">
-        <div class="w-100 p-30  m-b-10">
-            <div class="w-1-0 d-flex">
-                <div class="fs-30 bold w-100 text-FF title-box-border">
-                    <div class="npc-name" id="baggage_title">
 
-                    </div>
-
-                    <div class="row" id="baggage_html">
-
-                    </div>
-                    <div class="row" id="baggage_desc">
-
-                    </div>
-                    <div class="btn-m-green m-t-30 float-right m-r-20" id="dialog_return_btn" target_id="baggage_detail">
-                                            返回
-                                        </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
 
 </div>

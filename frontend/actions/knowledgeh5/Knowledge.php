@@ -32,6 +32,8 @@ class Knowledge extends Action
 
         $knowledgeClassId = !empty($_GET['knowledge_class_id']) ? $_GET['knowledge_class_id'] : \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL;
 
+        $showKnowledgeId = !empty($_GET['show_knowledge_id']) ? $_GET['show_knowledge_id'] : 0;
+
         $model = \common\models\Knowledge::find()
             ->where([
                 'knowledge_class' => $knowledgeClassId,
@@ -60,6 +62,7 @@ class Knowledge extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'knowledgeClass' => $knowledgeClassId,
+            'showKnowledgeId' => $showKnowledgeId,
         ]);
     }
 }

@@ -483,17 +483,32 @@ $(function () {
     });
 
     $(".knowledge-title").click(function (){
-        var tobj = $(this).parent().find(".knowledge-content");
-        var allobj = $(".knowledge-content");
+        var obj = $(this);
+        showKnowledge(obj);
 
-        if (tobj.is(':hidden')) {
-            allobj.hide();
-           tobj.show();
-       } else {
-           tobj.hide();
-       }
+       //  var tobj = $(this).parent().find(".knowledge-content");
+       //  var allobj = $(".knowledge-content");
+       //
+       //  if (tobj.is(':hidden')) {
+       //      allobj.hide();
+       //     tobj.show();
+       // } else {
+       //     tobj.hide();
+       // }
         // $(".knowledge-content").hide();
     });
+
+    function showKnowledge(obj) {
+        var knowledge_title = obj.find("input[NAME='knowledge_title']").val();
+        var knowledge_image = obj.find("input[NAME='knowledge_image']").val();
+        var knowledge_desc = obj.find("input[NAME='knowledge_content']").val();
+
+        $('#knowledge_title').html(knowledge_title);
+        $('#knowledge_image').html(knowledge_image);
+        $('#knowledge_desc').html(knowledge_desc);
+
+        $('#knowledge_detail').modal('show');
+    }
 
 
     $("#logout_btn").click(function() {
