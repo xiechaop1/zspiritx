@@ -83,16 +83,16 @@ echo \dmstr\widgets\Alert::widget();
                                 'data-target' => '#case-form-' . $model->id
                             ]);
                         },
-                        'filter' => false
+                        'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
                     [
                         'label' => '用户',
                         'attribute' => 'user_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->user->user_name) ? $model->user->user_name : '未知';
+                            return !empty($model->user->user_name) ? $model->user->user_name . '[' . $model->user->id . ']' : '未知';
                         },
-                        'filter' => false
+                        'filter' => Html::activeInput('text', $searchModel, 'user_id'),
                     ],
                     [
                         'label' => '场次',

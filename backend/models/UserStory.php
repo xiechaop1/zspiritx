@@ -49,6 +49,14 @@ class UserStory extends \common\models\UserStory
             return $dataProvider;
         }
 
+        if ($this->user_id) {
+            $query->andWhere(['user_id' => $this->user_id]);
+        }
+
+        if ($this->story_id) {
+            $query->andWhere(['story_id' => $this->story_id]);
+        }
+
         return $dataProvider;
     }
 }
