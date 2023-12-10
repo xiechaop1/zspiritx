@@ -74,34 +74,55 @@ $this->title = $qa['topic'];
 //                    echo $qa['selected_json'];
                 ?>
                 <?php
-                if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_MULTI) {
-                    $inputType = 'checkbox';
-                } else {
-                    $inputType = 'radio';
+                switch ($qa['qa_type']) {
+                    case \common\models\Qa::QA_TYPE_MULTI:
+                        $inputType = 'checkbox';
+                        break;
+                    case \common\models\Qa::QA_TYPE_WORD:
+                        $inputType = 'text';
+                        break;
+                    case \common\models\Qa::QA_TYPE_SINGLE:
+                    default:
+                        $inputType = 'radio';
+                        break;
                 }
+//                if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_MULTI) {
+//                    $inputType = 'checkbox';
+//                } else {
+//                    $inputType = 'radio';
+//                }
 
-                $selected = explode("\n", $str);
+                if ($inputType == 'radio') {
+                    $selected = explode("\n", $str);
 
-                $optstr = '';
-                foreach ($selected as $sel) {
-                    preg_match('/\[(\w+)\]/', $sel,$labelArr);
-                    $label = count($labelArr) > 1 ? $labelArr[1] : '';
-                    $txt = str_replace('[' . $label . ']', '', $sel);
+                    $optstr = '';
+                    foreach ($selected as $sel) {
+                        preg_match('/\[(\w+)\]/', $sel, $labelArr);
+                        $label = count($labelArr) > 1 ? $labelArr[1] : '';
+                        $txt = str_replace('[' . $label . ']', '', $sel);
 
-                    $optstr .= '
+                        $optstr .= '
                     <div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
                         <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
                             <span class="answer-tag">' . $label . '</span>
-                    '. $txt . '
+                    ' . $txt . '
                     </label>
                     </div>
                 </div>
                     ';
 
 
-
+                    }
+                } else {
+                    $optstr = '<div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                    <input class="form-check-label fs-30" type=text name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
+                   <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
+                    </div>
+                    </div>
+                    ';
                 }
                 echo $optstr;
 
@@ -186,7 +207,7 @@ $this->title = $qa['topic'];
 
                     <div class="text-center m-t-30">
             <label id="answer-info" class="h5-btn-green-big answer-btn hide"  data-value="<?php echo $qa['st_selected']; ?>
-" data-qa="<?php echo $qa['id']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
+" data-qa="<?php echo $qa['id']; ?>" data-type="<?php echo $qa['qa_type']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
                 提交
             </label>
         </div>
