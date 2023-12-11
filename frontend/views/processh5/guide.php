@@ -50,12 +50,14 @@ $this->title = '向导';
                     }
                     ?>
                     <?php
+                    echo '<div style="clear: both;">';
                     if ($page < $pageCount - 1) {
                         echo '<a href="?type=' . $type . '&story_id=' . $storyId . '&page=' . ($page + 1) . '" class="btn-m-green m-t-30 float-right m-r-20">下一页</a>';
                     }
                     if ($page > 1) {
                         echo '<a href="?type=' . $type . '&story_id=' . $storyId . '&page=' . ($page - 1) . '" class="btn-m-green m-t-30 float-right m-r-20">上一页</a>';
                     }
+                    echo '</div>';
                     ?>
                 </div>
             </div>

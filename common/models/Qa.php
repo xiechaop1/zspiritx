@@ -19,6 +19,7 @@ class Qa extends \common\models\gii\Qa
     const QA_TYPE_PUZZLE_WORD = 5;     // 拼图文字题
     const QA_TYPE_PUZZLE_PIC = 6;      // 拼图图片题
     const QA_TYPE_WORD = 7;      // 填空题
+    const QA_TYPE_VERIFYCODE = 8;      // 验证码题
 
 
     public static $qaType2Name = [
@@ -29,6 +30,7 @@ class Qa extends \common\models\gii\Qa
         self::QA_TYPE_PUZZLE_WORD  => '拼图文字题',
         self::QA_TYPE_PUZZLE_PIC   => '拼图图片题',
         self::QA_TYPE_WORD => '填空题',
+        self::QA_TYPE_VERIFYCODE => '验证码题',
     ];
 
     public function behaviors()

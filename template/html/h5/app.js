@@ -17,9 +17,44 @@ $(function () {
         window.location.reload()
     })
 
+    $('.code-input input').on('keyup', function(e) {
+        // 转换为大写
+        this.value = this.value.toUpperCase();
+
+        var oldVal = $(this).val();
+        if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9]/)) {
+            $(this).next('input').focus();
+            $(this).next('input').select();
+        } else if (e.key === 'Backspace') {
+            if(oldVal=='') {
+                $(this).prev('input').focus();
+                // $(this).prev('input').val('');
+            }
+        } else if (e.key == 'ArrowLeft') {
+            $(this).prev('input').focus();
+            $(this).prev('input').select();
+        } else if (e.key == 'ArrowRight') {
+            $(this).next('input').focus();
+            $(this).next('input').select();
+        }
+    });
+
     //判断是否答对
-    $("input[name='answer']").click(function ()
-    {
+    $("input[name='answer']").click(function () {
+        submitAnswer($(this));
+    });
+
+    $("input[name='answer_txt']").change(function () {
+        var v_selects = $("input[name='answer_txt']");
+        for (i = 0; i < v_selects.length; i++) {
+            if (v_selects[i].value == '') {
+                return false;
+            }
+        }
+        submitAnswer($(this));
+    });
+
+    function submitAnswer(thisObj) {
         var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
         var qa_type=that.attr("data-type");
@@ -31,8 +66,14 @@ $(function () {
         var v_detail=that.attr("data-detail");
         if (qa_type == 1 || qa_type == 4) {
             var v_select = $("input[name='answer']:checked").val();
-        } else {
+        } else if (qa_type == 7) {
             var v_select = $("input[name='answer_txt']").val();
+        } else if (qa_type == 8) {
+            var v_selects = $("input[name='answer_txt']");
+            var v_select = '';
+            for (var i = 0; i < v_selects.length; i++) {
+                v_select += v_selects[i].value;
+            }
         }
         // $("#answer-box").hide();
         if(v_select==null){
@@ -109,7 +150,7 @@ $(function () {
                 }
             });
         }
-    })
+    };
 
     $("input[name='baggage']").click(function ()
     {

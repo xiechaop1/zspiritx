@@ -28,6 +28,45 @@ $this->registerMetaTag([
 $this->title = $qa['topic'];
 
 ?>
+<style>
+    .code-input {
+        display: flex;
+    }
+
+    .code-input input {
+        width: 55px;
+        height: 75px;
+        margin: 0 10px;
+        text-align: center;
+        font-size: 50px;
+        color: yellow;
+        border: 2px solid white;
+        border-radius: 14px;
+        transition: border-color 0.3s;
+    }
+
+    .code-input input:focus {
+        border-color: #0c84ff;
+        color: yellow;
+        outline: none;
+        background-color: #0b3452;
+    }
+
+    .code-input input[type=button] {
+        width: 100px;
+        height: 75px;
+        margin: 0 10px;
+        position: absolute;
+        right: 10px;
+        background-color: #0b3452;
+        text-align: center;
+        font-size: 50px;
+        color: white;
+        border: 2px solid #0c84ff;
+        border-radius: 24px;
+        transition: border-color 0.3s;
+    }
+</style>
 <audio autoplay loop>
   <source src="<?= $qa['voice'] ?>" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
@@ -81,6 +120,9 @@ $this->title = $qa['topic'];
                     case \common\models\Qa::QA_TYPE_WORD:
                         $inputType = 'text';
                         break;
+                    case \common\models\Qa::QA_TYPE_VERIFYCODE:
+                        $inputType = 'verifycode';
+                        break;
                     case \common\models\Qa::QA_TYPE_SINGLE:
                     default:
                         $inputType = 'radio';
@@ -115,12 +157,30 @@ $this->title = $qa['topic'];
 
 
                     }
-                } else {
+                } elseif ($inputType == 'text') {
                     $optstr = '<div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
                     <input class="form-check-label fs-30" type=text name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
                    <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
                     </div>
+                    </div>
+                    ';
+                } elseif ($inputType == 'verifycode') {
+                    $maxLength = !empty($str['length']) ? $str['length'] : 5;
+                    $optstr = '<div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border code-input" maxlength="' . $maxLength . '">
+                    ';
+                    for ($i=0; $i<$maxLength; $i++) {
+                        $autoFocus =  ($i==0) ? 'autofocus' : '';
+                        $optstr .= '<input type="text" name="answer_txt" maxlength="1" id="input-' . ($i+1) . '" ' . $autoFocus . '>';
+                    }
+//                    <input class="form-check-label fs-30" type="text" maxlength="1" id="input-1" autofocus>
+//        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-2">
+//        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-3">
+//        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-4">
+//                    <input class="form-check-label fs-30" type=text name="answer_txt" class="hide form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
+                   $optstr .= '<input type="button" name="answer" value="提交" class="fs-30">';
+                    $optstr .= '</div>
                     </div>
                     ';
                 }
