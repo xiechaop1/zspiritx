@@ -41,7 +41,7 @@ $this->title = '拾取';
                     </div>
                     <?= $msg ?>
                     <?php
-
+if (!empty($knowledge)) {
                         ?>
                         <hr style="color: white; border: 1px solid white;">
                         <span style="color: yellow"><?= $knowledge->title ?></span><br>
@@ -52,6 +52,7 @@ $this->title = '拾取';
                             <?php
                         }
                         echo $knowledge->content;
+}
                     ?>
                 </div>
             </div>
