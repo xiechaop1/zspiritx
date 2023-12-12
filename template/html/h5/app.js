@@ -64,7 +64,7 @@ $(function () {
         var session_stage_id=$("input[name='session_stage_id']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
-        if (qa_type == 1 || qa_type == 4) {
+        if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
             var v_select = $("input[name='answer']:checked").val();
         } else if (qa_type == 7) {
             var v_select = $("input[name='answer_txt']").val();
