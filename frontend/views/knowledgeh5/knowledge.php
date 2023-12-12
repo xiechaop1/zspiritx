@@ -142,13 +142,14 @@ $this->title = '知识库';
 
                 </div>
 
-                <div class="row" id="knowledge_html">
+                <div class="row" id="knowledge_image">
 
                 </div>
                 <div class="row" id="knowledge_desc">
 
                 </div>
                 <div>
+                    <
 
                     <!--                            <div class="btn-m-green m-t-30 float-right m-r-20" id="dialog_return_btn" target_id="baggage_detail">-->
                     <!--                                返回-->
