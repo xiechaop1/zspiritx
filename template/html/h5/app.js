@@ -550,7 +550,7 @@ $(function () {
         var knowledge_desc = obj.find("input[NAME='knowledge_content']").val();
 
         $('#knowledge_title').html(knowledge_title);
-        $('#knowledge_image').html(knowledge_image);
+        $('#knowledge_image').html('<img src=' + knowledge_image + ' style="width: 100%; height: auto;">');
         $('#knowledge_desc').html(knowledge_desc);
 
         $('#knowledge_detail').modal('show');
