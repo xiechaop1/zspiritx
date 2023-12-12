@@ -11,7 +11,7 @@
  */
 
 /**
- * @var \common\models\QA $qa
+ * @var \common\models\Secret $qa
  */
 
 \frontend\assets\secreth5Asset::register($this);
