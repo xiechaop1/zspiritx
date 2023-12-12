@@ -14,7 +14,7 @@ use yii\web\Controller;
 
 class Qah5Controller extends Controller
 {
-    public $layout = '@frontend/views/layouts/main_h5.php';
+    public $layout = '@frontend/views/layouts/main_secret.php';
 
     public function actions()
     {
