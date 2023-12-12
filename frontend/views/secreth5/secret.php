@@ -28,7 +28,7 @@ $this->registerMetaTag([
 $this->title = '密码锁';
 
 ?>
-<input type="hidden" name="pin_code" value="解锁密码">
+<input type="hidden" name="pin_code" value="<?= $pinCode ?>">
 
 <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
   返回
