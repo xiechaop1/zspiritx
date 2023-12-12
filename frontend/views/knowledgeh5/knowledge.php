@@ -100,7 +100,7 @@ $this->title = '知识库';
                     <span style="padding-left: 90px; ">'. $showTxt .  '</span>
                     <input type="hidden" name="knowledge_id" value="' . $item->id . '">
                     <input type="hidden" name="knowledge_title" value="' . mb_substr($label, 0 , 8) . (mb_strlen($label) > 8 ? '...' : '') . '">
-                    <input type="hidden" name="knowledge_image" value="' . !empty($image) ? \common\helpers\Attachment::completeUrl($image) : '' . '">
+                    <input type="hidden" name="knowledge_image" value="' . (!empty($image) ? \common\helpers\Attachment::completeUrl($image) : '') . '">
                     <input type="hidden" name="knowledge_content" value="' . $content . '">
                     </label>
                     </div>
