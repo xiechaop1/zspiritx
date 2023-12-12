@@ -12,7 +12,7 @@ namespace frontend\controllers;
 use liyifei\base\controllers\ViewController;
 use yii\web\Controller;
 
-class SecretController extends Controller
+class Secreth5Controller extends Controller
 {
     public $layout = '@frontend/views/layouts/main_secret.php';
 

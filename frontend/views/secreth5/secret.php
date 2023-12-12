@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = $qa['topic'];
+$this->title = '密码锁';
 
 ?>
 <input type="hidden" name="pin_code" value="解锁密码">
