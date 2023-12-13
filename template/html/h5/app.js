@@ -555,7 +555,7 @@ $(function () {
         } else {
             $('#knowledge_image').html('');
         }
-        var knowledge_desc = $("<div>").text(knowledge_desc_code).text();
+        var knowledge_desc = htmIDecode(knowledge_desc_code);
         $('#knowledge_desc').html(knowledge_desc);
 
         $('#knowledge_detail').modal('show');
@@ -571,6 +571,9 @@ $(function () {
             input_obj.val(input_obj.val().slice(0, -1));
         }
     });
+
+    function htmlEncode(html) {return $("<div>").text(html).html()};
+    function htmIDecode(encodedHtml) {return $("<div>").html(encodedHtml).text();}
 
     $("#logout_btn").click(function() {
         $.ajax({
