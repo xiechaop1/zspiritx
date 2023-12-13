@@ -101,7 +101,7 @@ $this->title = '知识库';
                     <input type="hidden" name="knowledge_id" value="' . $item->id . '">
                     <input type="hidden" name="knowledge_title" value="' . mb_substr($label, 0 , 8) . (mb_strlen($label) > 8 ? '...' : '') . '">
                     <input type="hidden" name="knowledge_image" value="' . (!empty($image) ? \common\helpers\Attachment::completeUrl($image) : '') . '">
-                    <input type="hidden" name="knowledge_content" value="' . urlencode($content) . '">
+                    <input type="hidden" name="knowledge_content" value="' . htmlentities($content) . '">
                     </label>
                     </div>
                     </div>

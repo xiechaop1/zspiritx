@@ -555,7 +555,7 @@ $(function () {
         } else {
             $('#knowledge_image').html('');
         }
-        var knowledge_desc = htmIDecode(knowledge_desc_code);
+        var knowledge_desc = unescape(knowledge_desc_code);
         $('#knowledge_desc').html(knowledge_desc);
 
         $('#knowledge_detail').modal('show');
