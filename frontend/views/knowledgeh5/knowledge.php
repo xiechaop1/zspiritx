@@ -145,7 +145,7 @@ $this->title = '知识库';
                 <div class="row" id="knowledge_image">
 
                 </div>
-                <div class="row" id="knowledge_desc">
+                <div id="knowledge_desc">
 
                 </div>
                 <div>
