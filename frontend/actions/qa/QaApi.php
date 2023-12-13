@@ -165,6 +165,12 @@ class QaApi extends ApiAction
 
         $userQa = UserQa::findOne(['user_id' => $userId, 'session_id' => $sessionId, 'qa_id' => $qaId]);
 
+        if ($qa['qa_type'] == Qa::QA_TYPE_CHATGPT) {
+            $response = Yii::$app->chatgpt->callOpenAIChatGPT($answer);
+            $ret['msg'] = $response['choices'][0]['message']['content'];
+            return $ret;
+        }
+
         try {
             $transaction = Yii::$app->db->beginTransaction();
             if ($qa['st_selected'] == $answer) {

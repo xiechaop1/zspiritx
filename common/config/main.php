@@ -30,6 +30,10 @@ return [
         'knowledge' => 'common\services\Knowledge',
         'models'    => 'common\services\Models',
         'score'     => 'common\services\Score',
+        'chatgpt'   => [
+            'class' => 'common\services\ChatGpt',
+            'apiKey' => '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',
+        ],
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',

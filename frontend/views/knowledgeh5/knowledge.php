@@ -169,7 +169,7 @@ if (!empty($showKnowledgeId)) {
             var obj = $('#knowledge_<?= $showKnowledgeId ?>');
             var knowledge_title = obj.find("input[NAME='knowledge_title']").val();
             var knowledge_image = obj.find("input[NAME='knowledge_image']").val();
-            var knowledge_desc = obj.find("input[NAME='knowledge_content']").val();
+            var knowledge_desc_code = obj.find("input[NAME='knowledge_content']").val();
 
             $('#knowledge_title').html(knowledge_title);
             if (knowledge_image != '') {
@@ -177,6 +177,7 @@ if (!empty($showKnowledgeId)) {
             } else {
                 $('#knowledge_image').html('');
             }
+            var knowledge_desc = unescape(knowledge_desc_code);
             $('#knowledge_desc').html(knowledge_desc);
 
             $('#knowledge_detail').modal('show');

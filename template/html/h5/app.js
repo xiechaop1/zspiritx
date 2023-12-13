@@ -66,7 +66,7 @@ $(function () {
         var v_detail=that.attr("data-detail");
         if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
             var v_select = $("input[name='answer']:checked").val();
-        } else if (qa_type == 7) {
+        } else if (qa_type == 7 || qa_type == 9) {
             var v_select = $("input[name='answer_txt']").val();
         } else if (qa_type == 8) {
             var v_selects = $("input[name='answer_txt']");
@@ -111,6 +111,10 @@ $(function () {
 
                     //新消息获取成功
                     if(obj["code"]==200){
+                        if (qa_type == 9) {
+                            $.alert(obj.msg);
+                            return false;
+                        }
                         if(v_ture==v_select){
                             $("#answer-box").hide();
                             $("#answer-right-box").removeClass('hide');
