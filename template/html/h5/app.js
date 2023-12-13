@@ -547,7 +547,7 @@ $(function () {
     function showKnowledge(obj) {
         var knowledge_title = obj.find("input[NAME='knowledge_title']").val();
         var knowledge_image = obj.find("input[NAME='knowledge_image']").val();
-        var knowledge_desc = obj.find("input[NAME='knowledge_content']").val();
+        var knowledge_desc_code = obj.find("input[NAME='knowledge_content']").val();
 
         $('#knowledge_title').html(knowledge_title);
         if (knowledge_image != '') {
@@ -555,6 +555,7 @@ $(function () {
         } else {
             $('#knowledge_image').html('');
         }
+        var knowledge_desc = $("<div>").text(knowledge_desc_code).text();
         $('#knowledge_desc').html(knowledge_desc);
 
         $('#knowledge_detail').modal('show');
