@@ -167,7 +167,11 @@ class QaApi extends ApiAction
 
         if ($qa['qa_type'] == Qa::QA_TYPE_CHATGPT) {
             $response = Yii::$app->chatgpt->callOpenAIChatGPT($answer);
-            $ret['msg'] = $response['choices'][0]['message']['content'];
+            if (!empty($response['choices'][0]['message']['content'])) {
+                $ret['msg'] = $response['choices'][0]['message']['content'];
+            } else {
+                $ret['msg'] = '可能遇到一些错误，请您稍后再试……';
+            }
             return $ret;
         }
 
