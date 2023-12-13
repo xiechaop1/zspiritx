@@ -38,9 +38,9 @@ class QaOne extends Action
             throw new NotFoundHttpException();
         }
 
-        $response = Yii::$app->chatgpt->callOpenAIChatGPT('问题1');
-        $ret['msg'] = $response['choices'][0]['message']['content'];
-        var_dump($response);exit;
+//        $response = Yii::$app->chatgpt->callOpenAIChatGPT('你好');
+//        $ret['msg'] = $response['choices'][0]['message']['content'];
+//        var_dump($response);exit;
 
         $model = $model->toArray();
 

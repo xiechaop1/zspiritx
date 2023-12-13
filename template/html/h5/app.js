@@ -82,6 +82,7 @@ $(function () {
 
 
         if(v_select!=null){
+
             $.ajax({
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
@@ -94,6 +95,9 @@ $(function () {
                     story_id:story_id,
                     session_id:session_id,
                     session_stage_id:session_stage_id
+                },
+                onload: function (data) {
+                    $('#answer-border-response').html('处理中……');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
@@ -112,7 +116,9 @@ $(function () {
                     //新消息获取成功
                     if(obj["code"]==200){
                         if (qa_type == 9) {
-                            $.alert(obj.msg);
+                            console.log(obj);
+                            // $.alert(obj.data.msg);
+                            $('#answer-border-response').html(obj.data.msg);
                             return false;
                         }
                         if(v_ture==v_select){

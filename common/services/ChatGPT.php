@@ -28,8 +28,6 @@ class ChatGPT extends Component
         $apiKey = $this->apiKey;
         $url = self::CHATGPT_HOST . '/chat/completions';
 
-        var_dump(Curl::curlPost($url, [], []));exit;
-
         $messages = array(
             array('role' => 'system', 'content' => '你是一个灵镜新世界的小灵镜，专门解答各种问题'),
             array('role' => 'user', 'content' => $userMessage)
@@ -43,6 +41,7 @@ class ChatGPT extends Component
         );
 
         $data = array(
+            'model' => 'gpt-3.5-turbo',  // 或者使用其他模型
             'messages' => array_merge($messages, $templateMessages),
             'temperature' => 0.7
         );
@@ -68,7 +67,7 @@ class ChatGPT extends Component
         }
 
         curl_close($ch);
-var_dump($response);exit;
+
         return json_decode($response, true);
     }
 

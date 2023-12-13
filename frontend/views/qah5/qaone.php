@@ -88,6 +88,17 @@ $this->title = $qa['topic'];
     .keyboard_area .keyboard_click {
         background-color: #0c84ff;
     }
+
+    .answer-border-response {
+        height: 75px;
+        margin: 0 10px;
+        text-align: center;
+        color: yellow;
+        border: 2px solid white;
+        border-radius: 14px;
+        transition: border-color 0.3s;
+        font-size: 24px;
+    }
 </style>
 <audio autoplay loop>
   <source src="<?= $qa['voice'] ?>" type="audio/mpeg">
@@ -186,9 +197,9 @@ $this->title = $qa['topic'];
                     <input class="form-check-label fs-30" type=text ' . (!empty($str['keyboard']) ? 'readonly' : '') . '  name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
                    <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
                     </div>
-                    <div class="m-t-30 col-sm-12 col-md-6 keyboard_area">
                     ';
                     if (!empty($str['keyboard'])) {
+                        $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
                         $keyboard = $str['keyboard'];
                         $keyboardArray = [];
                         for ($i = 0; $i < mb_strlen($keyboard, 'UTF8'); $i++) {
@@ -205,12 +216,15 @@ $this->title = $qa['topic'];
                             }
                             $i++;
                         }
+                        $optstr .= '</div>';
                     }
 
                     $optstr .= '
                     </div>
-                    </div>
                     ';
+                    $optstr .= '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="answer-border">
+                    等待提问……
+                    </div></div>';
                 } elseif ($inputType == 'verifycode') {
                     $maxLength = !empty($str['length']) ? $str['length'] : 5;
                     $optstr = '<div class="m-t-30 col-sm-12 col-md-6">

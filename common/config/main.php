@@ -32,7 +32,7 @@ return [
         'score'     => 'common\services\Score',
         'chatgpt'   => [
             'class' => 'common\services\ChatGPT',
-            'apiKey' => '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',
+            'apiKey' => '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',
         ],
 
         // add by xiechao
