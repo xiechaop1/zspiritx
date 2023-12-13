@@ -17,15 +17,18 @@ use yii;
 class ChatGPT extends Component
 {
 
-    const CHATGPT_HOST = 'https://api.openai.com/v1';
+//    const CHATGPT_HOST = 'https://api.openai.com/v1';
+    const CHATGPT_HOST = 'https://openai-proxy-openai-proxy-fbgfvcgtgs.us-west-1.fcapp.run/v1';
 
     public $apiKey;
 
     private $_token;
 
     public function callOpenAIChatGPT($userMessage) {
-        $apiKey = 'YOUR_API_KEY'; // 替换为你的实际API密钥
+        $apiKey = $this->apiKey;
         $url = self::CHATGPT_HOST . '/chat/completions';
+
+        var_dump(Curl::curlPost($url, [], []));exit;
 
         $messages = array(
             array('role' => 'system', 'content' => '你是一个灵镜新世界的小灵镜，专门解答各种问题'),
@@ -49,11 +52,14 @@ class ChatGPT extends Component
             'Authorization: Bearer ' . $apiKey
         );
 
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//        curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1:8118");
+//        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
 
         $response = curl_exec($ch);
 
@@ -62,7 +68,7 @@ class ChatGPT extends Component
         }
 
         curl_close($ch);
-
+var_dump($response);exit;
         return json_decode($response, true);
     }
 
