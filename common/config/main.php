@@ -31,7 +31,7 @@ return [
         'models'    => 'common\services\Models',
         'score'     => 'common\services\Score',
         'chatgpt'   => [
-            'class' => 'common\services\ChatGpt',
+            'class' => 'common\services\ChatGPT',
             'apiKey' => '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',
         ],
 
