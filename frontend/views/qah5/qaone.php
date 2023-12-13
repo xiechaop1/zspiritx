@@ -140,6 +140,7 @@ $this->title = $qa['topic'];
                         $inputType = 'checkbox';
                         break;
                     case \common\models\Qa::QA_TYPE_WORD:
+                    case \common\models\Qa::QA_TYPE_CHATGPT:
                         $inputType = 'text';
                         break;
                     case \common\models\Qa::QA_TYPE_VERIFYCODE:
