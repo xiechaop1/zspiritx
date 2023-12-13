@@ -560,6 +560,16 @@ $(function () {
         $('#knowledge_detail').modal('show');
     }
 
+    $(".keyboard").click(function (){
+        var obj = $(this);
+        var val = obj.attr('val');
+        var input_obj = obj.parent().parent().find("input[NAME='answer_txt']");
+        if (val != 'DELETE') {
+            input_obj.val(input_obj.val() + val);
+        } else {
+            input_obj.val(input_obj.val().slice(0, -1));
+        }
+    });
 
     $("#logout_btn").click(function() {
         $.ajax({

@@ -21,7 +21,7 @@ $this->registerMetaTag([
     'content' => 'no-referrer',
 ]);
 //$this->registerMetaTag([
-//    'name' => 'viewport',
+//    'name' => 'viewport',q
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
