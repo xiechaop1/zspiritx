@@ -211,11 +211,11 @@
 
 
     $(function (){
-        var winW=$(window).height()-120;
+        var winH=$(window).height()-200;
         // alert(winW);
         $(".compass-text").css('margin-left','-10px');
 
-        $(".compass-text").css('margin-top',winW/2);
+        $(".compass-text").css('margin-top',winH/2);
         $(".compass-text").removeClass('hide')
         //初始化距离信息
         var user_lng=$("input[name='user_lng']").val();
