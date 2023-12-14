@@ -199,7 +199,6 @@ $this->title = $qa['topic'];
                     $optstr = '';
                     if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_CHATGPT) {
                         $optstr = '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="answer-border">
-                    等待提问……
                     </div></div>';
                     }
                     $optstr .= '<div class="m-t-30 col-sm-12 col-md-6">
