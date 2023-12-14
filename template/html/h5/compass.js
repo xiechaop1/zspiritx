@@ -43,10 +43,10 @@
     //     compassPaper.path(pathlineY).attr(crossStyle)
     // )
     //指北线
-    var northBar = compassPaper.path(northline).attr({
-        stroke: 'white',
-        'stroke-width': 4
-    })
+    // var northBar = compassPaper.path(northline).attr({
+    //     stroke: 'white',
+    //     'stroke-width': 4
+    // })
     var compass = compassPaper.set()
     var strokeWidth
     var billet
