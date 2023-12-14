@@ -15,6 +15,8 @@ class Secreth5Asset extends AssetBundle
 {
     public $sourcePath = '@runtime/../../template';
 
+    CONST HOST = 'https://s.nowkey.net/zspiritx/';
+    
     public $css = [
     	'https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900',
         'https://fonts.googleapis.com/css?family=Share+Tech+Mono',
@@ -24,8 +26,8 @@ class Secreth5Asset extends AssetBundle
 
     ];
     public $js = [
-    	'js/jquery/jQuery-2.1.3.min.js',
-        'js/jquery/jquery.json.min.js',
+        self::HOST . 'js/jquery/jQuery-2.1.3.min.js',
+        self::HOST . 'js/jquery/jquery.json.min.js',
         'html/html5_sliding_unlock/js/flickity.pkgd.js',
         'html/html5_sliding_unlock/js/howler.js',
         'html/html5_sliding_unlock/js/index.js',
