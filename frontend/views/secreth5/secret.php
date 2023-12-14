@@ -35,6 +35,7 @@ $this->title = '密码锁';
 </div>
 
 <div class="loader"></div>
+
 <div class="lock">
   <div class="screen">
     <div class="code">0000</div>
@@ -42,6 +43,70 @@ $this->title = '密码锁';
     <div class="scanlines"></div>
   </div>
   <div class="rows">
+    <div class="row">
+      <div class="cell">
+        <div class="text">0</div>
+      </div>
+      <div class="cell">
+        <div class="text">1</div>
+      </div>
+      <div class="cell">
+        <div class="text">2</div>
+      </div>
+      <div class="cell">
+        <div class="text">3</div>
+      </div>
+      <div class="cell">
+        <div class="text">4</div>
+      </div>
+      <div class="cell">
+        <div class="text">5</div>
+      </div>
+      <div class="cell">
+        <div class="text">6</div>
+      </div>
+      <div class="cell">
+        <div class="text">7</div>
+      </div>
+      <div class="cell">
+        <div class="text">8</div>
+      </div>
+      <div class="cell">
+        <div class="text">9</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell">
+        <div class="text">0</div>
+      </div>
+      <div class="cell">
+        <div class="text">1</div>
+      </div>
+      <div class="cell">
+        <div class="text">2</div>
+      </div>
+      <div class="cell">
+        <div class="text">3</div>
+      </div>
+      <div class="cell">
+        <div class="text">4</div>
+      </div>
+      <div class="cell">
+        <div class="text">5</div>
+      </div>
+      <div class="cell">
+        <div class="text">6</div>
+      </div>
+      <div class="cell">
+        <div class="text">7</div>
+      </div>
+      <div class="cell">
+        <div class="text">8</div>
+      </div>
+      <div class="cell">
+        <div class="text">9</div>
+      </div>
+    </div>
     <div class="row">
       <div class="cell">
         <div class="text">0</div>
