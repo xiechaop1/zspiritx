@@ -211,8 +211,8 @@
 
 
     $(function (){
-        var winW=$(window).height()-40;
-        alert(winW);
+        var winW=$(window).height()-120;
+        // alert(winW);
         $(".compass-text").css('margin-left','-10px');
 
         $(".compass-text").css('margin-top',winW/2);
