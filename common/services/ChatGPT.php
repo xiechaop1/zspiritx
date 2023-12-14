@@ -66,7 +66,7 @@ class ChatGPT extends Component
         return json_decode($response, true);
     }
 
-    public function text2Speech($text, $voice = 'alloy') {
+    public function text2Speech($text, $voice = 'nova') {
         $data = array(
             'model' => 'tts-1',  // 或者使用其他模型
             'input' => $text,

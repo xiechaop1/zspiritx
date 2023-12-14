@@ -180,6 +180,7 @@ class QaApi extends ApiAction
                 $ret['voice'] = Yii::$app->chatgpt->text2Speech($ret['msg']);
 
             } else {
+                var_dump($response);
                 $ret['msg'] = '可能遇到一些错误，请您稍后再试……';
             }
             return $ret;

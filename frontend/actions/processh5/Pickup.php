@@ -149,6 +149,7 @@ class Pickup extends Action
             $storyModelName = !empty($storyModel->story_model_name) ? $storyModel->story_model_name : $storyModel->model->model_name;
             $msg = '您成功获取了 <font color=yellow>' . $storyModelName . '</font>';
 
+            $this->_params['knowledge'] = [];
             if (!empty($knowledgeId)) {
                 Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId);
                 $knowledge = Knowledge::find()
@@ -184,6 +185,7 @@ class Pickup extends Action
             'userId'        => $params['user_id'],
             'sessionId'     => $params['session_id'],
             'msg'           => $msg,
+            'knowledge'     => $params['knowledge'],
         ]);
     }
 }

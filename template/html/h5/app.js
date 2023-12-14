@@ -66,8 +66,13 @@ $(function () {
         var v_detail=that.attr("data-detail");
         if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
             var v_select = $("input[name='answer']:checked").val();
-        } else if (qa_type == 7 || qa_type == 9) {
+        } else if (qa_type == 7) {
             var v_select = $("input[name='answer_txt']").val();
+        } else if (qa_type == 9) {
+            var v_select1 = $("input[name='answer_txt']").val();
+            var v_select2 = '';
+            // var v_select2 = $("#answer-border-response").html();
+            var v_select = v_select2 + v_select1;
         } else if (qa_type == 8) {
             var v_selects = $("input[name='answer_txt']");
             var v_select = '';
@@ -118,12 +123,17 @@ $(function () {
                         if (qa_type == 9) {
                             console.log(obj);
                             // $.alert(obj.data.msg);
-                            $('#answer-border-response').html(obj.data.msg);
+                            var htmlObj = $('#answer-border-response');
+                            if (htmlObj.html() == '等待提问……') {
+                                htmlObj.html('');
+                            }
+                            htmlObj.html(htmlObj.html() + '<br>' + '小灵语：' + obj.data.msg);
                             if (obj.data.voice != undefined) {
                                 var audio_voice=$("#audio_voice")[0];
                                 audio_voice.src = obj.data.voice;
                                 audio_voice.play();
                             }
+                            $("input[name='answer_txt']").val('');
                             return false;
                         }
                         if(v_ture==v_select){
