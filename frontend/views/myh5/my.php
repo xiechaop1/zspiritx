@@ -53,6 +53,7 @@ $this->title = '我的';
                         <label class="form-check-label fs-30 answer-btn">
                             <span class="answer-tag">M</span>
                             <span style="padding-left: 90px; "><a href="/knowledgeh5/all?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&knowledge_class_id=<?= \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION ?>">任务</a></span>
+                            <?= $userKnowledge[\common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION] == 1 ? '<img src="../../static/img/qa/unread.png" style="margin-left: 15px;"></img>' : '' ?>
                     </label>
                      </div>
                 </div>
@@ -65,6 +66,7 @@ $this->title = '我的';
                                 <label class="form-check-label fs-30 answer-btn">
                                     <span class="answer-tag">K</span>
                                     <span style="padding-left: 90px; "><a href="/knowledgeh5/all?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&knowledge_class_id=<?= \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL ?>">知识</a></span>
+                                    <?= $userKnowledge[\common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL] == 1 ? '<img src="../../static/img/qa/unread.png" style="margin-left: 15px;"></img>' : '' ?>
                                 </label>
 
                             </div>

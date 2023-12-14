@@ -29,6 +29,10 @@ class KnowledgeController extends Controller
                 'class' => 'frontend\actions\knowledge\KnowledgeApi',
                 'action' => 'get_knowledge_by_user',
             ],
+            'set_read' => [
+                'class' => 'frontend\actions\knowledge\KnowledgeApi',
+                'action' => 'set_read',
+            ],
 
         ];
     }

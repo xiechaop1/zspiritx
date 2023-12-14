@@ -43,14 +43,19 @@ class Knowledge extends Action
             ->orderBy('sort_by ASC')
             ->all();
 
-        $userKnowledge = UserKnowledge::find()
+        $userKnowledges = UserKnowledge::find()
             ->where([
                 'user_id'       => $userId,
                 'session_id'    => $sessionId,
             ])
             ->all();
 
-        $userKnowledgeMap = ArrayHelper::map($userKnowledge, 'knowledge_id', 'knowledge_status');
+        $userKnowledgeMap = ArrayHelper::map($userKnowledges, 'knowledge_id', 'knowledge_status');
+
+        $userKnowledge = [];
+        foreach ($userKnowledges as $uk) {
+            $userKnowledge[$uk->knowledge_id] = $uk;
+        }
 
 
         return $this->controller->render('knowledge', [

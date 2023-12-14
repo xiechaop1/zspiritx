@@ -56,6 +56,9 @@ class KnowledgeApi extends ApiAction
                 case 'get_knowledge_by_user':
                     $ret = $this->getKnowledgeByUser();
                     break;
+                case 'set_read':
+                    $ret = $this->setRead();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -102,6 +105,16 @@ class KnowledgeApi extends ApiAction
         }
 
         return $ret;
+    }
+
+    public function setRead()
+    {
+        $userKnowledgeId = !empty($this->_get['user_knowledge_id']) ? $this->_get['user_knowledge_id'] : 0;
+
+
+        return Yii::$app->knowledge->isReadByUserKnowledgeId(
+            $userKnowledgeId
+        );
     }
 
     public function completeKnowledge() {
