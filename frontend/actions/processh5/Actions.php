@@ -37,6 +37,12 @@ class Actions extends Action
 
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
+        $knowledgeId = !empty($this->_get['knowledge_id']) ? $this->_get['knowledge_id'] : 0;
+        $knowledge = [];
+        if (!empty($knowledgeId)) {
+            $knowledge = Knowledge::findOne($knowledgeId);
+        }
+
         try {
             $ret = Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $actDetail, $actType, $expirationInterval);
             $msg = '消息成功发送';
@@ -44,13 +50,14 @@ class Actions extends Action
             $msg = $e->getMessage();
         }
 
-        return $this->controller->render('actions', [
+        return $this->controller->render('msg', [
             'model'            => $ret,
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'msg'           => $msg,
+            'knowledge'     => $knowledge,
         ]);
 
     }
