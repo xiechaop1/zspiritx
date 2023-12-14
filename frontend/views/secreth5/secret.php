@@ -14,7 +14,7 @@
  * @var \common\models\Secret $qa
  */
 
-\frontend\assets\secreth5Asset::register($this);
+\frontend\assets\Secreth5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
