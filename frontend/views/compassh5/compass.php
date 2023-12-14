@@ -53,7 +53,7 @@ $this->title = '罗盘';
     返回
 </div>
 
-<div class="compass-text">
+<div class="compass-text hide">
   距离 <span class="color-red">-- 米</span>
 </div>
 <div class="box-center m-t-40">
