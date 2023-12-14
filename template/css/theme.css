@@ -4165,7 +4165,9 @@ header .user-name{
 .round.green,.round.red,.contact-hide,.contact-show{
     cursor: pointer;
 }
-
+.hide{
+    display: none;
+}
 .user-tag-1{
     height:30px;
     background:rgba(221,238,221,1);

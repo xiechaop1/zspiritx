@@ -26,7 +26,7 @@
     //创建画布
     var compassPaper = Raphael(initX, initY, paperWidth, paperHeight)
     //画园
-    compassPaper.circle(paperWidth / 2, paperHeight / 2, crLong).attr('fill', 'black');
+    // compassPaper.circle(paperWidth / 2, paperHeight / 2, crLong).attr('fill', 'black');
 
     var cross = compassPaper.set()
     var crossStyle = {
@@ -38,28 +38,28 @@
     var pathlineY = 'M' + (paperWidth / 2) + ' ' + (paperHeight / 2 - crShort / 2) + 'L' + (paperWidth / 2) + ' ' + (paperHeight / 2 + crShort / 2);
     var northline = 'M' + (paperWidth / 2) + ' ' + (paperHeight / 2 - crShort) + 'L' + (paperWidth / 2) + ' ' + (crLong - crShort);
 
-    cross.push(
-        compassPaper.path(pathlineX).attr(crossStyle),
-        compassPaper.path(pathlineY).attr(crossStyle)
-    )
+    // cross.push(
+    //     compassPaper.path(pathlineX).attr(crossStyle),
+    //     compassPaper.path(pathlineY).attr(crossStyle)
+    // )
     //指北线
-    var northBar = compassPaper.path(northline).attr({
-        stroke: 'white',
-        'stroke-width': 4
-    })
+    // var northBar = compassPaper.path(northline).attr({
+    //     stroke: 'white',
+    //     'stroke-width': 4
+    // })
     var compass = compassPaper.set()
     var strokeWidth
     var billet
     var degText
     for (var i = 0; i < 360; i = i + 5) {
         if (i % 30 == 0) {
-            strokeWidth = 2
+           /* strokeWidth = 2
             degText = compassPaper.text(paperWidth / 2, (paperHeight / 2 - crShort) * 4 / 5, i).attr({
                 fill: 'white',
                 'font-size': '24rem'
             }).transform('R' + i + ', ' + paperWidth / 2 + ', ' + paperHeight / 2)
             degText.degPosition = i
-            compass.push(degText)
+            compass.push(degText)*/
         } else {
             strokeWidth = 1
         }
@@ -73,9 +73,9 @@
         );
     }
     ['北', '东', '南', '西'].forEach(function(direction, index) {
-        var directionText = compassPaper.text(paperWidth / 2, (paperHeight / 2 - crShort + crShort / 3), direction).attr({
+        var directionText = compassPaper.text(paperWidth / 2, (paperHeight / 8 - crShort/2 + crShort / 3), direction).attr({
             fill: 'white',
-            'font-size': '30rem'
+            'font-size': '40rem'
         }).transform('R' + index * 90 + ', ' + (paperWidth / 2) + ',' + paperHeight / 2)
         directionText.degPosition = index * 90
         compass.push(directionText)
@@ -211,6 +211,12 @@
 
 
     $(function (){
+        var winH=$(window).height()-260;
+        // alert(winW);
+        $(".compass-text").css('margin-left','-10px');
+
+        $(".compass-text").css('margin-top',winH/2);
+        $(".compass-text").removeClass('hide')
         //初始化距离信息
         var user_lng=$("input[name='user_lng']").val();
         var user_lat=$("input[name='user_lat']").val();
@@ -222,6 +228,7 @@
         var distance = lnglat1.distance(lnglat2);//计算lnglat1到lnglat2之间的实际距离(m)
         distance=Math.round(distance)
         $(".compass-text .color-red").empty().text(distance+" 米");
+
 
 
         //更具用户经纬度获取和目的地的信息
