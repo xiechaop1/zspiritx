@@ -28,10 +28,10 @@ class Curl
             $postFields = http_build_query($postFields);
         } else {
             $postFields = json_encode($postFields);
-            $header = [
-                'Content-Type: application/json; charset=utf-8',
-                'Content-Length: ' . strlen($postFields)
-            ];
+
+            $header[] = 'Content-Type: application/json; charset=utf-8';
+            $header[] = 'Content-Length: ' . strlen($postFields);
+
         }
 
         $ch = curl_init ();
@@ -49,6 +49,11 @@ class Curl
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $postFields );
 
         $result = curl_exec ( $ch );
+
+        if (curl_errno($ch)) {
+//            echo 'Error:' . curl_error($ch);
+            $result = curl_error($ch);
+        }
 
         curl_close ( $ch );
 

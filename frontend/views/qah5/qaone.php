@@ -117,6 +117,10 @@ $this->title = $qa['topic'];
     您的浏览器不支持 audio 元素。
 </audio>
 
+    <audio controls id="audio_voice" class="hide">
+        <source src="" type="audio/mpeg">
+        您的浏览器不支持 audio 元素。
+    </audio>
 
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
@@ -222,9 +226,11 @@ $this->title = $qa['topic'];
                     $optstr .= '
                     </div>
                     ';
-                    $optstr .= '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="answer-border">
+                    if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_CHATGPT) {
+                        $optstr .= '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="answer-border">
                     等待提问……
                     </div></div>';
+                    }
                 } elseif ($inputType == 'verifycode') {
                     $maxLength = !empty($str['length']) ? $str['length'] : 5;
                     $optstr = '<div class="m-t-30 col-sm-12 col-md-6">

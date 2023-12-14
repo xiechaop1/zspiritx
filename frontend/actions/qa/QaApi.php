@@ -166,10 +166,21 @@ class QaApi extends ApiAction
         $userQa = UserQa::findOne(['user_id' => $userId, 'session_id' => $sessionId, 'qa_id' => $qaId]);
 
         if ($qa['qa_type'] == Qa::QA_TYPE_CHATGPT) {
-            $response = Yii::$app->chatgpt->callOpenAIChatGPT($answer);
+            $knowledges = [];
+            if (!empty($qa['knowledge_id'])) {
+                $knowledgesData = Yii::$app->knowledge->get($qa['knowledge_id'], $sessionId, $userId);
+                if (!empty($knowledgesData->knowledge)) {
+                    $knowledges = $knowledgesData->knowledge;
+                }
+            }
+
+            $response = Yii::$app->chatgpt->callOpenAIChatGPT($answer, $knowledges);
             if (!empty($response['choices'][0]['message']['content'])) {
                 $ret['msg'] = $response['choices'][0]['message']['content'];
+                $ret['voice'] = Yii::$app->chatgpt->text2Speech($ret['msg']);
+
             } else {
+                var_dump($response);
                 $ret['msg'] = '可能遇到一些错误，请您稍后再试……';
             }
             return $ret;

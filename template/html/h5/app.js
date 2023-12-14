@@ -119,6 +119,11 @@ $(function () {
                             console.log(obj);
                             // $.alert(obj.data.msg);
                             $('#answer-border-response').html(obj.data.msg);
+                            if (obj.data.voice != undefined) {
+                                var audio_voice=$("#audio_voice")[0];
+                                audio_voice.src = obj.data.voice;
+                                audio_voice.play();
+                            }
                             return false;
                         }
                         if(v_ture==v_select){
