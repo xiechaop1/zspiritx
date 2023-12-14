@@ -40,7 +40,7 @@ class Actions extends Action
         $knowledgeId = !empty($this->_get['knowledge_id']) ? $this->_get['knowledge_id'] : 0;
         $knowledge = [];
         if (!empty($knowledgeId)) {
-            $knowledge = Knowledge::findOne($knowledgeId);
+            $knowledge = \common\models\Knowledge::findOne($knowledgeId);
         }
 
         try {
