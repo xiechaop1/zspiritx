@@ -52,6 +52,36 @@ class Knowledge extends Component
         return $userKnowledge;
     }
 
+    public function isRead($knowledgeId, $sessionId, $userId, $storyId) {
+        $userKnowledge = UserKnowledge::find()
+            ->where([
+                'user_id' => $userId,
+                'knowledge_id' => $knowledgeId,
+                'session_id' => $sessionId,
+            ])->one();
+
+        if (!empty($userKnowledge)) {
+            $userKnowledge->is_read = UserKnowledge::KNOWLEDGE_IS_READ_YES;
+            $userKnowledge->save();
+        } else {
+            throw new \Exception('用户没有接受知识/任务', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
+        }
+    }
+
+    public function isReadByUserKnowledgeId($userKnowledgeId) {
+        $userKnowledge = UserKnowledge::find()
+            ->where([
+                'id' => $userKnowledgeId,
+            ])->one();
+
+        if (!empty($userKnowledge)) {
+            $userKnowledge->is_read = UserKnowledge::KNOWLEDGE_IS_READ_YES;
+            $userKnowledge->save();
+        } else {
+            throw new \Exception('用户没有接受知识/任务', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
+        }
+    }
+
     public function set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act = 'complete') {
 
         $knowledge = \common\models\Knowledge::findOne($knowledgeId);

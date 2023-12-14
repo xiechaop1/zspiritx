@@ -24,6 +24,14 @@ class UserKnowledge extends \common\models\gii\UserKnowledge
         self::KNOWLDEGE_STATUS_REMOVE   => '已删除',
     ];
 
+    const KNOWLEDGE_IS_READ_YES = 1;     // 已读
+    const KNOWLEDGE_IS_READ_NO = 0;      // 未读
+
+    public static $knowledgeIsRead2Name = [
+        self::KNOWLEDGE_IS_READ_YES => '已读',
+        self::KNOWLEDGE_IS_READ_NO => '未读',
+    ];
+
     public function behaviors()
     {
         return [

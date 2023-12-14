@@ -583,6 +583,36 @@ $(function () {
         var knowledge_desc = unescape(knowledge_desc_code);
         $('#knowledge_desc').html(knowledge_desc);
 
+        var user_knowledge_id = obj.find("input[NAME='user_knowledge_id']").val();
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/knowledge/set_read',
+            data:{
+                user_knowledge_id:user_knowledge_id
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //新消息获取成功
+                if(obj["code"]==200){
+                    $('#unread_' + user_knowledge_id).hide();
+                }
+                //新消息获取失败
+                else{
+                    alert(obj.msg)
+                }
+
+            }
+        });
+
         $('#knowledge_detail').modal('show');
     }
 
