@@ -110,8 +110,8 @@ class AskApi extends ApiAction
                 $ret['old_answer'] = $oldAnswerArray;
             } else {
 //                var_dump($response);
-                if (!empty($ret['error']['msg'])) {
-                    $ret['msg'] = $ret['error']['msg'];
+                if (!empty($ret['error']['message'])) {
+                    $ret['msg'] = $ret['error']['message'];
                 } else {
                     $ret['msg'] = '可能遇到一些错误，请您稍后再试……';
                 }
