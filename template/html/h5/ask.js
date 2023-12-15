@@ -53,6 +53,7 @@ $(function () {
                 type: "POST", //用POST方式传输
                 dataType: "json", //数据格式:JSON
                 async: false,
+                timeout: 120000,
                 url: '/ask/say?is_test=1',
                 data:{
                     user_id:user_id,
