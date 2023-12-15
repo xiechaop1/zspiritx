@@ -67,7 +67,8 @@ $(function () {
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     $("#h5-process").modal('hide');
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
-                    $.alert("网络异常，请检查网络情况");
+                    // $.alert("网络异常，请检查网络情况");
+                    $.alert(textStatus);
                 },
                 success: function (data, status){
                     var dataContent=data;

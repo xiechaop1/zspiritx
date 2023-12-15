@@ -109,8 +109,12 @@ class AskApi extends ApiAction
                 $ret['old_answer_json'] = json_encode($oldAnswerArray);
                 $ret['old_answer'] = $oldAnswerArray;
             } else {
-                var_dump($response);
-                $ret['msg'] = '可能遇到一些错误，请您稍后再试……';
+//                var_dump($response);
+                if (!empty($ret['error']['msg'])) {
+                    $ret['msg'] = $ret['error']['msg'];
+                } else {
+                    $ret['msg'] = '可能遇到一些错误，请您稍后再试……';
+                }
             }
             return $ret;
 //        }
