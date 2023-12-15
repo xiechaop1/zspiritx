@@ -66,36 +66,42 @@ $this->title = '密码锁';
     for ($i=0; $i<strlen($stSelected); $i++) {
       ?>
       <div class="row">
+          <?php
+          for ($j=0; $j<mb_strlen($qa['selected_json'], 'UTF8'); $j++) {
+          ?>
       <div class="cell">
-        <div class="text">0</div>
+        <div class="text"><?= mb_substr($qa['selected_json'], $j, 1, 'UTF8') ?></div>
       </div>
-      <div class="cell">
-        <div class="text">1</div>
-      </div>
-      <div class="cell">
-        <div class="text">2</div>
-      </div>
-      <div class="cell">
-        <div class="text">3</div>
-      </div>
-      <div class="cell">
-        <div class="text">4</div>
-      </div>
-      <div class="cell">
-        <div class="text">5</div>
-      </div>
-      <div class="cell">
-        <div class="text">6</div>
-      </div>
-      <div class="cell">
-        <div class="text">7</div>
-      </div>
-      <div class="cell">
-        <div class="text">8</div>
-      </div>
-      <div class="cell">
-        <div class="text">9</div>
-      </div>
+          <?php
+          }
+          ?>
+<!--      <div class="cell">-->
+<!--        <div class="text">1</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">2</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">3</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">4</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">5</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">6</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">7</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">8</div>-->
+<!--      </div>-->
+<!--      <div class="cell">-->
+<!--        <div class="text">9</div>-->
+<!--      </div>-->
     </div>
     <?php
     }

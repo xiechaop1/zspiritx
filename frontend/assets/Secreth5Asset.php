@@ -16,7 +16,7 @@ class Secreth5Asset extends AssetBundle
     public $sourcePath = '@runtime/../../template';
 
     CONST HOST = 'https://s.nowkey.net/zspiritx/';
-    
+
     public $css = [
     	'https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900',
         'https://fonts.googleapis.com/css?family=Share+Tech+Mono',
