@@ -24,6 +24,34 @@ class ChatGPT extends Component
 
     private $_token;
 
+    public function chatWithChatGPT($userMessage, $oldMessages = [], $templateContents = array()) {
+
+        $messages = array(
+            array('role' => 'system', 'content' => '你是一个灵镜新世界的小灵镜，专门解答各种问题'),
+            array('role' => 'user', 'content' => $userMessage)
+        );
+
+        $templateMessages = array();
+        if (!empty($templateContents)) {
+            foreach ($templateContents as $templateContent) {
+                $templateMessages[] = array('role' => 'assistant', 'content' => $templateContent);
+            }
+        }
+
+        $messages = array_merge($oldMessages, $messages);
+//        var_dump($messages);exit;
+
+        $data = array(
+            'model' => 'gpt-3.5-turbo',  // 或者使用其他模型
+            'messages' => array_merge($messages, $templateMessages),
+            'temperature' => 0.7
+        );
+//var_dump($data);exit;
+        $response = $this->_call('/chat/completions', $data, 'POST');
+
+        return json_decode($response, true);
+    }
+
     public function callOpenAIChatGPT($userMessage, $templateContents = array()) {
 //        $apiKey = $this->apiKey;
 //        $url = self::CHATGPT_HOST . '/chat/completions';

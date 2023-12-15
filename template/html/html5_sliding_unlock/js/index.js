@@ -227,7 +227,8 @@ var lock = new Lock();
 
 $("#return_btn").click(function (){
   var params = {
-    'WebViewOff':1
+    'WebViewOff':1,
+    'AnswerType':2
   }
   var data=$.toJSON(params);
   Unity.call(data);

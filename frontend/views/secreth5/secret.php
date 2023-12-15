@@ -49,7 +49,7 @@ $this->title = '密码锁';
         您的浏览器不支持 audio 元素。
     </audio>
 
-<div class="btn-m-green m-t-30 float-right m-r-20" id="qa_return_btn">
+<div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
   返回
 </div>
 
