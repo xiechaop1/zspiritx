@@ -95,21 +95,25 @@ class ChatGPT extends Component
     }
 
     public function text2Speech($text, $voice = 'nova') {
-        $data = array(
-            'model' => 'tts-1',  // 或者使用其他模型
-            'input' => $text,
-            'voice' => $voice
-        );
+        try {
+            $data = array(
+                'model' => 'tts-1',  // 或者使用其他模型
+                'input' => $text,
+                'voice' => $voice
+            );
 
-        $steam = $this->_call('/audio/speech', $data, 'POST');
+            $steam = $this->_call('/audio/speech', $data, 'POST');
 
-        $tempFile = '/tmp/' . md5($text) . '.mp3';
+            $tempFile = '/tmp/' . md5($text) . '.mp3';
 
-        $saveFile = Yii::$app->basePath . '/web' . $tempFile;
+            $saveFile = Yii::$app->basePath . '/web' . $tempFile;
 
-        file_put_contents($saveFile, $steam);
+            file_put_contents($saveFile, $steam);
 
-        return $tempFile;
+            return $tempFile;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     private function _formatResponse($response) {

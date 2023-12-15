@@ -95,7 +95,12 @@ class AskApi extends ApiAction
             $response = Yii::$app->chatgpt->chatWithChatGPT($answer, $oldAnswerArray, $knowledges);
             if (!empty($response['choices'][0]['message']['content'])) {
                 $ret['msg'] = $response['choices'][0]['message']['content'];
-                $ret['voice'] = Yii::$app->chatgpt->text2Speech($ret['msg']);
+                try {
+                    $ret['voice'] = Yii::$app->chatgpt->text2Speech($ret['msg']);
+                } catch (\Exception $e) {
+                    $ret['voice'] = '';
+                    $ret['msg'] = $e->getMessage();
+                }
 
                 $oldAnswerArray[] = [
                     'role' => 'user',
@@ -110,8 +115,8 @@ class AskApi extends ApiAction
                 $ret['old_answer'] = $oldAnswerArray;
             } else {
 //                var_dump($response);
-                if (!empty($ret['error']['message'])) {
-                    $ret['msg'] = $ret['error']['message'];
+                if (!empty($ret['error']['type'])) {
+                    $ret['msg'] = $ret['error']['type'];
                 } else {
                     $ret['msg'] = '可能遇到一些错误，请您稍后再试……';
                 }
