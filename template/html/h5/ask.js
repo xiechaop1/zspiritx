@@ -1,7 +1,6 @@
 $(function () {
 
     $(document).bind("ajaxSend", function() {
-        return false;
         $("#h5-process").modal('show');
         // $("#h5-process").show();
     }).bind("ajaxComplete", function() {
@@ -27,8 +26,8 @@ $(function () {
         var session_id=$("input[name='session_id']").val();
         var v_select = $("input[name='ask_answer_txt']").val();
 
-        $("#h5-process").modal('show');
-        $("#h5-process").show();
+        // $("#h5-process").modal('show');
+        // $("#h5-process").show();
 
         // $("#answer-box").hide();
         if(v_select==null){
