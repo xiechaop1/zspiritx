@@ -82,6 +82,9 @@
     })
 
     var redTriLine = 'M' + (paperWidth / 2) + ' ' + ((paperHeight / 2 - crLong) + cdiff / 2) + ' L' + (paperWidth / 2 - (paperHeight / 2 - crShort) / 4) + ' ' + (paperHeight / 2 - crShort) + ' L' + (paperWidth / 2 + (paperHeight / 2 - crShort) / 4) + ' ' + (paperHeight / 2 - crShort) + 'Z';
+
+    redTriLine = compassPaper.image("../../img/pin.png", paperWidth / 2-100, (paperHeight / 2 - crLong-80) + cdiff / 2, 200, 200);
+
     var redTriangle = compassPaper.path(redTriLine).attr({
         fill: 'red',
         'stroke-width': 0
