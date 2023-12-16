@@ -11,7 +11,7 @@ $(function () {
     //判断是否答对
     $(".ask_answer").click(function () {
         // submitAnswer($(this));
-        submitAnswer();
+        submitAskAnswer();
     });
     $(".ask_answer_show").click(function () {
         $("#h5-process").modal("show");
@@ -25,7 +25,7 @@ $(function () {
     //     return false;
     // });
 
-    function submitAnswer(thisObj) {
+    function submitAskAnswer(thisObj) {
         var that=$("#answer-info");
         var story_id=that.attr("data-story");
         var user_id=$("input[name='user_id']").val();
