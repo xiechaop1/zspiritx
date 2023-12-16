@@ -9,7 +9,7 @@ $(function () {
     // var old_answer_json=$("input[name='ask_old_answer']").val();
 
     //判断是否答对
-    $("input[name='ask_answer']").click(function () {
+    $(".ask_answer").click(function () {
         submitAnswer($(this));
     });
 
@@ -38,6 +38,7 @@ $(function () {
 
 
         if(v_select!=null&&v_select!=undefined&&v_select!=""){
+            console.log('ajax 进程 1')
             $("#h5-process").modal("show");
 
             var content_obj = $('#answer-border-response');
@@ -51,6 +52,7 @@ $(function () {
             newDiv.append(newContent);
             newDiv.append(newName);
             content_obj.append(newDiv);
+            console.log('ajax 进程 2')
 
 
             $.ajax({
@@ -70,18 +72,21 @@ $(function () {
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log('ajax 进程 3')
                     $("#h5-process").modal("hide");
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
                     // $.alert("网络异常，请检查网络情况");
                     $.alert(textStatus);
                 },
                 success: function (data, status){
+                    console.log('ajax 进程 3')
+                    $("#h5-process").modal("hide");
                     var dataContent=data;
                     var dataCon=$.toJSON(dataContent);
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                     //console.log("ajax请求成功:"+data.toString())
 
-                    $("#h5-process").modal("hide");
+
                     //新消息获取成功
                     if(obj["code"]==200){
                             // console.log(obj);
