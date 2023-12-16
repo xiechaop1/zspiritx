@@ -38,6 +38,7 @@ $(function () {
 
 
         if(v_select!=null&&v_select!=undefined&&v_select!=""){
+            $("#h5-process").modal("show");
 
             var content_obj = $('#answer-border-response');
             content_obj.html('');
@@ -50,7 +51,7 @@ $(function () {
             newDiv.append(newContent);
             newDiv.append(newName);
             content_obj.append(newDiv);
-            $("#h5-process").modal('show');
+
 
             $.ajax({
                 type: "POST", //用POST方式传输
@@ -69,7 +70,7 @@ $(function () {
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $("#h5-process").modal('hide');
+                    $("#h5-process").modal("hide");
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
                     // $.alert("网络异常，请检查网络情况");
                     $.alert(textStatus);
@@ -80,7 +81,7 @@ $(function () {
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                     //console.log("ajax请求成功:"+data.toString())
 
-                    $("#h5-process").modal('hide');
+                    $("#h5-process").modal("hide");
                     //新消息获取成功
                     if(obj["code"]==200){
                             // console.log(obj);
