@@ -63,14 +63,11 @@ $(function () {
             content_obj.append(newDiv);
             console.log('ajax 进程 2')
 
-            var dt = new Date();
-            var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            $.alert(time);
             $.ajax({
                 type: "POST", //用POST方式传输
                 dataType: "json", //数据格式:JSON
-                async: false,
-                timeout: 120000,
+                async: true,
+                timeout: 0,
                 url: '/ask/say?is_test=1',
                 data:{
                     user_id:user_id,
@@ -153,9 +150,6 @@ $(function () {
                     else{
 
                         $.alert(obj.msg);
-                        var dt = new Date();
-                        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-                        $.alert(time);
                     }
 
                 }
