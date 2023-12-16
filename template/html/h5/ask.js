@@ -63,7 +63,9 @@ $(function () {
             content_obj.append(newDiv);
             console.log('ajax 进程 2')
 
-
+            var dt = new Date();
+            var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+            $.alert(time);
             $.ajax({
                 type: "POST", //用POST方式传输
                 dataType: "json", //数据格式:JSON
@@ -149,7 +151,11 @@ $(function () {
                     }
                     //新消息获取失败
                     else{
-                        $.alert(obj.msg)
+
+                        $.alert(obj.msg);
+                        var dt = new Date();
+                        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+                        $.alert(time);
                     }
 
                 }
@@ -157,6 +163,15 @@ $(function () {
         }
     };
 
+    $("#qa_return_btn").click(function (){
+        // Unity.call('WebViewOff&FalseAnswer');
+        var params = {
+            'WebViewOff':1,
+            'AnswerType':2
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
 
 
 })
