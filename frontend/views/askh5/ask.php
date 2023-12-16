@@ -197,8 +197,8 @@ $this->title = '小灵镜';
                     </div></div>
             </div>
             <div class="row">
-            <label class="fs-30 ask_answer_show" style="color: yellow;" >显示</label>
-            <label class="fs-30 ask_answer_hide" style="color: yellow;" >关闭</label>
+            <!--<label class="fs-30 ask_answer_show" style="color: yellow;" >显示</label>
+            <label class="fs-30 ask_answer_hide" style="color: yellow;" >关闭</label>-->
                     <div class="m-t-30 col-sm-12 col-md-6" style="position: fixed; bottom: 10px; left: 5px;">
                     <div class="answer-border" >
                         <form id="ask_form">

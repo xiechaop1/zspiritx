@@ -41,6 +41,8 @@ $(function () {
         if(v_select==null||v_select==undefined||v_select==''){
             $.alert('请选择答案')
             // $("#h5-null").modal('show');
+        }else{
+            $("#h5-process").modal("show");
         }
 
 
