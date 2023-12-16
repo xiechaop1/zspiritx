@@ -39,11 +39,12 @@ class ChatGPT extends Component
         }
 
         $messages = array_merge($oldMessages, $messages);
+        $messages = array_merge($templateMessages, $messages);
 //        var_dump($messages);exit;
 
         $data = array(
             'model' => 'gpt-3.5-turbo',  // 或者使用其他模型
-            'messages' => array_merge($messages, $templateMessages),
+            'messages' => $messages,
             'temperature' => 0.7
         );
 //var_dump($data);exit;
