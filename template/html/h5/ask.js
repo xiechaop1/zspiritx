@@ -25,19 +25,19 @@ $(function () {
         var old_answer=$("input[name='ask_old_answer']").val();
         var session_id=$("input[name='session_id']").val();
         var v_select = $("input[name='ask_answer_txt']").val();
-        console.log("v_select:"+v_select)
+        console.log("v_select:"+v_select,v_select.length);
 
         // $("#h5-process").modal('show');
         // $("#h5-process").show();
 
         // $("#answer-box").hide();
-        if(v_select==null||v_select==undefined){
+        if(v_select==null||v_select==undefined||v_select==''){
             $.alert('请选择答案')
             // $("#h5-null").modal('show');
         }
 
 
-        if(v_select!=null&&v_select!=undefined){
+        if(v_select!=null&&v_select!=undefined&&v_select!=""){
 
             var content_obj = $('#answer-border-response');
             content_obj.html('');
