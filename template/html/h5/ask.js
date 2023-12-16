@@ -1,11 +1,11 @@
 $(function () {
 
-    $(document).bind("ajaxSend", function() {
+  /*  $(document).bind("ajaxSend", function() {
         $("#h5-process").modal('show');
         // $("#h5-process").show();
     }).bind("ajaxComplete", function() {
         $("h5-process").modal('hide');
-    });
+    });*/
     // var old_answer_json=$("input[name='ask_old_answer']").val();
 
     //判断是否答对
@@ -25,17 +25,19 @@ $(function () {
         var old_answer=$("input[name='ask_old_answer']").val();
         var session_id=$("input[name='session_id']").val();
         var v_select = $("input[name='ask_answer_txt']").val();
+        console.log("v_select:"+v_select)
 
         // $("#h5-process").modal('show');
         // $("#h5-process").show();
 
         // $("#answer-box").hide();
-        if(v_select==null){
-            $("#h5-null").modal('show');
+        if(v_select==null||v_select==undefined){
+            $.alert('请选择答案')
+            // $("#h5-null").modal('show');
         }
 
 
-        if(v_select!=null){
+        if(v_select!=null&&v_select!=undefined){
 
             var content_obj = $('#answer-border-response');
             content_obj.html('');
@@ -48,6 +50,7 @@ $(function () {
             newDiv.append(newContent);
             newDiv.append(newName);
             content_obj.append(newDiv);
+            $("#h5-process").modal('show');
 
             $.ajax({
                 type: "POST", //用POST方式传输
