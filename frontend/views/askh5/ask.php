@@ -201,8 +201,8 @@ $this->title = '小灵镜';
                     <div class="answer-border" >
                         <form id="ask_form">
                     <input class="form-check-label fs-30" type=text <?= (!empty($str['keyboard']) ? 'readonly' : '') ?> name="ask_answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
-                   <input type="button" name="ask_answer" value="提交" class="fs-30" style="color: yellow;">
-                        <input type="hidden" name="ask_old_answer" value='<?= json_encode([[
+                    <input type="button" name="ask_answer" value="提交" class="fs-30" style="color: yellow;">
+                    <input type="hidden" name="ask_old_answer" value='<?= json_encode([[
                             'role' => 'assistant',
                             'content' => '我是小灵镜，有什么可以帮您？',
                         ]]); ?>'>
@@ -274,23 +274,22 @@ $this->title = '小灵镜';
 
 
 <!-- 按钮：用于打开模态框 -->
-    <div class="modal fade" id="h5-process" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal fade" id="h5-process" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
-                <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="p-20-40 relative h5" name="loginStr" style="width: 600px;">
                     <div>
                         <div class="fs-36 text-F6 text-center bold">
                             正在思考中……
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-<div class="modal fade" id="h5-null" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="h5-null" tabindex="-1"  aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>

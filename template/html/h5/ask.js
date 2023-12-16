@@ -1,11 +1,11 @@
 $(function () {
 
-    $(document).bind("ajaxSend", function() {
+  /*  $(document).bind("ajaxSend", function() {
         $("#h5-process").modal('show');
         // $("#h5-process").show();
     }).bind("ajaxComplete", function() {
         $("h5-process").modal('hide');
-    });
+    });*/
     // var old_answer_json=$("input[name='ask_old_answer']").val();
 
     //判断是否答对
@@ -25,17 +25,20 @@ $(function () {
         var old_answer=$("input[name='ask_old_answer']").val();
         var session_id=$("input[name='session_id']").val();
         var v_select = $("input[name='ask_answer_txt']").val();
+        console.log("v_select:"+v_select,v_select.length);
 
         // $("#h5-process").modal('show');
         // $("#h5-process").show();
 
         // $("#answer-box").hide();
-        if(v_select==null){
-            $("#h5-null").modal('show');
+        if(v_select==null||v_select==undefined||v_select==''){
+            $.alert('请选择答案')
+            // $("#h5-null").modal('show');
         }
 
 
-        if(v_select!=null){
+        if(v_select!=null&&v_select!=undefined&&v_select!=""){
+            $("#h5-process").modal("show");
 
             var content_obj = $('#answer-border-response');
             content_obj.html('');
@@ -48,6 +51,7 @@ $(function () {
             newDiv.append(newContent);
             newDiv.append(newName);
             content_obj.append(newDiv);
+
 
             $.ajax({
                 type: "POST", //用POST方式传输
@@ -66,7 +70,7 @@ $(function () {
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $("#h5-process").modal('hide');
+                    $("#h5-process").modal("hide");
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
                     // $.alert("网络异常，请检查网络情况");
                     $.alert(textStatus);
@@ -77,7 +81,7 @@ $(function () {
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                     //console.log("ajax请求成功:"+data.toString())
 
-                    $("#h5-process").modal('hide');
+                    $("#h5-process").modal("hide");
                     //新消息获取成功
                     if(obj["code"]==200){
                             // console.log(obj);
