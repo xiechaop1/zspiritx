@@ -13,10 +13,10 @@ $(function () {
         submitAnswer($(this));
     });
 
-    $('#ask_form').submit(function() {
-        submitAnswer($(this).find("input[name='ask_answer']"));
-        return false;
-    });
+    // $('#ask_form').submit(function() {
+    //     submitAnswer($(this).find("input[name='ask_answer']"));
+    //     return false;
+    // });
 
     function submitAnswer(thisObj) {
         var that=$("#answer-info");
