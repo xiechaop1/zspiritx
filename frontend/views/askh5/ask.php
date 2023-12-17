@@ -178,6 +178,10 @@ $this->title = '小灵镜';
     /*    border: 2px solid #0c84ff;*/
     /*    border-radius: 14px;*/
     /*}*/
+
+    .m-b-20{
+     margin-bottom:20px;
+    }
 </style>
 <audio autoplay loop>
   <source src="" type="audio/mpeg">
@@ -231,7 +235,7 @@ $this->title = '小灵镜';
             <!--<label class="fs-30 ask_answer_show" style="color: yellow;" >显示</label>
             <label class="fs-30 ask_answer_hide" style="color: yellow;" >关闭</label>-->
                     <div class="m-t-30 col-sm-12 col-md-6" style="position: fixed; bottom: 10px; left: 5px;">
-                    <div class="answer-border" >
+                    <div class="answer-border m-b-20" >
                         <form id="ask_form">
                     <input class="form-check-label fs-30" speech x-webkit-speech x-webkit-speech="x-webkit-speech"   type=text <?= (!empty($str['keyboard']) ? 'readonly' : '') ?> name="ask_answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
                     <label class="fs-30 ask_answer" style="color: yellow;" >提交</label>
