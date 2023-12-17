@@ -253,7 +253,7 @@ $this->title = '小灵镜';
                                 foreach ($knowledge->suggestion as $suggestion) {
                                     $suggestionContent = !empty($suggestion['content']) ? $suggestion['content'] : $suggestion['label'];
                                     ?>
-                                    <div class="col-sm-6 col-md-3">
+                                    <div class="<?= mb_strlen($suggestion['label'], 'UTF8') > 9 ? 'col-sm-12 col-md-6' : 'col-sm-6 col-md-3' ?>">
                                         <div class="answer-border m-b-20">
                                             <input type="button" name="ask_answer_content" value="<?= $suggestion['label'] ?>" content="<?= $suggestionContent ?>" class="fs-30 ask_answer_content" style="color: yellow;">
                                         </div>
