@@ -1,11 +1,13 @@
 $(function () {
 
+  /*
+    //浏览器是否支持语音输入判断
     if (document.createElement("input").webkitSpeech === undefined) {
         alert("很遗憾，你的浏览器不支持语音识别。");
     } else {
         alert("尝试使用语言识别来输入内容吧");
     }
-
+*/
   /*  $(document).bind("ajaxSend", function() {
         $("#h5-process").modal('show');
         // $("#h5-process").show();
