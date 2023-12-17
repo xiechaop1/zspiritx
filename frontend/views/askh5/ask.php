@@ -237,7 +237,7 @@ $this->title = '小灵镜';
                     <div class="m-t-30 col-sm-12 col-md-6" style="position: fixed; bottom: 10px; left: 5px;">
                     <div class="answer-border m-b-20" >
                         <form id="ask_form">
-                    <input class="form-check-label fs-30" speech x-webkit-speech x-webkit-speech="x-webkit-speech"   type=text <?= (!empty($str['keyboard']) ? 'readonly' : '') ?> name="ask_answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
+                    <input class="form-check-label fs-30"  lang="zh-CN"  x-webkit-speech x-webkit-grammar="bUIltin:search"  type=text <?= (!empty($str['keyboard']) ? 'readonly' : '') ?> name="ask_answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
                     <label class="fs-30 ask_answer" style="color: yellow;" >提交</label>
                    <!-- <input type="button" name="ask_answer" value="提交" class="fs-30" style="color: yellow;">-->
                     <input type="hidden" name="ask_old_answer" value='<?= json_encode([[
