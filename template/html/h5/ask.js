@@ -24,6 +24,10 @@ $(function () {
         submitAnswer($(this).find("input[name='ask_answer']"));
         return false;
     });
+    $(".loading-box").click(function (){
+         $(".loading-box").addClass('hide');  
+         $("body").removeClass('modal-open'); 
+    })
 
     function submitAskAnswer(thisObj) {
         var that=$("#answer-info");

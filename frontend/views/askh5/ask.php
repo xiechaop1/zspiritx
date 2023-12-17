@@ -142,6 +142,37 @@ $this->title = '小灵镜';
     .row {
         clear:both;
     }
+    .loading-box{
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1050;
+        display: block;
+        width: 100%;
+        height: 100%;
+        outline: 0;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        min-height: calc(100% - (1.75rem * 2));
+        background-color: rgba(0,0,0,0.8);
+    }
+    .loading-text{
+        color:#ffffff;
+        font-size: 40px;
+        text-align: center;
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        min-height: calc(100% - (1.75rem * 2));
+        align-items: center;
+    }
+    .hide{
+        display: none !important;
+    }
     /*.chat_div {*/
     /*    padding: 15px;*/
     /*    border: 2px solid #0c84ff;*/
