@@ -37,12 +37,19 @@ $(function () {
          $("body").removeClass('modal-open'); 
     })
 
+    $(".ask_answer_content").click(function () {
+        // submitAnswer($(this));
+        console.log($(this).attr('content'));
+        $("input[name='ask_answer_txt']").val($(this).attr('content'));
+        submitAskAnswer($("input[name='ask_answer']"));
+    });
     function submitAskAnswer(thisObj) {
         var that=$("#answer-info");
         var story_id=that.attr("data-story");
         var user_id=$("input[name='user_id']").val();
         var old_answer=$("input[name='ask_old_answer']").val();
         var session_id=$("input[name='session_id']").val();
+        var knowledge_id=$("input[name='knowledge_id']").val();
         var v_select = $("input[name='ask_answer_txt']").val();
         console.log("v_select:"+v_select,v_select.length);
 
@@ -86,7 +93,8 @@ $(function () {
                     answer:v_select,
                     story_id:story_id,
                     session_id:session_id,
-                    old_answer:old_answer
+                    old_answer:old_answer,
+                    knowledge_id:knowledge_id
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log('ajax 进程 3')

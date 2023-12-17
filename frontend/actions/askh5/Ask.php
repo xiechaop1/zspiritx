@@ -10,6 +10,7 @@ namespace frontend\actions\askh5;
 
 
 use common\definitions\Common;
+use common\models\Knowledge;
 use common\models\Story;
 use yii\base\Action;
 use kartik\form\ActiveForm;
@@ -53,6 +54,18 @@ class Ask extends Action
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
+        $knowledgeId = !empty($_GET['knowledge_id']) ? $_GET['knowledge_id'] : 0;
+
+        $knowledge = [];
+        if (!empty($knowledgeId)) {
+            $knowledge = Knowledge::find()
+                ->where(['id' => $knowledgeId])
+                ->one();
+
+            if (!empty($knowledge)) {
+                $knowledge->suggestion = json_decode($knowledge->suggestion, true);
+            }
+        }
 
         return $this->controller->render('ask', [
 //            'qa'            => $model,
@@ -60,6 +73,8 @@ class Ask extends Action
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'sessionStageId'    => $sessionStageId,
+            'knowledgeId'   => $knowledgeId,
+            'knowledge'     => $knowledge,
         ]);
     }
 }

@@ -36,7 +36,7 @@ class Knowledge extends \yii\db\ActiveRecord
     {
         return [
             [[ 'story_id', 'sort_by', 'is_delete', 'story_stage_id', 'knowledge_class', 'knowledge_type', 'pre_knowledge_id', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'content', 'voice', 'linkurl', 'image' ], 'string'],
+            [['title', 'content', 'suggestion', 'voice', 'linkurl', 'image' ], 'string'],
         ];
     }
 

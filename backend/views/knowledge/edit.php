@@ -32,7 +32,7 @@ echo \dmstr\widgets\Alert::widget();
             ]);
             echo $form->field($knowledgeModel, 'title')->textInput(['value' => $knowledgeModel->title])->label('标题');
             echo $form->field($knowledgeModel, 'content')->textarea(['rows' => 20])->label('内容');
-
+            echo $form->field($knowledgeModel, 'suggestion')->textarea(['value' => $knowledgeModel->suggestion, 'rows' => 15])->label('建议对话(json)');
             echo $form->field($knowledgeModel, 'image')->widget('\liyifei\uploadOSS\FileUploadOSS', [
                 'multiple' => false,
                 'isImage' => true,

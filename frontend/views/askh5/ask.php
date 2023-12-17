@@ -190,6 +190,7 @@ $this->title = '小灵镜';
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
+<input type="hidden" name="knowledge_id" value="<?= $knowledgeId ?>">
 <div class="w-100 m-auto">
 <audio controls id="audio_right" class="hide">
     <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -237,7 +238,7 @@ $this->title = '小灵镜';
                     <div class="m-t-30 col-sm-12 col-md-6" style="position: fixed; bottom: 10px; left: 5px;">
                     <div class="answer-border m-b-20" >
                         <form id="ask_form">
-                    <input class="form-check-label fs-30"  lang="zh-CN"  x-webkit-speech x-webkit-grammar="bUIltin:search"  type=text <?= (!empty($str['keyboard']) ? 'readonly' : '') ?> name="ask_answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
+                    <input class="form-check-label fs-30"  lang="zh-CN"  x-webkit-speech x-webkit-grammar="bUIltin:search"  type=text <?= (!empty($str['keyboard']) ? 'readonly' : '') ?> name="ask_answer_txt" class="form-control" placeholder="请输入问题" style="width: 80%; color: yellow;">
                     <label class="fs-30 ask_answer" style="color: yellow;" >提交</label>
                    <!-- <input type="button" name="ask_answer" value="提交" class="fs-30" style="color: yellow;">-->
                     <input type="hidden" name="ask_old_answer" value='<?= json_encode([[
@@ -246,6 +247,22 @@ $this->title = '小灵镜';
                         ]]); ?>'>
                         </form>
                     </div>
+                        <div class="row" id="suggestion">
+                            <?php
+                            if (!empty($knowledge->suggestion)) {
+                                foreach ($knowledge->suggestion as $suggestion) {
+                                    $suggestionContent = !empty($suggestion['content']) ? $suggestion['content'] : $suggestion['label'];
+                                    ?>
+                                    <div class="col-sm-6 col-md-3">
+                                        <div class="answer-border m-b-20">
+                                            <input type="button" name="ask_answer_content" value="<?= $suggestion['label'] ?>" content="<?= $suggestionContent ?>" class="fs-30 ask_answer_content" style="color: yellow;">
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </div>
                         </div>
                     <?php
 //
@@ -301,6 +318,7 @@ $this->title = '小灵镜';
             <label id="answer-info" class="h5-btn-green-big answer-btn hide" data-story="<?php $storyId ?>" data-user="">
                 提交
             </label>
+
         </div>
         </div>
 

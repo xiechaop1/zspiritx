@@ -71,6 +71,11 @@ class Edit extends Action
 
             if ($model->validate()) {
 
+                if (!empty($model->suggestion)) {
+                    eval('$sugg = ' . $model->suggestion . ';');
+                    $model->suggestion = json_encode($sugg);
+                }
+
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');
@@ -98,6 +103,14 @@ class Edit extends Action
         foreach ($storyStageDatas as $storyStage) {
             $storyStages[$storyStage->id] = $storyStage->story->title . ': ' . $storyStage->stage_name . ' [' . $storyStage->stage_u_id . ']';
         }
+
+        if (\common\helpers\Common::isJson($model->suggestion)) {
+            $model->suggestion = json_decode($model->suggestion, true);
+            if (is_array($model->suggestion)) {
+                $model->suggestion = var_export($model->suggestion, true) . ';';
+            }
+        }
+
 
 //        $storyStages = ArrayHelper::map($storyStageDatas, 'id', 'stage_name');
 //        $storyStages = ['0' => '无'] + $storyStages;
