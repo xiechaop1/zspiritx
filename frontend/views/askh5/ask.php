@@ -273,7 +273,13 @@ $this->title = '小灵镜';
     </div>
 
 </div>
-
+<div class="loading-box hide">
+    <div class="loading-text">
+        <div class="m-auto">
+            正在思考中···
+        </div>
+    </div>
+</div>
 
 
 <!-- 按钮：用于打开模态框 -->

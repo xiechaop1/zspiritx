@@ -20,10 +20,10 @@ $(function () {
         $("#h5-process").modal("hide");
     });
 
-    // $('#ask_form').submit(function() {
-    //     submitAnswer($(this).find("input[name='ask_answer']"));
-    //     return false;
-    // });
+    $('#ask_form').submit(function() {
+        submitAnswer($(this).find("input[name='ask_answer']"));
+        return false;
+    });
 
     function submitAskAnswer(thisObj) {
         var that=$("#answer-info");
@@ -41,14 +41,14 @@ $(function () {
         if(v_select==null||v_select==undefined||v_select==''){
             $.alert('请选择答案')
             // $("#h5-null").modal('show');
-        }else{
-            $("#h5-process").modal("show");
         }
 
 
         if(v_select!=null&&v_select!=undefined&&v_select!=""){
             console.log('ajax 进程 1')
-            $("#h5-process").modal("show");
+            // $("#h5-process").modal("show");
+            $(".loading-box").removeClass('hide');
+            $("body").addClass('modal-open');
 
             var content_obj = $('#answer-border-response');
             content_obj.html('');
@@ -85,7 +85,10 @@ $(function () {
                 },
                 success: function (data, status){
                     console.log('ajax 进程 4')
-                    $("#h5-process").modal("hide");
+                    // $("#h5-process").modal("hide");
+                    $(".loading-box").addClass('hide');
+                    $("body").removeClass('modal-open');
+
                     var dataContent=data;
                     var dataCon=$.toJSON(dataContent);
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
