@@ -59,5 +59,9 @@ class UserModelsUsed extends \common\models\gii\UserModelsUsed
         return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
     }
 
+    public function getStoryModelLink() {
+        return $this->hasOne('common\models\StoryModelsLink',  ['id' => 'story_model_link_id']);
+    }
+
 
 }

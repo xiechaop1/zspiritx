@@ -20,7 +20,7 @@ class StoryModelsLink extends \common\models\StoryModelsLink
     {
         return [
             [['story_id', 'story_model_id', 'story_model_detail_id',
-                'story_model_id2', 'story_model_detail_id2', 'eff_type'], 'integer'],
+                'story_model_id2', 'story_model_detail_id2', 'eff_type', 'min_ct'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
             [['eff_exec', 'group_name', ], 'string'],
         ];

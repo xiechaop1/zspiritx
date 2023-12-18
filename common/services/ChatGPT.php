@@ -47,7 +47,9 @@ class ChatGPT extends Component
             'messages' => $messages,
             'temperature' => 0.7
         );
-//var_dump($data);exit;
+
+        Yii::info('chatGPT data: ' . json_encode($data));
+
         $response = $this->_call('/chat/completions', $data, 'POST');
 
         return json_decode($response, true);
@@ -81,8 +83,6 @@ class ChatGPT extends Component
             'messages' => array_merge($messages, $templateMessages),
             'temperature' => 0.7
         );
-
-
 
         $response = $this->_call('/chat/completions', $data, 'POST');
 

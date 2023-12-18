@@ -532,7 +532,7 @@ class Models extends Component
                                 'eff_type' => $partlyFoundType,
                                 'eff_exec' => $partlyFoundRet,
                                 'group_name' => $userModelUsed->group_name,
-                                'min_ct' => 1,
+                                'min_ct' => isset($userModelUsed->storyModelLink->min_ct) ? $userModelUsed->storyModelLink->min_ct : 1,
                             ];
                         } else {
                             // 完全匹配上
@@ -541,7 +541,7 @@ class Models extends Component
                                 'eff_type' => $userModelUsed->eff_type,
                                 'eff_exec' => $userModelUsed->eff_exec,
                                 'group_name' => $userModelUsed->group_name,
-                                'min_ct' => 1,
+                                'min_ct' => isset($userModelUsed->storyModelLink->min_ct) ? $userModelUsed->storyModelLink->min_ct : 1,
                             ];
 
                             if (!empty($noFoundModel)) {
@@ -642,6 +642,7 @@ class Models extends Component
                     }
                     foreach ($storyModelLinks as $storyModelLink) {
                         $userModelUsed = new UserModelsUsed();
+                        $userModelUsed->story_model_link_id = $storyModelLink->id;
                         $userModelUsed->user_id = $userId;
                         $userModelUsed->story_id = $storyId;
                         $userModelUsed->session_id = $sessionId;
@@ -666,8 +667,9 @@ class Models extends Component
 
     }
 
-    public function addUserModelUsedByStoryModel($storyModel, $targetStoryModel, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_COMPLETED_PARTLY,  $groupName = '', $effExec = '', $effType = 0) {
+    public function addUserModelUsedByStoryModel($storyModelLinkId, $storyModel, $targetStoryModel, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_COMPLETED_PARTLY,  $groupName = '', $effExec = '', $effType = 0) {
         $userModelUsed = new UserModelsUsed();
+        $userModelUsed->story_model_link_id = $storyModelLinkId;
         $userModelUsed->user_id = $userId;
         $userModelUsed->story_id = $storyId;
         $userModelUsed->session_id = $sessionId;
