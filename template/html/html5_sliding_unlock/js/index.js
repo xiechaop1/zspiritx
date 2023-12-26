@@ -78,7 +78,11 @@ var Lock = function () {
             //新消息获取成功
             if(obj["code"]==200){
               if (obj.data.score.score != undefined) {
-                $('#gold_score').val(obj.data.score.score + "枚（奖：" + obj.data.score.addtion + "枚）");
+                var score_text = "+" + obj.data.score.score + "枚";
+                if (obj.data.score.addition > 0) {
+                  score_text = score_text + "（奖：" + obj.data.score.addition + "枚）";
+                }
+                $("#gold_score").html(score_text);
               }
               $("#answer-box").removeClass('hide');
               $("#answer-right-box").removeClass('hide');
