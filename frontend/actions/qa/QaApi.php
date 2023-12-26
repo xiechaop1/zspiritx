@@ -154,6 +154,7 @@ class QaApi extends ApiAction
         $answer = !empty($this->_get['answer']) ? $this->_get['answer'] : '';
         $qaId = !empty($this->_get['qa_id']) ? $this->_get['qa_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $beginTs = !empty($this->_get['begin_ts']) ? $this->_get['begin_ts'] : 0;
 
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
@@ -193,23 +194,6 @@ class QaApi extends ApiAction
             } else {
                 $isRight = 0;
             }
-            if (empty($userQa)) {
-                $userQa = new UserQa();
-                $userQa->story_id = $qa['story_id'];
-                $userQa->session_id = $sessionId;
-                $userQa->user_id = $userId;
-                $userQa->qa_id = $qaId;
-                $userQa->answer = $answer;
-                $userQa->is_right = $isRight;
-                $ret = $userQa->save();
-                $userQaId = Yii::$app->db->getLastInsertID();
-                $userQa->id = $userQaId;
-
-            } else {
-                $userQa->answer = $answer;
-                $userQa->is_right = $isRight;
-                $ret = $userQa->save();
-            }
 
 
             if (!empty($sessionId)) {
@@ -217,10 +201,15 @@ class QaApi extends ApiAction
                 if (!empty($sessionQa)) {
                     $sessionQa->is_answer = SessionQa::SESSION_QA_STATUS_IS_ANSWER;
                     $sessionQa->is_right = $isRight;
-                    $ret = $sessionQa->save();
+                    $saveRet = $sessionQa->save();
                 }
             }
 
+            $scoreRets = [
+                'score' => 0,
+                'x' => 1.00,
+                'addtion' => 0,
+            ];
             if ($isRight == 1) {
                 if (!empty($qa['knowledge_id'])) {
                     Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $sessionStageId, $userId, $qa['story_id'], 'complete');
@@ -228,9 +217,38 @@ class QaApi extends ApiAction
 
                 Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $sessionStageId, $userId, $qa['story_id']);
 
+
                 if (!empty($qa['score'])) {
                     $score = $qa['score'];
+
+                    $scoreRets = Yii::$app->score->computeWithQa($userId, $storyId, $sessionId, $qaId, $score, $beginTs);
+
+                    if (!empty($scoreRets)) {
+                        $score = $scoreRets['score'];
+//                        $x = $scoreRets['x'];
+//                        $addition = $scoreRets['addition'];
+                    }
+
                     Yii::$app->score->add($userId, $storyId, $sessionId, $sessionStageId, $score);
+                }
+
+                //            $isNew = true;
+                if (empty($userQa)) {
+                    $userQa = new UserQa();
+                    $userQa->story_id = $qa['story_id'];
+                    $userQa->session_id = $sessionId;
+                    $userQa->user_id = $userId;
+                    $userQa->qa_id = $qaId;
+                    $userQa->answer = $answer;
+                    $userQa->is_right = $isRight;
+                    $saveRet = $userQa->save();
+                    $userQaId = Yii::$app->db->getLastInsertID();
+                    $userQa->id = $userQaId;
+
+                } else {
+                    $userQa->answer = $answer;
+                    $userQa->is_right = $isRight;
+                    $saveRet = $userQa->save();
                 }
 
 //                $itemKnowledgeList = ItemKnowledge::find()
@@ -263,7 +281,8 @@ class QaApi extends ApiAction
             throw new \Exception('添加用户问答失败', ErrorCode::QA_SAVE_FAILED);
         }
 
-        $ret = $userQa;
+        $ret['user_qa'] = $userQa;
+        $ret['score'] = $scoreRets;
 
         return $ret;
     }

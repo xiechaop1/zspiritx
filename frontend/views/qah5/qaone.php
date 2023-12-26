@@ -107,6 +107,7 @@ $this->title = $qa['topic'];
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
+<input type="hidden" name="begin_ts" value="<?= time() ?>">
 <div class="w-100 m-auto">
 <audio controls id="audio_right" class="hide">
     <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -306,7 +307,7 @@ $this->title = $qa['topic'];
                     <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
                             </span>
 
-                            <span class="answer-detail" style="color: yellow">
+                            <span class="answer-detail" id="gold_score" style="color: yellow">
                     +<?= $qa['score'] ?>枚
                         </span>
                         </div>

@@ -12,8 +12,10 @@ namespace common\services;
 use common\definitions\ErrorCode;
 use common\models\Actions;
 use common\models\ItemKnowledge;
+use common\models\Qa;
 use common\models\Session;
 use common\models\UserKnowledge;
+use common\models\UserQa;
 use common\models\UserScore;
 use yii\base\Component;
 use yii;
@@ -42,6 +44,57 @@ class Score extends Component
 
         return $userScores;
     }
+
+    public function computeWithQa($userId, $storyId, $sessionId, $qaId, $qaScore = 0, $beginTs = 0) {
+        $userQa = UserQa::findOne(['user_id' => $userId, 'session_id' => $sessionId, 'qa_id' => $qaId]);
+
+        $score = 0;
+        if (empty($qaScore)) {
+            $qa = Qa::findOne($qaId);
+            if (!empty($qa)) {
+                $qaScore = $qa['score'];
+            } else {
+                $qaScore = 0;
+            }
+        }
+
+        $x = 1.00;
+        $addition = 0;
+
+        $nowTime = time();
+        if (!empty($beginTs)) {
+            $timeInterval = intval($nowTime - $beginTs);
+            if ($timeInterval < 60) {
+                $addition = $qaScore;
+            } elseif ($timeInterval >= 60 && $timeInterval < 120) {
+                $addition = $qaScore * 0.5;
+            } else {
+                $addition = 0;
+            }
+        }
+
+        if (!empty($userQa)) {
+
+            if ($userQa['is_right'] == 1) {
+                $score = 0;
+                $addition = 0;
+            } else {
+                $score = $qaScore;
+                $x *= 0.5;
+            }
+        } else {
+            $score = $qaScore;
+        }
+
+        $score = $score * $x + $addition;
+
+        return [
+            'score' => $score,
+            'x' => $x,
+            'addition' => $addition,
+        ];
+    }
+
 
     public function add($userId, $storyId, $sessionId, $sessionStageId, $score = 0, $teamId = 0) {
 

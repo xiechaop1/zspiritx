@@ -62,6 +62,7 @@ $(function () {
         var user_id=$("input[name='user_id']").val();
         var session_id=$("input[name='session_id']").val();
         var session_stage_id=$("input[name='session_stage_id']").val();
+        var begin_ts=$("input[name='begin_ts']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
         if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
@@ -99,7 +100,8 @@ $(function () {
                     answer:v_select,
                     story_id:story_id,
                     session_id:session_id,
-                    session_stage_id:session_stage_id
+                    session_stage_id:session_stage_id,
+                    begin_ts:begin_ts
                 },
                 onload: function (data) {
                     $('#answer-border-response').html('处理中……');
@@ -137,6 +139,13 @@ $(function () {
                             return false;
                         }
                         if(v_ture==v_select){
+                            if (obj.data.score.score != undefined) {
+                                var score_text = "+" + obj.data.score.score + "枚";
+                                if (obj.data.score.addition > 0) {
+                                    score_text = score_text + "（奖：" + obj.data.score.addition + "枚）";
+                                }
+                                $("#gold_score").html(score_text);
+                            }
                             $("#answer-box").hide();
                             $("#answer-right-box").removeClass('hide');
                             // $("#h5-right").modal('show');
@@ -755,6 +764,7 @@ $(function () {
                 var session_stage_id=$("input[name='session_stage_id']").val();
                 var qa_id=$("input[name='qa_id']").val();
                 var story_id=$("input[name='story_id']").val();
+                var begin_ts=$("input[name='begin_ts']").val();
 
                 $.ajax({
                     type: "GET", //用POST方式传输
@@ -767,7 +777,8 @@ $(function () {
                         answer:'True',
                         story_id:story_id,
                         session_id:session_id,
-                        session_stage_id:session_stage_id
+                        session_stage_id:session_stage_id,
+                        begin_ts:begin_ts
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
@@ -783,8 +794,18 @@ $(function () {
                                 $('.puzzle_check').unbind('click');
                                 $('.puzzle_check').removeClass('puzzle_item');
                                 $('.puzzle_check').addClass('puzzle_item_end');
+                            if (obj.data.score.score != undefined) {
+                                var score_text = "+" + obj.data.score.score + "枚";
+                                if (obj.data.score.addition > 0) {
+                                    score_text = score_text + "（奖：" + obj.data.score.addition + "枚）";
+                                }
+                                $("#gold_score").html(score_text);
+                            }
+                            var audio_right=$("#audio_right")[0];
+                            audo_right.play();
                                 $("#answer-box").removeClass('hide');
                                 $("#answer-right-box").removeClass('hide');
+
                                 // $("#h5-right").modal('show');
                                 // setTimeout(function (){
                                 //     // Unity.call('WebViewOff&TrueAnswer');
@@ -860,6 +881,7 @@ $(function () {
             var session_stage_id=$("input[name='session_stage_id']").val();
             var qa_id=$("input[name='qa_id']").val();
             var story_id=$("input[name='story_id']").val();
+            var begin_ts=$("input[name='begin_ts']").val();
 
             $.ajax({
                 type: "GET", //用POST方式传输
@@ -872,7 +894,8 @@ $(function () {
                     answer:st_answer,
                     story_id:story_id,
                     session_id:session_id,
-                    session_stage_id:session_stage_id
+                    session_stage_id:session_stage_id,
+                    begin_ts:begin_ts
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
@@ -886,8 +909,17 @@ $(function () {
                     //新消息获取成功
                     if(obj["code"]==200){
                         $('.puzzle_item').unbind('click');
+                        if (obj.data.score.score != undefined) {
+                            var score_text = "+" + obj.data.score.score + "枚";
+                            if (obj.data.score.addition > 0) {
+                                score_text = score_text + "（奖：" + obj.data.score.addition + "枚）";
+                            }
+                            $("#gold_score").html(score_text);
+                        }
                         $("#answer-box").removeClass('hide');
                         $("#answer-right-box").removeClass('hide');
+                        var audio_right=$("#audio_right")[0];
+                        audo_right.play();
                         // $("#h5-right").modal('show');
                         setTimeout(function (){
                             // Unity.call('WebViewOff&TrueAnswer');

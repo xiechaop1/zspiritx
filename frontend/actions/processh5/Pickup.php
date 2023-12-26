@@ -156,7 +156,9 @@ class Pickup extends Action
                     ->where(['id' => $knowledgeId])
                     ->one();
 
-//                $this->_params['knowledge'] = $knowledge;
+                if ($knowledge->knowledge_class == Knowledge::KNOWLEDGE_CLASS_NORMAL) {
+                    $this->_params['knowledge'] = $knowledge;
+                }
             }
 
             if ($needAction == '1') {

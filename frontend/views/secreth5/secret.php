@@ -38,6 +38,14 @@ $this->title = '密码锁';
 <input type="hidden" name="qa_id" id="qa_id" value="<?= $qaId ?>">
 <input type="hidden" name="story_id" id="story_id" value="<?= $storyId ?>">
 
+<audio controls id="audio_right" class="hide">
+    <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+<audio controls id="audio_wrong" class="hide">
+    <source src="../../static/audio/qa_wrong.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
 
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
@@ -280,7 +288,7 @@ $this->title = '密码锁';
                     <img src="../../static/img/qa/gold.png" alt="" style="width: 75px; height: 75px; vertical-align: middle;" class=""/>
                             </span>
 
-                    <span class="answer-detail" style="box-sizing: border-box; color: yellow; font-size: 24px; font-weight: 500; line-height: 24px;letter-spacing: 2px; text-align: center;">
+                    <span class="answer-detail" id="gold_score" style="box-sizing: border-box; color: yellow; font-size: 24px; font-weight: 500; line-height: 24px;letter-spacing: 2px; text-align: center;">
                     +<?= $qa['score'] ?>枚
                         </span>
                 </div>

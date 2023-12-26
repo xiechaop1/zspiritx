@@ -51,6 +51,7 @@ var Lock = function () {
         var session_stage_id=$("input[name='session_stage_id']").val();
         var qa_id=$("input[name='qa_id']").val();
         var story_id=$("input[name='story_id']").val();
+        var begin_ts=$("input[name='begin_ts']").val();
         $.ajax({
           type: "GET", //用POST方式传输
           dataType: "json", //数据格式:JSON
@@ -62,7 +63,8 @@ var Lock = function () {
             answer:this.pin,
             story_id:story_id,
             session_id:session_id,
-            session_stage_id:session_stage_id
+            session_stage_id:session_stage_id,
+            begin_ts:begin_ts
           },
           error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
@@ -75,6 +77,9 @@ var Lock = function () {
             //console.log("ajax请求成功:"+data.toString())
             //新消息获取成功
             if(obj["code"]==200){
+              if (obj.data.score.score != undefined) {
+                $('#gold_score').val(obj.data.score.score + "枚（奖：" + obj.data.score.addtion + "枚）");
+              }
               $("#answer-box").removeClass('hide');
               $("#answer-right-box").removeClass('hide');
               // $("#h5-right").modal('show');

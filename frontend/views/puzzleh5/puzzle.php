@@ -45,6 +45,16 @@ $this->title = 'Puzzle';
         background: #9999;
     }
 </style>
+<audio controls id="audio_right" class="hide">
+    <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+<audio controls id="audio_wrong" class="hide">
+    <source src="../../static/audio/qa_wrong.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+
+
 <audio autoplay loop>
   <source src="" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
@@ -114,7 +124,7 @@ $this->title = 'Puzzle';
                     <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
                             </span>
 
-                        <span class="answer-detail" style="color: yellow">
+                        <span class="answer-detail" id="gold_score" style="color: yellow">
                     +<?= $qa['score'] ?>枚
                         </span>
                     </div>
