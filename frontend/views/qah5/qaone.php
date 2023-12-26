@@ -186,7 +186,7 @@ $this->title = $qa['topic'];
                     <div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
                         <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
+                        <label class="form-check-label fs-30 answer-btn" style="text-align:left; padding-left: 80px;" for="legal_person_yes_' . $label . '">
                             <span class="answer-tag">' . $label . '</span>
                     ' . $txt . '
                     </label>
