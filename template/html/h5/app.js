@@ -918,8 +918,8 @@ $(function () {
                         }
                         $("#answer-box").removeClass('hide');
                         $("#answer-right-box").removeClass('hide');
-                        var audio_right=$("#audio_right")[0];
-                        audo_right.play();
+                        // var audio_right=$("#audio_right")[0];
+                        // audo_right.play();
                         // $("#h5-right").modal('show');
                         setTimeout(function (){
                             // Unity.call('WebViewOff&TrueAnswer');
