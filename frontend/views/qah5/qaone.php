@@ -80,6 +80,19 @@ $this->title = $qa['topic'];
         transition: border-color 0.3s;
     }
 
+    .keyboard_area .v_keyboard {
+        width: 100px;
+        height: 75px;
+        margin: 0 10px;
+        background-color: #0b3452;
+        text-align: center;
+        font-size: 50px;
+        color: white;
+        border: 2px solid #0c84ff;
+        border-radius: 24px;
+        transition: border-color 0.3s;
+    }
+
     .keyboard_area .DELETE {
         background-color: #a83800;
         border: 2px solid #a80057;
@@ -204,7 +217,7 @@ $this->title = $qa['topic'];
                     }
                     $optstr .= '<div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
-                    <input class="form-check-label fs-30" type=text ' . (!empty($str['keyboard']) ? 'readonly' : '') . '  name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
+                    <input class="form-check-label fs-30 text_input" type=text ' . (!empty($str['keyboard']) ? 'readonly' : '') . '  name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
                    <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
                     </div>
                     ';
@@ -240,7 +253,7 @@ $this->title = $qa['topic'];
                     ';
                     for ($i=0; $i<$maxLength; $i++) {
                         $autoFocus =  ($i==0) ? 'autofocus' : '';
-                        $optstr .= '<input type="text" name="answer_txt" maxlength="1" id="input-' . ($i+1) . '" ' . $autoFocus . '>';
+                        $optstr .= '<input type="text" name="answer_txt" class="verifycode_input" maxlength="1" id="input-' . ($i+1) . '" ' . $autoFocus . '>';
                     }
 //                    <input class="form-check-label fs-30" type="text" maxlength="1" id="input-1" autofocus>
 //        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-2">
@@ -251,6 +264,31 @@ $this->title = $qa['topic'];
                     $optstr .= '</div>
                     </div>
                     ';
+                    if (!empty($str['keyboard'])) {
+                        $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                        $keyboard = $str['keyboard'];
+//                        $keyboardArray = [];
+//                        for ($i = 0; $i < mb_strlen($keyboard, 'UTF8'); $i++) {
+//                            $key = mb_substr($keyboard, $i, 1, 'UTF8');
+//                            $keyboardArray[$key] = $key;
+//                        }
+                        $keyboardArrayTmp = explode('|', $keyboard);
+                        foreach ($keyboardArrayTmp as $keyVal) {
+                            $keyboardArray[$keyVal] = $keyVal;
+                        }
+                        $keyboardArray['←'] = 'DELETE';
+
+                        $i = 0;
+                        foreach ($keyboardArray as $key => $val) {
+                            $optstr .= '<input type="button" name="keyboard" class="v_keyboard ' . $val . '" id="keyboard-' . $key . '" value="' . $key . '" val="' . $val . '">';
+                            if (($i + 1) % 5 == 0) {
+                                $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            }
+                            $i++;
+                        }
+                        $optstr .= '</div>';
+                    }
+
                 }
                 echo $optstr;
 

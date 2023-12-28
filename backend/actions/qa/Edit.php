@@ -72,6 +72,7 @@ class Edit extends Action
             if ($model->validate()) {
                 if (($model->qa_type == Qa::QA_TYPE_PUZZLE_WORD
                         || $model->qa_type == Qa::QA_TYPE_WORD
+                        || $model->qa_type == Qa::QA_TYPE_VERIFYCODE
                     || $model->qa_type == Qa::QA_TYPE_PUZZLE_PIC)
                     && (
                         substr($model->selected, 0, 5) == 'Array'

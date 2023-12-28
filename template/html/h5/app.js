@@ -44,7 +44,7 @@ $(function () {
         submitAnswer($(this));
     });
 
-    $("input[name='answer_txt']").change(function () {
+    $(".verify_code input[name='answer_txt']").change(function () {
         var v_selects = $("input[name='answer_txt']");
         for (i = 0; i < v_selects.length; i++) {
             if (v_selects[i].value == '') {
@@ -633,6 +633,41 @@ $(function () {
             input_obj.val(input_obj.val() + val);
         } else {
             input_obj.val(input_obj.val().slice(0, -1));
+        }
+    });
+
+    $(".v_keyboard").click(function (){
+        var obj = $(this);
+        var val = obj.attr('val');
+        var input_obj = obj.parent().parent().find("input[NAME='answer_txt']");
+
+        if (val != 'DELETE') {
+            var j=0;
+            // 定义一个数组
+            var list = new Array();
+            for (i=0; i<input_obj.length; i++) {
+                if ($(input_obj[i]).val() =="" ) {
+                    list.push(i);
+                    j++;
+                    if (j == val.length) {
+                        console.log(list);
+                        for (k=0; k<list.length; k++) {
+                            $(input_obj[list[k]]).val(val[k]);
+                        }
+                        return true;
+                    }
+                } else {
+                    j = 0;
+                    list = [];
+                }
+            }
+        } else {
+            for (i=input_obj.length - 1; i>=0; i--) {
+                if ($(input_obj[i]).val() !="" ) {
+                    $(input_obj[i]).val('');
+                    return true;
+                }
+            }
         }
     });
 
