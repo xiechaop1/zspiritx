@@ -647,15 +647,17 @@ $(function () {
             var list = new Array();
             for (i=0; i<input_obj.length; i++) {
                 if ($(input_obj[i]).val() =="" ) {
-                    list.push(i);
-                    j++;
-                    if (j == val.length) {
-                        console.log(list);
-                        for (k=0; k<list.length; k++) {
-                            $(input_obj[list[k]]).val(val[k]);
-                        }
-                        return true;
-                    }
+                    $(input_obj[i]).val(val);
+                    return true;
+                    // list.push(i);
+                    // j++;
+                    // if (j == val.length) {
+                    //     console.log(list);
+                    //     for (k=0; k<list.length; k++) {
+                    //         $(input_obj[list[k]]).val(val[k]);
+                    //     }
+                    //     return true;
+                    // }
                 } else {
                     j = 0;
                     list = [];

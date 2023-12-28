@@ -247,13 +247,19 @@ $this->title = $qa['topic'];
                     ';
 
                 } elseif ($inputType == 'verifycode') {
+//                    $maxLength = !empty($str['length']) ? $str['length'] : 5;
                     $maxLength = !empty($str['length']) ? $str['length'] : 5;
+                    $width = intval(360 / $maxLength) . 'px';
                     $optstr = '<div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border code-input" maxlength="' . $maxLength . '">
                     ';
                     for ($i=0; $i<$maxLength; $i++) {
                         $autoFocus =  ($i==0) ? 'autofocus' : '';
-                        $optstr .= '<input type="text" name="answer_txt" class="verifycode_input" maxlength="1" id="input-' . ($i+1) . '" ' . $autoFocus . '>';
+                        $optstr .= '<input type="text" name="answer_txt"';
+                        if (!empty($str['keyboard'])) {
+                            $optstr .= ' readonly';
+                        }
+                        $optstr .= ' style="width: ' . $width . '" class="verifycode_input" maxlength="1" id="input-' . ($i+1) . '" ' . $autoFocus . '>';
                     }
 //                    <input class="form-check-label fs-30" type="text" maxlength="1" id="input-1" autofocus>
 //        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-2">
