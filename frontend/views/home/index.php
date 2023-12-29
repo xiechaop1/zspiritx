@@ -11,7 +11,7 @@
  */
 
 
-\frontend\assets\Qah5Asset::register($this);
+\frontend\assets\Homeh5Asset::register($this);
 
 
 $this->registerMetaTag([
