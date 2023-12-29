@@ -4,7 +4,7 @@ html, body {
 
 }
 .btn-m-green {
-    position: absolute;
+    position: fixed;
     z-index: 9999;
     bottom: 30px;
 }
