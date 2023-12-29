@@ -30,7 +30,8 @@ class Qah5Asset extends AssetBundle
         self::HOST . 'css/iconfont.css',
         self::HOST . 'css/animate.css',
         self::HOST . 'html/h5/app.css',
-        self::HOST . 'html/h5/qa.css'
+        self::HOST . 'html/h5/qa.css',
+        'html/h5/diy.css',
 
     ];
     public $js = [
