@@ -838,8 +838,8 @@ $(function () {
                                 }
                                 $("#gold_score").html(score_text);
                             }
-                            var audio_right=$("#audio_right")[0];
-                            audo_right.play();
+                            // var audio_right=$("#audio_right")[0];
+                            // audo_right.play();
                                 $("#answer-box").removeClass('hide');
                                 $("#answer-right-box").removeClass('hide');
 

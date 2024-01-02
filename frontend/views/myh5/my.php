@@ -14,7 +14,7 @@
  * @var \common\models\QA $qa
  */
 
-\frontend\assets\Qah5Asset::register($this);
+\frontend\assets\Marginh5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
