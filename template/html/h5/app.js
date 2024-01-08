@@ -158,7 +158,7 @@ $(function () {
                                 }
                                 var data=$.toJSON(params);
                                 Unity.call(data);
-                            },3000)
+                            },2000);
                         }
                         else{
                             $("#answer-box").hide();
@@ -167,13 +167,14 @@ $(function () {
                             audio_wrong.play();
                             setTimeout(function (){
                                 // Unity.call('WebViewOff&FalseAnswer');
-                                var params = {
-                                    'WebViewOff':1,
-                                    'AnswerType':2
-                                }
-                                var data=$.toJSON(params);
-                                Unity.call(data);
-                            },3000)
+                                // var params = {
+                                //     'WebViewOff':1,
+                                //     'AnswerType':2
+                                // }
+                                // var data=$.toJSON(params);
+                                // Unity.call(data);
+                                location.reload();
+                            },2000);
                         }
                     }
                     //新消息获取失败
