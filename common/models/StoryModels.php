@@ -84,6 +84,22 @@ class StoryModels extends \common\models\gii\StoryModels
         self::USE_ALLOW_NEED_TARGET => '需要目标使用',
     ];
 
+    const SELECTED_PERMISSION_NOT   = 0;    // 不可选
+    const SELECTED_PERMISSION_YES   = 1;    // 可选
+
+    public static $selectedPermission2Name = [
+        self::SELECTED_PERMISSION_NOT => '不可选',
+        self::SELECTED_PERMISSION_YES => '可选',
+    ];
+
+    const NAMECARD_DISPLAY_NOT      = 0;    // 不显示
+    const NAMECARD_DISPLAY_YES      = 1;    // 显示
+
+    public static $namecardDisplay2Name = [
+        self::NAMECARD_DISPLAY_NOT => '不显示',
+        self::NAMECARD_DISPLAY_YES => '显示',
+    ];
+
     public function behaviors()
     {
         return [

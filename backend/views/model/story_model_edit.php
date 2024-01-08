@@ -83,14 +83,26 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('是否显示');
-            echo $form->field($storyModel, 'is_undertake')->widget('\kartik\select2\Select2', [
-                'data' => \common\models\StoryModels::$isUndertake2Name,
+            echo $form->field($storyModel, 'selected_permission')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$selectedPermission2Name,
                 'options' => [
                     'multiple' => false
                 ],
-            ])->label('是否兜底');
-            echo $form->field($storyModel, 'undertake_trigger_timeout')->textInput(['value' => $storyModel->undertake_trigger_timeout])->label('兜底执行时间（s）');
-            echo $form->field($storyModel, 'undertake_alive_timeout')->textInput(['value' => $storyModel->undertake_alive_timeout])->label('兜底持续时间（s）');
+            ])->label('是否可选');
+            echo $form->field($storyModel, 'namecard_display')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$namecardDisplay2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('是否显示名牌');
+//            echo $form->field($storyModel, 'is_undertake')->widget('\kartik\select2\Select2', [
+//                'data' => \common\models\StoryModels::$isUndertake2Name,
+//                'options' => [
+//                    'multiple' => false
+//                ],
+//            ])->label('是否兜底');
+//            echo $form->field($storyModel, 'undertake_trigger_timeout')->textInput(['value' => $storyModel->undertake_trigger_timeout])->label('兜底执行时间（s）');
+//            echo $form->field($storyModel, 'undertake_alive_timeout')->textInput(['value' => $storyModel->undertake_alive_timeout])->label('兜底持续时间（s）');
             if (!empty($storyModel->dialog)) {
                 $dialogTxt = var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true);
                 // 去掉数组中下标
