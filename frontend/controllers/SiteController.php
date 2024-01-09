@@ -154,17 +154,6 @@ class SiteController extends ViewController
             'index_api' => [
                 'class' => 'frontend\actions\site\GetJobListApi',
             ],
-            'get_latest_view_api' => [
-                'class' => 'frontend\actions\site\GetLatestViewApi',
-            ],
-            'save_history_uri' => [
-                'class'     => 'frontend\actions\site\HistoryUri',
-                'action'    => 'save',
-            ],
-            'delete_history_uri' => [
-                'class'     => 'frontend\actions\site\HistoryUri',
-                'action'    => 'delete',
-            ],
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
