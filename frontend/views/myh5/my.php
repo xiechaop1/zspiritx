@@ -43,7 +43,7 @@ $this->title = '我的';
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
                     <div class="npc-name">
-                        我的
+                        我的(<?= !empty($user->user_name) ? $user->user_name : $userId ?>)
                     </div>
 
             <div class="row" id="answer-box">

@@ -46,6 +46,16 @@ $this->title = '灵镜新世界-我的';
             我的
           </div>
 
+            <div class="row" id="answer-box">
+                <div class="m-t-30 col-sm-12 col-md-12">
+                    <div class="answer-border">
+                        <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
+                        <label class="form-check-label fs-30 answer-btn">
+                            <?= !empty($userInfo->user_name) ? $userInfo->user_name : $userId ?>
+                        </label>
+                    </div>
+                </div>
+            </div>
           <div class="row" id="answer-box">
             <div class="m-t-30 col-sm-12 col-md-12">
               <div class="answer-border">

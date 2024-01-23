@@ -111,8 +111,14 @@ class Model
         if (!empty($params['story_id'])) {
             $ret = str_replace('{$story_id}', $params['story_id'], $ret);
         }
+        if (!empty($params['model_id'])) {
+            $ret = str_replace('{$model_id}', $params['model_id'], $ret);
+        }
         if (!empty($params['story_model_id'])) {
             $ret = str_replace('{$story_model_id}', $params['story_model_id'], $ret);
+        }
+        if (!empty($params['story_model_detail_id'])) {
+            $ret = str_replace('{$story_model_detail_id}', $params['story_model_detail_id'], $ret);
         }
         if (!empty($params['model_inst_u_id'])) {
             $ret = str_replace('{$model_inst_u_id}', $params['model_inst_u_id'], $ret);

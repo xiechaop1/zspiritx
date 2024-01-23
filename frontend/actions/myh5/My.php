@@ -10,6 +10,7 @@ namespace frontend\actions\myh5;
 
 
 use common\models\Knowledge;
+use common\models\User;
 use common\models\UserKnowledge;
 use yii\base\Action;
 
@@ -44,11 +45,16 @@ class My extends Action
             $userKnowledge[$knowledge->knowledge_class] = 1;
         }
 
+        $user = User::findOne()
+            ->where(['id' => $userId])
+            ->one();
+
 //        var_dump($userKnowledge);exit;
 
         return $this->controller->render('my', [
             'params'        => $_GET,
             'userId'        => $userId,
+            'user'          => $user,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'userKnowledge' => $userKnowledge,
