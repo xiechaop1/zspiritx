@@ -484,6 +484,12 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
+                        var params = {
+                            'UserId':obj["data"]["id"],
+                        }
+                        var data=$.toJSON(params);
+                        console.log(data);
+                        Unity.call(data);
                         location.href="/home/index";
                         // var params = {
                         //     'WebViewOff':1,
