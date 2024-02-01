@@ -45,7 +45,7 @@ class My extends Action
             $userKnowledge[$knowledge->knowledge_class] = 1;
         }
 
-        $user = User::findOne()
+        $user = User::find()
             ->where(['id' => $userId])
             ->one();
 
