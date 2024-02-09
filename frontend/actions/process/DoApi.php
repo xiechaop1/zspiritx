@@ -125,6 +125,9 @@ class DoApi extends ApiAction
                 case 'join':
                     $ret = $this->join();
                     break;
+                case 'get_story':
+                    $ret = $this->getStory();
+                    break;
                 case 'get_story_models':
                     $ret = $this->getStoryModels();
                     break;
@@ -165,6 +168,13 @@ class DoApi extends ApiAction
         }
 
         return $this->success($ret);
+    }
+
+    /**
+     * 获取剧本信息
+     */
+    public function getStory() {
+        return $this->_storyInfo;
     }
 
     /**

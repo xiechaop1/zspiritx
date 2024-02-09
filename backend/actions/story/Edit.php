@@ -68,6 +68,11 @@ class Edit extends Action
                 $model->story_bg = json_encode($storyBgTmp, true);
             }
 
+            if (!empty($model->resources)) {
+                eval('$resourcesTmp = ' . $model->resources);
+                $model->resources = json_encode($resourcesTmp, true);
+            }
+
             if ($model->validate()) {
                 if ($model->save()) {
 

@@ -27,6 +27,7 @@ class Story extends \yii\db\ActiveRecord
         return [
             [['title', 'desc', 'guide', 'story_bg', 'thumbnail', 'cover_image', 'image', ], 'string'],
             [['persons_ct', 'roles_ct', 'story_type', 'story_status', 'status', 'sort_by'], 'integer'],
+            [['resources'], 'string'],
             [['is_debug', 'is_delete', 'created_at', 'updated_at',], 'integer'],
         ];
     }
