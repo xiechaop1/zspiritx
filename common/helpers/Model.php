@@ -96,6 +96,7 @@ class Model
         if (empty($resources)) {
             return $resources;
         }
+
         if (Common::isJson($resources)) {
             $resourcesArr = json_decode($resources, true);
         } else {
@@ -104,17 +105,20 @@ class Model
 
         if (is_array($resourcesArr)) {
             $resources = [];
-            foreach ($resourcesArr as $type => $res) {
-                if (!empty($res) && is_array($res)) {
-                    foreach ($res as &$row) {
-                        $row = Attachment::completeUrl('/' . $type . '/' . $row, false);
+            foreach ($resourcesArr as $type => $allPlatforms) {
+
+                foreach ($allPlatforms as $platform => $res) {
+                    if (!empty($res) && is_array($res)) {
+                        foreach ($res as &$row) {
+                            $row = Attachment::completeUrl('/' . $type . '/' . $row, false);
+                        }
                     }
+                    $ret[$type][$platform] = $res;
                 }
-                $ret[$type] = $res;
             }
         }
 
-        return $resources;
+        return $ret;
     }
 
     public static function formatDialog($storyModel, $params = []) {
