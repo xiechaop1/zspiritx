@@ -174,6 +174,9 @@ class DoApi extends ApiAction
      * 获取剧本信息
      */
     public function getStory() {
+
+        $this->_storyInfo = Model::formatResources($this->_storyInfo);
+
         return $this->_storyInfo;
     }
 

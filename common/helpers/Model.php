@@ -92,6 +92,31 @@ class Model
         return json_decode($dialogJson, true);
     }
 
+    public static function formatResources($resources) {
+        if (empty($resources)) {
+            return $resources;
+        }
+        if (Common::isJson($resources)) {
+            $resourcesArr = json_decode($resources, true);
+        } else {
+            $resourcesArr = $resources;
+        }
+
+        if (is_array($resourcesArr)) {
+            $resources = [];
+            foreach ($resourcesArr as $type => $res) {
+                if (!empty($res) && is_array($res)) {
+                    foreach ($res as &$row) {
+                        $row = Attachment::completeUrl('/' . $type . '/' . $row, false);
+                    }
+                }
+                $ret[$type] = $res;
+            }
+        }
+
+        return $resources;
+    }
+
     public static function formatDialog($storyModel, $params = []) {
         if (!empty($storyModel->dialog)) {
             $ret = $storyModel->dialog;
