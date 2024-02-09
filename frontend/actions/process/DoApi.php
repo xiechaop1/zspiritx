@@ -175,7 +175,7 @@ class DoApi extends ApiAction
      */
     public function getStory() {
 
-        $this->_storyInfo = Model::formatResources($this->_storyInfo);
+        $this->_storyInfo['resources'] = Model::formatResources($this->_storyInfo['resources']);
 
         return $this->_storyInfo;
     }
