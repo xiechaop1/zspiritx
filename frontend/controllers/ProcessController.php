@@ -26,6 +26,10 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'join',
             ],
+            'get_story' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'get_story',
+            ],
             'get_session_models' => [
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'get_session_models',
