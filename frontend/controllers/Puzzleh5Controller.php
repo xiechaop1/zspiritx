@@ -30,6 +30,9 @@ class Puzzleh5Controller extends Controller
             'puzzle_word' => [
                 'class' => 'frontend\actions\puzzleh5\PuzzleWord',
             ],
+            'puzzle_sudoku' => [
+                'class' => 'frontend\actions\puzzleh5\PuzzleSudoku',
+            ],
 
         ];
     }

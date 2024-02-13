@@ -680,6 +680,143 @@ $(function () {
         }
     });
 
+    $(".v_s_keyboard").click(function (){
+        var sudoku_current = $('#sudoku_current').val();
+        $('.v_s_keyboard_choosen').removeClass('v_s_keyboard_choosen');
+        $('.DELETE_v_s_keyboard_choosen').removeClass('DELETE_v_s_keyboard_choosen');
+        var thisVal = $(this).attr('val');
+        if (sudoku_current != thisVal) {
+            $('#sudoku_current').val(thisVal);
+            console.log(thisVal);
+            if (thisVal != 'DELETE') {
+                $(this).addClass('v_s_keyboard_choosen');
+            } else {
+                $(this).addClass('DELETE_v_s_keyboard_choosen');
+            }
+        } else {
+            $('#sudoku_current').val('');
+            // $(this).addClass('v_s_keyboard_choosen');
+        }
+    });
+
+    $(".puzzle_sudoku_item").click(function() {
+        var sudokuCurrent = $('#sudoku_current').val();
+        var readOnly = $(this).attr('ro');
+
+        console.log(readOnly);
+
+        if (readOnly == '1') {
+            return false;
+        }
+
+        if (sudokuCurrent == '') {
+            return false;
+        }
+        if (sudokuCurrent == 'DELETE') {
+            $(this).html(' ');
+        } else {
+            $(this).html(sudokuCurrent);
+        }
+
+        if (isValidSudoku() == true) {
+            console.log('success');
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: false,
+                url: '/qa/add_user_answer',
+                data:{
+                    user_id:user_id,
+                    qa_id:qa_id,
+                    answer:'True',
+                    story_id:story_id,
+                    session_id:session_id,
+                    session_stage_id:session_stage_id,
+                    begin_ts:begin_ts
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    var dataContent=data;
+                    var dataCon=$.toJSON(dataContent);
+                    var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    //console.log("ajax请求成功:"+data.toString())
+                    //新消息获取成功
+                    if(obj["code"]==200){
+                        $('.puzzle_check').unbind('click');
+                        $('.puzzle_check').removeClass('puzzle_item');
+                        $('.puzzle_check').addClass('puzzle_item_end');
+                        if (obj.data.score.score != undefined) {
+                            var score_text = "+" + obj.data.score.score + "枚";
+                            if (obj.data.score.addition > 0) {
+                                score_text = score_text + "（奖：" + obj.data.score.addition + "枚）";
+                            }
+                            $("#gold_score").html(score_text);
+                        }
+                        // var audio_right=$("#audio_right")[0];
+                        // audo_right.play();
+                        $("#answer-box").removeClass('hide');
+                        $("#answer-right-box").removeClass('hide');
+
+                        // $("#h5-right").modal('show');
+                        // setTimeout(function (){
+                        //     // Unity.call('WebViewOff&TrueAnswer');
+                        //     var params = {
+                        //         'WebViewOff':1,
+                        //         'AnswerType':1
+                        //     }
+                        //     var data=$.toJSON(params);
+                        //     Unity.call(data);
+                        // },3000)
+                        setTimeout(function () {
+                            // Unity.call('WebViewOff&TrueAnswer');
+                            // var params = {
+                            //     'WebViewOff':1,
+                            //     'AnswerType':1
+                            // }
+                            // var data=$.toJSON(params);
+                            // Unity.call(data);
+                            $("#answer-right-box").addClass('hide');
+                        }, 4000);
+                    }
+                    //新消息获取失败
+                    else{
+                        $.alert(obj.msg)
+                    }
+
+                }
+            });
+        }
+    });
+
+    var isValidSudoku = function() {
+        const [row, col, boxes] = [{}, {}, {}];
+
+        for (let i = 0; i < 9; i++) {
+            for (let j=0; j < 9; j++) {
+                var num = $('#puzzle_sudoku_' + i + '_' + j).html();
+                num = num.replace(/\s*/g, "");
+                if (num == '') {
+                    return false;
+                }
+                const boxIndex = parseInt(i/3) * 3 + parseInt(j/3);
+                if (row[i + '-' + num]
+                    || col[j + '-' + num]
+                    || boxes[boxIndex + '-' + num]
+                ) {
+                    return false;
+                }
+
+                row[i + '-' + num] = true;
+                col[j + '-' + num] = true;
+                boxes[boxIndex + '-' + num] = true;
+            }
+        }
+        return true;
+    }
+
     function htmlEncode(html) {return $("<div>").text(html).html()};
     function htmIDecode(encodedHtml) {return $("<div>").html(encodedHtml).text();}
 
