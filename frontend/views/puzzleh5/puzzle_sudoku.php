@@ -133,6 +133,7 @@ $this->title = 'Puzzle';
 <input type="hidden" name="story_id" id="story_id" value="<?= $storyId ?>">
 
 <input type="hidden" name="sudoku_current" id="sudoku_current" value="">
+<input type="hidden" name="sudoku_size" id="sudoku_size" value="<?= $size ?>">
 
 <div class="w-100 m-auto">
 

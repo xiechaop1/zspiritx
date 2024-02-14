@@ -701,6 +701,7 @@ $(function () {
 
     $(".puzzle_sudoku_item").click(function() {
         var sudokuCurrent = $('#sudoku_current').val();
+        var sudokuSize = $('#sudoku_size').val();
         var readOnly = $(this).attr('ro');
 
         console.log(readOnly);
@@ -718,7 +719,7 @@ $(function () {
             $(this).html(sudokuCurrent);
         }
 
-        if (isValidSudoku() == true) {
+        if (isValidSudoku(sudokuSize) == true) {
             console.log('success');
             $.ajax({
                 type: "GET", //用POST方式传输
@@ -791,11 +792,11 @@ $(function () {
         }
     });
 
-    var isValidSudoku = function() {
+    var isValidSudoku = function(size int) {
         const [row, col, boxes] = [{}, {}, {}];
 
-        for (let i = 0; i < 9; i++) {
-            for (let j=0; j < 9; j++) {
+        for (let i = 0; i < size; i++) {
+            for (let j=0; j < size; j++) {
                 var num = $('#puzzle_sudoku_' + i + '_' + j).html();
                 num = num.replace(/\s*/g, "");
                 if (num == '') {
@@ -804,7 +805,7 @@ $(function () {
                 const boxIndex = parseInt(i/3) * 3 + parseInt(j/3);
                 if (row[i + '-' + num]
                     || col[j + '-' + num]
-                    || boxes[boxIndex + '-' + num]
+                    || (size == 9 && boxes[boxIndex + '-' + num])
                 ) {
                     return false;
                 }
