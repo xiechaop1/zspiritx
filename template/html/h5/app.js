@@ -792,7 +792,7 @@ $(function () {
         }
     });
 
-    var isValidSudoku = function(size int) {
+    var isValidSudoku = function(size) {
         const [row, col, boxes] = [{}, {}, {}];
 
         for (let i = 0; i < size; i++) {
