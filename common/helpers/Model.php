@@ -110,7 +110,7 @@ class Model
                 foreach ($allPlatforms as $platform => $res) {
                     if (!empty($res) && is_array($res)) {
                         foreach ($res as &$row) {
-                            $row = Attachment::completeUrl('/' . $type . '/' . $row, false);
+                            $row = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row, false);
                         }
                     }
                     $ret[$type][$platform] = $res;
