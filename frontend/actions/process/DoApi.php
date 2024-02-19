@@ -146,6 +146,9 @@ class DoApi extends ApiAction
                 case 'use_model':
                     $ret = $this->useModel();
                     break;
+                case 'phone_call':
+                    $ret = $this->phoneCall();
+                    break;
                 case 'get_baggage_models':
                     $ret = $this->getBaggageModels();
                     break;
@@ -927,6 +930,24 @@ class DoApi extends ApiAction
 //        }
 
         return $actions;
+    }
+
+    public function phoneCall() {
+        $whiteList = [
+            '65104101'  => '/voice/phone/no_phone_number.mp3',
+        ];
+
+        $phone = !empty($this->_get['phone']) ? $this->_get['phone'] : '';
+
+        if (!isset($whiteList[$phone])) {
+            $returnVoice = '/voice/phone/no_phone_number.mp3';
+        } else {
+            $returnVoice = $whiteList[$phone];
+        }
+
+        $returnVoice = Attachment::completeUrl($returnVoice, false);
+
+        return $returnVoice;
     }
 
     public function useModel() {
