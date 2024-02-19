@@ -21,7 +21,7 @@ class Phoneh5Controller extends Controller
         $request = \Yii::$app->request;
 
         return [
-            'get' => [
+            'phone' => [
                 'class' => 'frontend\actions\phoneh5\Phone',
             ],
 
