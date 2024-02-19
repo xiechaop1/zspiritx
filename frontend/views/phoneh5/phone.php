@@ -96,7 +96,7 @@ $this->registerMetaTag([
                 <td class="keypad">
                     <a href="javascript:return false;">
                         <label class="keypad-m">
-                            <img src="img/phone.png">
+                            <img src="../../static/img/phone.png">
                         </label>
                         <label class="keypad-m close hide">
                             <img src="../../static/img/close.png">
