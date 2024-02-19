@@ -138,6 +138,11 @@ $(function () {
                         audio.play();
                         setTimeout(function (){
                             audio.play();
+
+                            $("#audio_wrong").addEventListener('ended', function() {
+                                $("#keypad-open").show();
+                                $("#keypad-close").hide();
+                            });
                         },2000)
                     }
                     //新消息获取失败
