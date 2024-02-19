@@ -46,6 +46,10 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'use_model',
             ],
+            'phone_call' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'phone_call',
+            ],
             'pickup' => [
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'pickup',
