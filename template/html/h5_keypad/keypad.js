@@ -105,6 +105,8 @@ $(function () {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
                     $(".toast").empty().text("网络异常，请检查网络情况");
                     $(".toast-box").show();
+                    $("#keypad-open").show();
+                    $("#keypad-close").hide();
                     setTimeout(function (){
                         $(".toast-box").hide()
                     },1800)
