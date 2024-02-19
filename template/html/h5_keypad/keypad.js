@@ -74,17 +74,24 @@ $(function () {
         if($keypadNum.text()>999){
             var story_id=$("input[name='story_id']").val();
             var user_id=$("input[name='user_id']").val();
+            story_id=10;
+            user_id=1;
             var phone=$keypadNum.text();
 
             //audio 素材
             var audio_wait=$("#audio_right")[0];
             audio_wait.play();
+            setTimeout(function (){
+                audio_wait.pause();
+            },2000)
+            $("#keypad-open").hide();
+            $("#keypad-close").show();
 
             $.ajax({
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
                 async: false,
-                url: 'process/phone_call',
+                url: 'https://api.zspiritx.com.cn/process/phone_call',
                 data:{
                     is_test:1,
                     user_id:user_id,
@@ -112,8 +119,7 @@ $(function () {
                     if(obj["code"]==200){
                         $("#audio_wrong source").attr("src",obj.data);
 
-                        $("#keypad-open").hide();
-                        $("#keypad-close").show();
+
                         var audio_wrong=$("#audio_wrong")[0];
                         setTimeout(function (){
                             audio_wrong.play();
@@ -123,6 +129,8 @@ $(function () {
                     else{
                         $(".toast").empty().text(obj.msg);
                         $(".toast-box").show();
+                        $("#keypad-open").show();
+                        $("#keypad-close").hide();
                         setTimeout(function (){
                             $(".toast-box").hide()
                         },1800)

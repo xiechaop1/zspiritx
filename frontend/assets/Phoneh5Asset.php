@@ -23,6 +23,4 @@ class phoneh5Asset extends AssetBundle
         'html/h5_keypad/jquery.js',
         'html/h5_keypad/keypad.js',
         ];
-
-
 }
