@@ -82,8 +82,13 @@ $(function () {
         if($keypadNum.text()>999){
             var story_id=$("input[name='story_id']").val();
             var user_id=$("input[name='user_id']").val();
-            story_id=10;
-            user_id=1;
+            if(story_id==0){
+                story_id=10;
+            }
+            if(user_id==0){
+                user_id=1;
+            }
+
             var phone=$keypadNum.text();
 
             //audio 素材
@@ -139,7 +144,7 @@ $(function () {
                         setTimeout(function (){
                             audio.play();
 
-                            $("#audio_wrong").addEventListener('ended', function() {
+                            audio.addEventListener('ended', function() {
                                 $("#keypad-open").show();
                                 $("#keypad-close").hide();
                             });
