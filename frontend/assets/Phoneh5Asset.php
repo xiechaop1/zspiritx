@@ -11,7 +11,7 @@ namespace frontend\assets;
 
 use yii\web\AssetBundle;
 
-class maph5Asset extends AssetBundle
+class phoneh5Asset extends AssetBundle
 {
     public $sourcePath = '@runtime/../../template';
 

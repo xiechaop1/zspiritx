@@ -6,7 +6,7 @@
  * Time: 1:51 PM
  */
 
-namespace frontend\actions\map;
+namespace frontend\actions\phone;
 
 
 use common\definitions\Common;
@@ -20,7 +20,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-class Map extends Action
+class Phone extends Action
 {
 
     
