@@ -119,12 +119,11 @@ $(function () {
 
                     //新消息获取成功
                     if(obj["code"]==200){
-                        $("#audio_wrong source").attr("src",obj.data);
-
-
-                        var audio_wrong=$("#audio_wrong")[0];
+                        $("#audio_wrong source").prop("src",obj.data);
+                        var audio=$("#audio_wrong")[0];
+                        audio.play();
                         setTimeout(function (){
-                            audio_wrong.play();
+                            audio.play();
                         },2000)
                     }
                     //新消息获取失败
