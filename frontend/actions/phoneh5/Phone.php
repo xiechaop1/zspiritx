@@ -6,7 +6,7 @@
  * Time: 1:51 PM
  */
 
-namespace frontend\actions\phone;
+namespace frontend\actions\phoneh5;
 
 
 use common\definitions\Common;

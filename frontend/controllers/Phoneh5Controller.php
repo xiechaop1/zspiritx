@@ -22,7 +22,7 @@ class Phoneh5Controller extends Controller
 
         return [
             'get' => [
-                'class' => 'frontend\actions\phone\Phone',
+                'class' => 'frontend\actions\phoneh5\Phone',
             ],
 
         ];

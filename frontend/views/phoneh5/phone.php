@@ -10,10 +10,6 @@
  * @var \yii\web\View $this ;
  */
 
-/**
- * @var \common\models\QA $qa
- */
-
 \frontend\assets\Qah5Asset::register($this);
 
 $this->registerMetaTag([
@@ -25,7 +21,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = $qa['topic'];
+//$this->title = $qa['topic'];
 
 ?>
 
