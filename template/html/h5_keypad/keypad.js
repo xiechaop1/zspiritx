@@ -22,7 +22,7 @@ $(function () {
         var data=$.toJSON(params);
         Unity.call(data);
     });
-    
+
     $(".keypadinfo").slideDown(300);
     var $keypadNum = $("#keypadNum");
     $("#keypadNum").focus(function () {
@@ -95,6 +95,12 @@ $(function () {
             $("#keypad-open").hide();
             $("#keypad-close").show();
 
+            // $("#audio_wrong").prop("src","https://zspiritx.oss-cn-beijing.aliyuncs.com/voice/phone/no_phone_number.mp3");
+            // var audio=$("#audio_wrong")[0];
+            // audio.play();
+
+
+
             $.ajax({
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
@@ -127,7 +133,7 @@ $(function () {
 
                     //新消息获取成功
                     if(obj["code"]==200){
-                        $("#audio_wrong source").prop("src",obj.data);
+                        $("#audio_wrong").prop("src",obj.data);
                         var audio=$("#audio_wrong")[0];
                         audio.play();
                         setTimeout(function (){
