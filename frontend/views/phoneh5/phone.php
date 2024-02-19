@@ -10,7 +10,7 @@
  * @var \yii\web\View $this ;
  */
 
-\frontend\assets\Qah5Asset::register($this);
+\frontend\assets\Phoneh5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
@@ -35,7 +35,7 @@ $this->registerMetaTag([
        </div>
    </div>
    <audio controls id="audio_right" class="hide">
-       <source src="audio/wait_call.mp3" type="audio/mpeg">
+       <source src="../../static/audio/wait_call.mp3" type="audio/mpeg">
        您的浏览器不支持 audio 元素。
    </audio>
    <audio controls id="audio_wrong" class="hide">
@@ -57,7 +57,7 @@ $this->registerMetaTag([
                 <td class="keypad-close">
                     <a href="javascript:return false;">
                         <label class="keypad-m close">
-                            <img src="img/close.png">
+                            <img src="../../static/img/close.png">
                         </label>
 
                     </a>
@@ -99,7 +99,7 @@ $this->registerMetaTag([
                             <img src="img/phone.png">
                         </label>
                         <label class="keypad-m close hide">
-                            <img src="img/close.png">
+                            <img src="../../static/img/close.png">
                         </label>
 
                     </a>
