@@ -74,6 +74,8 @@ $(function () {
         if($keypadNum.text()>999){
             var story_id=$("input[name='story_id']").val();
             var user_id=$("input[name='user_id']").val();
+            story_id=10;
+            user_id=1;
             var phone=$keypadNum.text();
 
             //audio 素材
