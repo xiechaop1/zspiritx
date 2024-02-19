@@ -29,6 +29,7 @@ $this->title = '密码锁';
 
 ?>
 <style>
+    body {padding-top: 5px;}
     .hide {display: none;}
 </style>
 <input type="hidden" name="pin_code" value="<?= $stSelected ?>">
