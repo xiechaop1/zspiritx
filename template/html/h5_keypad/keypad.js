@@ -91,7 +91,7 @@ $(function () {
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
                 async: false,
-                url: 'https://api.zspiritx.com.cn/process/phone_call',
+                url: '/process/phone_call',
                 data:{
                     is_test:1,
                     user_id:user_id,
