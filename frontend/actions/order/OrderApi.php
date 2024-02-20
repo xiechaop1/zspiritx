@@ -106,7 +106,7 @@ class OrderApi extends ApiAction
             $order = new Order();
             $order->user_id = $this->_userId;
             $order->story_id = $this->_storyId;
-            $order->order_no = \common\helpers\Order::generateOutTradeNo($this->_userId, $this->_storyId, $payMethod);
+            $order->order_no = \common\helpers\Order::generateOutTradeNo($this->_userInfo, $this->_storyId, $payMethod);
             $order->amount = $currPrice;
             $order->story_price = $storyExtend['price'];
 
