@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\httpclient;
@@ -49,6 +49,11 @@ class Client extends Component
      * XML format
      */
     const FORMAT_XML = 'xml';
+    /**
+     * CURL format
+     * @since 2.0.9
+     */
+    const FORMAT_CURL = 'curl';
 
     /**
      * @var string base request URL.
@@ -135,6 +140,7 @@ class Client extends Component
                 'encodingType' => PHP_QUERY_RFC3986
             ],
             self::FORMAT_XML => 'yii\httpclient\XmlFormatter',
+            self::FORMAT_CURL => 'yii\httpclient\CurlFormatter',
         ];
 
         if (!isset($this->formatters[$format])) {
@@ -401,7 +407,7 @@ class Client extends Component
      * @return Request request instance.
      * @throws \yii\base\InvalidConfigException
      */
-    private function createRequestShortcut($method, $url, $data, $headers, $options)
+    protected function createRequestShortcut($method, $url, $data, $headers, $options)
     {
         $request = $this->createRequest()
             ->setMethod($method)

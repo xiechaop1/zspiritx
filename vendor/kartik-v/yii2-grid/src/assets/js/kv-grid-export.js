@@ -1,14 +1,14 @@
 /*!
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
- * @version   3.3.2
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2023
+ * @version   3.5.3
  *
  * Grid Export Validation Module for Yii's Gridview. Supports export of
  * grid data as CSV, HTML, or Excel.
  *
  * Author: Kartik Visweswaran
- * Copyright: 2014 - 2019, Kartik Visweswaran, Krajee.com
+ * Copyright: 2014 - 2023, Kartik Visweswaran, Krajee.com
  * For more JQuery plugins visit http://plugins.krajee.com
  * For more Yii related demos visit http://demos.krajee.com
  */
@@ -86,6 +86,7 @@
         self.messages = gridOpts.messages;
         self.target = gridOpts.target;
         self.exportConversions = gridOpts.exportConversions;
+        self.skipExportElements = gridOpts.skipExportElements;
         self.showConfirmAlert = gridOpts.showConfirmAlert;
         self.action = gridOpts.action;
         self.bom = gridOpts.bom;
@@ -113,7 +114,7 @@
             } else {
                 $table.find('thead tr th').each(function (i) {
                     var str = $(this).text().trim(), slugStr = $h.slug(str);
-                    head[i] = (!self.config.$h.slugColHeads || $h.isEmpty(slugStr)) ? 'col_' + i : slugStr;
+                    head[i] = (!self.config.slugColHeads || $h.isEmpty(slugStr)) ? 'col_' + i : slugStr;
                 });
             }
             $table.find('tbody tr:has("td")').each(function (i) {
@@ -210,10 +211,15 @@
         },
         clean: function (expType) {
             var self = this, $table = self.$table.clone(), $tHead, cssStyles = self.$element.data('cssStyles') || {},
-                $container = self.$table.closest('.kv-grid-container'),
+                $container = self.$table.closest('.kv-grid-container'), skipElements = self.skipExportElements,
                 safeRemove = function (selector) {
                     $table.find(selector + '.' + self.gridId).remove();
                 };
+            if (skipElements.length) {
+                $.each(skipElements, function(key, selector) {
+                    $table.find(selector).remove();
+                });
+            }
             if (expType === 'html') {
                 $table.find('.kv-grid-boolean').remove();
             }
@@ -302,7 +308,7 @@
                 self.popup.focus();
                 self.setPopupAlert(self.messages.downloadProgress);
             }
-            $('<form/>', {'action': self.action, 'target': target, 'method': 'post', css: {'display': 'none'}})
+            $('<form/>', {'action': self.action, class: 'kv-export-form', 'target': target, 'method': 'post', css: {'display': 'none'}})
                 .append(getInput('export_filetype', type), getInput('export_filename', self.filename))
                 .append(getInput('export_encoding', self.encoding), getInput('export_bom', self.bom ? 1 : 0))
                 .append(getInput('export_content', content), getInput('module_id', self.module), $csrf)

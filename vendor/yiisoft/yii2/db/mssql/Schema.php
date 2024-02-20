@@ -1,14 +1,14 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\db\mssql;
 
+use Yii;
 use yii\db\CheckConstraint;
-use yii\db\ColumnSchema;
 use yii\db\Constraint;
 use yii\db\ConstraintFinderInterface;
 use yii\db\ConstraintFinderTrait;
@@ -29,6 +29,10 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     use ViewFinderTrait;
     use ConstraintFinderTrait;
 
+    /**
+     * {@inheritdoc}
+     */
+    public $columnSchemaClass = 'yii\db\mssql\ColumnSchema';
     /**
      * @var string the default schema used for the current session.
      */
@@ -98,7 +102,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     protected function resolveTableName($name)
     {
         $resolvedName = new TableSchema();
-        $parts = explode('.', str_replace(['[', ']'], '', $name));
+        $parts = $this->getTableNameParts($name);
         $partCount = count($parts);
         if ($partCount === 4) {
             // server name, catalog name, schema name and table name passed
@@ -124,6 +128,25 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
         }
 
         return $resolvedName;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param string $name
+     * @return array
+     * @since 2.0.22
+     */
+    protected function getTableNameParts($name)
+    {
+        $parts = [$name];
+        preg_match_all('/([^.\[\]]+)|\[([^\[\]]+)\]/', $name, $matches);
+        if (isset($matches[0]) && is_array($matches[0]) && !empty($matches[0])) {
+            $parts = $matches[0];
+        }
+
+        $parts = str_replace(['[', ']'], '', $parts);
+
+        return $parts;
     }
 
     /**
@@ -158,7 +181,6 @@ FROM [INFORMATION_SCHEMA].[TABLES] AS [t]
 WHERE [t].[table_schema] = :schema AND [t].[table_type] IN ('BASE TABLE', 'VIEW')
 ORDER BY [t].[table_name]
 SQL;
-
         return $this->db->createCommand($sql, [':schema' => $schema])->queryColumn();
     }
 
@@ -176,6 +198,29 @@ SQL;
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getSchemaMetadata($schema, $type, $refresh)
+    {
+        $metadata = [];
+        $methodName = 'getTable' . ucfirst($type);
+        $tableNames = array_map(function ($table) {
+            return $this->quoteSimpleTableName($table);
+        }, $this->getTableNames($schema, $refresh));
+        foreach ($tableNames as $name) {
+            if ($schema !== '') {
+                $name = $schema . '.' . $name;
+            }
+            $tableMetadata = $this->$methodName($name, $refresh);
+            if ($tableMetadata !== null) {
+                $metadata[] = $tableMetadata;
+            }
+        }
+
+        return $metadata;
     }
 
     /**
@@ -223,8 +268,8 @@ SQL;
         $result = [];
         foreach ($indexes as $name => $index) {
             $result[] = new IndexConstraint([
-                'isPrimary' => (bool) $index[0]['index_is_primary'],
-                'isUnique' => (bool) $index[0]['index_is_unique'],
+                'isPrimary' => (bool)$index[0]['index_is_primary'],
+                'isUnique' => (bool)$index[0]['index_is_unique'],
                 'name' => $name,
                 'columnNames' => ArrayHelper::getColumn($index, 'column_name'),
             ]);
@@ -287,7 +332,7 @@ SQL;
      */
     public function createQueryBuilder()
     {
-        return new QueryBuilder($this->db);
+        return Yii::createObject(QueryBuilder::className(), [$this->db]);
     }
 
     /**
@@ -297,7 +342,7 @@ SQL;
      */
     protected function resolveTableNames($table, $name)
     {
-        $parts = explode('.', str_replace(['[', ']'], '', $name));
+        $parts = $this->getTableNameParts($name);
         $partCount = count($parts);
         if ($partCount === 4) {
             // server name, catalog name, schema name and table name passed
@@ -338,6 +383,7 @@ SQL;
         $column->enumValues = []; // mssql has only vague equivalents to enum
         $column->isPrimaryKey = null; // primary key will be determined in findColumns() method
         $column->autoIncrement = $info['is_identity'] == 1;
+        $column->isComputed = (bool)$info['is_computed'];
         $column->unsigned = stripos($column->dbType, 'unsigned') !== false;
         $column->comment = $info['comment'] === null ? '' : $info['comment'];
 
@@ -371,7 +417,7 @@ SQL;
             $info['column_default'] = null;
         }
         if (!$column->isPrimaryKey && ($column->type !== 'timestamp' || $info['column_default'] !== 'CURRENT_TIMESTAMP')) {
-            $column->defaultValue = $column->phpTypecast($info['column_default']);
+            $column->defaultValue = $column->defaultPhpTypecast($info['column_default']);
         }
 
         return $column;
@@ -385,7 +431,7 @@ SQL;
     protected function findColumns($table)
     {
         $columnsTableName = 'INFORMATION_SCHEMA.COLUMNS';
-        $whereSql = "[t1].[table_name] = '{$table->name}'";
+        $whereSql = "[t1].[table_name] = " . $this->db->quoteValue($table->name);
         if ($table->catalogName !== null) {
             $columnsTableName = "{$table->catalogName}.{$columnsTableName}";
             $whereSql .= " AND [t1].[table_catalog] = '{$table->catalogName}'";
@@ -399,9 +445,18 @@ SQL;
 SELECT
  [t1].[column_name],
  [t1].[is_nullable],
- [t1].[data_type],
+ CASE WHEN [t1].[data_type] IN ('char','varchar','nchar','nvarchar','binary','varbinary') THEN
+    CASE WHEN [t1].[character_maximum_length] = NULL OR [t1].[character_maximum_length] = -1 THEN
+        [t1].[data_type]
+    ELSE
+        [t1].[data_type] + '(' + LTRIM(RTRIM(CONVERT(CHAR,[t1].[character_maximum_length]))) + ')'
+    END
+ ELSE
+    [t1].[data_type]
+ END AS 'data_type',
  [t1].[column_default],
  COLUMNPROPERTY(OBJECT_ID([t1].[table_schema] + '.' + [t1].[table_name]), [t1].[column_name], 'IsIdentity') AS is_identity,
+ COLUMNPROPERTY(OBJECT_ID([t1].[table_schema] + '.' + [t1].[table_name]), [t1].[column_name], 'IsComputed') AS is_computed,
  (
     SELECT CONVERT(VARCHAR, [t2].[value])
 		FROM [sys].[extended_properties] AS [t2]
@@ -538,7 +593,10 @@ SQL;
 
         $table->foreignKeys = [];
         foreach ($rows as $row) {
-            $table->foreignKeys[$row['fk_name']] = [$row['uq_table_name'], $row['fk_column_name'] => $row['uq_column_name']];
+            if (!isset($table->foreignKeys[$row['fk_name']])) {
+                $table->foreignKeys[$row['fk_name']][] = $row['uq_table_name'];
+            }
+            $table->foreignKeys[$row['fk_name']][$row['fk_column_name']] = $row['uq_column_name'];
         }
     }
 
@@ -701,5 +759,58 @@ SQL;
         }
 
         return $result[$returnType];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function quoteColumnName($name)
+    {
+        if (preg_match('/^\[.*\]$/', $name)) {
+            return $name;
+        }
+
+        return parent::quoteColumnName($name);
+    }
+
+    /**
+     * Retrieving inserted data from a primary key request of type uniqueidentifier (for SQL Server 2005 or later)
+     * {@inheritdoc}
+     */
+    public function insert($table, $columns)
+    {
+        $command = $this->db->createCommand()->insert($table, $columns);
+        if (!$command->execute()) {
+            return false;
+        }
+
+        $isVersion2005orLater = version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
+        $inserted = $isVersion2005orLater ? $command->pdoStatement->fetch() : [];
+
+        $tableSchema = $this->getTableSchema($table);
+        $result = [];
+        foreach ($tableSchema->primaryKey as $name) {
+            // @see https://github.com/yiisoft/yii2/issues/13828 & https://github.com/yiisoft/yii2/issues/17474
+            if (isset($inserted[$name])) {
+                $result[$name] = $inserted[$name];
+            } elseif ($tableSchema->columns[$name]->autoIncrement) {
+                // for a version earlier than 2005
+                $result[$name] = $this->getLastInsertID($tableSchema->sequenceName);
+            } elseif (isset($columns[$name])) {
+                $result[$name] = $columns[$name];
+            } else {
+                $result[$name] = $tableSchema->columns[$name]->defaultValue;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createColumnSchemaBuilder($type, $length = null)
+    {
+        return Yii::createObject(ColumnSchemaBuilder::className(), [$type, $length, $this->db]);
     }
 }

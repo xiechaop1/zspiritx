@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\debug\panels;
@@ -76,7 +76,7 @@ class AssetPanel extends Panel
     public function isEnabled()
     {
         try {
-            Yii::$app->view->assetManager;
+            isset(Yii::$app->view->assetManager) && Yii::$app->view->assetManager;
         } catch (InvalidConfigException $exception) {
             return false;
         }

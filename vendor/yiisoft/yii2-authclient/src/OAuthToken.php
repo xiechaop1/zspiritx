@@ -1,13 +1,14 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\authclient;
 
 use yii\base\BaseObject;
+use yii\helpers\ArrayHelper;
 
 /**
  * Token represents OAuth token.
@@ -15,9 +16,9 @@ use yii\base\BaseObject;
  * @property int $expireDuration Token expiration duration. Note that the type of this property differs in
  * getter and setter. See [[getExpireDuration()]] and [[setExpireDuration()]] for details.
  * @property string $expireDurationParamKey Expire duration param key.
- * @property bool $isExpired Is token expired. This property is read-only.
- * @property bool $isValid Is token valid. This property is read-only.
- * @property array $params This property is read-only.
+ * @property-read bool $isExpired Is token expired.
+ * @property-read bool $isValid Is token valid.
+ * @property-read array $params
  * @property string $token Token value.
  * @property string $tokenSecret Token secret value.
  *
@@ -49,6 +50,17 @@ class OAuthToken extends BaseObject
      */
     private $_params = [];
 
+
+    public function __construct(array $config = [])
+    {
+        if (array_key_exists('tokenParamKey', $config)) {
+            $this->tokenParamKey = ArrayHelper::remove($config, 'tokenParamKey');
+        }
+        if (array_key_exists('tokenSecretParamKey', $config)) {
+            $this->tokenSecretParamKey = ArrayHelper::remove($config, 'tokenSecretParamKey');
+        }
+        parent::__construct($config);
+    }
 
     /**
      * {@inheritdoc}

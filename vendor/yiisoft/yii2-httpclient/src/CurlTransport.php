@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\httpclient;
@@ -34,7 +34,7 @@ class CurlTransport extends Transport
         $responseHeaders = [];
         $this->setHeaderOutput($curlResource, $responseHeaders);
 
-        $token = $request->client->createRequestLogToken($request->getMethod(), $curlOptions[CURLOPT_URL], $curlOptions[CURLOPT_HTTPHEADER], $request->getContent());
+        $token = $request->client->createRequestLogToken($request->getMethod(), $curlOptions[CURLOPT_URL], $curlOptions[CURLOPT_HTTPHEADER], print_r($request->getContent(), true));
         Yii::info($token, __METHOD__);
         Yii::beginProfile($token, __METHOD__);
         $responseContent = curl_exec($curlResource);
@@ -47,7 +47,7 @@ class CurlTransport extends Transport
         curl_close($curlResource);
 
         if ($errorNumber > 0) {
-            throw new Exception('Curl error: #' . $errorNumber . ' - ' . $errorMessage);
+            throw new Exception('Curl error: #' . $errorNumber . ' - ' . $errorMessage, $errorNumber);
         }
 
         $response = $request->client->createResponse($responseContent, $responseHeaders);
@@ -141,17 +141,22 @@ class CurlTransport extends Transport
         }
 
         $content = $request->getContent();
-        if ($content === null) {
-            if ($method === 'HEAD') {
-                $curlOptions[CURLOPT_NOBODY] = true;
-            }
-        } else {
+
+        if ($method === 'HEAD') {
+            $curlOptions[CURLOPT_NOBODY] = true;
+        }
+
+        if ($content !== null) {
             $curlOptions[CURLOPT_POSTFIELDS] = $content;
         }
 
         $curlOptions[CURLOPT_RETURNTRANSFER] = true;
         $curlOptions[CURLOPT_URL] = $request->getFullUrl();
         $curlOptions[CURLOPT_HTTPHEADER] = $request->composeHeaderLines();
+
+        if ($request->getOutputFile()) {
+            $curlOptions[CURLOPT_FILE] = $request->getOutputFile();
+        }
 
         return $curlOptions;
     }

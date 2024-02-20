@@ -91,6 +91,27 @@ class Wechat extends Component
         return $ret;
     }
 
+    public function getAccessToken($code) {
+        $uri = '/sns/oauth2/access_token';
+
+        $params = [
+            'appid' => $this->appId,
+            'secret' => $this->appSecret,
+            'code' => $code,
+            'grant_type' => 'authorization_code',
+        ];
+
+        $uri = $this->_createUri($uri, self::WECHAT_HOST, $params);
+
+        try {
+            $ret = $this->_getApi($uri);
+        } catch (\Exception $e) {
+            throw new \Exception('获取Session失败：' . $e->getMessage(), $e->getCode());
+        }
+
+        return $ret;
+    }
+
     public function getSession($code)
     {
         $uri = '/sns/jscode2session';

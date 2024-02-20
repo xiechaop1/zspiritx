@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\debug\widgets\NavigationButton;
 
 /* @var $this \yii\web\View */
 /* @var $summary array */
@@ -45,10 +46,11 @@ $this->title = 'Yii Debugger';
             <div class="col-md-10">
                 <?php
                 $statusCode = $summary['statusCode'];
+                $method = $summary['method'];
                 if ($statusCode === null) {
                     $statusCode = 200;
                 }
-                if ($statusCode >= 200 && $statusCode < 300) {
+                if (($statusCode >= 200 && $statusCode < 300) || ($method == 'COMMAND' && $statusCode == 0)) {
                     $calloutClass = 'callout-success';
                 } elseif ($statusCode >= 300 && $statusCode < 400) {
                     $calloutClass = 'callout-info';
@@ -63,8 +65,8 @@ $this->title = 'Yii Debugger';
                     foreach ($manifest as $meta) {
                         $label = ($meta['tag'] == $tag ? Html::tag('strong',
                                 '&#9658;&nbsp;' . $meta['tag']) : $meta['tag'])
-                            . ': ' . $meta['method'] . ' ' . $meta['url'] . ($meta['ajax'] ? ' (AJAX)' : '')
-                            . ', ' . date('Y-m-d h:i:s a', $meta['time'])
+                            . ': ' . Html::encode($meta['method']) . ' ' . Html::encode($meta['url']) . ($meta['ajax'] ? ' (AJAX)' : '')
+                            . ', ' . date('Y-m-d h:i:s a', (int) $meta['time'])
                             . ', ' . $meta['ip'];
                         $url = ['view', 'tag' => $meta['tag'], 'panel' => $activePanel->id];
                         $items[] = [
@@ -77,6 +79,14 @@ $this->title = 'Yii Debugger';
                     }
 
                     ?>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <?= NavigationButton::widget(
+                            ['manifest' => $manifest, 'tag' => $tag, 'panel' => $activePanel, 'button' => 'Prev']
+                        ) ?>
+                        <?= NavigationButton::widget(
+                            ['manifest' => $manifest, 'tag' => $tag, 'panel' => $activePanel, 'button' => 'Next']
+                        ) ?>
+                    </div>
                     <div class="btn-group btn-group-sm" role="group">
                         <?=Html::a('All', ['index'], ['class' => ['btn', 'btn-light']]);?>
                         <?=Html::a('Latest', ['view', 'panel' => $activePanel->id], ['class' => ['btn', 'btn-light']]);?>
@@ -99,9 +109,9 @@ $this->title = 'Yii Debugger';
                         </div>
                     </div>
                     <?php
-                    echo "\n" . $summary['tag'] . ': ' . $summary['method'] . ' ' . Html::a(Html::encode($summary['url']),
+                    echo "\n" . $summary['tag'] . ': ' . Html::encode($summary['method']) . ' ' . Html::a(Html::encode($summary['url']),
                             $summary['url']);
-                    echo ' at ' . date('Y-m-d h:i:s a', $summary['time']) . ' by ' . $summary['ip'];
+                    echo ' at ' . date('Y-m-d h:i:s a', (int) $summary['time']) . ' by ' . $summary['ip'];
                     ?>
                 </div>
                 <?= $activePanel->getDetail(); ?>
@@ -110,7 +120,7 @@ $this->title = 'Yii Debugger';
     </div>
 </div>
 <script type="text/javascript">
-    if (!window.frameElement) {
+    if (window.top == window) {
         document.querySelector('#yii-debug-toolbar').style.display = 'block';
     }
 </script>

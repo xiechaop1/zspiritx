@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\httpclient;
@@ -213,6 +213,20 @@ class Message extends Component
     }
 
     /**
+     * Checks if content with provided name exists
+     * @param $key string Name of the content parameter
+     * @return bool
+     * @since 2.0.10
+     */
+    public function hasContent($key)
+    {
+        $content = $this->getContent();
+        return is_array($content) && isset($content[$key]);
+    }
+
+
+
+    /**
      * Sets the data fields, which composes message content.
      * @param mixed $data content data fields.
      * @return $this self reference.
@@ -243,6 +257,9 @@ class Message extends Component
         if (empty($this->_data)) {
             $this->_data = $data;
         } else {
+            if (!is_array($this->_data)) {
+                throw new \yii\base\Exception('Unable to merge existing data with new data. Existing data is not an array.');
+            }
             $this->_data = array_merge($this->_data, $data);
         }
         return $this;

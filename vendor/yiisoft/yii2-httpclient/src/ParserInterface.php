@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\httpclient;
@@ -18,7 +18,7 @@ interface ParserInterface
     /**
      * Parses given HTTP response instance.
      * @param Response $response HTTP response instance.
-     * @return array parsed content data.
+     * @return mixed parsed content data.
      */
     public function parse(Response $response);
 }

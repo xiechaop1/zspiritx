@@ -38,7 +38,7 @@ $this->title = '灵镜新世界-我的';
 
 <div class="w-100 m-auto">
 
-  <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
+  <div class="p-20 bg-black w-100 m-t-80" style="position: relative; left: 0px; top: 30px;">
     <div class="w-100 p-30  m-b-10">
       <div class="w-1-0 d-flex">
         <div class="fs-30 bold w-100 text-FF title-box-border ">
@@ -125,4 +125,20 @@ $this->title = '灵镜新世界-我的';
 </div>
 
 </div>
+
+<footer class="footer" style="bottom: 0px;">
+    <div class="container">
+        <!--Footer Info -->
+        <div class="row footer-info text-center">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <span class="margin-10 footer-m-span white" style="color: white;"><?= !empty($unityVersion) ? '版本号：' . $unityVersion : ''?> &nbsp; 联系我们：18500041193</span><br>
+                <span class="margin-10 footer-m-span white" style="color: white;">Copyright © 2023-<?= Date('Y') ?> 庄生科技 zspiritx.com.cn 版权所有</span><br>
+                <span class="margin-10 footer-m-span"><a href="https://beian.miit.gov.cn" class="white">京ICP备2023021255号</a></span>
+            </div>
+        </div>
+        <!-- End Footer Info -->
+    </div>
+</footer>
+
+
 

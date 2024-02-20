@@ -1,21 +1,22 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\authclient;
 
 use yii\base\Exception;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 use Yii;
+use yii\helpers\Inflector;
 use yii\httpclient\Request;
 
 /**
  * BaseOAuth is a base class for the OAuth clients.
  *
- * @see http://oauth.net/
+ * @see https://oauth.net/
  *
  * @property OAuthToken $accessToken Auth token instance. Note that the type of this property differs in
  * getter and setter. See [[getAccessToken()]] and [[setAccessToken()]] for details.
@@ -51,6 +52,13 @@ abstract class BaseOAuth extends BaseClient
      * @since 2.0.6
      */
     public $autoRefreshAccessToken = true;
+    /**
+     * @var array List of the parameters to keep in default return url.
+     * @since 2.2.4
+     */
+    public $parametersToKeepInReturnUrl = [
+        'authclient',
+    ];
 
     /**
      * @var string URL, which user will be redirected after authentication at the OAuth provider web site.
@@ -59,7 +67,8 @@ abstract class BaseOAuth extends BaseClient
      */
     private $_returnUrl;
     /**
-     * @var OAuthToken|array access token instance or its array configuration.
+     * @var OAuthToken|array|null access token instance, its array configuration or null that means that token would be
+     * restored from token store.
      */
     private $_accessToken;
     /**
@@ -89,7 +98,7 @@ abstract class BaseOAuth extends BaseClient
 
     /**
      * Sets access token to be used.
-     * @param array|OAuthToken $token access token or its configuration.
+     * @param array|OAuthToken|null $token access token or its configuration. Set to null to restore token from token store.
      */
     public function setAccessToken($token)
     {
@@ -115,12 +124,12 @@ abstract class BaseOAuth extends BaseClient
     /**
      * Set signature method to be used.
      * @param array|signature\BaseMethod $signatureMethod signature method instance or its array configuration.
-     * @throws InvalidParamException on wrong argument.
+     * @throws InvalidArgumentException on wrong argument.
      */
     public function setSignatureMethod($signatureMethod)
     {
         if (!is_object($signatureMethod) && !is_array($signatureMethod)) {
-            throw new InvalidParamException('"' . get_class($this) . '::signatureMethod" should be instance of "\yii\autclient\signature\BaseMethod" or its array configuration. "' . gettype($signatureMethod) . '" has been given.');
+            throw new InvalidArgumentException('"' . get_class($this) . '::signatureMethod" should be instance of "\yii\autclient\signature\BaseMethod" or its array configuration. "' . gettype($signatureMethod) . '" has been given.');
         }
         $this->_signatureMethod = $signatureMethod;
     }
@@ -165,7 +174,12 @@ abstract class BaseOAuth extends BaseClient
      */
     protected function defaultReturnUrl()
     {
-        return Yii::$app->getRequest()->getAbsoluteUrl();
+        $params = Yii::$app->getRequest()->getQueryParams();
+        $params = array_intersect_key($params, array_flip($this->parametersToKeepInReturnUrl));
+
+        $params[0] = Yii::$app->controller->getRoute();
+
+        return Yii::$app->getUrlManager()->createAbsoluteUrl($params);
     }
 
     /**
@@ -174,9 +188,8 @@ abstract class BaseOAuth extends BaseClient
     protected function defaultRequestOptions()
     {
         return [
-            'userAgent' => Yii::$app->name . ' OAuth ' . $this->version . ' Client',
+            'userAgent' => Inflector::slug(Yii::$app->name) . ' OAuth ' . $this->version . ' Client',
             'timeout' => 30,
-            'sslVerifyPeer' => false,
         ];
     }
 
@@ -209,8 +222,10 @@ abstract class BaseOAuth extends BaseClient
     /**
      * Sends the given HTTP request, returning response data.
      * @param \yii\httpclient\Request $request HTTP request to be sent.
-     * @return array response data.
-     * @throws InvalidResponseException on invalid remote response.
+     * @return array|string|null response data.
+     * @throws ClientErrorResponseException on client error response codes.
+     * @throws InvalidResponseException on non-successful (other than client error) response codes.
+     * @throws \yii\httpclient\Exception
      * @since 2.1
      */
     protected function sendRequest($request)
@@ -218,10 +233,24 @@ abstract class BaseOAuth extends BaseClient
         $response = $request->send();
 
         if (!$response->getIsOk()) {
-            throw new InvalidResponseException($response, 'Request failed with code: ' . $response->getStatusCode() . ', message: ' . $response->getContent());
+            $statusCode = (int)$response->getStatusCode();
+            if ($statusCode >= 400 && $statusCode < 500) {
+                $exceptionClass = 'yii\\authclient\\ClientErrorResponseException';
+            } else {
+                $exceptionClass = 'yii\\authclient\\InvalidResponseException';
+            }
+            throw new $exceptionClass(
+                $response,
+                'Request failed with code: ' . $statusCode . ', message: ' . $response->getContent(),
+                $statusCode
+            );
         }
 
-        return $response->getData();
+        if (stripos($response->headers->get('content-type', ''), 'application/jwt') !== false) {
+            return $response->getContent();
+        } else {
+            return $response->getData();
+        }
     }
 
     /**
@@ -294,8 +323,10 @@ abstract class BaseOAuth extends BaseClient
     public function beforeApiRequestSend($event)
     {
         $accessToken = $this->getAccessToken();
-        if (!is_object($accessToken) || !$accessToken->getIsValid()) {
+        if (!is_object($accessToken) || (!$accessToken->getIsValid() && !$this->autoRefreshAccessToken)) {
             throw new Exception('Invalid access token.');
+        } elseif ($accessToken->getIsExpired() && $this->autoRefreshAccessToken) {
+            $accessToken = $this->refreshAccessToken($accessToken);
         }
 
         $this->applyAccessTokenToRequest($event->request, $accessToken);
@@ -305,7 +336,7 @@ abstract class BaseOAuth extends BaseClient
      * Performs request to the OAuth API returning response data.
      * You may use [[createApiRequest()]] method instead, gaining more control over request execution.
      * @see createApiRequest()
-     * @param string $apiSubUrl API sub URL, which will be append to [[apiBaseUrl]], or absolute API URL.
+     * @param string|array $apiSubUrl API sub URL, which will be append to [[apiBaseUrl]], or absolute API URL.
      * @param string $method request method.
      * @param array|string $data request data or content.
      * @param array $headers additional request headers.

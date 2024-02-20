@@ -1,6 +1,6 @@
 /*!
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
- * @version 2.1.3
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2020
+ * @version 2.1.9
  *
  * Krajee Bootstrap 3.x Theme for Select2
  *
@@ -364,6 +364,7 @@
     line-height: 1.428571429;
     margin-top: 0;
     min-width: 5em;
+    color: #999;
 }
 
 .select2-container--krajee[dir="rtl"] .select2-selection--single {
@@ -558,38 +559,37 @@
 .select2-container--krajee .select2-selection__clear {
     color: #000;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    top: 0.4rem;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 16px;
     opacity: 0.4;
-    filter: alpha(opacity=40);
-    position: absolute;
-}
-
-.select2-container--krajee .select2-selection--single .select2-selection__clear {
-    position: absolute;
 }
 
 .select2-container--krajee .select2-selection__clear:hover {
     opacity: 0.6;
-    filter: alpha(opacity=60);
+}
+
+.select2-container--krajee .select2-selection--single .select2-selection__clear,
+.select2-container--krajee .select2-selection--multiple .select2-selection__clear {
+    position: absolute;
+    top: 6px;
+    font-size: 16px;
 }
 
 .select2-container--krajee .select2-selection--single .select2-selection__clear {
-    right: 3rem;
+    right: 25px;
 }
 
 .select2-container--krajee[dir="rtl"] .select2-selection--single .select2-selection__clear {
-    left: 3rem;
+    left: 25px;
     right: auto;
 }
 
 .select2-container--krajee .select2-selection--multiple .select2-selection__clear {
-    right: 1rem;
+    right: 10px;
 }
 
 .select2-container--krajee[dir="rtl"] .select2-selection--multiple .select2-selection__clear {
-    left: 1rem;
+    left: 10px;
     right: auto;
 }
 
@@ -613,6 +613,10 @@
  * Multi Selection Remove
  */
 .select2-container--krajee .select2-selection--multiple .select2-selection__choice__remove {
+    border: none;
+    background: none;
+    box-shadow: none;
+    outline: none;
     float: right;
     color: #000;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

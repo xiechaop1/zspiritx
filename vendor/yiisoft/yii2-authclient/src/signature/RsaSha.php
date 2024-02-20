@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\authclient\signature;
@@ -13,7 +13,7 @@ use yii\base\NotSupportedException;
 /**
  * RsaSha1 represents 'SHAwithRSA' (also known as RSASSA-PKCS1-V1_5-SIGN with the SHA hash) signature method.
  *
- * > **Note:** This class requires PHP "OpenSSL" extension(<http://php.net/manual/en/book.openssl.php>).
+ * > **Note:** This class requires PHP "OpenSSL" extension(<https://php.net/manual/en/book.openssl.php>).
  *
  * @property string $privateCertificate Private key certificate content.
  * @property string $publicCertificate Public key certificate content.
@@ -33,7 +33,7 @@ class RsaSha extends BaseMethod
     public $publicCertificateFile;
     /**
      * @var int|string signature hash algorithm, e.g. `OPENSSL_ALGO_SHA1`, `OPENSSL_ALGO_SHA256` and so on.
-     * @see http://php.net/manual/en/openssl.signature-algos.php
+     * @see https://php.net/manual/en/openssl.signature-algos.php
      */
     public $algorithm;
 
@@ -171,8 +171,11 @@ class RsaSha extends BaseMethod
         $privateKeyId = openssl_pkey_get_private($privateCertificateContent, $key);
         // Sign using the key
         openssl_sign($baseString, $signature, $privateKeyId, $this->algorithm);
-        // Release the key resource
-        openssl_free_key($privateKeyId);
+
+        if (\PHP_VERSION_ID < 80000) {
+            // Release the key resource. Done automatically in PHP 8
+            openssl_free_key($privateKeyId);
+        }
 
         return base64_encode($signature);
     }
@@ -189,8 +192,11 @@ class RsaSha extends BaseMethod
         $publicKeyId = openssl_pkey_get_public($publicCertificate);
         // Check the computed signature against the one passed in the query
         $verificationResult = openssl_verify($baseString, $decodedSignature, $publicKeyId, $this->algorithm);
-        // Release the key resource
-        openssl_free_key($publicKeyId);
+
+        if (\PHP_VERSION_ID < 80000) {
+            // Release the key resource. Done automatically in PHP 8
+            openssl_free_key($publicKeyId);
+        }
 
         return ($verificationResult == 1);
     }
