@@ -36,6 +36,7 @@ $this->title = '灵镜新世界-我的';
   }
 </style>
 
+<body>
 <div class="w-100 m-auto">
 
   <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
@@ -125,6 +126,7 @@ $this->title = '灵镜新世界-我的';
 </div>
 
 </div>
+</body>
 <footer class="footer">
     <div class="container">
         <!--Footer Info -->
@@ -138,5 +140,6 @@ $this->title = '灵镜新世界-我的';
         <!-- End Footer Info -->
     </div>
 </footer>
+
 
 
