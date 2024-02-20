@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
 class Story extends \common\models\Story
 {
 
+    public $date_range;
 
     public function rules()
     {
