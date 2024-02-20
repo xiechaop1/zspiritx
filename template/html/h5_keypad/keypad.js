@@ -14,6 +14,14 @@ $(function () {
         }, false);
     })();
 
+    $("#return_btn").click(function (){
+        var params = {
+            'WebViewOff':1,
+            'AnswerType':2
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
 
     $(".keypadinfo").slideDown(300);
     var $keypadNum = $("#keypadNum");
@@ -74,8 +82,13 @@ $(function () {
         if($keypadNum.text()>999){
             var story_id=$("input[name='story_id']").val();
             var user_id=$("input[name='user_id']").val();
-            story_id=10;
-            user_id=1;
+            if(story_id==0){
+                story_id=10;
+            }
+            if(user_id==0){
+                user_id=1;
+            }
+
             var phone=$keypadNum.text();
 
             //audio 素材
@@ -87,11 +100,17 @@ $(function () {
             $("#keypad-open").hide();
             $("#keypad-close").show();
 
+            // $("#audio_wrong").prop("src","https://zspiritx.oss-cn-beijing.aliyuncs.com/voice/phone/no_phone_number.mp3");
+            // var audio=$("#audio_wrong")[0];
+            // audio.play();
+
+
+
             $.ajax({
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
                 async: false,
-                url: 'https://api.zspiritx.com.cn/process/phone_call',
+                url: '/process/phone_call',
                 data:{
                     is_test:1,
                     user_id:user_id,
@@ -105,6 +124,8 @@ $(function () {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
                     $(".toast").empty().text("网络异常，请检查网络情况");
                     $(".toast-box").show();
+                    $("#keypad-open").show();
+                    $("#keypad-close").hide();
                     setTimeout(function (){
                         $(".toast-box").hide()
                     },1800)
@@ -117,12 +138,16 @@ $(function () {
 
                     //新消息获取成功
                     if(obj["code"]==200){
-                        $("#audio_wrong source").attr("src",obj.data);
-
-
-                        var audio_wrong=$("#audio_wrong")[0];
+                        $("#audio_wrong").prop("src",obj.data);
+                        var audio=$("#audio_wrong")[0];
+                        audio.play();
                         setTimeout(function (){
-                            audio_wrong.play();
+                            audio.play();
+
+                            audio.addEventListener('ended', function() {
+                                $("#keypad-open").show();
+                                $("#keypad-close").hide();
+                            });
                         },2000)
                     }
                     //新消息获取失败

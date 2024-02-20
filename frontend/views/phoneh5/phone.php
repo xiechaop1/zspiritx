@@ -24,7 +24,9 @@ $this->registerMetaTag([
 //$this->title = $qa['topic'];
 
 ?>
-
+<div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
+  返回
+</div>
 
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">

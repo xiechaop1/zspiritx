@@ -21,6 +21,7 @@ class phoneh5Asset extends AssetBundle
     ];
     public $js = [
         'html/h5_keypad/jquery.js',
+         self::HOST . 'js/jquery/jquery.json.min.js',
         'html/h5_keypad/keypad.js',
         ];
 }
