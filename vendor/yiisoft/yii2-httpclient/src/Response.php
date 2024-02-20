@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\httpclient;
@@ -13,8 +13,8 @@ use yii\web\HeaderCollection;
 /**
  * Response represents HTTP request response.
  *
- * @property bool $isOk Whether response is OK. This property is read-only.
- * @property string $statusCode Status code. This property is read-only.
+ * @property-read bool $isOk Whether response is OK.
+ * @property-read string $statusCode Status code.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0
@@ -29,7 +29,7 @@ class Response extends Message
         $data = parent::getData();
         if ($data === null) {
             $content = $this->getContent();
-            if (!empty($content)) {
+            if (is_string($content) && strlen($content) > 0) {
                 $data = $this->getParser()->parse($this);
                 $this->setData($data);
             }
@@ -130,7 +130,7 @@ class Response extends Message
         if (preg_match('/^([^=&])+=[^=&]+(&[^=&]+=[^=&]+)*$/', $content)) {
             return Client::FORMAT_URLENCODED;
         }
-        if (preg_match('/^<.*>$/s', $content)) {
+        if (preg_match('/^<\?xml.*>$/s', $content)) {
             return Client::FORMAT_XML;
         }
         return null;
@@ -196,9 +196,6 @@ class Response extends Message
     private function getParser()
     {
         $format = $this->getFormat();
-        if ($format === null) {
-            throw new Exception("Unable to detect format for content parsing. Raw response:\n\n" . $this->toString());
-        }
         return $this->client->getParser($format);
     }
 }

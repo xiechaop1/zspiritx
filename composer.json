@@ -42,9 +42,9 @@
         "kartik-v/yii2-export": "@dev",
 	"mpdf/mpdf":"*",
 	"smalot/pdfparser": "*",
-	"php-xpdf/php-xpdf": "*"
-    },
-    "require-dev": {
+	"php-xpdf/php-xpdf": "*",
+        "wechatpay/wechatpay-guzzle-middleware": "*",
+        "guzzlehttp/guzzle": "^6.5"
     },
     "autoload": {
         "psr-4": {
@@ -55,6 +55,9 @@
         "process-timeout": 1800,
         "fxp-asset": {
             "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     },
     "repositories": [

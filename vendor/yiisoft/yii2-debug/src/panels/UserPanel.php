@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\debug\panels;
@@ -26,8 +26,8 @@ use yii\web\User;
 /**
  * Debugger panel that collects and displays user data.
  *
- * @property DataProviderInterface $userDataProvider Get model for GridView -> DataProvider. This property is read-only.
- * @property Model|UserSearchInterface $usersFilterModel Get model for GridView -> FilterModel. This property is read-only.
+ * @property-read DataProviderInterface $userDataProvider
+ * @property-read Model|UserSearchInterface $usersFilterModel
  *
  * @author Daniel Gomez Pan <pana_1990@hotmail.com>
  * @since 2.0.8
@@ -67,6 +67,11 @@ class UserPanel extends Panel
      * @since 2.0.13
      */
     public $userComponent = 'user';
+    /**
+     * @var string Display Name of the debug panel.
+     * @since 2.1.4
+     */
+    public $displayName = 'User';
 
 
     /**
@@ -82,7 +87,7 @@ class UserPanel extends Panel
         $this->userSwitch = new UserSwitch(['userComponent' => $this->userComponent]);
         $this->addAccessRules();
 
-        if (!is_object($this->filterModel)
+        if (is_string($this->filterModel)
             && class_exists($this->filterModel)
             && in_array('yii\debug\models\search\UserSearchInterface', class_implements($this->filterModel), true)
         ) {
@@ -112,13 +117,13 @@ class UserPanel extends Panel
      */
     private function addAccessRules()
     {
-        $this->ruleUserSwitch['controllers'] = [$this->module->id . '/user'];
+        $this->ruleUserSwitch['controllers'] = [$this->module->getUniqueId() . '/user'];
 
         $this->module->attachBehavior(
             'access_debug',
             [
                 'class' => 'yii\filters\AccessControl',
-                'only' => [$this->module->id . '/user', $this->module->id . '/default'],
+                'only' => [$this->module->getUniqueId() . '/user', $this->module->getUniqueId() . '/default'],
                 'user' => $this->userSwitch->getMainUser(),
                 'rules' => [
                     $this->ruleUserSwitch,
@@ -196,7 +201,7 @@ class UserPanel extends Panel
      */
     public function getName()
     {
-        return 'User';
+        return $this->displayName;
     }
 
     /**
@@ -220,7 +225,7 @@ class UserPanel extends Panel
      */
     public function save()
     {
-        $identity = Yii::$app->user->identity;
+        $identity = Yii::$app->{$this->userComponent}->identity;
 
         if (!isset($identity)) {
             return null;

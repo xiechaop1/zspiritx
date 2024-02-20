@@ -1,20 +1,19 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\authclient\clients;
 
-use yii\authclient\InvalidResponseException;
 use yii\authclient\OAuth2;
 use yii\helpers\Json;
 
 /**
  * VKontakte allows authentication via VKontakte OAuth.
  *
- * In order to use VKontakte OAuth you must register your application at <http://vk.com/editapp?act=create>.
+ * In order to use VKontakte OAuth you must register your application at <https://vk.com/editapp?act=create>.
  *
  * Example application configuration:
  *
@@ -27,6 +26,7 @@ use yii\helpers\Json;
  *                 'class' => 'yii\authclient\clients\VKontakte',
  *                 'clientId' => 'vkontakte_client_id',
  *                 'clientSecret' => 'vkontakte_client_secret',
+ *                 'scope' => 'email'
  *             ],
  *         ],
  *     ]
@@ -34,8 +34,8 @@ use yii\helpers\Json;
  * ]
  * ```
  *
- * @see http://vk.com/editapp?act=create
- * @see http://vk.com/developers.php?oid=-1&p=users.get
+ * @see https://vk.com/editapp?act=create
+ * @see https://vk.com/dev/users.get
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0
@@ -76,7 +76,7 @@ class VKontakte extends OAuth2
      * @see https://vk.com/dev/versions
      * @since 2.1.4
      */
-    public $apiVersion = '5.0';
+    public $apiVersion = '5.95';
 
 
     /**

@@ -1,6 +1,62 @@
 Change Log: `yii2-widget-select2`
 =================================
 
+## Version 2.1.9
+
+**Date:** 25-Sep-2020
+
+- (enh #330): Fix select all for option values containing hyphen.
+- (enh #329): Minor fixes to select2 krajee theme.
+- (enh #328): Fix undefined options in select all.
+- (enh #325): Use `hashVarLoadPosition` to initialize Select2 hash variable.
+
+## Version 2.1.8
+
+**Date:** 21-Jul-2020
+
+- (enh #326): Correct styling for all themes.
+- (enh #321): Add Kazakh Translations.
+- (enh #316): Add Uzbek Translations.
+- (enh #311): Add Turkish Translations.
+
+## Version 2.1.7
+
+**Date:** 15-Nov-2019
+
+- (enh #305): Correct placeholder color style for multiple Select2 Krajee BS3 Theme.
+- (bug #303, #304, #299, #298): Correct default data & empty placeholder validation.
+
+## Version 2.1.6
+
+**Date:** 01-Nov-2019
+
+- (enh #298, #289): Fix empty options when placeholder is set.
+
+## Version 2.1.5
+
+**Date:** 31-Oct-2019
+
+- (enh #301): Enhancements to multiple select RTL input and select all toggle.
+    - Intelligent filtered select all and unselect all that validates what all to select or unselect based on select2 search filter field typed
+    - Better styling of RTL multiple input
+- (enh #300): Add Material Theme.
+- (enh #299): Add Czech Translations.
+- (enh #298, #289): Fix empty options.
+- (enh #296): Change source input display from none to intelligent visibility hidden.
+
+## Version 2.1.4
+
+**Date:** 02-Sep-2019
+
+- (enh #290): Correct select all feature to work with the new select2 plugin release.
+- (enh #288): Modify to read select2 plugin assets from its packagist repository.
+- (enh #286): Fix demos page for broken _ajax remote data example_.
+- (enh #285): Add Azerbaijan Translations.
+- (enh #275): Add Hebrew Translations.
+- (enh #272): Update Greek Translations.
+- Update README.
+- (enh #168, #236, #246, #247, #253): Proper revert of behavior for select all toggle visibility.
+
 ## Version 2.1.3
 
 **Date:** 07-Sep-2018

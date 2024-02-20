@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\httpclient;
@@ -19,10 +19,17 @@ use yii\helpers\Json;
 class JsonParser extends BaseObject implements ParserInterface
 {
     /**
+     * @var bool whether to return objects in terms of associative arrays.
+     * @since 2.0.8
+     */
+    public $asArray = true;
+
+
+    /**
      * {@inheritdoc}
      */
     public function parse(Response $response)
     {
-        return Json::decode($response->getContent());
+        return Json::decode($response->getContent(), $this->asArray);
     }
 }

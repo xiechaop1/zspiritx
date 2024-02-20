@@ -3,8 +3,8 @@
 /**
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
- * @version   3.3.2
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2023
+ * @version   3.5.3
  */
 
 namespace kartik\grid;
@@ -24,7 +24,7 @@ use yii\helpers\Json;
  * 'columns' => [
  *     // ...
  *     [
- *         'class' => CheckboxColumn::className(),
+ *         'class' => CheckboxColumn::class,
  *         // you may configure additional properties here
  *     ],
  * ]

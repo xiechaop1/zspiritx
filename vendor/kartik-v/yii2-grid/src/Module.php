@@ -3,15 +3,18 @@
 /**
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
- * @version   3.3.2
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2023
+ * @version   3.5.3
  */
 
 namespace kartik\grid;
 
 /**
- * This module allows global level configurations for the enhanced Krajee [[GridView]]. One can configure the module
- * in their Yii configuration file as shown below:
+ * This module allows global level configurations for the enhanced Krajee [[GridView]].
+ *
+ * Setup the module in your Yii configuration file with a name `gridview` as shown below. Refer the
+ * [yii2-grid documentation](http://demos.krajee.com/grid#module) for details on the gridview module
+ * configuration parameters supported.
  *
  * ```php
  * 'modules' => [

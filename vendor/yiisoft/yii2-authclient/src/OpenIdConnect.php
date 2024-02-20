@@ -1,21 +1,28 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\authclient;
 
-use Jose\Factory\JWKFactory;
-use Jose\Loader;
+use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Checker\AlgorithmChecker;
+use Jose\Component\Checker\HeaderCheckerManager;
+use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\JWSTokenSupport;
+use Jose\Component\Signature\JWSVerifier;
+use Jose\Component\Signature\Serializer\CompactSerializer;
+use Jose\Component\Signature\Serializer\JWSSerializerManager;
 use Yii;
 use yii\authclient\signature\HmacSha;
 use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
 use yii\caching\Cache;
 use yii\di\Instance;
 use yii\helpers\Json;
+use yii\helpers\StringHelper;
 use yii\web\HttpException;
 
 /**
@@ -42,21 +49,25 @@ use yii\web\HttpException;
  * ]
  * ```
  *
- * This class requires `spomky-labs/jose` library to be installed for JWS verification. This can be done via composer:
+ * This class requires `web-token/jwt-checker`,`web-token/jwt-key-mgmt`, `web-token/jwt-signature`, `web-token/jwt-signature-algorithm-hmac`,
+ * `web-token/jwt-signature-algorithm-ecdsa` and `web-token/jwt-signature-algorithm-rsa` libraries to be installed for
+ * JWS verification. This can be done via composer:
  *
  * ```
- * composer require --prefer-dist "spomky-labs/jose:~5.0.6"
+ * composer require --prefer-dist "web-token/jwt-checker:>=1.0 <3.0" "web-token/jwt-signature:>=1.0 <3.0"
+ * "web-token/jwt-signature:>=1.0 <3.0" "web-token/jwt-signature-algorithm-hmac:>=1.0 <3.0"
+ * "web-token/jwt-signature-algorithm-ecdsa:>=1.0 <3.0" "web-token/jwt-signature-algorithm-rsa:>=1.0 <3.0"
  * ```
  *
  * Note: if you are using well-trusted OpenIdConnect provider, you may disable [[validateJws]], making installation of
- * `spomky-labs/jose` library redundant, however it is not recommended as it violates the protocol specification.
+ * `web-token` library redundant, however it is not recommended as it violates the protocol specification.
  *
- * @see http://openid.net/connect/
+ * @see https://openid.net/connect/
  * @see OAuth2
  *
  * @property Cache|null $cache The cache object, `null` - if not enabled. Note that the type of this property
  * differs in getter and setter. See [[getCache()]] and [[setCache()]] for details.
- * @property array $configParams OpenID provider configuration parameters. This property is read-only.
+ * @property array $configParams OpenID provider configuration parameters.
  * @property bool $validateAuthNonce Whether to use and validate auth 'nonce' parameter in authentication
  * flow.
  *
@@ -65,6 +76,23 @@ use yii\web\HttpException;
  */
 class OpenIdConnect extends OAuth2
 {
+    /**
+     * @var array Predefined OpenID Connect Claims
+     * @see https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.2
+     * @since 2.2.12
+     */
+    public $defaultIdTokenClaims = [
+        'iss', // Issuer Identifier for the Issuer of the response.
+        'sub', // Subject Identifier.
+        'aud', // Audience(s) that this ID Token is intended for.
+        'exp', // Expiration time on or after which the ID Token MUST NOT be accepted for processing.
+        'iat', // Time at which the JWT was issued.
+        'auth_time', // Time when the End-User authentication occurred.
+        'nonce', // String value used to associate a Client session with an ID Token, and to mitigate replay attacks.
+        'acr', // Authentication Context Class Reference.
+        'amr', // Authentication Methods References.
+        'azp', // Authorized party - the party to which the ID Token was issued.
+    ];
     /**
      * {@inheritdoc}
      */
@@ -75,15 +103,16 @@ class OpenIdConnect extends OAuth2
     public $issuerUrl;
     /**
      * @var bool whether to validate/decrypt JWS received with Auth token.
-     * Note: this functionality requires `spomky-labs/jose` composer package to be installed.
-     * You can disable this option in case of usage of trusted OpenIDConnect provider, however this violates
-     * the protocol rules, so you are doing it on your own risk.
+     * Note: this functionality requires `web-token/jwt-checker`, `web-token/jwt-key-mgmt`, `web-token/jwt-signature`
+     * composer package to be installed. You can disable this option in case of usage of trusted OpenIDConnect provider,
+     * however this violates the protocol rules, so you are doing it on your own risk.
      */
     public $validateJws = true;
     /**
      * @var array JWS algorithms, which are allowed to be used.
-     * These are used by `spomky-labs/jose` library for JWS validation/decryption.
-     * Make sure `spomky-labs/jose` supports the particular algorithm before adding it here.
+     * These are used by `web-token` library for JWS validation/decryption.
+     * Make sure to install `web-token/jwt-signature-algorithm-hmac`, `web-token/jwt-signature-algorithm-ecdsa`
+     * and `web-token/jwt-signature-algorithm-rsa` packages that support the particular algorithm before adding it here.
      */
     public $allowedJwsAlgorithms = [
         'HS256', 'HS384', 'HS512',
@@ -118,6 +147,14 @@ class OpenIdConnect extends OAuth2
      * When this is not set, it means caching is not enabled.
      */
     private $_cache = 'cache';
+    /**
+     * @var JWSLoader JSON Web Signature
+     */
+    private $_jwsLoader;
+    /**
+     * @var JWKSet Key Set
+     */
+    private $_jwkSet;
 
 
     /**
@@ -190,12 +227,13 @@ class OpenIdConnect extends OAuth2
     /**
      * Returns particular configuration parameter value.
      * @param string $name configuration parameter name.
+     * @param mixed $default value to be returned if the configuration parameter isn't set.
      * @return mixed configuration parameter value.
      */
-    public function getConfigParam($name)
+    public function getConfigParam($name, $default = null)
     {
         $params = $this->getConfigParams();
-        return $params[$name];
+        return array_key_exists($name, $params) ? $params[$name] : $default;
     }
 
     /**
@@ -214,6 +252,17 @@ class OpenIdConnect extends OAuth2
     }
 
     /**
+     * Set the OpenID provider configuration manually, this will bypass the automatic discovery via
+     * the /.well-known/openid-configuration endpoint.
+     * @param array $configParams OpenID provider configuration parameters.
+     * @since 2.2.12
+     */
+    public function setConfigParams($configParams)
+    {
+        $this->_configParams = $configParams;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildAuthUrl(array $params = [])
@@ -221,6 +270,13 @@ class OpenIdConnect extends OAuth2
         if ($this->authUrl === null) {
             $this->authUrl = $this->getConfigParam('authorization_endpoint');
         }
+
+        if (!isset($params['nonce']) && $this->getValidateAuthNonce()) {
+            $nonce = $this->generateAuthNonce();
+            $this->setState('authNonce', $nonce);
+            $params['nonce'] = $nonce;
+        }
+
         return parent::buildAuthUrl($params);
     }
 
@@ -234,9 +290,7 @@ class OpenIdConnect extends OAuth2
         }
 
         if (!isset($params['nonce']) && $this->getValidateAuthNonce()) {
-            $nonce = $this->generateAuthNonce();
-            $this->setState('authNonce', $nonce);
-            $params['nonce'] = $nonce;
+            $params['nonce'] = $this->getState('authNonce');
         }
 
         return parent::fetchAccessToken($authCode, $params);
@@ -250,6 +304,13 @@ class OpenIdConnect extends OAuth2
         if ($this->tokenUrl === null) {
             $this->tokenUrl = $this->getConfigParam('token_endpoint');
         }
+
+        if ($this->getValidateAuthNonce()) {
+            $nonce = $this->generateAuthNonce();
+            $this->setState('authNonce', $nonce);
+            $token->setParam('nonce', $nonce);
+        }
+
         return parent::refreshAccessToken($token);
     }
 
@@ -258,9 +319,39 @@ class OpenIdConnect extends OAuth2
      */
     protected function initUserAttributes()
     {
-        return $this->api($this->getConfigParam('userinfo_endpoint'), 'GET');
+        // Use 'userinfo_endpoint' config if available,
+        // try to extract user claims from access token's 'id_token' claim otherwise.
+
+        $userinfoEndpoint = $this->getConfigParam('userinfo_endpoint');
+        if (!empty($userinfoEndpoint)) {
+            $userInfo = $this->api($userinfoEndpoint, 'GET');
+            // The userinfo endpoint can return a JSON object (which will be converted to an array) or a JWT.
+            if (is_array($userInfo)) {
+                return $userInfo;
+            } else {
+                // Use the userInfo endpoint as id_token and parse it as JWT below
+                $idToken = $userInfo;
+            }
+        } else {
+            $accessToken = $this->accessToken;
+            $idToken = $accessToken->getParam('id_token');
+        }
+
+        $idTokenData = [];
+        if (!empty($idToken)) {
+            if ($this->validateJws) {
+                $idTokenClaims = $this->loadJws($idToken);
+            } else {
+                $idTokenClaims = Json::decode(StringHelper::base64UrlDecode(explode('.', $idToken)[1]));
+            }
+            $metaDataFields = array_flip($this->defaultIdTokenClaims);
+            unset($metaDataFields['sub']); // "Subject Identifier" is not meta data
+            $idTokenData = array_diff_key($idTokenClaims, $metaDataFields);
+        }
+
+        return $idTokenData;
     }
-	
+
     /**
      * {@inheritdoc}
      */
@@ -275,7 +366,7 @@ class OpenIdConnect extends OAuth2
      */
     protected function applyClientCredentialsToRequest($request)
     {
-        $supportedAuthMethods = $this->getConfigParam('token_endpoint_auth_methods_supported');
+        $supportedAuthMethods = $this->getConfigParam('token_endpoint_auth_methods_supported', 'client_secret_basic');
 
         if (in_array('client_secret_basic', $supportedAuthMethods)) {
             $request->addHeaders([
@@ -317,25 +408,6 @@ class OpenIdConnect extends OAuth2
     /**
      * {@inheritdoc}
      */
-    protected function defaultReturnUrl()
-    {
-        $params = Yii::$app->getRequest()->getQueryParams();
-        // OAuth2 specifics :
-        unset($params['code']);
-        unset($params['state']);
-        // OpenIdConnect specifics :
-        unset($params['nonce']);
-        unset($params['authuser']);
-        unset($params['session_state']);
-        unset($params['prompt']);
-        $params[0] = Yii::$app->controller->getRoute();
-
-        return Yii::$app->getUrlManager()->createAbsoluteUrl($params);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function createToken(array $tokenConfig = [])
     {
         if ($this->validateJws) {
@@ -345,7 +417,11 @@ class OpenIdConnect extends OAuth2
 
             if ($this->getValidateAuthNonce()) {
                 $authNonce = $this->getState('authNonce');
-                if (!isset($jwsData['nonce']) || empty($authNonce) || strcmp($jwsData['nonce'], $authNonce) !== 0) {
+                if (
+                    !isset($jwsData['nonce'])
+                    || empty($authNonce)
+                    || !Yii::$app->getSecurity()->compareString($jwsData['nonce'], $authNonce)
+                ) {
                     throw new HttpException(400, 'Invalid auth nonce');
                 } else {
                     $this->removeState('authNonce');
@@ -357,6 +433,63 @@ class OpenIdConnect extends OAuth2
     }
 
     /**
+     * Return JwkSet, returning related data.
+     * @return JWKSet object represents a key set.
+     * @throws InvalidResponseException on failure.
+     */
+    protected function getJwkSet()
+    {
+        if ($this->_jwkSet === null) {
+            $cache = $this->getCache();
+            $cacheKey = $this->configParamsCacheKeyPrefix . '_jwkSet';
+            if ($cache === null || ($jwkSet = $cache->get($cacheKey)) === false) {
+                $request = $this->createRequest()
+                    ->setMethod('GET')
+                    ->setUrl($this->getConfigParam('jwks_uri'));
+                $response = $this->sendRequest($request);
+                $jwkSet = JWKFactory::createFromValues($response);
+            }
+
+            $this->_jwkSet = $jwkSet;
+
+            if ($cache !== null) {
+                $cache->set($cacheKey, $jwkSet);
+            }
+        }
+        return $this->_jwkSet;
+    }
+
+    /**
+     * Return JWSLoader that validate the JWS token.
+     * @return JWSLoader to do token validation.
+     * @throws InvalidConfigException on invalid algorithm provide in configuration.
+     */
+    protected function getJwsLoader()
+    {
+        if ($this->_jwsLoader === null) {
+            $algorithms = [];
+            foreach ($this->allowedJwsAlgorithms as $algorithm)
+            {
+                $class = '\Jose\Component\Signature\Algorithm\\' . $algorithm;
+                if (!class_exists($class))
+                {
+                    throw new InvalidConfigException("Alogrithm class $class doesn't exist");
+                }
+                $algorithms[] = new $class();
+            }
+            $this->_jwsLoader = new JWSLoader(
+                new JWSSerializerManager([ new CompactSerializer() ]),
+                new JWSVerifier(new AlgorithmManager($algorithms)),
+                new HeaderCheckerManager(
+                    [ new AlgorithmChecker($this->allowedJwsAlgorithms) ],
+                    [ new JWSTokenSupport() ]
+                )
+            );
+        }
+        return $this->_jwsLoader;
+    }
+
+    /**
      * Decrypts/validates JWS, returning related data.
      * @param string $jws raw JWS input.
      * @return array JWS underlying data.
@@ -365,9 +498,10 @@ class OpenIdConnect extends OAuth2
     protected function loadJws($jws)
     {
         try {
-            $jwkSet = JWKFactory::createFromJKU($this->getConfigParam('jwks_uri'));
-            $loader = new Loader();
-            return $loader->loadAndVerifySignatureUsingKeySet($jws, $jwkSet, $this->allowedJwsAlgorithms)->getPayload();
+            $jwsLoader = $this->getJwsLoader();
+            $signature = null;
+            $jwsVerified = $jwsLoader->loadAndVerifyWithKeySet($jws, $this->getJwkSet(), $signature);
+            return Json::decode($jwsVerified->getPayload());
         } catch (\Exception $e) {
             $message = YII_DEBUG ? 'Unable to verify JWS: ' . $e->getMessage() : 'Invalid JWS';
             throw new HttpException(400, $message, $e->getCode(), $e);
@@ -378,13 +512,19 @@ class OpenIdConnect extends OAuth2
      * Validates the claims data received from OpenID provider.
      * @param array $claims claims data.
      * @throws HttpException on invalid claims.
+     * @since 2.2.3
      */
-    private function validateClaims(array $claims)
+    protected function validateClaims(array $claims)
     {
-        if (!isset($claims['iss']) || (strcmp(rtrim($claims['iss'], '/'), rtrim($this->issuerUrl, '/')) !== 0)) {
+        $expectedIssuer = $this->getConfigParam('issuer', $this->issuerUrl);
+        if (!isset($claims['iss']) || (strcmp(rtrim($claims['iss'], '/'), rtrim($expectedIssuer, '/')) !== 0)) {
             throw new HttpException(400, 'Invalid "iss"');
         }
-        if (!isset($claims['aud']) || (strcmp($claims['aud'], $this->clientId) !== 0)) {
+        if (!isset($claims['aud'])
+            || (!is_string($claims['aud']) && !is_array($claims['aud']))
+            || (is_string($claims['aud']) && strcmp($claims['aud'], $this->clientId) !== 0)
+            || (is_array($claims['aud']) && !in_array($this->clientId, $claims['aud']))
+        ) {
             throw new HttpException(400, 'Invalid "aud"');
         }
     }

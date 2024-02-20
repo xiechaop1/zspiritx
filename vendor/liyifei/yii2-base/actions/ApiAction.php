@@ -54,14 +54,14 @@ class ApiAction extends Action
         ];
     }
 
-    public function fail($errorMessage, $errorCode = Api::REQUEST_FAIL, $data = null)
+    public function fail($errorMessage, $errorCode = Api::REQUEST_FAIL)
     {
         Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
         return [
             'status' => false,
             'code' => $errorCode,
             'msg' => $errorMessage,
-            'data' => $data,
+            'data' => null
         ];
     }
 

@@ -1,24 +1,26 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2020
  * @package yii2-widgets
  * @subpackage yii2-widget-select2
- * @version 2.1.3
+ * @version 2.1.9
  */
 
 namespace kartik\select2;
 
+use Exception;
 use kartik\base\AddonTrait;
 use kartik\base\InputWidget;
+use ReflectionException;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use Yii\validators\RequiredValidator;
 use yii\web\JsExpression;
-use yii\web\View;
 
 /**
  * Select2 widget is a Yii2 wrapper for the Select2 jQuery plugin. This input widget is a jQuery based replacement for
@@ -32,6 +34,7 @@ use yii\web\View;
 class Select2 extends InputWidget
 {
     use AddonTrait;
+
     /**
      * Select2 large input size
      */
@@ -64,6 +67,10 @@ class Select2 extends InputWidget
      * Select2 Krajee theme (default for BS4)
      */
     const THEME_KRAJEE_BS4 = 'krajee-bs4';
+    /**
+     * Select2 Material Theme
+     */
+    const THEME_MATERIAL = 'material';
 
     /**
      * @var array $data the option data items. The array keys are option values, and the array values are the
@@ -187,12 +194,13 @@ class Select2 extends InputWidget
         self::THEME_BOOTSTRAP,
         self::THEME_KRAJEE,
         self::THEME_KRAJEE_BS4,
+        self::THEME_MATERIAL,
     ];
 
     /**
      * @inheritdoc
-     * @throws \ReflectionException
-     * @throws \yii\base\InvalidConfigException
+     * @throws ReflectionException
+     * @throws InvalidConfigException
      */
     public function run()
     {
@@ -202,8 +210,9 @@ class Select2 extends InputWidget
 
     /**
      * Initializes and renders the widget
-     * @throws \ReflectionException
-     * @throws \yii\base\InvalidConfigException
+     * @throws ReflectionException
+     * @throws InvalidConfigException
+     * @throws Exception
      */
     public function renderWidget()
     {
@@ -227,17 +236,28 @@ class Select2 extends InputWidget
             $this->pluginOptions['minimumResultsForSearch'] = new JsExpression('Infinity');
         }
         $this->initPlaceholder();
-        if (!isset($this->data)) {
-            if (!isset($this->value) && !isset($this->initValueText)) {
-                $this->data = [];
+        if (empty($this->data)) {
+            $emptyValue = !isset($this->value) || $this->value === '';
+            $emptyInitText = !isset($this->initValueText) || $this->initValueText === '';
+            if (!isset($this->pluginOptions['placeholder']) && !$multiple && $this->isRequired()) {
+                $emptyData = ['' => ''];
+            } else {
+                $emptyData = [];
+            }
+            if ($emptyValue && $emptyInitText) {
+                $this->data = $emptyData;
             } else {
                 if ($multiple) {
-                    $key = isset($this->value) && is_array($this->value) ? $this->value : [];
+                    $key = !$emptyValue && is_array($this->value) ? $this->value : '';
                 } else {
-                    $key = isset($this->value) ? $this->value : '';
+                    $key = !$emptyValue ? $this->value : '';
                 }
-                $val = isset($this->initValueText) ? $this->initValueText : $key;
-                $this->data = $multiple ? array_combine((array)$key, (array)$val) : [$key => $val];
+                $val = !$emptyInitText ? $this->initValueText : $key;
+                if ($multiple) {
+                    $this->data = $key !== '' ? array_combine((array)$key, (array)$val) : $emptyData;
+                } else {
+                    $this->data = $key !== '' ? [$key => $val] : $emptyData;
+                }
             }
         }
         $this->initLanguage('language', true);
@@ -248,12 +268,13 @@ class Select2 extends InputWidget
 
     /**
      * Initializes and render the toggle all button
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     protected function renderToggleAll()
     {
         // disable select all toggle feature for a single select, or when the showToggleALl is false, or
-        if (!$this->options['multiple'] || !$this->showToggleAll) {
+        // when one is generating an ajax based search for rendering the select2 options
+        if (!$this->options['multiple'] || !$this->showToggleAll || !empty($this->pluginOptions['ajax'])) {
             return;
         }
         $unchecked = '<i class="glyphicon glyphicon-unchecked"></i>';
@@ -293,6 +314,7 @@ class Select2 extends InputWidget
 
     /**
      * Initializes the placeholder for Select2
+     * @throws Exception
      */
     protected function initPlaceholder()
     {
@@ -320,6 +342,7 @@ class Select2 extends InputWidget
      *
      * @return string
      * @throws InvalidConfigException
+     * @throws Exception
      */
     protected function embedAddon($input)
     {
@@ -360,7 +383,7 @@ class Select2 extends InputWidget
     {
         if ($this->pluginLoading) {
             $this->_loadIndicator = '<div class="kv-plugin-loading loading-' . $this->options['id'] . '">&nbsp;</div>';
-            Html::addCssStyle($this->options, 'display:none');
+            Html::addCssStyle($this->options, ['width' => '1px', 'height' => '1px', 'visibility' => 'hidden']);
         }
         Html::addCssClass($this->options, 'form-control');
         $input = $this->getInput('dropDownList', true);
@@ -414,11 +437,31 @@ class Select2 extends InputWidget
         $this->_s2OptionsVar = 's2options_' . hash('crc32', $options);
         $this->options['data-s2-options'] = $this->_s2OptionsVar;
         $view = $this->getView();
-        $view->registerJs("var {$this->_s2OptionsVar} = {$options};", View::POS_HEAD);
+        $view->registerJs("var {$this->_s2OptionsVar} = {$options};", $this->hashVarLoadPosition);
         if ($this->maintainOrder) {
             $val = Json::encode(is_array($this->value) ? $this->value : [$this->value]);
             $view->registerJs("initS2Order('{$id}',{$val});");
         }
         $this->registerPlugin($this->pluginName, "jQuery('#{$id}')", "initS2Loading('{$id}','{$this->_s2OptionsVar}')");
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isRequired()
+    {
+        if (!empty($this->options['required'])) {
+            return true;
+        }
+        if (!$this->hasModel()) {
+            return false;
+        }
+        $validators = $this->model->getActiveValidators($this->attribute);
+        foreach ($validators as $validator) {
+            if ($validator instanceof RequiredValidator) {
+                return true;
+            }
+        }
+        return false;
     }
 }

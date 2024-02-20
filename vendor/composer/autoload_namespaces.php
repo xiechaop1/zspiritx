@@ -9,9 +9,9 @@ return array(
     'cebe\\gravatar\\' => array($vendorDir . '/cebe/yii2-gravatar'),
     'XPDF' => array($vendorDir . '/php-xpdf/php-xpdf/src'),
     'Smalot\\PdfParser\\' => array($vendorDir . '/smalot/pdfparser/src'),
-    'Monolog' => array($vendorDir . '/monolog/monolog/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
-    'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
+    'Evenement' => array($vendorDir . '/evenement/evenement/src'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'BaconQrCode' => array($vendorDir . '/bacon/bacon-qr-code/src'),
+    'Alchemy' => array($vendorDir . '/alchemy/binary-driver/src'),
 );

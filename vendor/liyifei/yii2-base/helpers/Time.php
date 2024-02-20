@@ -136,7 +136,9 @@ class Time
         if ($type == 'full') {
             return date("Y-m-d , H:i:s", $sTime);
         } else {
-            if ($dTime < 60 && $dTime > 0) {
+            if ($dTime == 0) {
+                return '刚刚';
+            } elseif ($dTime < 60 && $dTime > 0) {
                 return $dTime . "秒前";
             } elseif ($dTime < 3600 && $dTime > 0) {
                 return intval($dTime / 60) . "分钟前";
@@ -160,6 +162,8 @@ class Time
      */
     public static function getConstellation($month, $day)
     {
+        $signName = '';
+
         $signs = array(
             array('20' => '宝瓶座'), array('19' => '双鱼座'),
             array('21' => '白羊座'), array('20' => '金牛座'),
@@ -169,10 +173,25 @@ class Time
             array('22' => '射手座'), array('22' => '摩羯座')
         );
         $key = (int)$month - 1;
-        list($startSign, $signName) = each($signs[$key]);
+        if (is_array($signs[$key])) {
+            foreach ($signs[$key] as $key => $val) {
+                $startSign = $key;
+                $signName = $val;
+                break;
+            }
+        }
+
+        // list($startSign, $signName) = each($signs[$key]);
         if ($day < $startSign) {
             $key = $month - 2 < 0 ? $month = 11 : $month -= 2;
-            list($startSign, $signName) = each($signs[$key]);
+            if (is_array($signs[$key])) {
+                foreach ($signs[$key] as $key => $val) {
+                    $startSign = $key;
+                    $signName = $val;
+                    break;
+                }
+            }
+            //list($startSign, $signName) = each($signs[$key]);
         }
         return $signName;
     }

@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\authclient\widgets;
@@ -57,8 +57,8 @@ use yii\authclient\ClientInterface;
  *
  * @see \yii\authclient\AuthAction
  *
- * @property array $baseAuthUrl Base auth URL configuration. This property is read-only.
- * @property ClientInterface[] $clients Auth providers. This property is read-only.
+ * @property-read array $baseAuthUrl Base auth URL configuration.
+ * @property-read ClientInterface[] $clients Auth providers.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0

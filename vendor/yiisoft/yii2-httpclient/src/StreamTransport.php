@@ -1,15 +1,15 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\httpclient;
 
+use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
-use Yii;
 
 /**
  * StreamTransport sends HTTP messages using [Streams](http://php.net/manual/en/book.stream.php)
@@ -61,7 +61,7 @@ class StreamTransport extends Transport
             $stream = fopen($url, 'rb', false, $context);
             $responseContent = stream_get_contents($stream);
             // see http://php.net/manual/en/reserved.variables.httpresponseheader.php
-            $responseHeaders = $http_response_header;
+            $responseHeaders = (array)$http_response_header;
             fclose($stream);
         } catch (\Exception $e) {
             Yii::endProfile($token, __METHOD__);

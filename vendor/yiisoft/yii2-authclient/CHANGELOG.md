@@ -1,6 +1,117 @@
 Yii Framework 2 authclient extension Change Log
 ===============================================
 
+2.2.15 December 16, 2023
+------------------------
+
+- Enh GHSA-w8vh-p74j-x9xp: Improved security for OAuth1, OAuth2 and OpenID Connect clients by using timing attack safe string comparsion (rhertogh)
+- Enh GHSA-rw54-6826-c8j5: Improved security for OAuth2 client by requiring an `authCodeVerifier` if PKCE is enabled and clearing it after usage (rhertogh)
+- Bug #364: Use issuer claim from OpenID Configuration (radwouters)
+- Enh #367: Throw more specific `ClientErrorResponseException` when the response code in `BaseOAuth::sendRequest()` is a 4xx (rhertogh)
+
+
+2.2.14 November 18, 2022
+------------------------
+
+- Bug #351: Unable to set TokenParamKey in OAuth2 config, gets hard overwritten in OAuth2::createToken() (DSTester)
+
+
+2.2.13 September 04, 2022
+-------------------------
+
+- Bug #354: Fix PHP 8.1 deprecated message in BaseOAuth `stripos(): Passing null to parameter #1 ($haystack) of type string is deprecated` (marty-macfly)
+
+
+2.2.12 December 03, 2021
+------------------------
+
+- Bug #330: OpenID Connect client now defaults to `'client_secret_basic'` in case `token_endpoint_auth_methods_supported` isn't specified (rhertogh)
+- Bug #331: OpenID Connect `aud` claim can either be a string or a list of strings (azmeuk)
+- Bug #332: OpenID Connect `aud` nonce is passed from the authentication request to the token request (azmeuk)
+- Bug #339: OpenID Connect client now regenerates a new `nonce` when refreshing the access token (rhertogh)
+- Bug #344: Fix Facebook OAuth 400 error when latin characters are used in App name (pawelkania)
+- Enh #279: Add `AuthAction::$defaultClientId` and `AuthAction::getClientId()` (ditibal)
+- Enh #341: OpenID Connect client now uses access token `'id_token'` claim for `getUserAttributes()` if `userinfo_endpoint` is not available (rhertogh)
+- Enh #342: OpenID Connect client support for JWT in `userinfo_endpoint` response (rhertogh)
+
+
+2.2.11 August 09, 2021
+----------------------
+
+- Enh #318: Add `statusCode` from response to init `InvalidResponseException` in `sendRequest` method of `yii\authclient\BaseOAuth` class (vleedev)
+- Enh #327: Use `random_int()` when generating OAuth1 nonce (samdark)
+
+
+2.2.10 May 05, 2021
+-------------------
+
+- Chg #315: Add proof key for code exchange PKCE support to oauth2 (AdeAttwood)
+
+
+2.2.9 November 13, 2020
+-----------------------
+
+- Bug #312: do not refresh access token if it is not expired (albertborsos)
+
+
+2.2.8 November 10, 2020
+-----------------------
+
+- Bug #309: Try to refresh token in `BaseOAuth->beforeApiRequestSend()` if `BaseOAuth->autoRefreshAccessToken = true` instead of throwing "Invalid access token" exception (marty-macfly)
+- Bug #311: Fix PHP 8 compatibility (samdark)
+
+
+2.2.7 February 12, 2020
+-----------------------
+
+- Bug #292: Updated GitHub token transfer method according to https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api/#authenticating-using-query-parameters (raidkon)
+
+
+2.2.6 November 19, 2019
+-----------------------
+
+- Bug #288: Default request option for turning off SSL peer verification was removed (Rutger, samdark)
+- Enh #205: Add alternative storage system based on cache component (marty-macfly, tunecino)
+
+
+2.2.5 November 05, 2019
+-----------------------
+
+- Enh #217: Replace spomky-labs/jose by JWT Framework (marty-macfly, smcyr)
+
+
+2.2.4 July 02, 2019
+-------------------
+
+- Enh #276: Bumped VK API version to 5.95, according to developers recommendation (EvgeniyRRU)
+- Enh #278: Keep only selected parameters in default return URLs of OAuth services (albertborsos)
+
+
+2.2.3 June 04, 2019
+-------------------
+
+- Chg #273: `OpenIdConnect::validateClaims()` is now protected (samdark)
+
+
+2.2.2 May 14, 2019
+------------------
+
+- Bug #270: Updated Facebook icon to match brand guidelines (ServerDotBiz)
+
+
+2.2.1 April 23, 2019
+--------------------
+
+- Bug #252: Fix bug when `OAuthToken` is incorrectly instantiated if configuration array has incorrect order (rob006)
+
+
+2.2.0 April 16, 2019
+--------------------
+
+- Bug #266: Updated Google client image (nurielmeni)
+- Bug #267: Upgrade LinkedIn client to v2 (machour)
+
+
 2.1.8 January 28, 2019
 ----------------------
 
@@ -48,7 +159,7 @@ Yii Framework 2 authclient extension Change Log
 
 - Bug #152: Fixed `\yii\authclient\OAuth1::fetchRequestToken()` skips formatting for `yii\httpclient\Request` (klimov-paul)
 - Bug #160: Fixed `\yii\authclient\OAuth1::composeSignatureBaseString()` does not take URL query string into account (klimov-paul)
-- Enh #155: Added `\yii\authclient\OpenIdConnect` supporting [OpenID Connect](http://openid.net/connect/) protocol (klimov-paul)
+- Enh #155: Added `\yii\authclient\OpenIdConnect` supporting [OpenID Connect](https://openid.net/connect/) protocol (klimov-paul)
 - Enh #156: Added `\yii\authclient\signature\RsaSha` and `\yii\authclient\signature\HmacSha` supporting general 'SHAwithRSA' and 'HMAC SHA' signature methods (klimov-paul)
 - Enh #157: Added `\yii\authclient\OAuth2::authenticateUserJwt()` supporting authentication via JSON Web Token (JWT) (klimov-paul)
 - Enh #163: Added support for exchanging access token at `yii\authclient\clients\Facebook` (klimov-paul)
@@ -158,3 +269,6 @@ Yii Framework 2 authclient extension Change Log
 -------------------------
 
 - Initial release.
+
+
+

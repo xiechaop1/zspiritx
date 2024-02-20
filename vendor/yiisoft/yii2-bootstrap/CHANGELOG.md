@@ -1,6 +1,18 @@
 Yii Framework 2 bootstrap extension Change Log
 ==============================================
 
+2.0.11 August 09, 2021
+----------------------
+
+- Enh #261: Support of custom templates for Tab headers and panes (mmonem)
+
+
+2.0.10 April 23, 2019
+---------------------
+
+- Bug #253: Fixed missing initial class `collapsed` of an `a` element in heading in `yii\bootstrap\Collapse` widget (evil1)
+
+
 2.0.9 January 29, 2019
 ----------------------
 

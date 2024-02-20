@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\debug\panels;
@@ -68,8 +68,7 @@ class ProfilingPanel extends Panel
      */
     public function save()
     {
-        $target = $this->module->logTarget;
-        $messages = $target->filterMessages($target->messages, Logger::LEVEL_PROFILE);
+        $messages = $this->getLogMessages(Logger::LEVEL_PROFILE);
         return [
             'memory' => memory_get_peak_usage(),
             'time' => microtime(true) - YII_BEGIN_TIME,
