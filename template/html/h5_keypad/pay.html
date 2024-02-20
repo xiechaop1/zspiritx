@@ -1,35 +1,19 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: leeyifiei
- * Date: 2019/3/4
- * Time: 3:14 PM
- */
-
-/**
- * @var \yii\web\View $this ;
- */
-
-\frontend\assets\Payh5Asset::register($this);
-
-$this->registerMetaTag([
-    'name' => 'referrer',
-    'content' => 'no-referrer',
-]);
-//$this->registerMetaTag([
-//    'name' => 'viewport',
-//    'content' => 'width=device-width; initial-scale=1.0',
-//]);
-
-//$this->title = $qa['topic'];
-
-?>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta content="telephone=no" name="format-detection">
+  <meta content="email=no" name="format-detection">
+  <link rel="stylesheet" href="keypad.css">
+  <title>动态数字键盘</title>
+</head>
+<body>
 <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
   返回
 </div>
-
-<input type="hidden" name="user_id" value="<?= $userId ?>">
-<input type="hidden" name="story_id" value="<?= $storyId ?>">
 <div class="toast-box hide">
   <div class="toast">
     Toast提示
@@ -54,3 +38,8 @@ $this->registerMetaTag([
     重新支付
   </div>
 </div>
+
+</body>
+<script src="jquery.js"></script>
+<script src="keypad.js"></script>
+</html>
