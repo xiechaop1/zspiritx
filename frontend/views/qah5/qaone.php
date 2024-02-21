@@ -304,11 +304,13 @@ $this->title = $qa['topic'];
                     foreach ($selected as $selection) {
                         $label = $selection['label'];
                         $val = $selection['value'];
+                        $tag = !empty($selection['tag']) ? $selection['tag'] : $val;
+                        $selectionType = !empty($selection['type']) ? $selection['type'] : 1;
                         $optstr .= '
                         <div class="m-t-30 col-sm-12 col-md-6">
                         <div class="answer-border">
-                            <label class="form-check-label fs-30 selection-btn" style="text-align:left; padding-left: 80px;" answer_type="' . $val . '" for="selection_' . $val . '">
-                                <span class="answer-tag">' . $val . '</span>
+                            <label class="form-check-label fs-30 selection-btn" style="text-align:left; padding-left: 80px;" answer_type="' . $val . '" selection_type="' . $selectionType . '" for="selection_' . $val . '">
+                                <span class="answer-tag">' . $tag . '</span>
                         ' . $label . '
                         </label>
                         </div>

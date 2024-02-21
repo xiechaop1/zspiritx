@@ -41,13 +41,17 @@ $(function () {
 
     $(".selection-btn").click(function () {
         var val = $(this).attr('answer_type');
-        var params = {
-            'WebViewOff':1,
-            'AnswerType': val
+        var type = $(this).attr('selection_type');
+
+        if (type == 1) {
+            var params = {
+                'WebViewOff': 1,
+                'AnswerType': val
+            }
+            console.log(params);
+            var data = $.toJSON(params);
+            Unity.call(data);
         }
-        console.log(params);
-        var data=$.toJSON(params);
-        Unity.call(data);
     });
 
     //判断是否答对
