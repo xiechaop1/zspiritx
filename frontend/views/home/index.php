@@ -100,7 +100,7 @@ $this->title = 'AR剧本杀';
           SID: <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
           <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
             <?php
-            if ($unityVersion != "") {
+            if (empty($unityVersion)) {
               echo '已经购买，请联系客服！';
             } else {
               echo '进入游戏';
@@ -155,7 +155,7 @@ $this->title = 'AR剧本杀';
             if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
               || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
             ) {
-              if ($unityVersion != "") {
+              if (empty($unityVersion)) {
                 echo '已经购买，请联系客服！';
               } else {
                 echo '进入游戏';
