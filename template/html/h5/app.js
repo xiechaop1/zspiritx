@@ -266,7 +266,8 @@ $(function () {
                             var params = {
                                 'WebViewOff': 1
                             }
-                            Unity.call(params);
+                            var data=$.toJSON(params);
+                            Unity.call(data);
                             // setTimeout(function () {
                             //     window.location.reload();
                             // }, 3000);
