@@ -332,6 +332,7 @@ $(function () {
         $('#login_story_id').val(storyId);
 
         var userId = $('#user_id').val();
+        var unityVersion = $('#unity_version').val();
 
         if (orderStatus == 0) {
             $.ajax({
@@ -356,17 +357,22 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
+                        console.log(obj.data);
                         var order_status = obj.data.order_status;
-                        if (order_status != 0 && order_status == 1) {
-                            var params = {
-                                'WebViewOff':1,
-                                'DebugInfo':isDebug,
-                                'UserId': userId,
-                                'StoryId': storyId
+                        if (order_status != 0 && (order_status == 1 || order_status == 2)) {
+                            if (unityVersion != "") {
+                                var params = {
+                                    'WebViewOff': 1,
+                                    'DebugInfo': isDebug,
+                                    'UserId': userId,
+                                    'StoryId': storyId
+                                }
+                                var data = $.toJSON(params);
+                                console.log(data);
+                                Unity.call(data);
+                            } else {
+                                alert('购买成功！');
                             }
-                            var data=$.toJSON(params);
-                            console.log(data);
-                            Unity.call(data);
                         } else {
                             // 执行支付唤醒
                             alert('准备支付');
@@ -384,15 +390,19 @@ $(function () {
         }
 
         if (userId != 0) {
-            var params = {
-                'WebViewOff':1,
-                'DebugInfo':isDebug,
-                'UserId': userId,
-                'StoryId': storyId
+            if (unityVersion != "") {
+                var params = {
+                    'WebViewOff': 1,
+                    'DebugInfo': isDebug,
+                    'UserId': userId,
+                    'StoryId': storyId
+                }
+                var data = $.toJSON(params);
+                console.log(data);
+                Unity.call(data);
+            } else {
+                alert('已经购买！');
             }
-            var data=$.toJSON(params);
-            console.log(data);
-            Unity.call(data);
         } else {
             $('#loginform').show();
         }

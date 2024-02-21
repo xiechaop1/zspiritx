@@ -37,6 +37,7 @@ $this->title = 'AR剧本杀';
   您的浏览器不支持 audio 元素。
 </audio>
 <input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>">
+<input type="hidden" id="unity_version" name="unity_version" value="<?= $unityVersion ?>">
 
 <div class="owl-carousel owl-theme" id="banner">
   <?php

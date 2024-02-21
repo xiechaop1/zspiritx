@@ -122,9 +122,10 @@ class OrderApi extends ApiAction
 
             $transaction->commit();
 
+            $ret = $order;
             if ($currPrice > 0) {
-                $ret = $this->payByOrder($order);
-            } else {
+//                $ret = $this->payByOrder($order);
+//            } else {
                 $ret = [
                     'order' => $order,
                 ];
