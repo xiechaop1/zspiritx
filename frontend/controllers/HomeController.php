@@ -30,6 +30,9 @@ class HomeController extends Controller
             'my' => [
                 'class'     => 'frontend\actions\home\My',
             ],
+            'orders' => [
+                'class'     => 'frontend\actions\home\Orders',
+            ],
             'userprivacyagreement' => [
                 'class'     => 'frontend\actions\home\Userprivacyagreement',
             ],
