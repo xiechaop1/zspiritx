@@ -264,7 +264,7 @@ $(function () {
                             // if(v_ture==v_select){
                             $.alert('使用成功！');
                             var params = {
-                                'WebViewOff': 1,
+                                'WebViewOff': 1
                             }
                             Unity.call(params);
                             // setTimeout(function () {
