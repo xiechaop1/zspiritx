@@ -33,10 +33,11 @@ class WechatPay extends Component
 //    const WECHAT_SECRET = 'c71f42740ff11f631691b3a73d374bc4';
 //    const WECHAT_SECRET = '97e1f573c2ba3f75dbe88ffebddedf5a'; // test
 
-    const MERCHANT_ID   = '';
-    const MERCHANT_SERIAL_NUMBER = '';
+    const MERCHANT_ID   = '1667566912';
+    const MERCHANT_SERIAL_NUMBER = '4BAA56AF30CFEA2D70B90A1AF8F111F3021F1A82';
     const MERCHANT_PRIVATE_KEY = '';
     const WECHATPAY_CERTIFICATE = '';
+
 
     const ORDER_TIMEOUT = 30;       // minutes
 
@@ -44,6 +45,19 @@ class WechatPay extends Component
 
     private $_token;
 
+    // 解密微信回调数据
+    public function decryptData($data) {
+        $iv = Yii::$app->params['wechat']['iv'];
+        $sessionKey = Yii::$app->params['wechat']['sessionKey'];
+        $appid = Yii::$app->params['wechat']['appid'];
+        $pc = new WXBizDataCrypt($appid, $sessionKey);
+        $errCode = $pc->decryptData($data['encryptedData'], $iv, $data);
+        if ($errCode == 0) {
+            return $data;
+        } else {
+            return false;
+        }
+    }
     public function createClient() {
 
         if ($this->_client) {
@@ -53,10 +67,10 @@ class WechatPay extends Component
         // 商户相关配置，
         $merchantId = self::MERCHANT_ID; // 商户号
         $merchantSerialNumber = self::MERCHANT_SERIAL_NUMBER; // 商户API证书序列号
-        $merchantPrivateKey = PemUtil::loadPrivateKey('./path/to/mch/private/key.pem'); // 商户私钥文件路径
+        $merchantPrivateKey = PemUtil::loadPrivateKey( dirname(__FILE__) . '/../../frontend/web/cert/apiclient_key.pem'); // 商户私钥文件路径
 
         // 微信支付平台配置
-        $wechatpayCertificate = PemUtil::loadCertificate('./path/to/wechatpay/cert.pem'); // 微信支付平台证书文件路径
+        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/apiclient_cert.pem'); // 微信支付平台证书文件路径
 
         // 构造一个WechatPayMiddleware
         $wechatpayMiddleware = WechatPayMiddleware::builder()
@@ -74,10 +88,15 @@ class WechatPay extends Component
         return $this->_client;
     }
 
-    public function createH5Order($goodName, $outTradeNo, $amount) {
+    // $goodName, $outTradeNo, $amount
+    public function createH5Order($story, $order, $userInfo = []) {
         $uri = '/v3/pay/transactions/h5';
         $host = 'https://api.mch.weixin.qq.com';
         $uri = $this->_createUri($uri, $host);
+
+        $storyTitle = !empty($story->title) ? $story->title : '未知故事';
+        $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
+        $amount = !empty($order->amount) ? $order->amount : 0;
 
         $params = [
             // JSON请求体
@@ -89,7 +108,7 @@ class WechatPay extends Component
                     "currency" => "CNY",
                 ],
                 "mchid" => self::MERCHANT_ID,
-                "description" => $goodName,
+                "description" => $storyTitle,
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "out_trade_no" => $outTradeNo,
                 "appid" => $this->jsApiAppId,
@@ -107,14 +126,14 @@ class WechatPay extends Component
         $client = $this->createClient();
 
         try {
-            $result = $this->_getPostApi($client, $uri, $params);
+            $result = $this->_getPostApi($uri, $params);
             return $result;
         } catch (RequestException $e) {
-            return false;
+            throw $e;
         }
     }
 
-    public function createJsapiOrder($code, $goodName, $outTradeNo, $amount) {
+    public function createJsapiOrder($code, $story, $order, $userInfo = []) {
         $uri = '/v3/pay/transactions/jsapi';
         $host = 'https://api.mch.weixin.qq.com';
         $uri = $this->_createUri($uri, $host);
@@ -127,6 +146,11 @@ class WechatPay extends Component
             $openId = $accessToken['openid'];
         }
 
+        $storyTitle = !empty($story->title) ? $story->title : '未知故事';
+        $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
+        $amount = !empty($order->amount) ? $order->amount : 0;
+
+
         $params = [
             // JSON请求体
             'json' => [
@@ -137,7 +161,7 @@ class WechatPay extends Component
                     "currency" => "CNY",
                 ],
                 "mchid" => self::MERCHANT_ID,
-                "description" => $goodName,
+                "description" => $storyTitle,
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "payer" => [
                     "openid" => $openId,
@@ -262,6 +286,7 @@ class WechatPay extends Component
 
     private function _getPostApi($uri, $postParams = []) {
         try {
+            var_dump($postParams);exit;
             $resp = $this->_client->request(
                 'POST',
                 $uri,
@@ -269,17 +294,21 @@ class WechatPay extends Component
             );
             $statusCode = $resp->getStatusCode();
             if ($statusCode == 200) { //处理成功
-                echo "success,return body = " . $resp->getBody()->getContents()."\n";
+                return $resp->getBody()->getContents();
+//                echo "success,return body = " . $resp->getBody()->getContents()."\n";
             } else if ($statusCode == 204) { //处理成功，无返回Body
-                echo "success";
+                return true;
+//                echo "success";
             }
         } catch (RequestException $e) {
+            var_dump($e->getMessage());exit;
+            throw $e;
             // 进行错误处理
-            echo $e->getMessage()."\n";
-            if ($e->hasResponse()) {
-                echo "failed,resp code = " . $e->getResponse()->getStatusCode() . " return body = " . $e->getResponse()->getBody() . "\n";
-            }
-            return;
+//            echo $e->getMessage()."\n";
+//            if ($e->hasResponse()) {
+//                echo "failed,resp code = " . $e->getResponse()->getStatusCode() . " return body = " . $e->getResponse()->getBody() . "\n";
+//            }
+//            return;
         }
     }
 

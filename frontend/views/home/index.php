@@ -145,7 +145,9 @@ $this->title = 'AR剧本杀';
           if ($story->story_status == \common\models\Story::STORY_STATUS_OPEN_WAIT) {
             echo '等待开放';
           } else {
-            if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED) {
+            if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
+              || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
+            ) {
               echo '进入游戏';
             } else {
               if ($story->extend->curr_price == 0) {

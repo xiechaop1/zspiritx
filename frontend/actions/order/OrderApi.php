@@ -101,11 +101,12 @@ class OrderApi extends ApiAction
 
             $currPrice = $storyExtend['curr_price'];
 
-            $payMethod = 1;     // 微信支付
+            $payMethod = !empty($this->_get['pay_method']) ? $this->_get['pay_method'] : Order::PAY_METHOD_WECHAT;     // 微信支付
 
             $order = new Order();
             $order->user_id = $this->_userId;
             $order->story_id = $this->_storyId;
+            $order->pay_method = $payMethod;
             $order->order_no = \common\helpers\Order::generateOutTradeNo($this->_userInfo, $this->_storyId, $payMethod);
             $order->amount = $currPrice;
             $order->story_price = $storyExtend['price'];
@@ -113,18 +114,66 @@ class OrderApi extends ApiAction
             if ($currPrice > 0) {
                 $order->order_status = Order::ORDER_STATUS_WAIT;
                 $order->expire_time = time() + 30 * 60;     // 30分钟过期
+
             } else {
-                $order->order_status = Order::ORDER_STATUS_PAIED;
+                $order->order_status = Order::ORDER_STATUS_COMPLETED;
             }
             $ret = $order->save();
 
             $transaction->commit();
+
+            if ($currPrice > 0) {
+                $ret = $this->payByOrder($order);
+            } else {
+                $ret = [
+                    'order' => $order,
+                ];
+            }
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw $e;
         }
 
-        return $order;
+        return $ret;
+    }
+
+    public function payByOrder($order) {
+        $transaction = Yii::$app->db->beginTransaction();
+
+
+        if (empty($order)) {
+            throw new Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
+        }
+
+        if ($order->order_status != Order::ORDER_STATUS_WAIT) {
+            throw new Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
+        }
+
+        if (empty($order->story)) {
+            throw new Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+        }
+        $story = $order->story;
+
+        try {
+
+            $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
+
+            $order->order_status = Order::ORDER_STATUS_PAYING;
+//            $ret = $order->save();
+
+            $ret = [
+                'pay_res' => $res,
+                'order' => $order,
+            ];
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+//            $order->order_status = Order::ORDER_STATUS_PAY_FAILED;
+            $transaction->rollBack();
+            throw $e;
+        }
+
+        return $ret;
     }
 
     public function pay() {
@@ -145,17 +194,32 @@ class OrderApi extends ApiAction
         if ($order->order_status != Order::ORDER_STATUS_WAIT) {
             throw new Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
         }
+
+        if (empty($order->story)) {
+            throw new Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+        }
+        $story = $order->story;
+
         try {
-            $order->order_status = Order::ORDER_STATUS_PAIED;
-            $ret = $order->save();
+
+            $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
+
+            $order->order_status = Order::ORDER_STATUS_PAYING;
+//            $ret = $order->save();
+
+            $ret = [
+                'pay_res' => $res,
+                'order' => $order,
+            ];
 
             $transaction->commit();
         } catch (\Exception $e) {
+//            $order->order_status = Order::ORDER_STATUS_PAY_FAILED;
             $transaction->rollBack();
             throw $e;
         }
 
-        return $order;
+        return $ret;
     }
 
     public function cancel() {

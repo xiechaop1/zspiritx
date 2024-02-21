@@ -30,6 +30,7 @@ return [
         'knowledge' => 'common\services\Knowledge',
         'models'    => 'common\services\Models',
         'score'     => 'common\services\Score',
+        'wechatPay'    => 'common\services\WechatPay',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',

@@ -16,6 +16,10 @@ class Order
      */
     public static function generateOutTradeNo($userInfo, $storyId, $payMethod) {
 
+        if (empty($userInfo) || empty($storyId) || empty($payMethod)) {
+            return '';
+        }
+
         $userId = $userInfo['id'];
         $mobile = $userInfo['mobile'];
 
