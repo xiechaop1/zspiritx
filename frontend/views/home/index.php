@@ -99,7 +99,13 @@ $this->title = 'AR剧本杀';
           IS DEBUG:<input type="text" name="isDebug" value="1">
           SID: <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
           <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
-            进入游戏
+            <?php
+            if ($unityVersion != "") {
+              echo '已经购买，请联系客服！';
+            } else {
+              echo '进入游戏';
+            }
+            ?>
             <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
           </div>
         </div>
@@ -149,7 +155,11 @@ $this->title = 'AR剧本杀';
             if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
               || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
             ) {
-              echo '进入游戏';
+              if ($unityVersion != "") {
+                echo '已经购买，请联系客服！';
+              } else {
+                echo '进入游戏';
+              }
             } else {
               if ($story->extend->curr_price == 0) {
                 echo '限免';
