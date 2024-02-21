@@ -165,6 +165,9 @@ $this->title = $qa['topic'];
                 ?>
                 <?php
                 switch ($qa['qa_type']) {
+                    case \common\models\Qa::QA_TYPE_SELECTION:
+                        $inputType = 'selection';
+                        break;
                     case \common\models\Qa::QA_TYPE_MULTI:
                         $inputType = 'checkbox';
                         break;
@@ -295,6 +298,23 @@ $this->title = $qa['topic'];
                         $optstr .= '</div>';
                     }
 
+                } elseif ($inputType == 'selection') {
+                    $selected = $str;
+                    $optstr = '';
+                    foreach ($selected as $selection) {
+                        $label = $selection['label'];
+                        $val = $selection['value'];
+                        $optstr .= '
+                        <div class="m-t-30 col-sm-12 col-md-6">
+                        <div class="answer-border">
+                            <label class="form-check-label fs-30 selection-btn" style="text-align:left; padding-left: 80px;" answer_type="' . $val . '" for="selection_' . $val . '">
+                                <span class="answer-tag">' . $val . '</span>
+                        ' . $label . '
+                        </label>
+                        </div>
+                    </div>
+                        ';
+                    }
                 }
                 echo $optstr;
 

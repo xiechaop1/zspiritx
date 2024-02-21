@@ -25,6 +25,8 @@ class Qa extends \common\models\gii\Qa
 
     const QA_TYPE_SUDOKU = 11;      // 数独题
 
+    const QA_TYPE_SELECTION = 12;      // 选项
+
     public static $qaType2Name = [
         self::QA_TYPE_SINGLE  => '单选题',
         self::QA_TYPE_PIC   => '图片题',
@@ -37,6 +39,7 @@ class Qa extends \common\models\gii\Qa
         self::QA_TYPE_CHATGPT => '闲聊题',
         self::QA_TYPE_SECRET => '密码锁',
         self::QA_TYPE_SUDOKU => '数独题',
+        self::QA_TYPE_SELECTION => '选项',
     ];
 
     public function behaviors()

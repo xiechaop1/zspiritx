@@ -39,6 +39,17 @@ $(function () {
         }
     });
 
+    $(".selection-btn").click(function () {
+        var val = $(this).attr('answer_type');
+        var params = {
+            'WebViewOff':1,
+            'AnswerType': val
+        }
+        console.log(params);
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
+
     //判断是否答对
     $("input[name='answer']").click(function () {
         submitAnswer($(this));
