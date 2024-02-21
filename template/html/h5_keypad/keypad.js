@@ -17,7 +17,7 @@ $(function () {
     $("#return_btn").click(function (){
         var params = {
             'WebViewOff':1,
-            'AnswerType':2
+            'AnswerType':1
         }
         var data=$.toJSON(params);
         Unity.call(data);
