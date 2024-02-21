@@ -62,7 +62,7 @@ $this->title = '灵镜新世界-我的';
                 <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                 <label class="form-check-label fs-30 answer-btn">
                   <!--                  <span class="answer-tag"></span>-->
-                  <span style="padding-left: 90px; "><a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/zspiritx_useragreement.docx">用户协议</a></span>
+                  <span ><a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/zspiritx_useragreement.docx">用户协议</a></span>
                 </label>
               </div>
             </div>
@@ -73,7 +73,7 @@ $this->title = '灵镜新世界-我的';
                   <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                   <label class="form-check-label fs-30 answer-btn">
                     <!--                  <span class="answer-tag"></span>-->
-                    <span style="padding-left: 90px; "><a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/lingjing-userprivacyagreement.docx.docx">用户隐私协议</a></span>
+                    <span ><a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/lingjing-userprivacyagreement.docx.docx">用户隐私协议</a></span>
                   </label>
                 </div>
               </div>
@@ -84,7 +84,7 @@ $this->title = '灵镜新世界-我的';
                         <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                         <label class="form-check-label fs-30 answer-btn">
                             <!--                  <span class="answer-tag"></span>-->
-                            <span style="padding-left: 90px; "><a href="/home/index">返回</a></span>
+                            <span ><a href="/home/index">返回</a></span>
                         </label>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ $this->title = '灵镜新世界-我的';
                 <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                 <label class="form-check-label fs-30 answer-btn">
 <!--                  <span class="answer-tag"></span>-->
-                  <span style="padding-left: 90px; "><a href="javascript:void(0);" id="logout_btn">退出</a></span>
+                  <span ><a href="javascript:void(0);" id="logout_btn">退出</a></span>
                 </label>
               </div>
             </div>
@@ -106,7 +106,7 @@ $this->title = '灵镜新世界-我的';
                 <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                 <label class="form-check-label fs-30 answer-btn">
 <!--                  <span class="answer-tag">K</span>-->
-                  <span style="padding-left: 90px; "><a href="javascript:void(0);" id="delete_btn" style="color: grey;">注销</a></span>
+                  <span><a href="javascript:void(0);" id="delete_btn" style="color: grey;">注销</a></span>
                 </label>
 
               </div>
