@@ -189,6 +189,44 @@ table tr td:active .keypad-m{
 	color: #ffffff;
 	font-size: 0.35rem;
 }
+.pay-box{
+	position: absolute;
+	/*bottom: 40px;*/
+	top:4.2rem;
+	font-size: 0.5rem;
+	width: 100%;
+	left: 0;
+	text-align: center;
+	padding: 10px 0;
+	z-index: 10000;
+}
+.pay{
+	background-color: #189b25;
+	width: 80%;
+	left: 0;
+	text-align: center;
+	padding: 10px 0;
+	z-index: 10000;
+	display: block;
+	margin: 0 auto;
+	border-radius: 10px;
+	color: #ffffff;
+	font-size: 0.35rem;
+}
+.btn-m-border{
+	width: 80%;
+	left: 0;
+	text-align: center;
+	padding: 10px 0;
+	z-index: 10000;
+	display: block;
+	margin: 20px auto;
+	border-radius: 10px;
+	font-size: 0.35rem;
+    background-color: #ffffff;
+	border: 1px solid #dfdfdf;
+	color: #333333;
+}
 .btn-m-green {
 	border-radius: 32px 12px;
 	border: 1px solid #DAFC70;
