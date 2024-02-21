@@ -250,7 +250,8 @@ $(function () {
                         console.log(obj);
                         if (obj.data.type == 1) {
                             var params = obj.data.ret;
-                            Unity.call(params);
+                            var data = $.toJSON(params);
+                            Unity.call(data);
                         } else if (obj.data.type == 5) {
                             // 如果是展现，则直接展现
                             $('#baggage_title').html(obj.data.title);
