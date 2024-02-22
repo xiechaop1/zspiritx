@@ -30,6 +30,7 @@ class Phone extends Action
         $userId = !empty($get['user_id']) ? $get['user_id'] : 0;
         $sessionId = !empty($get['session_id']) ? $get['session_id'] : 0;
         $teamId = !empty($get['team_id']) ? $get['team_id'] : 0;
+        $qaId = !empty($get['qa_id']) ? $get['qa_id'] : 0;
         $userLng = !empty($get['user_lng']) ? $get['user_lng'] : 0;
         $userLat = !empty($get['user_lat']) ? $get['user_lat'] : 0;
         $storyStageId = !empty($get['story_stage_id']) ? $get['story_stage_id'] : 0;
@@ -40,6 +41,7 @@ class Phone extends Action
             'userId'    => $userId,
             'sessionId' => $sessionId,
             'teamId'    => $teamId,
+            'qaId'      => $qaId,
             'storyId'   => $storyId,
             'userLng'   => $userLng,
             'userLat'   => $userLat,

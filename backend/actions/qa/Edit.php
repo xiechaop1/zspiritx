@@ -70,11 +70,13 @@ class Edit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-                if (($model->qa_type == Qa::QA_TYPE_PUZZLE_WORD
-                        || $model->qa_type == Qa::QA_TYPE_WORD
-                        || $model->qa_type == Qa::QA_TYPE_VERIFYCODE
-                    || $model->qa_type == Qa::QA_TYPE_PUZZLE_PIC
-                    || $model->qa_type == Qa::QA_TYPE_SELECTION
+                if ((
+//                    $model->qa_type == Qa::QA_TYPE_PUZZLE_WORD
+//                        || $model->qa_type == Qa::QA_TYPE_WORD
+//                        || $model->qa_type == Qa::QA_TYPE_VERIFYCODE
+//                    || $model->qa_type == Qa::QA_TYPE_PUZZLE_PIC
+//                    || $model->qa_type == Qa::QA_TYPE_SELECTION
+                        in_array($model->qa_type, Qa::$qaTypeIsJson)
                     )
                     && (
                         substr($model->selected, 0, 5) == 'Array'
@@ -115,6 +117,8 @@ class Edit extends Action
             $model->selected = json_decode($model->selected, true);
             if (is_array($model->selected)) {
                 $model->selected = var_export($model->selected, true);
+//                $model->selected = preg_replace('/\s*\d+\s*=>\s*/', "\n", $model->selected) . ';';
+
             }
         }
 

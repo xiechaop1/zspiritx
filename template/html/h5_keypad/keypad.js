@@ -15,11 +15,22 @@ $(function () {
     })();
 
     $("#return_btn").click(function (){
-        var params = {
-            'WebViewOff':1,
-            'AnswerType':1
+
+        var answerType = $("input[name='answer_type']").val();
+        console.log(answerType);
+        if (answerType > 0) {
+            var params = {
+                'WebViewOff': 1,
+                'AnswerType': answerType
+            }
+
+        } else {
+            var params = {
+                'WebViewOff': 1
+            }
         }
-        var data=$.toJSON(params);
+        console.log(params);
+        var data = $.toJSON(params);
         Unity.call(data);
     });
 
@@ -82,6 +93,7 @@ $(function () {
         if($keypadNum.text()>999){
             var story_id=$("input[name='story_id']").val();
             var user_id=$("input[name='user_id']").val();
+            var qa_id=$("input[name='qa_id']").val();
             if(story_id==0){
                 story_id=10;
             }
@@ -115,6 +127,7 @@ $(function () {
                     is_test:1,
                     user_id:user_id,
                     story_id:story_id,
+                    qa_id:qa_id,
                     phone:phone
                 },
                 onload: function (data) {
@@ -135,10 +148,9 @@ $(function () {
                     var dataCon=$.toJSON(dataContent);
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                     //console.log("ajax请求成功:"+data.toString())
-
                     //新消息获取成功
                     if(obj["code"]==200){
-                        $("#audio_wrong").prop("src",obj.data);
+                        $("#audio_wrong").prop("src",obj.data.voice);
                         var audio=$("#audio_wrong")[0];
                         audio.play();
                         setTimeout(function (){
@@ -148,7 +160,20 @@ $(function () {
                                 $("#keypad-open").show();
                                 $("#keypad-close").hide();
                             });
-                        },2000)
+                        },2000);
+
+                        if (obj.data.value > 0) {
+                            $("input[name='answer_type']").val(obj.data.value);
+                        } else {
+                            $("input[name='answer_type']").val(0);
+                        }
+
+                        if (obj.data.after > 0) {
+                            $("input[name='after_close']").val(obj.data.after);
+                        } else {
+                            $("input[name='after_close']").val(0);
+                        }
+
                     }
                     //新消息获取失败
                     else{
@@ -181,6 +206,26 @@ $(function () {
         var audio_wrong=$("#audio_wrong")[0];
         audio_wait.pause();
         audio_wrong.pause();
+        $keypadNum.text('');
         // alert("挂电话")
+        var after = $("input[name='after_close']").val();
+        if (after == 1) {
+            var answerType = $("input[name='answer_type']").val();
+            console.log(answerType);
+            if (answerType > 0) {
+                var params = {
+                    'WebViewOff': 1,
+                    'AnswerType': answerType
+                }
+
+            } else {
+                var params = {
+                    'WebViewOff': 1
+                }
+            }
+            console.log(params);
+            var data = $.toJSON(params);
+            Unity.call(data);
+        }
     });
 })

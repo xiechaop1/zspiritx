@@ -933,21 +933,45 @@ class DoApi extends ApiAction
     }
 
     public function phoneCall() {
-        $whiteList = [
-            '65104101'  => '/voice/phone/no_phone_number.mp3',
-        ];
+
+        $qaId = !empty($this->_get['qa_id']) ? $this->_get['qa_id'] : 0;
+
+        $qa = Qa::find()
+            ->where([
+                'id' => (int)$qaId,
+                'qa_type' => Qa::QA_TYPE_PHONE,
+            ])
+            ->one();
+
+        if (!empty($qa)) {
+            $selected = $qa->selected;
+            $selected = json_decode($selected, true);
+            $whiteList = $selected;
+        } else {
+            $whiteList = [
+                '65104101' => [
+                    'voice' => '/voice/phone/wait_call.mp3',
+                    'value' => 2,
+                ],
+            ];
+        }
 
         $phone = !empty($this->_get['phone']) ? $this->_get['phone'] : '';
 
         if (!isset($whiteList[$phone])) {
-            $returnVoice = '/voice/phone/no_phone_number.mp3';
+            $ret = [
+                'voice' => '/voice/phone/no_phone_number.mp3',
+//                'value' => 1,
+            ];
         } else {
-            $returnVoice = $whiteList[$phone];
+            $ret = $whiteList[$phone];
         }
 
-        $returnVoice = Attachment::completeUrl($returnVoice, false);
+        $returnVoice = Attachment::completeUrl($ret['voice'], false);
 
-        return $returnVoice;
+        $ret['voice'] = $returnVoice;
+
+        return $ret;
     }
 
     public function useModel() {
