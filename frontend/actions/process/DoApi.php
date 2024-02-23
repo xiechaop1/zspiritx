@@ -1208,6 +1208,7 @@ class DoApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
         $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
+        $lockCt = !empty($this->get['lock_ct']) ? $this->get['lock_ct'] : 0;
 
         $transaction = Yii::$app->db->beginTransaction();
         $sessionModel = SessionModels::find()
@@ -1281,7 +1282,11 @@ class DoApi extends ApiAction
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             } else {
-                $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+                if (empty($lockCt)
+                    || $userModelBaggage->use_ct < $lockCt
+                ) {
+                    $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+                }
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             }
