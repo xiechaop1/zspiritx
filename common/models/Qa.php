@@ -29,6 +29,8 @@ class Qa extends \common\models\gii\Qa
 
     const QA_TYPE_PHONE = 13;      // 手机
 
+    const QA_TYPE_PHONE_SMS = 14;      // 手机短信
+
     public static $qaType2Name = [
         self::QA_TYPE_SINGLE  => '单选题',
         self::QA_TYPE_PIC   => '图片题',
@@ -43,6 +45,7 @@ class Qa extends \common\models\gii\Qa
         self::QA_TYPE_SUDOKU => '数独题',
         self::QA_TYPE_SELECTION => '选项',
         self::QA_TYPE_PHONE => '手机',
+        self::QA_TYPE_PHONE_SMS => '手机短信',
     ];
 
     public static $qaTypeIsJson = [
@@ -51,6 +54,7 @@ class Qa extends \common\models\gii\Qa
         self::QA_TYPE_VERIFYCODE,
         self::QA_TYPE_SELECTION,
         self::QA_TYPE_PHONE,
+        self::QA_TYPE_PHONE_SMS,
     ];
 
     public function behaviors()

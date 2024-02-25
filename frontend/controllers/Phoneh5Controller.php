@@ -24,6 +24,12 @@ class Phoneh5Controller extends Controller
             'phone' => [
                 'class' => 'frontend\actions\phoneh5\Phone',
             ],
+            'mail' => [
+                'class' => 'frontend\actions\phoneh5\Mail',
+            ],
+            'sms' => [
+                'class' => 'frontend\actions\phoneh5\Sms',
+            ],
 
         ];
     }

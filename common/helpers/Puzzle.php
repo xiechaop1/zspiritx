@@ -135,8 +135,12 @@ class Puzzle
 // 调用生成迷宫图片函数
 //generateMazeImage(400, 400, 40);
 
-    public static function cutImage($imagePath, $blockSize = 200, $rows = 4, $cols = 4, $prefix = 'puzzle_image_') {
-        $image = imagecreatefromjpeg($imagePath);
+    public static function cutImage($imagePath, $blockSize = 200, $rows = 4, $cols = 4, $prefix = 'puzzle_image_', $type = 'jpg') {
+        if ($type == 'jpg') {
+            $image = imagecreatefromjpeg($imagePath);
+        } elseif ($type == 'png') {
+            $image = imagecreatefrompng($imagePath);
+        }
         $imageSize = getimagesize($imagePath);
 
         $width = $imageSize[0];
@@ -159,7 +163,12 @@ class Puzzle
 //                    'blockSize' => $blockSize,
 //                ];
 //                imagejpeg($gameImage, 'puzzle_image_' . $x . '_' . $y . '.jpg');
-                imagejpeg($gameImage, $prefix . $ct . '.jpg');
+                if ($type == 'jpg') {
+                    imagejpeg($gameImage, $prefix . $ct . '.jpg');
+                } elseif ($type == 'png') {
+                    imagepng($gameImage, $prefix . $ct . '.png');
+                }
+
                 $ct++;
 //                 $blockImages[] = $gameImage;
             }

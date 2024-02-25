@@ -52,7 +52,8 @@ class Picture extends Action
         $cols = !empty($_GET['cols']) ? $_GET['cols'] : 0;
         $blockSize = !empty($_GET['block_size']) ? $_GET['block_size'] : 200;
         $image = !empty($_GET['image']) ? $_GET['image'] : '';
-        $pictures = \common\helpers\Puzzle::cutImage($image, $blockSize, $rows, $cols, $prefix);
+        $type = !empty($_GET['type']) ? $_GET['type'] : 'jpg';
+        $pictures = \common\helpers\Puzzle::cutImage($image, $blockSize, $rows, $cols, $prefix, $type);
 //
         $picId = !empty($_GET['pic_id']) ? $_GET['pic_id'] : 0;
 //
