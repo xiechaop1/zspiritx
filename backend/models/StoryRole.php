@@ -15,7 +15,7 @@ use yii\data\ActiveDataProvider;
 
 class StoryRole extends \common\models\StoryRole
 {
-
+    public $date_range;
     public function rules()
     {
         return [
