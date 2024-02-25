@@ -35,7 +35,26 @@ $(function () {
     //页面重新加载
     $(".window-reload").on('click',function () {
         window.location.reload()
-    })
-    
+    });
+
+    $("#return_btn").click(function (){
+
+        var answerType = $("input[name='answer_type']").val();
+        console.log(answerType);
+        if (answerType > 0) {
+            var params = {
+                'WebViewOff': 1,
+                'AnswerType': answerType
+            }
+
+        } else {
+            var params = {
+                'WebViewOff': 1
+            }
+        }
+        console.log(params);
+        var data = $.toJSON(params);
+        Unity.call(data);
+    });
 
 })
