@@ -16,7 +16,8 @@ use yii\data\ActiveDataProvider;
 class Session extends \common\models\Session
 {
 
-
+    public $date_range;
+    
     public function rules()
     {
         return [
