@@ -482,6 +482,7 @@ $(function () {
         var storyId = $('#login_story_id').val();
         var userId = $('#user_id').val();
         var isagree = $('#agreement1').is(':checked');
+        var unityVersion = $('#unity_version').val();
 
         if (mobile.length > 3 && isagree == false) {
             alert('请勾选用户协议');
@@ -517,7 +518,7 @@ $(function () {
                         var data=$.toJSON(params);
                         console.log(data);
                         Unity.call(data);
-                        location.href="/home/index";
+                        location.href="/home/index?unity_version=" + unityVersion;
                         // var params = {
                         //     'WebViewOff':1,
                         //     'DebugInfo':isDebug,
@@ -730,6 +731,13 @@ $(function () {
         var sudokuCurrent = $('#sudoku_current').val();
         var sudokuSize = $('#sudoku_size').val();
         var readOnly = $(this).attr('ro');
+
+        var user_id=$("input[name='user_id']").val();
+        var story_id=$("input[name='story_id']").val();
+        var session_id=$("input[name='session_id']").val();
+        var session_stage_id=$("input[name='session_stage_id']").val();
+        var qa_id=$("input[name='qa_id']").val();
+        var begin_ts=$("input[name='begin_ts']").val();
 
         console.log(readOnly);
 

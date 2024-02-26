@@ -67,6 +67,7 @@ $this->title = 'AR儿童剧本杀';
 
                 <input type="hidden" name="is_debug" id="login_is_debug" value="">
                 <input type="hidden" name="story_id" id="login_story_id" value="">
+                  <input type="hidden" name="unity_version" id="unity_version" value="<?= $unityVersion ?>">
                 <div class="btn-m-green m-t-30 float-right m-r-20" id="login_btn">
                   提交
                 </div>

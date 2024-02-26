@@ -29,8 +29,10 @@ class Weblogin extends Action
 
         $refUrl = Yii::$app->request->get('ref');
 
+        $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
 
         return $this->controller->render('login', [
+            'unityVersion'  => $unityVersion,
 //            'banners'       => $banners,
 //            'ref_url'       => $refUrl,
 //            'source'        => Yii::$app->request->get('source', ''),

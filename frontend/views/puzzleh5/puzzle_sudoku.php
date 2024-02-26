@@ -134,6 +134,7 @@ $this->title = 'Puzzle';
 
 <input type="hidden" name="sudoku_current" id="sudoku_current" value="">
 <input type="hidden" name="sudoku_size" id="sudoku_size" value="<?= $size ?>">
+<input type="hidden" name="begin_ts" value="<?= time() ?>">
 
 <div class="w-100 m-auto">
 

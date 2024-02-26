@@ -35,6 +35,7 @@ class Index extends Action
 
         $image = 'img/home/index_image.jpg';
         $image = Attachment::completeUrl($image, false);
+        $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
 
 //        $banner = [
 //            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
@@ -46,7 +47,7 @@ class Index extends Action
 
         $userId = Cookie::getCookie('user_id');
         if (empty($userId)) {
-            header('Location: /passport/web_login');
+            header('Location: /passport/web_login?unity_version=' . $unityVersion);
         }
 
         try {
@@ -60,7 +61,7 @@ class Index extends Action
                 $user->last_login_device = Client::getAgent();
                 $user->save();
             } else {
-                header('Location: /passport/web_login');
+                header('Location: /passport/web_login?unity_version=' . $unityVersion);
             }
 
             if (strlen($user->mobile) < 3) {
@@ -87,8 +88,6 @@ class Index extends Action
         }
 
         $bgm = '';
-
-        $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
 
         return $this->controller->render('index', [
             'userId'    => $userId,
