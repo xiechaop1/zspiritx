@@ -671,6 +671,42 @@ $(function () {
         }
     });
 
+    $(".v_div_keyboard").click(function() {
+        var obj = $(this);
+        var val = obj.attr('val');
+        var input_obj = obj.parent().parent().find("input[NAME='answer_txt']");
+        if (val != 'DELETE') {
+            var j=0;
+            // 定义一个数组
+            var list = new Array();
+            for (i=0; i<input_obj.length; i++) {
+                if ($(input_obj[i]).val() =="" ) {
+                    $(input_obj[i]).val(val);
+                    return true;
+                    // list.push(i);
+                    // j++;
+                    // if (j == val.length) {
+                    //     console.log(list);
+                    //     for (k=0; k<list.length; k++) {
+                    //         $(input_obj[list[k]]).val(val[k]);
+                    //     }
+                    //     return true;
+                    // }
+                } else {
+                    j = 0;
+                    list = [];
+                }
+            }
+        } else {
+            for (i=input_obj.length - 1; i>=0; i--) {
+                if ($(input_obj[i]).val() !="" ) {
+                    $(input_obj[i]).val('');
+                    return true;
+                }
+            }
+        }
+    });
+
     $(".v_keyboard").click(function (){
         var obj = $(this);
         var val = obj.attr('val');

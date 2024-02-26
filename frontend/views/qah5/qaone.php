@@ -112,6 +112,44 @@ $this->title = $qa['topic'];
         transition: border-color 0.3s;
         font-size: 24px;
     }
+
+    .keyboard_area .v_div_keyboard {
+        float: left;
+        width: 120px;
+        height: 120px;
+        margin: 0 10px;
+        background-color: #0b3452;
+        text-align: center;
+        font-size: 50px;
+        color: white;
+        border: 2px solid #0c84ff;
+        border-radius: 24px;
+        transition: border-color 0.3s;
+    }
+
+    .keyboard_area .keyboard_label_big {
+        clear: both;
+        font-size: 40px;
+        font-weight: bold;
+        color: white;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .keyboard_area .keyboard_label_small {
+        clear: both;
+        font-size: 24px;
+        color: white;
+        margin: 0px;
+        padding: 0px;
+    }
+    .keyboard_area .keyboard_label_delete {
+        clear: both;
+        font-size: 40px;
+        color: red;
+        margin: 0px;
+        padding: 0px;
+    }
 </style>
 <audio autoplay loop>
   <source src="<?= $qa['voice'] ?>" type="audio/mpeg">
@@ -274,28 +312,69 @@ $this->title = $qa['topic'];
                     </div>
                     ';
                     if (!empty($str['keyboard'])) {
-                        $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
-                        $keyboard = $str['keyboard'];
+                        if ($str['keyboard'] != '9area') {
+                            $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            $keyboard = $str['keyboard'];
 //                        $keyboardArray = [];
 //                        for ($i = 0; $i < mb_strlen($keyboard, 'UTF8'); $i++) {
 //                            $key = mb_substr($keyboard, $i, 1, 'UTF8');
 //                            $keyboardArray[$key] = $key;
 //                        }
-                        $keyboardArrayTmp = explode('|', $keyboard);
-                        foreach ($keyboardArrayTmp as $keyVal) {
-                            $keyboardArray[$keyVal] = $keyVal;
-                        }
-                        $keyboardArray['←'] = 'DELETE';
-
-                        $i = 0;
-                        foreach ($keyboardArray as $key => $val) {
-                            $optstr .= '<input type="button" name="keyboard" class="v_keyboard ' . $val . '" id="keyboard-' . $key . '" value="' . $key . '" val="' . $val . '">';
-                            if (($i + 1) % 5 == 0) {
-                                $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            $keyboardArrayTmp = explode('|', $keyboard);
+                            foreach ($keyboardArrayTmp as $keyVal) {
+                                $keyboardArray[$keyVal] = $keyVal;
                             }
-                            $i++;
+                            $keyboardArray['←'] = 'DELETE';
+
+                            $i = 0;
+                            foreach ($keyboardArray as $key => $val) {
+                                $optstr .= '<input type="button" name="keyboard" class="v_keyboard ' . $val . '" id="keyboard-' . $key . '" value="' . $key . '" val="' . $val . '">';
+                                if (($i + 1) % 5 == 0) {
+                                    $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                                }
+                                $i++;
+                            }
+                            $optstr .= '</div>';
+                        } elseif ($str['keyboard'] == '9area') {
+                            $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            $keyboard = $str['keyboard'];
+                            $keyboardArray = [];
+
+                            $labels = [
+                                0 => '+',
+                                1 => ' ',
+                                2 => 'ABC',
+                                3 => 'DEF',
+                                4 => 'GHI',
+                                5 => 'JKL',
+                                6 => 'MNO',
+                                7 => 'PQRS',
+                                8 => 'TUV',
+                                9 => 'WXYZ',
+                                '*' => '',
+                                '#' => '',
+                            ];
+
+                            $vals = [
+                                1,2,3,4,5,6,7,8,9,'*', 0, '#'
+                            ];
+
+                            for ($i = 0; $i < sizeof($vals); $i++) {
+                                $val = $vals[$i];
+                                $keyboardArray[$val] = '<div class="keyboard_label_big">' . $val . '</div><div class="keyboard_label_small">' . $labels[$val] . '</div>';
+                            }
+                            $keyboardArray['DELETE'] = '<div class="keyboard_label_delete">←</div>';
+
+                            $i = 0;
+                            foreach ($keyboardArray as $key => $val) {
+                                $optstr .= '<div name="keyboard" class="v_div_keyboard" id="keyboard-' . $key . '" val="' . $key . '">' . $val . '</div>';
+                                if (($i + 1) % 3 == 0) {
+                                    $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                                }
+                                $i++;
+                            }
+                            $optstr .= '</div>';
                         }
-                        $optstr .= '</div>';
                     }
 
                 } elseif ($inputType == 'selection') {
