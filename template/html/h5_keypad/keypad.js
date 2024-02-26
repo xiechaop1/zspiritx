@@ -165,7 +165,7 @@ $(function () {
                         if (obj.data.value > 0) {
                             $("input[name='answer_type']").val(obj.data.value);
                         } else {
-                            $("input[name='answer_type']").val(0);
+                            $("input[name='answer_type']").val(2);
                         }
 
                         if (obj.data.after > 0) {
