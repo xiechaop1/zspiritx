@@ -99,7 +99,9 @@ class PuzzleSudoku extends Action
                     $numList[$i][$j] = $num;
                     $whiteList['row'][$i] = array_diff($whiteList['row'][$i], [$num]);
                     $whiteList['col'][$j] = array_diff($whiteList['col'][$j], [$num]);
-                    $whiteList['area'][floor($i / 3) * 3 + floor($j / 3)] = array_diff($whiteList['area'][floor($i / 3) * 3 + floor($j / 3)], [$num]);
+                    if ($size == 9) {
+                        $whiteList['area'][floor($i / 3) * 3 + floor($j / 3)] = array_diff($whiteList['area'][floor($i / 3) * 3 + floor($j / 3)], [$num]);
+                    }
                 }
             }
 //            echo $ct++;

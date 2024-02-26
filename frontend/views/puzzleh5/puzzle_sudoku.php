@@ -165,16 +165,28 @@ $this->title = 'Puzzle';
                         if ($i == 0) {
                             $class .= ' bor-top';
                         }
-                        if (($i+1) % 3 == 0) {
-                            $class .= ' bor-bottom';
+                        if ($size == 9) {
+                            if (($i + 1) % 3 == 0) {
+                                $class .= ' bor-bottom';
+                            }
+                        } else {
+                            if (($i + 1) == $size) {
+                                $class .= ' bor-bottom';
+                            }
                         }
                         for ($j=0; $j<sizeof($iList[$i]); $j++) {
                             $classJ = '';
                             if ($j == 0) {
                                 $classJ .= ' bor-left';
                             }
-                            if (($j+1) % 3 == 0) {
-                                $classJ .= ' bor-right';
+                            if ($size == 9) {
+                                if (($j + 1) % 3 == 0) {
+                                    $classJ .= ' bor-right';
+                                }
+                            } else {
+                                if (($j + 1) == $size) {
+                                    $classJ .= ' bor-right';
+                                }
                             }
                             ?>
                             <div class="puzzle_sudoku_item <?= !empty($iList[$i][$j]) ? 'item_lock' : '' ?> <?= $class ?> <?= $classJ ?>" ro="<?= !empty($iList[$i][$j]) ? '1' : '0' ?>" i="<?= $i ?>" j="<?= $j ?>" val="<?= $iList[$i][$j] ?>" id="puzzle_sudoku_<?= $i ?>_<?= $j ?>">
