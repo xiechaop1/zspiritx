@@ -55,6 +55,7 @@ class Qa extends \common\models\gii\Qa
         self::QA_TYPE_SELECTION,
         self::QA_TYPE_PHONE,
         self::QA_TYPE_PHONE_SMS,
+        self::QA_TYPE_SUDOKU,
     ];
 
     public function behaviors()
