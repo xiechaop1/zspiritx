@@ -56,6 +56,8 @@ class Sms extends Action
 
             $label = !empty($selectedArr['label']) ? $selectedArr['label'] : $label;
             $label2 = !empty($selectedArr['label2']) ? $selectedArr['label2'] : '安全验证';
+
+            $returnAnswerType = !empty($selectedArr['return_answertype']) ? $selectedArr['return_answertype'] : 2;
         }
 
         return $this->controller->render('sms', [
@@ -75,6 +77,7 @@ class Sms extends Action
             'qa'        => $qa,
             'smsContents' => $smsContents,
             'selectedArr' => $selectedArr,
+            'returnAnswerType' => $returnAnswerType,
         ]);
     }
 }

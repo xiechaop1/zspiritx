@@ -27,7 +27,7 @@ $this->registerMetaTag([
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="qa_id" value="<?= $qaId ?>">
-<input type="hidden" name="answer_type" value="<?= empty($forgot) ? '0' : '1' ?>">
+<input type="hidden" name="answer_type" value="<?= empty($forgot) ? $returnAnswerType : '1' ?>">
 
 <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
   返回
