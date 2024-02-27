@@ -149,10 +149,17 @@ $(function () {
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
+                    var voice;
                     if(obj["code"]==200){
-                        $("#audio_wrong").prop("src",obj.data.voice);
-                        var audio=$("#audio_wrong")[0];
-                        audio.play();
+                        console.log(obj.data);
+                        for (vid in obj.data.voices) {
+                            voice = obj.data.voices[vid];
+                            console.log(voice);
+                            // $("#audio_wrong").prop("src", obj.data.voice);
+                            $("#audio_wrong").prop("src", voice);
+                            var audio = $("#audio_wrong")[0];
+                            audio.play();
+                        }
                         setTimeout(function (){
                             audio.play();
 

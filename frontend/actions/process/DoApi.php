@@ -967,9 +967,19 @@ class DoApi extends ApiAction
             $ret = $whiteList[$phone];
         }
 
-        $returnVoice = Attachment::completeUrl($ret['voice'], false);
+        if (!is_array($ret['voice'])) {
+            $returnVoice = Attachment::completeUrl($ret['voice'], false);
+            $ret['voices'] = [$returnVoice];
+        } else {
+            $returnVoice = [];
+            foreach ($ret['voice'] as $voice) {
+                $returnVoice[] = Attachment::completeUrl($voice, false);
+            }
+            $ret['voices'] = $returnVoice;
+        }
+        unset($ret['voice']);
 
-        $ret['voice'] = $returnVoice;
+
 
         return $ret;
     }
