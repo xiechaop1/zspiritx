@@ -150,10 +150,10 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     var voice;
+                    var audio = $("#audio_wrong")[0];
                     if(obj["code"]==200){
                         console.log(obj.data);
                         for (vid in obj.data.voices) {
-                            audio.play();
                             audio.addEventListener('ended', function() {
                                 voice = obj.data.voices[vid];
                                 console.log(voice);
