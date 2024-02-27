@@ -101,7 +101,7 @@ $this->title = 'AR剧本杀';
           <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
             <?php
             if (empty($unityVersion)) {
-              echo '已经购买，请联系客服！';
+              echo '已经购买，请联系客服！也可以直接去场馆体验！';
             } else {
               echo '进入游戏';
             }
@@ -156,7 +156,7 @@ $this->title = 'AR剧本杀';
               || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
             ) {
               if (empty($unityVersion)) {
-                echo '已经购买，请联系客服！';
+                echo '已经购买，请联系客服！也可以直接去场馆体验！';
               } else {
                 echo '进入游戏';
               }
