@@ -153,6 +153,7 @@ $(function () {
                     var audio = $("#audio_wrong")[0];
                     if(obj["code"]==200){
                         console.log(obj.data);
+                        audio.play();
                         for (vid in obj.data.voices) {
                             audio.addEventListener('ended', function() {
                                 voice = obj.data.voices[vid];
