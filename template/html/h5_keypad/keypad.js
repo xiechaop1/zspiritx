@@ -150,19 +150,23 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     var voice;
-                    var audio = $("#audio_wrong")[0];
+                    var cont = 0;
                     if(obj["code"]==200){
                         console.log(obj.data);
-                        audio.play();
                         for (vid in obj.data.voices) {
-                            audio.addEventListener('ended', function() {
-                                voice = obj.data.voices[vid];
-                                console.log(voice);
-                                // $("#audio_wrong").prop("src", obj.data.voice);
-                                $("#audio_wrong").prop("src", voice);
-                                var audio = $("#audio_wrong")[0];
-                                audio.play();
+                            voice = obj.data.voices[vid];
+                            $("#audio_wrong").prop("src", voice);
+                            var audio = $("#audio_wrong")[0];
+                            console.log(voice);
+                            // $("#audio_wrong").prop("src", obj.data.voice);
+                            audio.play();
+                            cont = 0;
+                            audio.addEventListener('ended', function () {
+                                cont = 1;
                             });
+                            while(cont == 0) {
+
+                            }
                         }
                         setTimeout(function (){
                             audio.play();
