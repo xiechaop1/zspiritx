@@ -154,13 +154,13 @@ $(function () {
                     if(obj["code"]==200){
                         console.log(obj.data);
                         var  i = 0;
-                        var num=obj.data.voices.length();//音频长度
-                        
+                        var num=obj.data.voices.length;//音频长度
+
                         // Change the audio element source
                         var voice = obj.data.voices[i];
                         $("#audio_wrong").prop("src", voice);
                         var audio = $("#audio_wrong")[0];
-                        console.log(voice);
+                        console.log(voice,num);
                         // $("#audio_wrong").prop("src", obj.data.voice);
 
                         //拨打电话铃声响2000ms后执行播报；
@@ -172,6 +172,7 @@ $(function () {
                                     $("#keypad-close").hide();
                                 }else{
                                     i = i+1;
+                                    console.log("歌曲编号：",i);
                                     voice = obj.data.voices[i];
                                     $("#audio_wrong").prop("src", voice);
                                 }
