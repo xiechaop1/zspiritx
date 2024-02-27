@@ -153,29 +153,50 @@ $(function () {
                     var cont = 0;
                     if(obj["code"]==200){
                         console.log(obj.data);
-                        for (vid in obj.data.voices) {
-                            voice = obj.data.voices[vid];
-                            $("#audio_wrong").prop("src", voice);
-                            var audio = $("#audio_wrong")[0];
-                            console.log(voice);
-                            // $("#audio_wrong").prop("src", obj.data.voice);
-                            audio.play();
-                            cont = 0;
-                            audio.addEventListener('ended', function () {
-                                cont = 1;
-                            });
-                            while(cont == 0) {
+                        var  i = 0;
+                        var num=obj.data.voices.length();//音频长度
+                        
+                        // Change the audio element source
+                        var voice = obj.data.voices[i];
+                        $("#audio_wrong").prop("src", voice);
+                        var audio = $("#audio_wrong")[0];
+                        console.log(voice);
+                        // $("#audio_wrong").prop("src", obj.data.voice);
 
-                            }
-                        }
+                        //拨打电话铃声响2000ms后执行播报；
                         setTimeout(function (){
                             audio.play();
-
-                            audio.addEventListener('ended', function() {
-                                $("#keypad-open").show();
-                                $("#keypad-close").hide();
+                            audio.addEventListener('ended', function () {
+                                if(i==num-1){
+                                    $("#keypad-open").show();
+                                    $("#keypad-close").hide();
+                                }else{
+                                    i = i+1;
+                                    voice = obj.data.voices[i];
+                                    $("#audio_wrong").prop("src", voice);
+                                }
                             });
+
                         },2000);
+
+
+
+                        // for (vid in obj.data.voices) {
+                        //     voice = obj.data.voices[vid];
+                        //     $("#audio_wrong").prop("src", voice);
+                        //     var audio = $("#audio_wrong")[0];
+                        //     console.log(voice);
+                        //     // $("#audio_wrong").prop("src", obj.data.voice);
+                        //     audio.play();
+                        //
+                        //     audio.addEventListener('ended', function () {
+                        //         cont = cont+1;
+                        //     });
+                        //     while(cont == 0) {
+                        //
+                        //     }
+                        // }
+
 
                         if (obj.data.value > 0) {
                             $("input[name='answer_type']").val(obj.data.value);
