@@ -153,12 +153,15 @@ $(function () {
                     if(obj["code"]==200){
                         console.log(obj.data);
                         for (vid in obj.data.voices) {
-                            voice = obj.data.voices[vid];
-                            console.log(voice);
-                            // $("#audio_wrong").prop("src", obj.data.voice);
-                            $("#audio_wrong").prop("src", voice);
-                            var audio = $("#audio_wrong")[0];
                             audio.play();
+                            audio.addEventListener('ended', function() {
+                                voice = obj.data.voices[vid];
+                                console.log(voice);
+                                // $("#audio_wrong").prop("src", obj.data.voice);
+                                $("#audio_wrong").prop("src", voice);
+                                var audio = $("#audio_wrong")[0];
+                                audio.play();
+                            });
                         }
                         setTimeout(function (){
                             audio.play();
