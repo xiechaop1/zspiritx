@@ -102,21 +102,19 @@ $(function () {
             }
 
             var phone=$keypadNum.text();
-
             //audio 素材
             var audio_wait=$("#audio_right")[0];
             audio_wait.play();
             setTimeout(function (){
                 audio_wait.pause();
             },2000)
+
             $("#keypad-open").hide();
             $("#keypad-close").show();
 
             // $("#audio_wrong").prop("src","https://zspiritx.oss-cn-beijing.aliyuncs.com/voice/phone/no_phone_number.mp3");
             // var audio=$("#audio_wrong")[0];
             // audio.play();
-
-
 
             $.ajax({
                 type: "GET", //用POST方式传输
@@ -160,23 +158,31 @@ $(function () {
                         var voice = obj.data.voices[i];
                         $("#audio_wrong").prop("src", voice);
                         var audio = $("#audio_wrong")[0];
-                        console.log(voice,num);
+
+                        // audio.play();
+
+                        console.log(voice,num,i);
+
                         // $("#audio_wrong").prop("src", obj.data.voice);
 
                         //拨打电话铃声响2000ms后执行播报；
                         setTimeout(function (){
-                            audio.play();
-                            audio.addEventListener('ended', function () {
-                                if(i==num-1){
-                                    $("#keypad-open").show();
-                                    $("#keypad-close").hide();
-                                }else{
-                                    i = i+1;
-                                    console.log("歌曲编号：",i);
-                                    voice = obj.data.voices[i];
-                                    $("#audio_wrong").prop("src", voice);
-                                }
-                            });
+                            next(i,obj.data.voices,num);
+
+                            // audio.play();
+                            // audio.addEventListener('ended', function () {
+                            //     if(i==num-1){
+                            //         $("#keypad-open").show();
+                            //         $("#keypad-close").hide();
+                            //     }else{
+                            //         i = i+1;
+                            //         console.log("歌曲编号：",i);
+                            //         voice = obj.data.voices[i];
+                            //         $("#audio_wrong").prop("src", voice);
+                            //         var audio = $("#audio_wrong")[0];
+                            //         console.log(voice,num);
+                            //     }
+                            // });
 
                         },2000);
 
@@ -235,6 +241,27 @@ $(function () {
 
         // alert("拨打电话"+$keypadNum.text())
     });
+
+    //Music change
+    function next(i,list,num){
+        if(i==num){
+            $("#keypad-open").show();
+            $("#keypad-close").hide();
+        }else{
+            var voice = list[i];
+            $("#audio_wrong").prop("src", voice);
+            var audio = $("#audio_wrong")[0];
+            audio.play();
+            console.log("歌曲编号：",i,voice,num);
+
+            audio.addEventListener('ended', function () {
+                i = i+1;
+                next(i,num,list);
+            });
+        }
+
+    }
+
     $('.keypad-close').click(function () {
         $("#keypad-open").show();
         $("#keypad-close").hide();
@@ -244,6 +271,7 @@ $(function () {
         audio_wait.pause();
         audio_wrong.pause();
         $keypadNum.text('');
+
         // alert("挂电话")
         var after = $("input[name='after_close']").val();
         if (after == 1) {
@@ -254,7 +282,6 @@ $(function () {
                     'WebViewOff': 1,
                     'AnswerType': answerType
                 }
-
             } else {
                 var params = {
                     'WebViewOff': 1
