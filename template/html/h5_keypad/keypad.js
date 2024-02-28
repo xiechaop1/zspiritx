@@ -168,22 +168,22 @@ $(function () {
 
                         //拨打电话铃声响2000ms后执行播报；
                         setTimeout(function (){
-                            next(i,obj.data.voices,num);
+                            // next(i,obj.data.voices,num);
 
-                            // audio.play();
-                            // audio.addEventListener('ended', function () {
-                            //     if(i==num-1){
-                            //         $("#keypad-open").show();
-                            //         $("#keypad-close").hide();
-                            //     }else{
-                            //         i = i+1;
-                            //         console.log("歌曲编号：",i);
-                            //         voice = obj.data.voices[i];
-                            //         $("#audio_wrong").prop("src", voice);
-                            //         var audio = $("#audio_wrong")[0];
-                            //         console.log(voice,num);
-                            //     }
-                            // });
+                            audio.play();
+                            audio.addEventListener('ended', function () {
+                                if(i==num-1||i>num-1){
+                                    $("#keypad-open").show();
+                                    $("#keypad-close").hide();
+                                    audio.pause();
+                                }else{
+                                    i = i+1;
+                                    voice = obj.data.voices[i];
+                                    console.log("歌曲编号：",i,voice,num);
+                                    $("#audio_wrong").prop("src", voice);
+                                    audio.play();
+                                }
+                            });
 
                         },2000);
 
@@ -245,9 +245,11 @@ $(function () {
 
     //Music change
     function next(i,list,num){
-        if(i==num){
+        if(i==num||i>num){
             $("#keypad-open").show();
             $("#keypad-close").hide();
+            var audio = $("#audio_wrong")[0];
+            audio.pause();
         }else{
             var voice = list[i];
             $("#audio_wrong").prop("src", voice);
