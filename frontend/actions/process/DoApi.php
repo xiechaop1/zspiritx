@@ -966,7 +966,7 @@ class DoApi extends ApiAction
                 $ret['voice'] = '/voice/phone/no_phone_number.mp3';
             }
             if (empty($ret['value'])) {
-                $ret['value'] = 2;
+                $ret['value'] = isset($whiteList['wrong']) ? sizeof($whiteList) : sizeof($whiteList) + 1;
             }
         } else {
             $ret = $whiteList[$phone];
