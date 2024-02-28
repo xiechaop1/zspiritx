@@ -109,7 +109,7 @@ class Finish extends Action
             Yii::$app->act->add($sessionId,$sessionStageId, $storyId, 0, $msg, Actions::ACTION_TYPE_ACTION);
 
             sleep(3);
-            Yii::$app->act->add($sessionId,$sessionStageId, $storyId, 0, 'https://h5.zspiritx.com.cn/home/index', Actions::ACTION_TYPE_WEBVIEW);
+            Yii::$app->act->add($sessionId,$sessionStageId, $storyId, 0, 'https://h5.zspiritx.com.cn/home/index?unity_version=99.00', Actions::ACTION_TYPE_WEBVIEW);
 
             $transaction->commit();
         } catch (\Exception $e) {
