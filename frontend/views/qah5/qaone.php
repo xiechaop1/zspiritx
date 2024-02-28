@@ -363,12 +363,17 @@ $this->title = $qa['topic'];
                                 $val = $vals[$i];
                                 $keyboardArray[$val] = '<div class="keyboard_label_big">' . $val . '</div><div class="keyboard_label_small">' . $labels[$val] . '</div>';
                             }
-                            $keyboardArray['DELETE'] = '<div class="keyboard_label_delete">←</div>';
+                            $keyboardAddationArray[2]['DELETE'] = '<div class="keyboard_label_delete">←</div>';
 
                             $i = 0;
                             foreach ($keyboardArray as $key => $val) {
                                 $optstr .= '<div name="keyboard" class="v_div_keyboard" id="keyboard-' . $key . '" val="' . $key . '">' . $val . '</div>';
                                 if (($i + 1) % 3 == 0) {
+                                    if (!empty($keyboardAddationArray[$i])) {
+                                        foreach ($keyboardAddationArray[$i] as $key => $val) {
+                                            $optstr .= '<div name="keyboard" class="v_div_keyboard" id="keyboard-' . $key . '" val="' . $key . '">' . $val . '</div>';
+                                        }
+                                    }
                                     $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
                                 }
                                 $i++;
