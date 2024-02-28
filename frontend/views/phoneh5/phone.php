@@ -31,7 +31,8 @@ $this->registerMetaTag([
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="qa_id" value="<?= $qaId ?>">
-<input type="hidden" name="answer_type" value="2">
+<input type="hidden" name="answer_type" value="<?= $defAnswerType ?>">
+<input type="hidden" name="default_answer_type" value="<?= $defAnswerType ?>">
 <input type="hidden" name="after_close" value="0">
 
    <div class="toast-box hide">

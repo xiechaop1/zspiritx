@@ -959,10 +959,15 @@ class DoApi extends ApiAction
         $phone = !empty($this->_get['phone']) ? $this->_get['phone'] : '';
 
         if (!isset($whiteList[$phone])) {
-            $ret = [
-                'voice' => '/voice/phone/no_phone_number.mp3',
-//                'value' => 1,
-            ];
+            if (!empty($whiteList['wrong'])) {
+                $ret = $whiteList['wrong'];
+            }
+            if (empty($ret['voice'])) {
+                $ret['voice'] = '/voice/phone/no_phone_number.mp3';
+            }
+            if (empty($ret['value'])) {
+                $ret['value'] = 2;
+            }
         } else {
             $ret = $whiteList[$phone];
         }
@@ -978,7 +983,6 @@ class DoApi extends ApiAction
             $ret['voices'] = $returnVoice;
         }
         unset($ret['voice']);
-
 
 
         return $ret;

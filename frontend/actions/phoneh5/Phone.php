@@ -37,6 +37,22 @@ class Phone extends Action
         $storyId = !empty($get['story_id']) ? $get['story_id'] : 0;
         $disRange = 2000;
 
+        $qa = [];
+        if (!empty($qaId)) {
+            $qa = Qa::findOne($qaId);
+
+            if (!empty($qa)) {
+                $selected = $qa->selected;
+                $selected = json_decode($selected, true);
+                $whiteList = $selected;
+
+                if (!empty($whiteList['wrong']['value'])) {
+                    $defAnswerType = $whiteList['wrong']['value'];
+                }
+            }
+        }
+        $defAnswerType = empty($defAnswerType) ? 2 : $defAnswerType;
+
         return $this->controller->render('phone', [
             'userId'    => $userId,
             'sessionId' => $sessionId,
@@ -47,6 +63,8 @@ class Phone extends Action
             'userLat'   => $userLat,
             'storyStageId' => $storyStageId,
             'disRange'  => $disRange,
+            'qa'        => $qa,
+            'defAnswerType' =>  $defAnswerType,
         ]);
     }
 }

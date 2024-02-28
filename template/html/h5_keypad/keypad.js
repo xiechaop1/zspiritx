@@ -209,7 +209,8 @@ $(function () {
                         if (obj.data.value > 0) {
                             $("input[name='answer_type']").val(obj.data.value);
                         } else {
-                            $("input[name='answer_type']").val(2);
+                            var def_answer_type = $("input[name='def_answer_type']").val();
+                            $("input[name='answer_type']").val(def_answer_type);
                         }
 
                         if (obj.data.after > 0) {
