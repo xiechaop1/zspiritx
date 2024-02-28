@@ -1222,7 +1222,7 @@ class DoApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
         $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
-        $lockCt = !empty($this->get['lock_ct']) ? $this->get['lock_ct'] : 0;
+        $lockCt = !empty($this->_get['lock_ct']) ? $this->_get['lock_ct'] : 0;
 
         $transaction = Yii::$app->db->beginTransaction();
         $sessionModel = SessionModels::find()
