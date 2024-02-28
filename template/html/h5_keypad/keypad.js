@@ -90,7 +90,7 @@ $(function () {
         $keypadNum.text($keypadNum.text() + $(this).text());
     });
     $('.keypad').click(function () {
-        if($keypadNum.text()>999){
+        if($keypadNum.text()>99){
             var story_id=$("input[name='story_id']").val();
             var user_id=$("input[name='user_id']").val();
             var qa_id=$("input[name='qa_id']").val();
