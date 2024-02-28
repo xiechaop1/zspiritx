@@ -164,9 +164,9 @@ $(function () {
                             audio.addEventListener('ended', function () {
                                 cont = 1;
                             });
-                            while(cont == 0) {
-
-                            }
+                            // while(cont == 0) {
+                            //     console.log(cont);
+                            // }
                         }
                         setTimeout(function (){
                             audio.play();

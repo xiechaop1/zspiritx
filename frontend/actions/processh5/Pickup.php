@@ -49,6 +49,8 @@ class Pickup extends Action
         $actType = !empty($this->_get['act_type']) ? $this->_get['act_type'] : \common\models\Actions::ACTION_TYPE_MSG;
         $expirationInterval = !empty($this->_get['expiration_interval']) ? $this->_get['expiration_interval'] : -1;
 
+        $lockCt = !empty($this->get['lock_ct']) ? $this->get['lock_ct'] : 0;
+
         $transaction = Yii::$app->db->beginTransaction();
         $sessionModel = SessionModels::find()
             ->where([
@@ -129,7 +131,12 @@ class Pickup extends Action
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             } else {
-                $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+//                $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+                if (empty($lockCt)
+                    || $userModelBaggage->use_ct < $lockCt
+                ) {
+                    $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
+                }
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             }
