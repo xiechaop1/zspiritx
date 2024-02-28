@@ -175,6 +175,7 @@ $(function () {
                                 if(i==num-1||i>num-1){
                                     $("#keypad-open").show();
                                     $("#keypad-close").hide();
+                                    $keypadNum.text('');
                                     audio.pause();
                                 }else{
                                     i = i+1;
