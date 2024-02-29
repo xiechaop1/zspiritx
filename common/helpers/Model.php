@@ -175,6 +175,10 @@ class Model
                     $dia['sentenceClipURL'] = Attachment::completeUrl($dia['sentenceClipURL'], false);
                 }
 
+                if (!empty($dia['bgmURL'])) {
+                    $dia['bgmURL'] = Attachment::completeUrl($dia['bgmURL'], false);
+                }
+
                 if (!empty($dia['passiveModels'])) {
                     $tmpModels = [];
                     foreach ($dia['passiveModels'] as $idx => $passiveModelInstUid) {
