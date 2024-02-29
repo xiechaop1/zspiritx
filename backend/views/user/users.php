@@ -88,6 +88,11 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
+                        'label' => '用户名',
+                        'attribute' => 'user_name',
+                        'filter'    => Html::activeInput('text', $searchModel, 'user_name',['placeholder'=>'用户名']),
+                    ],
+                    [
                         'label' => '手机号',
                         'attribute' => 'mobile',
                         'filter'    => Html::activeInput('text', $searchModel, 'mobile',['placeholder'=>'手机号']),
