@@ -42,7 +42,7 @@ class Set extends Action
         $userKnowledge = Yii::$app->knowledge->get($knowledgeId, $sessionId, $userId);
 
         switch ($act) {
-            case 'completed':
+            case 'complete':
                 $knowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
                 break;
             case 'process':
