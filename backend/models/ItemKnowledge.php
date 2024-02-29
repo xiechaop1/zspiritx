@@ -16,6 +16,8 @@ use yii\data\ActiveDataProvider;
 class ItemKnowledge extends \common\models\ItemKnowledge
 {
 
+    public $date_range;
+    
     public function rules()
     {
         return [
