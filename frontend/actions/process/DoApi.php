@@ -955,7 +955,7 @@ class DoApi extends ApiAction
                 ],
             ];
         }
-
+        
         $phone = !empty($this->_get['phone']) ? $this->_get['phone'] : '';
 
         if (!isset($whiteList[$phone])) {
@@ -1159,7 +1159,11 @@ class DoApi extends ApiAction
                         $minCt = !empty($checkRet['min_ct']) ? $checkRet['min_ct'] : 0;
                     break;
                 case StoryModels::ACTIVE_TYPE_MODEL_DISPLAY:
-                    $modelUId = $storyModel->model_inst_u_id;
+                    if (empty($storyModel->active_model_inst_u_id)) {
+                        $modelUId = $storyModel->model_inst_u_id;
+                    } else {
+                        $modelUId = $storyModel->active_model_inst_u_id;
+                    }
                     $expirationInterval = 3600;
                     Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $modelUId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
                     $minCt = 0;

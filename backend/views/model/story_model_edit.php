@@ -119,6 +119,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('动作类型');
+            echo $form->field($storyModel, 'active_model_inst_u_id')->textInput(['value' => $storyModel->active_model_inst_u_id])->label('动作目标模型Unity ID');
             echo $form->field($storyModel, 'use_allow')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$useAllow2Name,
                 'options' => [
