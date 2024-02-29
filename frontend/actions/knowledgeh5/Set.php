@@ -64,7 +64,7 @@ class Set extends Action
             $actionTxt = '您成功获得了知识 ';
             $actionTypeTxt = '知识';
         } else {
-            if ($act == 'completed') {
+            if ($act == 'complete') {
                 $actionTxt = '您已经完成了任务 ';
             } else {
                 $actionTxt = '您正在进行任务 ';
