@@ -29,7 +29,11 @@ class Set extends Action
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
 
         $knowledgeClassId = !empty($_GET['knowledge_class_id']) ? $_GET['knowledge_class_id'] : \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL;
-        $act = !empty($_GET['act']) ? $_GET['act'] : 'completed';
+        $act = !empty($_GET['act']) ? $_GET['act'] : 'complete';
+
+        if ($act == 'completed') {
+            $act = 'complete';
+        }
 
         $knowledge = \common\models\Knowledge::find()
             ->where(['id' => $knowledgeId])
