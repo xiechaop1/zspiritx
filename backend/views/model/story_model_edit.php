@@ -83,6 +83,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('是否显示');
+            echo $form->field($storyModel, 'is_placing_hint')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$placingHint2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('是否显示提示');
             echo $form->field($storyModel, 'selected_permission')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$selectedPermission2Name,
                 'options' => [

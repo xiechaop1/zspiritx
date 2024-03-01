@@ -43,6 +43,7 @@ class Pickup extends Action
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
         $knowledgeId = !empty($this->_get['knowledge_id']) ? $this->_get['knowledge_id'] : 0;
+        $knowledgeAct = !empty($this->_get['knowledge_act']) ? $this->_get['knowledge_act'] : 'complete';
 
         $needAction = !empty($this->_get['need_action']) ? $this->_get['need_action'] : 0;
         $actDetail = !empty($this->_get['act_detail']) ? $this->_get['act_detail'] : 0;
@@ -158,7 +159,7 @@ class Pickup extends Action
 
             $this->_params['knowledge'] = [];
             if (!empty($knowledgeId)) {
-                Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId);
+                Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $knowledgeAct);
                 $knowledge = Knowledge::find()
                     ->where(['id' => $knowledgeId])
                     ->one();

@@ -68,6 +68,14 @@ class StoryModels extends \common\models\gii\StoryModels
         self::VISIBLE_HIDE => '隐藏',
     ];
 
+    const PLACING_NOT_HINT      = 0;       // 不显示
+    const PLACING_HINT          = 1;       // 显示
+
+    public static $placingHint2Name = [
+        self::PLACING_HINT => '显示',
+        self::PLACING_NOT_HINT => '不显示',
+    ];
+
     const IS_UNDERTAKE_NOT        = 0;    // 不承接
     const IS_UNDERTAKE_YES        = 1;    // 承接
 
