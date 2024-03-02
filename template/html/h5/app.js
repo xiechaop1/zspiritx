@@ -558,9 +558,10 @@ $(function () {
 
     $("#qa_return_btn").click(function (){
         // Unity.call('WebViewOff&FalseAnswer');
+        var rtnAnswerType = $('#rtn_answer_type').val();
         var params = {
             'WebViewOff':1,
-            'AnswerType':2
+            'AnswerType':rtnAnswerType
         }
         var data=$.toJSON(params);
         Unity.call(data);

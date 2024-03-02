@@ -159,6 +159,7 @@ $this->title = $qa['topic'];
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
 <input type="hidden" name="begin_ts" value="<?= time() ?>">
+<input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
 <div class="w-100 m-auto">
 <audio controls id="audio_right" class="hide">
     <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">

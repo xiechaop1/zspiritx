@@ -50,6 +50,22 @@ class QaOne extends Action
         $model['selected_json'] = \common\helpers\Common::isJson($model['selected']) ? json_decode($model['selected'], true) : $model['selected'];
         $model['attachment'] = \common\helpers\Attachment::completeUrl($model['attachment'], true);
 
+        $rtnAnswerType = 2;
+        if ($model['qa_type'] == Qa::QA_TYPE_SELECTION) {
+            if (!empty($model['selected_json'])) {
+                $newSelectionJson = [];
+                foreach ($model['selected_json'] as $m) {
+                    if ($m['type'] == 0) {      // Return Answer Type
+                        $rtnAnswerType = $m['value'];
+                        break;
+                    } else {
+                        $newSelectionJson[] = $m;
+                    }
+                }
+                $model['selected_json'] = $newSelectionJson;
+            }
+        }
+
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
@@ -60,6 +76,7 @@ class QaOne extends Action
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'sessionStageId'    => $sessionStageId,
+            'rtnAnswerType'     => $rtnAnswerType,
         ]);
     }
 }
