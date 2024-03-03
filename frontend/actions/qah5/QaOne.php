@@ -57,7 +57,6 @@ class QaOne extends Action
                 foreach ($model['selected_json'] as $m) {
                     if ($m['type'] == 0) {      // Return Answer Type
                         $rtnAnswerType = $m['value'];
-                        break;
                     } else {
                         $newSelectionJson[] = $m;
                     }
