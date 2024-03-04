@@ -52,7 +52,7 @@ $this->title = 'AR剧本杀';
       <input type="hidden" name="isDebug" value="0">
       <input type="hidden" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
       <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
-        <a href="/home/my">我的</a>
+        <a href="/home/my?unity_version=<?= $unityVersion ?>">我的</a>
       </div>
 
       <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
