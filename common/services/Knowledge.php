@@ -143,16 +143,16 @@ class Knowledge extends Component
                             Actions::ACTION_TYPE_MSG,
                         ]);
 //                    }
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您<color=red>完成了任务</color>：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
 
                 } else {
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您<color=green>获得了知识</color>：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 }
             } elseif ($act == 'process') {
                 if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您<color=green>开启了任务</color>：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您开启了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 } else {
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您<color=green>获得了知识</color>：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
                 }
             }
 
