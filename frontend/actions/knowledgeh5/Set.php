@@ -61,20 +61,23 @@ class Set extends Action
 
         if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL) {
 //            $msg = '您成功获得了知识 ' . $knowledge->title . '，可以到"我的"->"知识"中查看';
-            $actionTxt = '您成功获得了知识 ';
+            $actionTxt = '您<span style="color: #80ff00; ">成功获得了知识</span> ';
             $actionTypeTxt = '知识';
         } else {
             if ($act == 'complete') {
-                $actionTxt = '您已经<span style="color: red">完成了任务</span> ';
+                $actionTxt = '您已经<span style="color: #f84934">完成了任务</span> ';
             } else {
-                $actionTxt = '您正在<span style="color: green; font-weight: bold;">进行任务</span> ';
+                $actionTxt = '您正在<span style="color: #80ff00; ">进行任务</span> ';
             }
             $actionTypeTxt = '任务';
         }
-        $msg = $actionTxt . '<span style="color: yellow">' . $knowledge->title . '</span>，可以到<span style="color: yellow">"我的"->"' . $actionTypeTxt . '"</span>中查看';
-        if ($act != 'complete') {
+        $msg = $actionTxt . '<span style="color: yellow">' . $knowledge->title . '</span>';
+//        if ($act != 'complete') {
+//        $msg .= '<hr style="border: 0px solid #f1fa8c; ">';
+        $msg .= '<br><br>';
+        $msg .= '可以到<span style="color: yellow">"我的"->"' . $actionTypeTxt . '"</span>中查看';
             $msg .= '<br><a style="color:yellow;" href="/knowledgeh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&knowledge_class_id=' . $knowledge->knowledge_class . '&show_knowledge_id=' . $knowledgeId . '">[查看任务]</a><br><br>';
-        }
+//        }
 
         return $this->controller->render('set', [
             'userKnowledge' => $userKnowledge,

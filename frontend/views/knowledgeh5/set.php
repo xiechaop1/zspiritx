@@ -39,11 +39,27 @@ $this->title = '获取知识';
                     <div class="npc-name">
                         消息
                     </div>
+                    <?php
+                    if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL) {
+                        $tagImg = 'write1.png';
+                    } else {
+                        if ($act == 'complete') {
+                            $tagImg = 'finish.png';
+                        } else {
+                            $tagImg = 'play.png';
+                        }
+                    }
+                    ?>
+<!--                    <div style="position: absolute; z-index: 99999;">-->
+                        <div class="m-t-30 float-right m-r-20">
+                        <img src="../../static/img/tags/<?= $tagImg ?>" class="img-36  d-inline-block m-r-10 vertical-mid" />
+                        </div>
+<!--                    </div>-->
                     <?= $msg ?>
 
                     <?php
 
-                    if ($act != 'completed') {
+                    if ($act != 'complete') {
                     ?>
                     <hr style="color: white; border: 1px solid white;">
                     <span style="color: yellow"><?= $knowledge->title ?></span><br>
