@@ -65,14 +65,16 @@ class Set extends Action
             $actionTypeTxt = '知识';
         } else {
             if ($act == 'complete') {
-                $actionTxt = '您已经完成了任务 ';
+                $actionTxt = '您已经<span style="color: red">完成了任务</span> ';
             } else {
-                $actionTxt = '您正在进行任务 ';
+                $actionTxt = '您正在<span style="color: green; font-weight: bold;">进行任务</span> ';
             }
             $actionTypeTxt = '任务';
         }
         $msg = $actionTxt . '<span style="color: yellow">' . $knowledge->title . '</span>，可以到<span style="color: yellow">"我的"->"' . $actionTypeTxt . '"</span>中查看';
-        $msg .= '<br><a style="color:yellow;" href="/knowledgeh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&knowledge_class_id=' . $knowledge->knowledge_class . '&show_knowledge_id=' . $knowledgeId . '">[查看任务]</a><br><br>';
+        if ($act != 'complete') {
+            $msg .= '<br><a style="color:yellow;" href="/knowledgeh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&knowledge_class_id=' . $knowledge->knowledge_class . '&show_knowledge_id=' . $knowledgeId . '">[查看任务]</a><br><br>';
+        }
 
         return $this->controller->render('set', [
             'userKnowledge' => $userKnowledge,
