@@ -100,10 +100,17 @@ $this->title = 'AR剧本杀';
           SID: <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
           <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
             <?php
-            if (empty($unityVersion)) {
-              echo '已经购买，请联系客服！也可以直接去场馆体验！';
+            if (!empty($unityVersion) && !empty($story->latest_unity_version)) {
+              if (\common\helpers\Common::compareUnityVersion($unityVersion, $story->latest_unity_version) < 0) {
+                // 不满足最低版本
+                echo '您需要升级以后才可以体验这个剧本！';
+              }
             } else {
-              echo '进入游戏';
+              if (empty($unityVersion)) {
+                echo '已经购买，请联系客服！也可以直接去场馆体验！';
+              } else {
+                echo '进入游戏';
+              }
             }
             ?>
             <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
@@ -152,26 +159,33 @@ $this->title = 'AR剧本杀';
           if ($story->story_status == \common\models\Story::STORY_STATUS_OPEN_WAIT) {
             echo '等待开放';
           } else {
-            if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
-              || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
-            ) {
-              if (empty($unityVersion)) {
-                echo '已经购买，请联系客服！也可以直接去场馆体验！';
-              } else {
-                echo '进入游戏';
+            if (!empty($unityVersion) && !empty($story->latest_unity_version)) {
+              if (\common\helpers\Common::compareUnityVersion($unityVersion, $story->latest_unity_version) < 0) {
+                // 不满足最低版本
+                echo '您需要升级以后才可以体验这个剧本！';
               }
             } else {
-              if ($story->extend->curr_price == 0 && !empty($unityVersion)) {
-                echo '限免';
-              } else {
-                if (!empty($unityVersion)) {
-                  if ($story->extend->curr_price != $story->extend->price) {
-                    echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
-                  } else {
-                    echo '￥' . $story->extend->price;
-                  }
+              if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
+                  || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
+              ) {
+                if (empty($unityVersion)) {
+                  echo '已经购买，请联系客服！也可以直接去场馆体验！';
                 } else {
-                  echo '￥68';
+                  echo '进入游戏';
+                }
+              } else {
+                if ($story->extend->curr_price == 0 && !empty($unityVersion)) {
+                  echo '限免';
+                } else {
+                  if (!empty($unityVersion)) {
+                    if ($story->extend->curr_price != $story->extend->price) {
+                      echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
+                    } else {
+                      echo '￥' . $story->extend->price;
+                    }
+                  } else {
+                    echo '￥68';
+                  }
                 }
               }
             }

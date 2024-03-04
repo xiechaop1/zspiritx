@@ -153,6 +153,31 @@ class Common
 
     }
 
+    public static function compareUnityVersion($ver1, $ver2) {
+        $ver1Arr = explode('.', $ver1);
+        $ver2Arr = explode('.', $ver2);
+
+        $ver1Arr = array_map('intval', $ver1Arr);
+        $ver2Arr = array_map('intval', $ver2Arr);
+
+        $len = min(count($ver1Arr), count($ver2Arr));
+        for ($i=0; $i<$len; $i++) {
+            if ($ver1Arr[$i] > $ver2Arr[$i]) {
+                return 1;
+            } elseif ($ver1Arr[$i] < $ver2Arr[$i]) {
+                return -1;
+            }
+        }
+
+        if (count($ver1Arr) > count($ver2Arr)) {
+            return 1;
+        } elseif (count($ver1Arr) < count($ver2Arr)) {
+            return -1;
+        }
+
+        return 0;
+    }
+
     public static function generateWordPuzzle($words, $mixWords, $rows = 8, $cols = 8, $width = 400, $height = 400) {
         $wordLen = mb_strlen($words, 'UTF-8');
 

@@ -59,10 +59,13 @@ class My extends Action
             'agreement' => '',
         ];
 
+        $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
+
         return $this->controller->render('my', [
             'userId'    => $userId,
             'userInfo'  => $user,
-            'urls'       => $urls
+            'urls'       => $urls,
+            'unityVersion' => $unityVersion,
 //            'banner' => $banner,
         ]);
     }

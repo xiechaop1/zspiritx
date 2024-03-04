@@ -37,7 +37,7 @@ $this->title = '灵镜新世界-我的';
 </style>
 
 <div class="w-100 m-auto">
-
+    <input type="hidden" id="unity_version" name="unity_version" value="<?= $unityVersion ?>">
   <div class="p-20 bg-black w-100 m-t-80" style="position: relative; left: 0px; top: 30px;">
     <div class="w-100 p-30  m-b-10">
       <div class="w-1-0 d-flex">

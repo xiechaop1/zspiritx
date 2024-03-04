@@ -312,6 +312,7 @@ $(function () {
     })
 
     $(".owl-carousel .logout_btn").click(function() {
+        var unityVersion = $('#unity_version').val();
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -328,7 +329,7 @@ $(function () {
                 var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //新消息获取成功
                 if(obj["code"]==200){
-                    location.href='/passport/web_login';
+                    location.href='/passport/web_login?unity_version=' + unityVersion;
                 }
                 //新消息获取失败
                 else{
@@ -894,6 +895,7 @@ $(function () {
     function htmIDecode(encodedHtml) {return $("<div>").html(encodedHtml).text();}
 
     $("#logout_btn").click(function() {
+        var unityVersion = $('#unity_version').val();
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -910,7 +912,7 @@ $(function () {
                 var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //新消息获取成功
                 if(obj["code"]==200){
-                    location.href='/passport/web_login';
+                    location.href='/passport/web_login?unity_version=' + unityVersion;
                 }
                 //新消息获取失败
                 else{
@@ -923,6 +925,7 @@ $(function () {
     });
 
     $("#delete_btn").click(function() {
+        var unityVersion = $('#unity_version').val();
         if (!window.confirm('您确认注销您的账号吗？注销以后，数据将全部丢失！')) {
             return false;
         }
@@ -944,12 +947,12 @@ $(function () {
                 
                 //新消息获取成功
                 if(obj["code"]==200){
-                    location.href='/passport/web_login';
+                    location.href='/passport/web_login?unity_version' + unityVersion;
                 }
                 //新消息获取失败
                 else{
                     alert(obj.msg);
-                    location.href='/passport/web_login';
+                    location.href='/passport/web_login?unity_version' + unityVersion;
                 }
 
             }
