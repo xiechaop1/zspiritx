@@ -21,7 +21,7 @@ class Story extends \common\models\Story
     public function rules()
     {
         return [
-            [['title', 'desc', 'guide', 'story_bg', 'thumbnail', 'cover_image', 'image', ], 'string'],
+            [['title', 'desc', 'guide', 'story_bg', 'thumbnail', 'cover_image', 'image', 'latest_unity_version', ], 'string'],
             [['persons_ct', 'roles_ct', 'story_type', 'status', 'is_debug', 'story_status', 'sort_by'], 'integer'],
             [['resources'], 'string'],
             [[ 'created_at', 'updated_at',], 'integer'],

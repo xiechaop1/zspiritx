@@ -83,6 +83,7 @@ echo \dmstr\widgets\Alert::widget();
                 $tmpTxt = '';
             }
             echo $form->field($storyModel, 'resources')->textarea(['value' => $tmpTxt, 'rows' => 15])->label('资源(ios,android,huawei)(json)');
+            echo $form->field($storyModel, 'latest_unity_version')->textInput(['value' => $storyModel->latest_unity_version])->label('最低版本');
             echo $form->field($storyModel, 'persons_ct')->textInput(['value' => $storyModel->persons_ct])->label('人数');
             echo $form->field($storyModel, 'roles_ct')->textInput(['value' => $storyModel->roles_ct])->label('角色数');
             echo $form->field($storyModel, 'is_debug')->textInput(['value' => $storyModel->is_debug])->label('是否测试');
