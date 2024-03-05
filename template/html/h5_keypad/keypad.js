@@ -110,6 +110,7 @@ $(function () {
             },2000)
 
             $("#keypad-open").hide();
+            $("#return_btn").hide();
             $("#keypad-close").show();
 
             // $("#audio_wrong").prop("src","https://zspiritx.oss-cn-beijing.aliyuncs.com/voice/phone/no_phone_number.mp3");
@@ -137,6 +138,8 @@ $(function () {
                     $(".toast-box").show();
                     $("#keypad-open").show();
                     $("#keypad-close").hide();
+                    $("#return_btn").show();
+                    $("#shop-name").html('请输入手机号');
                     setTimeout(function (){
                         $(".toast-box").hide()
                     },1800)
@@ -154,6 +157,11 @@ $(function () {
 
                         var  i = 0;
                         var num=obj.data.voices.length;//音频长度
+
+                        var show_name = obj.data.name;
+                        if (show_name != "" && show_name != "undefined" && show_name != null) {
+                            $("#shop-name").html(show_name);
+                        }
 
                         // Change the audio element source
                         var voice = obj.data.voices[i];
@@ -227,6 +235,8 @@ $(function () {
                         $(".toast-box").show();
                         $("#keypad-open").show();
                         $("#keypad-close").hide();
+                        $("#return_btn").show();
+                        $("#shop-name").html('请输入手机号');
                         setTimeout(function (){
                             $(".toast-box").hide()
                         },1800)
@@ -270,6 +280,8 @@ $(function () {
     $('.keypad-close').click(function () {
         $("#keypad-open").show();
         $("#keypad-close").hide();
+        $("#return_btn").show();
+        $("#shop-name").html('请输入手机号');
         //audio 素材
         var audio_wait=$("#audio_right")[0];
         var audio_wrong=$("#audio_wrong")[0];

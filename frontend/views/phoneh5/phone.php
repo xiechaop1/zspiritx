@@ -52,7 +52,7 @@ $this->registerMetaTag([
 
     <div class="keypad-top">
         <div class="keypad-shop-info">
-            <span class="shop-name">请输入手机号</span>
+            <span class="shop-name" id="shop-name">请输入手机号</span>
         </div>
         <label class="inputlabel" id="keypadNum" type="text"></label>
     </div>
