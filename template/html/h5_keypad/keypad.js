@@ -180,8 +180,8 @@ $(function () {
 
                             audio.play();
                             audio.addEventListener('ended', function () {
-                                $("#return_btn").show();
                                 if(i==num-1||i>num-1){
+                                    $("#return_btn").show();
                                     $("#keypad-open").show();
                                     $("#keypad-close").hide();
                                     $keypadNum.text('');
