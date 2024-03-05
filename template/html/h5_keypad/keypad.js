@@ -196,7 +196,7 @@ $(function () {
 
                         },2000);
 
-
+                        $("#return_btn").show();
 
                         // for (vid in obj.data.voices) {
                         //     voice = obj.data.voices[vid];
