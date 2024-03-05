@@ -180,6 +180,7 @@ $(function () {
 
                             audio.play();
                             audio.addEventListener('ended', function () {
+                                $("#return_btn").show();
                                 if(i==num-1||i>num-1){
                                     $("#keypad-open").show();
                                     $("#keypad-close").hide();
@@ -196,7 +197,6 @@ $(function () {
 
                         },2000);
 
-                        $("#return_btn").show();
 
                         // for (vid in obj.data.voices) {
                         //     voice = obj.data.voices[vid];
