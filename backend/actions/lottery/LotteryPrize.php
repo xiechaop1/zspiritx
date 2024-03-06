@@ -75,7 +75,7 @@ class LotteryPrize extends Action
         $searchModel = new \backend\models\LotteryPrize();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        return $this->controller->render('lotteryPrizelist', [
+        return $this->controller->render('lottery_prize', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
             'lotteryPrizeModel'    => $model,

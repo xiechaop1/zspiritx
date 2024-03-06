@@ -17,7 +17,7 @@ use common\models\Image;
 use common\models\Knowledge;
 use common\models\Music;
 use common\models\MusicCategory;
-use common\models\Qa;
+use common\models\LotteryPrize;
 use common\models\Singer;
 use common\models\Story;
 use common\models\StoryStages;
@@ -34,21 +34,21 @@ class LotteryPrizeEdit extends Action
         $id = Net::get('id');
 
         if ($id) {
-            $model = \backend\models\Qa::findOne($id);
+            $model = \backend\models\LotteryPrize::findOne($id);
             $isNew = false;
         } else {
-            $model = new \backend\models\Qa();
+            $model = new \backend\models\LotteryPrize();
             $isNew = true;
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $qaModel = \backend\models\Qa::findOne($id);
+            $lotteryPrizeModel = \backend\models\LotteryPrize::findOne($id);
 
             switch (Net::post('action')) {
                 case 'delete':
-                    if ($qaModel) {
-                        if ($qaModel->delete()) {
+                    if ($lotteryPrizeModel) {
+                        if ($lotteryPrizeModel->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
@@ -70,28 +70,11 @@ class LotteryPrizeEdit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-                if ((
-//                    $model->qa_type == Qa::QA_TYPE_PUZZLE_WORD
-//                        || $model->qa_type == Qa::QA_TYPE_WORD
-//                        || $model->qa_type == Qa::QA_TYPE_VERIFYCODE
-//                    || $model->qa_type == Qa::QA_TYPE_PUZZLE_PIC
-//                    || $model->qa_type == Qa::QA_TYPE_SELECTION
-                        in_array($model->qa_type, Qa::$qaTypeIsJson)
-                    )
-                    && (
-                        substr($model->selected, 0, 5) == 'Array'
-                        || substr($model->selected, 0, 5) == 'array'
-                    )) {
-                    if (substr($model->selected, 0, -1) != ';') {
-                        $model->selected .= ';';
-                    }
-                    $model->selected = json_encode(eval("return {$model->selected}"));
-                } else {
-                    if (!\common\helpers\Common::isJson($model->selected)) {
-                        $model->selected = json_encode($model->selected);
-                    }
+
+                if (!\common\helpers\Common::isJson($model->prize_option)) {
+                    $model->prize_option = json_encode($model->prize_option);
                 }
-                
+
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');
@@ -107,34 +90,30 @@ class LotteryPrizeEdit extends Action
             return $this->controller->refresh();
         }
 
-        $qaTypes = Qa::$qaType2Name;
+        $intervalType = LotteryPrize::$intervalType2Name;
+        $prizeMethod = LotteryPrize::$prizeMethod2Name;
 
-        $storyDatas = Story::find()->all();
+        $storyDatas = \common\models\Story::find()->all();
+        $stories = ['0' => '无'] + array_reverse(ArrayHelper::map($storyDatas, 'id', 'title'), TRUE);
 
-        $stories = array_reverse(ArrayHelper::map($storyDatas, 'id', 'title'), TRUE);
+        $lotteryDatas = \common\models\Lottery::find()->all();
+        $lotteries = ['0' => '无'] + array_reverse(ArrayHelper::map($lotteryDatas, 'id', 'lottery_name'), TRUE);
 
-        if (\common\helpers\Common::isJson($model->selected)) {
-            $model->selected = json_decode($model->selected, true);
-            if (is_array($model->selected)) {
-                $model->selected = var_export($model->selected, true);
+        if (\common\helpers\Common::isJson($model->prize_option)) {
+            $model->prize_option = json_decode($model->prize_option, true);
+            if (is_array($model->prize_option)) {
+                $model->prize_option = var_export($model->prize_option, true);
 //                $model->selected = preg_replace('/\s*\d+\s*=>\s*/', "\n", $model->selected) . ';';
 
             }
         }
 
-        $knowledgeDatas = Knowledge::find()->orderBy(['id' => SORT_DESC])->all();
-        foreach ($knowledgeDatas as $knowledge) {
-            $knowledgeTmps[$knowledge->id] = $knowledge->title . ' ' . $knowledge->id . '(' . $knowledge->pre_knowledge_id . ')';
-        }
-//        $knowledgeTmps = ArrayHelper::map($knowledgeDatas, 'id', 'title');
-
-        $knowledges = ['0' => '无'] + $knowledgeTmps;
-
-        return $this->controller->render('edit', [
-            'qaModel'    => $model,
-            'qaTypes'    => $qaTypes,
+        return $this->controller->render('lottery_prize_edit', [
+            'lotteryPrizeModel'    => $model,
+            'intervalType'    => $intervalType,
+            'prizeMethod'     => $prizeMethod,
             'stories'   => $stories,
-            'knowledges'    => $knowledges,
+            'lotteries'   => $lotteries,
         ]);
     }
 }

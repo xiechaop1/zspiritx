@@ -27,8 +27,10 @@ class LotteryPrize extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['prize_name', 'prize_level_name', 'option', 'image', 'thumbnail' ], 'string'],
-            [['story_model_id', 'prize_level', 'lottery_id', 'prize_status', 'story_id', 'status'], 'integer'],
+            [['prize_name', 'prize_level_name', 'prize_option', 'image', 'thumbnail' ], 'string'],
+            [[
+                'prize_method', 'total_ct', 'interval_ct', 'interval_type', 'rate', 'prize_type',
+                'story_model_id', 'prize_level', 'lottery_id', 'prize_status', 'story_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }

@@ -12,6 +12,11 @@ namespace common\models;
 class Lottery extends \common\models\gii\Lottery
 {
 
+    const LOTTERY_TYPE_TICKET   = 1; // 奖券
+
+    public static $lotteryType2Name = [
+        self::LOTTERY_TYPE_TICKET   => '奖券',
+    ];
 
     public function behaviors()
     {

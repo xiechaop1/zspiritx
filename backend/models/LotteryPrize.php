@@ -22,15 +22,17 @@ class LotteryPrize extends \common\models\LotteryPrize
     public function rules()
     {
         return [
-            [['prize_name', 'prize_level_name', 'option', 'image', 'thumbnail' ], 'string'],
-            [['story_model_id', 'prize_level', 'lottery_id', 'prize_status', 'story_id', 'status'], 'integer'],
+            [['prize_name', 'prize_level_name', 'prize_option', 'image', 'thumbnail' ], 'string'],
+            [[
+                'prize_method', 'total_ct', 'interval_ct', 'interval_type', 'rate', 'prize_type',
+                'story_model_id', 'prize_level', 'lottery_id', 'prize_status', 'story_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }
 
     public function search($params)
     {
-        $query = \common\models\Lottery::find();
+        $query = \common\models\LotteryPrize::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false

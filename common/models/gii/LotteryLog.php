@@ -27,7 +27,7 @@ class LotteryLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ret', 'option' ], 'string'],
+            [['ret', 'prize_option', 'prize_snapshot', ], 'string'],
             [['lottery_id', 'user_id', 'prize_status', 'story_id', 'session_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];

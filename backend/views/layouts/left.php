@@ -130,6 +130,24 @@
                         ]
                     ],
                     [
+                        'label' => '抽奖管理',
+                        'icon' => 'folder-open',
+                        'items' => [
+                            [
+                                'label' => '抽奖列表',
+                                'url' => ['/lottery/lottery'],
+                                'active' => in_array($this->context->route, ['lottery/lottery', ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
+                                'label' => '奖品列表',
+                                'url' => ['/lottery/lottery_prize'],
+                                'active' => in_array($this->context->route, ['lottery/lottery_prize', 'lottery/lottery_prize_edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                        ]
+                    ],
+                    [
                         'label' => '知识管理',
                         'icon' => 'folder-open',
                         'items' => [

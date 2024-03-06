@@ -11,18 +11,20 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '问答管理',
+    'label' => '抽奖管理',
 ];
 
-$this->title = '问答列表';
+$this->title = '抽奖列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/qa/edit', [
+            <?= \yii\bootstrap\Html::button('添加', [
                 'class' => 'btn btn-primary pull-right',
+                'data-toggle' => "modal",
+                'data-target' => '#add-form'
             ]) ?>
         </div>
         <div class="box-body">
@@ -31,12 +33,12 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($qaModel) {
+                'afterRow' => function ($model, $key, $index) use ($lotteryModel) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '查看日志',
                         'options' => [
-                            'id' => 'case-form-' . $model->id
+                            'id' => 'edit-form-' . $model->id
                         ]]);
                     $form = ActiveForm::begin([
                         'layout' => 'horizontal',
@@ -51,9 +53,20 @@ echo \dmstr\widgets\Alert::widget();
                             ],
                         ],
                     ]);
+                    echo $form->field($model, 'lottery_name')->label('标题');
+                    echo $form->field($model, 'story_id')->label('剧本ID');
+                    echo $form->field($model, 'lottery_type')->dropDownList(\common\models\Lottery::$lotteryType2Name)->label('抽奖类型');
+
                     ?>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
                     <?php
                     echo Html::hiddenInput('data-id', $model->id);
+
                     ActiveForm::end();
                     Modal::end();
                 },
@@ -67,64 +80,42 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'story_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
+                if (empty($model->story)) {
+                    return '暂无';
+                }
                             return $model->story->title;
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
                     [
-                        'label' => '题目分类',
+                        'label' => '标题',
+                        'format' => 'raw',
+                        'filter'    => Html::activeInput('text', $searchModel, 'lottery_name',['placeholder'=>'标题']),
+                        'value' => function ($model) {
+                            return \yii\helpers\Html::a($model->lottery_name, 'javascript:void(0)', [
+                                'data-toggle' => 'modal',
+                                'data-target' => '#edit-form-' . $model->id
+                            ]);
+                        }
+                    ],
+                    [
+                        'label' => '抽奖类型',
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
-                            'qa_type',
-                            $qaTypes, ["class" => "form-control ", 'value' => !empty($params['Qa']['qa_type']) ? $params['Qa']['qa_type'] : '']),
+                            'lottery_type',
+                            $lotteryTypes, ["class" => "form-control ", 'value' => !empty($params['Lottery']['lottery_type']) ? $params['Lottery']['lottery_type'] : '']),
                         'value' => function ($model) {
 
-                            $ret = !empty(\common\models\Qa::$qaType2Name[$model->qa_type])
-                                ? \common\models\Qa::$qaType2Name[$model->qa_type]
+                            $ret = !empty(\common\models\Lottery::$lotteryType2Name[$model->lottery_type])
+                                ? \common\models\Lottery::$lotteryType2Name[$model->lottery_type]
                                 : '未知';
 
                             return $ret;
 
                         }
                     ],
-                    [
-                        'label' => '标题',
-                        'format' => 'raw',
-                        'filter'    => Html::activeInput('text', $searchModel, 'topic',['placeholder'=>'标题']),
-                        'value' => function ($model) {
-                            return Html::a($model->topic, '/qa/edit?id=' . $model->id);
-                        }
-                    ],
-//                    [
-//                        'label' => '选项',
-//                        'format' => 'raw',
-//                        'filter'    => false,
-//                        'value' => function ($model) {
-//                            return \common\helpers\Common::isJson($model->selected) ? json_decode($model->selected, true) : $model->selected;
-//                        }
-//                    ],
-                    [
-                        'label' => '答案选项',
-                        'format' => 'raw',
-                        'filter'    => false,
-                        'value' => function ($model) {
-                            return \common\helpers\Common::isJson($model->st_selected) ? json_decode($model->st_selected, true) : $model->st_selected;
-                        }
-                    ],
 
-//                    [
-//                        'label' => '封面图片',
-//                        'attribute' => 'verse_url',
-//                        'format'    => 'raw',
-//                        'value' => function ($model) {
-//                            $img = \common\helpers\Attachment::completeUrl($model->verse_url);
-//                            $ret = Html::img($img, ['width' => 150, 'height' => 75]);
-//
-//                            return $ret;
-//                        },
-//                        'filter' => false
-//                    ],
                     [
                         'label' => '创建时间',
                         'format' => 'raw',
@@ -150,10 +141,14 @@ echo \dmstr\widgets\Alert::widget();
                         'template' => '{lines} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['qa/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', 'javascript:void(0)', [
+                                    'class' => 'btn btn-xs btn-primary',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#edit-form-' . $model->id
+                                ]);
                             },
 //                            'detail' => function ($url, $model, $key) {
-//                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+//                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['lottery/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
 //                            },
                             'delete' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::button('删除', [
@@ -194,7 +189,9 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
-echo $form->field($qaModel, 'topic')->label('标题');
+echo $form->field($lotteryModel, 'lottery_name')->label('标题');
+echo $form->field($lotteryModel, 'story_id')->label('剧本ID');
+echo $form->field($lotteryModel, 'lottery_type')->dropDownList(\common\models\Lottery::$lotteryType2Name)->label('抽奖类型');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>

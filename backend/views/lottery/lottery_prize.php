@@ -21,7 +21,7 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/lottery/edit', [
+            <?= \yii\bootstrap\Html::a('添加', '/lottery/lottery_prize_edit', [
                 'class' => 'btn btn-primary pull-right',
             ]) ?>
         </div>
@@ -31,7 +31,7 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($lotteryModel) {
+                'afterRow' => function ($model, $key, $index) use ($lotteryPrizeModel) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '查看日志',
@@ -63,25 +63,66 @@ echo \dmstr\widgets\Alert::widget();
 //                        'filter'    => Html::activeInput('text', $searchModel, 'id'),
                     ],
                     [
-                        'label' => '剧本',
-                        'attribute' => 'story_id',
+                        'label' => '抽奖活动',
+                        'attribute' => 'lottery_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return $model->story->title;
+                if (empty($model->lottery)) {
+                    return '未知';
+                }
+                            return $model->lottery->lottery_name;
                         },
-                        'filter' => Html::activeInput('text', $searchModel, 'story_id'),
+                        'filter' => Html::activeInput('text', $searchModel, 'lottery_id'),
                     ],
                     [
-                        'label' => '题目分类',
+                        'label' => '奖品名称',
+                        'format' => 'raw',
+                        'filter'    => Html::activeInput('text', $searchModel, 'prize_name',['placeholder'=>'奖品名称']),
+                        'value' => function ($model) {
+                            return Html::a($model->prize_name, '/lottery/lottery_prize_edit?id=' . $model->id);
+                        }
+                    ],
+                    [
+                        'label' => '奖品类型',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return \common\models\LotteryPrize::$prizeType2Name[$model->prize_type];
+                        },
+                        'filter' => false,
+                    ],
+                    [
+                        'label' => '奖品等级',
+                        'attribute' => 'prize_level',
+                    ],
+                    [
+                        'label' => '奖品等级名称',
+                        'attribute' => 'prize_level_name',
+                    ],
+                    [
+                        'attribute' => 'story_model_id',
+                        'label' => '模型ID',
+                    ],
+                    [
+                        'label' => '缩略图',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            $img = \common\helpers\Attachment::completeUrl($model->thumbnail);
+                            $ret = Html::img($img, ['width' => 75, 'height' => 75]);
+
+                            return $ret;
+                        },
+                    ],
+                    [
+                        'label' => '奖品状态',
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
-                            'lottery_type',
-                            $lotteryTypes, ["class" => "form-control ", 'value' => !empty($params['Qa']['lottery_type']) ? $params['Qa']['lottery_type'] : '']),
+                            'prize_status',
+                            \common\models\LotteryPrize::$lotteryPrizeStatus2Name, ["class" => "form-control ", 'value' => !empty($params['LotteryPrize']['prize_status']) ? $params['LotteryPrize']['prize_status'] : '']),
                         'value' => function ($model) {
 
-                            $ret = !empty(\common\models\Qa::$lotteryType2Name[$model->lottery_type])
-                                ? \common\models\Qa::$lotteryType2Name[$model->lottery_type]
+                            $ret = !empty(\common\models\LotteryPrize::$lotteryPrizeStatus2Name[$model->prize_status])
+                                ? \common\models\LotteryPrize::$lotteryPrizeStatus2Name[$model->prize_status]
                                 : '未知';
 
                             return $ret;
@@ -89,29 +130,63 @@ echo \dmstr\widgets\Alert::widget();
                         }
                     ],
                     [
-                        'label' => '标题',
+                        'attribute' => 'total_ct',
+                        'label' => '总数',
+                        'filter' => false,
+                    ],
+                    [
+                        'label' => '间隔类型',
                         'format' => 'raw',
-                        'filter'    => Html::activeInput('text', $searchModel, 'topic',['placeholder'=>'标题']),
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'interval_type',
+                            \common\models\LotteryPrize::$intervalType2Name, ["class" => "form-control ", 'value' => !empty($params['LotteryPrize']['interval_type']) ? $params['LotteryPrize']['interval_type'] : '']),
                         'value' => function ($model) {
-                            return Html::a($model->topic, '/lottery/edit?id=' . $model->id);
+
+                            $ret = !empty(\common\models\LotteryPrize::$intervalType2Name[$model->interval_type])
+                                ? \common\models\LotteryPrize::$intervalType2Name[$model->interval_type]
+                                : '未知';
+
+                            return $ret;
+
                         }
                     ],
+                    [
+                        'attribute' => 'interval_ct',
+                        'label' => '时间间隔内最大数',
+                        'filter' => false,
+                    ],
+                    [
+                        'attribute' => 'rate',
+                        'label' => '中奖概率',
+                        'filter' => false,
+                    ],
+                    [
+                        'label' => '中奖方式',
+                        'format' => 'raw',
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'prize_method',
+                            \common\models\LotteryPrize::$prizeMethod2Name, ["class" => "form-control ", 'value' => !empty($params['LotteryPrize']['prize_method']) ? $params['LotteryPrize']['prize_method'] : '']),
+                        'value' => function ($model) {
+
+                            $ret = !empty(\common\models\LotteryPrize::$prizeMethod2Name[$model->prize_method])
+                                ? \common\models\LotteryPrize::$prizeMethod2Name[$model->prize_method]
+                                : '未知';
+
+                            return $ret;
+
+                        }
+                    ],
+
 //                    [
-//                        'label' => '选项',
+//                        'label' => '中奖条件',
 //                        'format' => 'raw',
 //                        'filter'    => false,
 //                        'value' => function ($model) {
-//                            return \common\helpers\Common::isJson($model->selected) ? json_decode($model->selected, true) : $model->selected;
+//                            return \common\helpers\Common::isJson($model->prize_option) ? json_decode($model->prize_option, true) : $model->prize_option;
 //                        }
 //                    ],
-                    [
-                        'label' => '答案选项',
-                        'format' => 'raw',
-                        'filter'    => false,
-                        'value' => function ($model) {
-                            return \common\helpers\Common::isJson($model->st_selected) ? json_decode($model->st_selected, true) : $model->st_selected;
-                        }
-                    ],
 
 //                    [
 //                        'label' => '封面图片',
@@ -150,7 +225,7 @@ echo \dmstr\widgets\Alert::widget();
                         'template' => '{lines} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['lottery/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['lottery/lottery_prize_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
                             },
 //                            'detail' => function ($url, $model, $key) {
 //                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['lottery/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
@@ -194,7 +269,7 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
-echo $form->field($lotteryModel, 'topic')->label('标题');
+echo $form->field($lotteryPrizeModel, 'prize_name')->label('标题');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>

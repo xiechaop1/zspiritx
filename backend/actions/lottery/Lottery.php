@@ -23,7 +23,7 @@ class Lottery extends Action
     
     public function run()
     {
-        $lotteryId = Net::post('id');
+        $lotteryId = Net::post('data-id');
         if ($lotteryId) {
             $model = \common\models\Lottery::findOne($lotteryId);
         } else {
@@ -32,11 +32,11 @@ class Lottery extends Action
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $qa = \common\models\Lottery::findOne($id);
+            $lottery = \common\models\Lottery::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
-                    if ($qa) {
-                        if ($qa->delete()) {
+                    if ($lottery) {
+                        if ($lottery->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
@@ -44,9 +44,9 @@ class Lottery extends Action
                     }
                     break;
                 case 'reset':
-                    if ($qa) {
-                        $qa->is_delete = Common::STATUS_NORMAL;
-                        if ($qa->save()) {
+                    if ($lottery) {
+                        $lottery->is_delete = Common::STATUS_NORMAL;
+                        if ($lottery->save()) {
 
                         }
                     }
@@ -79,6 +79,7 @@ class Lottery extends Action
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
             'lotteryModel'    => $model,
+            'lotteryTypes'   => \common\models\Lottery::$lotteryType2Name,
             'params'        => $_GET,
         ]);
     }
