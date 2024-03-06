@@ -79,6 +79,20 @@ class Common
         return $str;
 
     }
+
+    public static function generateNo($prefix, $dateTag, $sort, $randMin = 1000, $randMax = 9999) {
+        $rand = rand($randMin, $randMax);
+        return $prefix . $dateTag . $sort . $rand;
+    }
+
+    // 生成固定长度数字
+    public static function generateFullNumber($num, $len = 6) {
+        $numLen = strlen($num);
+        $pre = str_repeat('0', $len - $numLen);
+        $num = $pre . $num;
+        return $num;
+    }
+
     public static function showList($array, $val, $default = '')
     {
 

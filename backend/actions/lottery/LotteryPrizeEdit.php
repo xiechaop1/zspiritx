@@ -70,11 +70,12 @@ class LotteryPrizeEdit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-
-                if (!\common\helpers\Common::isJson($model->prize_option)) {
-                    $model->prize_option = json_encode($model->prize_option);
+//                if (!\common\helpers\Common::isJson($model->prize_option)) {
+                if (!empty($model->prize_option)) {
+                    eval('$r=' . $model->prize_option . ';');
+                    $model->prize_option = json_encode($r);
+//                }
                 }
-
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');

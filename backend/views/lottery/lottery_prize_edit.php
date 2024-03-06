@@ -46,7 +46,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('中奖方式');
-            echo $form->field($lotteryPrizeModel, 'rate')->textInput(['value' => $lotteryPrizeModel->rate])->label('中奖概率');
+            echo $form->field($lotteryPrizeModel, 'rate')->textInput(['value' => $lotteryPrizeModel->rate])->label('中奖概率（万分之）');
             echo $form->field($lotteryPrizeModel, 'total_ct')->textInput(['value' => $lotteryPrizeModel->total_ct])->label('总数');
             echo $form->field($lotteryPrizeModel, 'interval_type')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\LotteryPrize::$intervalType2Name,
