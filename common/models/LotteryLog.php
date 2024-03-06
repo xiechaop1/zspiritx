@@ -9,7 +9,7 @@
 namespace common\models;
 
 
-class PrizeLog extends \common\models\gii\PrizeLog
+class LotteryLog extends \common\models\gii\LotteryLog
 {
 
 
@@ -28,6 +28,15 @@ class PrizeLog extends \common\models\gii\PrizeLog
         return $this->hasOne('common\models\User', ['id' => 'user_id']);
     }
 
+    public function getStory()
+    {
+        return $this->hasOne('common\models\Story', ['id' => 'story_id']);
+    }
+
+    public function getPrize()
+    {
+        return $this->hasOne('common\models\LotteryPrize', ['id' => 'prize_id']);
+    }
 
 
 }

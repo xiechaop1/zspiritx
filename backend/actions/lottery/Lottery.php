@@ -6,7 +6,7 @@
  * Time: 1:51 PM
  */
 
-namespace backend\actions\qa;
+namespace backend\actions\lottery;
 
 
 use common\definitions\Common;
@@ -17,22 +17,22 @@ use liyifei\base\helpers\Net;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class Qa extends Action
+class Lottery extends Action
 {
 
     
     public function run()
     {
-        $qaId = Net::post('id');
-        if ($qaId) {
-            $model = \common\models\Qa::findOne($qaId);
+        $lotteryId = Net::post('id');
+        if ($lotteryId) {
+            $model = \common\models\Lottery::findOne($lotteryId);
         } else {
-            $model = new \common\models\Qa();
+            $model = new \common\models\Lottery();
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $qa = \common\models\Qa::findOne($id);
+            $qa = \common\models\Lottery::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
                     if ($qa) {
@@ -72,16 +72,13 @@ class Qa extends Action
             return $this->controller->refresh();
         }
 
-        $searchModel = new \backend\models\Qa();
+        $searchModel = new \backend\models\Lottery();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $qaTypes = \common\models\Qa::$qaType2Name;
-
-        return $this->controller->render('qalist', [
+        return $this->controller->render('lottery', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
-            'qaTypes'   => $qaTypes,
-            'qaModel'    => $model,
+            'lotteryModel'    => $model,
             'params'        => $_GET,
         ]);
     }

@@ -31,6 +31,11 @@ class Index extends Action
 {
     public function run()
     {
+        if ($_SERVER['HTTP_HOST'] == 'h5.zspiritx.com.cn') {
+            return $this->controller->redirect('https://h5.zspiritx.com.cn/home/index');
+        }
+
+
         $this->controller->layout = '@frontend/views/layouts/main_w.php';
 
         $qrCode = [

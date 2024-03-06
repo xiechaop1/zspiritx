@@ -5,10 +5,10 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%log}}".
+ * This is the model class for table "{{%lottery_log}}".
  *
  */
-class PrizeLog extends \yii\db\ActiveRecord
+class LotteryLog extends \yii\db\ActiveRecord
 {
 
     public $lyricJson;
@@ -18,7 +18,7 @@ class PrizeLog extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%prize_log}}';
+        return '{{%lottery_log}}';
     }
 
     /**

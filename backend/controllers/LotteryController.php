@@ -14,7 +14,7 @@ use liyifei\base\controllers\ViewController;
 use liyifei\base\helpers\Net;
 use yii;
 
-class QaController extends ViewController
+class LotteryController extends ViewController
 {
     public function behaviors()
     {
@@ -23,7 +23,7 @@ class QaController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['qa', 'edit', 'user_qa'],
+                        'actions' => ['lottery', 'lottery_prize', 'lottery_prize_edit', 'edit', 'user_lottery'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -35,14 +35,20 @@ class QaController extends ViewController
     public function actions()
     {
         return yii\helpers\ArrayHelper::merge(parent::actions(), [
-            'qa' => [
-                'class' => 'backend\actions\qa\Qa',
+            'lottery' => [
+                'class' => 'backend\actions\lottery\Lottery',
+            ],
+            'lottery_prize' => [
+                'class' => 'backend\actions\lottery\LotteryPrize',
+            ],
+            'lottery_prize_edit' => [
+                'class' => 'backend\actions\lottery\LotteryPrizeEdit',
             ],
             'edit' => [
-                'class' => 'backend\actions\qa\Edit',
+                'class' => 'backend\actions\lottery\Edit',
             ],
-            'user_qa' => [
-                'class' => 'backend\actions\qa\Userqa',
+            'user_lottery' => [
+                'class' => 'backend\actions\lottery\UserLottery',
             ],
         ]);
     }

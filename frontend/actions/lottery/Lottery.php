@@ -6,13 +6,14 @@
  * Time: 1:51 PM
  */
 
-namespace frontend\actions\puzzleh5;
+namespace frontend\actions\lottery;
 
 
 use common\definitions\Common;
 use common\helpers\Attachment;
 use common\helpers\Client;
 use common\helpers\Cookie;
+use common\models\LotteryPrize;
 use common\models\Order;
 use common\models\Story;
 use common\models\User;
@@ -25,7 +26,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-class Puzzle extends Action
+class Lottery extends Action
 {
 
     
@@ -34,31 +35,37 @@ class Puzzle extends Action
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
+        $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
-        $rows = !empty($_GET['rows']) ? $_GET['rows'] : 0;
-        $cols = !empty($_GET['cols']) ? $_GET['cols'] : 0;
-        $imgWidth = !empty($_GET['img_width']) ? $_GET['img_width'] : 0;
-        $prefix = !empty($_GET['prefix']) ? $_GET['prefix'] : 0;
+        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 0;
 
-        $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
-
-        $qaOne = Qa::find()
+        $lottery = \common\models\Lottery::find()
             ->where([
-                'id'    => $qaId,
+                'id'    => $lotteryId
             ])
             ->one();
 
-        if (empty($qaOne)) {
-            throw new NotFoundHttpException('QA not found');
+        if (empty($lottery)) {
+            throw new NotFoundHttpException('Lottery not found');
         }
-        $qaOne = $qaOne->toArray();
-        $qaOne['selected_json'] = \common\helpers\Common::isJson($qaOne['selected']) ? json_decode($qaOne['selected'], true) : $qaOne['selected'];
-        $qaOne['attachment'] = \common\helpers\Attachment::completeUrl($qaOne['attachment'], true);
 
-        $rows = !empty($qaOne['selected_json']['rows']) ? $qaOne['selected_json']['rows'] : $rows;
-        $cols = !empty($qaOne['selected_json']['cols']) ? $qaOne['selected_json']['cols'] : $cols;
-        $imgWidth = !empty($qaOne['selected_json']['imgWidth']) ? $qaOne['selected_json']['imgWidth'] : $imgWidth;
-        $prefix = !empty($qaOne['selected_json']['prefix']) ? $qaOne['selected_json']['prefix'] : $prefix;
+        $lotteryPrize = LotteryPrize::find()
+            ->where([
+                'lottery_id'    => $lotteryId
+            ])
+            ->all();
+
+        if (!empty($lotteryPrize)) {
+            foreach ($lotteryPrize as $prize) {
+
+            }
+
+        }
+
+//        $qaOne = $qaOne->toArray();
+//        $qaOne['selected_json'] = \common\helpers\Common::isJson($qaOne['selected']) ? json_decode($qaOne['selected'], true) : $qaOne['selected'];
+//        $qaOne['attachment'] = \common\helpers\Attachment::completeUrl($qaOne['attachment'], true);
+
 
 
         return $this->controller->render('puzzle', [
@@ -68,10 +75,6 @@ class Puzzle extends Action
             'sessionStageId'    => $sessionStageId,
             'qaId'          => $qaId,
             'storyId'       => $qaOne['story_id'],
-            'rows'          => $rows,
-            'cols'          => $cols,
-            'prefix'        => $prefix,
-            'imgWidth'      => $imgWidth,
             'qa'         => $qaOne,
         ]);
     }

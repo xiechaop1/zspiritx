@@ -13,7 +13,7 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class Lottery extends \common\models\Lottery
+class LotteryPrize extends \common\models\LotteryPrize
 {
     public $date_range;
 
@@ -22,8 +22,8 @@ class Lottery extends \common\models\Lottery
     public function rules()
     {
         return [
-            [['lottery_name', ], 'string'],
-            [['story_id', 'status'], 'integer'],
+            [['prize_name', 'prize_level_name', 'option', 'image', 'thumbnail' ], 'string'],
+            [['story_model_id', 'prize_level', 'lottery_id', 'prize_status', 'story_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }
@@ -45,7 +45,15 @@ class Lottery extends \common\models\Lottery
 
 
         $query->andFilterWhere([
-            'like', 'lottery_name', $this->lottery_name
+            'like', 'prize_name', $this->prize_name
+        ]);
+
+        $query->andFilterWhere([
+            'lottery_id' => $this->lottery_id,
+        ]);
+
+        $query->andFilterWhere([
+            'prize_level' => $this->prize_level,
         ]);
 
         $query->andFilterWhere([

@@ -9,7 +9,7 @@
 namespace common\models;
 
 
-class LotteryLog extends \common\models\gii\LotteryLog
+class LotteryPrize extends \common\models\gii\LotteryPrize
 {
 
 
@@ -23,9 +23,9 @@ class LotteryLog extends \common\models\gii\LotteryLog
     }
 
     // 获取用户信息
-    public function getUser()
+    public function getStory()
     {
-        return $this->hasOne('common\models\User', ['id' => 'user_id']);
+        return $this->hasOne('common\models\Story', ['id' => 'story_id']);
     }
 
 

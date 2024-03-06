@@ -5,10 +5,10 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%lottery_log}}".
+ * This is the model class for table "{{%lottery}}".
  *
  */
-class LotteryLog extends \yii\db\ActiveRecord
+class Lottery extends \yii\db\ActiveRecord
 {
 
     public $lyricJson;
@@ -18,7 +18,7 @@ class LotteryLog extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%lottery_log}}';
+        return '{{%lottery}}';
     }
 
     /**
@@ -27,8 +27,8 @@ class LotteryLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ret', 'option' ], 'string'],
-            [['lottery_id', 'user_id', 'prize_status', 'story_id', 'session_id', 'status'], 'integer'],
+            [['lottery_name', ], 'string'],
+            [['lottery_type', 'story_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }

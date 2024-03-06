@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "{{%lottery_log}}".
  *
  */
-class LotteryLog extends \yii\db\ActiveRecord
+class LotteryPrize extends \yii\db\ActiveRecord
 {
 
     public $lyricJson;
@@ -18,7 +18,7 @@ class LotteryLog extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%lottery_log}}';
+        return '{{%lottery_prize}}';
     }
 
     /**
@@ -27,8 +27,8 @@ class LotteryLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ret', 'option' ], 'string'],
-            [['lottery_id', 'user_id', 'prize_status', 'story_id', 'session_id', 'status'], 'integer'],
+            [['prize_name', 'prize_level_name', 'option', 'image', 'thumbnail' ], 'string'],
+            [['story_model_id', 'prize_level', 'lottery_id', 'prize_status', 'story_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }

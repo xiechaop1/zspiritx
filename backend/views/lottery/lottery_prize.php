@@ -11,17 +11,17 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '问答管理',
+    'label' => '抽奖管理',
 ];
 
-$this->title = '问答列表';
+$this->title = '抽奖列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/qa/edit', [
+            <?= \yii\bootstrap\Html::a('添加', '/lottery/edit', [
                 'class' => 'btn btn-primary pull-right',
             ]) ?>
         </div>
@@ -31,7 +31,7 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($qaModel) {
+                'afterRow' => function ($model, $key, $index) use ($lotteryModel) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '查看日志',
@@ -76,12 +76,12 @@ echo \dmstr\widgets\Alert::widget();
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
-                            'qa_type',
-                            $qaTypes, ["class" => "form-control ", 'value' => !empty($params['Qa']['qa_type']) ? $params['Qa']['qa_type'] : '']),
+                            'lottery_type',
+                            $lotteryTypes, ["class" => "form-control ", 'value' => !empty($params['Qa']['lottery_type']) ? $params['Qa']['lottery_type'] : '']),
                         'value' => function ($model) {
 
-                            $ret = !empty(\common\models\Qa::$qaType2Name[$model->qa_type])
-                                ? \common\models\Qa::$qaType2Name[$model->qa_type]
+                            $ret = !empty(\common\models\Qa::$lotteryType2Name[$model->lottery_type])
+                                ? \common\models\Qa::$lotteryType2Name[$model->lottery_type]
                                 : '未知';
 
                             return $ret;
@@ -93,7 +93,7 @@ echo \dmstr\widgets\Alert::widget();
                         'format' => 'raw',
                         'filter'    => Html::activeInput('text', $searchModel, 'topic',['placeholder'=>'标题']),
                         'value' => function ($model) {
-                            return Html::a($model->topic, '/qa/edit?id=' . $model->id);
+                            return Html::a($model->topic, '/lottery/edit?id=' . $model->id);
                         }
                     ],
 //                    [
@@ -150,10 +150,10 @@ echo \dmstr\widgets\Alert::widget();
                         'template' => '{lines} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['qa/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['lottery/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
                             },
 //                            'detail' => function ($url, $model, $key) {
-//                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+//                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['lottery/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
 //                            },
                             'delete' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::button('删除', [
@@ -194,7 +194,7 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
-echo $form->field($qaModel, 'topic')->label('标题');
+echo $form->field($lotteryModel, 'topic')->label('标题');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>

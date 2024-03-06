@@ -13,7 +13,7 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class Qa extends \common\models\Qa
+class Lottery extends \common\models\Lottery
 {
     public $date_range;
 
@@ -22,14 +22,15 @@ class Qa extends \common\models\Qa
     public function rules()
     {
         return [
-            [['qa_type', 'story_id', 'knowledge_id', 'story_stage_id', 'score', 'created_at', 'updated_at'], 'integer'],
-            [['topic', 'voice', 'attachment', 'st_answer', 'st_selected', 'selected'], 'string'],
+            [['lottery_name', ], 'string'],
+            [['story_id', 'status'], 'integer'],
+            [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }
 
     public function search($params)
     {
-        $query = \common\models\Qa::find();
+        $query = \common\models\Lottery::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
@@ -44,7 +45,7 @@ class Qa extends \common\models\Qa
 
 
         $query->andFilterWhere([
-            'like', 'topic', $this->topic
+            'like', 'lottery_name', $this->lottery_name
         ]);
 
         $query->andFilterWhere([

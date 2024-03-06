@@ -6,7 +6,7 @@
  * Time: 下午8:29
  */
 
-namespace backend\actions\qa;
+namespace backend\actions\lottery;
 
 
 use common\definitions\Common;
@@ -27,7 +27,7 @@ use yii\base\Action;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class Edit extends Action
+class LotteryPrizeEdit extends Action
 {
     public function run()
     {
