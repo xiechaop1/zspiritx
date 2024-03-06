@@ -64,6 +64,28 @@ class ErrorCode extends Api
     const USER_KNOWLEDGE_NOT_FOUND      = -90001;   // 知识不存在
     const USER_KNOWLEDGE_OPERATE_FAILED = -90002;   // 知识操作失败
 
+    const USER_PRIZE_NOT_FOUND = -100001; // 用户奖品不存在
+
+    const USER_PRIZE_STATUS_ERROR = -100002; // 用户奖品状态错误
+
+    const USER_PRIZE_AWARD_METHOD_ERROR = -100003; // 用户奖品领取方式错误
+
+    const USER_PRIZE_EXPIRED = -100004; // 用户奖品已过期
+
+    const USER_PRIZE_CANCEL = -100005; // 用户奖品已取消
+
+    const USER_PRIZE_RECEIVED = -100006; // 用户奖品已领取
+
+    const USER_PRIZE_NOT_ALLOW = -100007; // 用户奖品不允许领取
+
+    const USER_PRIZE_NOT_ENOUGH = -100008; // 用户奖品不足
+
+    const USER_PRIZE_AWARD_METHOD_NOT_ALLOW = -100009; // 用户奖品领取方式不允许
+
+    const USER_PRIZE_AWARD_METHOD_NOT_FOUND = -100010; // 用户奖品领取方式不存在
+
+    const USER_PRIZE_ADD_FAILED = -100011; // 用户奖品添加失败
+
 
 
 }

@@ -31,6 +31,7 @@ return [
         'models'    => 'common\services\Models',
         'score'     => 'common\services\Score',
         'wechatPay'    => 'common\services\WechatPay',
+        'lottery'   => 'common\services\Lottery',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',
