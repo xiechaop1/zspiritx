@@ -513,12 +513,14 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
-                        var params = {
-                            'UserId':obj["data"]["id"],
+                        if (unityVersion != "") {
+                            var params = {
+                                'UserId': obj["data"]["id"],
+                            }
+                            var data = $.toJSON(params);
+                            console.log(data);
+                            Unity.call(data);
                         }
-                        var data=$.toJSON(params);
-                        console.log(data);
-                        Unity.call(data);
                         location.href="/home/index?unity_version=" + unityVersion;
                         // var params = {
                         //     'WebViewOff':1,
