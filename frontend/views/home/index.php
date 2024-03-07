@@ -153,11 +153,11 @@ $this->title = 'AR剧本杀';
           if ($story->story_status == \common\models\Story::STORY_STATUS_OPEN_WAIT) {
             echo '等待开放';
           } else {
-            if (!empty($unityVersion) && !empty($story->latest_unity_version)) {
-              if (\common\helpers\Common::compareUnityVersion($unityVersion, $story->latest_unity_version) < 0) {
+            if (!empty($unityVersion) && !empty($story->latest_unity_version)
+            && (\common\helpers\Common::compareUnityVersion($unityVersion, $story->latest_unity_version) < 0)
+            ) {
                 // 不满足最低版本
                 echo '您需要升级以后才可以体验这个剧本！';
-              }
             } else {
               if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
                   || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
