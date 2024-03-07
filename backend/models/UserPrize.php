@@ -68,6 +68,11 @@ class UserPrize extends \common\models\UserPrize
 
         }
 
+        if (!empty($this->prize_id)) {
+            $query->andWhere(['prize_id' => $this->prize_id]);
+
+        }
+
         if (!empty($this->user_prize_status)) {
             $query->andWhere(['user_prize_status' => $this->user_prize_status]);
         }

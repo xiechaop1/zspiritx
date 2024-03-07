@@ -49,18 +49,21 @@ class UserLottery extends Action
                         $userLottery->lottery_status = \common\models\UserLottery::USER_LOTTERY_STATUS_WAIT;
                         $userLottery->save();
                     }
+                    Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 case 'used':
                     if ($userLottery) {
                         $userLottery->lottery_status = \common\models\UserLottery::USER_LOTTERY_STATUS_USED;
                         $userLottery->save();
                     }
+                    Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 case 'cancel':
                     if ($userLottery) {
                         $userLottery->lottery_status = \common\models\UserLottery::USER_LOTTERY_STATUS_CANCEL;
                         $userLottery->save();
                     }
+                    Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 case 'reset':
                     if ($userLottery) {
@@ -69,6 +72,16 @@ class UserLottery extends Action
 
                         }
                     }
+                    Yii::$app->session->setFlash('success', '操作成功');
+                    break;
+                case 'generate':
+                    $userId = Net::post('user_id');
+                    $storyId = Net::post('story_id');
+                    $sessionId = Net::post('session_id');
+                    $lotteryId = Net::post('lottery_id');
+                    $ct = Net::post('ct');
+                    $channelId = 0;
+                    Yii::$app->lottery->generateLottery($userId, $storyId, $sessionId, $lotteryId, $channelId, $ct);
                     Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 default:
@@ -82,6 +95,15 @@ class UserLottery extends Action
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
+
+            if (empty($model->lottery_no)) {
+                $lotteryNo = \common\helpers\Common::generateNo('ZWT'
+                    . $model->user_id
+                    . \common\helpers\Common::generateFullNumber($model->session_id, 2)
+                    . \common\helpers\Common::generateFullNumber($model->lottery_id, 2)
+                    , Date('YmdH'), '', 1000, 9999);
+                $model->lottery_no = $lotteryNo;
+            }
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', '操作成功');

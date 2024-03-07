@@ -49,18 +49,21 @@ class UserPrize extends Action
                         $userPrize->user_prize_status = \common\models\UserPrize::USER_PRIZE_STATUS_RECEIVED;
                         $userPrize->save();
                     }
+                    Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 case 'user_prize_cancel':
                     if ($userPrize) {
                         $userPrize->user_prize_status = \common\models\UserPrize::USER_PRIZE_STATUS_CANCEL;
                         $userPrize->save();
                     }
+                    Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 case 'user_prize_wait':
                     if ($userPrize) {
                         $userPrize->user_prize_status = \common\models\UserPrize::USER_PRIZE_STATUS_WAIT;
                         $userPrize->save();
                     }
+                    Yii::$app->session->setFlash('success', '操作成功');
                     break;
                 case 'reset':
                     if ($userPrize) {

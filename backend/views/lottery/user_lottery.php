@@ -21,8 +21,10 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/qa/edit', [
+            <?= \yii\bootstrap\Html::button('添加', [
                 'class' => 'btn btn-primary pull-right',
+                'data-toggle' => "modal",
+                'data-target' => '#add-form'
             ]) ?>
         </div>
         <div class="box-body">
@@ -51,9 +53,21 @@ echo \dmstr\widgets\Alert::widget();
                             ],
                         ],
                     ]);
+                    echo $form->field($userLotteryModel, 'story_id')->textInput(['value' => $model->story_id])->label('剧本ID');
+                    echo $form->field($userLotteryModel, 'session_id')->textInput(['value' => $model->session_id])->label('场次ID');
+                    echo $form->field($userLotteryModel, 'user_id')->textInput(['value' => $model->user_id])->label('用户ID');
+                    echo $form->field($userLotteryModel, 'lottery_id')->textInput(['value' => $model->lottery_id])->label('抽奖活动ID');
+                    echo $form->field($userLotteryModel, 'lottery_no')->textInput(['value' => $model->lottery_no])->label('核销码');
+                    echo $form->field($userLotteryModel, 'ct')->textInput(['value' => $model->ct])->label('次数');
                     ?>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
                     <?php
-                    echo Html::hiddenInput('data-id', $model->id);
+                    echo Html::hiddenInput('id', $model->id);
                     ActiveForm::end();
                     Modal::end();
                 },
@@ -93,6 +107,11 @@ echo \dmstr\widgets\Alert::widget();
                             return !empty($model->lottery->lottery_name) ? $model->lottery->lottery_name : '未知';
                         },
                         'filter' => false
+                    ],
+                    [
+                        'label' => '次数',
+                        'attribute' => 'ct',
+                        'filter' => false,
                     ],
                     [
                         'label' => '核销码',
@@ -159,10 +178,14 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {rece} {wait} {cancel} {delete}',
+                        'template' => '{lines} {rece} {wait} {cancel} {edit} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['lottery/user_lottery_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', 'javascript:void(0);', [
+                                    'class' => 'btn btn-xs btn-primary',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#case-form-' . $model->id
+                                ]);
                             },
 //                            'detail' => function ($url, $model, $key) {
 //                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
@@ -233,6 +256,13 @@ $form = ActiveForm::begin([
         ],
     ],
 ]);
+echo Html::hiddenInput('data-action', 'generate');
+echo $form->field($userLotteryModel, 'story_id')->textInput()->label('剧本ID');
+echo $form->field($userLotteryModel, 'session_id')->textInput()->label('场次ID');
+echo $form->field($userLotteryModel, 'user_id')->textInput()->label('用户ID');
+echo $form->field($userLotteryModel, 'lottery_id')->textInput()->label('抽奖活动ID');
+//echo $form->field($userLotteryModel, 'lottery_no')->textInput()->label('核销码');
+echo $form->field($userLotteryModel, 'ct')->textInput()->label('次数');
 ?>
     <div class="form-group">
         <label class="control-label col-sm-2"></label>

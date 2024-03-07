@@ -21,9 +21,6 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
-            <?= \yii\bootstrap\Html::a('添加', '/qa/edit', [
-                'class' => 'btn btn-primary pull-right',
-            ]) ?>
         </div>
         <div class="box-body">
             <?php
@@ -93,6 +90,15 @@ echo \dmstr\widgets\Alert::widget();
                             return !empty($model->lottery->lottery_name) ? $model->lottery->lottery_name : '未知';
                         },
                         'filter' => false
+                    ],
+                    [
+                        'label' => '奖品',
+                        'attribute' => 'prize_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty($model->prize->prize_name) ? $model->prize->prize_name : '未知';
+                        },
+                        'filter' => Html::activeInput('text', $searchModel, 'prize_id',['placeholder'=>'奖品ID']),
                     ],
                     [
                         'label' => '核销码',
