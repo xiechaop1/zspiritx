@@ -288,7 +288,7 @@ class Lottery extends Component
             . $userId
             . \common\helpers\Common::generateFullNumber($sessionId, 2)
             . \common\helpers\Common::generateFullNumber($lotteryId, 2)
-            , Date('YmdH'), 1000, 9999
+            , Date('YmdH'), '', 1000, 9999
         );
 
         try {

@@ -13,7 +13,7 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class UserPrize extends \common\models\UserPrize
+class UserLottery extends \common\models\UserLottery
 {
     public $date_range;
 
@@ -21,16 +21,16 @@ class UserPrize extends \common\models\UserPrize
     {
         return [
             [[
-                'user_id', 'prize_id', 'prize_type', 'award_method', 'prize_type', 'expire_time',
-                'lottery_id', 'user_prize_status', 'story_id', 'session_id', 'channel_id', 'status'], 'integer'],
-            [['extend_info','user_prize_no', ] , 'string'],
+                'user_id', 'lottery_id', 'expire_time', 'ct',
+                'lottery_id', 'lottery_status', 'story_id', 'session_id', 'channel_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
+            [['lottery_no'], 'string'],
         ];
     }
 
     public function search($params)
     {
-        $query = \common\models\UserPrize::find();
+        $query = \common\models\UserLottery::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
@@ -63,13 +63,13 @@ class UserPrize extends \common\models\UserPrize
             $query->andWhere(['session_id' => $this->session_id]);
         }
 
-        if (!empty($this->user_prize_no)) {
-            $query->andWhere(['user_prize_no' => $this->user_prize_no]);
+        if (!empty($this->lottery_no)) {
+            $query->andWhere(['lottery_no' => $this->lottery_no]);
 
         }
 
-        if (!empty($this->user_prize_status)) {
-            $query->andWhere(['user_prize_status' => $this->user_prize_status]);
+        if (!empty($this->lottery_status)) {
+            $query->andWhere(['lottery_status' => $this->lottery_status]);
         }
 
 
