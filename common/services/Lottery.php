@@ -16,6 +16,7 @@ use common\models\LotteryPrize;
 use common\models\Qa;
 use common\models\Session;
 use common\models\UserKnowledge;
+use common\models\UserLottery;
 use common\models\UserPrize;
 use common\models\UserQa;
 use common\models\UserScore;
@@ -25,7 +26,7 @@ use yii\web\NotFoundHttpException;
 
 class Lottery extends Component
 {
-    public function run($userId, $storyId, $sessionId, $lotteryId, $channelId, $optCt) {
+    public function run($userId, $userLotteryId, $storyId, $sessionId, $lotteryId, $channelId, $optCt) {
         $lottery = \common\models\Lottery::find()
             ->where([
                 'id'    => $lotteryId
@@ -34,6 +35,31 @@ class Lottery extends Component
 
         if (empty($lottery)) {
             throw new NotFoundHttpException('Lottery not found');
+        }
+
+        $userLottery = UserLottery::find()
+            ->where([
+                'id'    => $userLotteryId,
+                'user_id'   => $userId,
+                'lottery_id'    => $lotteryId,
+                'session_id'    => $sessionId,
+                'story_id'      => $storyId,
+            ])
+            ->andFilterWhere([
+                '>', 'ct', 0
+            ])
+            ->andFilterWhere([
+                'or',
+                ['>=', 'expire_time', time()],
+                ['expire_time' => 0]
+            ])
+            ->andFilterWhere([
+                'lottery_status' => UserLottery::USER_LOTTERY_STATUS_WAIT
+            ])
+            ->one();
+
+        if (empty($userLottery)) {
+            throw new \Exception('您的抽奖机会已经用过，或者已经过期/作废，无法抽奖！', ErrorCode::USER_LOTTERY_NOT_FOUND);
         }
 
         $lotteryPrize = LotteryPrize::find()
@@ -191,6 +217,13 @@ class Lottery extends Component
             $newUserPrize = $this->add($userId, $sessionId, $channelId, $storyId,
                 $lotteryId, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
                 UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE);
+
+            $userLottery->ct = $userLottery->ct - 1;
+            if ($userLottery->ct <= 0) {
+                $userLottery->lottery_status = UserLottery::USER_LOTTERY_STATUS_USED;
+            }
+            $userLottery->save();
+
         } catch (\Exception $e) {
 //            $newUserPrize = null;
 //            $msg = '您的操作出现异常，请您重试！';
@@ -239,6 +272,44 @@ class Lottery extends Component
 
         return $newUserPrize;
     }
+
+    public function generateLottery($userId, $storyId, $sessionId, $lotteryId, $channelId, $ct) {
+        $lottery = \common\models\Lottery::find()
+            ->where([
+                'id'    => $lotteryId
+            ])
+            ->one();
+
+        if (empty($lottery)) {
+            throw new NotFoundHttpException('Lottery not found');
+        }
+
+        $lotteryNo = \common\helpers\Common::generateNo('ZWT'
+            . $userId
+            . \common\helpers\Common::generateFullNumber($sessionId, 2)
+            . \common\helpers\Common::generateFullNumber($lotteryId, 2)
+            , Date('YmdH'), 1000, 9999
+        );
+
+        try {
+            $userLottery = new UserLottery();
+            $userLottery->user_id = $userId;
+            $userLottery->lottery_no = $lotteryNo;
+            $userLottery->lottery_id = $lotteryId;
+            $userLottery->session_id = $sessionId;
+            $userLottery->channel_id = $channelId;
+            $userLottery->story_id = $storyId;
+            $userLottery->lottery_status = UserLottery::USER_LOTTERY_STATUS_WAIT;
+            $userLottery->ct = $ct;
+            $userLottery->save();
+        } catch (\Exception $e) {
+            var_dump($e);
+            throw new \Exception('添加抽奖机会失败', ErrorCode::USER_LOTTERY_ADD_FAILED);
+        }
+
+        return $userLottery;
+    }
+
 
 
 

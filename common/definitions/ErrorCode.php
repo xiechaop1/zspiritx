@@ -86,6 +86,8 @@ class ErrorCode extends Api
 
     const USER_PRIZE_ADD_FAILED = -100011; // 用户奖品添加失败
 
+    const USER_LOTTERY_NOT_FOUND = -110001; // 用户抽奖券不存在
 
+    const USER_LOTTERY_ADD_FAILED = -110002; // 用户抽奖券添加失败
 
 }

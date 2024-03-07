@@ -17,6 +17,7 @@ use common\models\LotteryPrize;
 use common\models\Order;
 use common\models\Story;
 use common\models\User;
+use common\models\UserLottery;
 use common\models\UserPrize;
 use yii\base\Action;
 use kartik\form\ActiveForm;
@@ -40,35 +41,41 @@ class Lottery extends Action
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
         $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 0;
+        $userLotteryId = !empty($_GET['user_lottery_id']) ? $_GET['user_lottery_id'] : 0;
 
         $optCt = !empty($_GET['opt_ct']) ? $_GET['opt_ct'] : 0;
 
-        $ret = Yii::$app->lottery->run($userId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
+//        $ret = Yii::$app->lottery->run($userId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
+//
+//        $msg = $ret['msg'];
+//        $newUserPrize = $ret['newUserPrize'];
+//        $lottery = $ret['lottery'];
+//        $lotteryPrize = $ret['lotteryPrize'];
+//        $userPrize = $ret['userPrize'];
+//        $prizePool = $ret['prizePool'];
+//        $finalPrize = $ret['finalPrize'];
 
-        $msg = $ret['msg'];
-        $newUserPrize = $ret['newUserPrize'];
-        $lottery = $ret['lottery'];
-        $lotteryPrize = $ret['lotteryPrize'];
-        $userPrize = $ret['userPrize'];
-        $prizePool = $ret['prizePool'];
-        $finalPrize = $ret['finalPrize'];
-
-var_dump($msg);
-var_dump($prizePool);
-var_dump($newUserPrize);
-exit;
+        $userLottery = UserLottery::find()
+            ->where(['id' => $userLotteryId])
+            ->one();
 
         return $this->controller->render('lottery', [
             'params'        => $_GET,
             'userId'        => $userId,
+            'userLotteryId' => $userLotteryId,
             'sessionId'     => $sessionId,
-            'prize'         => $finalPrize,
             'storyId'       => $storyId,
-            'lotteryPrize'    => $lotteryPrize,
-            'lottery'       => $lottery,
-            'userPrize'     => $userPrize,
-            'newUserPrize'  => $newUserPrize,
-            'msg'           => $msg,
+            'lotteryId'     => $lotteryId,
+            'channelId'     => $channelId,
+            'optCt'         => $optCt,
+            'userLottery'   => $userLottery,
+
+//            'prize'         => $finalPrize,
+//            'lotteryPrize'    => $lotteryPrize,
+//            'lottery'       => $lottery,
+//            'userPrize'     => $userPrize,
+//            'newUserPrize'  => $newUserPrize,
+//            'msg'           => $msg,
         ]);
     }
 }

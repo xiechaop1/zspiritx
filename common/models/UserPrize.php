@@ -61,6 +61,9 @@ class UserPrize extends \common\models\gii\UserPrize
         return $this->hasOne('common\models\Lottery',  ['id' => 'lottery_id']);
     }
 
+    public function getUserLottery(){
+        return $this->hasOne('common\models\UserLottery',  ['id' => 'user_lottery_id']);
+    }
     public function getStory() {
         return $this->hasOne('common\models\Story', ['id' => 'story_id']);
     }
