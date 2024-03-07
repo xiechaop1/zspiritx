@@ -160,10 +160,10 @@ lang=EN-US>/</span>经营的能力。</span></p>
 
 <p class=p2><span style='font-size:10.5pt;font-family:宋体'>（一）在您使用</span><span
 lang=ZH style='font-size:10.5pt;font-family:宋体'>灵镜新世界</span><span
-style='font-size:10.5pt;font-family:宋体'>或服务时，我们需要<span lang=EN-US>/</span>可能需要收集和使用的您的个人信息，<span
+style='font-size:10.5pt;font-family:宋体'>或服务时，我们需要<span lang=EN-US>/</span>可能需要收集和使用的您的个人信息，包括不限于：相机权限，Android ID，手机号码等个人信息<span
 class=s2>为实现</span></span><span class=s2><span lang=ZH style='font-size:10.5pt;
 font-family:宋体'>验证您的用户身份，以及</span></span><span class=s2><span style='font-size:
-10.5pt;font-family:宋体'>向您提供我们产品及<span lang=EN-US>/</span>或服务的基本功能，您须授权我们收集、使用的必要的信息。如您拒绝提供相应信息，可能导致您不能使用</span></span><span
+10.5pt;font-family:宋体'>向您提供我们产品及<span lang=EN-US>/</span>或服务的基本功能，如：AR能力，数据唯一标识判断能力等，您须授权我们收集、使用的必要的信息。如您拒绝提供相应信息，可能导致您不能使用</span></span><span
 class=s2><span lang=ZH style='font-size:10.5pt;font-family:宋体'>灵镜新世界</span></span><span
 class=s2><span style='font-size:10.5pt;font-family:宋体'>的相关服务和功能</span></span><span
 style='font-size:10.5pt;font-family:宋体'>。</span></p>
@@ -214,7 +214,7 @@ style='font-size:10.5pt;font-family:宋体'>过程中，我们会获取您的网
 lang=EN-US>app</span>中加以体现，作为您的体验一部分。当您使用<span lang=EN-US>app</span>时候，我们会<span
 class=s2>收集您的日志记录</span>，作为您的基本分析</span><span lang=ZH style='font-size:10.5pt;
 font-family:宋体'>，</span><span style='font-size:10.5pt;font-family:宋体'>并在您更换设备或者重新进入<span
-lang=EN-US>app</span>的时候，会回放您之前的操作。</span></p>
+lang=EN-US>app</span>的时候，会回放您之前的操作。我们还会获取您的相机权限，用来保障AR功能的正常运行。同时也会收集您Android ID等个人信息，用于身份确认。</span></p>
 
 <p class=p2><span lang=EN-US style='font-size:10.5pt;font-family:宋体'>3</span><span
 style='font-size:10.5pt;font-family:宋体'>、基于相册（图片库<span lang=EN-US>/</span>视频库）的图片<span

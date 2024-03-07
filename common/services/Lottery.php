@@ -189,7 +189,7 @@ class Lottery extends Component
 
         try {
             $newUserPrize = $this->add($userId, $sessionId, $channelId, $storyId,
-                $lotteryId, $finalPrize->id, $finalPrize->prize_type, 0,
+                $lotteryId, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
                 UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE);
         } catch (\Exception $e) {
 //            $newUserPrize = null;
@@ -209,14 +209,14 @@ class Lottery extends Component
 
     }
 
-    public function add($userId, $sessionId, $channelId, $storyId, $lotteryId, $prizeId, $prizeType, $expireTime = 0, $awardMethod = UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE) {
+    public function add($userId, $sessionId, $channelId, $storyId, $lotteryId, $userTotalPrizeCt, $prizeId, $prizeType, $expireTime = 0, $awardMethod = UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE) {
         $userPrizeNo = \common\helpers\Common::generateNo('ZW'
             . $userId
             . \common\helpers\Common::generateFullNumber($sessionId, 2)
             . \common\helpers\Common::generateFullNumber($lotteryId, 2)
             . \common\helpers\Common::generateFullNumber($prizeId, 2)
             . \common\helpers\Common::generateFullNumber($prizeType, 2)
-            , Date('YmdH'), \common\helpers\Common::generateFullNumber(0, 5), 10, 99
+            , Date('YmdH'), \common\helpers\Common::generateFullNumber($userTotalPrizeCt + 1, 5), 10, 99
         );
         // 把奖品入库
         try {

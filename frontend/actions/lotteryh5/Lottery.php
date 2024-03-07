@@ -52,7 +52,7 @@ class Lottery extends Action
         $userPrize = $ret['userPrize'];
         $prizePool = $ret['prizePool'];
         $finalPrize = $ret['finalPrize'];
-        
+
 var_dump($msg);
 var_dump($prizePool);
 var_dump($newUserPrize);
