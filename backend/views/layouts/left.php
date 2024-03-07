@@ -145,6 +145,12 @@
                                 'active' => in_array($this->context->route, ['lottery/lottery_prize', 'lottery/lottery_prize_edit' ]),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
+                            [
+                                'label' => '用户奖品',
+                                'url' => ['/lottery/user_prize'],
+                                'active' => in_array($this->context->route, ['lottery/user_prize', 'lottery/user_prize_edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
                         ]
                     ],
                     [

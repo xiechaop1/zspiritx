@@ -6,10 +6,11 @@
  * Time: 1:51 PM
  */
 
-namespace backend\actions\qa;
+namespace backend\actions\lottery;
 
 
 use common\definitions\Common;
+use common\models\User;
 use yii\base\Action;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
@@ -17,36 +18,54 @@ use liyifei\base\helpers\Net;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class UserQa extends Action
+class UserPrize extends Action
 {
 
     
     public function run()
     {
-        $userQaId = Net::post('id');
-        if ($userQaId) {
-            $model = \common\models\UserQa::findOne($userQaId);
+        $userPrizeId = Net::post('id');
+        if ($userPrizeId) {
+            $model = \common\models\UserPrize::findOne($userPrizeId);
         } else {
-            $model = new \common\models\UserQa();
+            $model = new \common\models\UserPrize();
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $UserQa = \common\models\UserQa::findOne($id);
+            $userPrize = \common\models\UserPrize::findOne($id);
             switch (Net::post('action')) {
                 case 'delete':
-                    if ($UserQa) {
-                        if ($UserQa->delete()) {
+                    if ($userPrize) {
+                        if ($userPrize->delete()) {
                             Yii::$app->session->setFlash('success', '操作成功');
                         } else {
                             Yii::$app->session->setFlash('danger', '操作失败');
                         }
                     }
                     break;
+                case 'user_prize_rece':
+                    if ($userPrize) {
+                        $userPrize->user_prize_status = \common\models\UserPrize::USER_PRIZE_STATUS_RECEIVED;
+                        $userPrize->save();
+                    }
+                    break;
+                case 'user_prize_cancel':
+                    if ($userPrize) {
+                        $userPrize->user_prize_status = \common\models\UserPrize::USER_PRIZE_STATUS_CANCEL;
+                        $userPrize->save();
+                    }
+                    break;
+                case 'user_prize_wait':
+                    if ($userPrize) {
+                        $userPrize->user_prize_status = \common\models\UserPrize::USER_PRIZE_STATUS_WAIT;
+                        $userPrize->save();
+                    }
+                    break;
                 case 'reset':
-                    if ($UserQa) {
-                        $UserQa->is_delete = Common::STATUS_NORMAL;
-                        if ($UserQa->save()) {
+                    if ($userPrize) {
+                        $userPrize->is_delete = Common::STATUS_NORMAL;
+                        if ($userPrize->save()) {
 
                         }
                     }
@@ -72,13 +91,13 @@ class UserQa extends Action
             return $this->controller->refresh();
         }
 
-        $searchModel = new \backend\models\UserQa();
+        $searchModel = new \backend\models\UserPrize();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        return $this->controller->render('user_qa', [
+        return $this->controller->render('user_prize', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
-            'userQaModel'    => $model,
+            'userPrizeModel'    => $model,
             'params'        => $_GET,
         ]);
     }

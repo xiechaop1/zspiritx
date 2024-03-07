@@ -11,10 +11,10 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->params['breadcrumbs'][] = [
-    'label' => '用户问答管理',
+    'label' => '用户抽奖管理',
 ];
 
-$this->title = '用户问答列表';
+$this->title = '用户抽奖列表';
 echo \dmstr\widgets\Alert::widget();
 ?>
 
@@ -31,7 +31,7 @@ echo \dmstr\widgets\Alert::widget();
                 'filterPosition' => \backend\widgets\GridView::FILTER_POS_HEADER,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'afterRow' => function ($model, $key, $index) use ($userQaModel) {
+                'afterRow' => function ($model, $key, $index) use ($userPrizeModel) {
                     Modal::begin([
                         'size' => Modal::SIZE_DEFAULT,
                         'header' => '查看日志',
@@ -83,42 +83,57 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'label' => '场次',
                         'attribute' => 'session_id',
+                        'filter' => false
+                    ],
+                    [
+                        'label' => '抽奖活动',
+                        'attribute' => 'lottery_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->session->session_name) ? $model->session->session_name : '未知';
+                            return !empty($model->lottery->lottery_name) ? $model->lottery->lottery_name : '未知';
                         },
                         'filter' => false
                     ],
                     [
-                        'label' => '题目',
-                        'attribute' => 'qa_id',
+                        'label' => '核销码',
+                        'attribute' => 'user_prize_no',
+                        'filter' => Html::activeInput('text', $searchModel, 'user_prize_no',['placeholder'=>'核销码']),
+                    ],
+                    [
+                        'label' => '奖品状态',
+                        'attribute' => 'user_prize_status',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return !empty($model->qa->topic) ? $model->qa->topic : '未知';
+                            return !empty(\common\models\UserPrize::$userPrizeStatus2Name[$model->user_prize_status])
+                                ? \common\models\UserPrize::$userPrizeStatus2Name[$model->user_prize_status] : '未知';
+                        },
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'user_prize_status',
+                            \common\models\UserPrize::$userPrizeStatus2Name, ["class" => "form-control ",
+                                'value' => !empty($params['UserPrize']['user_prize_status']) ? $params['UserPrize']['user_prize_status'] : '']),
+                    ],
+                    [
+                        'label' => '发奖方式',
+                        'attribute' => 'award_method',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\UserPrize::$userPrizeAwardMethod2Name[$model->award_method])
+                                ? \common\models\UserPrize::$userPrizeAwardMethod2Name[$model->award_method] : '未知';
                         },
                         'filter' => false
                     ],
                     [
-                        'label' => '用户答案',
-                        'attribute' => 'answer',
-                        'filter'    => false,
-                    ],
-                    [
-                        'label' => '标答选项',
-                        'format' => 'raw',
-                        'filter'    => false,
+                        'label' => '过期时间',
+                        'attribute' => 'expire_time',
+                        'format'    => 'raw',
                         'value' => function ($model) {
-                            return \common\helpers\Common::isJson($model->qa->st_selected) ? json_decode($model->qa->st_selected, true) : $model->qa->st_selected;
-                        }
+                            return !empty($model->expire_time) ?
+                                Date('Y-m-d H:i:s', $model->expire_time) : '永久';
+                        },
+                        'filter' => false
                     ],
-                    [
-                        'label' => '是否正确',
-                        'format' => 'raw',
-                        'filter'    => false,
-                        'value' => function ($model) {
-                            return $model->is_right == 1 ? '<span style="color: green">正确</span>' : '<span style="color: red">错误</span>';
-                        }
-                    ],
+
 
 //                    [
 //                        'label' => '封面图片',
@@ -138,7 +153,7 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeDropDownList(
                             $searchModel,
                             'date_range',
-                            \common\definitions\Common::$dateRange, ["class" => "form-control ", 'value' => !empty($params['Music']['date_range']) ? $params['Music']['date_range'] : '']),
+                            \common\definitions\Common::$dateRange, ["class" => "form-control ", 'value' => !empty($params['UserPrize']['date_range']) ? $params['UserPrize']['date_range'] : '']),
                         'value' => function ($model) {
                             return Date('Y-m-d H:i:s', $model->created_at);
                         },
@@ -154,14 +169,41 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{lines} {delete}',
+                        'template' => '{lines} {rece} {wait} {cancel} {delete}',
                         'buttons' => [
                             'edit' => function ($url, $model, $key) {
-                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['qa/edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
+                                return \yii\helpers\Html::a('编辑', \yii\helpers\Url::to(['lottery/user_prize_edit', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
                             },
 //                            'detail' => function ($url, $model, $key) {
 //                                return \yii\helpers\Html::a('详情', \yii\helpers\Url::to(['qa/detail', 'id' => $model->id]), ['class' => 'btn btn-xs btn-primary']);
 //                            },
+                            'rece' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::button('领取', [
+                                    'class' => 'btn btn-xs btn-success ajax_single_btn',
+                                    'request-url' => '',
+                                    'request-type' => 'POST',
+                                    'data-action' => 'user_prize_rece',
+                                    'data-id' => $model->id
+                                ]);
+                            },
+                            'cancel' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::button('取消', [
+                                    'class' => 'btn btn-xs btn-success ajax_single_btn',
+                                    'request-url' => '',
+                                    'request-type' => 'POST',
+                                    'data-action' => 'user_prize_cancel',
+                                    'data-id' => $model->id
+                                ]);
+                            },
+                            'wait' => function ($url, $model, $key) {
+                                return \yii\helpers\Html::button('等待', [
+                                    'class' => 'btn btn-xs btn-success ajax_single_btn',
+                                    'request-url' => '',
+                                    'request-type' => 'POST',
+                                    'data-action' => 'user_prize_wait',
+                                    'data-id' => $model->id
+                                ]);
+                            },
                             'delete' => function ($url, $model, $key) {
                                 return \yii\helpers\Html::button('删除', [
                                     'class' => 'btn btn-xs btn-danger delete_single_btn',

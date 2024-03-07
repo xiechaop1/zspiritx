@@ -23,7 +23,7 @@ class LotteryController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['lottery', 'lottery_prize', 'lottery_prize_edit', 'edit', 'user_lottery'],
+                        'actions' => ['lottery', 'lottery_prize', 'lottery_prize_edit', 'edit', 'user_lottery', 'user_prize'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -49,6 +49,9 @@ class LotteryController extends ViewController
             ],
             'user_lottery' => [
                 'class' => 'backend\actions\lottery\UserLottery',
+            ],
+            'user_prize' => [
+                'class' => 'backend\actions\lottery\UserPrize',
             ],
         ]);
     }

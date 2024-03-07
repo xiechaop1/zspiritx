@@ -5,7 +5,7 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%lottery_log}}".
+ * This is the model class for table "{{%user_prize}}".
  *
  */
 class UserPrize extends \yii\db\ActiveRecord
@@ -30,7 +30,7 @@ class UserPrize extends \yii\db\ActiveRecord
             [[
                 'user_id', 'prize_id', 'prize_type', 'award_method', 'prize_type', 'expire_time',
                 'lottery_id', 'user_prize_status', 'story_id', 'session_id', 'channel_id', 'status'], 'integer'],
-            [['extend_info',] , 'string'],
+            [['extend_info', 'user_prize_no', ] , 'string'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];
     }
