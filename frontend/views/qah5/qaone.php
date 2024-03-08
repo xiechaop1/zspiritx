@@ -466,10 +466,10 @@ $this->title = $qa['topic'];
                     }
                     ?>
                     <div class="answer-title m-t-40">
-                        <?php echo $qa['st_selected']; ?>
+                        <?php echo ($qa['st_selected'] != 'True') ? $qa['st_selected'] : ''; ?>
                     </div>
                     <div class="answer-detail m-t-40" style="line-height: 40px;">
-                         <?php echo $qa['st_answer']; ?>
+                         <?php echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
                     </div>
                 </div>
 
