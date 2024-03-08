@@ -23,6 +23,7 @@ class StoryModels extends \common\models\gii\StoryModels
     const SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_LATLNG = 24; // 经纬度随机在用户周围放置
     const SCAN_IMAGE_TYPE_FOLLOW_USER = 31; // 跟随用户
     const SCAN_IMAGE_TYPE_UI_WINDOW = 51; // UI窗口
+    const SCAN_IMAGE_TYPE_MODEL_COMBINE = 6; // 模型组合
 
     public static $scanImageType2Name = [
         self::SCAN_IMAGE_TYPE_RANDOM_PLANE => '随机平面',
@@ -35,6 +36,7 @@ class StoryModels extends \common\models\gii\StoryModels
         self::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_LATLNG => '经纬度随机在用户周围放置',
         self::SCAN_IMAGE_TYPE_FOLLOW_USER => '跟随用户',
         self::SCAN_IMAGE_TYPE_UI_WINDOW => 'UI窗口',
+        self::SCAN_IMAGE_TYPE_MODEL_COMBINE => '模型组合',
     ];
 
     const DIRECTION_DEFAULT     = 1;        // 朝向默认
