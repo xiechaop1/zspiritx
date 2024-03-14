@@ -95,6 +95,17 @@ class ChatGPT extends Component
         return json_decode($response, true);
     }
 
+    public function generateQAEmbeddingFromChatGPT($question, $answer) {
+        $data = array(
+            'model' => 'text-embedding-3-small',  // 或者使用其他模型
+            'input' => $question . ' ' . $answer
+        );
+
+        $response = $this->_call('/embeddings', $data, 'POST');
+
+        return json_decode($response, true);
+    }
+
     public function text2Speech($text, $voice = 'nova') {
         try {
             $data = array(

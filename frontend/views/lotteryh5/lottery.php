@@ -59,40 +59,93 @@ $this->title = '抽奖';
 
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
-            <div class="w-1-0 d-flex">
-                <div class="fs-30 bold w-100 text-FF title-box-border">
-                    <div class="npc-name">
-                        抽奖
-                    </div>
-                    <div class="npc-name" style="right: 60px;" id="msg_return_btn">
-                        X
-                    </div>
-                    <?= !empty($userLottery->lottery->lottery_name) ? $userLottery->lottery->lottery_name : '' ?> 抽奖
-                    <div>
-                        奖券<?= !empty($userLottery->lottery_no) ? $userLottery->lottery_no : '' ?>
-                    </div>
-                    <?php
-                    if ($userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_WAIT) {
-                    ?>
-                    <label id="answer-info" class="h5-btn-green-big lottery-btn">
-                        抽奖
-                    </label>
-                    <?php
-                    } else {
-                        ?>
-                        <label id="answer-info" class="h5-btn-green-big lottery-btn">
-                            <?=
-                            $userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_USED ? '已抽奖'
-                                : '已过期/取消'
-                            ?>
-                        </label>
+            <div class="w-1-0 d-flex fs-30 bold text-FF">
+                <div style="height: 583px;">
+<!--                    style="background-image:url(../../static/img/lottery/ticket.jpg); width: 1600px; height: 583px;"-->
+                    <img src="../../static/img/lottery/ticket.jpg" width="100%">
+                                        <div class="npc-name fs-18" style="padding: 15px 15px; top: 55px; right: 60px;" id="msg_return_btn">
+                                            X
+                                        </div>
+
+                <div class="fs-18" style="position: absolute; left: 80px; top: 70px;">
+                    No. <?= !empty($userLottery->lottery_no) ? $userLottery->lottery_no : '' ?>
+                </div>
+                    <div class="fs-12" style="position: absolute; left: 80px; top: 220px;">
                         <?php
-                    }
-                    ?>
-                    <!--<div class="hpa-ctr">
-                        <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
-                        播放语音
-                    </div>-->
+                        if (!empty($userLottery->ct)) {
+                            echo '本抽奖券每张只能使用 <span style="color: yellow">' . $userLottery->ct . '</span> 次';
+                            } else {
+                            echo '本抽奖券已经使用过';
+                        }
+                        ?>
+                        <br>
+                        兑换位置：<span style="color: yellow">国家植物园温室大棚</span><br>
+                        抽奖活动最终解释权归公园家所有
+                    </div>
+                    <div style="position: absolute; left: 350px; top: 200px;">
+                                        <?php
+                                        if (empty($userLottery)) {
+                                            ?>
+                                            <label id="answer-info" style="background-color: #a61717; color:#a0a0a0" class="h5-btn-green-big lottery-btn">
+                                                无奖券
+                                            </label>
+
+                                            <?php
+                                        } else {
+                                            if ($userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_WAIT) {
+                                            ?>
+                                            <label id="answer-info" style="background-color: #a61717" class="h5-btn-green-big lottery-btn">
+                                                抽奖
+                                            </label>
+                                            <?php
+                                            } else {
+                                                ?>
+                                                <label id="answer-info" style="background-color: #a61717; color:#a0a0a0" class="h5-btn-green-big lottery-btn">
+                                                    <?=
+                                                    $userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_USED ? '已抽奖'
+                                                        : '已过期/取消'
+                                                    ?>
+                                                </label>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                    </div>
+                </div>
+
+                <!--                <div class="fs-30 bold w-100 text-FF title-box-border">-->
+<!--                    <div class="npc-name">-->
+<!--                        抽奖-->
+<!--                    </div>-->
+<!--                    <div class="npc-name" style="right: 60px;" id="msg_return_btn">-->
+<!--                        X-->
+<!--                    </div>-->
+<!--                    --><?php //= !empty($userLottery->lottery->lottery_name) ? $userLottery->lottery->lottery_name : '' ?><!-- 抽奖-->
+<!--                    <div>-->
+<!--                        奖券--><?php //= !empty($userLottery->lottery_no) ? $userLottery->lottery_no : '' ?>
+<!--                    </div>-->
+<!--                    --><?php
+//                    if ($userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_WAIT) {
+//                    ?>
+<!--                    <label id="answer-info" class="h5-btn-green-big lottery-btn">-->
+<!--                        抽奖-->
+<!--                    </label>-->
+<!--                    --><?php
+//                    } else {
+//                        ?>
+<!--                        <label id="answer-info" class="h5-btn-green-big lottery-btn">-->
+<!--                            --><?php //=
+//                            $userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_USED ? '已抽奖'
+//                                : '已过期/取消'
+//                            ?>
+<!--                        </label>-->
+<!--                        --><?php
+//                    }
+//                    ?>
+<!--                    <div class="hpa-ctr">-->
+<!--                        <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+<!--                        播放语音-->
+<!--                    </div>-->
                 </div>
             </div>
             <div class="row hide" id="answer-right-box">

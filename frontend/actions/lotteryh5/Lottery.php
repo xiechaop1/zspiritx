@@ -45,6 +45,36 @@ class Lottery extends Action
 
         $optCt = !empty($_GET['opt_ct']) ? $_GET['opt_ct'] : 0;
 
+        if (empty($userLotteryId)) {
+            $userLottery = UserLottery::find()
+                ->where([
+                    'user_id' => $userId,
+                    'session_id' => $sessionId,
+                    'story_id' => $storyId,
+                    'lottery_id' => $lotteryId,
+                    'lottery_status' => UserLottery::USER_LOTTERY_STATUS_WAIT
+                ])
+                ->one();
+
+            if (empty($userLottery)) {
+                $userLottery = UserLottery::find()
+                    ->where([
+                        'user_id' => $userId,
+                        'session_id' => $sessionId,
+                        'story_id' => $storyId,
+                        'lottery_id' => $lotteryId,
+                    ])
+                    ->orderBy([
+                        'id' => SORT_DESC
+                    ])
+                    ->one();
+            }
+        } else {
+            $userLottery = UserLottery::find()
+                ->where(['id' => $userLotteryId])
+                ->one();
+        }
+
 //        $ret = Yii::$app->lottery->run($userId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
 //
 //        $msg = $ret['msg'];
@@ -55,14 +85,12 @@ class Lottery extends Action
 //        $prizePool = $ret['prizePool'];
 //        $finalPrize = $ret['finalPrize'];
 
-        $userLottery = UserLottery::find()
-            ->where(['id' => $userLotteryId])
-            ->one();
+
 
         return $this->controller->render('lottery', [
             'params'        => $_GET,
             'userId'        => $userId,
-            'userLotteryId' => $userLotteryId,
+            'userLotteryId' => !empty($userLottery->id) ? $userLottery->id : 0,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'lotteryId'     => $lotteryId,
