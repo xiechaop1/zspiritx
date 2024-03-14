@@ -76,12 +76,12 @@ $(function () {
                 if(obj["code"]==200){
                     console.log(obj);
 
-                    $('#answer-title').html(obj.data.finalPrize.prize_name);
-                    $('#answer-detail').html(obj.data.msg);
+                    $('#lottery-success .lottery-content').empty().text(obj.data.finalPrize.prize_name);
+                    $('#lottery-success .lottery-detail').empty().text(obj.data.msg);
 
-                    var dialog = $('#answer-right-box');
-                    // dialog.modal('show');
-                    dialog.show();
+                    var dialog = $('#lottery-success');
+                    dialog.modal('show');
+                    // dialog.show();
 
 
                         // var params = {

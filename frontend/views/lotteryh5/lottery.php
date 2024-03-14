@@ -180,6 +180,28 @@ $this->title = '抽奖';
 </div>
 
 
+<!-- 按钮：抽奖结果显示 -->
+<div class="modal fade" id="lottery-success" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-lottery-bg">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
+                <img src="../../static/img/icon-close.png" class="img-40">
+            </span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="m-t-50">
+                    <div class="fs-36 text-F6 text-center bold">
+                        <img src="../../static/img/bg-lottery-text1.png" class="img-250">
+                    </div>
+                    <div class="fs-40 text-FF text-center bold m-t-50 lottery-title"></div>
+                    <div class="fs-30 text-FF text-center bold m-t-20 lottery-detail"></div>
+                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
+                        <label class="btn-blue-m">确认</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- 按钮：用于打开模态框 -->
 <div class="modal fade" id="h5-null" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -209,12 +231,9 @@ $this->title = '抽奖';
                         恭喜您答对了
                     </div>
                     <div class="text-center m-t-30">
-
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </div>
