@@ -47,6 +47,9 @@ class UserLottery extends Action
                 case 'wait':
                     if ($userLottery) {
                         $userLottery->lottery_status = \common\models\UserLottery::USER_LOTTERY_STATUS_WAIT;
+                        if ($userLottery->ct == 0) {
+                            $userLottery->ct = 1;
+                        }
                         $userLottery->save();
                     }
                     Yii::$app->session->setFlash('success', '操作成功');
