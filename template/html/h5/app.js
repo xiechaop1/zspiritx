@@ -250,7 +250,8 @@ $(function () {
                         console.log(obj);
                         if (obj.data.type == 1) {
                             var params = obj.data.ret;
-                            var data = $.toJSON(params);
+                            // var data = $.toJSON(params);
+                            var data = params;
                             console.log(data);
                             Unity.call(data);
                         } else if (obj.data.type == 5) {
