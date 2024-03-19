@@ -101,6 +101,28 @@ class Common
             : $default;
     }
 
+    public static function encodeJson($str) {
+        $ret = $str;
+        if (!empty($str)) {
+            eval('$tmp = ' . $str);
+            $ret = json_encode($tmp, true);
+        }
+        return $ret;
+    }
+
+    public static function decodeJsonToVarexport($json, $needNum = false) {
+        if (!empty($json)) {
+            $txt = var_export(\common\helpers\Model::decodeDialog($json), true);
+            // 去掉数组中下标
+            // 让数组内容在textarea中文本显示
+            if (!$needNum) {
+                $txt = preg_replace('/\s*\d+\s*=>\s*/', "\n", $txt) . ';';
+            }
+        } else {
+            $txt = '';
+        }
+        return $txt;
+    }
 
     /**
      * 给定一个ip 一个网段 判断该ip是否属于该网段

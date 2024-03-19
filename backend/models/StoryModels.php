@@ -29,7 +29,7 @@ class StoryModels extends \common\models\StoryModels
             [['created_at', 'updated_at',], 'integer'],
             [['active_model_inst_u_id', 'target_model_u_id', 'scan_image_id', 'model_inst_u_id',
                 'active_next', 'story_model_name', 'story_model_desc', 'dialog',
-                'model_group', 'use_group_name', 'story_model_image', ], 'string'],
+                'model_group', 'use_group_name', 'story_model_image', 'story_model_html',  ], 'string'],
         ];
     }
 

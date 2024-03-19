@@ -75,6 +75,8 @@ class StoryModelEdit extends Action
 
             $model->dialog = Model::encodeDialog($model->dialog);
 
+            $model->story_model_html = \common\helpers\Common::encodeJson($model->story_model_html);
+
             if (empty($model->story_model_name)) {
                 if (!empty($model->model_id)) {
                     $modelModel = \common\models\Models::find()

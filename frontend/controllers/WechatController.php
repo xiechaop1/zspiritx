@@ -52,6 +52,10 @@ class WechatController extends Controller
                 'class'     => 'frontend\actions\wechat\NotifyApi',
                 'action'    => 'notify',
             ],
+            'jsapi' => [
+                'class'     => 'frontend\actions\wechat\CreateApi',
+                'action'    => 'jsapi',
+            ],
         ]);
     }
 }
