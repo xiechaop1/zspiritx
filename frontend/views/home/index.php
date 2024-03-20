@@ -141,6 +141,12 @@ $this->title = 'AR剧本杀';
         </div>
         <div class="fs-24  w-100 text-FF m-t-30">
           <?= $story->desc ?>
+          <?php
+          if (empty($unityVersion)) {
+            echo '<br>这是具体在对应场馆的剧本，您购买完成以后，可以联系客服（18500041193），我们会安排老师和您一起线下体验剧本。';
+            echo '<br>如果您有任何售前、售后问题，也可以随时和客服联系（18500041193)。';
+          }
+          ?>
           <!-- <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：凯德茂·大峡谷</span><br>
           在大峡谷内，忽然产生了一段奇妙的故事。<br>
           因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。
