@@ -508,7 +508,7 @@ input[type="radio"]:checked+label::before {
 
 /*lottery*/
 .modal-lottery-bg{
-    background: rgba(18,15,11,0.8);
+    background: rgba(18,15,11,0.8) !important;
     /*background-color: green;*/
     border-radius: 64px;
 }
