@@ -351,6 +351,16 @@ $(function () {
         });
 
     });
+    $(".owl-carousel .show_detail").click(function() {
+       var obj_tar = $(this).attr('d-target');
+       var obj = $('#story_detail_2');
+       console.log(obj);
+       obj.show();
+       obj.attr('display', 'block');
+         // obj.modal('show');
+       // console.log($(obj_tar));
+       // $(obj_tar).modal('show');
+    });
     $(".owl-carousel .play_btn").click(function() {
         var t = $(this).parent().parent().parent();
         var isDebug = t.find("input[name='isDebug']").val();

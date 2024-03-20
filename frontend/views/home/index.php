@@ -139,14 +139,19 @@ $this->title = 'AR剧本杀';
           <?= $story->title ?>
 <!--          侏罗纪-时间裂痕-->
         </div>
+
         <div class="fs-24  w-100 text-FF m-t-30">
           <?= $story->desc ?>
-          <?php
-          if (empty($unityVersion)) {
-            echo '<br>这是具体在对应场馆的剧本，您购买完成以后，可以联系客服（18500041193），我们会安排老师和您一起线下体验剧本。';
-            echo '<br>如果您有任何售前、售后问题，也可以随时和客服联系（18500041193)。';
-          }
-          ?>
+    <?php
+    if (empty($unityVersion)) {
+      ?>
+          <hr>
+          产品介绍：这个剧本在线下场馆体验，您购买以后（提示购买成功），和客服联系（18500041193），我们安排工作人员和您一起线下体验。
+          <hr>
+          售后/客服：如果您有任何售前、售后咨询，退款需求等，请您于客服联系（18500041193）。
+      <?php
+    }
+    ?>
           <!-- <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：凯德茂·大峡谷</span><br>
           在大峡谷内，忽然产生了一段奇妙的故事。<br>
           因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。
@@ -154,6 +159,15 @@ $this->title = 'AR剧本杀';
           他们回不去了，这里的环境也不适宜，他们也对人类有着威胁和敌意。<br>
           传说只要集齐5颗宝石，就可以让他们穿越回去并且修复裂痕！ 冒险家，需要你们的帮助，去收集这些宝石了 -->
         </div>
+        <?php
+        if (empty($unityVersion) && 1 != 1) {
+          ?>
+            <div class="btn-m-green m-t-30 float-right m-r-20 show_detail" d-target="#story_detail_<?= $story->id ?>">
+            了解详情
+            </div>
+          <?php
+        }
+        ?>
         <div class="btn-m-green m-t-30 float-right m-r-20 <?= $story->story_status == \common\models\Story::STORY_STATUS_ONLINE ? 'play_btn' : ''; ?>">
           <?php
           if ($story->story_status == \common\models\Story::STORY_STATUS_OPEN_WAIT) {
