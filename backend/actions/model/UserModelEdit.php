@@ -83,7 +83,7 @@ class UserModelEdit extends Action
                     'story_model_id'    => (int)$model->story_model_id,
                 ])
                 ->one();
-            $model->session_model_id = $sessionModel->id;
+            $model->session_model_id = $sessionModel['id'];
 
             if ($model->validate()) {
 
