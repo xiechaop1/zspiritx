@@ -12,7 +12,7 @@ namespace frontend\controllers;
 use liyifei\base\controllers\ViewController;
 use yii\web\Controller;
 
-class Phoneh5Controller extends Controller
+class Payh5Controller extends Controller
 {
     public $layout = '@frontend/views/layouts/main_phone.php';
 

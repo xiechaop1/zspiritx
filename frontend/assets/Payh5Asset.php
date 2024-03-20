@@ -11,7 +11,7 @@ namespace frontend\assets;
 
 use yii\web\AssetBundle;
 
-class payh5Asset extends AssetBundle
+class Payh5Asset extends AssetBundle
 {
     public $sourcePath = '@runtime/../../template';
 
