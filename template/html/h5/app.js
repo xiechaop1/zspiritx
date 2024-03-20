@@ -263,6 +263,15 @@ $(function () {
                             // $('#baggage_detail_back').modal('show');
                             // obj.show();
                             obj.modal('show');
+                        }  else if (obj.data.type == 6) {
+                            // 如果是展现，则直接展现
+                            $('#baggage_title').html(obj.data.title);
+                            $('#baggage_html').html(obj.data.html);
+                            $('#baggage_desc').html(obj.data.desc);
+                            var obj = $('#baggage_detail');
+                            // $('#baggage_detail_back').modal('show');
+                            // obj.show();
+                            obj.modal('show');
                         } else {
                             // if(v_ture==v_select){
                             $.alert('使用成功！');

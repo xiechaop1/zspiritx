@@ -28,7 +28,6 @@ $this->registerMetaTag([
 $this->title = '抽奖';
 
 ?>
-
 <audio autoplay loop>
   <source src="" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
@@ -57,20 +56,20 @@ $this->title = '抽奖';
         您的浏览器不支持 audio 元素。
     </audio>
 
-    <div class="p-20 bg-black">
-        <div class="w-100 p-30  m-b-10">
+    <div class="p-20 bg-black" style="margin: 0px; padding: 0px;">
+        <div class="w-100 p-30  m-b-10" style="margin: 0px; padding: 0px;">
             <div class="w-1-0 d-flex fs-30 bold text-FF">
                 <div style="height: 583px;">
 <!--                    style="background-image:url(../../static/img/lottery/ticket.jpg); width: 1600px; height: 583px;"-->
                     <img src="../../static/img/lottery/ticket.jpg" width="100%">
-                                        <div class="npc-name fs-18" style="padding: 15px 15px; top: 55px; right: 60px;" id="msg_return_btn">
-                                            X
-                                        </div>
+<!--                                        <div class="npc-name fs-18" style="padding: 15px 15px; top: 15px; right: 25px;" id="msg_return_btn">-->
+<!--                                            X-->
+<!--                                        </div>-->
 
-                <div class="fs-18" style="position: absolute; left: 80px; top: 70px;">
+                <div class="fs-18" style="position: absolute; left: 35px; top: 25px;">
                     No. <?= !empty($userLottery->lottery_no) ? $userLottery->lottery_no : '' ?>
                 </div>
-                    <div class="fs-12" style="position: absolute; left: 80px; top: 220px;">
+                    <div class="fs-12" style="position: absolute; left: 50px; top: 200px;">
                         <?php
                         if (!empty($userLottery->ct)) {
                             echo '本抽奖券每张只能使用 <span style="color: yellow">' . $userLottery->ct . '</span> 次';
@@ -82,7 +81,7 @@ $this->title = '抽奖';
                         兑换位置：<span style="color: yellow">国家植物园温室大棚</span><br>
                         抽奖活动最终解释权归公园家所有
                     </div>
-                    <div style="position: absolute; left: 350px; top: 200px;">
+                    <div style="position: absolute; left: 370px; top: 180px;">
                                         <?php
                                         if (empty($userLottery)) {
                                             ?>

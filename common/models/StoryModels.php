@@ -51,8 +51,8 @@ class StoryModels extends \common\models\gii\StoryModels
     const ACTIVE_TYPE_BUFF      = 2;    // BUFF
     const ACTIVE_TYPE_MODEL     = 3;    // 模型
     const ACTIVE_TYPE_MODEL_DISPLAY = 4;    // 模型展示
-
     const ACTIVE_TYPE_SHOW    = 5;    // 展示
+    const ACTIVE_TYPE_HTML    = 6;    // HTML
 
     public static $activeType2Name = [
         self::ACTIVE_TYPE_SHOW => '展示图片',
@@ -60,6 +60,7 @@ class StoryModels extends \common\models\gii\StoryModels
         self::ACTIVE_TYPE_BUFF => 'BUFF',
         self::ACTIVE_TYPE_MODEL => '对模型',
         self::ACTIVE_TYPE_MODEL_DISPLAY => '模型放出来',
+        self::ACTIVE_TYPE_HTML => 'HTML',
     ];
 
     const VISIBLE_SHOW        = 0;    // 显示

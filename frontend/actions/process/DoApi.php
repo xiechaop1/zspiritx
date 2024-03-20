@@ -1172,6 +1172,43 @@ class DoApi extends ApiAction
                         'msg'  => 'success',
                     ];
                     break;
+                case StoryModels::ACTIVE_TYPE_HTML:
+                    $title = $storyModel->story_model_name;
+                    $smHtml = $storyModel->story_model_html;
+                    $desc = $storyModel->story_model_desc;
+
+                    $html = '';
+                    if (!empty($smHtml)) {
+                        if (\common\helpers\Common::isJson($smHtml)) {
+                            $smHtmlJson = json_decode($smHtml, true);
+                            if (!empty($smHtmlJson['url'])) {
+                                // iframe
+                                $html = '<iframe src="' . $smHtmlJson['url'] . '" frameborder=”no” border=”0″ marginwidth=”0″ marginheight=”0″ scrolling=”no” allowtransparency=”yes”';
+                                if (!empty($smHtmlJson['height'])) {
+                                    $html .= ' height="' . $smHtmlJson['height'] . '"';
+                                }
+                                if (!empty($smHtmlJson['width'])) {
+                                    $html .= ' width="' . $smHtmlJson['width'] . '"';
+                                }
+                                $html .= '></iframe>';
+                            }
+                        } else {
+                            $html = $smHtml;
+                        }
+                    }
+//                    $html .= '<div style="padding: 10px;">';
+//                    $html .= $desc;
+//                    $html .= '</div>';
+
+                    $minCt = 0;
+                    $res = [
+                        'code' => 0,
+                        'type' => $storyModel->active_type,
+                        'title' => $title,
+                        'html' => $html,
+                        'desc' => $desc,
+                    ];
+                    break;
                 case StoryModels::ACTIVE_TYPE_SHOW:
                     $minCt = 0;
 
