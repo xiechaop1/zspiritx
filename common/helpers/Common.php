@@ -90,6 +90,8 @@ class Common
         $numLen = strlen($num);
         if ($len > $numLen) {
             $pre = str_repeat('0', $len - $numLen);
+        } else {
+            $pre = '';
         }
         $num = $pre . $num;
         return $num;
