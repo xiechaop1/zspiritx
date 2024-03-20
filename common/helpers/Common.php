@@ -88,7 +88,9 @@ class Common
     // 生成固定长度数字
     public static function generateFullNumber($num, $len = 6) {
         $numLen = strlen($num);
-        $pre = str_repeat('0', $len - $numLen);
+        if ($len > $numLen) {
+            $pre = str_repeat('0', $len - $numLen);
+        }
         $num = $pre . $num;
         return $num;
     }
