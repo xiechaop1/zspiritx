@@ -6,7 +6,7 @@
  * Time: 1:51 PM
  */
 
-namespace frontend\actions\phoneh5;
+namespace frontend\actions\payh5;
 
 
 use common\definitions\Common;
@@ -20,7 +20,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-class Phone extends Action
+class Pay extends Action
 {
 
     
@@ -36,7 +36,7 @@ class Phone extends Action
         $storyId = !empty($get['story_id']) ? $get['story_id'] : 0;
         $disRange = 2000;
 
-        return $this->controller->render('phone', [
+        return $this->controller->render('pay', [
             'userId'    => $userId,
             'sessionId' => $sessionId,
             'teamId'    => $teamId,
