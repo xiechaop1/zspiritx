@@ -96,7 +96,7 @@ class OrderApi extends ApiAction
             $storyExtend = StoryExtend::findOne(['story_id' => $this->_storyId]);
 
             if (empty($storyExtend)) {
-                throw new Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+                throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
             }
 
             $currPrice = $storyExtend['curr_price'];
@@ -143,15 +143,15 @@ class OrderApi extends ApiAction
 
 
         if (empty($order)) {
-            throw new Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
+            throw new \Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
         }
 
         if ($order->order_status != Order::ORDER_STATUS_WAIT) {
-            throw new Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
+            throw new \Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
         }
 
         if (empty($order->story)) {
-            throw new Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+            throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
         }
         $story = $order->story;
 
@@ -183,7 +183,7 @@ class OrderApi extends ApiAction
         $transaction = Yii::$app->db->beginTransaction();
 
         if (empty($this->_get['order_id'])) {
-            throw new Exception('请您给出订单信息', ErrorCode::ORDER_NOT_FOUND);
+            throw new \Exception('请您给出订单信息', ErrorCode::ORDER_NOT_FOUND);
         }
 
         $orderId = $this->_get['order_id'];
@@ -191,15 +191,15 @@ class OrderApi extends ApiAction
         $order = Order::findOne($orderId);
 
         if (empty($order)) {
-            throw new Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
+            throw new \Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
         }
 
         if ($order->order_status != Order::ORDER_STATUS_WAIT) {
-            throw new Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
+            throw new \Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
         }
 
         if (empty($order->story)) {
-            throw new Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+            throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
         }
         $story = $order->story;
 
