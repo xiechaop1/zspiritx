@@ -128,30 +128,32 @@ class Model
             return '';
         }
 
-        if (!empty($params['user_id'])) {
-            $ret = str_replace('{$user_id}', $params['user_id'], $ret);
-        }
-        if (!empty($params['session_id'])) {
-            $ret = str_replace('{$session_id}', $params['session_id'], $ret);
-        }
-        if (!empty($params['session_stage_id'])) {
-            $ret = str_replace('{$session_stage_id}', $params['session_stage_id'], $ret);
-        }
-        if (!empty($params['story_id'])) {
-            $ret = str_replace('{$story_id}', $params['story_id'], $ret);
-        }
-        if (!empty($params['model_id'])) {
-            $ret = str_replace('{$model_id}', $params['model_id'], $ret);
-        }
-        if (!empty($params['story_model_id'])) {
-            $ret = str_replace('{$story_model_id}', $params['story_model_id'], $ret);
-        }
-        if (!empty($params['story_model_detail_id'])) {
-            $ret = str_replace('{$story_model_detail_id}', $params['story_model_detail_id'], $ret);
-        }
-        if (!empty($params['model_inst_u_id'])) {
-            $ret = str_replace('{$model_inst_u_id}', $params['model_inst_u_id'], $ret);
-        }
+        $ret = Common::formatUrlParams($ret, $params);
+
+//        if (!empty($params['user_id'])) {
+//            $ret = str_replace('{$user_id}', $params['user_id'], $ret);
+//        }
+//        if (!empty($params['session_id'])) {
+//            $ret = str_replace('{$session_id}', $params['session_id'], $ret);
+//        }
+//        if (!empty($params['session_stage_id'])) {
+//            $ret = str_replace('{$session_stage_id}', $params['session_stage_id'], $ret);
+//        }
+//        if (!empty($params['story_id'])) {
+//            $ret = str_replace('{$story_id}', $params['story_id'], $ret);
+//        }
+//        if (!empty($params['model_id'])) {
+//            $ret = str_replace('{$model_id}', $params['model_id'], $ret);
+//        }
+//        if (!empty($params['story_model_id'])) {
+//            $ret = str_replace('{$story_model_id}', $params['story_model_id'], $ret);
+//        }
+//        if (!empty($params['story_model_detail_id'])) {
+//            $ret = str_replace('{$story_model_detail_id}', $params['story_model_detail_id'], $ret);
+//        }
+//        if (!empty($params['model_inst_u_id'])) {
+//            $ret = str_replace('{$model_inst_u_id}', $params['model_inst_u_id'], $ret);
+//        }
 
         $jsonTmp = json_decode($ret, true);
 

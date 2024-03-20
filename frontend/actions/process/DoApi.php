@@ -1182,6 +1182,14 @@ class DoApi extends ApiAction
                         if (\common\helpers\Common::isJson($smHtml)) {
                             $smHtmlJson = json_decode($smHtml, true);
                             if (!empty($smHtmlJson['url'])) {
+
+                                $params = [
+                                    'user_id' => $userId,
+                                    'story_id' => $storyId,
+                                    'session_id' => $sessionId,
+                                ];
+
+                                $smHtmlJson['url'] = \common\helpers\Common::formatUrlParams($smHtmlJson['url'], $params);
                                 // iframe
                                 $html = '<iframe src="' . $smHtmlJson['url'] . '" frameborder=”no” border=”0″ marginwidth=”0″ marginheight=”0″ scrolling=”no” allowtransparency=”yes”';
                                 if (!empty($smHtmlJson['height'])) {
