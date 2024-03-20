@@ -43,14 +43,14 @@ $this->registerMetaTag([
   </div>
   <label class="inputlabel" id="keypadNum" type="text" data-value="100.00">1100.00</label>
 </div>
-<div class="pay-box hide">
+<div class="pay-box ">
   <div class="pay">
     微信支付
   </div>
-  <div class="btn-m-border" id="pay-complete">
+  <div class="btn-m-border hide" id="pay-complete">
     支付完成
   </div>
-  <div class="btn-m-border" id="pay-retry">
+  <div class="btn-m-border hide" id="pay-retry">
     重新支付
   </div>
 </div>
