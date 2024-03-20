@@ -72,7 +72,7 @@ $(function () {
 
 
 
-    $('.pay').click(function () {
+    $('.pay,#pay-retry').click(function () {
         if (typeof WeixinJSBridge == "undefined"){
             if( document.addEventListener ){
                 document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
@@ -83,6 +83,11 @@ $(function () {
         }else{
             onBridgeReady();
         }
-        // alert("拨打电话"+$keypadNum.text())
+        $(".pay-box").show()
+        alert("微信支付");
+    });
+
+    $('#pay-complete').click(function () {
+        alert("支付成功，页面跳转");
     });
 })
