@@ -24,6 +24,9 @@ class Lotteryh5Controller extends Controller
             'lottery' => [
                 'class' => 'frontend\actions\lotteryh5\Lottery',
             ],
+            'generate_lottery' => [
+                'class' => 'frontend\actions\lotteryh5\GenerateLottery',
+            ],
 
         ];
     }
