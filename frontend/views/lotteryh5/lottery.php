@@ -57,7 +57,7 @@ $this->title = '抽奖';
     </audio>
 
     <div class="p-20 bg-black" style="margin: 0px; padding: 0px;">
-        <div class="w-100 p-30  m-b-10" style="margin: 0px; padding: 0px;">
+        <div class="w-100 p-30" style="margin: 0px; padding: 0px;">
             <div class="w-1-0 d-flex fs-30 bold text-FF">
                 <div style="height: 583px;">
 <!--                    style="background-image:url(../../static/img/lottery/ticket.jpg); width: 1600px; height: 583px;"-->
