@@ -75,7 +75,8 @@ $this->title = 'AR剧本杀';
     </div>
     <?php
     }else if (!empty($user) &&
-      $user->user_type == \common\models\User::USER_TYPE_INNER)
+      $user->user_type == \common\models\User::USER_TYPE_INNER
+    && $userId != 101)
   {
     ?>
     <div class="item">
@@ -102,7 +103,7 @@ $this->title = 'AR剧本杀';
             <?php
 
               if (empty($unityVersion)) {
-                echo '已经购买，请联系客服！也可以直接去场馆体验！';
+                echo '已经购买，请联系客服！';
               } else {
                 echo '进入游戏';
               }
@@ -146,7 +147,7 @@ $this->title = 'AR剧本杀';
     if (empty($unityVersion)) {
       ?>
           <hr>
-          产品介绍：这个剧本在线下场馆体验，您购买以后（提示购买成功），和客服联系（18500041193），我们安排工作人员和您一起线下体验。
+          产品介绍：这个剧本在线下场馆体验，您购买以后（提示购买成功），和客服联系（18500041193），我们安排寄送物料给您。
           <hr>
           售后/客服：如果您有任何售前、售后咨询，退款需求等，请您于客服联系（18500041193）。
       <?php
@@ -177,13 +178,13 @@ $this->title = 'AR剧本杀';
             && (\common\helpers\Common::compareUnityVersion($unityVersion, $story->latest_unity_version) < 0)
             ) {
                 // 不满足最低版本
-                echo '您需要升级以后才可以体验这个剧本！';
+                echo '您需要升级以后访问！';
             } else {
               if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
                   || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
               ) {
                 if (empty($unityVersion)) {
-                  echo '已经购买，请联系客服！也可以直接去场馆体验！';
+                  echo '已经购买，请联系客服！';
                 } else {
                   echo '进入游戏';
                 }
