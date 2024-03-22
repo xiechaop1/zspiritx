@@ -53,3 +53,12 @@ html, body {
     font-size: 24px;
 }
 
+.title-box-border2 {
+    background: rgba(31,38,40,0.8);
+    /*border-radius: 48px;*/
+    opacity: 1;
+    border-top: 2px solid #DAFC70;
+    padding: 25px 5px 5px 5px;
+    position: relative;
+}
+

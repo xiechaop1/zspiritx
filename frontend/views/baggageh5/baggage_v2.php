@@ -36,14 +36,14 @@ $this->title = '我的背包';
 <input type="hidden" name="target_story_model_detail_id" value="<?= $targetStoryModelDetailId ?>">
 <input type="hidden" name="target_model_id" value="<?= $targetModelId ?>">
 <div class="w-100 m-auto">
-    <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
-                        返回
-    </div>
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
-                <div class="fs-30 bold w-100 text-FF title-box-border">
-                    <div class="npc-name">
+                <div class="fs-30 bold w-100 text-FF title-box-border2">
+                    <div class="btn-m-green m-t-30  m-l-30" style="position: absolute; right: 5px; top: -60px;" id="return_btn">
+                        返回
+                    </div>
+                    <div class="npc-name" style="background-color: #000; color: #DAFC70">
                         背包
                     </div>
 
@@ -66,15 +66,15 @@ $this->title = '我的背包';
                         $baggageName = 'baggage';
                     }
                 ?>
-                <div class="m-t-30 col-sm-4 col-md-12" style="padding: 5px; ">
+                <div class="m-t-30 col-sm-3 col-md-12" style="padding: 5px; ">
                     <div class="answer-border2" style="height: 260px;">
                         <input class="form-check-input" type="radio" name="<?= $baggageName ?>" value="<?= $item->id ?>" id="legal_person_yes_<?= $item->id ?>" >
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_<?= $item->id ?>" style="padding-top: 20px;">
-                            <div style="clear:both;">
                             <span class="answer-tag2"><?= $item->use_ct ?></span>
+                            <div style="clear:both; height: 120px;">
                             <?php
                             if (!empty($item->storyModel->icon)) {
-                                echo '<img src="' . \common\helpers\Attachment::completeUrl($item->storyModel->icon, true) . '" class="img-150 m-r-10" title="' . $txt . '">';
+                                echo '<img src="' . \common\helpers\Attachment::completeUrl($item->storyModel->icon, true) . '" class="img-120 m-r-10" title="' . $txt . '">';
                             } else {
                                 echo $txt;
                             }
