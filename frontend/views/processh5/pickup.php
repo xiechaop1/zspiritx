@@ -40,11 +40,12 @@ $this->title = '拾取';
                         消息
                     </div>
                     <?= $msg ?>
-                    <br>
                     <?php
                     if (!empty($storyModel->icon)) {
                         ?>
-                        <img src="<?= \common\helpers\Attachment::completeUrl($storyModel->icon) ?>" class="img-120" style="border-radius: 20px; ">
+                    <div style="clear:both;">
+                    <img src="<?= \common\helpers\Attachment::completeUrl($storyModel->icon) ?>" class="img-120" style="border-radius: 20px; ">
+                    </div>
                         <?php
                     }
                     ?>
