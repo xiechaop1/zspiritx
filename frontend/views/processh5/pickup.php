@@ -44,10 +44,9 @@ $this->title = '拾取';
                     <?php
                     if (!empty($storyModel->icon)) {
                         ?>
-                        <img src="<?= \common\helpers\Attachment::completeUrl($storyModel->icon) ?>" class="img-60" style="border-radius: 10px; ">
+                        <img src="<?= \common\helpers\Attachment::completeUrl($storyModel->icon) ?>" class="img-120" style="border-radius: 20px; ">
                         <?php
                     }
-                    ?>
                     ?>
                     <?php
 if (!empty($knowledge)) {
