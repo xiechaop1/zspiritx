@@ -43,8 +43,8 @@ $this->title = '拾取';
                     <?php
                     if (!empty($storyModel->icon)) {
                         ?>
-                    <div style="clear:both;">
-                    <img src="<?= \common\helpers\Attachment::completeUrl($storyModel->icon) ?>" class="img-120" style="border-radius: 20px; ">
+                    <div style="clear:both;" align="center">
+                    <img src="<?= \common\helpers\Attachment::completeUrl($storyModel->icon) ?>" class="img-160" style="border-radius: 20px; ">
                     </div>
                         <?php
                     }
