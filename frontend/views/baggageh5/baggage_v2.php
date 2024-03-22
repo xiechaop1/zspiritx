@@ -74,7 +74,7 @@ $this->title = '我的背包';
                             <div style="clear:both; height: 120px;">
                             <?php
                             if (!empty($item->storyModel->icon)) {
-                                echo '<img src="' . \common\helpers\Attachment::completeUrl($item->storyModel->icon, true) . '" class="img-120 m-r-10" title="' . $txt . '">';
+                                echo '<img src="' . \common\helpers\Attachment::completeUrl($item->storyModel->icon, true) . '" class="img-120 m-r-10" style="border-radius: 20px;" title="' . $txt . '">';
                             } else {
                                 echo $txt;
                             }
