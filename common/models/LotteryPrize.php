@@ -43,11 +43,12 @@ class LotteryPrize extends \common\models\gii\LotteryPrize
 
     const PRIZE_METHOD_UNIQUE = 2;    // 唯一
     const PRIZE_METHOD_REPEAT = 1;    // 可重复
+    const PRIZE_METHOD_CLASS_UNIQUE = 3;    // 类别唯一
 
     public static $prizeMethod2Name = [
         self::PRIZE_METHOD_REPEAT => '可重复',
         self::PRIZE_METHOD_UNIQUE => '唯一',
-
+        self::PRIZE_METHOD_CLASS_UNIQUE => '类别唯一',
     ];
 
 

@@ -100,6 +100,7 @@ class Lottery extends Component
 
 
         $userPrizeArray = [];
+        $userPrizeClassArray = [];
         if (!empty($userPrize)) {
             foreach ($userPrize as $up) {
 
@@ -112,6 +113,15 @@ class Lottery extends Component
                     $userPrizeArray[$dateTag][$up->prize_id] + 1 : 1;
                 $userPrizeArray[0][$up->prize_id] = !empty($userPrizeArray[0][$up->prize_id]) ?
                     $userPrizeArray[0][$up->prize_id] + 1 : 1;
+
+                if (!empty($up->prize->prize_level)) {
+                    $userPrizeClassArray[$hourTag][$up->prize->prize_level] = !empty($userPrizeArray[$hourTag][$up->prize->prize_level]) ?
+                        $userPrizeClassArray[$hourTag][$up->prize->prize_level] + 1 : 1;
+                    $userPrizeClassArray[$dateTag][$up->prize->prize_level] = !empty($userPrizeArray[$dateTag][$up->prize->prize_level]) ?
+                        $userPrizeClassArray[$dateTag][$up->prize->prize_level] + 1 : 1;
+                    $userPrizeClassArray[0][$up->prize->prize_level] = !empty($userPrizeArray[0][$up->prize->prize_level]) ?
+                        $userPrizeClassArray[0][$up->prize->prize_level] + 1 : 1;
+                }
 
             }
         }
@@ -190,47 +200,72 @@ class Lottery extends Component
 
         if (!empty($prizePool)) {
             $lastPoolIdx = sizeof($prizePool) - 1;
-            $prizePool[$lastPoolIdx] = [
-                'prize' => $prizePool[$lastPoolIdx]['prize'],
-                'rest_ct' => $prizePool[$lastPoolIdx]['rest_ct'],
-                'rateRange' => [
-                    $prizePool[$lastPoolIdx]['rateRange'][0] > 0 ? 0 : $prizePool[$lastPoolIdx]['rateRange'][0],
-                    $prizePool[$lastPoolIdx]['rateRange'][1]
-                ],
-            ];
+            if ($prizePool[$lastPoolIdx]['rateRange'][0] > 0) {
+                // 添加不中奖概率
+                $prizePool[] = [
+                    'prize' => 0,
+                    'rest_ct' => 999999999,
+                    'rateRange' => [
+                        0,
+                        $prizePool[$lastPoolIdx]['rateRange'][0]
+                    ],
+                ];
+
+            }
+//            $prizePool[$lastPoolIdx] = [
+//                'prize' => $prizePool[$lastPoolIdx]['prize'],
+//                'rest_ct' => $prizePool[$lastPoolIdx]['rest_ct'],
+//                'rateRange' => [
+//                    $prizePool[$lastPoolIdx]['rateRange'][0] > 0 ? 0 : $prizePool[$lastPoolIdx]['rateRange'][0],
+//                    $prizePool[$lastPoolIdx]['rateRange'][1]
+//                ],
+//            ];
+        }
+
+        if (!empty($prizePool)) {
             $randRate = mt_rand(0, $allRate);
             $finalPrize = [];
             foreach ($prizePool as $pp) {
                 if ($randRate >= $pp['rateRange'][0] && $randRate < $pp['rateRange'][1]) {
-                    $finalPrize = $pp['prize'];
+                    if (!empty($pp['prize'])) {
+                        $finalPrize = $pp['prize'];
+                        $isAward = 1;
+                        $msg = '恭喜您，您得到 ' . $finalPrize->prize_name . ' 一份！';
+                    } else {
+                        $isAward = 0;
+                        $msg = '很遗憾，您没有中奖！您继续答题，期待下次中奖！';
+                    }
                     break;
                 }
             }
-            $msg = '恭喜您，您得到 ' . $finalPrize->prize_name . ' 一份！';
         } else {
-            $msg = '很遗憾，您没有中奖，再接再厉！';
+            $isAward = 0;
+            $msg = '很遗憾，您没有中奖！您继续答题，期待下次中奖！';
         }
 
         $upnSession = !empty($sessionId) ? $sessionId : $channelId;
 
-        try {
-            $newUserPrize = $this->add($userId, $sessionId, $channelId, $storyId,
-                $lotteryId, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
-                UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE);
+        if (!empty($finalPrize)) {
+            try {
+                $newUserPrize = $this->add($userId, $sessionId, $channelId, $storyId,
+                    $lotteryId, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
+                    UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE);
 
-            $userLottery->ct = $userLottery->ct - 1;
-            if ($userLottery->ct <= 0) {
-                $userLottery->lottery_status = UserLottery::USER_LOTTERY_STATUS_USED;
-            }
-            $userLottery->save();
+                $userLottery->ct = $userLottery->ct - 1;
+                if ($userLottery->ct <= 0) {
+                    $userLottery->lottery_status = UserLottery::USER_LOTTERY_STATUS_USED;
+                }
+                $userLottery->save();
 
-        } catch (\Exception $e) {
+            } catch (\Exception $e) {
 //            $newUserPrize = null;
 //            $msg = '您的操作出现异常，请您重试！';
-            throw new \Exception('添加奖品失败', ErrorCode::USER_PRIZE_ADD_FAILED);
+                throw new \Exception('添加奖品失败', ErrorCode::USER_PRIZE_ADD_FAILED);
+            }
         }
 
         return [
+            'isAward' => $isAward,
             'msg'   => $msg,
             'newUserPrize' => $newUserPrize,
             'lottery' => $lottery,

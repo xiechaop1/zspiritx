@@ -8,3 +8,48 @@ html, body {
     z-index: 9999;
     /*bottom: 50px;*/
 }
+
+.answer-tag2{
+    width: 40px;
+    height: 40px;
+    background: rgba(31,38,40,1);
+    border-radius: 20px;
+    opacity: 1;
+    border: 2px solid #DAFC70;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 35px;
+    text-align: center;
+    position: absolute;
+    left:0;
+    top:-8px
+}
+.answer-border2{
+    background: rgba(31,38,40,0.8);
+    border-radius: 24px;
+    opacity: 1;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 12px 30px 12px 20px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #FFFFFF;
+    position: relative;
+}
+
+.img-150 {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    display: block;
+    border: 1px solid rgba(233,233,233,1);
+}
+
+.answer-txt {
+    margin-top: 10px;
+    border-top: 10px;
+    border-color: #fff;
+    font-size: 24px;
+}
+

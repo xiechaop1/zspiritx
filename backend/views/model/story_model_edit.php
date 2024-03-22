@@ -46,6 +46,15 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('模型');
             echo $form->field($storyModel, 'story_model_name')->textInput(['value' => $storyModel->story_model_name])->label('剧本模型名称');
+            echo $form->field($storyModel, 'icon')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => true,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=story_model/icon/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $storyModel->icon],
+//                'directory' => 'cover/' . Date('Y/m/')
+            ])->label('图标');
             echo $form->field($storyModel, 'story_model_desc')->textarea(['value' => $storyModel->story_model_desc])->label('剧本模型描述');
 
             echo $form->field($storyModel, 'story_stage_id')->textInput(['value' => $storyModel->story_stage_id])->label('Stage ID');

@@ -45,8 +45,14 @@ class Baggage extends Action
             ->orderBy(['id' => SORT_DESC])
             ->all();
 
+        $template = 'baggage';
 
-        return $this->controller->render('baggage', [
+        $bagVersion = !empty($_GET['bag_version']) ? $_GET['bag_version'] : 0;
+        if (!empty($bagVersion)) {
+            $template = 'baggage_v2';
+        }
+
+        return $this->controller->render($template, [
             'model'         => $model,
             'params'        => $_GET,
             'userId'        => $userId,
