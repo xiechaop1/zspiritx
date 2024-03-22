@@ -48,7 +48,9 @@ class Baggage extends Action
         $template = 'baggage';
 
         $bagVersion = !empty($_GET['bag_version']) ? $_GET['bag_version'] : 0;
-        if (!empty($bagVersion)) {
+        if (!empty($bagVersion)
+            || in_array($storyId,[11])
+        ) {
             $template = 'baggage_v2';
         }
 
