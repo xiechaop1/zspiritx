@@ -28,6 +28,16 @@ $this->registerMetaTag([
 $this->title = '拾取';
 
 ?>
+<style>
+    .img-160 {
+        width: 160px;
+        height: 160px;
+        border-radius: 10px;
+        display: block;
+        border: 1px solid rgba(233,233,233,1);
+    }
+
+</style>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <div class="w-100 m-auto">

@@ -46,14 +46,6 @@ html, body {
     border: 1px solid rgba(233,233,233,1);
 }
 
-.img-160 {
-    width: 160px;
-    height: 160px;
-    border-radius: 10px;
-    display: block;
-    border: 1px solid rgba(233,233,233,1);
-}
-
 .answer-txt {
     margin-top: 10px;
     border-top: 10px;
