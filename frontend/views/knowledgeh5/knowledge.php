@@ -40,17 +40,17 @@ $this->title = '知识库';
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <div class="w-100 m-auto">
-    <div class="btn-m-green m-t-30  m-l-30">
+    <div class="btn-m-green m-t-30  m-l-30" style="top: 0px;">
         <a href="/myh5/my?user_id=<?=$userId?>&session_id=<?=$sessionId?>&story_id=<?=$storyId?>">上一页</a>
-    </div>
-    <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
-        返回
     </div>
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
-                <div class="fs-30 bold w-100 text-FF title-box-border">
-                    <div class="npc-name">
+                <div class="fs-30 bold w-100 text-FF title-box-border2">
+                    <div class="btn-m-green m-t-30  m-l-30" style="position: absolute; right: 5px; top: -60px;" id="return_btn">
+                        返回
+                    </div>
+                    <div class="npc-name" style="background-color: #000; color: #DAFC70">
                         <?= $knowledgeClass == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL ? '知识' : '任务'; ?>
                     </div>
 
