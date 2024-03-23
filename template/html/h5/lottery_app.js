@@ -78,6 +78,8 @@ $(function () {
 
                     $('#lottery-success .lottery-content').empty().text(obj.data.finalPrize.prize_name);
                     $('#lottery-success .lottery-detail').empty().text(obj.data.msg);
+                    $("#lottery-success .lottery-success-title").show();
+                    $("#lottery-success .lottery-error-title").hide();
 
                     var dialog = $('#lottery-success');
                     dialog.modal('show');
@@ -94,7 +96,14 @@ $(function () {
                 }
                 //新消息获取失败
                 else{
-                    $.alert(obj.msg)
+
+                    $('#lottery-success .lottery-content').empty().text(obj.msg);
+                    $('#lottery-success .lottery-detail').empty();
+                    $("#lottery-success .lottery-success-title").hide();
+                    $("#lottery-success .lottery-error-title").show();
+                    var dialog = $('#lottery-success');
+                    dialog.modal('show');
+                    // $.alert(obj.msg)
                 }
 
             }

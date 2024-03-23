@@ -199,6 +199,9 @@ rem{
 .img-250{
     width: 250px;
 }
+.img-350{
+    width: 350px;
+}
 .img-w-100{
     width: 100%;
     height: auto;
@@ -521,9 +524,11 @@ input[type="radio"]:checked+label::before {
     font-size: 32px;
     line-height: 96px;
     color: #FFFFFF;
-
-
-
+}
+.lottery-error-top{
+    position: absolute;
+    top: -100px;
+    left: 0px;
 }
 @media (min-width: 576px){
     .modal-dialog {

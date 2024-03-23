@@ -188,9 +188,14 @@ $this->title = '抽奖';
             </span>
             <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
                 <div class="m-t-50">
-                    <div class="fs-36 text-F6 text-center bold">
+                    <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
                         <img src="../../static/img/bg-lottery-text1.png" class="img-250">
                     </div>
+                    <div class="fs-36 text-F6 text-center bold lottery-error-title">
+                        <img src="../../static/img/lottery-error-top.png" class="lottery-error-top">
+                        <img src="../../static/img/lottery-error.png" class="img-350">
+                    </div>
+
                     <div class="fs-40 text-FF text-center bold m-t-50 lottery-title"></div>
                     <div class="fs-30 text-FF text-center bold m-t-20 lottery-detail"></div>
                     <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
