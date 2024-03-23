@@ -44,6 +44,15 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('模型');
             echo $form->field($storyModelDetailModel, 'title')->textInput(['value' => $storyModelDetailModel->title])->label('详情名称');
+            echo $form->field($storyModel, 'icon')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => true,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=story_model/icon/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $storyModel->icon],
+//                'directory' => 'cover/' . Date('Y/m/')
+            ])->label('图标');
             echo $form->field($storyModelDetailModel, 'direction')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$direction2Name,
                 'options' => [

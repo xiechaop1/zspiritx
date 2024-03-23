@@ -28,7 +28,7 @@ class StoryModelDetail extends \yii\db\ActiveRecord
             [['model_id', 'is_unique', 'pre_story_model_id', 'story_id',
                  'active_type', 'direction', 'sort_by', 'status'], 'integer'],
             [['active_expiretime', 'created_at', 'updated_at',], 'integer'],
-            [['active_next', 'dialog', 'story_model_image', 'title' ], 'string'],
+            [['active_next', 'dialog', 'story_model_image', 'icon', 'title' ], 'string'],
         ];
     }
 
