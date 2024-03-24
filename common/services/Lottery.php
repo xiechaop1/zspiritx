@@ -115,11 +115,11 @@ class Lottery extends Component
                     $userPrizeArray[0][$up->prize_id] + 1 : 1;
 
                 if (!empty($up->prize->prize_level)) {
-                    $userPrizeClassArray[$hourTag][$up->prize->prize_level] = !empty($userPrizeArray[$hourTag][$up->prize->prize_level]) ?
+                    $userPrizeClassArray[$hourTag][$up->prize->prize_level] = !empty($userPrizeClassArray[$hourTag][$up->prize->prize_level]) ?
                         $userPrizeClassArray[$hourTag][$up->prize->prize_level] + 1 : 1;
-                    $userPrizeClassArray[$dateTag][$up->prize->prize_level] = !empty($userPrizeArray[$dateTag][$up->prize->prize_level]) ?
+                    $userPrizeClassArray[$dateTag][$up->prize->prize_level] = !empty($userPrizeClassArray[$dateTag][$up->prize->prize_level]) ?
                         $userPrizeClassArray[$dateTag][$up->prize->prize_level] + 1 : 1;
-                    $userPrizeClassArray[0][$up->prize->prize_level] = !empty($userPrizeArray[0][$up->prize->prize_level]) ?
+                    $userPrizeClassArray[0][$up->prize->prize_level] = !empty($userPrizeClassArray[0][$up->prize->prize_level]) ?
                         $userPrizeClassArray[0][$up->prize->prize_level] + 1 : 1;
                 }
 
@@ -244,6 +244,7 @@ class Lottery extends Component
         }
 
         $upnSession = !empty($sessionId) ? $sessionId : $channelId;
+        $newUserPrize = null;
 
         if (!empty($finalPrize)) {
             try {
