@@ -14,7 +14,7 @@ use yii\web\Cookie as CookieBase;
 class Client
 {
     public static function getAgent() {
-        return $_SERVER['HTTP_USER_AGENT'];
+        return !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
     }
 
     public static function isMobile()
