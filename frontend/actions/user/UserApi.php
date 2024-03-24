@@ -170,9 +170,13 @@ class UserApi extends ApiAction
     }
 
     public function loginAndRegByMobile() {
-        $mobile = !empty($this->_get['mobile']) ? $this->_get['mobile'] : '';
-        $verifyCode = !empty($this->_get['verify_code']) ? $this->_get['verify_code'] : '';
-        $token = !empty($this->_get['token']) ? $this->_get['token'] : '';
+//        $mobile = !empty($this->_get['mobile']) ? $this->_get['mobile'] : '';
+//        $verifyCode = !empty($this->_get['verify_code']) ? $this->_get['verify_code'] : '';
+//        $token = !empty($this->_get['token']) ? $this->_get['token'] : '';
+
+        $mobile = !empty($_REQUEST['mobile']) ? $_REQUEST['mobile'] : '';
+        $verifyCode = !empty($_REQUEST['verify_code']) ? $_REQUEST['verify_code'] : '';
+        $token = !empty($_REQUEST['token']) ? $_REQUEST['token'] : '';
 //        $userPass = !empty($this->_get['user_pass']) ? $this->_get['user_pass'] : '';
 
         if (empty($mobile)
