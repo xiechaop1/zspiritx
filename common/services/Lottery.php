@@ -71,22 +71,26 @@ class Lottery extends Component
             ])
             ->all();
 
-        $userPrize = UserPrize::find()
-            ->where([
-                'user_id'   => $userId,
-                'lottery_id'    => $lotteryId,
-                'session_id'    => $sessionId,
-                'story_id'      => $storyId,
-            ])
-            ->andFilterWhere([
-                'or',
-                ['>=', 'expire_time', time()],
-                ['expire_time' => 0]
-            ])
-            ->andFilterWhere([
-                'user_prize_status' => UserPrize::$normalUserPrizeStatus
-            ])
-            ->all();
+        $userPrize = $this->getUserPrize($userId, $lotteryId, $sessionId, $storyId, UserPrize::$normalUserPrizeStatus);
+
+//        $userPrize = UserPrize::find()
+//            ->where([
+//                'user_id'   => $userId,
+//                'lottery_id'    => $lotteryId,
+//                'session_id'    => $sessionId,
+//                'story_id'      => $storyId,
+//            ])
+//            ->andFilterWhere([
+//                'or',
+//                ['>=', 'expire_time', time()],
+//                ['expire_time' => 0]
+//            ])
+//            ->andFilterWhere([
+//                'user_prize_status' => UserPrize::$normalUserPrizeStatus
+//            ])
+//            ->all();
+
+
 
         // 计算剩余数量
 //        // 总数
@@ -270,9 +274,9 @@ class Lottery extends Component
             'msg'   => $msg,
             'newUserPrize' => $newUserPrize,
             'lottery' => $lottery,
-            'lotteryPrize' => $lotteryPrize,
-            'userPrize' => $userPrize,
-            'prizePool' => $prizePool,
+//            'lotteryPrize' => $lotteryPrize,
+//            'userPrize' => $userPrize,
+//            'prizePool' => $prizePool,
             'finalPrize' => $finalPrize,
         ];
 
@@ -309,7 +313,7 @@ class Lottery extends Component
         return $newUserPrize;
     }
 
-    public function generateLottery($userId, $storyId, $sessionId, $lotteryId, $channelId, $ct) {
+    public function generateLottery($userId, $storyId, $sessionId, $lotteryId, $channelId, $ct = 1) {
         $lottery = \common\models\Lottery::find()
             ->where([
                 'id'    => $lotteryId
@@ -346,7 +350,50 @@ class Lottery extends Component
         return $userLottery;
     }
 
+    public function getUserLottery($userId, $storyId, $sessionId, $lotteryId, $lotteryStatus = UserLottery::USER_LOTTERY_STATUS_WAIT) {
+        $userLottery = UserLottery::find()
+            ->where([
+                'user_id'   => $userId,
+                'lottery_id'    => $lotteryId,
+                'session_id'    => $sessionId,
+                'story_id'      => $storyId,
+            ])
+            ->andFilterWhere([
+                '>', 'ct', 0
+            ])
+            ->andFilterWhere([
+                'or',
+                ['>=', 'expire_time', time()],
+                ['expire_time' => 0]
+            ])
+            ->andFilterWhere([
+                'lottery_status' => $lotteryStatus
+            ])
+            ->all();
 
+        return $userLottery;
+    }
+
+    public function getUserPrize($userId, $lotteryId, $sessionId, $storyId, $userPrizeStatus) {
+        $userPrize = UserPrize::find()
+            ->where([
+                'user_id'   => $userId,
+                'lottery_id'    => $lotteryId,
+                'session_id'    => $sessionId,
+                'story_id'      => $storyId,
+            ])
+            ->andFilterWhere([
+                'or',
+                ['>=', 'expire_time', time()],
+                ['expire_time' => 0]
+            ])
+            ->andFilterWhere([
+                'user_prize_status' => $userPrizeStatus
+            ])
+            ->all();
+
+        return $userPrize;
+    }
 
 
 }

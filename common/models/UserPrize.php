@@ -26,11 +26,21 @@ class UserPrize extends \common\models\gii\UserPrize
         self::USER_PRIZE_STATUS_CANCEL => '已取消',
     ];
 
+
     public static $normalUserPrizeStatus = [
         self::USER_PRIZE_STATUS_PREPARING,
         self::USER_PRIZE_STATUS_WAIT,
         self::USER_PRIZE_STATUS_RECEIVED,
     ];
+
+    public static $allUserPrizeStatus = [
+        self::USER_PRIZE_STATUS_PREPARING,
+        self::USER_PRIZE_STATUS_WAIT,
+        self::USER_PRIZE_STATUS_RECEIVED,
+        self::USER_PRIZE_STATUS_EXPIRED,
+        self::USER_PRIZE_STATUS_CANCEL,
+    ];
+
 
     const USER_PRIZE_AWARD_METHOD_ONLINE = 1; // 线上
     const USER_PRIZE_AWARD_METHOD_OFFLINE = 2; // 线下

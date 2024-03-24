@@ -29,7 +29,14 @@ class LotteryController extends Controller
                 'class' => 'frontend\actions\lottery\LotteryApi',
                 'action' => 'generate_lottery',
             ],
-
+            'get_user_lottery' => [
+                'class' => 'frontend\actions\lottery\LotteryApi',
+                'action' => 'get_user_lottery',
+            ],
+            'get_user_prize' => [
+                'class' => 'frontend\actions\lottery\LotteryApi',
+                'action' => 'get_user_prize',
+            ],
         ];
     }
 }
