@@ -82,7 +82,7 @@ class LotteryApi extends ApiAction
 //        $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
-        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 0;
+        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 1;
         $userLotteryId = !empty($_GET['user_lottery_id']) ? $_GET['user_lottery_id'] : 0;
 
         $optCt = !empty($_GET['opt_ct']) ? $_GET['opt_ct'] : 0;
@@ -103,7 +103,7 @@ class LotteryApi extends ApiAction
 //        $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
-        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 0;
+        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 1;
         $ct = !empty($_GET['ct']) ? $_GET['ct'] : 1;
 
         try {
@@ -120,10 +120,18 @@ class LotteryApi extends ApiAction
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $channelId = !empty($_GET['channel_id']) ? $_GET['channel_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
-        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 0;
+        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 1;
 
         try {
-            $ret = Yii::$app->lottery->getUserPrize($userId, $lotteryId, $sessionId, $storyId, UserPrize::$allUserPrizeStatus);
+            $tempRet = Yii::$app->lottery->getUserPrize($userId, $lotteryId, $sessionId, $storyId, UserPrize::$allUserPrizeStatus);
+            $ret = [];
+            if (!empty($tempRet)) {
+                foreach ($tempRet as $k => $v) {
+                    $one = $v->toArray();
+                    $one['prize'] = $v->prize;
+                    $ret[] = $one;
+                }
+            }
         } catch (\Exception $e) {
             throw $e;
         }
