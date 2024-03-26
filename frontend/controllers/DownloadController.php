@@ -51,6 +51,7 @@ class DownloadController extends Controller
     {
         return ArrayHelper::merge(parent::actions(), [
             'redirect' => 'frontend\actions\download\Redirect',
+            'mini'   => 'frontend\actions\download\Mini',
         ]);
     }
 
