@@ -33,12 +33,12 @@ class DownloadController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['redirect', ],
+                        'actions' => ['redirect', 'mini', ],
                         'allow' => true,
                         'roles' => ['?']
                     ],
                     [
-                        'actions' => ['redirect',],
+                        'actions' => ['redirect', 'mini', ],
                         'allow' => true,
                         'roles' => ['@']
                     ]
