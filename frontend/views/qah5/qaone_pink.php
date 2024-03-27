@@ -241,15 +241,24 @@ $this->title = $qa['topic'];
                         preg_match('/\[(\w+)\]/', $sel, $labelArr);
                         $label = count($labelArr) > 1 ? $labelArr[1] : '';
                         $txt = str_replace('[' . $label . ']', '', $sel);
+                        $selImg = '';
+                        if (strpos($txt, '[src]') !== false) {
+                            preg_match('/\[src\](.*)\[\/src\]/', $txt, $imgArr);
+                            $selImg = count($imgArr) > 1 ? $imgArr[1] : '';
+                            $txt = str_replace('[src]' . $selImg . '[/src]', '', $txt);
+                            $selImg = \common\helpers\Attachment::completeUrl($selImg, true);
+                        }
 
                         $optstr .= '
                     <div class="m-t-30 col-sm-6 col-md-6">
                     <div class="">
                         <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
-                            <span class="pink-ans-text">
-                                 <img src="../../static/img/example.png" alt="" class="img-responsive"/>
-                                  ' . $txt . '
+                            <span class="pink-ans-text">';
+                        if (!empty($selImg)) {
+                            $optstr .= '<img src="' . $selImg . '" alt="" class="img-responsive"/>';
+                        }
+                        $optstr .= $txt . '
                             </span>
                             <span class="answer-tag">' . $label . '</span>
 
