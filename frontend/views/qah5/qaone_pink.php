@@ -257,6 +257,9 @@ $this->title = $qa['topic'];
                             <span class="pink-ans-text">';
                         if (!empty($selImg)) {
                             $optstr .= '<img src="' . $selImg . '" alt="" class="img-responsive"/>';
+                        } else {
+                            $optStr .= $txt;
+                            $txt = '';
                         }
                         $optstr .=  '
                             </span>
