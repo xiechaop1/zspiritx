@@ -241,9 +241,9 @@ $this->title = $qa['topic'];
 
                         $optstr .= '
                     <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
+                    <div class="">
                         <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
-                        <label class="form-check-label fs-30 answer-btn" style="text-align:left; padding-left: 80px;" for="legal_person_yes_' . $label . '">
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
                             <span class="pink-ans-text">
                                  <img src="../../static/img/example.png" alt="" class="img-responsive"/>
                                   QA答案XXXX
@@ -260,11 +260,11 @@ $this->title = $qa['topic'];
                 } elseif ($inputType == 'text') {
                     $optstr = '';
                     if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_CHATGPT) {
-                        $optstr = '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="answer-border">
+                        $optstr = '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="">
                     </div></div>';
                     }
                     $optstr .= '<div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
+                    <div class="">
                     <input class="form-check-label fs-30 text_input" type=text ' . (!empty($str['keyboard']) ? 'readonly' : '') . '  name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
                    <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
                     </div>
@@ -299,7 +299,7 @@ $this->title = $qa['topic'];
                     $maxLength = !empty($str['length']) ? $str['length'] : 5;
                     $width = intval(360 / $maxLength) . 'px';
                     $optstr = '<div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border code-input" maxlength="' . $maxLength . '">
+                    <div class="code-input" maxlength="' . $maxLength . '">
                     ';
                     for ($i=0; $i<$maxLength; $i++) {
                         $autoFocus =  ($i==0) ? 'autofocus' : '';
@@ -399,8 +399,8 @@ $this->title = $qa['topic'];
                         $selectionType = !empty($selection['type']) ? $selection['type'] : 1;
                         $optstr .= '
                         <div class="m-t-30 col-sm-12 col-md-6">
-                        <div class="answer-border">
-                            <label class="form-check-label fs-30 selection-btn" style="text-align:left; padding-left: 80px;" answer_type="' . $val . '" selection_type="' . $selectionType . '" for="selection_' . $val . '">
+                        <div class="">
+                            <label class="form-check-label fs-30 selection-btn" answer_type="' . $val . '" selection_type="' . $selectionType . '" for="selection_' . $val . '">
                                 <span class="pink-ans-text">
                                     <img src="../../static/img/example.png" alt="" class="img-responsive"/>
                                     QA答案XXXX
@@ -416,7 +416,7 @@ $this->title = $qa['topic'];
                 echo $optstr;
 
                 ?>
-
+                </div>
                 <div class="row" id="answer-box">
 
                     <div class="m-t-30 col-sm-6 col-md-6">
@@ -506,7 +506,7 @@ $this->title = $qa['topic'];
                     <div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
                         <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
-                        <label class="form-check-label fs-30 answer-btn" style="text-align:left; padding-left: 80px;" for="legal_person_yes_' . $label . '">
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
                             <span class="answer-tag">' . $label . '</span>
                     ' . $txt . '
                     </label>

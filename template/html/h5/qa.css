@@ -26,7 +26,7 @@
 }
 .pink-help{
     vertical-align: bottom;
-    position: absolute;
+    /*position: absolute;*/
     bottom: 0;
     right: 10px;
     width: 100%;
@@ -49,6 +49,12 @@
     top: -8px;
     color: #ffffff;
     box-shadow: 4px 6px 5px 2px rgba(0, 0, 0, 0.5);
+}
+.qa-pink .answer-btn{
+    width: 100%;
+}
+.qa-pink .title-box-border .text-center{
+    min-height: 200px;
 }
 .pink-ans-text{
     border: 4px solid #E69B98;
