@@ -88,7 +88,20 @@ class LotteryApi extends ApiAction
         $optCt = !empty($_GET['opt_ct']) ? $_GET['opt_ct'] : 0;
 
         try {
-            $ret = Yii::$app->lottery->run($userId, $userLotteryId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
+            $retTemp = Yii::$app->lottery->run($userId, $userLotteryId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
+
+            $ret = [
+                'result' => [
+                    'lottery_name' => $retTemp['lottery']['lottery_name'],
+                    'prize_name' => $retTemp['finalPrize']['prize_name'],
+                    'image' => $retTemp['finalPrize']['image'],
+                    'prize_level' => $retTemp['finalPrize']['prize_level'],
+                    'user_prize_no' => $retTemp['newUserPrize']['user_prize_no'],
+                    'desc' => '奖品兑奖地址：国家植物园科普馆门口\n兑奖截止时间：2024年05月01日 0点之前\n本次活动最终解释权归 公园加 所有',
+                ]
+            ];
+//            $ret += $retTemp;
+
         } catch (\Exception $e) {
             throw $e;
         }
