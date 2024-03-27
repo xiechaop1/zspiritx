@@ -175,6 +175,271 @@ $this->title = $qa['topic'];
         您的浏览器不支持 audio 元素。
     </audio>
 
+
+     <!--新QA样式-->
+      <div class="p-20 bg-white qa-pink">
+            <div class="w-100 p-30  m-b-10 pink-border">
+                <div class="w-1-0 d-flex">
+                    <div class="fs-30 bold w-100 text-FF ">
+                        <img src="<?= $qa['attachment'] ?>" alt="" class="img-responsive  d-block"/>
+                    </div>
+                </div>
+                <div class="w-1-0 d-flex m-t-20">
+                    <div class="fs-30 bold w-100  title-box-border">
+                        <div class="row">
+                            <div class="col-sm-8 text-center">
+                                <img src="../../static/img/pic-right.png" alt="" class="pink-right d-block m-b-15"/>
+                                 <?= $qa['topic'] ?>
+                            </div>
+                            <div class="col-sm-4">
+                                <img src="../../static/img/pic-help.png" alt="" class="pink-help d-block"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="answer-box">
+                <?php
+                $str = $qa['selected_json'];
+//                $str = str_replace("[div]", '<div>', $str);
+//                $str = str_replace("[/div]", '</div>', $str);
+//                    echo $qa['selected_json'];
+                ?>
+                <?php
+                switch ($qa['qa_type']) {
+                    case \common\models\Qa::QA_TYPE_SELECTION:
+                        $inputType = 'selection';
+                        break;
+                    case \common\models\Qa::QA_TYPE_MULTI:
+                        $inputType = 'checkbox';
+                        break;
+                    case \common\models\Qa::QA_TYPE_WORD:
+                    case \common\models\Qa::QA_TYPE_CHATGPT:
+                        $inputType = 'text';
+                        break;
+                    case \common\models\Qa::QA_TYPE_VERIFYCODE:
+                        $inputType = 'verifycode';
+                        break;
+                    case \common\models\Qa::QA_TYPE_SINGLE:
+                    default:
+                        $inputType = 'radio';
+                        break;
+                }
+//                if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_MULTI) {
+//                    $inputType = 'checkbox';
+//                } else {
+//                    $inputType = 'radio';
+//                }
+
+                if ($inputType == 'radio') {
+                    $selected = explode("\n", $str);
+
+                    $optstr = '';
+                    foreach ($selected as $sel) {
+                        preg_match('/\[(\w+)\]/', $sel, $labelArr);
+                        $label = count($labelArr) > 1 ? $labelArr[1] : '';
+                        $txt = str_replace('[' . $label . ']', '', $sel);
+
+                        $optstr .= '
+                    <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
+                        <label class="form-check-label fs-30 answer-btn" style="text-align:left; padding-left: 80px;" for="legal_person_yes_' . $label . '">
+                            <span class="pink-ans-text">
+                                 <img src="../../static/img/example.png" alt="" class="img-responsive"/>
+                                  QA答案XXXX
+                            </span>
+                            <span class="answer-tag">' . $label . '</span>
+                    ' . $txt . '
+                    </label>
+                    </div>
+                </div>
+                    ';
+
+
+                    }
+                } elseif ($inputType == 'text') {
+                    $optstr = '';
+                    if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_CHATGPT) {
+                        $optstr = '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="answer-border">
+                    </div></div>';
+                    }
+                    $optstr .= '<div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                    <input class="form-check-label fs-30 text_input" type=text ' . (!empty($str['keyboard']) ? 'readonly' : '') . '  name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
+                   <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
+                    </div>
+                    ';
+                    if (!empty($str['keyboard'])) {
+                        $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                        $keyboard = $str['keyboard'];
+                        $keyboardArray = [];
+                        for ($i = 0; $i < mb_strlen($keyboard, 'UTF8'); $i++) {
+                            $key = mb_substr($keyboard, $i, 1, 'UTF8');
+                            $keyboardArray[$key] = $key;
+                        }
+                        $keyboardArray['←'] = 'DELETE';
+
+                        $i = 0;
+                        foreach ($keyboardArray as $key => $val) {
+                            $optstr .= '<input type="button" name="keyboard" class="keyboard ' . $val . '" id="keyboard-' . $key . '" value="' . $key . '" val="' . $val . '">';
+                            if (($i + 1) % 5 == 0) {
+                                $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            }
+                            $i++;
+                        }
+                        $optstr .= '</div>';
+                    }
+
+                    $optstr .= '
+                    </div>
+                    ';
+
+                } elseif ($inputType == 'verifycode') {
+//                    $maxLength = !empty($str['length']) ? $str['length'] : 5;
+                    $maxLength = !empty($str['length']) ? $str['length'] : 5;
+                    $width = intval(360 / $maxLength) . 'px';
+                    $optstr = '<div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border code-input" maxlength="' . $maxLength . '">
+                    ';
+                    for ($i=0; $i<$maxLength; $i++) {
+                        $autoFocus =  ($i==0) ? 'autofocus' : '';
+                        $optstr .= '<input type="text" name="answer_txt"';
+                        if (!empty($str['keyboard'])) {
+                            $optstr .= ' readonly';
+                        }
+                        $optstr .= ' style="width: ' . $width . '" class="verifycode_input" maxlength="1" id="input-' . ($i+1) . '" ' . $autoFocus . '>';
+                    }
+//                    <input class="form-check-label fs-30" type="text" maxlength="1" id="input-1" autofocus>
+//        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-2">
+//        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-3">
+//        <input class="form-check-label fs-30" type="text" maxlength="1" id="input-4">
+//                    <input class="form-check-label fs-30" type=text name="answer_txt" class="hide form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
+                   $optstr .= '<input type="button" name="answer" value="提交" class="fs-30">';
+                    $optstr .= '</div>
+                    </div>
+                    ';
+                    if (!empty($str['keyboard'])) {
+                        if ($str['keyboard'] != '9area') {
+                            $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            $keyboard = $str['keyboard'];
+//                        $keyboardArray = [];
+//                        for ($i = 0; $i < mb_strlen($keyboard, 'UTF8'); $i++) {
+//                            $key = mb_substr($keyboard, $i, 1, 'UTF8');
+//                            $keyboardArray[$key] = $key;
+//                        }
+                            $keyboardArrayTmp = explode('|', $keyboard);
+                            foreach ($keyboardArrayTmp as $keyVal) {
+                                $keyboardArray[$keyVal] = $keyVal;
+                            }
+                            $keyboardArray['←'] = 'DELETE';
+
+                            $i = 0;
+                            foreach ($keyboardArray as $key => $val) {
+                                $optstr .= '<input type="button" name="keyboard" class="v_keyboard ' . $val . '" id="keyboard-' . $key . '" value="' . $key . '" val="' . $val . '">';
+                                if (($i + 1) % 5 == 0) {
+                                    $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                                }
+                                $i++;
+                            }
+                            $optstr .= '</div>';
+                        } elseif ($str['keyboard'] == '9area') {
+                            $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            $keyboard = $str['keyboard'];
+                            $keyboardArray = [];
+
+                            $labels = [
+                                0 => '+',
+                                1 => ' ',
+                                2 => 'ABC',
+                                3 => 'DEF',
+                                4 => 'GHI',
+                                5 => 'JKL',
+                                6 => 'MNO',
+                                7 => 'PQRS',
+                                8 => 'TUV',
+                                9 => 'WXYZ',
+                                '*' => '',
+                                '#' => '',
+                            ];
+
+                            $vals = [
+                                1,2,3,4,5,6,7,8,9,'*', 0, '#'
+                            ];
+
+                            for ($i = 0; $i < sizeof($vals); $i++) {
+                                $val = $vals[$i];
+                                $keyboardArray[$val] = '<div class="keyboard_label_big">' . $val . '</div><div class="keyboard_label_small">' . $labels[$val] . '</div>';
+                            }
+                            $keyboardAddationArray[2]['DELETE'] = '<div class="keyboard_label_delete">←</div>';
+
+                            $i = 0;
+                            foreach ($keyboardArray as $key => $val) {
+                                $optstr .= '<div name="keyboard" class="v_div_keyboard" id="keyboard-' . $key . '" val="' . $key . '">' . $val . '</div>';
+                                if (($i + 1) % 3 == 0) {
+                                    if (!empty($keyboardAddationArray[$i])) {
+                                        foreach ($keyboardAddationArray[$i] as $key => $val) {
+                                            $optstr .= '<div name="keyboard" class="v_div_keyboard" id="keyboard-' . $key . '" val="' . $key . '">' . $val . '</div>';
+                                        }
+                                    }
+                                    $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                                }
+                                $i++;
+                            }
+                            $optstr .= '</div>';
+                        }
+                    }
+
+                } elseif ($inputType == 'selection') {
+                    $selected = $str;
+                    $optstr = '';
+                    foreach ($selected as $selection) {
+                        $label = $selection['label'];
+                        $val = $selection['value'];
+                        $tag = !empty($selection['tag']) ? $selection['tag'] : $val;
+                        $selectionType = !empty($selection['type']) ? $selection['type'] : 1;
+                        $optstr .= '
+                        <div class="m-t-30 col-sm-12 col-md-6">
+                        <div class="answer-border">
+                            <label class="form-check-label fs-30 selection-btn" style="text-align:left; padding-left: 80px;" answer_type="' . $val . '" selection_type="' . $selectionType . '" for="selection_' . $val . '">
+                                <span class="pink-ans-text">
+                                    <img src="../../static/img/example.png" alt="" class="img-responsive"/>
+                                    QA答案XXXX
+                                </span>
+                                <span class="answer-tag">' . $tag . '</span>
+                        ' . $label . '
+                        </label>
+                        </div>
+                    </div>
+                        ';
+                    }
+                }
+                echo $optstr;
+
+                ?>
+
+                <div class="row" id="answer-box">
+
+                    <div class="m-t-30 col-sm-6 col-md-6">
+                        <div class="">
+                            <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_A" >
+                            <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_A">
+                                <span class="pink-ans-text">
+                                     <img src="../../img/example.png" alt="" class="img-responsive"/>
+                                     QA答案XXXX
+                                </span>
+                                <span class="answer-tag">A</span>
+
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    <!--原QA样式-->
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
