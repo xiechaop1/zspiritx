@@ -187,7 +187,7 @@ $this->title = $qa['topic'];
                         <img src="<?= $qa['attachment'] ?>" alt="" class="img-responsive  d-block"/>
                     </div>
                 </div>
-                <div class="w-1-0 d-flex m-t-20">
+                <div class="w-1-0 d-flex">
                     <div class="fs-30 bold w-100  title-box-border">
                         <div class="row">
                             <div class="col-sm-8 text-center">
@@ -437,6 +437,15 @@ $this->title = $qa['topic'];
                     </div>
 
                 </div>-->
+            <div class="row hide" id="answer-error-box">
+                <div class="m-t-60 col-sm-12 col-md-12">
+                    <div class="answer-detail " >
+                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        <span  class=" d-inline-block vertical-mid">很遗憾，答错了，再想想~</span>
+
+                    </div>
+                </div>
+            </div>
 
             </div>
         </div>
@@ -677,44 +686,7 @@ $this->title = $qa['topic'];
 
                 ?>
 
-<!--
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_A" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_A">
-                            <span class="answer-tag">A</span>
-                            8跟
-                        </label>
-                    </div>
-                </div>
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_B" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_B">
-                            <span class="answer-tag">B</span>
-                            6跟
-                        </label>
-                    </div>
-                </div>
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_C" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_C">
-                            <span class="answer-tag">C</span>
-                            5跟
-                        </label>
-                    </div>
-                </div>
-                <div class="m-t-30 col-sm-12 col-md-6">
-                    <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_D" >
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_D">
-                            <span class="answer-tag">D</span>
-                            3跟
-                        </label>
-                    </div>
-                </div>
--->
+
             </div>
             <div class="row hide" id="answer-right-box">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
