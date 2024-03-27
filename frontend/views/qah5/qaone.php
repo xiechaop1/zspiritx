@@ -175,7 +175,10 @@ $this->title = $qa['topic'];
         您的浏览器不支持 audio 元素。
     </audio>
 
+    <?php
 
+    if ($style == 'pink') {
+    ?>
      <!--新QA样式-->
       <div class="p-20 bg-white qa-pink">
             <div class="w-100 p-30  m-b-10 pink-border">
@@ -437,7 +440,9 @@ $this->title = $qa['topic'];
 
             </div>
         </div>
-
+    <?php
+    } else {
+    ?>
 
     <!--原QA样式-->
     <div class="p-20 bg-black">
@@ -758,6 +763,9 @@ $this->title = $qa['topic'];
         </div>
 
     </div>
+    <?php
+    }
+    ?>
 
 </div>
 

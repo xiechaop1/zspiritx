@@ -31,6 +31,8 @@ class QaOne extends Action
             $model = \common\models\Qa::findOne($qaId);
         }
 
+        $style = !empty($_GET['style']) ? $_GET['style'] : 'default';
+
         if (empty($model)) {
 //            $this->controller->render('qaone', [
 //                'err_text'  => '没有找到问答信息，请您刷新重试',
@@ -76,6 +78,7 @@ class QaOne extends Action
             'sessionId'     => $sessionId,
             'sessionStageId'    => $sessionStageId,
             'rtnAnswerType'     => $rtnAnswerType,
+            'style'         => $style,
         ]);
     }
 }
