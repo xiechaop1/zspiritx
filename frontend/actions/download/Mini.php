@@ -18,6 +18,7 @@ class Mini extends Action
 
     public function run()
     {
+//        $uri = 'https://www.zspiritx.com.cn/wx4fcf3c1035010828?id=78';
         $uri = 'https://www.zspiritx.com.cn/wx4fcf3c1035010828?id=78';
 
         $downloadAllow = 1;
