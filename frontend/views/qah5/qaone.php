@@ -240,16 +240,16 @@ $this->title = $qa['topic'];
                         $txt = str_replace('[' . $label . ']', '', $sel);
 
                         $optstr .= '
-                    <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="m-t-30 col-sm-6 col-md-6">
                     <div class="">
                         <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
                             <span class="pink-ans-text">
                                  <img src="../../static/img/example.png" alt="" class="img-responsive"/>
-                                  QA答案XXXX
+                                  ' . $txt . '
                             </span>
                             <span class="answer-tag">' . $label . '</span>
-                    ' . $txt . '
+
                     </label>
                     </div>
                 </div>
@@ -260,17 +260,17 @@ $this->title = $qa['topic'];
                 } elseif ($inputType == 'text') {
                     $optstr = '';
                     if ($qa['qa_type'] == \common\models\Qa::QA_TYPE_CHATGPT) {
-                        $optstr = '<div class="m-t-30 col-sm-12 col-md-6"><div id="answer-border-response" class="">
+                        $optstr = '<div class="m-t-30 col-sm-6 col-md-6"><div id="answer-border-response" class="">
                     </div></div>';
                     }
-                    $optstr .= '<div class="m-t-30 col-sm-12 col-md-6">
+                    $optstr .= '<div class="m-t-30 col-sm-6 col-md-6">
                     <div class="">
                     <input class="form-check-label fs-30 text_input" type=text ' . (!empty($str['keyboard']) ? 'readonly' : '') . '  name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
                    <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
                     </div>
                     ';
                     if (!empty($str['keyboard'])) {
-                        $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                        $optstr .= '<div class="m-t-30 col-sm-6 col-md-6 keyboard_area">';
                         $keyboard = $str['keyboard'];
                         $keyboardArray = [];
                         for ($i = 0; $i < mb_strlen($keyboard, 'UTF8'); $i++) {
@@ -283,7 +283,7 @@ $this->title = $qa['topic'];
                         foreach ($keyboardArray as $key => $val) {
                             $optstr .= '<input type="button" name="keyboard" class="keyboard ' . $val . '" id="keyboard-' . $key . '" value="' . $key . '" val="' . $val . '">';
                             if (($i + 1) % 5 == 0) {
-                                $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                                $optstr .= '</div><div class="m-t-30 col-sm-6 col-md-6 keyboard_area">';
                             }
                             $i++;
                         }
@@ -298,7 +298,7 @@ $this->title = $qa['topic'];
 //                    $maxLength = !empty($str['length']) ? $str['length'] : 5;
                     $maxLength = !empty($str['length']) ? $str['length'] : 5;
                     $width = intval(360 / $maxLength) . 'px';
-                    $optstr = '<div class="m-t-30 col-sm-12 col-md-6">
+                    $optstr = '<div class="m-t-30 col-sm-6 col-md-6">
                     <div class="code-input" maxlength="' . $maxLength . '">
                     ';
                     for ($i=0; $i<$maxLength; $i++) {
@@ -320,7 +320,7 @@ $this->title = $qa['topic'];
                     ';
                     if (!empty($str['keyboard'])) {
                         if ($str['keyboard'] != '9area') {
-                            $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            $optstr .= '<div class="m-t-30 col-sm-6 col-md-6 keyboard_area">';
                             $keyboard = $str['keyboard'];
 //                        $keyboardArray = [];
 //                        for ($i = 0; $i < mb_strlen($keyboard, 'UTF8'); $i++) {
@@ -337,13 +337,13 @@ $this->title = $qa['topic'];
                             foreach ($keyboardArray as $key => $val) {
                                 $optstr .= '<input type="button" name="keyboard" class="v_keyboard ' . $val . '" id="keyboard-' . $key . '" value="' . $key . '" val="' . $val . '">';
                                 if (($i + 1) % 5 == 0) {
-                                    $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                                    $optstr .= '</div><div class="m-t-30 col-sm-6 col-md-6 keyboard_area">';
                                 }
                                 $i++;
                             }
                             $optstr .= '</div>';
                         } elseif ($str['keyboard'] == '9area') {
-                            $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                            $optstr .= '<div class="m-t-30 col-sm-6 col-md-6 keyboard_area">';
                             $keyboard = $str['keyboard'];
                             $keyboardArray = [];
 
@@ -381,7 +381,7 @@ $this->title = $qa['topic'];
                                             $optstr .= '<div name="keyboard" class="v_div_keyboard" id="keyboard-' . $key . '" val="' . $key . '">' . $val . '</div>';
                                         }
                                     }
-                                    $optstr .= '</div><div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
+                                    $optstr .= '</div><div class="m-t-30 col-sm-6 col-md-6 keyboard_area">';
                                 }
                                 $i++;
                             }
@@ -398,15 +398,15 @@ $this->title = $qa['topic'];
                         $tag = !empty($selection['tag']) ? $selection['tag'] : $val;
                         $selectionType = !empty($selection['type']) ? $selection['type'] : 1;
                         $optstr .= '
-                        <div class="m-t-30 col-sm-12 col-md-6">
+                        <div class="m-t-30 col-sm-6 col-md-6">
                         <div class="">
                             <label class="form-check-label fs-30 selection-btn" answer_type="' . $val . '" selection_type="' . $selectionType . '" for="selection_' . $val . '">
                                 <span class="pink-ans-text">
                                     <img src="../../static/img/example.png" alt="" class="img-responsive"/>
-                                    QA答案XXXX
+                                    ' . $label . '
                                 </span>
                                 <span class="answer-tag">' . $tag . '</span>
-                        ' . $label . '
+
                         </label>
                         </div>
                     </div>
@@ -417,7 +417,7 @@ $this->title = $qa['topic'];
 
                 ?>
                 </div>
-                <div class="row" id="answer-box">
+                <!--<div class="row" id="answer-box">
 
                     <div class="m-t-30 col-sm-6 col-md-6">
                         <div class="">
@@ -433,7 +433,7 @@ $this->title = $qa['topic'];
                         </div>
                     </div>
 
-                </div>
+                </div>-->
 
             </div>
         </div>
