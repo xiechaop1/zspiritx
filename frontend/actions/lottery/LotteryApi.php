@@ -149,6 +149,8 @@ class LotteryApi extends ApiAction
             if (!empty($tempRet)) {
                 foreach ($tempRet as $k => $v) {
                     $one = $v->toArray();
+                    $one['user_prize_status_name'] = !empty(UserPrize::$userPrizeStatus2Name[$v->user_prize_status]) ?
+                        UserPrize::$userPrizeStatus2Name[$v->user_prize_status] : '';
                     $one['prize'] = $v->prize;
                     $ret[] = $one;
                 }
