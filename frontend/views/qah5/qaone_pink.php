@@ -446,7 +446,9 @@ $this->title = $qa['topic'];
                     </div>
                 </div>
             </div>
-
+             <label id="answer-info" class="h5-btn-green-big answer-btn hide"  data-value="<?php echo $qa['st_selected']; ?>" data-qa="<?php echo $qa['id']; ?>" data-type="<?php echo $qa['qa_type']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
+                 提交
+             </label>
             </div>
         </div>
     <?php
