@@ -71,7 +71,12 @@ class QaOne extends Action
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
 
-        return $this->controller->render('qaone', [
+        $tpl = 'qaone';
+        if ($style == 'pink') {
+            $tpl = 'qaone_pink';
+        }
+
+        return $this->controller->render($tpl, [
             'qa'            => $model,
             'params'        => $_GET,
             'userId'        => $userId,
