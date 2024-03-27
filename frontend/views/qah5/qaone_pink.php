@@ -258,9 +258,9 @@ $this->title = $qa['topic'];
                         if (!empty($selImg)) {
                             $optstr .= '<img src="' . $selImg . '" alt="" class="img-responsive"/>';
                         }
-                        $optstr .= $txt . '
+                        $optstr .=  '
                             </span>
-                            <span class="answer-tag">' . $label . '</span>
+                            <span class="answer-tag">' .  $label . ' ' . $txt .  '</span>
 
                     </label>
                     </div>
