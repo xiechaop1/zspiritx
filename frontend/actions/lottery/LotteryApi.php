@@ -92,11 +92,19 @@ class LotteryApi extends ApiAction
 
             $ret = [
                 'result' => [
-                    'lottery_name' => $retTemp['lottery']['lottery_name'],
-                    'prize_name' => $retTemp['finalPrize']['prize_name'],
-                    'image' => $retTemp['finalPrize']['image'],
-                    'prize_level' => $retTemp['finalPrize']['prize_level'],
-                    'user_prize_no' => $retTemp['newUserPrize']['user_prize_no'],
+                    'lottery_id' => !empty($retTemp['lottery']['id']) ? $retTemp['lottery']['id'] : 0,
+                    'lottery_name' => !empty($retTemp['lottery']['lottery_name']) ? $retTemp['lottery']['lottery_name'] : '',
+                    'prize_id' => !empty($retTemp['finalPrize']['id']) ? $retTemp['finalPrize']['id'] : 0,
+                    'prize_name' => !empty($retTemp['finalPrize']['prize_name']) ? $retTemp['finalPrize']['prize_name'] : '',
+                    'image' => !empty($retTemp['finalPrize']['image']) ? $retTemp['finalPrize']['image'] : '',
+                    'prize_level' => !empty($retTemp['finalPrize']['prize_level']) ? $retTemp['finalPrize']['prize_level'] : '',
+                    'user_prize_id' => !empty($retTemp['newUserPrize']['id']) ? $retTemp['newUserPrize']['id'] : 0,
+                    'user_prize_no' => !empty($retTemp['newUserPrize']['user_prize_no']) ? $retTemp['newUserPrize']['user_prize_no'] : '',
+                    'user_prize_status' => !empty($retTemp['newUserPrize']['user_prize_status']) ? $retTemp['newUserPrize']['user_prize_status'] : 0,
+                    'user_prize_status_name' => !empty(UserPrize::$userPrizeStatus2Name[$retTemp['newUserPrize']['user_prize_status']]) ?
+                        UserPrize::$userPrizeStatus2Name[$retTemp['newUserPrize']['user_prize_status']] : '',
+                    'user_prize_expire_time' => !empty($retTemp['newUserPrize']['user_prize_expire_time']) ? $retTemp['newUserPrize']['user_prize_expire_time'] : 0,
+                    'user_prize_ct' => !empty($retTemp['newUserPrize']['ct']) ? $retTemp['newUserPrize']['ct'] : 0,
                     'desc' => '奖品兑奖地址：国家植物园科普馆门口\n兑奖截止时间：2024年05月01日 0点之前\n本次活动最终解释权归 公园加 所有',
                 ]
             ];
