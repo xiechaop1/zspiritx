@@ -169,7 +169,7 @@ class WechatPay extends Component
         $client = $this->createClient($channel);
 
         try {
-            $result = $this->_getPostApi($uri, $params);
+            $result = $this->_getPostApi($uri, $params, $channel);
             return $result;
         } catch (RequestException $e) {
             throw $e;
@@ -266,7 +266,7 @@ class WechatPay extends Component
 
         $client = $this->createClient($channel);
 
-        $ret = $this->_getPostApi($uri, $params);
+        $ret = $this->_getPostApi($uri, $params, $channel);
         return $ret;
 
     }
@@ -353,12 +353,19 @@ class WechatPay extends Component
         return $ret;
     }
 
-    private function _getPostApi($uri, $postParams = []) {
+    private function _getPostApi($uri, $postParams = [], $channel = '') {
         try {
+            $token = $this->_createAuth($channel),
             $resp = $this->_client->request(
                 'POST',
                 $uri,
-                $postParams
+                [
+                    'header' => [
+                        'Authorization' => $token,
+                        'Content-Type' => 'application/json',
+                    ],
+                    'body' => $postParams
+                ]
             );
             $statusCode = $resp->getStatusCode();
             if ($statusCode == 200) { //处理成功
@@ -378,6 +385,36 @@ class WechatPay extends Component
 //            }
 //            return;
         }
+    }
+
+    // 生成微信支付JsApi v3的签名
+    private function _createAuth($channel = '' ) {
+
+        $mch = $this->_getMch($channel);
+
+        $prefix = !empty($mch['prefix']) ? $mch['prefix'] : '';
+
+        $keyFile = dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem'
+
+        $timestamp = time();
+        $nonce = uniqid();
+        $body = '';
+        $http_method = 'POST';
+        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
+        $url_parts = parse_url($url);
+        $canonical_url = ($url_parts['path'] . (!empty($url_parts['query']) ? "?${url_parts['query']}" : ""));
+        $message = $http_method."\n".
+            $canonical_url."\n".
+            $timestamp."\n".
+            $nonce."\n".
+            $body."\n";
+
+        openssl_sign($message, $raw_sign, $keyFile, 'sha256WithRSAEncryption');
+        $sign = base64_encode($raw_sign);
+
+        $schema = 'WECHATPAY2-SHA256-RSA2048';
+        $token = sprintf('mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
+            self::MERCHANT_ID, $nonce, $timestamp, self::MERCHANT_SERIAL_NUMBER, $sign);
     }
 
     private function _getMch($channel) {
