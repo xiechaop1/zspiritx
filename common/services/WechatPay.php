@@ -193,13 +193,18 @@ class WechatPay extends Component
                     break;
             }
         }
-        $accessSession = Yii::$app->wechat->getSession($code, $channel);
 
-        if (!$accessSession) {
-            return false;
-        } else {
-            $openId = $accessSession['openid'];
-        }
+        $openId = 'oDeH-7E3_p4ToG65qqOKT1WoWdpA';
+
+//        $accessSession = Yii::$app->wechat->getSession($code, $channel);
+//
+//        if (!$accessSession) {
+//            return false;
+//        } else {
+//            $openId = $accessSession['openid'];
+//        }
+
+        var_dump($this->getCertificates($channel));exit;
 
         $storyTitle = !empty($story->title) ? $story->title : '未知故事';
         $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
@@ -355,17 +360,23 @@ class WechatPay extends Component
 
     private function _getPostApi($uri, $postParams = [], $channel = '') {
         try {
-            $token = $this->_createAuth($postParams, $channel);
+            $mch = $this->_getMch($channel);
+            $merchantId = $mch['merchantId'];
+            $merchantSerialNumber = $mch['merchantSerialNumber'];
+            $prefix = $mch['prefix'];
+
+            $token = $this->_createAuth($uri, 'POST', $postParams, $merchantId, $merchantSerialNumber, $prefix);
             $resp = $this->_client->request(
                 'POST',
                 $uri,
-                [
-                    'header' => [
-                        'Authorization' => $token,
-                        'Content-Type' => 'application/json',
-                    ],
-                    'body' => json_encode($postParams),
-                ]
+                $postParams
+//                [
+//                    'header' => [
+//                        'Authorization' => $token,
+//                        'Content-Type' => 'application/json',
+//                    ],
+//                    'body' => $postParams,
+//                ]
             );
             $statusCode = $resp->getStatusCode();
             if ($statusCode == 200) { //处理成功
@@ -388,15 +399,15 @@ class WechatPay extends Component
     }
 
     // 生成微信支付JsApi v3的签名
-    private function _createAuth($body, $channel = '') {
+    private function _createAuth($url, $http_method = 'POST', $body, $merchantId, $merchantSerialNumber, $prefix = '') {
 
         $body = json_encode($body);
 
-        $mch = $this->_getMch($channel);
-        $merchantId = $mch['merchantId'];
-        $merchantSerialNumber = $mch['merchantSerialNumber'];
-
-        $prefix = !empty($mch['prefix']) ? $mch['prefix'] : '';
+//        $mch = $this->_getMch($channel);
+//        $merchantId = $mch['merchantId'];
+//        $merchantSerialNumber = $mch['merchantSerialNumber'];
+//
+//        $prefix = !empty($mch['prefix']) ? $mch['prefix'] : '';
 
         $keyFile = openssl_get_privatekey(file_get_contents(
             dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem'
@@ -405,8 +416,8 @@ class WechatPay extends Component
         $timestamp = time();
         $nonce = uniqid();
 //        $body = '';
-        $http_method = 'POST';
-        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
+//        $http_method = 'POST';
+//        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
 //        $url = 'https://' . $_SERVER['HTTP_HOST'] . '/' . $_SERVER['REQUEST_URI'];
         $url_parts = parse_url($url);
         $canonical_url = ($url_parts['path'] . (!empty($url_parts['query']) ? "?${url_parts['query']}" : ""));
@@ -450,6 +461,32 @@ class WechatPay extends Component
             'merchantSerialNumber' => $merchantSerialNumber,
             'prefix' => $prefix,
         ];
+    }
+
+
+    public function getCertificates($channel) {
+        $uri = '/v3/certificates';
+        $host = 'https://api.mch.weixin.qq.com';
+        $uri = $this->_createUri($uri, $host);
+
+        $mch = $this->_getMch($channel);
+        $merchantId = $mch['merchantId'];
+        $merchantSerialNumber = $mch['merchantSerialNumber'];
+        $prefix = $mch['prefix'];
+
+        $token = $this->_createAuth($uri, 'GET', [], $merchantId, $merchantSerialNumber, $prefix);
+
+        try {
+            $result = Curl::curlGet($uri, [
+                'header' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+            return json_decode($result,true);
+        } catch (RequestException $e) {
+            throw $e;
+        }
     }
 
 }

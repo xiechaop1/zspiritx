@@ -61,11 +61,11 @@ class Curl
 
     }
 
-    public static function curlGet($url){
+    public static function curlGet($url, $header = 0){
 
         $ch = curl_init ();
 
-        curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+        curl_setopt ( $ch, CURLOPT_HEADER, $header );
 
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 
