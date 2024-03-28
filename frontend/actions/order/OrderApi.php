@@ -167,7 +167,8 @@ class OrderApi extends ApiAction
             $code = !empty($this->_get['code']) ? $this->_get['code'] : '';
 
 //            $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
-            $res = Yii::$app->wechatPay->createJsapiOrder($code, $story, $order, $this->_userInfo);
+            $channel = !empty($this->_get['channel']) ? $this->_get['channel'] : '';
+            $res = Yii::$app->wechatPay->createJsapiOrder($code, $story, $order, $this->_userInfo, $channel);
 
             $order->order_status = Order::ORDER_STATUS_PAYING;
 //            $ret = $order->save();
