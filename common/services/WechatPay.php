@@ -195,15 +195,15 @@ class WechatPay extends Component
             }
         }
 
-        $openId = 'oDeH-7E3_p4ToG65qqOKT1WoWdpA';
+//        $openId = 'oDeH-7E3_p4ToG65qqOKT1WoWdpA';
 
-//        $accessSession = Yii::$app->wechat->getSession($code, $channel);
-//
-//        if (!$accessSession) {
-//            return false;
-//        } else {
-//            $openId = $accessSession['openid'];
-//        }
+        $accessSession = Yii::$app->wechat->getSession($code, $channel);
+
+        if (!$accessSession) {
+            return false;
+        } else {
+            $openId = $accessSession['openid'];
+        }
 
 //        var_dump($this->getCertificates($channel));exit;
 
