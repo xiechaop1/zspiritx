@@ -99,6 +99,15 @@ class WechatPay extends Component
         $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
         $amount = !empty($order->amount) ? $order->amount : 0;
 
+        $appId = $this->jsApiAppId;
+        if (!empty($channel)) {
+            switch ($channel) {
+                case 'gyj':
+                    $appId = $this->tdJsApiAppId['gyj'];
+                    break;
+            }
+        }
+
         $params = [
             // JSON请求体
             'json' => [
@@ -112,7 +121,7 @@ class WechatPay extends Component
                 "description" => $storyTitle,
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "out_trade_no" => $outTradeNo,
-                "appid" => $this->jsApiAppId,
+                "appid" => $appId,
 //                "scene_info" => [
 //                    "h5_info" => [
 //                        "type" => "Wap",
@@ -236,7 +245,15 @@ class WechatPay extends Component
         return $ret;
     }
 
-    private function _createJsApiOrderParams($params) {
+    private function _createJsApiOrderParams($params, $channel = '') {
+        $appId = $this->jsApiAppId;
+        if (!empty($channel)) {
+            switch ($channel) {
+                case 'gyj':
+                    $appId = $this->tdJsApiAppId['gyj'];
+                    break;
+            }
+        }
         $ret = [
             // JSON请求体
             'json' => [
@@ -254,7 +271,7 @@ class WechatPay extends Component
                 ],
                 "out_trade_no" => $params['out_trade_no'],
 //                "goods_tag" => "WXG",
-                "appid" => $this->jsApiAppId,
+                "appid" => $appId,
 //        "wxd678efh567hg6787",
                 "attach" => $params['attach'],
 //                "detail" => [
