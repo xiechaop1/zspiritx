@@ -101,7 +101,7 @@ class WechatPay extends Component
 
         // 微信支付平台配置
 //        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_cert.pem'); // 微信支付平台证书文件路径
-        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/' . $pltpem); // 微信支付平台证书文件路径
+        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/' . $pltpem); // 微信支付平台证书文件路径
         // 构造一个WechatPayMiddleware
         $wechatpayMiddleware = WechatPayMiddleware::builder()
             ->withMerchant($merchantId, $merchantSerialNumber, $merchantPrivateKey) // 传入商户相关配置
