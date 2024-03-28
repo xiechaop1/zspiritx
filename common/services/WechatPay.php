@@ -155,6 +155,9 @@ class WechatPay extends Component
                 case 'gyj':
                     $appId = $this->tdJsApiAppId['gyj'];
                     break;
+                default:
+                    $appId = $this->jsApiAppId;
+                    break;
             }
         }
         $accessSession = Yii::$app->wechat->getSession($code, $channel);
