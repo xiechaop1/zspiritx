@@ -48,6 +48,10 @@ class WechatPay extends Component
 
     private $_token;
 
+    private $_appId;
+
+    private $_mch;
+
     // 解密微信回调数据
     public function decryptData($data) {
         $iv = Yii::$app->params['wechat']['iv'];
@@ -61,6 +65,25 @@ class WechatPay extends Component
             return false;
         }
     }
+
+    public function setMch($channel) {
+        $mch = $this->_getMch($channel);
+
+        $this->_mch = $mch;
+
+        $this->_appId = $this->jsApiAppId;
+        if (!empty($channel)) {
+            switch ($channel) {
+                case 'gyj':
+                    $this->_appId = $this->tdJsApiAppId['gyj'];
+                    break;
+                default:
+                    $this->_appId = $this->jsApiAppId;
+                    break;
+            }
+        }
+    }
+
     public function createClient($channel) {
 
         if ($this->_client) {
@@ -119,7 +142,10 @@ class WechatPay extends Component
     }
 
     // $goodName, $outTradeNo, $amount
-    public function createH5Order($story, $order, $userInfo = []) {
+    public function createH5Order($story, $order, $userInfo = [], $channel = '') {
+
+        $this->setMch($channel);
+
         $uri = '/v3/pay/transactions/h5';
         $host = 'https://api.mch.weixin.qq.com';
         $uri = $this->_createUri($uri, $host);
@@ -128,11 +154,14 @@ class WechatPay extends Component
         $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
         $amount = !empty($order->amount) ? $order->amount : 0;
 
-        $appId = $this->jsApiAppId;
+        $this->_appId = $appId = $this->jsApiAppId;
         if (!empty($channel)) {
             switch ($channel) {
                 case 'gyj':
-                    $appId = $this->tdJsApiAppId['gyj'];
+                    $this->_appId = $appId = $this->tdJsApiAppId['gyj'];
+                    break;
+                default:
+                    $this->_appId = $appId = $this->jsApiAppId;
                     break;
             }
         }
@@ -178,19 +207,21 @@ class WechatPay extends Component
     }
 
     public function createJsapiOrder($code, $story, $order, $userInfo = [], $channel = '') {
+        $this->setMch($channel);
+
         $uri = '/v3/pay/transactions/jsapi';
         $host = 'https://api.mch.weixin.qq.com';
         $uri = $this->_createUri($uri, $host);
 
 //        $accessToken = Yii::$app->wechat->getAccessToken($code);
-        $appId = $this->jsApiAppId;
+        $this->_appId = $appId = $this->jsApiAppId;
         if (!empty($channel)) {
             switch ($channel) {
                 case 'gyj':
-                    $appId = $this->tdJsApiAppId['gyj'];
+                    $this->_appId = $appId = $this->tdJsApiAppId['gyj'];
                     break;
                 default:
-                    $appId = $this->jsApiAppId;
+                    $this->_appId = $appId = $this->jsApiAppId;
                     break;
             }
         }
@@ -272,7 +303,12 @@ class WechatPay extends Component
 
         $client = $this->createClient($channel);
 
-        $ret = $this->_getPostApi($uri, $params, $channel);
+        $tmpRet = $this->_getPostApi($uri, $params, $channel);
+
+        $tmpJson = json_decode($tmpRet, true);
+
+        $ret = $this->generateSign($tmpJson['prepay_id'], $this->_appId, $prefix);
+
         return $ret;
 
     }
@@ -294,70 +330,6 @@ class WechatPay extends Component
         return $ret;
     }
 
-    private function _createJsApiOrderParams($params, $channel = '') {
-        $appId = $this->jsApiAppId;
-        if (!empty($channel)) {
-            switch ($channel) {
-                case 'gyj':
-                    $appId = $this->tdJsApiAppId['gyj'];
-                    break;
-            }
-        }
-        $ret = [
-            // JSON请求体
-            'json' => [
-                "time_expire" => Date('Y-m-dTH:i:s+08:00', strtotime('+' . self::ORDER_TIMEOUT . 'mins')),
-                    // "2018-06-08T10:34:56+08:00",
-                "amount" => [
-                    "total" => $params['amount']['total'],
-                    "currency" => "CNY",
-                ],
-                "mchid" => self::MERCHANT_ID,
-                "description" => $params['description'],
-                "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
-                "payer" => [
-                    "openid" => "oUpF8uMuAJO_M2pxb1Q9zNjWeS6o",
-                ],
-                "out_trade_no" => $params['out_trade_no'],
-//                "goods_tag" => "WXG",
-                "appid" => $appId,
-//        "wxd678efh567hg6787",
-                "attach" => $params['attach'],
-//                "detail" => [
-//                    "invoice_id" => "wx123",
-//                    "goods_detail" => [
-//                        [
-//                            "goods_name" => "iPhoneX 256G",
-//                            "wechatpay_goods_id" => "1001",
-//                            "quantity" => 1,
-//                            "merchant_goods_id" => "商品编码",
-//                            "unit_price" => 828800,
-//                        ],
-//                        [
-//                            "goods_name" => "iPhoneX 256G",
-//                            "wechatpay_goods_id" => "1001",
-//                            "quantity" => 1,
-//                            "merchant_goods_id" => "商品编码",
-//                            "unit_price" => 828800,
-//                        ],
-//                    ],
-//                    "cost_price" => 608800,
-//                ],
-//                "scene_info" => [
-//                    "store_info" => [
-//                        "address" => "广东省深圳市南山区科技中一道10000号",
-//                        "area_code" => "440305",
-//                        "name" => "腾讯大厦分店",
-//                        "id" => "0001",
-//                    ],
-//                    "device_id" => "013467007045764",
-//                    "payer_client_ip" => "14.23.150.211",
-//                ]
-            ],
-            'headers' => [ 'Accept' => 'application/json' ]
-        ];
-        return $ret;
-    }
 
     private function _getPostApi($uri, $postParams = [], $channel = '') {
         try {
@@ -366,7 +338,7 @@ class WechatPay extends Component
             $merchantSerialNumber = $mch['merchantSerialNumber'];
             $prefix = $mch['prefix'];
 
-            $token = $this->_createAuth($uri, 'POST', $postParams, $merchantId, $merchantSerialNumber, $prefix);
+//            $token = $this->_createAuth($uri, 'POST', $postParams, $merchantId, $merchantSerialNumber, $prefix);
             $resp = $this->_client->request(
                 'POST',
                 $uri,
@@ -381,7 +353,9 @@ class WechatPay extends Component
             );
             $statusCode = $resp->getStatusCode();
             if ($statusCode == 200) { //处理成功
-                return $resp->getBody()->getContents();
+                $tmpRet = $resp->getBody()->getContents();
+
+                return $tmpRet;
 //                echo "success,return body = " . $resp->getBody()->getContents()."\n";
             } else if ($statusCode == 204) { //处理成功，无返回Body
                 return true;
@@ -436,6 +410,36 @@ class WechatPay extends Component
             $schema, $merchantId, $nonce, $timestamp, $merchantSerialNumber, $sign);
 
         return $token;
+
+    }
+
+    public function generateSign($packageStr, $appId, $prefix) {
+
+        $timeStamp = time();
+        $nonceStr = uniqid();
+
+        $package = 'prepay_id=' . $packageStr;
+
+        $message = $appId."\n".
+            $timeStamp."\n".
+            $nonceStr."\n".
+            $package."\n";
+
+        $keyFile = openssl_get_privatekey(file_get_contents(
+            dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem'
+        ));
+
+        openssl_sign($message, $raw_sign, $keyFile, 'sha256WithRSAEncryption');
+        $sign = base64_encode($raw_sign);
+
+        return [
+            'appId' => $appId,
+            'timeStamp' => $timeStamp,
+            'nonceStr' => $nonceStr,
+            'package' => $package,
+            'signType' => 'RSA',
+            'paySign' => $sign,
+        ];
     }
 
     private function _getMch($channel) {
