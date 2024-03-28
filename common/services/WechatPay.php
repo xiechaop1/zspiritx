@@ -27,6 +27,7 @@ class WechatPay extends Component
     public $appSecret;
 
     public $jsApiAppId;
+    public $tdJsApiAppId;
     public $jsApiAppSecret;
 //    const WECHAT_APP_ID = 'wxdc22108a3be1428d';
 //    const WECHAT_APP_ID = 'wx15fe47d044ab1a36';   // test
@@ -133,13 +134,21 @@ class WechatPay extends Component
         }
     }
 
-    public function createJsapiOrder($code, $story, $order, $userInfo = []) {
+    public function createJsapiOrder($code, $story, $order, $userInfo = [], $channel = '') {
         $uri = '/v3/pay/transactions/jsapi';
         $host = 'https://api.mch.weixin.qq.com';
         $uri = $this->_createUri($uri, $host);
 
 //        $accessToken = Yii::$app->wechat->getAccessToken($code);
-        $accessSession = Yii::$app->wechat->getSession($code);
+        $appId = $this->jsApiAppId;
+        if (!empty($channel)) {
+            switch ($channel) {
+                case 'gyj':
+                    $appId = $this->tdJsApiAppId['gyj'];
+                    break;
+            }
+        }
+        $accessSession = Yii::$app->wechat->getSession($code, $channel);
 
         if (!$accessSession) {
             return false;
@@ -168,7 +177,7 @@ class WechatPay extends Component
                     "openid" => $openId,
                 ],
                 "out_trade_no" => $outTradeNo,
-                "appid" => $this->jsApiAppId,
+                "appid" => $appId,
 //        "wxd678efh567hg6787",
                 "attach" => '创建订单' . time(),
 //                "detail" => [

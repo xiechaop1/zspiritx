@@ -21,6 +21,10 @@ class Wechat extends Component
 
     public $appId;
     public $appSecret;
+
+    public $tdAppInfo;
+    public $tdAppId;
+    public $tdAppSecret;
 //    const WECHAT_APP_ID = 'wxdc22108a3be1428d';
 //    const WECHAT_APP_ID = 'wx15fe47d044ab1a36';   // test
 //    const WECHAT_SECRET = 'c71f42740ff11f631691b3a73d374bc4';
@@ -113,9 +117,23 @@ class Wechat extends Component
         return $ret;
     }
 
-    public function getSession($code)
+    public function getSession($code, $channel = '')
     {
         $uri = '/sns/jscode2session';
+
+        if (empty($channel)) {
+            $appId = $this->appId;
+            $appSecret = $this->appSecret;
+        } else {
+            switch ($channel) {
+                case 'gyj':
+                    $appId = !empty($this->tdAppInfo['gyj']['appId'])
+                        ? $this->tdAppInfo['gyj']['appId'] : '';
+                    $appSecret = !empty($this->tdAppInfo['gyj']['appSecret'])
+                        ? $this->tdAppInfo['gyj']['appSecret'] : '';
+//                    $appSecret = $this->tdAppSecret['gyj'];
+            }
+        }
 
         $params = [
             'appid' => $this->appId,
