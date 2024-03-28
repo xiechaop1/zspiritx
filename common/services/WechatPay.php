@@ -74,6 +74,7 @@ class WechatPay extends Component
         $merchantId = $mch['merchantId'];
         $merchantSerialNumber = $mch['merchantSerialNumber'];
         $prefix = $mch['prefix'];
+        $pltpem = $mch['pltpem'];
 
 //        if (!empty($channel)) {
 //            if (!empty($this->merchant[$channel])) {
@@ -99,8 +100,8 @@ class WechatPay extends Component
         $merchantPrivateKey = PemUtil::loadPrivateKey( dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem'); // 商户私钥文件路径
 
         // 微信支付平台配置
-        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_cert.pem'); // 微信支付平台证书文件路径
-
+//        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_cert.pem'); // 微信支付平台证书文件路径
+        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/' . $pltpem); // 微信支付平台证书文件路径
         // 构造一个WechatPayMiddleware
         $wechatpayMiddleware = WechatPayMiddleware::builder()
             ->withMerchant($merchantId, $merchantSerialNumber, $merchantPrivateKey) // 传入商户相关配置
@@ -204,7 +205,7 @@ class WechatPay extends Component
 //            $openId = $accessSession['openid'];
 //        }
 
-        var_dump($this->getCertificates($channel));exit;
+//        var_dump($this->getCertificates($channel));exit;
 
         $storyTitle = !empty($story->title) ? $story->title : '未知故事';
         $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
@@ -443,50 +444,29 @@ class WechatPay extends Component
                 $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
                 $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
                 $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+                $pltpem = !empty($this->merchant[$channel]['pltpem']) ? $this->merchant[$channel]['pltpem'] : '';
             } else {
                 $channel = 'default';
                 $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
                 $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
                 $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+                $pltpem = !empty($this->merchant[$channel]['pltpem']) ? $this->merchant[$channel]['pltpem'] : '';
             }
         } else {
             $channel = 'default';
             $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
             $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
             $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+            $pltpem = !empty($this->merchant[$channel]['pltpem']) ? $this->merchant[$channel]['pltpem'] : '';
         }
 
         return [
             'merchantId' => $merchantId,
             'merchantSerialNumber' => $merchantSerialNumber,
             'prefix' => $prefix,
+            'pltpem' => $pltpem,
         ];
     }
 
-
-    public function getCertificates($channel) {
-        $uri = '/v3/certificates';
-        $host = 'https://api.mch.weixin.qq.com';
-        $uri = $this->_createUri($uri, $host);
-
-        $mch = $this->_getMch($channel);
-        $merchantId = $mch['merchantId'];
-        $merchantSerialNumber = $mch['merchantSerialNumber'];
-        $prefix = $mch['prefix'];
-
-        $token = $this->_createAuth($uri, 'GET', [], $merchantId, $merchantSerialNumber, $prefix);
-
-        try {
-            $result = \common\helpers\Curl::curlGet($uri,
-                [
-                    'Authorization' => $token,
-                    'Content-Type' => 'application/json',
-                ]
-            );
-            return json_decode($result,true);
-        } catch (RequestException $e) {
-            throw $e;
-        }
-    }
 
 }
