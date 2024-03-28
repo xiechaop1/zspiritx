@@ -70,23 +70,28 @@ class WechatPay extends Component
         $merchantId = self::MERCHANT_ID; // 商户号
         $merchantSerialNumber = self::MERCHANT_SERIAL_NUMBER; // 商户API证书序列号
 
-        if (!empty($channel)) {
-            if (!empty($this->merchant[$channel])) {
-                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
-                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
-                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
-            } else {
-                $channel = 'default';
-                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
-                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
-                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
-            }
-        } else {
-            $channel = 'default';
-            $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
-            $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
-            $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
-        }
+        $mch = $this->_getMch($channel);
+        $merchantId = $mch['merchantId'];
+        $merchantSerialNumber = $mch['merchantSerialNumber'];
+        $prefix = $mch['prefix'];
+
+//        if (!empty($channel)) {
+//            if (!empty($this->merchant[$channel])) {
+//                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+//                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+//                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+//            } else {
+//                $channel = 'default';
+//                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+//                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+//                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+//            }
+//        } else {
+//            $channel = 'default';
+//            $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+//            $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+//            $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+//        }
 
         // 商户相关配置，
 //        $merchantId = self::MERCHANT_ID; // 商户号
@@ -131,6 +136,11 @@ class WechatPay extends Component
             }
         }
 
+        $mch = $this->_getMch($channel);
+        $merchantId = $mch['merchantId'];
+        $merchantSerialNumber = $mch['merchantSerialNumber'];
+        $prefix = $mch['prefix'];
+
         $params = [
             // JSON请求体
             'json' => [
@@ -140,7 +150,7 @@ class WechatPay extends Component
                     "total" => $amount,
                     "currency" => "CNY",
                 ],
-                "mchid" => self::MERCHANT_ID,
+                "mchid" => $merchantId,
                 "description" => $storyTitle,
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "out_trade_no" => $outTradeNo,
@@ -196,6 +206,10 @@ class WechatPay extends Component
         $outTradeNo = substr($outTradeNo, 0, 32);
         $amount = !empty($order->amount) ? $order->amount : 0;
 
+        $mch = $this->_getMch($channel);
+        $merchantId = $mch['merchantId'];
+        $merchantSerialNumber = $mch['merchantSerialNumber'];
+        $prefix = $mch['prefix'];
 
         $params = [
             // JSON请求体
@@ -206,7 +220,7 @@ class WechatPay extends Component
                     "total" => $amount * 100,
                     "currency" => "CNY",
                 ],
-                "mchid" => self::MERCHANT_ID,
+                "mchid" => $merchantId,
                 "description" => $storyTitle,
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "payer" => [
@@ -364,6 +378,32 @@ class WechatPay extends Component
 //            }
 //            return;
         }
+    }
+
+    private function _getMch($channel) {
+        if (!empty($channel)) {
+            if (!empty($this->merchant[$channel])) {
+                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+            } else {
+                $channel = 'default';
+                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+            }
+        } else {
+            $channel = 'default';
+            $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+            $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+            $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+        }
+
+        return [
+            'merchantId' => $merchantId,
+            'merchantSerialNumber' => $merchantSerialNumber,
+            'prefix' => $prefix,
+        ];
     }
 
 }
