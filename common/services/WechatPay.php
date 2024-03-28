@@ -391,6 +391,8 @@ class WechatPay extends Component
     private function _createAuth($channel = '' ) {
 
         $mch = $this->_getMch($channel);
+        $merchantId = $mch['merchantId'];
+        $merchantSerialNumber = $mch['merchantSerialNumber'];
 
         $prefix = !empty($mch['prefix']) ? $mch['prefix'] : '';
 
@@ -413,8 +415,10 @@ class WechatPay extends Component
         $sign = base64_encode($raw_sign);
 
         $schema = 'WECHATPAY2-SHA256-RSA2048';
-        $token = sprintf('mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
-            self::MERCHANT_ID, $nonce, $timestamp, self::MERCHANT_SERIAL_NUMBER, $sign);
+        $token = sprintf('%s mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
+            $schema, $merchantId, $nonce, $timestamp, $merchantSerialNumber, $sign);
+
+        return $token;
     }
 
     private function _getMch($channel) {
