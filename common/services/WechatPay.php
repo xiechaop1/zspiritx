@@ -34,6 +34,8 @@ class WechatPay extends Component
 //    const WECHAT_SECRET = 'c71f42740ff11f631691b3a73d374bc4';
 //    const WECHAT_SECRET = '97e1f573c2ba3f75dbe88ffebddedf5a'; // test
 
+    public $merchant;
+
     const MERCHANT_ID   = '1667566912';
     const MERCHANT_SERIAL_NUMBER = '4BAA56AF30CFEA2D70B90A1AF8F111F3021F1A82';
     const MERCHANT_PRIVATE_KEY = '';
@@ -59,19 +61,40 @@ class WechatPay extends Component
             return false;
         }
     }
-    public function createClient() {
+    public function createClient($channel) {
 
         if ($this->_client) {
             return $this->_client;
         }
 
-        // 商户相关配置，
         $merchantId = self::MERCHANT_ID; // 商户号
         $merchantSerialNumber = self::MERCHANT_SERIAL_NUMBER; // 商户API证书序列号
-        $merchantPrivateKey = PemUtil::loadPrivateKey( dirname(__FILE__) . '/../../frontend/web/cert/apiclient_key.pem'); // 商户私钥文件路径
+
+        if (!empty($channel)) {
+            if (!empty($this->merchant[$channel])) {
+                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+            } else {
+                $channel = 'default';
+                $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+                $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+                $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+            }
+        } else {
+            $channel = 'default';
+            $merchantId = !empty($this->merchant[$channel]['id']) ? $this->merchant[$channel]['id'] : '';
+            $merchantSerialNumber = !empty($this->merchant[$channel]['serialNumber']) ? $this->merchant[$channel]['serialNumber'] : '';
+            $prefix = !empty($this->merchant[$channel]['prefix']) ? $this->merchant[$channel]['prefix'] : '';
+        }
+
+        // 商户相关配置，
+//        $merchantId = self::MERCHANT_ID; // 商户号
+//        $merchantSerialNumber = self::MERCHANT_SERIAL_NUMBER; // 商户API证书序列号
+        $merchantPrivateKey = PemUtil::loadPrivateKey( dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem'); // 商户私钥文件路径
 
         // 微信支付平台配置
-        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/apiclient_cert.pem'); // 微信支付平台证书文件路径
+        $wechatpayCertificate = PemUtil::loadCertificate(dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_cert.pem'); // 微信支付平台证书文件路径
 
         // 构造一个WechatPayMiddleware
         $wechatpayMiddleware = WechatPayMiddleware::builder()
@@ -133,7 +156,7 @@ class WechatPay extends Component
             'headers' => [ 'Accept' => 'application/json' ]
         ];
 
-        $client = $this->createClient();
+        $client = $this->createClient($channel);
 
         try {
             $result = $this->_getPostApi($uri, $params);
@@ -227,7 +250,7 @@ class WechatPay extends Component
             'headers' => [ 'Accept' => 'application/json' ]
         ];
 
-        $client = $this->createClient();
+        $client = $this->createClient($channel);
 
         $ret = $this->_getPostApi($uri, $params);
         return $ret;
