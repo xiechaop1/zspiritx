@@ -355,7 +355,7 @@ class WechatPay extends Component
 
     private function _getPostApi($uri, $postParams = [], $channel = '') {
         try {
-            $token = $this->_createAuth($channel);
+            $token = $this->_createAuth($postParams, $channel);
             $resp = $this->_client->request(
                 'POST',
                 $uri,
@@ -364,7 +364,7 @@ class WechatPay extends Component
                         'Authorization' => $token,
                         'Content-Type' => 'application/json',
                     ],
-                    'body' => $postParams
+                    'body' => json_encode($postParams),
                 ]
             );
             $statusCode = $resp->getStatusCode();
@@ -388,7 +388,9 @@ class WechatPay extends Component
     }
 
     // 生成微信支付JsApi v3的签名
-    private function _createAuth($channel = '' ) {
+    private function _createAuth($body, $channel = '') {
+
+        $body = json_encode($body);
 
         $mch = $this->_getMch($channel);
         $merchantId = $mch['merchantId'];
@@ -396,14 +398,16 @@ class WechatPay extends Component
 
         $prefix = !empty($mch['prefix']) ? $mch['prefix'] : '';
 
-        $keyFile = file_get_contents(dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem');
+        $keyFile = openssl_get_privatekey(file_get_contents(
+            dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem'
+        ));
 
         $timestamp = time();
         $nonce = uniqid();
-        $body = '';
+//        $body = '';
         $http_method = 'POST';
-//        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
-        $url = 'https://' . $_SERVER['HTTP_HOST'] . '/' . $_SERVER['REQUEST_URI'];
+        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
+//        $url = 'https://' . $_SERVER['HTTP_HOST'] . '/' . $_SERVER['REQUEST_URI'];
         $url_parts = parse_url($url);
         $canonical_url = ($url_parts['path'] . (!empty($url_parts['query']) ? "?${url_parts['query']}" : ""));
         $message = $http_method."\n".
