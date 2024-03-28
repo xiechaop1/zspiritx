@@ -396,7 +396,7 @@ class WechatPay extends Component
 
         $prefix = !empty($mch['prefix']) ? $mch['prefix'] : '';
 
-        $keyFile = dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem'
+        $keyFile = dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem';
 
         $timestamp = time();
         $nonce = uniqid();
