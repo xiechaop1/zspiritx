@@ -226,6 +226,8 @@ class WechatPay extends Component
             'headers' => [ 'Accept' => 'application/json' ]
         ];
 
+        $client = $this->createClient();
+
         $ret = $this->_getPostApi($uri, $params);
         return $ret;
 
