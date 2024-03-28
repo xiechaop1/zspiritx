@@ -355,7 +355,7 @@ class WechatPay extends Component
 
     private function _getPostApi($uri, $postParams = [], $channel = '') {
         try {
-            $token = $this->_createAuth($channel),
+            $token = $this->_createAuth($channel);
             $resp = $this->_client->request(
                 'POST',
                 $uri,
