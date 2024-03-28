@@ -396,13 +396,14 @@ class WechatPay extends Component
 
         $prefix = !empty($mch['prefix']) ? $mch['prefix'] : '';
 
-        $keyFile = dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem';
+        $keyFile = file_get_contents(dirname(__FILE__) . '/../../frontend/web/cert/' . $prefix . '/apiclient_key.pem');
 
         $timestamp = time();
         $nonce = uniqid();
         $body = '';
         $http_method = 'POST';
-        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
+//        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
+        $url = 'https://' . $_SERVER['HTTP_HOST'] . '/' . $_SERVER['REQUEST_URI'];
         $url_parts = parse_url($url);
         $canonical_url = ($url_parts['path'] . (!empty($url_parts['query']) ? "?${url_parts['query']}" : ""));
         $message = $http_method."\n".
