@@ -170,6 +170,7 @@ class WechatPay extends Component
 
         $storyTitle = !empty($story->title) ? $story->title : '未知故事';
         $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
+        $outTradeNo = substr($outTradeNo, 0, 32);
         $amount = !empty($order->amount) ? $order->amount : 0;
 
 
@@ -331,7 +332,7 @@ class WechatPay extends Component
 //                echo "success";
             }
         } catch (RequestException $e) {
-            var_dump($e->getMessage());exit;
+            var_dump($e);exit;
             throw $e;
             // 进行错误处理
 //            echo $e->getMessage()."\n";

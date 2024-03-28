@@ -23,7 +23,7 @@ class Order
         $userId = $userInfo['id'];
         $mobile = $userInfo['mobile'];
 
-        $ret = 'ZS' . Date('YmdHis') . substr($mobile, 0, -4) . self::genNum(6, $userId) . self::genNum(4, $storyId) . self::genNum(2, $payMethod) . rand(1000,9999);
+        $ret = 'ZS' . Date('YmdHis') . self::genNum(6, $userId) . self::genNum(4, $storyId) . self::genNum(2, $payMethod) . rand(1000,9999);
 
         return $ret;
     }
