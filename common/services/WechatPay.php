@@ -477,12 +477,12 @@ class WechatPay extends Component
         $token = $this->_createAuth($uri, 'GET', [], $merchantId, $merchantSerialNumber, $prefix);
 
         try {
-            $result = Curl::curlGet($uri, [
-                'header' => [
+            $result = \common\helpers\Curl::curlGet($uri,
+                [
                     'Authorization' => $token,
                     'Content-Type' => 'application/json',
-                ],
-            ]);
+                ]
+            );
             return json_decode($result,true);
         } catch (RequestException $e) {
             throw $e;
