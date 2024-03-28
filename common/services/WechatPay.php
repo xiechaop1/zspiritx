@@ -138,12 +138,13 @@ class WechatPay extends Component
         $host = 'https://api.mch.weixin.qq.com';
         $uri = $this->_createUri($uri, $host);
 
-        $accessToken = Yii::$app->wechat->getAccessToken($code);
+//        $accessToken = Yii::$app->wechat->getAccessToken($code);
+        $accessSession = Yii::$app->wechat->getSession($code);
 
-        if (!$accessToken) {
+        if (!$accessSession) {
             return false;
         } else {
-            $openId = $accessToken['openid'];
+            $openId = $accessSession['openid'];
         }
 
         $storyTitle = !empty($story->title) ? $story->title : '未知故事';

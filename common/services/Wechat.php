@@ -91,6 +91,7 @@ class Wechat extends Component
         return $ret;
     }
 
+
     public function getAccessToken($code) {
         $uri = '/sns/oauth2/access_token';
 
