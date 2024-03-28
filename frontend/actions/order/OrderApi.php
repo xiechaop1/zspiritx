@@ -90,6 +90,8 @@ class OrderApi extends ApiAction
             }
         }
 
+        $execMethod = !empty($this->_get['exec_method']) ? $this->_get['exec_method'] : 0;
+
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
@@ -123,8 +125,14 @@ class OrderApi extends ApiAction
             $transaction->commit();
 
             $ret = $order;
-            if ($currPrice > 0) {
-                $ret = $this->payByOrder($order);
+            if (!empty($execMethod)) {
+                if ($currPrice > 0) {
+                    $ret = $this->payByOrder($order);
+                } else {
+                    $ret = [
+                        'order' => $order,
+                    ];
+                }
             } else {
                 $ret = [
                     'order' => $order,
