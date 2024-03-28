@@ -191,12 +191,31 @@ class OrderApi extends ApiAction
         $transaction = Yii::$app->db->beginTransaction();
 
         if (empty($this->_get['order_id'])) {
-            throw new \Exception('请您给出订单信息', ErrorCode::ORDER_NOT_FOUND);
+            if (!empty($this->_get['story_id'])
+                 && $this->_get['user_id']
+            ) {
+                $order = Order::find()
+                    ->where([
+                        'user_id' => $this->_get['user_id'],
+                        'story_id' => $this->_get['story_id'],
+                        'order_status' => Order::ORDER_STATUS_WAIT
+                    ])
+                    ->one();
+
+                if (empty($orderInfo)) {
+                    $orderTmp = $this->create();
+                    $order = $orderTmp['order'];
+                }
+            } else {
+                throw new \Exception('请您给出订单信息', ErrorCode::ORDER_NOT_FOUND);
+            }
+        } else {
+            $orderId = $this->_get['order_id'];
+
+            $order = Order::findOne($orderId);
         }
 
-        $orderId = $this->_get['order_id'];
 
-        $order = Order::findOne($orderId);
 
         if (empty($order)) {
             throw new \Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
