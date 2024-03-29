@@ -50,7 +50,7 @@ class OrderdataController extends Controller
         return ArrayHelper::merge(parent::actions(), [
             'order' => [
                 'class'     => 'frontend\actions\order\GetOrderApi',
-                'action'    => 'order',
+                'action'    => 'get_order_list',
             ],
         ]);
     }

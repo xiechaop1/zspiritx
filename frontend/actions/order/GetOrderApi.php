@@ -9,11 +9,11 @@
 namespace frontend\actions\order;
 
 
+use common\definitions\ErrorCode;
 use common\models\Order;
+use common\models\Story;
+use common\models\StoryExtend;
 use common\models\User;
-use common\models\UserList;
-use common\models\UserMusicList;
-use common\models\Music;
 use frontend\actions\ApiAction;
 use Yii;
 
@@ -21,53 +21,79 @@ class GetOrderApi extends ApiAction
 {
     public $action;
     private $_get;
-    private $_musicId;
     private $_userId;
-
-    private $_musicInfo;
 
     private $_userInfo;
 
     public function run()
     {
 
-        $this->_get = Yii::$app->request->get();
+        try {
+            $this->valToken();
 
-        $this->_userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+            $this->_get = Yii::$app->request->get();
 
-        $this->_userInfo = User::findOne($this->_userId);
+            $this->_userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
 
-        switch ($this->action) {
-            case 'order':
-                $ret = $this->order();
-                break;
-            default:
-                $ret = [];
-                break;
+            if (empty($this->_userId)) {
+                return $this->fail('请您给出用户信息', ErrorCode::USER_NOT_FOUND);
+            }
 
+            $this->_userInfo = User::findOne($this->_userId);
+
+            switch ($this->action) {
+                case 'get_order_list':
+                    $ret = $this->getOrderList();
+                    break;
+                default:
+                    $ret = [];
+                    break;
+
+            }
+        } catch (\Exception $e) {
+            return $this->fail($e->getMessage(), $e->getCode());
         }
 
-        return $ret;
+        return $this->success($ret);
     }
 
-    public function order() {
-        $orderId = $this->_get['id'];
-        $userId = !empty($this->_userId) ? $this->_userId : 0;
-        $order = Order::find()->where(['id' => $orderId])->with('musicwithoutstatus')->asArray()->one();
 
-        if (empty($order)) {
-            return $this->fail('订单不存在', -100);
-        } else {
-            if ($order['user_id'] != $userId) {
-                return $this->fail('订单不属于当前用户', -101);
-            } else {
-                $order['musicwithoutstatus'] = \common\helpers\Music::formatSource($order['musicwithoutstatus']);
-                $order['created_at_friendly'] = Date('Y.m.d', $order['created_at']);
-                $order['updated_at_friendly'] = Date('Y.m.d', $order['updated_at']);
-                $order['expire_time_friendly'] = Date('Y.m.d', $order['expire_time']);
-                return $this->success($order);
+    /**
+     * 创建订单
+     * @return array
+     * @throws \yii\db\Exception
+     */
+
+    public function getOrderList() {
+
+        $orderData = Order::find()
+            ->where([
+                'user_id' => $this->_userId,
+            ])
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        $ret = [];
+        if (!empty($orderData)) {
+            foreach ($orderData as $order) {
+                $story = [];
+                if (!empty($order->story)) {
+                    $story = $order->story;
+                }
+                $storyExtend = [];
+                if (!empty($story->extend)) {
+                    $storyExtend = $story->extend;
+                }
+                $ret[] = [
+                    'order' => $order,
+                    'story' => $story,
+                    'storyExtend' => $storyExtend,
+                ];
             }
         }
+
+
+        return $ret;
     }
 
 

@@ -52,7 +52,7 @@ $(function () {
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
-            url: '/lottery/award',
+            url: '/lottery/award_by_h5',
             data:{
                 user_id:user_id,
                 story_id:story_id,

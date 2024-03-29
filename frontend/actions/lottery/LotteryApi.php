@@ -16,6 +16,7 @@ use common\models\ItemKnowledge;
 use common\models\Qa;
 use common\models\SessionQa;
 use common\models\StoryStages;
+use common\models\UserKnowledge;
 use common\models\UserPrize;
 use common\models\UserQa;
 use common\models\User;
@@ -52,6 +53,9 @@ class LotteryApi extends ApiAction
             switch ($this->action) {
                 case 'award':
                     $ret = $this->award();
+                    break;
+                case 'award_by_h5':
+                    $ret = $this->awardByH5();
                     break;
                 case 'generate_lottery':
                     $ret = $this->generateLottery();
@@ -109,6 +113,57 @@ class LotteryApi extends ApiAction
                 ]
             ];
 //            $ret += $retTemp;
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $ret;
+    }
+
+
+    // 抽奖
+    public function awardByH5() {
+        $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
+        $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
+        $channelId = !empty($_GET['channel_id']) ? $_GET['channel_id'] : 0;
+//        $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
+        $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
+
+        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 1;
+        $userLotteryId = !empty($_GET['user_lottery_id']) ? $_GET['user_lottery_id'] : 0;
+
+        $optCt = !empty($_GET['opt_ct']) ? $_GET['opt_ct'] : 0;
+
+        try {
+
+            if ( empty($optCt) ) {
+
+                $userKnowledge = UserKnowledge::find()
+                    ->where([
+                        'user_id' => $userId,
+                        'story_id' => $storyId,
+                        'session_id'    => $sessionId,
+                        'knowledge_status' => UserKnowledge::KNOWLDEGE_STATUS_COMPLETE,
+                    ])
+                    ->all();
+
+                if (!empty($userKnowledge)) {
+                    $tmpUk = [];
+                    $ct = 0;
+                    foreach ($userKnowledge as $uk) {
+                        if (empty($tmpUk[$uk->id])) {
+                            $tmpUk[$uk->id] = 1;
+                            $ct++;
+                        }
+                    }
+                    $optCt = $ct;
+                }
+
+            }
+
+
+            $ret = Yii::$app->lottery->run($userId, $userLotteryId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
 
         } catch (\Exception $e) {
             throw $e;
