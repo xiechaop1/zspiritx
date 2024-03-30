@@ -32,6 +32,7 @@ return [
         'score'     => 'common\services\Score',
         'wechatPay'    => 'common\services\WechatPay',
         'lottery'   => 'common\services\Lottery',
+        'baggage'   => 'common\services\Baggage',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',

@@ -33,6 +33,10 @@ $this->title = '我的背包';
         border: 2px solid rgba(218, 252, 112, 0.8);
     }
 
+    .btn-disable {
+        color: #999;
+    }
+
 </style>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
@@ -42,6 +46,8 @@ $this->title = '我的背包';
 <input type="hidden" name="target_model_id" value="<?= $targetModelId ?>">
 
 <input type="hidden" name="selected_story_model_ids" value="">
+<input type="hidden" name="use_btn_disable" value="0">
+<input type="hidden" name="combine_btn_disable" value="0">
 <div class="w-100 m-auto">
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
@@ -127,9 +133,9 @@ $this->title = '我的背包';
                             </div>
                         <div>
 
-<!--                            <div class="btn-m-green m-t-30 float-right m-r-20" id="dialog_return_btn" target_id="baggage_detail">-->
-<!--                                返回-->
-<!--                            </div>-->
+                        <div class="btn-m-green m-t-30 float-right m-r-20" id="dialog_return_btn" target_id="baggage_detail" need_refresh="0">
+                            返回
+                        </div>
 
                     </div>
             </div>
@@ -141,12 +147,12 @@ $this->title = '我的背包';
     <div class="w-100 p-30  m-b-10">
         <div class="w-1-0 d-flex">
             <div class="fs-30 bold w-100 text-FF">
-    <div class="btn-m-green m-t-30  m-l-30" style="position: absolute; left: 5px; top: -50px;" id="use_btn">
+    <div class="btn-m-green m-t-30  m-l-30 use_btn" style="position: absolute; left: 5px; top: -50px;" id="use_btn" act="1">
         使用
     </div>
-<!--                <div class="btn-m-green m-t-30  m-l-30" style="position: absolute; left: 155px; top: -50px;" id="combine_btn">-->
-<!--                    组合-->
-<!--                </div>-->
+                <div class="btn-m-green m-t-30  m-l-30 use_btn" act="2" style="position: absolute; left: 155px; top: -50px;" id="combine_btn">
+                    组合
+                </div>
             </div>
         </div>
     </div>

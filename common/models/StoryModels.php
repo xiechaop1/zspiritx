@@ -54,6 +54,8 @@ class StoryModels extends \common\models\gii\StoryModels
     const ACTIVE_TYPE_SHOW    = 5;    // 展示
     const ACTIVE_TYPE_HTML    = 6;    // HTML
 
+    const ACTIVE_TYPE_COMBINE = 7;    // 组合
+
     public static $activeType2Name = [
         self::ACTIVE_TYPE_SHOW => '展示图片',
         self::ACTIVE_TYPE_CHAT => '聊天',
@@ -61,6 +63,7 @@ class StoryModels extends \common\models\gii\StoryModels
         self::ACTIVE_TYPE_MODEL => '对模型',
         self::ACTIVE_TYPE_MODEL_DISPLAY => '模型放出来',
         self::ACTIVE_TYPE_HTML => 'HTML',
+        self::ACTIVE_TYPE_COMBINE => '组合',
     ];
 
     const VISIBLE_SHOW        = 0;    // 显示

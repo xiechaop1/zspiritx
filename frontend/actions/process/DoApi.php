@@ -994,10 +994,23 @@ class DoApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
 
+        $act = !empty($this->_get['act']) ? $this->_get['act'] : 1;     // 1 - 使用；2 - 组合；3 - 丢弃
 
-        $targetStoryModelId = !empty($this->_get['target_story_model_id']) ? $this->_get['target_story_model_id'] : 0;
-        $targetStoryModelDetailId = !empty($this->_get['target_story_model_detail_id']) ? $this->_get['target_story_model_detail_id'] : 0;
         $userModelId = !empty($this->_get['user_model_id']) ? $this->_get['user_model_id'] : 0;
+
+        if ($act == 2) {
+            $umIds = explode(',', $userModelId);
+            if (sizeof($umIds) < 2) {
+                throw new \yii\db\Exception('您需要选择两个物品', ErrorCode::USER_MODEL_NOT_FOUND);
+            }
+            $userModelId = $umIds[0];
+            $userModelId2 = $umIds[1];
+        } else {
+
+            $targetStoryModelId = !empty($this->_get['target_story_model_id']) ? $this->_get['target_story_model_id'] : 0;
+            $targetStoryModelDetailId = !empty($this->_get['target_story_model_detail_id']) ? $this->_get['target_story_model_detail_id'] : 0;
+        }
+
 
         if (empty($userModelId)) {
             throw new \yii\db\Exception('您没有选择任何物品', ErrorCode::USER_MODEL_NOT_FOUND);
@@ -1059,6 +1072,96 @@ class DoApi extends ApiAction
                         throw new \yii\base\Exception('执行出现问题', ErrorCode::USER_MODEL_BUFF_NOT_FOUND);
                     }
                     $res = '';
+                    break;
+                case StoryModels::ACTIVE_TYPE_COMBINE:
+                    $userModel2 = UserModels::find()
+                        ->where([
+                            'id' => (int)$userModelId2,
+                        ])
+                        ->one();
+
+                    if (empty($userModel2)) {
+                        throw new \yii\db\Exception('您没有选择任何物品', ErrorCode::USER_MODEL_NOT_FOUND);
+                    }
+
+                    if ($userModel2->use_ct <= 0) {
+                        throw new \yii\db\Exception('该道具使用次数已用完', ErrorCode::USER_MODEL_NOT_ENOUGH);
+                    }
+
+                    $storyModel2 = $userModel2->storyModel;
+
+                    if (empty($storyModel2)) {
+                        throw new \yii\base\Exception('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
+                    }
+
+                    if ($storyModel2->use_allow == StoryModels::USE_ALLOW_NOT) {
+                        throw new \yii\base\Exception('该道具不允许使用', ErrorCode::USER_MODEL_NOT_ALLOW);
+                    }
+
+                    $storyModelLinks = StoryModelsLink::find()
+                        ->where([
+                            'story_id'          => $storyId,
+//                            'story_model_id'    => $storyModel->id,
+//                            'story_model_id2'   => $storyModel1->id,
+                        ]);
+                    if (!empty($storyModel->story_model_detail_id)) {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_detail_id' => $storyModel->story_model_detail_id,
+                        ]);
+                    } else {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_id' => $storyModel->id,
+                        ]);
+                    }
+
+                    if (!empty($storyModel2->story_model_detail_id)) {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_detail_id2' => $storyModel2->story_model_detail_id,
+                        ]);
+                    } else {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_id2' => $storyModel2->id,
+                        ]);
+                    }
+
+                    $storyModelLink = $storyModelLinks->orderBy(['story_model_id' => SORT_ASC])
+                        ->one();
+
+                    if (!empty($storyModelLink)) {
+                        $newStoryModelId = $storyModelLink->eff_exec;
+                        $type = $storyModelLink->eff_type;
+
+                        if ($type == StoryModelsLink::EFF_TYPE_MODEL) {
+                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0);
+                        }
+
+                        $minCt = $storyModelLink->min_ct;
+                        if ($minCt > 0) {
+                            $userModel2->use_ct -= $minCt;
+                            $userModel2->save();
+                        }
+
+                        $retUserModel = $newUserModel;
+                        if (!empty($newUserModel)) {
+                            $retUserModel = $newUserModel->toArray();
+                            if (!empty($newUserModel->storyModel)) {
+                                $retUserModel['story_model'] = $newUserModel->storyModel->toArray();
+                                $retUserModel['story_model']['icon'] = Attachment::completeUrl($retUserModel['story_model']['icon'], true);
+                                $showRet['icon'] = $retUserModel['story_model']['icon'];
+                                $showRet['story_model_name'] = $newUserModel->storyModel->story_model_name;
+                            }
+                        }
+
+                        $res = [
+                            'user_model' => $bagageModel,
+                            'user_model2' => $userModel2,
+                            'new_user_model' => $retUserModel,
+                            'show' => $showRet,
+                        ];
+                    } else {
+                        throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+                    }
+
                     break;
                 case StoryModels::ACTIVE_TYPE_MODEL:
                     if ($storyModel->use_allow == StoryModels::USE_ALLOW_NEED_TARGET

@@ -14,9 +14,12 @@ class StoryModelsLink extends \common\models\gii\StoryModelsLink
 
     const EFF_TYPE_DIALOG = 1; // 对话
 
+    const EFF_TYPE_MODEL = 2; // 模型
+
 
     public static $effType2Name = [
         self::EFF_TYPE_DIALOG => '对话',
+        self::EFF_TYPE_MODEL => '模型',
     ];
 
     public function behaviors()
