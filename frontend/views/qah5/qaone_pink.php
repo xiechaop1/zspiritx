@@ -258,7 +258,7 @@ $this->title = $qa['topic'];
                         if (!empty($selImg)) {
                             $optstr .= '<img src="' . $selImg . '" alt="" class="img-responsive"/>';
                         } else {
-                            $optStr .= $txt;
+                            $optstr .= $txt;
                             $txt = '';
                         }
                         $optstr .=  '
