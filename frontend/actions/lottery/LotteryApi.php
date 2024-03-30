@@ -17,6 +17,8 @@ use common\models\Qa;
 use common\models\SessionQa;
 use common\models\StoryStages;
 use common\models\UserKnowledge;
+use common\models\UserLottery;
+use common\models\UserModels;
 use common\models\UserPrize;
 use common\models\UserQa;
 use common\models\User;
@@ -135,6 +137,8 @@ class LotteryApi extends ApiAction
 
         $optCt = !empty($_GET['opt_ct']) ? $_GET['opt_ct'] : 0;
 
+        $storyModelId = !empty($_GET['story_model_id']) ? $_GET['story_model_id'] : 0;
+
         try {
 
             if ( empty($optCt) ) {
@@ -164,6 +168,45 @@ class LotteryApi extends ApiAction
 
 
             $ret = Yii::$app->lottery->run($userId, $userLotteryId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
+
+            if (!empty($storyModelId)) {
+                $userModelBaggage = UserModels::find()
+                    ->where([
+                        'user_id'           => (int)$userId,
+                        'session_id'        => (int)$sessionId,
+                        'story_model_id'    => (int)$storyModelId,
+                    ])
+                    ->one();
+
+                $userLotteryCt = UserLottery::find()
+                    ->where([
+                        'user_id'   => $userId,
+                        'lottery_id'    => $lotteryId,
+                        'session_id'    => $sessionId,
+                        'story_id'      => $storyId,
+                    ])
+                    ->andFilterWhere([
+                        '>', 'ct', 0
+                    ])
+                    ->andFilterWhere([
+                        'or',
+                        ['>=', 'expire_time', time()],
+                        ['expire_time' => 0]
+                    ])
+                    ->andFilterWhere([
+                        'lottery_status' => UserLottery::USER_LOTTERY_STATUS_WAIT
+                    ])
+                    ->count();
+
+                if (!empty($userModelBaggage)) {
+                    $userModelBaggage->use_ct = $userLotteryCt;
+                    if ($userLotteryCt == 0) {
+                        $userModelBaggage->is_delete = Common::STATUS_DELETED;;
+                    }
+                    $userModelBaggage->save();
+                }
+
+            }
 
         } catch (\Exception $e) {
             throw $e;

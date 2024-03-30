@@ -47,6 +47,7 @@ $(function () {
         var channel_id=$("input[name='channel_id']").val();
         var opt_ct=$("input[name='opt_ct']").val();
         var user_lottery_id=$("input[name='user_lottery_id']").val();
+        var story_model_id=$("input[name='story_model_id']").val();
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -61,6 +62,7 @@ $(function () {
                 channel_id:channel_id,
                 user_lottery_id:user_lottery_id,
                 opt_ct:opt_ct,
+                story_model_id:story_model_id,
                 is_test:1
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {

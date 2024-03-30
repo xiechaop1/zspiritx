@@ -45,6 +45,8 @@ class Lottery extends Action
 
         $optCt = !empty($_GET['opt_ct']) ? $_GET['opt_ct'] : 0;
 
+        $storyModelId = !empty($_GET['story_model_id']) ? $_GET['story_model_id'] : 0;
+
         if (empty($userLotteryId)) {
             $userLottery = UserLottery::find()
                 ->where([
@@ -97,6 +99,7 @@ class Lottery extends Action
             'channelId'     => $channelId,
             'optCt'         => $optCt,
             'userLottery'   => $userLottery,
+            'storyModelId'  => $storyModelId,
 
 //            'prize'         => $finalPrize,
 //            'lotteryPrize'    => $lotteryPrize,

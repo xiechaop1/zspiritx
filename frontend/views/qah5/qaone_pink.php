@@ -151,7 +151,7 @@ $this->title = $qa['topic'];
         padding: 0px;
     }
 </style>
-<audio autoplay loop>
+<audio autoplay loop type="audio/mpeg">
   <source src="<?= \common\helpers\Attachment::completeUrl($qa['voice'], false) ?>" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
 </audio>

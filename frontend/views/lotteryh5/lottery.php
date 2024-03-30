@@ -39,6 +39,7 @@ $this->title = '抽奖';
 <input type="hidden" name="channel_id" value="<?= $channelId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="opt_ct" value="<?= $optCt ?>">
+<input type="hidden" name="story_model_id" value="<?= $storyModelId ?>">
 
 <input type="hidden" name="answer_type" value="2">
 <div class="w-100 m-auto">
