@@ -28,13 +28,20 @@ $this->registerMetaTag([
 $this->title = '我的背包';
 
 ?>
+<style>
+    .bag_selected {
+        border: 2px solid rgba(218, 252, 112, 0.8);
+    }
 
+</style>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="target_story_model_id" value="<?= $targetStoryModelId ?>">
 <input type="hidden" name="target_story_model_detail_id" value="<?= $targetStoryModelDetailId ?>">
 <input type="hidden" name="target_model_id" value="<?= $targetModelId ?>">
+
+<input type="hidden" name="selected_story_model_ids" value="">
 <div class="w-100 m-auto">
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
@@ -46,7 +53,6 @@ $this->title = '我的背包';
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
                         背包
                     </div>
-
             <div class="row" id="answer-box">
                 <?php
                 foreach ($model as $item) {
@@ -66,7 +72,7 @@ $this->title = '我的背包';
                         $baggageName = 'baggage';
                     }
                 ?>
-                <div class="m-t-30 col-sm-3 col-md-12" style="padding: 5px; ">
+                <div class="m-t-30 col-sm-3 col-md-12" style="padding: 5px; " id="baggage_area">
                     <div class="answer-border2" style="height: 260px;">
                         <input class="form-check-input" type="radio" name="<?= $baggageName ?>" value="<?= $item->id ?>" id="legal_person_yes_<?= $item->id ?>" >
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_<?= $item->id ?>" style="padding-top: 20px;">
@@ -130,8 +136,20 @@ $this->title = '我的背包';
         </div>
     </div>
 
-
-
+</div>
+<div style="position: fixed; bottom: 0px; margin:10px; width: 100%;">
+    <div class="w-100 p-30  m-b-10">
+        <div class="w-1-0 d-flex">
+            <div class="fs-30 bold w-100 text-FF">
+    <div class="btn-m-green m-t-30  m-l-30" style="position: absolute; left: 5px; top: -50px;" id="use_btn">
+        使用
+    </div>
+<!--                <div class="btn-m-green m-t-30  m-l-30" style="position: absolute; left: 155px; top: -50px;" id="combine_btn">-->
+<!--                    组合-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
 </div>
 
 </div>

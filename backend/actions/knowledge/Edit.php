@@ -76,6 +76,11 @@ class Edit extends Action
                     $model->suggestion = json_encode($sugg);
                 }
 
+                if (!empty($model->comp_action)) {
+                    eval('$ca = ' . $model->comp_action . ';');
+                    $model->comp_action = json_encode($ca);
+                }
+
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');

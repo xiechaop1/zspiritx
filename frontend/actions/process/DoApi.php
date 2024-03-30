@@ -999,6 +999,9 @@ class DoApi extends ApiAction
         $targetStoryModelDetailId = !empty($this->_get['target_story_model_detail_id']) ? $this->_get['target_story_model_detail_id'] : 0;
         $userModelId = !empty($this->_get['user_model_id']) ? $this->_get['user_model_id'] : 0;
 
+        if (empty($userModelId)) {
+            throw new \yii\db\Exception('您没有选择任何物品', ErrorCode::USER_MODEL_NOT_FOUND);
+        }
 
         $bagageModel = UserModels::find()
             ->where([
@@ -1011,22 +1014,22 @@ class DoApi extends ApiAction
         $bagageModel = $bagageModel->one();
 
         if (empty($bagageModel)) {
-            return $this->fail('背包中没有该道具', ErrorCode::USER_MODEL_NOT_FOUND);
+            throw new \yii\db\Exception('背包中没有该道具', ErrorCode::USER_MODEL_NOT_FOUND);
         }
 
         if ($bagageModel->use_ct <= 0) {
-            return $this->fail('该道具使用次数已用完', ErrorCode::USER_MODEL_NOT_ENOUGH);
+            throw new \yii\db\Exception('该道具使用次数已用完', ErrorCode::USER_MODEL_NOT_ENOUGH);
         }
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $storyModel = $bagageModel->storyModel;
             if (empty($storyModel)) {
-                return $this->fail('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
+                throw new \yii\db\Exception('没有找到该道具', ErrorCode::USER_MODEL_NOT_FOUND);
             }
 
             if ($storyModel->use_allow == StoryModels::USE_ALLOW_NOT) {
-                return $this->fail('该道具不允许使用', ErrorCode::USER_MODEL_NOT_ALLOW);
+                throw new \yii\db\Exception('该道具不允许使用', ErrorCode::USER_MODEL_NOT_ALLOW);
             }
 
 //            $activeArray = \common\helpers\Model::decodeActive($storyModel->activeNext);

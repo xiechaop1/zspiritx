@@ -111,54 +111,54 @@ class Knowledge extends Component
                 'session_id' => $sessionId,
             ])->one();
 
-        try {
-            switch ($act) {
-                case 'process':
-                    $userKnowledgeStatus= UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
-                    break;
-                case 'complete':
-                default:
-                    $userKnowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
-                    break;
-            }
-            if (!empty($userKnowledge)) {
-                $userKnowledge->knowledge_status = $userKnowledgeStatus;
-            } else {
-                $userKnowledge = new UserKnowledge();
-                $userKnowledge->user_id = $userId;
-                $userKnowledge->knowledge_id = $knowledgeId;
-                $userKnowledge->session_id = $sessionId;
-                $userKnowledge->knowledge_status = $userKnowledgeStatus;
-            }
-            $userKnowledge->save();
+            try {
+                switch ($act) {
+                    case 'process':
+                        $userKnowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_PROCESS;
+                        break;
+                    case 'complete':
+                    default:
+                        $userKnowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
+                        break;
+                }
+                if (!empty($userKnowledge)) {
+                    $userKnowledge->knowledge_status = $userKnowledgeStatus;
+                } else {
+                    $userKnowledge = new UserKnowledge();
+                    $userKnowledge->user_id = $userId;
+                    $userKnowledge->knowledge_id = $knowledgeId;
+                    $userKnowledge->session_id = $sessionId;
+                    $userKnowledge->knowledge_status = $userKnowledgeStatus;
+                }
+                $userKnowledge->save();
 
-            if ($act == 'complete') {
-                if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                if ($act == 'complete') {
+                    if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
 
 //                    if (!empty($sessionStageId)) {
-                    // $sessionStageId
-                    // $sessionStageId 变量先提出来，用0全覆盖试试，要不总是有很多漏网数据不能被read，就还提示出来
+                        // $sessionStageId
+                        // $sessionStageId 变量先提出来，用0全覆盖试试，要不总是有很多漏网数据不能被read，就还提示出来
                         Yii::$app->act->read($sessionId, 0, $userId, [
                             Actions::ACTION_TYPE_ACTION,
                             Actions::ACTION_TYPE_MSG,
                         ]);
 //                    }
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                        Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您完成了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
 
-                } else {
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    } else {
+                        Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    }
+                } elseif ($act == 'process') {
+                    if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
+                        Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您开启了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    } else {
+                        Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    }
                 }
-            } elseif ($act == 'process') {
-                if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您开启了任务：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
-                } else {
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
-                }
+
+            } catch (\Exception $e) {
+                throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
             }
-
-        } catch (\Exception $e) {
-            throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
-        }
 
         if ($act == 'complete') {
             // 更新新知识点

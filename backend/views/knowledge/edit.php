@@ -79,6 +79,11 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('分类');
             echo $form->field($knowledgeModel, 'sort_by')->textInput(['value' => $knowledgeModel->sort_by])->label('排序');
+            echo $form->field($knowledgeModel, 'rep_ct')->textInput(['value' => $knowledgeModel->rep_ct])->label('重复次数(0为不限制)');
+            if (!empty($knowledgeModel->comp_action)) {
+                $compAction = var_export(\common\helpers\Model::decodeDialog($knowledgeModel->comp_action), true);
+            }
+            echo $form->field($knowledgeModel, 'comp_action')->textarea(['value' => !empty($knowledgeModel->comp_action) ? $compAction: '', 'rows' => 20])->label('完成时动作');
             echo $form->field($knowledgeModel, 'pre_knowledge_id')->textInput(['value' => $knowledgeModel->pre_knowledge_id])->label('上一ID');
 
 //            echo $form->field($knowledgeModel, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [

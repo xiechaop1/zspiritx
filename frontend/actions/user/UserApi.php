@@ -16,11 +16,13 @@ use common\helpers\Client;
 use common\helpers\Cookie;
 use common\models\Actions;
 use common\models\ItemKnowledge;
+use common\models\Knowledge;
 use common\models\SessionModels;
 use common\models\StoryModels;
 use common\models\StoryStages;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
+use common\models\UserKnowledge;
 use common\models\UserList;
 use common\models\UserScore;
 use common\models\UserStory;
@@ -465,10 +467,55 @@ class UserApi extends ApiAction
                 $userStory->save();
 
 
-                Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
-                Yii::$app->knowledge->removeByStage($storyStageId, $sessionId, $userId, $storyId);
-                Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
+                $knowledges = Knowledge::find()
+                    ->where([
+                        'story_stage_id' => $storyStageId
+                    ])
+                    ->orderBy([
+                        'sort_by' => SORT_ASC
+                    ])
+                    ->all();
 
+                $userKnowledges = UserKnowledge::find()
+                    ->where([
+                        'story_stage_id' => $storyStageId,
+                        'user_id' => $userId,
+                        'story_id' => $storyId,
+                    ])
+                    ->all();
+
+                $ckUserKnow = [];
+                foreach ($userKnowledges as $uk) {
+                    $ckUserKnow[$uk->knowledge_id] = $uk;
+                }
+
+                $allComp = 1;
+                foreach ($knowledges as $know) {
+                    if ($know->knowledge_class == Knowledge::KNOWLEDGE_CLASS_MISSSION
+                        &&
+                        !(
+                            $know->rep_ct > 0
+                            &&
+                            ( !empty($ckUserKnow[$know->id])
+                                && $ckUserKnow[$know->id]->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE
+                            )
+                        )
+                    ) {
+                        $allComp = 0;
+                        break;
+                    }
+                    $compAction = $know->comp_action;
+                }
+
+                Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
+                if ($allComp == 0) {
+                    Yii::$app->knowledge->removeByStage($storyStageId, $sessionId, $userId, $storyId);
+                    Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
+                } else {
+                    if (!empty($compAction)) {
+                        Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $compAction, Actions::ACTION_TYPE_MODEL_DISPLAY);
+                    }
+                }
             }
 
             $stageCookie = [

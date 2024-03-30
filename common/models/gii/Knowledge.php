@@ -35,8 +35,10 @@ class Knowledge extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'story_id', 'sort_by', 'is_delete', 'story_stage_id', 'knowledge_class', 'knowledge_type', 'pre_knowledge_id', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'content', 'suggestion', 'voice', 'linkurl', 'image' ], 'string'],
+            [[ 'story_id', 'sort_by', 'is_delete', 'story_stage_id', 'knowledge_class',
+                'knowledge_type', 'pre_knowledge_id', 'rep_ct',
+                'created_at', 'updated_at'], 'integer'],
+            [['title', 'content', 'suggestion', 'voice', 'linkurl', 'image', 'comp_action' ], 'string'],
         ];
     }
 

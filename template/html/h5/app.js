@@ -202,7 +202,33 @@ $(function () {
         }
     };
 
-    $("input[name='baggage']").click(function ()
+    $("input[name='baggage']").click(function () {
+        var v_select = $("input[name='selected_story_model_ids']").val();
+        var obj = $(this).parent();
+        if (v_select == null || v_select == '') {
+            v_select = $(this).val();
+            obj.addClass('bag_selected');
+        } else {
+            if (v_select.indexOf($(this).val()) >= 0) {
+                v_select = v_select.replace(',' + $(this).val(), '');
+                v_select = v_select.replace($(this).val() + ',', '');
+                v_select = v_select.replace($(this).val(), '');
+
+                obj.removeClass('bag_selected');
+            } else {
+                v_select = v_select + ',' + $(this).val();
+
+                obj.addClass('bag_selected');
+            }
+        }
+        $("input[name='selected_story_model_ids']").val(v_select);
+
+        console.log(v_select);
+
+    });
+
+    // $("input[name='baggage2']").click(function ()
+    $('#use_btn').click(function ()
     {
         var that=$("#answer-info");
         var user_id=$("input[name='user_id']").val();
@@ -213,8 +239,9 @@ $(function () {
         var target_model_id=$("input[name='target_model_id']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
-        var v_select=$("input[name='baggage']:checked").val();
+        // var v_select=$("input[name='baggage']:checked").val();
         // $("#answer-box").hide();
+        var v_select = $("input[name='selected_story_model_ids']").val();
         if(v_select==null){
             $("#h5-null").modal('show');
         }
@@ -244,6 +271,7 @@ $(function () {
                     var dataContent=data;
                     var dataCon=$.toJSON(dataContent);
                     var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    console.log(obj);
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
@@ -284,6 +312,11 @@ $(function () {
                             //     window.location.reload();
                             // }, 3000);
                         }
+
+                        $("input[name='selected_story_model_ids']").val('');
+                        $("input[name='baggage']").each(function() {
+                            $(this).parent().removeClass('bag_selected');
+                        });
 
                         // }
                         // else{
