@@ -10,6 +10,7 @@ $(function () {
         var data=$.toJSON(params);
         Unity.call(data);
     });
+
     $(".map-info-close").on('click',function (){
         var me=$(this);
         $("#map-info-box").hide();
@@ -38,20 +39,22 @@ $(function () {
             // center: [116.397428, 39.90923],
             zoom: 25
         });
+
     }
 
 
-
-
     AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
-
-
         //缩放控件，显示Zoom值
         map.addControl(new BasicControl.Zoom({
             position: 'rb',
-
         }));
 
+    });
+    AMap.plugin([
+        'AMap.ToolBar',
+    ], function(){
+        // 在图面添加工具条控件, 工具条控件只有缩放功能
+        map.addControl(new AMap.ToolBar());
     });
 
     // map.clearMap();  // 清除地图覆盖物
@@ -98,7 +101,6 @@ $(function () {
         $("#map-info-box").show();
         console.log(text,n,me)
         $("#map-info-box .map-text-context").text(n);
-
     }
 
 
@@ -197,9 +199,6 @@ $(function () {
                     removeMarkers();
 
                     drawPoi(markers);
-
-
-
                 }
                 //新消息获取失败
                 else{
@@ -290,6 +289,7 @@ $(function () {
 
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         map.setCenter([lng, lat]);
+                        new AMap.Marker({position:[lng, lat], map});
                     }
                     console.log("地图中心",lat,lng)
                 }
@@ -340,7 +340,7 @@ $(function () {
     function drawUser(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
-                marker.title+'</span>';
+                '</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
                 map: map,
@@ -352,20 +352,6 @@ $(function () {
             //     showPoiDetail(e);
             // });
         });
-        // markers.forEach(function(marker) {
-        //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
-        //         '</span>';
-        //     var marker= new AMap.Marker({
-        //         content: markerContent,
-        //         map: map,
-        //         // icon: marker.icon,
-        //         position: [marker.longitude, marker.latitude],
-        //         offset: new AMap.Pixel(-13, -30)
-        //     });
-        //     markers.on('click', function(e){
-        //         showPoiDetail();
-        //     });
-        // });
     }
 
     getPoi();
