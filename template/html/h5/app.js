@@ -163,7 +163,7 @@ $(function () {
                             }
                             $("#answer-box").hide();
                             $("#answer-right-box").removeClass('hide');
-                            // $("#h5-right").modal('show');
+                            $("#h5-right").modal('show');
                             audio_right.play();
                             setTimeout(function (){
                                 // Unity.call('WebViewOff&TrueAnswer');
