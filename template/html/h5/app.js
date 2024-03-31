@@ -312,6 +312,7 @@ $(function () {
                             $('#baggage_html').html(obj.data.html);
                             $('#baggage_desc').html(obj.data.desc);
                             var obj = $('#baggage_detail');
+                            $('#dialog_return_btn').attr('need_refresh', 1);
                             // $('#baggage_detail_back').modal('show');
                             // obj.show();
                             obj.modal('show');
