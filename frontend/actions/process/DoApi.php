@@ -1392,6 +1392,7 @@ class DoApi extends ApiAction
                                     'user_id' => $userId,
                                     'story_id' => $storyId,
                                     'session_id' => $sessionId,
+                                    'story_model_id' => $storyModel->id,
                                 ];
 
                                 $smHtmlJson['url'] = \common\helpers\Common::formatUrlParams($smHtmlJson['url'], $params);
