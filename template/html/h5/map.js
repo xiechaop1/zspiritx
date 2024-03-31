@@ -405,7 +405,7 @@ $(function () {
     getUserPoi();
 
     setInterval(getPoi,8000);
-    setInterval(removeMarkers,3000);
+    // setInterval(removeMarkers,3000);
     
 });
 
