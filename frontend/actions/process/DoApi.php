@@ -1003,6 +1003,8 @@ class DoApi extends ApiAction
             if (sizeof($umIds) < 2) {
                 throw new \yii\db\Exception('您需要至少选择两个物品', ErrorCode::USER_MODEL_NOT_FOUND);
             }
+//            ksort($umIds);
+            $userModelId = $umIds[0];
 
             $combineGroup = !empty($this->_get['combine_group']) ? $this->_get['combine_group'] : '';
 

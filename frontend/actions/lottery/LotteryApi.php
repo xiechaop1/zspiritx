@@ -146,7 +146,7 @@ class LotteryApi extends ApiAction
                 $userKnowledge = UserKnowledge::find()
                     ->where([
                         'user_id' => $userId,
-                        'story_id' => $storyId,
+//                        'story_id' => $storyId,
                         'session_id'    => $sessionId,
                         'knowledge_status' => UserKnowledge::KNOWLDEGE_STATUS_COMPLETE,
                     ])
