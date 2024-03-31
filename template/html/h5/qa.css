@@ -68,6 +68,9 @@
     border-radius: 20px;
     background: #333333;
 }
+.qa-pink #answer-right-box .answer-detail{
+    color: #333333;
+}
 .pink-ans-text{
     border: 4px solid #bfd897;
     display: block;
@@ -76,4 +79,8 @@
     padding: 20px;
     text-align: center;
     box-shadow: 4px 8px 5px 2px rgba(0, 0, 0, 0.7);
+}
+.qa-pink > body.bg-black{
+    background-color: #ffffff !important;
+
 }
