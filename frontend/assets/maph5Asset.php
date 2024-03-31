@@ -45,7 +45,7 @@ class maph5Asset extends AssetBundle
         self::HOST . 'js/jqueryToast/js/toast.script.js',
         self::HOST . 'js/getOptions.js',
         self::HOST . 'js/jquery.SuperSlide.2.1.3.js',
-        self::HOST . 'html/h5/map.js',
+        'html/h5/map.js',
         ];
 
 
