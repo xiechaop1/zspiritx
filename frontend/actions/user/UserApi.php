@@ -690,7 +690,9 @@ class UserApi extends ApiAction
 //            var_dump($sql);
             $userLoc = Yii::$app->db->createCommand($sql)->queryOne();
         } else {
-            $userLoc = \common\models\UserLoc::findOne($userId);
+            $userLoc = \common\models\UserLoc::find()
+                ->where(['user_id' => $userId])
+                ->one();
         }
 
         return $userLoc;
