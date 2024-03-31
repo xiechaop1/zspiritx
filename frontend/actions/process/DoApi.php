@@ -1112,6 +1112,7 @@ class DoApi extends ApiAction
                         $groupStoryModel = StoryModelsLink::find()
                             ->where([
                                 'story_id' => $storyId,
+                                'eff_type' => StoryModelsLink::EFF_TYPE_MODEL,
                             ]);
                         if (!empty($storyModel->story_model_detail_id)) {
                             $groupStoryModel = $groupStoryModel->andFilterWhere([
@@ -1131,6 +1132,7 @@ class DoApi extends ApiAction
                         ->where([
                             'group_name'        => $combineGroup,
                             'story_id'          => $storyId,
+                            'eff_type'          => StoryModelsLink::EFF_TYPE_MODEL,
 //                            'story_model_id'    => $storyModel->id,
 //                            'story_model_id2'   => $storyModel1->id,
                         ])
