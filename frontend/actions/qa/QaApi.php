@@ -211,6 +211,9 @@ class QaApi extends ApiAction
                 'addtion' => 0,
             ];
             if ($isRight == 1) {
+                // 临时处理
+                // 10w以上目前认为是小程序可能调用的场次
+                // 未来需要扩展，增加third字段
                 if (!empty($sessionId) && $sessionId < 100000) {
                     if (!empty($qa['knowledge_id'])) {
                         Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $sessionStageId, $userId, $qa['story_id'], 'complete');
