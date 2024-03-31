@@ -5,7 +5,7 @@ $(function () {
 
     $("#return_btn").click(function (){
         var params = {
-            'WebViewOff':1,
+            'WebViewOff':1
         }
         var data=$.toJSON(params);
         Unity.call(data);
@@ -16,12 +16,6 @@ $(function () {
         $("#map-info-box").hide();
     });
 
-    // function getLocation(lat,lng){
-    //     location[1]=lat;
-    //     location[0]=lng;
-    //     return location;
-    // }
-    //
 
     var user_lng=$("input[name='user_lng']").val();
     var user_lat=$("input[name='user_lat']").val();
@@ -42,7 +36,6 @@ $(function () {
 
     }
 
-
     AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
         //缩放控件，显示Zoom值
         map.addControl(new BasicControl.Zoom({
@@ -59,6 +52,7 @@ $(function () {
 
     // map.clearMap();  // 清除地图覆盖物
 
+    //markers 测试数据
     var markers = [{
         // icon: '../../img/map/marker_1.png',
         position: [116.205467, 39.907761]
@@ -70,28 +64,6 @@ $(function () {
         position: [116.305467, 39.807761]
     }];
 
-    // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
-    //  drawPoi(markers)
-    // markers.forEach(function(marker) {
-    //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail(1)" data-id="text id 1">1' +
-    //         '</span>';
-    //    var marker= new AMap.Marker({
-    //         content: markerContent,
-    //         map: map,
-    //         icon: marker.icon,
-    //         position: [marker.position[0], marker.position[1]],
-    //         offset: new AMap.Pixel(-13, -30)
-    //     });
-    //     // marker.on('click', function(e){
-    //     //     showPoiDetail(e);
-    //     // });
-    //
-    //     // marker.on('click', mapEvent => {
-    //     //     console.log(mapEvent.target);
-    //     //     console.log(mapEvent.target.dom.getElementsByClassName('marker_text')[0].getAttribute('data-id'))
-    //     //
-    //     // })
-    // });
 
     function  showPoiDetail(n){
         var me=$(this);
@@ -103,26 +75,7 @@ $(function () {
         $("#map-info-box .map-text-context").text(n);
     }
 
-
-
-
-    // var centerText = '当前中心点坐标：' + center.getLng() + ',' + center.getLat();
-    // document.getElementById('centerCoord').innerHTML = centerText;
-    // document.getElementById('tips').innerHTML = '成功添加三个点标记，其中有两个在当前地图视野外！';
-
-    // 添加事件监听, 使地图自适应显示到合适的范围
-/*    AMap.event.addDomListener(document.getElementById('setFitView'), 'click', function() {
-        var newCenter = map.setFitView();
-        document.getElementById('centerCoord').innerHTML = '当前中心点坐标：' + newCenter.getCenter();
-        // document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
-    });*/
-    // $.extend({
-    //     getLocation:function (lat,lng){
-    //        getLocation(lat,lng);
-    //        getPoi();
-    //     }
-    // })
-
+    //获取Poi 点详情
     function getPoi(lng,lat){
         var user_id=$("input[name='user_id']").val();
         var story_id=$("input[name='story_id']").val();
@@ -290,7 +243,7 @@ $(function () {
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         map.setCenter([lng, lat]);
                         var markerUser = new AMap.Marker({
-                            position: new AMap.LngLat([lng, lat])   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                            position: [lng, lat]   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
                         });
                        // 将创建的点标记添加到已有的地图实例：
                         map.add(markerUser);
