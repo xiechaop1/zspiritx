@@ -478,9 +478,10 @@ class UserApi extends ApiAction
 
                 $userKnowledges = UserKnowledge::find()
                     ->where([
-                        'story_stage_id' => $storyStageId,
+//                        'story_stage_id' => $storyStageId,
                         'user_id' => $userId,
                         'story_id' => $storyId,
+                        'session_id' => $sessionId,
                     ])
                     ->all();
 
