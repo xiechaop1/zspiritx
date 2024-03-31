@@ -30,7 +30,7 @@ $(function () {
     else{
         var map = new AMap.Map('container', {
             resizeEnable: true,
-            // center: [116.397428, 39.90923],
+            center: [116.397428, 39.90923],
             zoom: 25
         });
 
@@ -42,12 +42,6 @@ $(function () {
             position: 'rb',
         }));
 
-    });
-    AMap.plugin([
-        'AMap.ToolBar',
-    ], function(){
-        // 在图面添加工具条控件, 工具条控件只有缩放功能
-        map.addControl(new AMap.ToolBar());
     });
 
     // map.clearMap();  // 清除地图覆盖物
