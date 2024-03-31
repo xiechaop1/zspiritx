@@ -211,45 +211,46 @@ class QaApi extends ApiAction
                 'addtion' => 0,
             ];
             if ($isRight == 1) {
-                if (!empty($qa['knowledge_id'])) {
-                    Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $sessionStageId, $userId, $qa['story_id'], 'complete');
-                }
-
-                Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $sessionStageId, $userId, $qa['story_id']);
-
-
-                if (!empty($qa['score'])) {
-                    $score = $qa['score'];
-
-                    $scoreRets = Yii::$app->score->computeWithQa($userId, $storyId, $sessionId, $qaId, $score, $beginTs);
-
-                    if (!empty($scoreRets)) {
-                        $score = $scoreRets['score'];
-//                        $x = $scoreRets['x'];
-//                        $addition = $scoreRets['addition'];
+                if (!empty($sessionId) && $sessionId < 100000) {
+                    if (!empty($qa['knowledge_id'])) {
+                        Yii::$app->knowledge->set($qa['knowledge_id'], $sessionId, $sessionStageId, $userId, $qa['story_id'], 'complete');
                     }
 
-                    Yii::$app->score->add($userId, $storyId, $sessionId, $sessionStageId, $score);
-                }
+                    Yii::$app->knowledge->setByItem($qa['id'], ItemKnowledge::ITEM_TYPE_QA, $sessionId, $sessionStageId, $userId, $qa['story_id']);
 
-                //            $isNew = true;
-                if (empty($userQa)) {
-                    $userQa = new UserQa();
-                    $userQa->story_id = $qa['story_id'];
-                    $userQa->session_id = $sessionId;
-                    $userQa->user_id = $userId;
-                    $userQa->qa_id = $qaId;
-                    $userQa->answer = $answer;
-                    $userQa->is_right = $isRight;
-                    $saveRet = $userQa->save();
-                    $userQaId = Yii::$app->db->getLastInsertID();
-                    $userQa->id = $userQaId;
 
-                } else {
-                    $userQa->answer = $answer;
-                    $userQa->is_right = $isRight;
-                    $saveRet = $userQa->save();
-                }
+                    if (!empty($qa['score'])) {
+                        $score = $qa['score'];
+
+                        $scoreRets = Yii::$app->score->computeWithQa($userId, $storyId, $sessionId, $qaId, $score, $beginTs);
+
+                        if (!empty($scoreRets)) {
+                            $score = $scoreRets['score'];
+//                        $x = $scoreRets['x'];
+//                        $addition = $scoreRets['addition'];
+                        }
+
+                        Yii::$app->score->add($userId, $storyId, $sessionId, $sessionStageId, $score);
+                    }
+
+                    //            $isNew = true;
+                    if (empty($userQa)) {
+                        $userQa = new UserQa();
+                        $userQa->story_id = $qa['story_id'];
+                        $userQa->session_id = $sessionId;
+                        $userQa->user_id = $userId;
+                        $userQa->qa_id = $qaId;
+                        $userQa->answer = $answer;
+                        $userQa->is_right = $isRight;
+                        $saveRet = $userQa->save();
+                        $userQaId = Yii::$app->db->getLastInsertID();
+                        $userQa->id = $userQaId;
+
+                    } else {
+                        $userQa->answer = $answer;
+                        $userQa->is_right = $isRight;
+                        $saveRet = $userQa->save();
+                    }
 
 //                $itemKnowledgeList = ItemKnowledge::find()
 //                    ->where([
@@ -266,10 +267,11 @@ class QaApi extends ApiAction
 //                    }
 //                }
 
-                if (!empty($qa['story_stage_id'])) {
-                    $storyStage = StoryStages::findOne($qa['story_stage_id']);
-                    $expirationInterval = 60;        // 消息超时时间
-                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
+                    if (!empty($qa['story_stage_id'])) {
+                        $storyStage = StoryStages::findOne($qa['story_stage_id']);
+                        $expirationInterval = 60;        // 消息超时时间
+                        Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
+                    }
                 }
             }
 
