@@ -294,8 +294,9 @@ $(function () {
                         });
                        // 将创建的点标记添加到已有的地图实例：
                         map.add(markerUser);
+                        console.log("地图中心",lat,lng)
                     }
-                    console.log("地图中心",lat,lng)
+
                 }
                 //新消息获取失败
                 else{
