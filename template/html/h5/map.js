@@ -289,7 +289,11 @@ $(function () {
 
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         map.setCenter([lng, lat]);
-                        new AMap.Marker({position:[lng, lat], map});
+                        var markerUser = new AMap.Marker({
+                            position: new AMap.LngLat([lng, lat])   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                        });
+                       // 将创建的点标记添加到已有的地图实例：
+                        map.add(markerUser);
                     }
                     console.log("地图中心",lat,lng)
                 }
@@ -340,7 +344,7 @@ $(function () {
     function drawUser(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
-                '</span>';
+                marker.title+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
                 map: map,
@@ -352,6 +356,20 @@ $(function () {
             //     showPoiDetail(e);
             // });
         });
+        // markers.forEach(function(marker) {
+        //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
+        //         '</span>';
+        //     var marker= new AMap.Marker({
+        //         content: markerContent,
+        //         map: map,
+        //         // icon: marker.icon,
+        //         position: [marker.longitude, marker.latitude],
+        //         offset: new AMap.Pixel(-13, -30)
+        //     });
+        //     markers.on('click', function(e){
+        //         showPoiDetail();
+        //     });
+        // });
     }
 
     getPoi();
