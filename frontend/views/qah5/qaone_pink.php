@@ -730,6 +730,35 @@ $this->title = $qa['topic'];
                 </div>
 
             </div>
+            
+             <div class="row hide" id="answer-right-box">
+                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
+                     <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
+                     <?php
+                     if (!empty($qa['score'])) {
+                         ?>
+                         <div style="clear:both; text-align: center;">
+                         <span>
+                             <!-- ../../static/img/qa/gold.gif -->
+                     <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
+                             </span>
+
+                             <span class="answer-detail" id="gold_score" style="color: yellow">
+                     +<?= $qa['score'] ?>枚
+                         </span>
+                         </div>
+                         <?php
+                     }
+                     ?>
+                     <div class="answer-title m-t-40">
+                         <?php echo ($qa['st_selected'] != 'True') ? $qa['st_selected'] : ''; ?>
+                     </div>
+                     <div class="answer-detail m-t-40" style="line-height: 40px;">
+                          <?php echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
+                     </div>
+                 </div>
+
+             </div>
             <div class="row hide" id="answer-error-box">
                 <div class="m-t-60 col-sm-12 col-md-12">
                     <div class="answer-detail " >
