@@ -27,7 +27,7 @@ class maph5Asset extends AssetBundle
         self::HOST . 'js/jqueryToast/css/toast.styleH5.css',
         self::HOST . 'css/iconfont.css',
         self::HOST . 'css/animate.css',
-        self::HOST . 'html/h5/app.css',
+        'html/h5/app.css',
         self::HOST . 'html/h5/qa.css',
         'html/h5/diy.css',
 

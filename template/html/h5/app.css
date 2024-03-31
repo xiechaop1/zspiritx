@@ -26,14 +26,12 @@ html, body {
     position: relative;
 }
 #map-page .btn-m-green{
-    /*position: absolute;*/
-    /*top: 10px;*/
-    
+    position: absolute;
+    top: 15px;
     left: 15px;
     font-size: 18px;
     padding: 10px 15px;
     height: 45px;
-    position: fixed;
     bottom: 60px;
 }
 .btn-m-green{
@@ -529,6 +527,25 @@ input[type="radio"]:checked+label::before {
     position: absolute;
     top: -100px;
     left: 0px;
+}
+#user_center{
+    background-color: #f4f4f4;
+    color: #333333;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px;
+    position: absolute;
+    bottom: 75px;
+    left: 20px;
+    z-index: 999999;
+}
+#user_center img{
+    width: 30px;
+    margin: 0 1px auto 1px;
 }
 @media (min-width: 576px){
     .modal-dialog {

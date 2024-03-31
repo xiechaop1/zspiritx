@@ -103,7 +103,6 @@ $(function () {
 
 
         if(v_select!=null){
-
             $.ajax({
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
@@ -153,7 +152,12 @@ $(function () {
                             $("input[name='answer_txt']").val('');
                             return false;
                         }
+
                         if(v_ture==v_select){
+                            $("#answer-box").hide();
+                            $("#answer-right-box").removeClass('hide');
+                            audio_right.play();
+
                             if (obj.data.score.score != undefined) {
                                 var score_text = "+" + obj.data.score.score + "枚";
                                 if (obj.data.score.addition > 0) {
@@ -161,10 +165,7 @@ $(function () {
                                 }
                                 $("#gold_score").html(score_text);
                             }
-                            $("#answer-box").hide();
-                            $("#answer-right-box").removeClass('hide');
-                            $("#h5-right").modal('show');
-                            audio_right.play();
+
                             setTimeout(function (){
                                 // Unity.call('WebViewOff&TrueAnswer');
                                 var params = {
