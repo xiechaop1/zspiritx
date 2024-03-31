@@ -57,6 +57,10 @@ $this->registerMetaTag([
     返回
 </div>
 
+<div id="user_center">
+  <img src="../../static/img/position.png">
+</div>
+
 <script type="text/javascript">
         window._AMapSecurityConfig = {
             serviceHost:'https://h5.zspiritx.com.cn/_AMapService',

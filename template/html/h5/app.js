@@ -103,7 +103,6 @@ $(function () {
 
 
         if(v_select!=null){
-
             $.ajax({
                 type: "GET", //用POST方式传输
                 dataType: "json", //数据格式:JSON
@@ -153,6 +152,7 @@ $(function () {
                             $("input[name='answer_txt']").val('');
                             return false;
                         }
+
                         if(v_ture==v_select){
                             $("#answer-box").hide();
                             $("#answer-right-box").removeClass('hide');
