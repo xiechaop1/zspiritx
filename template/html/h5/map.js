@@ -368,7 +368,7 @@ $(function () {
     function drawUser(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
-                marker.title+'</span>';
+                '</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
                 map: map,
@@ -404,7 +404,7 @@ $(function () {
     getPoi();
     getUserPoi();
 
-    setInterval(getPoi,8000);
+    setInterval(getPoi,3000);
     // setInterval(removeMarkers,3000);
     
 });
