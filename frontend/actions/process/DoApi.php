@@ -1050,6 +1050,10 @@ class DoApi extends ApiAction
                 throw new \yii\db\Exception('该道具不允许使用', ErrorCode::USER_MODEL_NOT_ALLOW);
             }
 
+            if ($act == 2 && $storyModel->active_type != StoryModels::ACTIVE_TYPE_COMBINE) {
+                throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+            }
+
 //            $activeArray = \common\helpers\Model::decodeActive($storyModel->activeNext);
 
             // Todo: 临时处理物品使用以后减少数量逻辑
