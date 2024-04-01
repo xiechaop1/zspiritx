@@ -580,7 +580,7 @@ class Models extends Component
 
     }
 
-    public function addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
+    public function addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId, $sessionStageId, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
         $storyModelLinks = StoryModelsLink::find();
         if (!empty($groupName)) {
             $storyModelLinks->where([
@@ -607,9 +607,13 @@ class Models extends Component
                         'user_id' => $userId,
                         'story_id' => $storyId,
                         'session_id' => $sessionId,
+//                        'session_stage_id' => $sessionStageId,
 //                        'group_name' => $groupName,
                         'use_status' => UserModelsUsed::USE_STATUS_WAITING
                     ]);
+                if (!empty($sessionStageId)) {
+                    $currentUserModelUsed->andFilterWhere(['session_stage_id' => $sessionStageId]);
+                }
                 if (!empty($groupName)) {
                     $currentUserModelUsed->andFilterWhere(['group_name' => $groupName]);
                 }
@@ -646,6 +650,7 @@ class Models extends Component
                         $userModelUsed->user_id = $userId;
                         $userModelUsed->story_id = $storyId;
                         $userModelUsed->session_id = $sessionId;
+                        $userModelUsed->session_stage_id = $sessionStageId;
                         $userModelUsed->group_name = $storyModelLink->group_name;
                         $userModelUsed->use_status = $useStatus;
                         $userModelUsed->story_model_id = $storyModelLink->story_model_id;
@@ -665,6 +670,30 @@ class Models extends Component
             throw $e;
         }
 
+    }
+
+    public function cancelUserModelUsedByStageId($sessionStageId, $sessionId, $userId, $storyId ) {
+        $userModelUsed = UserModelsUsed::find()
+            ->where([
+                'user_id' => $userId,
+                'story_id' => $storyId,
+                'session_id' => $sessionId,
+                'session_stage_id' => $sessionStageId,
+                'use_status' => [
+                    UserModelsUsed::USE_STATUS_WAITING,
+                    UserModelsUsed::USE_STATUS_COMPLETED_PARTLY,
+                ]
+            ])
+            ->all();
+
+        if (!empty($userModelUsed)) {
+            foreach ($userModelUsed as $tmp) {
+                $tmp->use_status = UserModelsUsed::USE_STATUS_CANCEL;
+                $tmp->save();
+            }
+        }
+
+        return true;
     }
 
     public function addUserModelUsedByStoryModel($storyModelLinkId, $storyModel, $targetStoryModel, $userId, $storyId, $sessionId, $useStatus = UserModelsUsed::USE_STATUS_COMPLETED_PARTLY,  $groupName = '', $effExec = '', $effType = 0) {

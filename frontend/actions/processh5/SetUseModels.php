@@ -56,7 +56,7 @@ class SetUseModels extends Action
                 ])
                 ->one();
 
-            $ret = Yii::$app->models->addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId);
+            $ret = Yii::$app->models->addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId, $sessionStageId);
             $msg = '我已经准备好啦，打开背包，找到物品，点击使用吧！';
         } catch (\Exception $e) {
             return $this->pickupRender($e->getCode(), $e->getMessage(), $this->_params);

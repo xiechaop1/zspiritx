@@ -510,6 +510,10 @@ class UserApi extends ApiAction
 
                 Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
                 if ($allComp == 0) {
+
+                    // 删除当前场景下的用户待使用模型
+                    Yii::$app->models->cancelUserModelUsedByStageId($sessionStageId, $sessionId, $userId, $storyId);
+
                     Yii::$app->knowledge->removeByStage($storyStageId, $sessionId, $userId, $storyId);
                     Yii::$app->knowledge->setByItem($storyStageId, ItemKnowledge::ITEM_TYPE_STAGE, $sessionId, $sessionStageId, $userId, $storyId);
                 } else {

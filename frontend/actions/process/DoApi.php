@@ -994,6 +994,8 @@ class DoApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $modelId = !empty($this->_get['model_id']) ? $this->_get['model_id'] : 0;
 
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         $act = !empty($this->_get['act']) ? $this->_get['act'] : 1;     // 1 - 使用；2 - 组合；3 - 丢弃
 
         $userModelId = !empty($this->_get['user_model_id']) ? $this->_get['user_model_id'] : 0;

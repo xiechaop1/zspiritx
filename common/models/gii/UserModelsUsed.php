@@ -25,7 +25,8 @@ class UserModelsUsed extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'story_model_link_id', 'user_id', 'session_id', 'user_model_id', 'story_model_id', 'story_model_detail_id',
+            [['story_id', 'story_model_link_id', 'user_id', 'session_id', 'session_stage_id',
+                'user_model_id', 'story_model_id', 'story_model_detail_id',
                 'story_model_id2', 'story_model_detail_id2', 'eff_type'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
             [['eff_exec', 'group_name' ], 'string'],
