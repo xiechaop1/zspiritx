@@ -86,7 +86,7 @@ echo \dmstr\widgets\Alert::widget();
                         'format'    => 'raw',
                         'value' => function ($model) {
                             return !empty($model->icon) ?
-                                Html::img($model->icon, ['width' => '50px']) : ' - ';
+                                Html::img( \common\helpers\Attachment::completeUrl($model->icon, true), ['width' => '50px']) : ' - ';
                         },
 //                        'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
