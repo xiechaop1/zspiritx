@@ -1166,9 +1166,9 @@ class DoApi extends ApiAction
                         throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
                     }
 
-                    krsort($userModelIds);
+                    sort($userModelIds);
                     $userModelStr = implode(',', $userModelIds);
-                    krsort($linkStoryModelIds);
+                    sort($linkStoryModelIds);
                     $linkStoryModelStr = implode(',', $linkStoryModelIds);
 
                     if ($userModelStr == $linkStoryModelStr) {
