@@ -1131,7 +1131,11 @@ class DoApi extends ApiAction
                         }
                         $groupStoryModel = $groupStoryModel->one();
 
-                        $combineGroup = $groupStoryModel->group_name;
+                        if (!empty($groupStoryModel)) {
+                            $combineGroup = $groupStoryModel->group_name;
+                        } else {
+                            throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+                        }
                     }
 
                     $storyModelLinks = StoryModelsLink::find()
@@ -1204,7 +1208,7 @@ class DoApi extends ApiAction
                             'show' => $showRet,
                         ];
                     } else {
-                        throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+                        throw new \yii\base\Exception('您的使用打开方式不对！', ErrorCode::USER_MODEL_NO_EFFECT);
                     }
 
 //                    if (!empty($storyModel->story_model_detail_id)) {
