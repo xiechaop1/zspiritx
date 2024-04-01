@@ -272,6 +272,7 @@ $this->title = $qa['topic'];
                    <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
                     </div>
                     ';
+                    $str = json_decode($str, true);
                     if (!empty($str['keyboard'])) {
                         $optstr .= '<div class="m-t-30 col-sm-6 col-md-6 keyboard_area">';
                         $keyboard = $str['keyboard'];

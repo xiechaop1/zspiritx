@@ -51,6 +51,7 @@ class Qa extends \common\models\gii\Qa
     public static $qaTypeIsJson = [
         self::QA_TYPE_PUZZLE_WORD,
         self::QA_TYPE_PUZZLE_PIC,
+        self::QA_TYPE_WORD,
         self::QA_TYPE_VERIFYCODE,
         self::QA_TYPE_SELECTION,
         self::QA_TYPE_PHONE,

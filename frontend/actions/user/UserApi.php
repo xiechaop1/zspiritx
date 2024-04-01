@@ -480,7 +480,7 @@ class UserApi extends ApiAction
                     ->where([
 //                        'story_stage_id' => $storyStageId,
                         'user_id' => $userId,
-                        'story_id' => $storyId,
+//                        'story_id' => $storyId,
                         'session_id' => $sessionId,
                     ])
                     ->all();

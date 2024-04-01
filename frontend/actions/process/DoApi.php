@@ -1177,7 +1177,7 @@ class DoApi extends ApiAction
                             foreach ($userModels as $userModel2) {
                                 $userModel2->use_ct -= $minCt;
 
-                                if ($userModel2->user_ct == 0) {
+                                if ($userModel2->use_ct == 0) {
                                     $userModel2->is_delete = Common::STATUS_DELETED;
                                 }
                                 $userModel2->save();
