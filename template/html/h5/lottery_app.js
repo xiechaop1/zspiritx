@@ -79,12 +79,12 @@ $(function () {
                     console.log(obj);
 
                     if (obj.data.isAward == 1) {
-                        $('#lottery-success .lottery-title').empty().text(obj.data.finalPrize.prize_name);
-                        $('#lottery-success .lottery-detail').empty().text(obj.data.msg);
+                        $('#lottery-success-pink .lottery-title').empty().text(obj.data.finalPrize.prize_name);
+                        $('#lottery-success-pink .lottery-detail').empty().text(obj.data.msg);
                         $("#lottery-success .lottery-success-title").show();
                         $("#lottery-success .lottery-error-title").hide();
 
-                        var dialog = $('#lottery-success');
+                        var dialog = $('#lottery-success-pink');
                     } else {
                         $('#lottery-success .lottery-title').empty();
                         $('#lottery-success .lottery-detail').empty().text(obj.msg);
@@ -93,14 +93,6 @@ $(function () {
                         var dialog = $('#lottery-success');
                     }
                     dialog.modal('show');
-                    // dialog.show();
-
-
-                        // var params = {
-                        //     'WebViewOff': 1
-                        // }
-                        // var data=$.toJSON(params);
-                        // Unity.call(data);
 
 
                 }
