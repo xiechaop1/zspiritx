@@ -81,6 +81,16 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => 'Model Inst UnityID',
                     ],
                     [
+                        'attribute' => 'icon',
+                        'label' => '图标',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty($model->icon) ?
+                                Html::img($model->icon, ['width' => '50px']) : ' - ';
+                        },
+//                        'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
+                    ],
+                    [
                         'attribute' => 'story_model_name',
                         'label' => '剧本模型',
                         'format'    => 'raw',

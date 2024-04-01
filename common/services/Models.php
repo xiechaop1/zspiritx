@@ -609,7 +609,11 @@ class Models extends Component
                         'session_id' => $sessionId,
 //                        'session_stage_id' => $sessionStageId,
 //                        'group_name' => $groupName,
-                        'use_status' => UserModelsUsed::USE_STATUS_WAITING
+                        'use_status' =>
+                            [
+                            UserModelsUsed::USE_STATUS_WAITING,
+                            UserModelsUsed::USE_STATUS_COMPLETED_PARTLY,
+                        ]
                     ]);
                 if (!empty($sessionStageId)) {
                     $currentUserModelUsed->andFilterWhere(['session_stage_id' => $sessionStageId]);
