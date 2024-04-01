@@ -56,10 +56,77 @@ $this->title = '抽奖';
         <source src="" type="audio/mpeg">
         您的浏览器不支持 audio 元素。
     </audio>
+<div class="w-100 m-auto">
+    <div class="show" style="display: block;" >
+        <div class="modal-dialog modal-dialog-centered lottery-pink-modal">
+            <div class="modal-content modal-lottery-bg">
+                <div class="modal-lottery-bg-border">
+                    <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width:100%">
+                        <div class="m-t-50">
+                            <div class="fs-36 text-F6 text-center bold lottery-error-title">
+                                <img src="../../static/img/lottery/lottery-tymj.png" class="img-350">
+                            </div>
+                            <div class="fs-36  m-t-50 text-F6 text-center bold lottery-error-title">
+                                <img src="../../static/img/lottery/lottery-gift.png" class="img-350">
+                            </div>
+                            <div class="fs-36  text-33 text-center bold lottery-error-title">
+                                <?php
+                                if (!empty($userLottery->ct)) {
+                                    echo '本抽奖券每张只能使用 <span style="color: yellow">' . $userLottery->ct . '</span> 次';
+                                    } else {
+                                    echo '本抽奖券已经使用过';
+                                }
+                                ?>
+                                <br>
+                                兑换位置：<span style="color: yellow">国家植物园温室大棚</span><br>
+                                抽奖活动最终解释权归公园家所有
+                            </div>
+                            <div class="fs-24 m-t-20  text-66 text-center bold lottery-error-title">
+                                 No. <?= !empty($userLottery->lottery_no) ? $userLottery->lottery_no : '' ?>
+                            </div>
 
-    <div class="p-20 bg-black" style="margin: 0px; padding: 0px;">
+                            <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" >
+                                        <?php
+                                        if (empty($userLottery)) {
+                                            ?>
+
+                                                无奖券
+
+                                            <?php
+                                        } else {
+                                            if ($userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_WAIT) {
+                                            ?>
+
+                                            <label class="btn-pink-m lottery-btn">抽奖</label>
+                                            <?php
+                                            } else {
+                                                ?>
+
+                                                    <?=
+                                                    $userLottery->lottery_status == \common\models\UserLottery::USER_LOTTERY_STATUS_USED ? '已抽奖'
+                                                        : '已过期/取消'
+                                                    ?>
+
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="p-20 bg-black hide" style="margin: 0px; padding: 0px;">
         <div class="w-100 p-30" style="margin: 0px; padding: 0px;">
             <div class="w-1-0 d-flex fs-30 bold text-FF">
+
                 <div style="height: 583px;">
 <!--                    style="background-image:url(../../static/img/lottery/ticket.jpg); width: 1600px; height: 583px;"-->
                     <img src="../../static/img/lottery/ticket.jpg" width="100%">
@@ -148,31 +215,7 @@ $this->title = '抽奖';
 <!--                    </div>-->
                 </div>
             </div>
-            <div class="row hide" id="answer-right-box">
-                <div class="m-t-30 col-sm-12 col-md-12 p-40">
-                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
-                    <div class="answer-title m-t-40" id="answer-title">
 
-                    </div>
-                    <div class="answer-detail m-t-40" style="line-height: 40px;" id="answer-detail">
-
-                    </div>
-                </div>
-
-            </div>
-            <div class="row hide" id="answer-error-box">
-                <div class="m-t-60 col-sm-12 col-md-12">
-                    <div class="answer-detail " >
-                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
-                        <span  class=" d-inline-block vertical-mid">很遗憾，答错了，再想想~</span>
-
-                    </div>
-                </div>
-            </div>
-
-                    <div class="text-center m-t-30">
-
-        </div>
         </div>
 
     </div>
@@ -236,6 +279,36 @@ $this->title = '抽奖';
                         恭喜您答对了
                     </div>
                     <div class="text-center m-t-30">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="lottery-success-pink" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered lottery-pink-modal">
+        <div class="modal-content modal-lottery-bg">
+            <div class="modal-lottery-bg-border">
+                <span class="close m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal">
+                <img src="../../static/img/icon-close.png" class="img-40">
+            </span>
+                <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width:100%">
+                    <div class="m-t-50">
+                        <div class="fs-36 text-F6 text-center bold lottery-error-title">
+                            <img src="../../static/img/lottery/lottery-tymj.png" class="img-350">
+                        </div>
+                        <div class="fs-40 text-center  lottery-title bold m-t-50 lottery-pink-content m-t-50">
+
+                        </div>
+
+                        <div class="fs-24 m-t-20  text-33 lottery-detail text-center bold lottery-error-title">
+
+                        </div>
+                        <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20">
+                            <label class="btn-pink-m">兑换</label>
+                        </div>
                     </div>
                 </div>
             </div>
