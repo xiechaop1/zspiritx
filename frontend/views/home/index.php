@@ -98,7 +98,7 @@ $this->title = 'AR剧本杀';
           <div class="fs-24  w-100 text-FF m-t-30">
             这是用于测试的剧本
           </div>
-          IS DEBUG:<input type="text" name="isDebug" value="1">
+          IS DEBUG:<input type="text" name="isDebug" value="1" style="color: yellow; padding: 10px; font-size: 50px;">
           SID: <input type="text" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
           <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
             <?php
