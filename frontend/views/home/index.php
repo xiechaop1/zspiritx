@@ -43,7 +43,7 @@ $this->title = 'AR剧本杀';
   <?php
   if (
       !empty($user) &&
-      $userId >= 90 && $userId <= 100 &&
+      $user->mobile >= 90 && $user->mobile <= 100 &&
       $user->user_type == \common\models\User::USER_TYPE_INNER) {
     ?>
     <div class="item">
@@ -76,8 +76,8 @@ $this->title = 'AR剧本杀';
     <?php
     }else if (!empty($user) &&
       $user->user_type == \common\models\User::USER_TYPE_INNER
-    && $userId != 101
-  && $userId < 90)
+    && $user->mobile != 101
+  && $user->mobile < 90)
   {
     ?>
     <div class="item">
