@@ -48,7 +48,10 @@ class LotteryApi extends ApiAction
 
         try {
             $this->_storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
-            if (empty($this->_storyId)) {
+            if (empty($this->_storyId)
+                && $this->action != 'get_user_lottery'
+                && $this->action != 'get_user_prize'
+            ) {
                 throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
             }
 
