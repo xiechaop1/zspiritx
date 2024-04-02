@@ -76,7 +76,8 @@ $this->title = 'AR剧本杀';
     <?php
     }else if (!empty($user) &&
       $user->user_type == \common\models\User::USER_TYPE_INNER
-    && $userId != 101)
+    && $userId != 101
+  && $userId < 90)
   {
     ?>
     <div class="item">
@@ -357,7 +358,7 @@ $this->title = 'AR剧本杀';
     <!--Footer Info -->
     <div class="row footer-info text-center">
       <div class="col-md-12 col-sm-12 col-xs-12">
-        <span class="margin-10 footer-m-span white" style="color: white;"><?= !empty($unityVersion) ? '版本号：' . $unityVersion : ''?> &nbsp; 联系我们：18500041193</span><br>
+        <span class="margin-10 footer-m-span white" style="color: white;"><?= !empty($unityVersion) ? '版本号：' . $unityVersion : ''?> &nbsp; 您有任何问题，欢迎联系我们：18500041193，也可以发邮件：<a href="mailto:choicexie@163.com">choicexie@163.com</a></a></span><br>
         <span class="margin-10 footer-m-span white" style="color: white;">Copyright © 2023-<?= Date('Y') ?> 庄生科技 zspiritx.com.cn 版权所有</span><br>
         <span class="margin-10 footer-m-span"><a href="https://beian.miit.gov.cn" class="white">京ICP备2023021255号</a></span>
       </div>
