@@ -12,7 +12,7 @@ namespace frontend\controllers;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
-class WechatController extends Controller
+class WechatpayController extends Controller
 {
     public $layout = '@frontend/views/layouts/main_w.php';
 
@@ -49,11 +49,11 @@ class WechatController extends Controller
 
         return ArrayHelper::merge(parent::actions(), [
             'notify' => [
-                'class'     => 'frontend\actions\wechat\NotifyApi',
+                'class'     => 'frontend\actions\wechatpay\NotifyApi',
                 'action'    => 'notify',
             ],
             'jsapi' => [
-                'class'     => 'frontend\actions\wechat\CreateApi',
+                'class'     => 'frontend\actions\wechatpay\CreateApi',
                 'action'    => 'jsapi',
             ],
         ]);
