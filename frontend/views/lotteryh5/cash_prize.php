@@ -65,14 +65,31 @@ $this->title = '抽奖';
                                 <img src="../../static/img/lottery/lottery-tymj.png" class="img-350">
                             </div>
                             <div class="fs-40 text-center  lottery-title bold m-t-50 lottery-pink-content m-t-50">
-                                奖品名称XXX
+                                <?= !empty($userPrize->prize->prize_name) ? $userPrize->prize->prize_name : ' - ' ?>
                             </div>
 
                             <div class="fs-24 m-t-20  text-33 lottery-detail text-center bold lottery-error-title">
-                                奖品说明XXX
+                                兑奖码：<?= !empty($userPrize->user_prize_no) ? $userPrize->user_prize_no : ' - ' ?><br><br>
+                                本次活动奖品由公园加提供<br>
+                                活动兑奖地址：科普馆门口公园加活动区<br>
+                                兑换时间：20204.4.4-2024.5.4<br>
+                                兑换方式：请到现场联系工作人员兑换<br>
+                                本次活动最终解释权归公园加所有<br>
                             </div>
                             <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20">
-                                <label class="btn-pink-m">兑换</label>
+                                <?php
+                                if (!empty($prevUserPrize)) {
+                                ?>
+                                <label class="btn-pink-m" style="width: 160px;"><a href="/lotteryh5/cash_prize?user_id=<?= $userId?>&session_id=<?= $sessionId?>&user_prize_id=<?= $prevUserPrize->id ?>&lottery_id=<?= $lotteryId ?>&story_id=<?= $storyId ?>">上一个</a></label>
+                                <?php
+                                }
+
+                                if (!empty($nextUserPrize)) {
+                                ?>
+                                    <label class="btn-pink-m" style="width: 160px;"><a href="/lotteryh5/cash_prize?user_id=<?= $userId?>&session_id=<?= $sessionId?>&user_prize_id=<?= $nextUserPrize->id ?>&lottery_id=<?= $lotteryId ?>&story_id=<?= $storyId ?>">下一个</a></label>
+                                <?php
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
