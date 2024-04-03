@@ -29,7 +29,7 @@ class UserPrize extends \yii\db\ActiveRecord
         return [
             [[
                 'user_id', 'prize_id', 'prize_type', 'award_method', 'prize_type', 'expire_time',
-                'lottery_id', 'user_prize_status', 'story_id', 'session_id', 'channel_id', 'status'], 'integer'],
+                'lottery_id', 'user_lottery_id', 'user_prize_status', 'story_id', 'session_id', 'channel_id', 'status'], 'integer'],
             [['extend_info', 'user_prize_no', ] , 'string'],
             [[ 'created_at', 'updated_at',], 'integer'],
         ];
