@@ -71,7 +71,7 @@ class NotifyApi extends ApiAction
         $data = file_get_contents('php://input');
 
         $arrInput = json_decode($data, true);
-        file_put_contents('/tmp/wechatpay.log', 'arr post : ' . json_encode($arrPost, true) . "\n", FILE_APPEND);
+        file_put_contents('/tmp/wechatpay.log', 'arr post : ' . json_encode($arrInput, true) . "\n", FILE_APPEND);
 
         $mchkey = md5('Choice851111');
 
