@@ -64,7 +64,7 @@ class UserPrize extends \common\models\UserPrize
         }
 
         if (!empty($this->user_prize_no)) {
-            $query->andWhere(['user_prize_no' => $this->user_prize_no]);
+            $query->andWhere(['like', 'user_prize_no', $this->user_prize_no]);
 
         }
 

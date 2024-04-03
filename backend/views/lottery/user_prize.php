@@ -92,6 +92,11 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => false
                     ],
                     [
+                        'label' => '奖券ID',
+                        'attribute' => 'user_lottery_id',
+                        'filter' => false
+                    ],
+                    [
                         'label' => '奖品',
                         'attribute' => 'prize_id',
                         'format'    => 'raw',

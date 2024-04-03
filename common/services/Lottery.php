@@ -262,7 +262,7 @@ class Lottery extends Component
         if (!empty($finalPrize)) {
             try {
                 $newUserPrize = $this->add($userId, $sessionId, $channelId, $storyId,
-                    $lotteryId, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
+                    $lotteryId, $userLottery->id, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
                     UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE);
 
             } catch (\Exception $e) {
@@ -289,7 +289,7 @@ class Lottery extends Component
 
     }
 
-    public function add($userId, $sessionId, $channelId, $storyId, $lotteryId, $userTotalPrizeCt, $prizeId, $prizeType, $expireTime = 0, $awardMethod = UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE) {
+    public function add($userId, $sessionId, $channelId, $storyId, $lotteryId, $userLotteryId, $userTotalPrizeCt, $prizeId, $prizeType, $expireTime = 0, $awardMethod = UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE) {
         $userPrizeNo = \common\helpers\Common::generateNo('ZW'
             . $userId
             . \common\helpers\Common::generateFullNumber($sessionId, 2)
@@ -304,6 +304,7 @@ class Lottery extends Component
             $newUserPrize->user_prize_no = $userPrizeNo;
             $newUserPrize->user_id = $userId;
             $newUserPrize->session_id = $sessionId;
+            $newUserPrize->user_lottery_id = $userLotteryId;
             $newUserPrize->channel_id = $channelId;
             $newUserPrize->story_id = $storyId;
             $newUserPrize->lottery_id = $lotteryId;
