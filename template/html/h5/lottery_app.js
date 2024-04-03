@@ -79,12 +79,12 @@ $(function () {
                     console.log(obj);
 
                     if (obj.data.isAward == 1) {
-                        $('#lottery-success-pink .lottery-title').empty().text(obj.data.finalPrize.prize_name);
-                        $('#lottery-success-pink .lottery-detail').empty().text(obj.data.msg);
+                        $('#lottery-success .lottery-title').empty().text(obj.data.finalPrize.prize_name);
+                        $('#lottery-success .lottery-detail').empty().text(obj.data.msg);
                         $("#lottery-success .lottery-success-title").show();
                         $("#lottery-success .lottery-error-title").hide();
 
-                        var dialog = $('#lottery-success-pink');
+                        var dialog = $('#lottery-success');
                     } else {
                         $('#lottery-success .lottery-title').empty();
                         $('#lottery-success .lottery-detail').empty().text(obj.msg);
