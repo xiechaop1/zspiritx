@@ -403,5 +403,11 @@ class Lottery extends Component
         return $userPrize;
     }
 
+    public function getOneUserPrizeById($userPrizeId) {
+        $userPrize = UserPrize::findOne($userPrizeId);
+
+        return $userPrize;
+    }
+
 
 }

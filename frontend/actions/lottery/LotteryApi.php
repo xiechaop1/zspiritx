@@ -172,6 +172,14 @@ class LotteryApi extends ApiAction
 
             $ret = Yii::$app->lottery->run($userId, $userLotteryId, $storyId, $sessionId, $lotteryId, $channelId, $optCt);
 
+            if (!empty($ret) && $ret['isAward'] == 1) {
+                // Todo 待优化
+                // 植物园写死直接加入兑奖券（380）
+                // 后续优化
+                $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, 380, $userId, 1);
+            }
+
+
             if (!empty($storyModelId)) {
                 $userModelBaggage = UserModels::find()
                     ->where([
