@@ -64,7 +64,7 @@ class UserLottery extends \common\models\UserLottery
         }
 
         if (!empty($this->lottery_no)) {
-            $query->andWhere(['like', 'lottery_no', '%' . $this->lottery_no . '%']);
+            $query->andWhere(['like', 'lottery_no', $this->lottery_no]);
 
         }
 

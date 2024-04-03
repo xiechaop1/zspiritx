@@ -56,6 +56,9 @@ class Lottery extends Action
                     'lottery_id' => $lotteryId,
                     'lottery_status' => UserLottery::USER_LOTTERY_STATUS_WAIT
                 ])
+                ->andFilterWhere([
+                    '>', 'ct', 0
+                ])
                 ->one();
 
             if (empty($userLottery)) {
