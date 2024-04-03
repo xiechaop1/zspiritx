@@ -6,7 +6,7 @@
  * Time: 4:57 PM
  */
 
-namespace frontend\actions\wechat;
+namespace frontend\actions\wechatpay;
 
 
 use common\definitions\ErrorCode;
