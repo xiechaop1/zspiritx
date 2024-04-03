@@ -22,7 +22,7 @@ class UserLottery extends \common\models\UserLottery
         return [
             [[
                 'user_id', 'lottery_id', 'expire_time', 'ct',
-                'lottery_id', 'user_lottery_id', 'lottery_status', 'story_id', 'session_id', 'channel_id', 'status'], 'integer'],
+                'lottery_id', 'lottery_status', 'story_id', 'session_id', 'channel_id', 'status'], 'integer'],
             [[ 'created_at', 'updated_at',], 'integer'],
             [['lottery_no'], 'string'],
         ];

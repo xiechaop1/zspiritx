@@ -149,13 +149,13 @@
                                 'label' => '用户奖品',
                                 'url' => ['/lottery/user_prize'],
                                 'active' => in_array($this->context->route, ['lottery/user_prize', 'lottery/user_prize_edit' ]),
-                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_BACKEND_EDITOR)
                             ],
                             [
                                 'label' => '用户奖券',
                                 'url' => ['/lottery/user_lottery'],
                                 'active' => in_array($this->context->route, ['lottery/user_lottery', 'lottery/user_lottery_edit' ]),
-                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_BACKEND_EDITOR)
                             ],
                         ]
                     ],
