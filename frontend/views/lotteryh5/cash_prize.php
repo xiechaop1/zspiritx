@@ -79,7 +79,7 @@ $this->title = '抽奖';
                 </div>
             </div>
         </div>
-        
+
         <div class="modal-dialog modal-dialog-centered lottery-pink-modal">
             <div class="modal-content modal-lottery-bg">
                 <div class="modal-lottery-bg-border">

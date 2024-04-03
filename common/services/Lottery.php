@@ -250,17 +250,16 @@ class Lottery extends Component
         $upnSession = !empty($sessionId) ? $sessionId : $channelId;
         $newUserPrize = null;
 
+        $userLottery->ct = $userLottery->ct - 1;
         if (!empty($finalPrize)) {
             try {
                 $newUserPrize = $this->add($userId, $sessionId, $channelId, $storyId,
                     $lotteryId, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
                     UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE);
 
-                $userLottery->ct = $userLottery->ct - 1;
                 if ($userLottery->ct <= 0) {
                     $userLottery->lottery_status = UserLottery::USER_LOTTERY_STATUS_USED;
                 }
-                $userLottery->save();
 
             } catch (\Exception $e) {
 //            $newUserPrize = null;
@@ -268,6 +267,7 @@ class Lottery extends Component
                 throw new \Exception('添加奖品失败', ErrorCode::USER_PRIZE_ADD_FAILED);
             }
         }
+        $userLottery->save();
 
         return [
             'isAward' => $isAward,
