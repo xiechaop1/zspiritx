@@ -296,7 +296,7 @@ class Lottery extends Component
             . \common\helpers\Common::generateFullNumber($lotteryId, 2)
             . \common\helpers\Common::generateFullNumber($prizeId, 2)
             . \common\helpers\Common::generateFullNumber($prizeType, 2)
-            , Date('YmdH'), \common\helpers\Common::generateFullNumber($userTotalPrizeCt + 1, 5), 10, 99
+            , Date('Ymd'), \common\helpers\Common::generateFullNumber($userTotalPrizeCt + 1, 5), 10, 99
         );
         // 把奖品入库
         try {
