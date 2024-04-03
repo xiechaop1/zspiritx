@@ -257,15 +257,14 @@ class Lottery extends Component
                     $lotteryId, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
                     UserPrize::USER_PRIZE_AWARD_METHOD_ONLINE);
 
-                if ($userLottery->ct <= 0) {
-                    $userLottery->lottery_status = UserLottery::USER_LOTTERY_STATUS_USED;
-                }
-
             } catch (\Exception $e) {
 //            $newUserPrize = null;
 //            $msg = '您的操作出现异常，请您重试！';
                 throw new \Exception('添加奖品失败', ErrorCode::USER_PRIZE_ADD_FAILED);
             }
+        }
+        if ($userLottery->ct <= 0) {
+            $userLottery->lottery_status = UserLottery::USER_LOTTERY_STATUS_USED;
         }
         $userLottery->save();
 
