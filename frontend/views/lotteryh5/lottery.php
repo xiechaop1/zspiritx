@@ -120,6 +120,33 @@ $this->title = '抽奖';
             </div>
         </div>
     </div>
+
+    <!--兑奖页面-->
+    <div class="show" style="display: block;" >
+        <div class="modal-dialog modal-dialog-centered lottery-pink-modal">
+            <div class="modal-content modal-lottery-bg">
+                <div class="modal-lottery-bg-border">
+                <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width:100%">
+                    <div class="m-t-50">
+                        <div class="fs-36 text-F6 text-center bold lottery-error-title">
+                            <img src="../../static/img/lottery/lottery-tymj.png" class="img-350">
+                        </div>
+                        <div class="fs-40 text-center  lottery-title bold m-t-50 lottery-pink-content m-t-50">
+                           奖品名称XXX
+                        </div>
+
+                        <div class="fs-24 m-t-20  text-33 lottery-detail text-center bold lottery-error-title">
+                           奖品说明XXX
+                        </div>
+                        <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20">
+                            <label class="btn-pink-m">兑换</label>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
