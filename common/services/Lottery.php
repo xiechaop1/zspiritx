@@ -39,11 +39,15 @@ class Lottery extends Component
 
         $userLottery = UserLottery::find()
             ->where([
-                'id'    => $userLotteryId,
                 'user_id'   => $userId,
                 'lottery_id'    => $lotteryId,
                 'session_id'    => $sessionId,
             ]);
+        if (!empty($userLotteryId)) {
+            $userLottery = $userLottery->andFilterWhere([
+                'id'    => $userLotteryId
+            ]);
+        }
         if (!empty($storyId)) {
             $userLottery = $userLottery->andFilterWhere([
                 'story_id'  => $storyId
