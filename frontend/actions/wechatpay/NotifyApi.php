@@ -78,14 +78,18 @@ class NotifyApi extends ApiAction
         $cipher = (new AesUtil($mchkey))->decryptToString($arrPost['associated_data'], $arrPost['nonce'], $arrPost['ciphertext']);
         $arrData = json_decode($cipher, true);
 
+        file_put_contents('/tmp/wechatpay.log', json_encode($arrData, true), FILE_APPEND);
+
         if (!empty($arrData['out_trade_no'])
             && isset($arrData['trade_status'])
             && $arrData['trade_status'] == 'SUCCESS'
         ) {
             $order = Order::findOne(['order_no' => $arrData['out_trade_no']]);
+            file_put_contents('/tmp/wechatpay.log', json_encode($order, true), FILE_APPEND);
             if ($order) {
                 $order->order_status = Order::ORDER_STATUS_COMPLETED;
                 $order->save();
+                file_put_contents('/tmp/wechatpay.log', 'order save succ!', FILE_APPEND);
             }
         }
 
