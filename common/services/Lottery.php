@@ -234,9 +234,9 @@ class Lottery extends Component
 //            ];
         }
 
+        $finalPrize = [];
         if (!empty($prizePool)) {
             $randRate = mt_rand(0, $allRate);
-            $finalPrize = [];
             foreach ($prizePool as $pp) {
                 if ($randRate >= $pp['rateRange'][0] && $randRate < $pp['rateRange'][1]) {
                     if (!empty($pp['prize'])) {
