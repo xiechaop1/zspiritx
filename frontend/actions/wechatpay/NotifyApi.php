@@ -70,10 +70,12 @@ class NotifyApi extends ApiAction
     public function notify() {
         $data = file_get_contents('php://input');
 
-        $arrPost = json_decode($data, true);
+        $arrInput = json_decode($data, true);
         file_put_contents('/tmp/wechatpay.log', 'arr post : ' . json_encode($arrPost, true) . "\n", FILE_APPEND);
 
         $mchkey = md5('Choice851111');
+
+        $arrPost = $arrInput['resource'];
 
         // 解密入参
         $cipher = (new AesUtil($mchkey))->decryptToString($arrPost['associated_data'], $arrPost['nonce'], $arrPost['ciphertext']);
