@@ -55,7 +55,7 @@ $this->title = '抽奖';
     </audio>
 <div class="w-100 m-auto">
     <label class="close-btn hide">
-        <img src="../../img/icon-close.png" class="img-40">
+        <img src="../../static/img/icon-close.png" class="img-40">
     </label>
     <!--兑奖页面-->
     <div class="show" style="display: block;" >
