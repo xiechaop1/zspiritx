@@ -92,7 +92,16 @@ echo \dmstr\widgets\Alert::widget();
                         'value' => function ($model) {
                             return !empty($model->user->user_name) ? $model->user->user_name : '未知';
                         },
-                        'filter' => false
+                        'filter' => Html::activeInput('text', $searchModel, 'user_name',['placeholder'=>'用户名']),
+                    ],
+                    [
+                        'label' => '手机号',
+                        'attribute' => 'mobile',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty($model->user->mobile) ? $model->user->mobile : '未知';
+                        },
+                        'filter' => Html::activeInput('text', $searchModel, 'mobile',['placeholder'=>'手机号']),
                     ],
                     [
                         'label' => '场次',

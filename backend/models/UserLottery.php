@@ -17,6 +17,9 @@ class UserLottery extends \common\models\UserLottery
 {
     public $date_range;
 
+    public $user_name;
+    public $mobile;
+
     public function rules()
     {
         return [
@@ -49,6 +52,18 @@ class UserLottery extends \common\models\UserLottery
 
         if (!empty($this->user_id)) {
             $query->andWhere(['user_id' => $this->user_id]);
+        }
+
+        if (!empty($params['UserLottery']['mobile'])) {
+            $query->joinWith(['user' => function($model) use ($params) {
+                return $model->andFilterWhere(['like', 'o_user.mobile', $params['UserLottery']['mobile']]);
+            }]);
+        }
+
+        if (!empty($params['UserLottery']['user_name'])) {
+            $query->joinWith(['user' => function($model) use ($params) {
+                return $model->andFilterWhere(['like', 'o_user.user_name', $params['UserLottery']['user_name']]);
+            }]);
         }
 
         if (!empty($this->lottery_id)) {
