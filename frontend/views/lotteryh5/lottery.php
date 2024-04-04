@@ -57,6 +57,9 @@ $this->title = '抽奖';
         您的浏览器不支持 audio 元素。
     </audio>
 <div class="w-100 m-auto">
+    <label class="close-btn hide">
+        <img src="../../img/icon-close.png" class="img-40">
+    </label>
     <div class="show" style="display: block;" >
         <div class="modal-dialog modal-dialog-centered lottery-pink-modal">
             <div class="modal-content modal-lottery-bg">

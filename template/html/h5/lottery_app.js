@@ -97,8 +97,8 @@ $(function () {
                     //给微信小程序传参数
                     console.log(obj);
                     wx.miniProgram.postMessage({
-                        data:obj,
-                        info:'',
+                        data:'award',
+                        info:obj,
                         func:''
                     });
                 }
@@ -117,5 +117,20 @@ $(function () {
             }
         });
     });
+
+    //判断是否在微信里
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+        $(".close-btn").show()
+    }
+
+    //关闭按钮，给小程序传参
+    $(".close-btn").click(function (){
+        wx.miniProgram.postMessage({
+            data:'back',
+            info:'',
+            func:''
+        });
+    })
 
 })
