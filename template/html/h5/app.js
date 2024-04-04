@@ -462,7 +462,7 @@ $(function () {
                     //新消息获取成功
                     if(obj["code"]==200){
                         console.log(obj.data);
-                        var order_status = obj.data.order_status;
+                        var order_status = obj.data.order.order_status;
                         if (order_status != 0 && (order_status == 1 || order_status == 2)) {
                             if (unityVersion != "") {
                                 var params = {
