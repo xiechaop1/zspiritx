@@ -124,13 +124,27 @@ $(function () {
     // } else {
     //     $(".close-btn").show()
     // }
+    // 判断是否在微信浏览器内
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
+        wx.miniProgram.getEnv((res) => {
+            if (res.miniprogram) {
+                
+            } else {
+                $(".close-btn").hide()
+            }
+        })
+    } else {
+        $(".close-btn").hide()
+    }
 
-    wx.miniProgram.getEnv(function(res){
-        console.log("是否在微信小程序内",res)
-        if(res.miniprogram==false){
-            $(".close-btn").hide()
-        } // true
-    })
+    // wx.miniProgram.getEnv(function(res){
+    //     console.log("是否在微信小程序内",res)
+    //     if(res.miniprogram==false){
+    //         $(".close-btn").hide()
+    //     } // true
+    // })
 
 
 
