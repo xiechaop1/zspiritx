@@ -125,6 +125,8 @@ $(function () {
 
     //关闭按钮，给小程序传参
     $(".close-btn").click(function (){
+        wx.miniProgram.getEnv(function(res) { console.log("webview",res.miniprogram) })
+        wx.miniProgram.navigateTo({url: 'pages/oka/index'})
         //微信小程序后退
         wx.miniprogram.navigateBack({
            delta:1,
