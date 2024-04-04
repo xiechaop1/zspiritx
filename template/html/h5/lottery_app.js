@@ -118,9 +118,8 @@ $(function () {
         });
     });
 
-    //判断是否在微信里
-    var ua = window.navigator.userAgent.toLowerCase();
-    if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+    //判断是否在微信小程序里
+    if(!window.WeixinJSBridge || !WeixinJSBridge.invoke) {
         $(".close-btn").show()
     }
 
@@ -128,7 +127,13 @@ $(function () {
     $(".close-btn").click(function (){
         //微信小程序后退
         wx.miniprogram.navigateBack({
-           delta:1
+           delta:1,
+            success:function(){
+               console.log("微信小程序返回成功")
+            },
+            fail:function (){
+                console.log("微信小程序返回失败")
+            }
         });
         //微信小程序传参
         wx.miniProgram.postMessage({
