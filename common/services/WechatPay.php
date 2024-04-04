@@ -313,6 +313,47 @@ class WechatPay extends Component
 
     }
 
+    public function createRefundOrderByOrder($order, $channel = '') {
+        $this->setMch($channel);
+
+        $uri = '/v3/refund/domestic/refunds';
+        $host = 'https://api.mch.weixin.qq.com';
+        $uri = $this->_createUri($uri, $host);
+
+        $mch = $this->_getMch($channel);
+        $merchantId = $mch['merchantId'];
+        $merchantSerialNumber = $mch['merchantSerialNumber'];
+        $prefix = $mch['prefix'];
+
+        $order->refund_no = !empty($order->refund_no)
+            ? $order->refund_no
+            : \common\helpers\Order::generateOutTradeNo($order->userId, $order->storyId, $order->pay_method, 'ZR');
+
+        $order->save();
+
+        $params = [
+            // JSON请求体
+            'json' => [
+                "amount" => [
+                    "refund" => $order->amount * 100,
+                    "total" => $order->amount * 100,
+                    "currency" => "CNY",
+                ],
+                "out_trade_no" => $order->order_no,
+                "out_refund_no" => $order->refund_no,
+                "reason" => "用户退款：" . !empty($order->story->story_name) ? $order->story->story_name : '未知剧本',
+                "notify_url" => "https://www.zspiritx.com.cn/wechatpay/refund_notify",
+            ],
+            'headers' => [ 'Accept' => 'application/json' ]
+        ];
+
+        $client = $this->createClient($channel);
+
+        $tmpRet = $this->_getPostApi($uri, $params, $channel);
+
+        return $tmpRet;
+    }
+
     private function _createUri($uri, $host, $params = []) {
         $uri = $host . $uri;
         if (!empty($params)) {

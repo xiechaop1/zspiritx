@@ -22,6 +22,7 @@ class Order extends \common\models\gii\Order
     const ORDER_STATUS_PAYING       = 10;    // 支付中
     const ORDER_STATUS_PAY_FAILED   = 11;    // 支付失败
     const ORDER_STATUS_PAY_TIMEOUT  = 12;    // 支付超时
+    const ORDER_STATUS_REFUNDING     = 98;    // 退款中
     const ORDER_STATUS_REFUND       = 99;    // 已退款
 
     public static $orderStatus = [
@@ -33,6 +34,7 @@ class Order extends \common\models\gii\Order
         self::ORDER_STATUS_PAYING       => '支付中',
         self::ORDER_STATUS_PAY_FAILED   => '支付失败',
         self::ORDER_STATUS_PAY_TIMEOUT  => '支付超时',
+        self::ORDER_STATUS_REFUNDING    => '退款中',
         self::ORDER_STATUS_REFUND       => '已退款',
     ];
 

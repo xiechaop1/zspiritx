@@ -36,7 +36,8 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'story_id', 'pay_method', 'order_status', 'status', 'expire_time', 'created_at', 'updated_at'], 'integer'],
-            [['story_price', 'amount'], 'number'],
+            [['story_price', 'amount', 'refund_amount'], 'number'],
+            [['order_no', 'transaction_id', 'refund_no'], 'string'],
 //            [['attach', ], 'string'],
         ];
     }

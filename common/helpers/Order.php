@@ -14,7 +14,7 @@ class Order
     /*
      * 生成订单号
      */
-    public static function generateOutTradeNo($userInfo, $storyId, $payMethod) {
+    public static function generateOutTradeNo($userInfo, $storyId, $payMethod, $prefix = 'Z') {
 
         if (empty($userInfo) || empty($storyId) || empty($payMethod)) {
             return '';
@@ -23,7 +23,7 @@ class Order
         $userId = $userInfo['id'];
         $mobile = $userInfo['mobile'];
 
-        $ret = 'ZS' . Date('YmdHis') . self::genNum(6, $userId) . self::genNum(4, $storyId) . self::genNum(2, $payMethod) . rand(1000,9999);
+        $ret = $prefix . Date('ymdH') . self::genNum(6, $userId) . self::genNum(4, $storyId) . self::genNum(1, $payMethod) . rand(1000,9999);
 
         return $ret;
     }

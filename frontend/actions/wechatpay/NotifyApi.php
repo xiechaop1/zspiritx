@@ -91,6 +91,7 @@ class NotifyApi extends ApiAction
             $order = Order::findOne(['order_no' => $arrData['out_trade_no']]);
             file_put_contents('/tmp/wechatpay.log', "order : " . json_encode($order, true) . "\n", FILE_APPEND);
             if ($order) {
+                $order->transaction_id = !empty($arrData['transaction_id']) ? $arrData['transaction_id'] : '';
                 $order->order_status = Order::ORDER_STATUS_COMPLETED;
                 $order->save();
                 file_put_contents('/tmp/wechatpay.log', 'order save succ!', FILE_APPEND);
