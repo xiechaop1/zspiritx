@@ -47,7 +47,7 @@ class Lotteryh5Asset extends AssetBundle
         self::HOST . 'js/owl.carousel/owl.carousel.js',
         self::HOST . 'js/getOptions.js',
         self::HOST . 'js/jquery.SuperSlide.2.1.3.js',
-        'https://res.wx.qq.com/open/js/jweixin-1.3.2.js',
+        'https://res.wx.qq.com/open/js/jweixin-1.6.0.js',
         'html/h5/lottery_app.js',
         ];
 
