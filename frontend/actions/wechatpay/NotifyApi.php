@@ -74,6 +74,7 @@ class NotifyApi extends ApiAction
         file_put_contents('/tmp/wechatpay.log', 'arr post : ' . json_encode($arrInput, true) . "\n", FILE_APPEND);
 
         $mchkey = md5('choice851111');
+        $mchkey = 'b12c28d4741e950b30ff94ee44b7843c';
 
         $arrPost = $arrInput['resource'];
 
@@ -97,7 +98,10 @@ class NotifyApi extends ApiAction
         }
 
 
-        return [];
+        return [
+            'code' => '成功',
+            'message' => '成功',
+        ];
 //    }
 
 //        $transaction = Yii::$app->db->beginTransaction();
