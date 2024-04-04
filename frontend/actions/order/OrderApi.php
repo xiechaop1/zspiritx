@@ -54,6 +54,9 @@ class OrderApi extends ApiAction
                 case 'pay':
                     $ret = $this->pay();
                     break;
+                case 'refund':
+                    $ret = $this->refund();
+                    break;
                 case 'cancel':
                     $ret = $this->cancel();
                     break;
@@ -113,7 +116,13 @@ class OrderApi extends ApiAction
             $order->amount = $currPrice;
             $order->story_price = $storyExtend['price'];
 
-            if ($currPrice > 0) {
+            // Todo： 后续去掉
+            // 临时增加流程，保证小程序可以支付，app直接游戏
+            // 目前只有小程序传入execMethod
+            if ($currPrice > 0
+                &&
+                !empty($execMethod)
+            ) {
                 $order->order_status = Order::ORDER_STATUS_WAIT;
                 $order->expire_time = time() + 30 * 60;     // 30分钟过期
 
@@ -138,6 +147,99 @@ class OrderApi extends ApiAction
                     'order' => $order,
                 ];
             }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+
+        return $ret;
+    }
+
+    public function refundByOrder($order) {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (empty($order)) {
+            throw new \Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
+        }
+
+        if ($order->order_status != Order::ORDER_STATUS_PAIED) {
+            throw new \Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
+        }
+
+        if (empty($order->story)) {
+            throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+        }
+        $story = $order->story;
+
+        try {
+            $res = Yii::$app->wechatPay->refund($order, $this->_userInfo);
+
+            $order->order_status = Order::ORDER_STATUS_REFUNDING;
+            $ret = $order->save();
+
+            $ret = [
+                'refund_res' => $res,
+                'order' => $order,
+            ];
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+
+        return $ret;
+    }
+
+    public function refund() {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (empty($this->_get['order_id'])) {
+            if (!empty($this->_get['story_id'])
+                && $this->_get['user_id']
+            ) {
+                $order = Order::find()
+                    ->where([
+                        'user_id' => $this->_get['user_id'],
+                        'story_id' => $this->_get['story_id'],
+                        'order_status' => Order::ORDER_STATUS_COMPLETED
+                    ])
+                    ->one();
+
+            } else {
+                throw new \Exception('请您给出订单信息', ErrorCode::ORDER_NOT_FOUND);
+            }
+        } else {
+            $orderId = $this->_get['order_id'];
+
+            $order = Order::findOne($orderId);
+        }
+
+        if (empty($order)) {
+            throw new \Exception('订单不存在', ErrorCode::ORDER_NOT_FOUND);
+        }
+
+        if ($order->order_status != Order::ORDER_STATUS_PAIED) {
+            throw new \Exception('订单状态不正确', ErrorCode::ORDER_STATUS_ERROR);
+        }
+
+        if (empty($order->story)) {
+            throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+        }
+        $story = $order->story;
+
+        try {
+            $res = Yii::$app->wechatPay->refund($order, $this->_userInfo);
+
+            $order->order_status = Order::ORDER_STATUS_REFUNDING;
+            $ret = $order->save();
+
+            $ret = [
+                'refund_res' => $res,
+                'order' => $order,
+            ];
+
+            $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw $e;
