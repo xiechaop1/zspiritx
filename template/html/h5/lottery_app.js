@@ -94,7 +94,13 @@ $(function () {
                     }
                     dialog.modal('show');
 
-
+                    //给微信小程序传参数
+                    // console.log(obj);
+                    // wx.miniProgram.postMessage({
+                    //     data:'award',
+                    //     info:obj,
+                    //     func:''
+                    // });
                 }
                 //新消息获取失败
                 else{
@@ -111,5 +117,57 @@ $(function () {
             }
         });
     });
+
+    //判断是否在微信小程序里,下述官方方案侧测试判断不准
+    // if (!window.WeixinJSBridge || !WeixinJSBridge.invoke) {
+    //     $(".close-btn").hide()
+    // } else {
+    //     $(".close-btn").show()
+    // }
+    // 判断是否在微信浏览器内
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
+        wx.miniProgram.getEnv((res) => {
+            if (res.miniprogram) {
+                
+            } else {
+                $(".close-btn").hide()
+            }
+        })
+    } else {
+        $(".close-btn").hide()
+    }
+
+    // wx.miniProgram.getEnv(function(res){
+    //     console.log("是否在微信小程序内",res)
+    //     if(res.miniprogram==false){
+    //         $(".close-btn").hide()
+    //     } // true
+    // })
+
+
+
+    //关闭按钮，给小程序传参
+    $(".close-btn").click(function (){
+        // wx.miniProgram.getEnv(function(res) { console.log("webview",res.miniprogram) })
+        // wx.miniProgram.navigateTo({url: 'pages/oka/index'})
+        //微信小程序后退
+        wx.miniProgram.navigateBack({
+           delta:1,
+            success:function(){
+               console.log("微信小程序返回成功")
+            },
+            fail:function (){
+                console.log("微信小程序返回失败")
+            }
+        });
+        //微信小程序传参
+        wx.miniProgram.postMessage({
+            data:'back',
+            info:'',
+            func:''
+        });
+    })
 
 })

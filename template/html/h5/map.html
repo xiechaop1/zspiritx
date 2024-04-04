@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=375,user-scalable=no, target-densitydpi=device-dpi">
+<!--  <meta name="viewport" content="width=375,user-scalable=no, target-densitydpi=device-dpi">-->
+  <meta name="viewport" content="width=375, user-scalable=no">
+<!--  <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">-->
   <title>自适应显示多个点标记</title>
   <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
   <link rel="stylesheet" href="app.css"/>
@@ -15,7 +17,7 @@
     }
     #container {
       height: 100%;
-      width: 100%;
+      width: 375px;
     }
     .amap-icon img{
       width: 25px;
@@ -24,6 +26,9 @@
   </style>
 </head>
 <body>
+<div id="user_center">
+  <img src="../../img/position.png">
+</div>
 <div id="container"></div>
 
 <!--<div class="input-card">-->
