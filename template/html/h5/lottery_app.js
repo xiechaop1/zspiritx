@@ -126,6 +126,11 @@ $(function () {
 
     //关闭按钮，给小程序传参
     $(".close-btn").click(function (){
+        //微信小程序后退
+        wx.miniprogram.navigateBack({
+           delta:1
+        });
+        //微信小程序传参
         wx.miniProgram.postMessage({
             data:'back',
             info:'',
