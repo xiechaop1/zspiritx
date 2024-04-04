@@ -118,12 +118,20 @@ $(function () {
         });
     });
 
-    //判断是否在微信小程序里
-    if (!window.WeixinJSBridge || !WeixinJSBridge.invoke) {
-        $(".close-btn").hide()
-    } else {
-        $(".close-btn").show()
-    }
+    //判断是否在微信小程序里,下述官方方案侧测试判断不准
+    // if (!window.WeixinJSBridge || !WeixinJSBridge.invoke) {
+    //     $(".close-btn").hide()
+    // } else {
+    //     $(".close-btn").show()
+    // }
+
+    wx.miniProgram.getEnv(function(res) {
+        if(res.miniprogram==false){
+            $(".close-btn").hide()
+        } // true
+    })
+
+
 
     //关闭按钮，给小程序传参
     $(".close-btn").click(function (){
