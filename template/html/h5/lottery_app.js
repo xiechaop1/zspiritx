@@ -119,7 +119,9 @@ $(function () {
     });
 
     //判断是否在微信小程序里
-    if(!window.WeixinJSBridge || !WeixinJSBridge.invoke) {
+    if (!window.WeixinJSBridge || !WeixinJSBridge.invoke) {
+        $(".close-btn").hide()
+    } else {
         $(".close-btn").show()
     }
 
