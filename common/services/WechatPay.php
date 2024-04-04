@@ -254,7 +254,7 @@ class WechatPay extends Component
                 "time_expire" => Date('Y-m-d\TH:i:s+08:00', strtotime('+' . self::ORDER_TIMEOUT . 'mins')),
                 // "2018-06-08T10:34:56+08:00",
                 "amount" => [
-                    "total" => $amount * 100,
+                    "total" => round($amount * 100),
                     "currency" => "CNY",
                 ],
                 "mchid" => $merchantId,
@@ -335,8 +335,8 @@ class WechatPay extends Component
             // JSON请求体
             'json' => [
                 "amount" => [
-                    "refund" => $order->amount * 100,
-                    "total" => $order->amount * 100,
+                    "refund" => round($order->amount * 100),
+                    "total" => round($order->amount * 100),
                     "currency" => "CNY",
                 ],
                 "out_trade_no" => $order->order_no,
