@@ -125,7 +125,8 @@ $(function () {
     //     $(".close-btn").show()
     // }
 
-    wx.miniProgram.getEnv(function(res) {
+    wx.miniProgram.getEnv(function(res){
+        console.log("是否在微信小程序内",res)
         if(res.miniprogram==false){
             $(".close-btn").hide()
         } // true
