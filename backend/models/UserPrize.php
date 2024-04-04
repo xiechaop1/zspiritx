@@ -17,6 +17,10 @@ class UserPrize extends \common\models\UserPrize
 {
     public $date_range;
 
+    public $mobile;
+
+    public $user_name;
+
     public function rules()
     {
         return [
@@ -49,6 +53,18 @@ class UserPrize extends \common\models\UserPrize
 
         if (!empty($this->user_id)) {
             $query->andWhere(['user_id' => $this->user_id]);
+        }
+
+        if (!empty($params['UserPrize']['mobile'])) {
+            $query->joinWith(['user' => function($model) use ($params) {
+                return $model->andFilterWhere(['like', 'o_user.mobile', $params['UserPrize']['mobile']]);
+            }]);
+        }
+
+        if (!empty($params['UserPrize']['user_name'])) {
+            $query->joinWith(['user' => function($model) use ($params) {
+                return $model->andFilterWhere(['like', 'o_user.user_name', $params['UserPrize']['user_name']]);
+            }]);
         }
 
         if (!empty($this->lottery_id)) {
