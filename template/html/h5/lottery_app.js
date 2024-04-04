@@ -95,12 +95,12 @@ $(function () {
                     dialog.modal('show');
 
                     //给微信小程序传参数
-                    console.log(obj);
-                    wx.miniProgram.postMessage({
-                        data:'award',
-                        info:obj,
-                        func:''
-                    });
+                    // console.log(obj);
+                    // wx.miniProgram.postMessage({
+                    //     data:'award',
+                    //     info:obj,
+                    //     func:''
+                    // });
                 }
                 //新消息获取失败
                 else{
