@@ -17,11 +17,8 @@ class Order extends \common\models\Order
 {
     public $mobile;
 
-    public $music_title;
 
-    public $music_singer;
-    public $music_lyricist;
-    public $music_composer;
+    public $date_range;
 
     public function rules()
     {
