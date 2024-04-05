@@ -49,17 +49,18 @@ class Order extends \common\models\Order
                 'o_order.order_status'  => $params['Order']['order_status']
             ]);
         } else {
-            $query->andFilterWhere([
-                'o_order.order_status'  => [
-                    \common\models\Order::ORDER_STATUS_PAIED,
-                    \common\models\Order::ORDER_STATUS_COMPLETED
-                ]
-            ]);
+//            $query->andFilterWhere([
+//                'o_order.order_status'  => [
+//                    \common\models\Order::ORDER_STATUS_WAIT,
+//                    \common\models\Order::ORDER_STATUS_PAIED,
+//                    \common\models\Order::ORDER_STATUS_COMPLETED
+//                ]
+//            ]);
         }
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
+//        if (!($this->load($params) && $this->validate())) {
+//            return $dataProvider;
+//        }
 
         if (!empty($params['Order']['mobile'])) {
             $query->joinWith(['user' => function($model) use ($params) {
@@ -92,7 +93,7 @@ class Order extends \common\models\Order
         }
 
         $query->orderBy(['created_at' => SORT_DESC]);
-
+//var_dump($query->createCommand()->getRawSql());exit;
         return $dataProvider;
 
 
