@@ -107,6 +107,7 @@ class PuzzleImage extends Action
 
                             }
                         }
+                        shuffle($keyStoryModels);
                     } else {
                         $incBagItems = UserModels::find()
                             ->where([
