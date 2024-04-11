@@ -150,13 +150,14 @@ $this->title = 'Puzzle';
                     <div style="clear: both;">
                     <?php
                         $ct = 0;
+                        $width = intval(550 / $cols);
                         for ($i=0; $i < $rows; $i++) {
 
                             for ($j=0; $j < $cols; $j++) {
 
                                 $isLock = !empty($iList[$ct]['conf']['is_lock']) ? '1' : '0';
                     ?>
-                        <div class="puzzle_image_item" id="puzzle_image_<?= $ct ?>" lock="<?= $isLock ?>" right_val="<?= !empty($iList[$ct]) ? $ct : '' ?>" val="<?= $ct ?>">
+                        <div class="puzzle_image_item" style="width: <?= $width ?>px; height: <?= $width ?>px;" id="puzzle_image_<?= $ct ?>" lock="<?= $isLock ?>" right_val="<?= !empty($iList[$ct]) ? $ct : '' ?>" val="<?= $ct ?>">
                             <?php
                             if (!empty($iList[$ct])) {
                                 $storyModel = $iList[$ct]['storyModel'];

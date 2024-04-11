@@ -333,6 +333,12 @@ $(function () {
         });
         console.log(chk);
         if (chk == 1) {
+            var that=$("#answer-info");
+            var qa_id=$("input[name='qa_id']").val();
+            var user_id=$("input[name='user_id']").val();
+            var session_id=$("input[name='session_id']").val();
+            var session_stage_id=$("input[name='session_stage_id']").val();
+            var begin_ts=$("input[name='begin_ts']").val();
             console.log('success');
             $.ajax({
                 type: "GET", //用POST方式传输
