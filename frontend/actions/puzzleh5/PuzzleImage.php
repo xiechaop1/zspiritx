@@ -86,7 +86,6 @@ class PuzzleImage extends Action
                         $tmpStoryModels = StoryModels::find()
                             ->where([
                                 'id' => $incIds,
-                                'is_delete' => Common::STATUS_NORMAL,
                             ])
                             ->all();
                         if (!empty($tmpStoryModels)) {
