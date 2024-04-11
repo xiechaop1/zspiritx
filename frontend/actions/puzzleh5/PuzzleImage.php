@@ -15,6 +15,7 @@ use common\helpers\Client;
 use common\helpers\Cookie;
 use common\models\Order;
 use common\models\Story;
+use common\models\StoryModels;
 use common\models\User;
 use common\models\UserModels;
 use yii\base\Action;
@@ -103,7 +104,7 @@ class PuzzleImage extends Action
                                     ];
                                     $keyStoryModels[] = $sm;
                                 }
-                            
+
                             }
                         }
                     } else {
