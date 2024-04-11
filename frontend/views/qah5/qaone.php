@@ -322,7 +322,7 @@ $this->title = $qa['topic'];
                     </div>
                     ';
                     if (!empty($str['keyboard'])) {
-                        $optstr = \common\helpers\Qa::setKeyboard($str, $storyId, $userId, $sessionId);
+                        $optstr .= \common\helpers\Qa::setKeyboard($str, $storyId, $userId, $sessionId);
 //                        if ($str['keyboard'] != '9area') {
 //                            $optstr .= '<div class="m-t-30 col-sm-12 col-md-6 keyboard_area">';
 //                            $keyboard = $str['keyboard'];
