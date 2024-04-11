@@ -15,8 +15,8 @@ class Puzzleh5Asset extends AssetBundle
 {
     public $sourcePath = '@runtime/../../template';
 
-//    CONST HOST = 'https://s.nowkey.net/zspiritx/';
-    CONST HOST = '';
+    CONST HOST = 'https://s.nowkey.net/zspiritx/';
+//    CONST HOST = '';
 
     public $css = [
     	self::HOST . 'css/bootstrap/bootstrap.min.css',
