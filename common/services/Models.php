@@ -754,4 +754,34 @@ class Models extends Component
         return $userModelUsed;
     }
 
+    public function computeStoryModelPropWithFormula($useStoryModels, $targetStoryModel) {
+        $ret = [];
+        if (!empty($targetStoryModel->story_model_prop)) {
+            $tarStoryModelProp = json_decode($targetStoryModel->story_model_prop, true);
+            if (!empty($tarStoryModelProp['formula'])) {
+                $formula = $tarStoryModelProp['formula'];
+            }
+        }
+        if (empty($formula)) {
+            return $ret;
+        }
+
+//        preg_match_all('/\{\$(.+?)\}/', $formula, $matches);
+        if ( !empty($useStoryModels)
+//            && !empty($matches)
+        ) {
+            foreach ($useStoryModels as $usm) {
+                $storyModelProp = !empty($usm->story_model_prop) ? json_decode($usm->story_model_prop, true) : [];
+//                var_dump($storyModelProp);
+//                foreach ($matches[1] as $match) {
+//                    $formula = str_replace('{$' . $match . '}', $storyModelProp[$match], $formula);
+//                }
+//                echo $formula;
+                eval( $formula . ';');
+            }
+        }
+
+        return $ret;
+    }
+
 }

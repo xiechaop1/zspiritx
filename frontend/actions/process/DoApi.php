@@ -1098,6 +1098,7 @@ class DoApi extends ApiAction
                     }
 
                     $userModelIds = [];
+                    $storyModels = [];
                     foreach ($userModels as $userModel2) {
                         $storyModel2 = $userModel2->storyModel;
 
@@ -1114,6 +1115,8 @@ class DoApi extends ApiAction
                         } else {
                             $userModelIds[] = $storyModel2->id;
                         }
+
+                        $storyModels[] = $storyModel2;
                     }
 
                     if (empty($combineGroup)) {
@@ -1174,9 +1177,23 @@ class DoApi extends ApiAction
                     $linkStoryModelStr = implode(',', $linkStoryModelIds);
 
                     if ($userModelStr == $linkStoryModelStr) {
+
+                        $newStoryModel = StoryModels::find()->where(['id' => $newStoryModelId])->one();
+                        $computeRet = Yii::$app->models->computeStoryModelPropWithFormula($storyModels, $newStoryModel);
+
                         if ($type == StoryModelsLink::EFF_TYPE_MODEL) {
-                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0);
+                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $computeRet);
                         }
+                        if ($type == StoryModelsLink::EFF_TYPE_MODEL_AND_DISPLAY) {
+                            // 组合模型并显示出来
+                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $computeRet);
+                            $newStoryUID = !empty($newStoryModel->model_inst_u_id) ? $newStoryModel->model_inst_u_id : 0;
+                            if (!empty($newStoryUID) ) {
+                                $expirationInterval = 3600;
+                                Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $newStoryModelId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
+                            }
+                        }
+
 
                         $minCt = $storyModelLink->min_ct;
                         if ($minCt > 0) {
