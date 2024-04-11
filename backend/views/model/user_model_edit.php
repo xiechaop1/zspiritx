@@ -62,6 +62,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('剧本模型');
+            echo $form->field($userModel, 'user_model_prop')->textarea(['value' => \common\helpers\Common::decodeJsonToVarexport($userModel->user_model_prop), 'rows' => 20])->label('用户模型属性');
             echo $form->field($userModel, 'use_ct')->textInput(['value' => $userModel->use_ct])->label('剩余次数');
             ?>
 

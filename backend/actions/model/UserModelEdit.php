@@ -85,6 +85,8 @@ class UserModelEdit extends Action
                 ->one();
             $model->session_model_id = $sessionModel['id'];
 
+            $model->user_model_prop = \common\helpers\Common::encodeJson($model->user_model_prop);
+
             if ($model->validate()) {
 
                 if ($model->save()) {

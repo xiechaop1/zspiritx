@@ -22,6 +22,7 @@ class UserModel extends \common\models\UserModels
             [['user_id', 'story_model_id', 'story_model_detail_id', 'session_model_id',
                 'session_id', 'model_id', 'use_ct', 'is_delete',
                 'status', 'created_at', 'updated_at'], 'integer'],
+            [['user_model_prop'], 'string'],
         ];
     }
 
