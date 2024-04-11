@@ -89,8 +89,8 @@ class Qa
                         if (!in_array($storyModel->id, $incIds)) {
                             continue;
                         }
-                        if (!empty($storyModel->story_model_image)) {
-                            $showItem = '<img src="' . Attachment::completeUrl($storyModel->story_model_image, true) . '" class="puzzle_image_img">';
+                        if (!empty($storyModel->icon)) {
+                            $showItem = '<img src="' . Attachment::completeUrl($storyModel->icon, true) . '" class="puzzle_image_img">';
                         } else {
                             $showItem = $storyModel->story_model_name ;
                         }
