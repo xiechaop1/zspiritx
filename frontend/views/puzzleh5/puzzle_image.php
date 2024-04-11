@@ -74,6 +74,7 @@ $this->title = 'Puzzle';
     }
 
     .keyboard_area .v_puzzle_image_keyboard {
+        float: left;
         width: 120px;
         height: 120px;
         margin: 0 3px;

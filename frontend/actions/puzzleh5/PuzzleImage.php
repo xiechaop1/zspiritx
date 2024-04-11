@@ -90,6 +90,7 @@ class PuzzleImage extends Action
                             ->all();
                         if (!empty($tmpStoryModels)) {
                             foreach ($tmpStoryModels as $sm) {
+                                $incStoryModelConf = !empty($keyStoryModelsConf[$sm->id]) ? $keyStoryModelsConf[$sm->id] : [];
                                 if (!empty($incStoryModelConf['right_val'])) {
                                     $iList[$incStoryModelConf['right_val']] = [
                                         'conf' => $incStoryModelConf,
@@ -122,6 +123,7 @@ class PuzzleImage extends Action
                         if (!empty($incBagItems)) {
                             foreach ($incBagItems as $ibi) {
                                 if (!empty($ibi->storyModel)) {
+                                    $incStoryModelConf = !empty($keyStoryModelsConf[$ibi->storyModel->id]) ? $keyStoryModelsConf[$ibi->storyModel->id] : [];
                                     if (!empty($incStoryModelConf['right_val'])) {
                                         $iList[$incStoryModelConf['right_val']] = [
                                             'conf' => $incStoryModelConf,
