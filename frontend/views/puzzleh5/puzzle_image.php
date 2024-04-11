@@ -199,7 +199,7 @@ $this->title = 'Puzzle';
                 echo \common\helpers\Qa::setKeyboard($keyboard, $keyStoryModels, 'v_puzzle_image_keyboard');
                 ?>
             </div>
-            <div class="row hide" id="answer-box">
+            <div class="row hide" style="clear:both;" id="answer-box">
                 <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn" answer_type="1">
                     确定
                 </div>
