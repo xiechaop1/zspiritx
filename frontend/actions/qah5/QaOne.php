@@ -11,6 +11,7 @@ namespace frontend\actions\qah5;
 
 use common\definitions\Common;
 use common\models\Story;
+use common\models\UserModels;
 use yii\base\Action;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
@@ -68,8 +69,48 @@ class QaOne extends Action
         }
 
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
+        $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
+
+        $keyStoryModels = [];
+        if (!empty($model['selected_json'])
+            && !empty($model['selected_json']['keyboard'])
+            && $model['selected_json']['keyboard'] == 'bagitems'
+        ) {
+            $keyboardConfig = $model['selected_json'];
+
+
+            if ($keyboardConfig['keyboard'] == 'bagitems') {
+                if (!empty($keyboardConfig['inc_story_model_ids'])) {
+                    $incIds = [];
+                    $keyStoryModelsConf = [];
+                    foreach ($keyboardConfig['inc_story_model_ids'] as $incStoryModelId => $incStoryModelConf) {
+                        $incIds[] = $incStoryModelId;
+                        $keyStoryModelsConf[$incStoryModelId] = $incStoryModelConf;
+                    }
+                    $incBagItems = UserModels::find()
+                        ->where([
+                            'story_model_id' => $incIds,
+                            'user_id' => $userId,
+                            'session_id' => $sessionId,
+                            'is_delete' => \common\definitions\Common::STATUS_NORMAL,
+                        ]);
+                    if (!empty($storyId)) {
+                        $incBagItems = $incBagItems->andFilterWhere(['story_id' => $storyId]);
+                    }
+                    $incBagItems = $incBagItems->all();
+
+                    if (!empty($incBagItems)) {
+                        foreach ($incBagItems as $ibi) {
+                            if (!empty($ibi->storyModel)) {
+                                $keyStoryModels[] = $ibi->storyModel;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         $tpl = 'qaone';
         if ($style == 'pink') {
@@ -80,9 +121,11 @@ class QaOne extends Action
             'qa'            => $model,
             'params'        => $_GET,
             'userId'        => $userId,
+            'storyId'       => $storyId,
             'sessionId'     => $sessionId,
             'sessionStageId'    => $sessionStageId,
             'rtnAnswerType'     => $rtnAnswerType,
+            'keyStoryModels'    => $keyStoryModels,
             'style'         => $style,
         ]);
     }

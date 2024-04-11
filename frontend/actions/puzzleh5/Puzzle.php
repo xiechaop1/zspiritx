@@ -27,10 +27,9 @@ use yii\web\NotFoundHttpException;
 
 class Puzzle extends Action
 {
-
-    
     public function run()
     {
+
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;

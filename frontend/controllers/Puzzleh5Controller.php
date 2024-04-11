@@ -33,7 +33,9 @@ class Puzzleh5Controller extends Controller
             'puzzle_sudoku' => [
                 'class' => 'frontend\actions\puzzleh5\PuzzleSudoku',
             ],
-
+            'puzzle_image' => [
+                'class' => 'frontend\actions\puzzleh5\PuzzleImage',
+            ],
         ];
     }
 }
