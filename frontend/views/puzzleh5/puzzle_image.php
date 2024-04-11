@@ -163,8 +163,8 @@ $this->title = 'Puzzle';
                                 $smConf = $iList[$ct]['conf'];
                                 if (!empty($smConf['is_lock']) && $smConf['is_lock'] == '1') {
 
-                                    if (!empty($storyModel->story_model_image)) {
-                                        $showItem = '<img src="' . \common\helpers\Attachment::completeUrl($storyModel->story_model_image, true) . '" class="puzzle_image_img">';
+                                    if (!empty($storyModel->icon)) {
+                                        $showItem = '<img src="' . \common\helpers\Attachment::completeUrl($storyModel->icon, true) . '" class="puzzle_image_img">';
                                     } else {
                                         $showItem = $storyModel->story_model_name;
                                     }
