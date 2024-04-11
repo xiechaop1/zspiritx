@@ -78,33 +78,63 @@ class PuzzleImage extends Action
                         $incIds[] = $incStoryModelId;
                         $keyStoryModelsConf[$incStoryModelId] = $incStoryModelConf;
                     }
-                    $incBagItems = UserModels::find()
-                        ->where([
-                            'story_model_id' => $incIds,
-                            'user_id' => $userId,
-                            'session_id' => $sessionId,
-                            'is_delete' => \common\definitions\Common::STATUS_NORMAL,
-                        ]);
-                    if (!empty($storyId)) {
-                        $incBagItems = $incBagItems->andFilterWhere(['story_id' => $storyId]);
-                    }
-                    $incBagItems = $incBagItems->all();
 
-                    if (!empty($incBagItems)) {
-                        foreach ($incBagItems as $ibi) {
-                            if (!empty($ibi->storyModel)) {
+                    if (!empty($keyboardConfig['force_exist'])
+                        && $keyboardConfig['force_exist'] == 1
+                    ) {
+                        $tmpStoryModels = StoryModels::find()
+                            ->where([
+                                'id' => $incIds,
+                                'is_delete' => Common::STATUS_NORMAL,
+                            ])
+                            ->all();
+                        if (!empty($tmpStoryModels)) {
+                            foreach ($tmpStoryModels as $sm) {
                                 if (!empty($incStoryModelConf['right_val'])) {
                                     $iList[$incStoryModelConf['right_val']] = [
                                         'conf' => $incStoryModelConf,
-                                        'storyModel' => $ibi->storyModel
+                                        'storyModel' => $sm
                                     ];
-                                    $keyStoryModels[$incStoryModelConf['right_val']] = $ibi->storyModel;
+                                    $keyStoryModels[$incStoryModelConf['right_val']] = $sm;
                                 } else {
                                     $iList[] = [
                                         'conf' => $incStoryModelConf,
-                                        'storyModel' => $ibi->storyModel
+                                        'storyModel' => $sm
                                     ];
-                                    $keyStoryModels[] = $ibi->storyModel;
+                                    $keyStoryModels[] = $sm;
+                                }
+                            
+                            }
+                        }
+                    } else {
+                        $incBagItems = UserModels::find()
+                            ->where([
+                                'story_model_id' => $incIds,
+                                'user_id' => $userId,
+                                'session_id' => $sessionId,
+                                'is_delete' => \common\definitions\Common::STATUS_NORMAL,
+                            ]);
+                        if (!empty($storyId)) {
+                            $incBagItems = $incBagItems->andFilterWhere(['story_id' => $storyId]);
+                        }
+                        $incBagItems = $incBagItems->all();
+
+                        if (!empty($incBagItems)) {
+                            foreach ($incBagItems as $ibi) {
+                                if (!empty($ibi->storyModel)) {
+                                    if (!empty($incStoryModelConf['right_val'])) {
+                                        $iList[$incStoryModelConf['right_val']] = [
+                                            'conf' => $incStoryModelConf,
+                                            'storyModel' => $ibi->storyModel
+                                        ];
+                                        $keyStoryModels[$incStoryModelConf['right_val']] = $ibi->storyModel;
+                                    } else {
+                                        $iList[] = [
+                                            'conf' => $incStoryModelConf,
+                                            'storyModel' => $ibi->storyModel
+                                        ];
+                                        $keyStoryModels[] = $ibi->storyModel;
+                                    }
                                 }
                             }
                         }
