@@ -50,9 +50,10 @@ class Models extends \common\models\Models
             return $dataProvider;
         }
 
-        if (!$this->model_name) {
-            $query->andFilterWhere(['like', 'model_name', $this->model_name]);
+        if (!empty($this->model_name)) {
+            $query->andWhere(['like', 'model_name', $this->model_name]);
         }
+
 
         return $dataProvider;
     }
