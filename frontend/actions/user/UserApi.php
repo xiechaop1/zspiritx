@@ -491,21 +491,26 @@ class UserApi extends ApiAction
                 }
 
                 $allComp = 1;
-                foreach ($knowledges as $know) {
-                    if ($know->knowledge_class == Knowledge::KNOWLEDGE_CLASS_MISSSION
-                        &&
-                        !(
-                            $know->rep_ct > 0
+                if (!empty($knowledges)) {
+                    foreach ($knowledges as $know) {
+                        if ($know->knowledge_class == Knowledge::KNOWLEDGE_CLASS_MISSSION
                             &&
-                            ( !empty($ckUserKnow[$know->id])
-                                && $ckUserKnow[$know->id]->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE
+                            !(
+                                $know->rep_ct > 0
+                                &&
+                                (!empty($ckUserKnow[$know->id])
+                                    && $ckUserKnow[$know->id]->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE
+                                )
                             )
-                        )
-                    ) {
-                        $allComp = 0;
-                        break;
+                        ) {
+                            $allComp = 0;
+                            break;
+                        }
+                        $compAction = $know->comp_action;
                     }
-                    $compAction = $know->comp_action;
+                } else {
+                    // 如果没有任何任务和知识，当再次进入这个场景时，我认为是没有完成任务
+                    $allComp = 0;
                 }
 
                 Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
