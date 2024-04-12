@@ -51,7 +51,7 @@ $(function () {
     // map.clearMap();  // 清除地图覆盖物
 
     //markers 测试数据
-    var markers = [{
+    var markersExample = [{
         // icon: '../../img/map/marker_1.png',
         position: [116.205467, 39.907761]
     }, {
@@ -290,6 +290,53 @@ $(function () {
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
+            url: 'https://www.nowkey.net/nowkey/api/getStoryData',
+            data:{
+                spaceid:78,
+                is_test:1
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                // $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+
+                //新消息获取成功
+                if(obj["code"]==200){
+                    var markers = [];
+                    for (var i in obj.data.area) {
+                        var marker = {
+                            // iconPath: url,
+                            id: obj.data.area[i].id || 0,
+                            name: obj.data.area[i].user_id || '',
+                            latitude: obj.data.area[i].config.lat,
+                            longitude: obj.data.area[i].config.lng,
+                            width: 80,
+                            height: 80,
+                            title:2
+                        };
+                        markers.push(marker)
+                    }
+                    // removeMarkers();
+
+                    drawPoi(markers);
+
+                }
+                //新消息获取失败
+                else{
+                    // $.alert(obj.msg)
+                }
+
+            }
+        });
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
             url: 'https://h5.zspiritx.com.cn/user/get_user_loc',
             data:{
                 user_id:user_id,
@@ -311,11 +358,22 @@ $(function () {
 
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         // map.setCenter([lng, lat]);
-                        var markerUser = new AMap.Marker({
-                            position: [lng, lat]   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-                        });
+                        var markerUser = {
+                            // iconPath: url,
+                            id: '',
+                            name:'',
+                            latitude: lat,
+                            longitude: lng,
+                            width: 80,
+                            height: 80,
+                            title:2
+                        };
+                        drawUser(markerUser);
+                        // var markerUser = new AMap.Marker({
+                        //     position: [lng, lat]   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                        // });
                        // 将创建的点标记添加到已有的地图实例：
-                        map.add(markerUser);
+                       //  map.add(markerUser);
                         console.log("地图中心",lat,lng)
                     }
 
@@ -365,35 +423,16 @@ $(function () {
         // });
     }
 
-    function drawUser(markers){
-        markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
-                '</span>';
-            var marker= new AMap.Marker({
-                content: markerContent,
-                map: map,
-                icon: marker.icon,
-                position: [marker.longitude,marker.latitude],
-                offset: new AMap.Pixel(-13, -30)
-            });
-            // marker.on('click', function(e){
-            //     showPoiDetail(e);
-            // });
+    function drawUser(marker){
+        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+            '</span>';
+        var marker= new AMap.Marker({
+            content: markerContent,
+            map: map,
+            icon: marker.icon,
+            position: [marker.longitude,marker.latitude],
+            offset: new AMap.Pixel(-13, -30)
         });
-        // markers.forEach(function(marker) {
-        //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
-        //         '</span>';
-        //     var marker= new AMap.Marker({
-        //         content: markerContent,
-        //         map: map,
-        //         // icon: marker.icon,
-        //         position: [marker.longitude, marker.latitude],
-        //         offset: new AMap.Pixel(-13, -30)
-        //     });
-        //     markers.on('click', function(e){
-        //         showPoiDetail();
-        //     });
-        // });
     }
 
     //绑定点击定位
@@ -401,6 +440,7 @@ $(function () {
         getUserPoi();
     })
 
+    drawPoi(markersExample);
     getPoi();
     getUserPoi();
 
