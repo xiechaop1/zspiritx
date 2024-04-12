@@ -290,6 +290,54 @@ $(function () {
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
+            url: 'https://www.nowkey.net/nowkey/api/getStoryData',
+            data:{
+                spaceid:78,
+                is_test:1
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                //新消息获取成功
+                if(obj["code"]==200){
+                    var markers = [];
+                    for (var i in obj.data.area) {
+                        var marker = {
+                            // iconPath: url,
+                            id: obj.data.area[i].id || 0,
+                            name: obj.data.area[i].user_id || '',
+                            latitude: obj.data.area[i].config.lat,
+                            longitude: obj.data.area[i].config.lng,
+                            width: 80,
+                            height: 80,
+                            title:2
+                        };
+                        markers.push(marker)
+                    }
+                    // removeMarkers();
+
+                    drawPoi(markers);
+
+                }
+                //新消息获取失败
+                else{
+                    $.alert(obj.msg)
+                }
+
+            }
+        });
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
             url: 'https://h5.zspiritx.com.cn/user/get_user_loc',
             data:{
                 user_id:user_id,
@@ -376,17 +424,15 @@ $(function () {
         // });
     }
 
-    function drawUser(markers){
-        markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
-                '</span>';
-            var marker= new AMap.Marker({
-                content: markerContent,
-                map: map,
-                icon: marker.icon,
-                position: [marker.longitude,marker.latitude],
-                offset: new AMap.Pixel(-13, -30)
-            });
+    function drawUser(marker){
+        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+            '</span>';
+        var marker= new AMap.Marker({
+            content: markerContent,
+            map: map,
+            icon: marker.icon,
+            position: [marker.longitude,marker.latitude],
+            offset: new AMap.Pixel(-13, -30)
         });
     }
 
