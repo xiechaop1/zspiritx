@@ -54,6 +54,18 @@ class UserModel extends \common\models\UserModels
             $query->andFilterWhere(['story_id' => $this->story_id]);
         }
 
+        if (!empty($this->session_id)) {
+            $query->andFilterWhere(['session_id' => $this->session_id]);
+        }
+
+        if (!empty($this->user_id)) {
+            $query->andFilterWhere(['user_id' => $this->user_id]);
+        }
+
+        if (!empty($this->story_model_id))  {
+            $query->andFilterWhere(['story_model_id' => $this->story_model_id]);
+        }
+
         return $dataProvider;
     }
 }

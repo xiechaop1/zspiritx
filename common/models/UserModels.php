@@ -40,6 +40,11 @@ class UserModels extends \common\models\gii\UserModels
         return $this->hasOne('common\models\User',  ['id' => 'user_id']);
     }
 
+    public function getStory() {
+        return $this->hasOne('common\models\Story', ['id' => 'story_id']);
+
+    }
+
 //    public function getBuff(){
 //        return $this->hasOne('common\models\Buff',  ['id' => 'active_next'])->onCondition(['active_type' => StoryModels::ACTIVE_TYPE_BUFF]);
 //    }

@@ -153,7 +153,7 @@ echo \dmstr\widgets\Alert::widget();
             ])->label('图片/影音文件');
             echo $form->field($storyModel, 'story_model_prop')->textarea(['value' => \common\helpers\Common::decodeJsonToVarexport($storyModel->story_model_prop), 'rows' => 20])->label('模型属性配置');
             echo $form->field($storyModel, 'story_model_html')->textarea(['value' => !empty($storyModel->story_model_html) ? \common\helpers\Common::decodeJsonToVarexport($storyModel->story_model_html): '', 'rows' => 20])->label('模型Html配置');
-            echo $form->field($storyModel, 'use_group_name')->textInput(['value' => $storyModel->use_group_name])->label('背包分组');
+            echo $form->field($storyModel, 'use_group_name')->textInput(['value' => $storyModel->use_group_name])->label('道具使用背包分组');
             echo $form->field($storyModel, 'sort_by')->textInput(['value' => $storyModel->sort_by])->label('出现顺序');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');
             echo $form->field($storyModel, 'timebegin')->textInput(['value' => $storyModel->timebegin])->label('开始时间');
