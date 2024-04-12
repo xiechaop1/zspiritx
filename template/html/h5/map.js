@@ -51,7 +51,7 @@ $(function () {
     // map.clearMap();  // 清除地图覆盖物
 
     //markers 测试数据
-    var markers = [{
+    var markersExample = [{
         // icon: '../../img/map/marker_1.png',
         position: [116.205467, 39.907761]
     }, {
@@ -311,11 +311,22 @@ $(function () {
 
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         // map.setCenter([lng, lat]);
-                        var markerUser = new AMap.Marker({
-                            position: [lng, lat]   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-                        });
+                        var markerUser = {
+                            // iconPath: url,
+                            id: '',
+                            name:'',
+                            latitude: lat,
+                            longitude: lng,
+                            width: 80,
+                            height: 80,
+                            title:2
+                        };
+                        drawUser(markerUser);
+                        // var markerUser = new AMap.Marker({
+                        //     position: [lng, lat]   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                        // });
                        // 将创建的点标记添加到已有的地图实例：
-                        map.add(markerUser);
+                       //  map.add(markerUser);
                         console.log("地图中心",lat,lng)
                     }
 
@@ -376,24 +387,7 @@ $(function () {
                 position: [marker.longitude,marker.latitude],
                 offset: new AMap.Pixel(-13, -30)
             });
-            // marker.on('click', function(e){
-            //     showPoiDetail(e);
-            // });
         });
-        // markers.forEach(function(marker) {
-        //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
-        //         '</span>';
-        //     var marker= new AMap.Marker({
-        //         content: markerContent,
-        //         map: map,
-        //         // icon: marker.icon,
-        //         position: [marker.longitude, marker.latitude],
-        //         offset: new AMap.Pixel(-13, -30)
-        //     });
-        //     markers.on('click', function(e){
-        //         showPoiDetail();
-        //     });
-        // });
     }
 
     //绑定点击定位
@@ -401,6 +395,7 @@ $(function () {
         getUserPoi();
     })
 
+    drawPoi(markersExample);
     getPoi();
     getUserPoi();
 
