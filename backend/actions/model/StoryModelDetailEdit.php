@@ -73,7 +73,7 @@ class StoryModelDetailEdit extends Action
 
             $model->active_next = Model::encodeActive($model->active_next);
 
-            $model->dialog = Model::encodeDialog($model->dialog);
+            $model->dialog = Model::encodeDialog($model->dialog, $model);
 
             if ($model->validate()) {
 

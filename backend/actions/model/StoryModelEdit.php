@@ -73,7 +73,7 @@ class StoryModelEdit extends Action
 
             $model->active_next = Model::encodeActive($model->active_next);
 
-            $model->dialog = Model::encodeDialog($model->dialog);
+            $model->dialog = Model::encodeDialog($model->dialog, $model);
 
             $model->story_model_html = \common\helpers\Common::encodeJson($model->story_model_html);
 

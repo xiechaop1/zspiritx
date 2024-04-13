@@ -70,7 +70,7 @@ class Model
         return $active;
     }
 
-    public static function encodeDialog($dialog) {
+    public static function encodeDialog($dialog, $model = []) {
         if (empty($dialog)) {
             return $dialog;
         }
@@ -79,9 +79,9 @@ class Model
             if (!empty($dialog['template'])) {
                 switch ($dialog['template']) {
                     case 'pickup':
-                        $dialogName = $dialog['name'];
-                        $dialogDesc = $dialog['desc'];
-                        $modelName = $dialog['model_name'];
+                        $dialogName = !empty($dialog['name']) ? $dialog['name'] : $model->model_inst_u_id;
+                        $dialogDesc = !empty($dialog['desc']) ? $dialog['desc'] : $model->story_model_name;
+                        $modelName = !empty($dialog['model_name']) ? $dialog['model_name'] : $model->model_inst_u_id;
                         $storyModelId = !empty($dialog['story_model_id']) ? $dialog['story_model_id'] : '{$story_model_id}';
                         $dialog = array (
                             'Name' => $dialogDesc,
