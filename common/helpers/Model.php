@@ -76,6 +76,78 @@ class Model
         }
         eval('$dialog = ' . $dialog);
         if (is_array($dialog)) {
+            if (!empty($dialog['template'])) {
+                switch ($dialog['template']) {
+                    case 'pickup':
+                        $dialogName = $dialog['name'];
+                        $dialogDesc = $dialog['desc'];
+                        $modelName = $dialog['model_name'];
+                        $storyModelId = !empty($dialog['story_model_id']) ? $dialog['story_model_id'] : '{$story_model_id}';
+                        $dialog = array (
+                            'Name' => $dialogDesc,
+                            'Intro' => $dialogName . '-dialog-0',
+                            'ActionOnPlaced' =>
+                                array (
+                                    'localID' => $dialogName . '-OnPlaced',
+                                    'moveX' => 0,
+                                    'moveY' => 0,
+                                    'moveZ' => 0,
+                                ),
+                            'Dialog' =>
+                                array (
+                                    array (
+                                        'localID' => $dialogName . '-dialog-0',
+                                        'name' => $dialogDesc,
+                                        'sentence' => '发现' . $dialogDesc,
+                                        'quizID' => 0,
+                                        'sentenceClip' => '',
+                                        'url' => '',
+                                        'userSelections' =>
+                                            array (
+                                            ),
+                                        'nextID' =>
+                                            array (
+                                                $dialogName . '-dialog-1',
+                                            ),
+                                    ),
+                                    array (
+                                        'localID' => $dialogName . '-dialog-1',
+                                        'name' => $dialogDesc,
+                                        'sentence' => '',
+                                        'quizID' => 0,
+                                        'sentenceClip' => '',
+                                        'url' => 'https://h5.zspiritx.com.cn/processh5/pickup?user_id={$user_id}&session_id={$session_id}&session_stage_id={$session_stage_id}&story_id={$story_id}&story_model_id=' . $storyModelId . '&lock_ct=1',
+                                        'viewPort' => 30,
+                                        'hideModels' =>
+                                            array (
+                                                $modelName,
+                                            ),
+                                        'userSelections' =>
+                                            array (
+                                            ),
+                                        'nextID' =>
+                                            array (
+                                                $dialogName . '-dialog-End',
+                                            ),
+                                    ),
+                                    array (
+                                        'localID' => $dialogName . '-dialog-End',
+                                        'name' => '',
+                                        'sentence' => '',
+                                        'quizID' => 0,
+                                        'sentenceClip' => '',
+                                        'userSelections' =>
+                                            array (
+                                            ),
+                                        'nextID' =>
+                                            array (
+                                                $dialogName . '-dialog-0',
+                                            ),
+                                    ),
+                                ),
+                        );
+                }
+            }
             if (!empty($dialog['Dialog'])) {
                 $tmpDialog = [];
                 foreach ($dialog['Dialog'] as $dia) {
