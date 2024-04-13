@@ -230,6 +230,7 @@ $(function () {
             }
         });
 
+        //获取每个场景的模型
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -241,8 +242,8 @@ $(function () {
                 session_id:session_id,
                 user_lng:user_lng,
                 user_lat:user_lat,
-                dis_range:dis_range,
-                story_stage_id:story_stage_id,
+                // dis_range:dis_range,
+                // story_stage_id:story_stage_id,
                 is_test:1
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -263,10 +264,11 @@ $(function () {
                             // iconPath: url,
                             id: obj.data[i].id || 0,
                             name: obj.data[i].user_id || '',
-                            latitude: obj.data[i].lat,
-                            longitude: obj.data[i].lng,
+                            latitude: obj.data[i].snapshot.lat,
+                            longitude: obj.data[i].snapshot.lng,
                             width: 80,
                             height: 80,
+                            img: obj.data[i].snapshot.lng,
                             title:2
                         };
                         markers.push(marker)
@@ -286,53 +288,7 @@ $(function () {
             }
         });
 
-        $.ajax({
-            type: "GET", //用POST方式传输
-            dataType: "json", //数据格式:JSON
-            async: false,
-            url: 'https://www.nowkey.net/nowkey/api/getStoryData',
-            data:{
-                spaceid:78,
-                is_test:1
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
-                // $.alert("网络异常，请检查网络情况");
-            },
-            success: function (data, status){
-                var dataContent=data;
-                var dataCon=$.toJSON(dataContent);
-                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
-
-                //新消息获取成功
-                if(obj["code"]==200){
-                    var markers = [];
-                    for (var i in obj.data.area) {
-                        var marker = {
-                            // iconPath: url,
-                            id: obj.data.area[i].id || 0,
-                            name: obj.data.area[i].user_id || '',
-                            latitude: obj.data.area[i].config.lat,
-                            longitude: obj.data.area[i].config.lng,
-                            width: 80,
-                            height: 80,
-                            title:2
-                        };
-                        markers.push(marker)
-                    }
-                    // removeMarkers();
-
-                    drawPoi(markers);
-
-                }
-                //新消息获取失败
-                else{
-                    // $.alert(obj.msg)
-                }
-
-            }
-        });
-
+        //获取用户位置信息
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -444,7 +400,8 @@ $(function () {
     getPoi();
     getUserPoi();
 
-    setInterval(getPoi,3000);
+    setInterval(getPoi,60000);
+    setInterval(getUserPoi,5000);
     // setInterval(removeMarkers,3000);
     
 });
