@@ -46,13 +46,15 @@ $this->registerMetaTag([
 <div class="info">
   <div id="centerCoord"></div>
   <div id="tips"></div>
-</div>-->
-<div class="map-info-box" id="map-info-box">
-  <img decoding="async"  src="../../static/img/map/x.png" alt="First slide" class="map-info-close">
-  <div class="map-text-context">
-
-  </div>
 </div>
+<div class="map-info-box" id="map-info-box">
+  <div class="map-info-content">
+    <img decoding="async"  src="../../static/img/map/x.png" alt="First slide" class="map-info-close">
+    <div class="map-text-context">
+    </div>
+  </div>
+
+</div>-->
 <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
     返回
 </div>

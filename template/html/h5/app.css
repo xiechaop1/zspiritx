@@ -424,18 +424,39 @@ input[type="radio"]:checked+label::before {
     line-height: 30px;
     font-size: 16px;
     color:#ffffff;
-    background-image: url("../../img/map/onlineBgme.png");
+    background-image: url("../../img/map/marker_2.png");
     background-repeat: no-repeat;
     background-size: contain;
 }
 .map-info-box{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: opacity .15s linear;
+    background: rgba(0, 0, 0, 0.5);
+}
+.map-info-content{
     position: absolute;
     bottom: 0;
     background: #ffffff;
-    width: 100%;
+    /*width: 100%;*/
     padding: 20px 20px 50px 20px;
-    display:none;
+    display: none;
+    z-index: 999;
+    margin: auto 10px 10px 10px;
+    width: 355px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 8px 8px rgba(0,0,0,0.2);
 }
+
 .map-info-close{
     width: 20px;
     height: 20px;
@@ -541,7 +562,7 @@ input[type="radio"]:checked+label::before {
     position: absolute;
     bottom: 75px;
     left: 20px;
-    z-index: 999999;
+    z-index: 100;
 }
 #user_center img{
     width: 30px;
