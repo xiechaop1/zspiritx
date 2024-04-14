@@ -396,10 +396,8 @@ $(function () {
         getUserPoi();
     })
 
-    drawPoi(markersExample);
     getPoi();
     getUserPoi();
-
     setInterval(getPoi,10000);
     // setInterval(getUserPoi,5000);
     // setInterval(removeMarkers,3000);
