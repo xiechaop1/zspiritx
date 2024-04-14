@@ -479,7 +479,6 @@ input[type="radio"]:checked+label::before {
     display: flex;
     -ms-flex-align: center;
     align-items: end;
-    min-height: calc(100% -(.5rem* 2));
 }
 #modal-detail .modal-content {
     bottom: 40px;

@@ -49,7 +49,7 @@ $this->title = '罗盘';
 <input type="hidden" name="dis_range" value="<?= $disRange ?>">
 
 
-<div class="btn-m-green m-t-30  m-l-30" id="return_btn">
+<div class="btn-m-green m-t-30  m-l-30 go-history" >
     返回
 </div>
 
