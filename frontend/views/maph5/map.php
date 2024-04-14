@@ -64,7 +64,7 @@ $this->registerMetaTag([
 </div>
 <div class="compass_btn">
   <a href="/compassh5/compass">
-    <img src="../../img/map/compass.png">
+    <img src="../../static/img/map/compass.png">
   </a>
 </div>
 
@@ -73,7 +73,7 @@ $this->registerMetaTag([
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal">
-         <img decoding="async"  src="../../img/map/x.png" alt="First slide" class="map-info-close">
+         <img decoding="async"  src="../../static/img/map/x.png" alt="First slide" class="map-info-close">
       </span>
       <div class="p-20 relative h5 m-t-30" name="loginStr">
         <div>
