@@ -311,6 +311,7 @@ $(function () {
                         };
                         markersUser.push(marker)
                         drawUser(markersUser);
+
                         console.log("地图中心",lat,lng)
                     }
 
@@ -375,8 +376,8 @@ $(function () {
         var marker= new AMap.Marker({
             content: markerContent,
             map: map,
-            icon: marker.icon,
-            position: [marker.longitude,marker.latitude],
+            icon: marker[0].icon,
+            position: [marker[0].longitude,marker[0].latitude],
             offset: new AMap.Pixel(-13, -30)
         });
     }
