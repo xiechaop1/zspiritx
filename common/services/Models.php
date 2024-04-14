@@ -772,6 +772,7 @@ class Models extends Component
         ) {
             foreach ($useStoryModels as $usm) {
                 $storyModelProp = !empty($usm->story_model_prop) ? json_decode($usm->story_model_prop, true) : [];
+                $storyModelProp = !empty($storyModelProp['prop']) ? $storyModelProp['prop'] : [];
                 $storyModel = $usm;
 //                var_dump($storyModelProp);
 //                foreach ($matches[1] as $match) {

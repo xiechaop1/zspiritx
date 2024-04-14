@@ -144,6 +144,11 @@ class Common
         return $ret;
     }
 
+    // 判断数组1是否包含另一个数组2
+    public static function arrayContains($array1, $array2) {
+        $difference = array_diff($array1, $array2);
+        return count($difference) === 0;
+    }
     public static function decodeJsonToVarexport($json, $needNum = false) {
         if (!empty($json)) {
             $txt = var_export(\common\helpers\Model::decodeDialog($json), true);

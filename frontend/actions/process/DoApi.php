@@ -1123,7 +1123,11 @@ class DoApi extends ApiAction
                         $groupStoryModel = StoryModelsLink::find()
                             ->where([
                                 'story_id' => $storyId,
-                                'eff_type' => StoryModelsLink::EFF_TYPE_MODEL,
+                                'eff_type' => [
+                                    StoryModelsLink::EFF_TYPE_MODEL,
+                                    StoryModelsLink::EFF_TYPE_MODEL_AND_DISPLAY,
+                                    StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY,
+                                    ],
                             ]);
                         if (!empty($storyModel->story_model_detail_id)) {
                             $groupStoryModel = $groupStoryModel->andFilterWhere([
@@ -1147,7 +1151,11 @@ class DoApi extends ApiAction
                         ->where([
                             'group_name'        => $combineGroup,
                             'story_id'          => $storyId,
-                            'eff_type'          => StoryModelsLink::EFF_TYPE_MODEL,
+                            'eff_type'          => [
+                                StoryModelsLink::EFF_TYPE_MODEL,
+                                StoryModelsLink::EFF_TYPE_MODEL_AND_DISPLAY,
+                                StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY,
+                            ],
 //                            'story_model_id'    => $storyModel->id,
 //                            'story_model_id2'   => $storyModel1->id,
                         ])
@@ -1171,10 +1179,18 @@ class DoApi extends ApiAction
                         throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
                     }
 
-                    sort($userModelIds);
-                    $userModelStr = implode(',', $userModelIds);
-                    sort($linkStoryModelIds);
-                    $linkStoryModelStr = implode(',', $linkStoryModelIds);
+                    if ($type == StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY) {
+                        if (\common\helpers\Common::arrayContains($linkStoryModelIds, $userModelIds)) {
+                            sort($userModelIds);
+                            $userModelStr = implode(',', $userModelIds);
+                            $linkStoryModelStr = implode(',', $userModelIds);
+                        }
+                    } else {
+                        sort($userModelIds);
+                        $userModelStr = implode(',', $userModelIds);
+                        sort($linkStoryModelIds);
+                        $linkStoryModelStr = implode(',', $linkStoryModelIds);
+                    }
 
                     if ($userModelStr == $linkStoryModelStr) {
 
@@ -1184,7 +1200,10 @@ class DoApi extends ApiAction
                         if ($type == StoryModelsLink::EFF_TYPE_MODEL) {
                             $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $computeRet);
                         }
-                        if ($type == StoryModelsLink::EFF_TYPE_MODEL_AND_DISPLAY) {
+                        if (
+                            $type == StoryModelsLink::EFF_TYPE_MODEL_AND_DISPLAY
+                        || $type == StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY
+                        ) {
                             // 组合模型并显示出来
                             $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $computeRet);
                             $newStoryUID = !empty($newStoryModel->model_inst_u_id) ? $newStoryModel->model_inst_u_id : 0;
