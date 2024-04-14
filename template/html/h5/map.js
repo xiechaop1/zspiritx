@@ -305,7 +305,7 @@ $(function () {
                             height: 80,
                             title:2
                         };
-                        $(".marker_user").closest(".amap-marker").remove();
+
                         drawUser(markerUser);
 
                         console.log("地图中心",lat,lng)
@@ -364,6 +364,9 @@ $(function () {
 
     //描绘用户Marker
     function drawUser(marker){
+        $(".marker_user").closest(".amap-marker").remove();
+        $(".marker_user").closest(".amap-markers").remove();
+        $(".marker_user").remove();
         var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
             '</span>';
         var marker= new AMap.Marker({
