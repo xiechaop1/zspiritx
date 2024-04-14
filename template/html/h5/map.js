@@ -44,10 +44,6 @@ $(function () {
 
     });
 
-    //定位按钮
-
-
-
     // map.clearMap();  // 清除地图覆盖物
 
     //markers 测试数据
@@ -76,45 +72,13 @@ $(function () {
     //以用户GPS为中心定位
     function getUserPoi(lng,lat){
         var user_id=$("input[name='user_id']").val();
-        var story_id=$("input[name='story_id']").val();
-        var session_id=$("input[name='session_id']").val();
-        var user_lng=$("input[name='user_lng']").val();
-        var user_lat=$("input[name='user_lat']").val();
-        var dis_range=$("input[name='dis_range']").val();
-        var story_stage_id=$("input[name='story_stage_id']").val();
-
-        user_id!=null&&user_id!=undefined>0?'':user_id=1;
-        story_id!=null&&story_id!=undefined>0?'':story_id=1;
-        session_id!=null&&session_id!=undefined?'':session_id=5;
-        dis_range!=null&&dis_range!=undefined&&dis_range!=0?'':dis_range=1000;
-        story_stage_id!=null&&story_stage_id!=undefined&&story_stage_id!=0?'':story_stage_id=1;
-
-        var center = map.getCenter();
-        h5_lng=center.getLng();
-        h5_lat=center.getLat();
-        if(location[0]!=null&&location[0]!=undefined&&location[0]!=null&&location[0]!=undefined){
-            user_lng=location[0];
-            user_lat=location[1];
-        }
-        else if(user_lng!=null&&user_lng!=undefined&&user_lng!=0&&user_lat!=null&&user_lat!=undefined&&user_lat!=0){
-
-        }
-        else if(h5_lng!=null&&h5_lng!=undefined&&h5_lng!=0&&h5_lat!=null&&h5_lat!=undefined&&h5_lat!=0){
-            user_lng=h5_lng;
-            user_lat=h5_lat;
-        }
-        else{
-            user_lng=118.3726;
-            user_lat=39.3442;
-        }
-
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
             url: 'https://h5.zspiritx.com.cn/user/get_user_loc',
             data:{
-                user_id:user_id,
+                user_id:user_id
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
@@ -134,6 +98,9 @@ $(function () {
                         map.setCenter([lng, lat]);
                         console.log("地图中心",lat,lng)
                     }
+                    else{
+                        $.alert("定位失败")
+                    }
                 }
                 //新消息获取失败
                 else{
@@ -142,7 +109,8 @@ $(function () {
 
             }
         });
-    };
+    }
+
 
     //获取Poi 点详情
     function getPoi(lng,lat){
@@ -180,6 +148,18 @@ $(function () {
             user_lat=39.3442;
         }
 
+
+        getUserLocByTeam(user_id,session_id,user_lng,user_lat,dis_range);
+
+        getSessionModels(user_id,session_id,user_lng,user_lat,story_stage_id,dis_range);
+
+        getUserLoc(user_id)
+
+
+    }
+
+    //获取队伍成员位置信息
+    function getUserLocByTeam(user_id,session_id,user_lng,user_lat,dis_range){
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -206,19 +186,23 @@ $(function () {
                 if(obj["code"]==200){
                     var markers = [];
                     for (var i in obj.data) {
-                        var marker = {
-                            // iconPath: url,
-                            id: obj.data[i].id || 0,
-                            name: obj.data[i].user_id || '',
-                            latitude: obj.data[i].lat,
-                            longitude: obj.data[i].lng,
-                            width: 80,
-                            height: 80,
-                            title:1
-                        };
-                        markers.push(marker)
+                        if(obj.data[i].user_id!=user_id){
+                            var marker = {
+                                // iconPath: url,
+                                id: obj.data[i].id || 0,
+                                name: obj.data[i].user_id || '',
+                                latitude: obj.data[i].lat,
+                                longitude: obj.data[i].lng,
+                                width: 80,
+                                height: 80,
+                                title:1
+                            };
+                            markers.push(marker)
+                        }
                     }
-                    removeMarkers();
+
+                    $(".marker_text").remove();
+                    // removeMarkers();
 
                     drawPoi(markers);
                 }
@@ -229,8 +213,10 @@ $(function () {
 
             }
         });
+    }
 
-        //获取每个场景的模型
+    //获取每个场景的模型
+    function getSessionModels(user_id,session_id,user_lng,user_lat,story_stage_id,dis_range){
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -254,7 +240,6 @@ $(function () {
                 var dataContent=data;
                 var dataCon=$.toJSON(dataContent);
                 var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
-                //console.log("ajax请求成功:"+data.toString())
 
                 //新消息获取成功
                 if(obj["code"]==200){
@@ -273,12 +258,8 @@ $(function () {
                         };
                         markers.push(marker)
                     }
-                    // removeMarkers();
 
-                    drawPoi(markers);
-
-
-
+                    drawModals(markers);
                 }
                 //新消息获取失败
                 else{
@@ -287,8 +268,10 @@ $(function () {
 
             }
         });
+    }
 
-        //获取用户位置信息
+    //获取用户位置信息
+    function getUserLoc(user_id){
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -305,7 +288,6 @@ $(function () {
                 var dataContent=data;
                 var dataCon=$.toJSON(dataContent);
                 var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
-                //console.log("ajax请求成功:"+data.toString())
 
                 //新消息获取成功
                 if(obj["code"]==200){
@@ -315,7 +297,6 @@ $(function () {
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         // map.setCenter([lng, lat]);
                         var markerUser = {
-                            // iconPath: url,
                             id: '',
                             name:'',
                             latitude: lat,
@@ -325,11 +306,7 @@ $(function () {
                             title:2
                         };
                         drawUser(markerUser);
-                        // var markerUser = new AMap.Marker({
-                        //     position: [lng, lat]   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-                        // });
-                       // 将创建的点标记添加到已有的地图实例：
-                       //  map.add(markerUser);
+
                         console.log("地图中心",lat,lng)
                     }
 
@@ -341,13 +318,14 @@ $(function () {
 
             }
         });
-    };
-
-    function removeMarkers(){
-        map.clearMap();
-        // map.remove(markers);
     }
 
+    //清楚地图上的Marker
+    function removeMarkers(){
+        map.clearMap();
+    }
+
+    //描绘Marker
     function drawPoi(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
@@ -379,6 +357,25 @@ $(function () {
         // });
     }
 
+    //描绘模型Marker
+    function drawModals(markers){
+        markers.forEach(function(marker) {
+            var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+                marker.title+'</span>';
+            var marker= new AMap.Marker({
+                content: markerContent,
+                map: map,
+                icon: marker.icon,
+                position: [marker.longitude,marker.latitude],
+                offset: new AMap.Pixel(-13, -30)
+            });
+            // marker.on('click', function(e){
+            //     showPoiDetail(e);
+            // });
+        });
+    }
+
+    //描绘用户Marker
     function drawUser(marker){
         var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
             '</span>';
