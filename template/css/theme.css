@@ -3513,7 +3513,7 @@ input.datepicker + span{
     max-width: 950px;
 }
 .modal-content{
-    border-radius: 0;
+    border-radius: 10px;
 }
 .model-style-2 .close{
     width: 40px;

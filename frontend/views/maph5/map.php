@@ -55,13 +55,41 @@ $this->registerMetaTag([
   </div>
 
 </div>-->
+
 <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
     返回
 </div>
-
 <div id="user_center">
   <img src="../../static/img/position.png">
 </div>
+<div class="compass_btn">
+  <a href="/compassh5/compass">
+    <img src="../../img/map/compass.png">
+  </a>
+</div>
+
+<!-- 场景详情 -->
+<div class="modal fade" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal">
+         <img decoding="async"  src="../../img/map/x.png" alt="First slide" class="map-info-close">
+      </span>
+      <div class="p-20 relative h5 m-t-30" name="loginStr">
+        <div>
+          <div class="fs-15 text-33 bold">
+           场景简介：
+          </div>
+          <div class="m-t-20 bg-F5 p-20 fs-14  border-radius-r-5 border-radius-l-5 map-text-context">
+            场景信息XXXXX
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 <script type="text/javascript">
         window._AMapSecurityConfig = {

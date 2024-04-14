@@ -428,7 +428,7 @@ input[type="radio"]:checked+label::before {
     background-repeat: no-repeat;
     background-size: contain;
 }
-.map-info-box{
+/*.map-info-box{
     position: fixed;
     top: 0;
     left: 0;
@@ -442,7 +442,7 @@ input[type="radio"]:checked+label::before {
     overflow-y: auto;
     transition: opacity .15s linear;
     background: rgba(0, 0, 0, 0.5);
-}
+}*/
 .map-info-content{
     position: absolute;
     bottom: 0;
@@ -461,7 +461,7 @@ input[type="radio"]:checked+label::before {
     width: 20px;
     height: 20px;
     float: right;
-
+    margin-left: 15px;
 }
 .map-text-context{
     font-size: 20px;
@@ -564,10 +564,26 @@ input[type="radio"]:checked+label::before {
     left: 20px;
     z-index: 100;
 }
-#user_center img{
+#user_center img,.compass_btn img{
     width: 30px;
     margin: 0 1px auto 1px;
 }
+.compass_btn{
+    background-color: #f4f4f4;
+    color: #333333;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px;
+    position: absolute;
+    bottom: 129px;
+    left: 20px;
+    z-index: 100;
+}
+
 .lottery-pink-modal .close{
     width: 80px;
     height: 60px;

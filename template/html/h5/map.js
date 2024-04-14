@@ -402,10 +402,8 @@ function showPoiDetail(n) {
     var text=me.find('.marker_text').attr("data-id");
     text=me.attr("data-id");
     text=$(this).attr('data-id');
-    $("#map-info-box").show();
-    console.log(text,me,n)
-    $("#map-info-box .map-text-context").empty().text(n);
-
+    $("#modal-detail .map-text-context").empty().text(n);
+    $("#modal-detail").modal('show');
 }
 
 
