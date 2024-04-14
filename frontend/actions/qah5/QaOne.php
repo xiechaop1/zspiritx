@@ -28,6 +28,11 @@ class QaOne extends Action
     public function run()
     {
         $qaId = Net::get('id');
+
+        if (empty($qaId)) {
+            $qaId = Net::get('qa_id');
+        }
+
         if ($qaId) {
             $model = \common\models\Qa::findOne($qaId);
         }
