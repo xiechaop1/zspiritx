@@ -151,7 +151,7 @@ $(function () {
 
         getUserLocByTeam(user_id,session_id,user_lng,user_lat,dis_range);
 
-        getSessionModels(user_id,session_id,user_lng,user_lat,story_stage_id,dis_range);
+        getSessionModels(user_id,story_id,session_id,user_lng,user_lat,story_stage_id,dis_range);
 
         getUserLoc(user_id)
 
@@ -216,7 +216,7 @@ $(function () {
     }
 
     //获取每个场景的模型
-    function getSessionModels(user_id,session_id,user_lng,user_lat,story_stage_id,dis_range){
+    function getSessionModels(user_id,story_id,session_id,user_lng,user_lat,story_stage_id,dis_range){
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
