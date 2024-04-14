@@ -650,6 +650,11 @@ $(function () {
         Unity.call(data);
     });
 
+    //浏览器页面back
+    $(".go-history").click(function (){
+        history.go(-1);
+    })
+
     $("#qa_return_btn").click(function (){
         // Unity.call('WebViewOff&FalseAnswer');
         var rtnAnswerType = $('#rtn_answer_type').val();
