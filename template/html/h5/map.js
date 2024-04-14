@@ -2,6 +2,9 @@ var map = new AMap.Map('container', {
 });
 $(function () {
     var location=[];
+    var markersUser = [];
+    var markersTeam = [];
+    var markersModal = [];
 
     $("#return_btn").click(function (){
         var params = {
@@ -182,7 +185,8 @@ $(function () {
 
                 //新消息获取成功
                 if(obj["code"]==200){
-                    var markers = [];
+                    markersTeam = [];
+
                     for (var i in obj.data) {
                         if(obj.data[i].user_id!=user_id&&obj.data[i].lat!=null&&obj.data[i].lng!=null){
                             var marker = {
@@ -195,14 +199,14 @@ $(function () {
                                 height: 80,
                                 title:1
                             };
-                            markers.push(marker)
+                            markersTeam.push(marker)
                         }
                     }
 
                     $(".marker_text").closest(".amap-marker").remove();
                     // removeMarkers();
 
-                    drawPoi(markers);
+                    drawPoi(markersTeam);
                 }
                 //新消息获取失败
                 else{
@@ -241,7 +245,7 @@ $(function () {
 
                 //新消息获取成功
                 if(obj["code"]==200){
-                    var markers = [];
+                    markersModal = [];
                     for (var i in obj.data) {
                         if(obj.data[i].snapshot.lat!=null&&obj.data[i].snapshot.lng!=null){
                             var marker = {
@@ -255,11 +259,11 @@ $(function () {
                                 img: obj.data[i].snapshot.lng,
                                 title:2
                             };
-                            markers.push(marker)
+                            markersModal.push(marker)
                         }
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
-                    drawModals(markers);
+                    drawModals(markersModal);
                 }
                 //新消息获取失败
                 else{
@@ -296,7 +300,7 @@ $(function () {
 
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         // map.setCenter([lng, lat]);
-                        var markerUser = {
+                        markersUser = {
                             id: '',
                             name:'',
                             latitude: lat,
@@ -306,7 +310,7 @@ $(function () {
                             title:2
                         };
 
-                        drawUser(markerUser);
+                        drawUser(markersUser);
 
                         console.log("地图中心",lat,lng)
                     }
@@ -367,6 +371,7 @@ $(function () {
         $(".marker_user").closest(".amap-marker").remove();
         $(".marker_user").closest(".amap-markers").remove();
         $(".marker_user").remove();
+        map.remove(markersUser);
         var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
             '</span>';
         var marker= new AMap.Marker({
