@@ -199,7 +199,7 @@ $(function () {
                         }
                     }
 
-                    $(".marker_text").remove();
+                    $(".marker_text").closest(".amap-marker").remove();
                     // removeMarkers();
 
                     drawPoi(markers);
@@ -258,7 +258,7 @@ $(function () {
                             markers.push(marker)
                         }
                     }
-
+                    $(".marker_modal").closest(".amap-marker").remove();
                     drawModals(markers);
                 }
                 //新消息获取失败
@@ -278,7 +278,7 @@ $(function () {
             async: false,
             url: 'https://h5.zspiritx.com.cn/user/get_user_loc',
             data:{
-                user_id:user_id,
+                user_id:user_id
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
@@ -305,7 +305,7 @@ $(function () {
                             height: 80,
                             title:2
                         };
-                        $(".marker_user").remove();
+                        $(".marker_user").closest(".amap-marker").remove();
                         drawUser(markerUser);
 
                         console.log("地图中心",lat,lng)
@@ -342,26 +342,12 @@ $(function () {
             //     showPoiDetail(e);
             // });
         });
-        // markers.forEach(function(marker) {
-        //     var markerContent= '<span style="left:20%;top:80%;"  class="marker_text" data-id="'+marker.title+'">'+marker.title
-        //         '</span>';
-        //     var marker= new AMap.Marker({
-        //         content: markerContent,
-        //         map: map,
-        //         // icon: marker.icon,
-        //         position: [marker.longitude, marker.latitude],
-        //         offset: new AMap.Pixel(-13, -30)
-        //     });
-        //     markers.on('click', function(e){
-        //         showPoiDetail();
-        //     });
-        // });
     }
 
     //描绘模型Marker
     function drawModals(markers){
         markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="marker_text"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+            var markerContent= '<span style="left:20%;top:80%;"  class="marker_modal"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
                 marker.title+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
