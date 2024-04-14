@@ -41,6 +41,10 @@ class Puzzle extends Action
 
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
 
+        if (empty($qaId)) {
+            $qaId = Net::get('id');
+        }
+
         $qaOne = Qa::find()
             ->where([
                 'id'    => $qaId,
