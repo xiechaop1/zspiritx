@@ -38,7 +38,7 @@ $this->title = '我的';
     <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
          退出
     </div>
-    <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 80px;">
+    <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 100px;">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
