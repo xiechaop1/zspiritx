@@ -474,6 +474,17 @@ input[type="radio"]:checked+label::before {
     font-size: 36px;
     color: #ffffff;
 }
+#modal-detail .modal-dialog-centered {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: end;
+    min-height: calc(100% -(.5rem* 2));
+}
+#modal-detail .modal-content {
+    bottom: 40px;
+    border-radius: 10px;
+}
 .box-center{
     text-align: center;
     position: absolute;
