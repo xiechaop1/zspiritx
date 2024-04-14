@@ -184,7 +184,7 @@ $(function () {
                 if(obj["code"]==200){
                     var markers = [];
                     for (var i in obj.data) {
-                        if(obj.data[i].user_id!=user_id){
+                        if(obj.data[i].user_id!=user_id&&obj.data[i].lat!=null&&obj.data[i].lng!=null){
                             var marker = {
                                 // iconPath: url,
                                 id: obj.data[i].id || 0,
@@ -243,18 +243,20 @@ $(function () {
                 if(obj["code"]==200){
                     var markers = [];
                     for (var i in obj.data) {
-                        var marker = {
-                            // iconPath: url,
-                            id: obj.data[i].id || 0,
-                            name: obj.data[i].user_id || '',
-                            latitude: obj.data[i].snapshot.lat,
-                            longitude: obj.data[i].snapshot.lng,
-                            width: 80,
-                            height: 80,
-                            img: obj.data[i].snapshot.lng,
-                            title:2
-                        };
-                        markers.push(marker)
+                        if(obj.data[i].snapshot.lat!=null&&obj.data[i].snapshot.lng!=null){
+                            var marker = {
+                                // iconPath: url,
+                                id: obj.data[i].id || 0,
+                                name: obj.data[i].user_id || '',
+                                latitude: obj.data[i].snapshot.lat,
+                                longitude: obj.data[i].snapshot.lng,
+                                width: 80,
+                                height: 80,
+                                img: obj.data[i].snapshot.lng,
+                                title:2
+                            };
+                            markers.push(marker)
+                        }
                     }
 
                     drawModals(markers);
