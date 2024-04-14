@@ -148,13 +148,11 @@ $(function () {
             user_lat=39.3442;
         }
 
-
         getUserLocByTeam(user_id,session_id,user_lng,user_lat,dis_range);
 
         getSessionModels(user_id,story_id,session_id,user_lng,user_lat,story_stage_id,dis_range);
 
         getUserLoc(user_id)
-
 
     }
 
@@ -305,6 +303,7 @@ $(function () {
                             height: 80,
                             title:2
                         };
+                        $(".marker_user").remove();
                         drawUser(markerUser);
 
                         console.log("地图中心",lat,lng)
@@ -394,9 +393,10 @@ $(function () {
     })
 
     getPoi();
+    getUserLoc();
     getUserPoi();
     setInterval(getPoi,10000);
-    // setInterval(getUserPoi,5000);
+    setInterval(getUserLoc,5000);
     // setInterval(removeMarkers,3000);
     
 });
