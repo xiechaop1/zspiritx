@@ -62,23 +62,25 @@ class Prepare extends Action
             ->one();
 
         if (!empty($storyMatch)) {
-            throw new Exception('您已经有待比赛的车辆，您需要取消或者结束比赛！', ErrorCode::STORY_MATCH_ALREADY_EXIST_READY);
-        }
-
-        $userModel = UserModels::find()
-            ->where([
-                'user_id' => $userId,
-                'session_id' => $sessionId,
-                'story_id' => $storyId,
-//                'story_model_id' => $storyModelId,
-            ]);
-        if (!empty($storyModelDetailId)) {
-            $userModel->andWhere(['story_model_detail_id' => $storyModelDetailId]);
+            $msg = '您已经有待比赛的车辆，您需要取消或者结束比赛！';
+//            return $this->renderErr('您已经有待比赛的车辆，您需要取消或者结束比赛！');
+//            throw new Exception('您已经有待比赛的车辆，您需要取消或者结束比赛！', ErrorCode::STORY_MATCH_ALREADY_EXIST_READY);
         } else {
-            $userModel->andWhere(['story_model_id' => $storyModelId]);
-        }
 
-        $userModel = $userModel->one();
+            $userModel = UserModels::find()
+                ->where([
+                    'user_id' => $userId,
+                    'session_id' => $sessionId,
+                    'story_id' => $storyId,
+//                'story_model_id' => $storyModelId,
+                ]);
+            if (!empty($storyModelDetailId)) {
+                $userModel->andWhere(['story_model_detail_id' => $storyModelDetailId]);
+            } else {
+                $userModel->andWhere(['story_model_id' => $storyModelId]);
+            }
+
+            $userModel = $userModel->one();
 
 //        if (!empty($userModel)) {
 //            $storyModelId = $userModel->story_model_id;
@@ -99,14 +101,23 @@ class Prepare extends Action
             $storyMatch->m_story_model_detail_id = $storyModelDetailId;
             $storyMatch->save();
 
+            $msg = '您的车辆已经准备好，准备开始比赛吧！';
+        }
+
         return $this->controller->render('msg', [
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'story_match'   => $storyMatch,
-            'msg' => '您的车辆已经准备好，准备开始比赛吧！',
+            'msg' => $msg,
             'btnName' => '开始比赛',
+        ]);
+    }
+
+    public function renderErr($errTxt) {
+        return $this->controller->render('msg', [
+            'msg' => $errTxt,
         ]);
     }
 }

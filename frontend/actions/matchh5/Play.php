@@ -61,7 +61,8 @@ class Play extends Action
             ->one();
 
         if (empty($storyMatch)) {
-            throw new Exception('您没有准备参赛的赛车，请您用钥匙启动准备好以后，联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
+            return $this->renderErr('您没有准备参赛的赛车，请您用钥匙启动准备好以后，联系小精灵！');
+//            throw new Exception('您没有准备参赛的赛车，请您用钥匙启动准备好以后，联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
         $userModelId = $storyMatch->user_model_id;
@@ -72,7 +73,8 @@ class Play extends Action
         $userModelProp = !empty($userModel->user_model_prop) ? json_decode($userModel->user_model_prop, true) : [];
 
         if (empty($userModelProp)) {
-            throw new Exception('您的赛车没有准备好，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
+            return $this->renderErr('您的赛车没有准备好，请联系小精灵！');
+//            throw new Exception('您的赛车没有准备好，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
         $userModelProp = !empty($userModelProp['prop']) ? $userModelProp['prop'] : [];
@@ -86,7 +88,8 @@ class Play extends Action
         $timeRate = $timeRate > 1 ? 1 : $timeRate;
 
         if (empty($timeRate)) {
-            throw new Exception('您的赛车参数异常，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
+            return $this->renderErr('您的赛车参数异常，请联系小精灵！');
+//            throw new Exception('您的赛车参数异常，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
         // 计算"中国勒芒"圈速
@@ -250,6 +253,12 @@ class Play extends Action
             'rank'  => $rank,
             'ct'    => $ct,
 
+        ]);
+    }
+
+    public function renderErr($errTxt) {
+        return $this->controller->render('msg', [
+            'msg' => $errTxt,
         ]);
     }
 }
