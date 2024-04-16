@@ -61,7 +61,7 @@ class Play extends Action
             ->one();
 
         if (empty($storyMatch)) {
-            throw new Exception('您没有准备参赛的汽车，请您用钥匙启动准备好以后，联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
+            throw new Exception('您没有准备参赛的赛车，请您用钥匙启动准备好以后，联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
         $userModelId = $storyMatch->user_model_id;
@@ -72,9 +72,10 @@ class Play extends Action
         $userModelProp = !empty($userModel->user_model_prop) ? json_decode($userModel->user_model_prop, true) : [];
 
         if (empty($userModelProp)) {
-            throw new Exception('您的汽车没有准备好，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
+            throw new Exception('您的赛车没有准备好，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
+        $userModelProp = !empty($userModelProp['prop']) ? $userModelProp['prop'] : [];
         $speed = !empty($userModelProp['speed']) ? $userModelProp['speed'] : 0;
         $cornerSpeed = !empty($userModelProp['corner_speed']) ? $userModelProp['corner_speed'] : 0;
         $acceleration = !empty($userModelProp['acc']) ? $userModelProp['acc'] : 0;
@@ -83,6 +84,10 @@ class Play extends Action
 
         $timeRate = ($speed / 350) * 0.3 + ($cornerSpeed / 300) * 0.15 + ($acceleration / 100) * 0.25 + ($operate / 100) * 0.3;
         $timeRate = $timeRate > 1 ? 1 : $timeRate;
+
+        if (empty($timeRate)) {
+            throw new Exception('您的赛车参数异常，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
+        }
 
         // 计算"中国勒芒"圈速
         $eachLopSecMax = 230000;
