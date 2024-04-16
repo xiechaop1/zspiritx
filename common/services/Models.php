@@ -819,4 +819,84 @@ class Models extends Component
         ];
     }
 
+    public function computeStoryModelLinkPropWithFormula($linkExecArr, $targetStoryModel, $targetUserModel = [], $useStoryModelIds = []) {
+        $ret = [];
+        $combineList = [];
+//        if (!empty($targetStoryModel->story_model_prop)) {
+//            $tarStoryModelProp = json_decode($targetStoryModel->story_model_prop, true);
+//            if (!empty($tarStoryModelProp['formula'])) {
+//                $formula = $tarStoryModelProp['formula'];
+//            }
+//        }
+//        if (empty($formula)) {
+//            return $ret;
+//        }
+
+        if (!empty($targetUserModel)) {
+            $userModelProp = !empty($targetUserModel->user_model_prop) ? json_decode($targetUserModel->user_model_prop, true) : [];
+            $combineList = !empty($userModelProp['combine_story_model_list']) ? $userModelProp['combine_story_model_list'] : [];
+
+            if (!empty($combineList)) {
+                foreach ($useStoryModelIds as $useStoryModelId) {
+                    if (!in_array($useStoryModelId, $combineList)) {
+                        $combineList[] = $useStoryModelId;
+                    }
+                }
+
+//                $useStoryModels = StoryModels::find()
+//                    ->where([
+//                        'id' => $combineList,
+//                    ])
+//                    ->all();
+
+
+            } else {
+                $combineList = $useStoryModelIds;
+            }
+        } else {
+            $combineList = $useStoryModelIds;
+        }
+
+//        preg_match_all('/\{\$(.+?)\}/', $formula, $matches);
+        if ( !empty($combineList)
+//            && !empty($matches)
+        ) {
+            $formula = '';
+            foreach ($combineList as $storyModelId) {
+
+                if (!empty($linkExecArr[$storyModelId]['prop'])) {
+                    $storyModelProp = $linkExecArr[$storyModelId]['prop'];
+                } else {
+                    $storyModelProp = [];
+                }
+
+                $formula = !empty($linkExecArr[$storyModelId]['formula']) ? $linkExecArr[$storyModelId]['formula'] : $formula;
+                if (empty($formula)) {
+                    return [
+                        'prop' => '',
+                        'combine_story_model_list' => [],
+                    ];
+                }
+
+//                $storyModelProp = !empty($usm->story_model_prop) ? json_decode($usm->story_model_prop, true) : [];
+//                $storyModelProp = !empty($storyModelProp['prop']) ? $storyModelProp['prop'] : [];
+//                $storyModelProp = !empty($usm->story_model_prop) ? json_decode($usm->story_model_prop, true) : [];
+//                $storyModelProp = !empty($storyModelProp['prop']) ? $storyModelProp['prop'] : [];
+//                $storyModel = $usm;
+//                var_dump($storyModelProp);
+//                foreach ($matches[1] as $match) {
+//                    $formula = str_replace('{$' . $match . '}', $storyModelProp[$match], $formula);
+//                }
+//                echo $formula;
+//                exit;
+                eval( $formula . ';');
+            }
+        }
+
+        return [
+            'prop' => $ret,
+            'combine_story_model_list' => $combineList,
+        ];
+    }
+
 }

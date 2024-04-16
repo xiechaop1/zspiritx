@@ -176,6 +176,12 @@ echo \dmstr\widgets\Alert::widget();
                     [
                         'label' => '执行',
                         'attribute' => 'eff_exec',
+                        'value' => function ($model) {
+                            $ret = substr($model->eff_exec, 0, 50);
+                            if (strlen($model->eff_exec) > 50)
+                                $ret .= '...';
+                            return $ret;
+                        },
                         'filter' => false,
                     ],
                     [

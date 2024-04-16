@@ -1172,16 +1172,25 @@ class DoApi extends ApiAction
                         ->all();
 
                     $linkStoryModelIds = [];
+                    $linkStoryModelDetailIds = [];
+                    $linkExecArr = [];
                     if (!empty($storyModelLinks)) {
 
                         foreach ($storyModelLinks as $storyModelLink) {
                             if (!empty($storyModelLink->story_model_detail_id)) {
-                                $linkStoryModelIds[] = $storyModelLink->story_model_detail_id;
-                            } else {
-                                $linkStoryModelIds[] = $storyModelLink->story_model_id;
+                                $linkStoryModelDetailIds[] = $storyModelLink->story_model_detail_id;
                             }
+                            $linkStoryModelIds[] = $storyModelLink->story_model_id;
 
-                            $newStoryModelId = $storyModelLink->eff_exec;
+
+                            $tmpExec = $storyModelLink->eff_exec;
+                            if (\common\helpers\Common::isJson($tmpExec)) {
+                                $tmpExecArr = json_decode($tmpExec, true);
+                                $newStoryModelId = !empty($tmpExecArr['target_story_model_id']) ? $tmpExecArr['target_story_model_id'] : 0;
+                                $linkExecArr[$storyModelLink->story_model_id] = $tmpExecArr;
+                            } else {
+                                $newStoryModelId = $tmpExec;
+                            }
                             $type = $storyModelLink->eff_type;
                         }
                     } else {
@@ -1219,7 +1228,8 @@ class DoApi extends ApiAction
                                 ->one();
                         }
 
-                        $newModelProp = Yii::$app->models->computeStoryModelPropWithFormula($storyModels, $newStoryModel, $newUserModelForCombine, $storyModelIds);
+//                        $newModelProp = Yii::$app->models->computeStoryModelPropWithFormula($storyModels, $newStoryModel, $newUserModelForCombine, $storyModelIds);
+                        $newModelProp = Yii::$app->models->computeStoryModelLinkPropWithFormula($linkExecArr, $newStoryModel, $newUserModelForCombine, $storyModelIds);
 
                         if ($type == StoryModelsLink::EFF_TYPE_MODEL) {
                             $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $newModelProp);

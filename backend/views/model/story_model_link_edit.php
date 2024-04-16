@@ -64,7 +64,17 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('执行类型');
-            echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => !empty($storyModelLink->eff_exec) ? var_export(json_decode($storyModelLink->eff_exec, true), true) : '', 'rows' => 15])->label('执行');
+            if (!empty($storyModelLink->eff_exec)) {
+                if (\common\helpers\Common::isJson($storyModelLink->eff_exec)) {
+                    $tmpExec = json_decode($storyModelLink->eff_exec, true);
+                    $tmpExecStr = var_export($tmpExec, true);
+                } else {
+                    $tmpExecStr = $storyModelLink->eff_exec;
+                }
+            } else {
+                $tmpExecStr = '';
+            }
+            echo $form->field($storyModelLink, 'eff_exec')->textarea(['value' => $tmpExecStr, 'rows' => 15])->label('执行');
             echo $form->field($storyModelLink, 'min_ct')->textInput(['value' => $storyModelLink->min_ct])->label('执行成功减少数量');
 
             ?>

@@ -71,7 +71,11 @@ class StoryModelLinkEdit extends Action
 
             $model->load(Yii::$app->request->post());
 
-            if (!\common\helpers\Common::isJson($model->eff_exec)
+            if (
+//                !\common\helpers\Common::isJson($model->eff_exec)
+            (substr($model->eff_exec, 0, 5) == 'Array'
+                || substr($model->eff_exec, 0, 5) == 'array'
+            )
                 && !empty($model->eff_exec)
             ) {
                 if (strpos($model->eff_exec, -1) != ';') {
