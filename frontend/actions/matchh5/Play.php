@@ -223,11 +223,10 @@ class Play extends Action
         $rank = 0;
         if (!empty($rankRet)) {
             foreach ($rankRet as $r) {
+                $rank++;
                 if (
-                    $r->id != $storyMatch->id
+                    $r->id == $storyMatch->id
                 ) {
-                    $rank++;
-                } else {
                     break;
                 }
             }
