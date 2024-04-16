@@ -754,8 +754,9 @@ class Models extends Component
         return $userModelUsed;
     }
 
-    public function computeStoryModelPropWithFormula($useStoryModels, $targetStoryModel) {
+    public function computeStoryModelPropWithFormula($useStoryModels, $targetStoryModel, $targetUserModel = [], $useStoryModelIds = []) {
         $ret = [];
+        $combineList = [];
         if (!empty($targetStoryModel->story_model_prop)) {
             $tarStoryModelProp = json_decode($targetStoryModel->story_model_prop, true);
             if (!empty($tarStoryModelProp['formula'])) {
@@ -766,24 +767,56 @@ class Models extends Component
             return $ret;
         }
 
+        if (!empty($targetUserModel)) {
+            $userModelProp = !empty($targetUserModel->user_model_prop) ? json_decode($targetUserModel->user_model_prop, true) : [];
+            $combineList = !empty($userModelProp['combine_story_model_list']) ? $userModelProp['combine_story_model_list'] : [];
+
+            if (!empty($combineList)) {
+                foreach ($useStoryModelIds as $useStoryModelId) {
+                    if (!in_array($useStoryModelId, $combineList)) {
+                        $combineList[] = $useStoryModelId;
+                    }
+                }
+
+                $useStoryModels = StoryModels::find()
+                    ->where([
+                        'id' => $combineList,
+                    ])
+                    ->all();
+
+
+            } else {
+                $combineList = $useStoryModelIds;
+            }
+        } else {
+            $combineList = $useStoryModelIds;
+        }
+
 //        preg_match_all('/\{\$(.+?)\}/', $formula, $matches);
         if ( !empty($useStoryModels)
 //            && !empty($matches)
         ) {
             foreach ($useStoryModels as $usm) {
+
                 $storyModelProp = !empty($usm->story_model_prop) ? json_decode($usm->story_model_prop, true) : [];
                 $storyModelProp = !empty($storyModelProp['prop']) ? $storyModelProp['prop'] : [];
+//                $storyModelProp = !empty($usm->story_model_prop) ? json_decode($usm->story_model_prop, true) : [];
+//                $storyModelProp = !empty($storyModelProp['prop']) ? $storyModelProp['prop'] : [];
                 $storyModel = $usm;
 //                var_dump($storyModelProp);
 //                foreach ($matches[1] as $match) {
 //                    $formula = str_replace('{$' . $match . '}', $storyModelProp[$match], $formula);
 //                }
 //                echo $formula;
+//                exit;
                 eval( $formula . ';');
             }
         }
 
-        return $ret;
+        return [
+            'prop' => $ret,
+            'combine_story_model_list' => $combineList,
+        ];
     }
 
 }

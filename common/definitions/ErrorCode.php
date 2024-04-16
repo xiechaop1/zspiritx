@@ -90,4 +90,8 @@ class ErrorCode extends Api
 
     const USER_LOTTERY_ADD_FAILED = -110002; // 用户抽奖券添加失败
 
+    const STORY_MATCH_ALREADY_EXIST_READY = -120002; // 已经有待比赛的车辆
+
+    const STORY_MATCH_NOT_EXIST_READY = -120003; // 没有准备参赛的汽车
+
 }

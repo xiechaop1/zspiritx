@@ -26,6 +26,14 @@ class StoryModelsLink extends \common\models\gii\StoryModelsLink
         self::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY => '包含模型并显示',
     ];
 
+    const IS_TAG_YES = 1;
+    const IS_TAG_NO = 0;
+
+    public static $isTag2Name = [
+        self::IS_TAG_YES => '是',
+        self::IS_TAG_NO => '否',
+    ];
+
     public function behaviors()
     {
         return [

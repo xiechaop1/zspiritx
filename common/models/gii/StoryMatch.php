@@ -5,10 +5,10 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%story_model}}".
+ * This is the model class for table "{{%story_match}}".
  *
  */
-class StoryModelsLink extends \yii\db\ActiveRecord
+class StoryMatch extends \yii\db\ActiveRecord
 {
 
     /**
@@ -16,7 +16,7 @@ class StoryModelsLink extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%story_model_link}}';
+        return '{{%story_match}}';
     }
 
     /**
@@ -25,11 +25,10 @@ class StoryModelsLink extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'story_model_id', 'story_model_detail_id',
-                'story_model_id2', 'story_model_detail_id2', 'is_tag',
-                'eff_type', 'min_ct'], 'integer'],
-            [['created_at', 'updated_at',], 'integer'],
-            [['eff_exec', 'group_name' ], 'string'],
+            [['story_id', 'session_id', 'user_id', 'm_story_model_id', 'm_story_model_detail_id',
+                'user_model_id', 'score', 'score2',], 'integer'],
+            [['created_at', 'updated_at', 'status', 'story_match_status', ], 'integer'],
+            [['match_name', 'match_detail' ], 'string'],
         ];
     }
 

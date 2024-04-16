@@ -52,7 +52,12 @@ echo \dmstr\widgets\Alert::widget();
             ])->label('关联模型');
 
             echo $form->field($storyModelLink, 'group_name')->textInput(['value' => $storyModelLink->group_name])->label('分组');
-
+            echo $form->field($storyModelLink, 'is_tag')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModelsLink::$isTag2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('是否标志性');
             echo $form->field($storyModelLink, 'eff_type')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModelsLink::$effType2Name,
                 'options' => [

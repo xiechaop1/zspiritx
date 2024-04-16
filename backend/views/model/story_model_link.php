@@ -154,6 +154,16 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeInput('text', $searchModel, 'group_name'),
                     ],
                     [
+                        'label' => '标志性',
+                        'attribute' => 'is_tag',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\StoryModelsLink::$isTag2Name[$model->is_tag]) ?
+                                \common\models\StoryModelsLink::$isTag2Name[$model->is_tag] : ' - ';
+                        },
+                        'filter' => Html::activeInput('text', $searchModel, 'is_tag'),
+                    ],
+                    [
                         'label' => '效果类型',
                         'attribute' => 'eff_type',
                         'format'    => 'raw',

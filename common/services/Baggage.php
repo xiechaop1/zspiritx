@@ -85,9 +85,9 @@ class Baggage extends Component
             $userModelProp = !empty($userModelProp) ?
                 json_encode($userModelProp, true) : '';
 
-            $retUserModelProp = [
-                'prop' => $userModelProp,
-            ];
+//            $retUserModelProp = [
+//                'prop' => $userModelProp,
+//            ];
 
             if (empty($userModelBaggage)) {
                 $userModelBaggage = new UserModels();
@@ -98,7 +98,7 @@ class Baggage extends Component
                 $userModelBaggage->story_model_id = $storyModelId;
                 $userModelBaggage->story_model_detail_id = $storyModelDetailId;
                 $userModelBaggage->session_model_id = $sessionModel->id;
-                $userModelBaggage->user_model_prop = $retUserModelProp;
+                $userModelBaggage->user_model_prop = $userModelProp;
                 $userModelBaggage->use_ct = 1;
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();

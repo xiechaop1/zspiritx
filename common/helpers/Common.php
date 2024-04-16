@@ -201,6 +201,43 @@ class Common
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
+    public static function formatTime($timeStamp, $returnFormat = 'H:i:s.ms', $needMicSec = true) {
+        if ($needMicSec) {
+            $timestr = floor($timeStamp / 1000);
+            $micSec = $timeStamp % 1000;
+        } else {
+            $timestr = $timeStamp;
+            $micSec = 0;
+        }
+        $hour = floor($timestr / 3600);
+        $minute = floor(($timestr - $hour * 3600) / 60);
+        $second = $timestr - $hour * 3600 - $minute * 60;
+
+        $str = $returnFormat;
+        $str = str_replace('ms', sprintf('%03d', $micSec), $str);
+        if ($hour == 0) {
+            $str = str_replace('H:', '', $str);
+            $str = str_replace('H', '', $str);
+        } else {
+            $str = str_replace('H', sprintf('%02d', $hour), $str);
+        }
+        if ($minute == 0) {
+            $str = str_replace('i:', '', $str);
+            $str = str_replace('i', '', $str);
+        } else {
+            $str = str_replace('i', sprintf('%02d', $minute), $str);
+        }
+        $str = str_replace('s', sprintf('%02d', $second), $str);
+
+        return [
+            'hour' => $hour,
+            'minute' => $minute,
+            'second' => $second,
+            'micSec' => $micSec,
+            'str' => $str,
+        ];
+    }
+
     /**
      * @param $lat1
      * @param $lng1

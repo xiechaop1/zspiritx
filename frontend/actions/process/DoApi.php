@@ -1097,8 +1097,10 @@ class DoApi extends ApiAction
                         throw new \yii\db\Exception('您没有选择任何物品', ErrorCode::USER_MODEL_NOT_FOUND);
                     }
 
-                    $userModelIds = [];
+                    $storyModelIds = [];
+                    $storyModelDetailIds = [];
                     $storyModels = [];
+                    $userModelIds = [];
                     foreach ($userModels as $userModel2) {
                         $storyModel2 = $userModel2->storyModel;
 
@@ -1111,12 +1113,12 @@ class DoApi extends ApiAction
                         }
 
                         if (!empty($storyModel2->story_model_detail_id)) {
-                            $userModelIds[] = $storyModel2->story_model_detail_id;
-                        } else {
-                            $userModelIds[] = $storyModel2->id;
+                            $storyModelDetailIds[] = $storyModel2->story_model_detail_id;
                         }
+                        $storyModelIds[] = $storyModel2->id;
 
                         $storyModels[] = $storyModel2;
+                        $userModelIds[] = $userModel2->id;
                     }
 
                     if (empty($combineGroup)) {
@@ -1128,22 +1130,29 @@ class DoApi extends ApiAction
                                     StoryModelsLink::EFF_TYPE_MODEL_AND_DISPLAY,
                                     StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY,
                                     ],
+                            ])
+                            ->andFilterWhere([
+                                'or', ['story_model_id' => $storyModelIds],
+                                ['story_model_detail_id' => $storyModelDetailIds],
+                            ])
+                            ->andFilterWhere([
+                                'is_tag' => StoryModelsLink::IS_TAG_YES
                             ]);
-                        if (!empty($storyModel->story_model_detail_id)) {
-                            $groupStoryModel = $groupStoryModel->andFilterWhere([
-                                'story_model_detail_id' => $storyModel->story_model_detail_id,
-                            ]);
-                        } else {
-                            $groupStoryModel = $groupStoryModel->andFilterWhere([
-                                'story_model_id' => $storyModel->id,
-                            ]);
-                        }
-                        $groupStoryModel = $groupStoryModel->one();
 
+//                        if (!empty($storyModel->story_model_detail_id)) {
+//                            $groupStoryModel = $groupStoryModel->andFilterWhere([
+//                                'story_model_detail_id' => $storyModel->story_model_detail_id,
+//                            ]);
+//                        } else {
+//                            $groupStoryModel = $groupStoryModel->andFilterWhere([
+//                                'story_model_id' => $storyModel->id,
+//                            ]);
+//                        }
+                        $groupStoryModel = $groupStoryModel->one();
                         if (!empty($groupStoryModel)) {
                             $combineGroup = $groupStoryModel->group_name;
                         } else {
-                            throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+                            throw new \yii\base\Exception('没有找到必须的合成物品', ErrorCode::USER_MODEL_NO_EFFECT);
                         }
                     }
 
@@ -1176,18 +1185,20 @@ class DoApi extends ApiAction
                             $type = $storyModelLink->eff_type;
                         }
                     } else {
-                        throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+                        throw new \yii\base\Exception('您的使用没有关联效果', ErrorCode::USER_MODEL_NO_EFFECT);
                     }
 
                     if ($type == StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY) {
-                        if (\common\helpers\Common::arrayContains($linkStoryModelIds, $userModelIds)) {
-                            sort($userModelIds);
-                            $userModelStr = implode(',', $userModelIds);
-                            $linkStoryModelStr = implode(',', $userModelIds);
+                        if (\common\helpers\Common::arrayContains($storyModelIds, $linkStoryModelIds)) {
+                            sort($storyModelIds);
+                            $userModelStr = implode(',', $storyModelIds);
+                            $linkStoryModelStr = implode(',', $storyModelIds);
+                        } else {
+                            throw new \yii\base\Exception('您的组合没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
                         }
                     } else {
-                        sort($userModelIds);
-                        $userModelStr = implode(',', $userModelIds);
+                        sort($storyModelIds);
+                        $userModelStr = implode(',', $storyModelIds);
                         sort($linkStoryModelIds);
                         $linkStoryModelStr = implode(',', $linkStoryModelIds);
                     }
@@ -1195,17 +1206,30 @@ class DoApi extends ApiAction
                     if ($userModelStr == $linkStoryModelStr) {
 
                         $newStoryModel = StoryModels::find()->where(['id' => $newStoryModelId])->one();
-                        $computeRet = Yii::$app->models->computeStoryModelPropWithFormula($storyModels, $newStoryModel);
+                        // Todo:处理需要修改，变成取出之前组合的所有物品，然后计算新的物品，如果没有组合物品，用新的物品
+                        $newUserModelForCombine = [];
+                        if (in_array($newStoryModelId, $storyModelIds)) {
+                            $newUserModelForCombine = UserModels::find()
+                                ->where([
+                                    'story_model_id' => $newStoryModelId,
+                                    'story_id' => $storyId,
+                                    'session_id' => $sessionId,
+                                    'user_id' => $userId,
+                                ])
+                                ->one();
+                        }
+
+                        $newModelProp = Yii::$app->models->computeStoryModelPropWithFormula($storyModels, $newStoryModel, $newUserModelForCombine, $storyModelIds);
 
                         if ($type == StoryModelsLink::EFF_TYPE_MODEL) {
-                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $computeRet);
+                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $newModelProp);
                         }
                         if (
                             $type == StoryModelsLink::EFF_TYPE_MODEL_AND_DISPLAY
                         || $type == StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY
                         ) {
                             // 组合模型并显示出来
-                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $computeRet);
+                            $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $newModelProp);
                             $newStoryUID = !empty($newStoryModel->model_inst_u_id) ? $newStoryModel->model_inst_u_id : 0;
                             if (!empty($newStoryUID) ) {
                                 $expirationInterval = 3600;
