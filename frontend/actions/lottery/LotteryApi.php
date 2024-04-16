@@ -13,6 +13,7 @@ use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\models\Actions;
 use common\models\ItemKnowledge;
+use common\models\LotteryPrize;
 use common\models\Qa;
 use common\models\SessionQa;
 use common\models\StoryStages;
@@ -56,6 +57,9 @@ class LotteryApi extends ApiAction
             }
 
             switch ($this->action) {
+                case 'award_by_seed':
+                    $ret = $this->awardBySeed();
+                    break;
                 case 'award':
                     $ret = $this->award();
                     break;
@@ -81,6 +85,30 @@ class LotteryApi extends ApiAction
         }
 
         return $this->success($ret);
+    }
+
+    public function awardBySeed() {
+        $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
+        $sessionId = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
+        $channelId = !empty($_GET['channel_id']) ? $_GET['channel_id'] : 0;
+//        $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
+        $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
+
+        $lotteryId = !empty($_GET['lottery_id']) ? $_GET['lottery_id'] : 1;
+
+        $prizeId = !empty($_GET['prize_id']) ? $_GET['prize_id'] : 0;
+
+        $userPrize = Yii::$app->lottery->getUserPrize($userId, $lotteryId, $sessionId, $storyId, UserPrize::$normalUserPrizeStatus);
+
+        $newUserPrize = Yii::$app->lottery->add($userId, $sessionId, $channelId, $storyId,
+            $lotteryId, 0, 0, $prizeId, LotteryPrize::PRIZE_TYPE_GOODS, 0, UserPrize::USER_PRIZE_AWARD_METHOD_EXCHANGE);
+
+        $ret = [
+            'user_prize_list' => $userPrize,
+            'new_user_prize' => $newUserPrize,
+        ];
+
+        return $ret;
     }
 
     // 抽奖

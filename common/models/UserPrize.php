@@ -44,12 +44,14 @@ class UserPrize extends \common\models\gii\UserPrize
 
     const USER_PRIZE_AWARD_METHOD_ONLINE = 1; // 线上
     const USER_PRIZE_AWARD_METHOD_OFFLINE = 2; // 线下
+    const USER_PRIZE_AWARD_METHOD_EXCHANGE = 3; // 兑换
     const USER_PRIZE_AWARD_METHOD_SELF = 5; // 自提
     const USER_PRIZE_AWARD_METHOD_EXPRESS = 10; // 快递
 
     public static $userPrizeAwardMethod2Name = [
         self::USER_PRIZE_AWARD_METHOD_ONLINE => '线上',
         self::USER_PRIZE_AWARD_METHOD_OFFLINE => '线下',
+        self::USER_PRIZE_AWARD_METHOD_EXCHANGE => '兑换',
         self::USER_PRIZE_AWARD_METHOD_SELF => '自提',
         self::USER_PRIZE_AWARD_METHOD_EXPRESS => '快递',
     ];
