@@ -46,7 +46,9 @@ class Prepare extends Action
 
         $matchName = !empty($_GET['match_name']) ? $_GET['match_name'] : '中国勒芒';
 
-        $userModelId = !empty($_GET['user_model_id']) ? $_GET['user_model_id'] : 0;
+        $storyModelId = !empty($_GET['story_model_id']) ? $_GET['story_model_id'] : 0;
+        $storyModelDetailId = !empty($_GET['story_model_detail_id']) ? $_GET['story_model_detail_id'] : 0;
+//        $userModelId = !empty($_GET['user_model_id']) ? $_GET['user_model_id'] : 0;
 
         $storyMatch = StoryMatch::find()
             ->where([
@@ -65,17 +67,26 @@ class Prepare extends Action
 
         $userModel = UserModels::find()
             ->where([
-                'id' => $userModelId,
-            ])
-            ->one();
-
-        if (!empty($userModel)) {
-            $storyModelId = $userModel->story_model_id;
-            $storyModelDetailId = $userModel->story_model_detail_id;
+                'user_id' => $userId,
+                'session_id' => $sessionId,
+                'story_id' => $storyId,
+//                'story_model_id' => $storyModelId,
+            ]);
+        if (!empty($storyModelDetailId)) {
+            $userModel->andWhere(['story_model_detail_id' => $storyModelDetailId]);
         } else {
-            $storyModelId = 0;
-            $storyModelDetailId = 0;
+            $userModel->andWhere(['story_model_id' => $storyModelId]);
         }
+
+        $userModel = $userModel->one();
+
+//        if (!empty($userModel)) {
+//            $storyModelId = $userModel->story_model_id;
+//            $storyModelDetailId = $userModel->story_model_detail_id;
+//        } else {
+//            $storyModelId = 0;
+//            $storyModelDetailId = 0;
+//        }
 
             $storyMatch = new StoryMatch();
             $storyMatch->story_id = $storyId;
@@ -83,7 +94,7 @@ class Prepare extends Action
             $storyMatch->session_id = $sessionId;
             $storyMatch->match_name = $matchName;
             $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PREPARE;
-            $storyMatch->user_model_id = $userModelId;
+            $storyMatch->user_model_id = $userModel->id;
             $storyMatch->m_story_model_id = $storyModelId;
             $storyMatch->m_story_model_detail_id = $storyModelDetailId;
             $storyMatch->save();

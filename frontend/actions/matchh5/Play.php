@@ -46,7 +46,7 @@ class Play extends Action
 
         $matchName = !empty($_GET['match_name']) ? $_GET['match_name'] : '中国勒芒';
 
-        $userModelId = !empty($_GET['user_model_id']) ? $_GET['user_model_id'] : 0;
+//        $userModelId = !empty($_GET['user_model_id']) ? $_GET['user_model_id'] : 0;
 
 
         $storyMatch = StoryMatch::find()
@@ -64,7 +64,7 @@ class Play extends Action
             throw new Exception('您没有准备参赛的汽车，请您用钥匙启动准备好以后，联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
-
+        $userModelId = $storyMatch->user_model_id;
         $userModel = UserModels::find()
             ->where(['id' => $userModelId])
             ->one();
