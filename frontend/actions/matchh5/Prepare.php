@@ -105,15 +105,8 @@ class Prepare extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'story_match'   => $storyMatch,
-            'msg' => '您的车辆已经准备好，去找小精灵比赛吧！',
-//            'storyModelId'  => $storyModelId,
-
-//            'prize'         => $finalPrize,
-//            'lotteryPrize'    => $lotteryPrize,
-//            'lottery'       => $lottery,
-//            'userPrize'     => $userPrize,
-//            'newUserPrize'  => $newUserPrize,
-//            'msg'           => $msg,
+            'msg' => '您的车辆已经准备好，准备开始比赛吧！',
+            'btnName' => '开始比赛',
         ]);
     }
 }
