@@ -26,6 +26,211 @@ use yii\web\NotFoundHttpException;
 
 class Lottery extends Component
 {
+    public function runWithExchange($userId, $storyId, $sessionId, $lotteryId, $channelId, $prizeId) {
+        $lottery = \common\models\Lottery::find()
+            ->where([
+                'id'    => $lotteryId
+            ])
+            ->one();
+
+        if (empty($lottery)) {
+            throw new NotFoundHttpException('Lottery not found');
+        }
+
+        $lotteryPrize = LotteryPrize::find()
+            ->where([
+                'lottery_id'    => $lotteryId,
+                'prize_id'      => $prizeId,
+            ])
+            ->orderBy([
+                'prize_level'   => SORT_DESC
+            ])
+            ->all();
+
+        $userPrize = $this->getUserPrize($userId, $lotteryId, $sessionId, $storyId, UserPrize::$normalUserPrizeStatus);
+
+//        $userPrize = UserPrize::find()
+//            ->where([
+//                'user_id'   => $userId,
+//                'lottery_id'    => $lotteryId,
+//                'session_id'    => $sessionId,
+//                'story_id'      => $storyId,
+//            ])
+//            ->andFilterWhere([
+//                'or',
+//                ['>=', 'expire_time', time()],
+//                ['expire_time' => 0]
+//            ])
+//            ->andFilterWhere([
+//                'user_prize_status' => UserPrize::$normalUserPrizeStatus
+//            ])
+//            ->all();
+
+
+
+        // 计算剩余数量
+//        // 总数
+//        $totalCt = $lotteryPrize->total_ct;
+//        // 间隔内数量
+//        $intervalRestCt = $intervalCt = $lotteryPrize->interval_ct;
+
+        $userTotalPrizeCt = count($userPrize);
+//        $restCt = $totalCt - $userTotalPrizeCt;
+
+
+
+        $userPrizeArray = [];
+        $userPrizeClassArray = [];
+        if (!empty($userPrize)) {
+            foreach ($userPrize as $up) {
+
+                // 按时间计算
+                $hourTag = Date('YmdH', $up->created_at);
+                $dateTag = Date('Ymd', $up->created_at);
+                $userPrizeArray[$hourTag][$up->prize_id] = !empty($userPrizeArray[$hourTag][$up->prize_id]) ?
+                    $userPrizeArray[$hourTag][$up->prize_id] + 1 : 1;
+                $userPrizeArray[$dateTag][$up->prize_id] = !empty($userPrizeArray[$dateTag][$up->prize_id]) ?
+                    $userPrizeArray[$dateTag][$up->prize_id] + 1 : 1;
+                $userPrizeArray[0][$up->prize_id] = !empty($userPrizeArray[0][$up->prize_id]) ?
+                    $userPrizeArray[0][$up->prize_id] + 1 : 1;
+
+                if (!empty($up->prize->prize_level)) {
+                    $userPrizeClassArray[$hourTag][$up->prize->prize_level] = !empty($userPrizeClassArray[$hourTag][$up->prize->prize_level]) ?
+                        $userPrizeClassArray[$hourTag][$up->prize->prize_level] + 1 : 1;
+                    $userPrizeClassArray[$dateTag][$up->prize->prize_level] = !empty($userPrizeClassArray[$dateTag][$up->prize->prize_level]) ?
+                        $userPrizeClassArray[$dateTag][$up->prize->prize_level] + 1 : 1;
+                    $userPrizeClassArray[0][$up->prize->prize_level] = !empty($userPrizeClassArray[0][$up->prize->prize_level]) ?
+                        $userPrizeClassArray[0][$up->prize->prize_level] + 1 : 1;
+                }
+
+            }
+        }
+
+        $prizePool = [];
+        $rateTotal = $allRate = 10000;
+        if (!empty($lotteryPrize)) {
+            foreach ($lotteryPrize as $prize) {
+                // 唯一中奖校验
+                if ($prize->prize_method == LotteryPrize::PRIZE_METHOD_UNIQUE
+                    && !empty($userPrizeArray[0][$prize->id])
+                ) {
+                    throw new \Exception('您已经兑换过该奖品，无法再次兑换！', ErrorCode::USER_PRIZE_RECEIVED);
+                    continue;
+                }
+
+                switch ($prize->interval_type) {
+                    case LotteryPrize::INTERVAL_TYPE_HOUR:
+                        $nowTimeTag = Date('YmdH');
+                        break;
+                    case LotteryPrize::INTERVAL_TYPE_DAY:
+                    default:
+                        $nowTimeTag = Date('Ymd');
+                        break;
+                }
+
+                // 计算数量
+                if ($prize->total_ct >= 0) {
+                    if ($prize->total_ct <= $userTotalPrizeCt) {
+                        continue;
+                    }
+                    $restCt = $prize->total_ct - $userTotalPrizeCt;
+                } else {
+                    $restCt = 9999999999999;
+                }
+
+                if ($prize->interval_ct >= 0) {
+                    $intervalRestCt = !empty($userPrizeArray[$nowTimeTag][$prize->id]) ?
+                        $prize->interval_ct - $userPrizeArray[$nowTimeTag][$prize->id] : $prize->interval_ct;
+                } else {
+                    $intervalRestCt = 9999999999999;
+                }
+
+                $optRestCt = $restCt < $intervalRestCt ? $restCt : $intervalRestCt;
+                if ($optRestCt <= 0) {
+                    throw new \Exception('奖品数量不足，请您明日再来兑奖！', ErrorCode::USER_PRIZE_NOT_ENOUGH);
+                    continue;
+                }
+
+                // 解析中奖条件
+                $prizeOptionJson = \common\helpers\Common::isJson($prize->prize_option) ?
+                    json_decode($prize->prize_option, true) : [];
+
+//                if (!empty($prizeOptionJson['opt_formula'])) {
+//                    $optFormula = $prizeOptionJson['opt_formula'];
+//                    $optFormula = str_replace('{$opt_ct}', $optCt, $optFormula);
+//
+//                    eval("\$optRet = $optFormula;");
+//                    if (!$optRet) {
+//                        continue;
+//                    }
+//                }
+
+
+                $prizePool[] = [
+                    'prize' => $prize,
+                    'rest_ct' => $optRestCt,
+                    'rateRange' => [
+                        0,
+                        10000
+                    ],
+                ];
+
+                $rateTotal = $rateTotal - $prize->rate;
+
+            }
+        }
+
+        $finalPrize = [];
+        if (!empty($prizePool)) {
+//            $randRate = mt_rand(0, $allRate);
+            foreach ($prizePool as $pp) {
+//                if ($randRate >= $pp['rateRange'][0] && $randRate < $pp['rateRange'][1]) {
+                    if (!empty($pp['prize'])) {
+                        $finalPrize = $pp['prize'];
+                        $isAward = 1;
+                        $msg = '您成功兑换 ' . $finalPrize->prize_name . ' 一份！';
+                    } else {
+                        $isAward = 0;
+                        $msg = '兑奖失败！';
+                    }
+                    break;
+//                }
+            }
+        } else {
+            throw new \Exception('奖品可能数量不足，或者您已经兑换，无法兑换！', ErrorCode::USER_PRIZE_RECEIVED);
+            $isAward = 0;
+            $msg = '兑奖失败';
+        }
+
+        $upnSession = !empty($sessionId) ? $sessionId : $channelId;
+        $newUserPrize = null;
+
+        if (!empty($finalPrize)) {
+            try {
+                $newUserPrize = $this->add($userId, $sessionId, $channelId, $storyId,
+                    $lotteryId, 0, $userTotalPrizeCt, $finalPrize->id, $finalPrize->prize_type, 0,
+                    UserPrize::USER_PRIZE_AWARD_METHOD_EXCHANGE);
+
+            } catch (\Exception $e) {
+//            $newUserPrize = null;
+//            $msg = '您的操作出现异常，请您重试！';
+                throw new \Exception('添加奖品失败', ErrorCode::USER_PRIZE_ADD_FAILED);
+            }
+        }
+
+        return [
+            'isAward' => $isAward,
+            'msg'   => $msg,
+            'newUserPrize' => $newUserPrize,
+            'lottery' => $lottery,
+//            'lotteryPrize' => $lotteryPrize,
+//            'userPrize' => $userPrize,
+//            'prizePool' => $prizePool,
+            'finalPrize' => $finalPrize,
+        ];
+
+    }
+
     public function run($userId, $userLotteryId, $storyId, $sessionId, $lotteryId, $channelId, $optCt) {
         $lottery = \common\models\Lottery::find()
             ->where([

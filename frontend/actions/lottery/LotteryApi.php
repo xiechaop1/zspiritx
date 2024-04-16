@@ -98,15 +98,32 @@ class LotteryApi extends ApiAction
 
         $prizeId = !empty($_GET['prize_id']) ? $_GET['prize_id'] : 0;
 
-        $userPrize = Yii::$app->lottery->getUserPrize($userId, $lotteryId, $sessionId, $storyId, UserPrize::$normalUserPrizeStatus);
+        try {
+            $retTemp = Yii::$app->lottery->runWithExchange($userId, $storyId, $sessionId, $lotteryId, $channelId, $prizeId);
 
-        $newUserPrize = Yii::$app->lottery->add($userId, $sessionId, $channelId, $storyId,
-            $lotteryId, 0, 0, $prizeId, LotteryPrize::PRIZE_TYPE_GOODS, 0, UserPrize::USER_PRIZE_AWARD_METHOD_EXCHANGE);
+            $ret = [
+                'result' => [
+                    'lottery_id' => !empty($retTemp['lottery']['id']) ? $retTemp['lottery']['id'] : 0,
+                    'lottery_name' => !empty($retTemp['lottery']['lottery_name']) ? $retTemp['lottery']['lottery_name'] : '',
+                    'prize_id' => !empty($retTemp['finalPrize']['id']) ? $retTemp['finalPrize']['id'] : 0,
+                    'prize_name' => !empty($retTemp['finalPrize']['prize_name']) ? $retTemp['finalPrize']['prize_name'] : '',
+                    'image' => !empty($retTemp['finalPrize']['image']) ? $retTemp['finalPrize']['image'] : '',
+                    'prize_level' => !empty($retTemp['finalPrize']['prize_level']) ? $retTemp['finalPrize']['prize_level'] : '',
+                    'user_prize_id' => !empty($retTemp['newUserPrize']['id']) ? $retTemp['newUserPrize']['id'] : 0,
+                    'user_prize_no' => !empty($retTemp['newUserPrize']['user_prize_no']) ? $retTemp['newUserPrize']['user_prize_no'] : '',
+                    'user_prize_status' => !empty($retTemp['newUserPrize']['user_prize_status']) ? $retTemp['newUserPrize']['user_prize_status'] : 0,
+                    'user_prize_status_name' => !empty(UserPrize::$userPrizeStatus2Name[$retTemp['newUserPrize']['user_prize_status']]) ?
+                        UserPrize::$userPrizeStatus2Name[$retTemp['newUserPrize']['user_prize_status']] : '',
+                    'user_prize_expire_time' => !empty($retTemp['newUserPrize']['user_prize_expire_time']) ? $retTemp['newUserPrize']['user_prize_expire_time'] : 0,
+                    'user_prize_ct' => !empty($retTemp['newUserPrize']['ct']) ? $retTemp['newUserPrize']['ct'] : 0,
+                    'desc' => '奖品兑奖地址：国家植物园科普馆门口\n兑奖截止时间：2024年05月01日 0点之前\n本次活动最终解释权归 公园加 所有',
+                ]
+            ];
+//            $ret += $retTemp;
 
-        $ret = [
-            'user_prize_list' => $userPrize,
-            'new_user_prize' => $newUserPrize,
-        ];
+        } catch (\Exception $e) {
+            throw $e;
+        }
 
         return $ret;
     }
