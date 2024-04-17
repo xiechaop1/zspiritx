@@ -47,7 +47,7 @@ $this->title = 'AR剧本杀';
   <?php
   } else {
   ?>
-  <img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/icon_1024x1024.png" style="width: 50px;"> 灵镜新世界
+  <img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/icon_1024x1024.png" style="width: 50px;"> 灵镜
   <?php
   }
   ?>
