@@ -73,7 +73,28 @@ $this->title = 'AR剧本杀';
           <?= $story->title ?>
 <!--          侏罗纪-时间裂痕-->
         </div>
+          <div class="btn-m-green m-t-30 float-right m-r-20 <?= $story->story_status == \common\models\Story::STORY_STATUS_ONLINE ? 'buy_btn' : ''; ?>">
+              <?php
+              if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
+                  || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
+              ) {
+                  echo '<a href="/home/orders">下载</a>';
+              } else {
+                  if (empty($story->extend->curr_price) || $story->extend->curr_price == 0) {
+                      echo '￥68';
+                  } else {
+                      if ($story->extend->curr_price != $story->extend->price) {
+                          echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
+                      } else {
+                          echo '￥' . $story->extend->price;
+                      }
+                  }
+              }
 
+
+              ?>
+              <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+          </div>
         <div class="fs-24  w-100 text-FF m-t-30">
           <img src="<?=\common\helpers\Attachment::completeUrl($story->cover_image) ?>" style="width: 200px;" />
           <hr>
@@ -112,28 +133,6 @@ $this->title = 'AR剧本杀';
           <?php
         }
         ?>
-        <div class="btn-m-green m-t-30 float-right m-r-20 <?= $story->story_status == \common\models\Story::STORY_STATUS_ONLINE ? 'buy_btn' : ''; ?>">
-          <?php
-              if ($orderStatus == \common\models\Order::ORDER_STATUS_PAIED
-                  || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
-              ) {
-                  echo '<a href="/home/orders">下载</a>';
-              } else {
-                if (empty($story->extend->curr_price) || $story->extend->curr_price == 0) {
-                  echo '￥68';
-                } else {
-                    if ($story->extend->curr_price != $story->extend->price) {
-                      echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
-                    } else {
-                      echo '￥' . $story->extend->price;
-                    }
-                }
-              }
-
-
-          ?>
-          <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
-        </div>
       </div>
     </div>
   </div>
