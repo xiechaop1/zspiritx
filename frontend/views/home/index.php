@@ -194,7 +194,11 @@ $this->title = 'AR剧本杀';
                   || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
               ) {
                 if (empty($unityVersion)) {
-                  echo '<a href="detail?story_id=' . $story->id . '">了解详情</a>';
+                  if (file_exists(Yii::getAlias('@frontend/web/' . $story->id . '.txt'))) {
+                    echo '<a href="detail?story_id=' . $story->id . '">了解详情</a>';
+                  } else {
+                    echo '敬请期待';
+                  }
                 } else {
                   echo '进入游戏';
                 }
