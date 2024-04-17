@@ -47,7 +47,7 @@ class Index extends Action
 
         $userId = Cookie::getCookie('user_id');
         if (empty($userId)) {
-            header('Location: /passport/web_login?unity_version=' . $unityVersion);
+            header('Location: /passport/web_login' . !empty($unityVersion) ? '?unity_version=' . $unityVersion : '');
         }
 
         try {
@@ -61,7 +61,7 @@ class Index extends Action
                 $user->last_login_device = Client::getAgent();
                 $user->save();
             } else {
-                header('Location: /passport/web_login?unity_version=' . $unityVersion);
+                header('Location: /passport/web_login' . !empty($unityVersion) ? '?unity_version=' . $unityVersion : '');
             }
 
             if (strlen($user->mobile) < 4) {

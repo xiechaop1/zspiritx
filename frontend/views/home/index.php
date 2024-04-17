@@ -39,11 +39,24 @@ $this->title = 'AR剧本杀';
 <input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>">
 <input type="hidden" id="unity_version" name="unity_version" value="<?= $unityVersion ?>">
 
+<div style="position: absolute; z-index: 999; margin: 20px; color: white; font-size: 24px;">
+  <?php
+  if (empty($unityVersion)) {
+  ?>
+  <a href="/home/index"><img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/logo_white_1024.png" style="width: 150px;"></a>
+  <?php
+  } else {
+  ?>
+  <img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/icon_1024x1024.png" style="width: 50px;"> 灵镜新世界
+  <?php
+  }
+  ?>
+</div>
 <div class="owl-carousel owl-theme" id="banner">
   <?php
   if (
       !empty($user) &&
-      $user->mobile >= 90 && $user->mobile <= 100 &&
+      $user->mobile >= 90 && $user->mobile <= 120 &&
       $user->user_type == \common\models\User::USER_TYPE_INNER) {
     ?>
     <div class="item">
@@ -52,7 +65,7 @@ $this->title = 'AR剧本杀';
       <input type="hidden" name="isDebug" value="0">
       <input type="hidden" name="storyId" value="4" style="color: white; padding: 10px; font-size: 50px;">
       <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
-        <a href="/home/my?unity_version=<?= $unityVersion ?>">我的</a>
+        <a href="/home/my<?= !empty($unityVersion) ? '?unity_version=' . $unityVersion : "" ?>">我的</a>
       </div>
 
       <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
@@ -66,8 +79,14 @@ $this->title = 'AR剧本杀';
           <div class="fs-24  w-100 text-FF m-t-30">
             这是用于审核的剧本
           </div>
-          <div class="btn-m-green m-t-30 float-right m-r-20 play_btn">
-            进入游戏
+          <div class="btn-m-green m-t-30 float-right m-r-20 <?= !empty($unityVersion) ? 'play_btn' : '' ?>">
+            <?php
+            if (empty($unityVersion)) {
+                  echo '<a href="detail?story_id=2">了解详情</a>';
+                } else {
+                  echo '进入游戏';
+                }
+            ?>
             <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
           </div>
         </div>
@@ -144,16 +163,6 @@ $this->title = 'AR剧本杀';
 
         <div class="fs-24  w-100 text-FF m-t-30">
           <?= $story->desc ?>
-    <?php
-    if (empty($unityVersion)) {
-      ?>
-          <hr>
-          产品介绍：这个剧本在线下场馆体验，您购买以后（提示购买成功），和客服联系（18500041193），我们安排寄送物料给您。
-          <hr>
-          售后/客服：如果您有任何售前、售后咨询，退款需求等，请您于客服联系（18500041193）。
-      <?php
-    }
-    ?>
           <!-- <span>价格：<span style="color: red; font-size: 24px; font-weight: bold;">限免</span></span>&nbsp; <span>位置：凯德茂·大峡谷</span><br>
           在大峡谷内，忽然产生了一段奇妙的故事。<br>
           因为时间裂痕，一些上古恐龙穿越到了现代，因为看到大峡谷有他们的同类，于是他们就来到了这里。
@@ -165,12 +174,12 @@ $this->title = 'AR剧本杀';
         if (empty($unityVersion) && 1 != 1) {
           ?>
             <div class="btn-m-green m-t-30 float-right m-r-20 show_detail" d-target="#story_detail_<?= $story->id ?>">
-            了解详情
+              <a href="detail?story_id=<?= $story->id ?>">了解详情</a>
             </div>
           <?php
         }
         ?>
-        <div class="btn-m-green m-t-30 float-right m-r-20 <?= $story->story_status == \common\models\Story::STORY_STATUS_ONLINE ? 'play_btn' : ''; ?>">
+        <div class="btn-m-green m-t-30 float-right m-r-20 <?= ($story->story_status == \common\models\Story::STORY_STATUS_ONLINE && !empty($unityVersion)) ? 'play_btn' : ''; ?>">
           <?php
           if ($story->story_status == \common\models\Story::STORY_STATUS_OPEN_WAIT) {
             echo '等待开放';
@@ -185,7 +194,7 @@ $this->title = 'AR剧本杀';
                   || $orderStatus == \common\models\Order::ORDER_STATUS_COMPLETED
               ) {
                 if (empty($unityVersion)) {
-                  echo '已经购买，请联系客服！';
+                  echo '<a href="detail?story_id=' . $story->id . '">了解详情</a>';
                 } else {
                   echo '进入游戏';
                 }
@@ -200,7 +209,7 @@ $this->title = 'AR剧本杀';
                       echo '￥' . $story->extend->price;
                     }
                   } else {
-                    echo '￥68';
+                    echo '<a href="detail?story_id=' . $story->id . '">了解详情</a>';
                   }
                 }
               }

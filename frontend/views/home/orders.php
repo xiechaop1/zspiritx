@@ -36,6 +36,19 @@ $this->title = '灵镜新世界-我的';
   }
 </style>
 
+<div style="position: absolute; top: 0px; z-index: 999; margin: 20px; color: white; font-size: 24px;">
+    <?php
+    if (empty($unityVersion)) {
+        ?>
+        <a href="/home/index"><img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/logo_white_1024.png" style="width: 150px;"></a>
+        <?php
+    } else {
+        ?>
+        <img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/icon_1024x1024.png" style="width: 50px;"> 灵镜新世界
+        <?php
+    }
+    ?>
+</div>
 <div class="w-100 m-auto">
 
   <div class="p-20 bg-black w-100 m-t-80" style="position: relative; left: 0px; top: 0px;">
@@ -64,6 +77,18 @@ $this->title = '灵镜新世界-我的';
                             <span style="color: <?= $order->order_status == \common\models\Order::ORDER_STATUS_COMPLETED
                             || $order->order_status == \common\models\Order::ORDER_STATUS_PAIED ? 'green' : '#a83800' ?>">
                                 <?= !empty(\common\models\Order::$orderStatus[$order->order_status]) ? \common\models\Order::$orderStatus[$order->order_status] : ' - ' ?>
+                            </span>
+                            <span style="color: <?= $order->order_status == \common\models\Order::ORDER_STATUS_COMPLETED
+                            || $order->order_status == \common\models\Order::ORDER_STATUS_PAIED ? 'green' : '#a83800' ?>">
+                                <?php
+                                if (!empty($order->order_status)
+                                && ($order->order_status == \common\models\Order::ORDER_STATUS_COMPLETED
+                                    || $order->order_status == \common\models\Order::ORDER_STATUS_PAIED)
+                                ) {
+                                    $filePath = '/' . $order->story->id . '.txt';
+                                    echo '<a href="' . $filePath . '">下载</a>';
+                                }
+                                ?>
                             </span>
                         </div>
                     </div>

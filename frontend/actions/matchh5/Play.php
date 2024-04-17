@@ -70,14 +70,14 @@ class Play extends Action
             ->where(['id' => $userModelId])
             ->one();
 
-        $userModelProp = !empty($userModel->user_model_prop) ? json_decode($userModel->user_model_prop, true) : [];
+        $tmpUserModelProp = !empty($userModel->user_model_prop) ? json_decode($userModel->user_model_prop, true) : [];
 
-        if (empty($userModelProp)) {
+        if (empty($tmpUserModelProp)) {
             return $this->renderErr('您的赛车没有准备好，请联系小精灵！');
 //            throw new Exception('您的赛车没有准备好，请联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
-        $userModelProp = !empty($userModelProp['prop']) ? $userModelProp['prop'] : [];
+        $userModelProp = !empty($tmpUserModelProp['prop']) ? $tmpUserModelProp['prop'] : [];
         $speed = !empty($userModelProp['speed']) ? $userModelProp['speed'] : 0;
         $cornerSpeed = !empty($userModelProp['corner_speed']) ? $userModelProp['corner_speed'] : 0;
         $acceleration = !empty($userModelProp['acc']) ? $userModelProp['acc'] : 0;
@@ -233,6 +233,34 @@ class Play extends Action
         } else {
             $rank = 1;
         }
+
+//        $matchPrize = 10000;
+        if ($rank == 1) {
+            $matchPrize = 500000;
+        } elseif ($rank == 2) {
+            $matchPrize = 200000;
+        } elseif ($rank == 3) {
+            $matchPrize = 100000;
+        } elseif ($rank <= 10) {
+            $matchPrize = 50000;
+        } else {
+            $matchPrize = 10000;
+        }
+
+        if (!empty($tmpUserModelProp['match']['rank_list'])) {
+            $tmpUserModelProp['match']['rank_list'][] = $rank;
+        }
+        if (!empty($tmpUserModelProp['match']['valuable'])) {
+            $tmpUserModelProp['match']['valuable'] += $matchPrize;
+        } else {
+            $tmpUserModelProp['match']['valuable'] = $matchPrize;
+        }
+        $userModel->user_model_prop = json_encode($tmpUserModelProp, true);
+        $userModel->save();
+
+        // Todo:插入排行榜数据（调用排行service）
+        // 带开发
+
         $ctArr = \common\helpers\Common::formatTime($i);
         $ctTime = $ctArr['str'];
         $matchDetail['flow'][] = [

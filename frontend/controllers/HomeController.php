@@ -27,6 +27,9 @@ class HomeController extends Controller
             'index' => [
                 'class'     => 'frontend\actions\home\Index',
             ],
+            'detail' => [
+                'class'     => 'frontend\actions\home\Detail',
+            ],
             'my' => [
                 'class'     => 'frontend\actions\home\My',
             ],

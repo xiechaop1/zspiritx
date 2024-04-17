@@ -36,6 +36,19 @@ $this->title = '灵镜新世界-我的';
   }
 </style>
 
+<div style="position: absolute; top: 0px; z-index: 999; margin: 20px; color: white; font-size: 24px;">
+    <?php
+    if (empty($unityVersion)) {
+        ?>
+        <a href="/home/index"><img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/logo_white_1024.png" style="width: 150px;"></a>
+        <?php
+    } else {
+        ?>
+        <img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/icon_1024x1024.png" style="width: 50px;"> 灵镜新世界
+        <?php
+    }
+    ?>
+</div>
 <div class="w-100 m-auto">
     <input type="hidden" id="unity_version" name="unity_version" value="<?= $unityVersion ?>">
   <div class="p-20 bg-black w-100 m-t-80" style="position: relative; left: 0px; top: 30px;">
@@ -95,7 +108,7 @@ $this->title = '灵镜新世界-我的';
                         <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                         <label class="form-check-label fs-30 answer-btn">
                             <!--                  <span class="answer-tag"></span>-->
-                            <span ><a href="/home/index?unity_version=<?= $unityVersion ?>">返回</a></span>
+                            <span ><a href="/home/index<?= !empty($unityVersion) ? "?unity_version=" . $unityVersion : "" ?>">返回</a></span>
                         </label>
                     </div>
                 </div>
