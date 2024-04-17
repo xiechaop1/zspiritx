@@ -42,7 +42,7 @@ $this->title = 'AR剧本杀';
 //      $orderStatus = !empty($ordersMap[$story->id]) ? $ordersMap[$story->id] : \common\models\Order::ORDER_STATUS_WAIT;
       $orderStatus = !empty($order->order_status) ? $order->order_status : 0;
   ?>
-  <div class="item">
+  <div class="item" style="height: 100%;">
     <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
     <input type="hidden" name="isDebug" value="<?= $story->is_debug ?>">
     <input type="hidden" name="storyId" value="<?= $story->id ?>">
