@@ -82,7 +82,7 @@ $this->title = 'AR剧本杀';
           <div class="btn-m-green m-t-30 float-right m-r-20 <?= !empty($unityVersion) ? 'play_btn' : '' ?>">
             <?php
             if (empty($unityVersion)) {
-                  echo '<a href="detail?story_id=2">了解详情</a>';
+                  echo '<a href="detail?story_id=12">了解详情</a>';
                 } else {
                   echo '进入游戏';
                 }
