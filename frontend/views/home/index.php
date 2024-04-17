@@ -149,7 +149,7 @@ $this->title = 'AR剧本杀';
     <input type="hidden" name="storyId" value="<?= $story->id ?>">
     <input type="hidden" name="orderStatus" value="<?= !empty($ordersMap[$story->id]) ? $ordersMap[$story->id] : 0 ?>">
     <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
-      <a href="/home/my?unity_version=<?= $unityVersion ?>">我的</a>
+      <a href="/home/my<?= !empty($unityVersion) ? '?unity_version=' . $unityVersion : '' ?>">我的</a>
     </div>
     <img decoding="async"  src="<?= \common\helpers\Attachment::completeUrl($story->cover_image) ?>" alt="First slide" class="img-w-100">
     <div class="text-content">
@@ -209,7 +209,11 @@ $this->title = 'AR剧本杀';
                       echo '￥' . $story->extend->price;
                     }
                   } else {
-                    echo '<a href="detail?story_id=' . $story->id . '">了解详情</a>';
+                    if (file_exists(Yii::getAlias('@frontend/web/' . $story->id . '.txt'))) {
+                      echo '<a href="detail?story_id=' . $story->id . '">了解详情</a>';
+                    } else {
+                      echo '敬请期待';
+                    }
                   }
                 }
               }
