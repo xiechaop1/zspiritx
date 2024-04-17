@@ -135,6 +135,7 @@ class Play extends Action
             if ($badRand > $reliability) {
                 $badSec = rand(1000, 80000);
                 $i += $badSec;
+                $eachLopSec += $badSec;
                 $badSecArr = \common\helpers\Common::formatTime($badSec, 'i:s.ms');
                 $badSecStr = $badSecArr['str'];
                 $matchDetail[] = [
