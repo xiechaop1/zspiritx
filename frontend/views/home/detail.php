@@ -198,7 +198,7 @@ $this->title = 'AR剧本杀';
                   echo '<a href="/home/orders">下载</a>';
               } else {
                 if (empty($story->extend->curr_price) || $story->extend->curr_price == 0) {
-                  echo '限免';
+                  echo '￥68';
                 } else {
                     if ($story->extend->curr_price != $story->extend->price) {
                       echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
