@@ -223,15 +223,19 @@ class Common
 
         $str = $returnFormat;
         $str = str_replace('ms', sprintf('%03d', $micSec), $str);
+        $noHour = false;
         if ($hour == 0) {
             $str = str_replace('H:', '', $str);
             $str = str_replace('H', '', $str);
+            $noHour = true;
         } else {
             $str = str_replace('H', sprintf('%02d', $hour), $str);
         }
-        if ($minute == 0) {
+        $noMinute = false;
+        if ($minute == 0 && $noHour) {
             $str = str_replace('i:', '', $str);
             $str = str_replace('i', '', $str);
+            $noMinute = true;
         } else {
             $str = str_replace('i', sprintf('%02d', $minute), $str);
         }
