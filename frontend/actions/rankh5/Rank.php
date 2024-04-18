@@ -54,12 +54,27 @@ class Rank extends Action
 
         $storyName = !empty($story->title) ? $story->title : '未知故事';
 
+        if (empty($rankClass)) {
+            $rankClass = key(StoryRank::$storyRankCategories[$storyId]);
+        }
+
         $rankConfig = !empty(StoryRank::$storyRankCategories[$storyId][$rankClass])
             ? StoryRank::$storyRankCategories[$storyId][$rankClass]
             : [
                 'score' => ['name' => '成绩'],
                 'score2' => ['name' => '副成绩'],
             ];
+
+
+        $rankConfigList = !empty(StoryRank::$storyRankCategories[$storyId])
+            ? StoryRank::$storyRankCategories[$storyId]
+            : [$rankClass => [
+                'score' => ['name' => '成绩'],
+                'score2' => ['name' => '副成绩'],
+            ]
+            ];
+
+
 
         try {
             $rankRet = StoryRank::find()
@@ -110,7 +125,9 @@ class Rank extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'rankList'  => $rankList,
+            'rankCfgList' => $rankConfigList,
             'rankConfig' => $rankConfig,
+            'rankClass' => $rankClass,
         ]);
 
     }

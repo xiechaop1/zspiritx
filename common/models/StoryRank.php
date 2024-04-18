@@ -54,6 +54,29 @@ class StoryRank extends \common\models\gii\StoryRank
 //                'score2' => '总时间',
             ],
         ],
+        2 => [
+            self::STORY_RANK_CLASS_CAR_MATCH => [
+                'score' => [
+                    'name' => '圈速',
+                ],
+                'score2' =>
+                    ['name' => '总时间',
+                        'format' => '\\common\\helpers\\Common::formatTimeToStr',
+                    ],
+            ],
+            self::STORY_RANK_CLASS_CAR_SCORE => [
+                'score' => [
+                    'name' => '分数'
+                ],
+//                'score2' => '总时间',
+            ],
+            self::STORY_RANK_CLASS_CAR_VALUABLE => [
+                'score' => [
+                    'name' => '价值'
+                ],
+//                'score2' => '总时间',
+            ],
+        ],
     ];
 
     public function behaviors()
