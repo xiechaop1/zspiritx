@@ -41,7 +41,7 @@ class StoryRank extends \common\models\gii\StoryRank
                 ],
                 'score2' =>
                     ['name' => '总时间',
-                    'format' => '\\common\\helpers\\Common::formatTimeToStr',
+                    'format' => '\\common\\helpers\\Common::formatTimeToStr(%d)',
                     ],
             ],
             self::STORY_RANK_CLASS_CAR_SCORE => [
@@ -59,7 +59,7 @@ class StoryRank extends \common\models\gii\StoryRank
                 ],
                 'score' => [
                     'name' => '价值',
-                    'format' => 'number_format',
+                    'format' => 'number_format(%d)',
                 ],
 //                'score2' => '总时间',
             ],
@@ -71,18 +71,19 @@ class StoryRank extends \common\models\gii\StoryRank
                 ],
                 'score2' =>
                     ['name' => '总时间',
-                        'format' => '\\common\\helpers\\Common::formatTimeToStr',
+                        'format' => '\\common\\helpers\\Common::formatTimeToStr(%d)',
                     ],
             ],
             self::STORY_RANK_CLASS_CAR_SCORE => [
                 'score' => [
-                    'name' => '分数'
+                    'name' => '分数',
                 ],
 //                'score2' => '总时间',
             ],
             self::STORY_RANK_CLASS_CAR_VALUABLE => [
                 'score' => [
-                    'name' => '价值'
+                    'name' => '价值',
+                    'format' => 'number_format(%d)',
                 ],
 //                'score2' => '总时间',
             ],

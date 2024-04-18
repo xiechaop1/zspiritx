@@ -113,7 +113,7 @@ $this->title = '消息';
                                     ?>
                                     <td><?php
                                         if (!empty($rankConfig['storyModel']['format'])) {
-                                            eval('$tmp = ' . $rankConfig['score2']['format'] . '(\'' . $r->storyModel->story_model_name . '\');');
+                                            eval('$tmp = ' . sprintf($rankConfig['score2']['format'], $r->storyModel->story_model_name) . '; ');
                                             echo $tmp;
                                         } else {
                                             echo $r->storyModel->story_model_name;
@@ -123,7 +123,7 @@ $this->title = '消息';
                                 ?>
                                 <td style="font-weight: bold;"><?php
                                     if (!empty($rankConfig['score']['format'])) {
-                                        eval('$tmp = ' . $rankConfig['score']['format'] . '(' . $r->score . ');');
+                                        eval('$tmp = ' . sprintf($rankConfig['score']['format'], $r->score) . ';');
                                         echo $tmp;
                                     } else {
                                         echo $r->score;
@@ -133,7 +133,7 @@ $this->title = '消息';
                                 ?>
                                 <td><?php
                                     if (!empty($rankConfig['score2']['format'])) {
-                                        eval('$tmp = ' . $rankConfig['score2']['format'] . '($r->score2);');
+                                        eval('$tmp = ' . sprintf($rankConfig['score2']['format'], $r->score2) . ';');
                                         echo $tmp;
                                     } else {
                                         echo $r->score2;
