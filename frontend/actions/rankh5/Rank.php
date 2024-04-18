@@ -54,7 +54,9 @@ class Rank extends Action
 
         $storyName = !empty($story->title) ? $story->title : '未知故事';
 
-        if (empty($rankClass)) {
+        if (empty($rankClass)
+        && !empty(StoryRank::$storyRankCategories[$storyId])
+        ) {
             $rankClass = key(StoryRank::$storyRankCategories[$storyId]);
         }
 
@@ -62,7 +64,6 @@ class Rank extends Action
             ? StoryRank::$storyRankCategories[$storyId][$rankClass]
             : [
                 'score' => ['name' => '成绩'],
-                'score2' => ['name' => '副成绩'],
             ];
 
 
@@ -70,7 +71,6 @@ class Rank extends Action
             ? StoryRank::$storyRankCategories[$storyId]
             : [$rankClass => [
                 'score' => ['name' => '成绩'],
-                'score2' => ['name' => '副成绩'],
             ]
             ];
 

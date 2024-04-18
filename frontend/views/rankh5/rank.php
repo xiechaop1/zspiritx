@@ -75,7 +75,13 @@ $this->title = '消息';
                     <tr style="border-bottom: 3px white solid;">
                         <td style="font-weight: bold;">排名</td>
                         <td style="font-weight: bold;">参赛者</td>
-                        <td style="font-weight: bold;">赛车</td>
+                        <?php
+                        if (!empty($rankConfig['storyModel']['name'])) {
+                            ?>
+                            <td style="font-weight: bold;"><?= !empty($rankConfig['storyModel']['name']) ? $rankConfig['storyModel']['name'] : '物品' ?></td>
+                            <?php
+                        }
+                        ?>
                         <td style="font-weight: bold;"><?= !empty($rankConfig['score']['name']) ? $rankConfig['score']['name'] : '成绩' ?></td>
                         <?php
                         if (!empty($rankConfig['score2']['name'])) {
@@ -102,7 +108,19 @@ $this->title = '消息';
                             <tr>
                                 <td style="font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
-                                <td><?= $r->storyModel->story_model_name ?></td>
+                                <?php
+                                if (!empty($rankConfig['score2']['name'])) {
+                                    ?>
+                                    <td><?php
+                                        if (!empty($rankConfig['score2']['format'])) {
+                                            eval('$tmp = ' . $rankConfig['score2']['format'] . '(' . $r->storyModel->story_model_name . ');');
+                                            echo $tmp;
+                                        } else {
+                                            echo $r->storyModel->story_model_name;
+                                        } ?></td>
+                                    <?php
+                                }
+                                ?>
                                 <td style="font-weight: bold;"><?php
                                     if (!empty($rankConfig['score']['format'])) {
                                         eval('$tmp = ' . $rankConfig['score']['format'] . '($r->score);');

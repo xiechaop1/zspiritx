@@ -33,6 +33,9 @@ class StoryRank extends \common\models\gii\StoryRank
     public static $storyRankCategories = [
         11 => [
             self::STORY_RANK_CLASS_CAR_MATCH => [
+                'storyModel' => [
+                    'name' => '车型',
+                ],
                 'score' => [
                     'name' => '圈速',
                 ],
@@ -42,14 +45,21 @@ class StoryRank extends \common\models\gii\StoryRank
                     ],
             ],
             self::STORY_RANK_CLASS_CAR_SCORE => [
+                'storyModel' => [
+                    'name' => '车型',
+                ],
                 'score' => [
-                    'name' => '分数'
+                    'name' => '分数',
                 ],
 //                'score2' => '总时间',
             ],
             self::STORY_RANK_CLASS_CAR_VALUABLE => [
+                'storyModel' => [
+                    'name' => '车型',
+                ],
                 'score' => [
-                    'name' => '价值'
+                    'name' => '价值',
+                    'format' => 'number_format',
                 ],
 //                'score2' => '总时间',
             ],
