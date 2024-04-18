@@ -123,7 +123,7 @@ $this->title = '消息';
                                 ?>
                                 <td style="font-weight: bold;"><?php
                                     if (!empty($rankConfig['score']['format'])) {
-                                        eval('$tmp = ' . $rankConfig['score']['format'] . '($r->score);');
+                                        eval('$tmp = ' . $rankConfig['score']['format'] . '(' . $r->score . ');');
                                         echo $tmp;
                                     } else {
                                         echo $r->score;
