@@ -33,7 +33,7 @@ return [
         'wechatPay'    => 'common\services\WechatPay',
         'lottery'   => 'common\services\Lottery',
         'baggage'   => 'common\services\Baggage',
-        'rank'      => 'common\services\StoryRank',
+        'storyRank'      => 'common\services\StoryRank',
 
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',
