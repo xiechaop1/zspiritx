@@ -32,6 +32,7 @@ use common\models\StoryExtend;
 use common\models\StoryGoal;
 use common\models\StoryModels;
 use common\models\StoryModelsLink;
+use common\models\StoryRank;
 use common\models\StoryRole;
 use common\models\StoryStages;
 use common\models\User;
@@ -1271,7 +1272,6 @@ class DoApi extends ApiAction
                                 Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $newStoryUID, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
                             }
                         }
-
 
                         $minCt = $storyModelLink->min_ct;
                         if ($minCt > 0) {

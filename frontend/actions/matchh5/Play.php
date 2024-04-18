@@ -18,6 +18,7 @@ use common\models\LotteryPrize;
 use common\models\Order;
 use common\models\Story;
 use common\models\StoryMatch;
+use common\models\StoryRank;
 use common\models\User;
 use common\models\UserLottery;
 use common\models\UserModels;
@@ -261,6 +262,59 @@ class Play extends Action
 
         // Todo:插入排行榜数据（调用排行service）
         // 带开发
+        $storyModelId = !empty($userModel->storyModel->id) ? $userModel->storyModel->id : 0;
+        $storyModelDetailId = !empty($userModel->storyModelDetail->id) ? $userModel->storyModelDetail->id : 0;
+
+        try {
+            Yii::$app->storyRank->add(
+                $userId, $storyId, $sessionId,
+                StoryRank::STORY_RANK_CLASS_CAR_MATCH,
+                $ct, StoryRank::STORY_RANK_SORT_DESC,
+                $i, StoryRank::STORY_RANK_SORT_ASC,
+                $storyModelId, $storyModelDetailId, $userModelId
+            );
+
+            if (!empty($tmpUserModelProp['prop']['valuable'])) {
+                $propValuable = $tmpUserModelProp['prop']['valuable'];
+            } else {
+                $propValuable = 0;
+            }
+
+            if (!empty($tmpUserModelProp['match']['valuable'])) {
+                $matchValuable = $tmpUserModelProp['match']['valuable'];
+            } else {
+                $matchValuable = 0;
+            }
+
+            $totalValuable = $propValuable + $matchValuable;
+
+            if (!empty($tmpUserModelProp['prop']['score'])) {
+                $score = $tmpUserModelProp['prop']['score'];
+            } else {
+                $score = 0;
+            }
+
+            Yii::$app->storyRank->add(
+                $userId, $storyId, $sessionId,
+                StoryRank::STORY_RANK_CLASS_CAR_VALUABLE,
+                $totalValuable, StoryRank::STORY_RANK_SORT_DESC,
+                0, StoryRank::STORY_RANK_SORT_DESC,
+                $storyModelId, $storyModelDetailId, $userModelId
+            );
+
+
+            Yii::$app->storyRank->add(
+                $userId, $storyId, $sessionId,
+                StoryRank::STORY_RANK_CLASS_CAR_SCORE,
+                $score, StoryRank::STORY_RANK_SORT_DESC,
+                0, StoryRank::STORY_RANK_SORT_DESC,
+                $storyModelId, $storyModelDetailId, $userModelId
+            );
+        } catch (Exception $e) {
+//            return $this->renderErr('排行榜数据插入失败，请联系小精灵！');
+        }
+
+
 
         $ctArr = \common\helpers\Common::formatTime($i);
         $ctTime = $ctArr['str'];

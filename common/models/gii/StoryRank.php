@@ -5,7 +5,7 @@ namespace common\models\gii;
 use Yii;
 
 /**
- * This is the model class for table "{{%story_match}}".
+ * This is the model class for table "{{%story_rank}}".
  *
  */
 class StoryRank extends \yii\db\ActiveRecord
@@ -25,7 +25,7 @@ class StoryRank extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'session_id', 'user_id', 'story_model_id', 'story_model_detail_id',
+            [['story_id', 'rank_class', 'session_id', 'user_id', 'story_model_id', 'story_model_detail_id',
                 'user_model_id', 'score', 'score2',], 'integer'],
             [['created_at', 'updated_at', ], 'integer'],
         ];
