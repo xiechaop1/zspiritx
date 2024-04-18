@@ -1265,7 +1265,7 @@ class DoApi extends ApiAction
                         ) {
                             // 组合模型并显示出来
                             $newUserModel = Yii::$app->baggage->pickup($storyId, $sessionId, $newStoryModelId, $userId, 0, $newModelProp);
-                            $newStoryUID = !empty($newStoryModel->model_inst_u_id) ? $newStoryModel->model_inst_u_id : 0;
+                            $newStoryUID = !empty($newUserModel->storyModel->model_inst_u_id) ? $newUserModel->storyModel->model_inst_u_id : 0;
                             if (!empty($newStoryUID) ) {
                                 $expirationInterval = 3600;
                                 Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $newStoryModelId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
