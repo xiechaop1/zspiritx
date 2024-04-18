@@ -30,7 +30,8 @@ $this->title = '我的背包';
 ?>
 <style>
     .bag_selected {
-        border: 2px solid rgba(218, 252, 112, 0.8);
+        border: 1px solid rgba(218, 252, 112, 0.8);
+        background-color: rgba(155, 252, 112, 0.2);
     }
 
     .btn-disable {
