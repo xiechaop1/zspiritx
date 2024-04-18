@@ -35,10 +35,11 @@ class StoryRank extends \common\models\gii\StoryRank
             self::STORY_RANK_CLASS_CAR_MATCH => [
                 'score' => [
                     'name' => '圈速',
-                    'format' => '\\common\\helpers\\Common::formatTimeToStr',
                 ],
                 'score2' =>
-                    ['name' => '总时间'],
+                    ['name' => '总时间',
+                    'format' => '\\common\\helpers\\Common::formatTimeToStr',
+                    ],
             ],
             self::STORY_RANK_CLASS_CAR_SCORE => [
                 'score' => [
