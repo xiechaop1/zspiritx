@@ -27,7 +27,7 @@ use yii\web\NotFoundHttpException;
 
 class StoryRank extends Component
 {
-    public function addRank($userId, $storyId, $sessionId,
+    public function add($userId, $storyId, $sessionId,
                             $rankClass, $score, $scoreSort = \common\models\StoryRank::STORY_RANK_SORT_DESC,
                             $score2 = 0, $score2Sort = \common\models\StoryRank::STORY_RANK_SORT_DESC ,
                             $storyModelId = 0, $storyModelDetailId = 0, $userModelId = 0) {
