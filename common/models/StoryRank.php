@@ -17,9 +17,9 @@ class StoryRank extends \common\models\gii\StoryRank
     const STORY_RANK_CLASS_CAR_VALUABLE = 3;
 
     public static $storyRankClass2Name = [
-        self::STORY_RANK_CLASS_CAR_MATCH => '车型比赛成绩',
-        self::STORY_RANK_CLASS_CAR_SCORE => '车型评分',
-        self::STORY_RANK_CLASS_CAR_VALUABLE => '车型价值',
+        self::STORY_RANK_CLASS_CAR_MATCH => '比赛成绩',
+        self::STORY_RANK_CLASS_CAR_SCORE => '评分',
+        self::STORY_RANK_CLASS_CAR_VALUABLE => '价值',
     ];
 
     const STORY_RANK_SORT_ASC = 3;
