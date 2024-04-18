@@ -205,6 +205,10 @@ class Common
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
+    public static function formatTimeToStr($timeStamp, $returnFormat = 'H:i:s.ms', $needMicSec = true) {
+        $time = self::formatTime($timeStamp, $returnFormat, $needMicSec);
+        return !empty($time['str']) ? $time['str'] : $timeStamp;
+    }
     public static function formatTime($timeStamp, $returnFormat = 'H:i:s.ms', $needMicSec = true) {
         if ($needMicSec) {
             $timestr = floor($timeStamp / 1000);

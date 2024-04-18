@@ -57,8 +57,8 @@ class Rank extends Action
         $rankConfig = !empty(StoryRank::$storyRankCategories[$storyId][$rankClass])
             ? StoryRank::$storyRankCategories[$storyId][$rankClass]
             : [
-                'score' => '成绩',
-                'score2' => '副成绩',
+                'score' => ['name' => '成绩'],
+                'score2' => ['name' => '副成绩'],
             ];
 
         try {

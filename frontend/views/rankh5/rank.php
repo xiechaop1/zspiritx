@@ -42,8 +42,8 @@ $this->title = '消息';
                         <td style="font-weight: bold;">排名</td>
                         <td style="font-weight: bold;">参赛者</td>
                         <td style="font-weight: bold;">赛车</td>
-                        <td style="font-weight: bold;">圈数</td>
-                        <td style="font-weight: bold;">总时长</td>
+                        <td style="font-weight: bold;"><?= !empty($rankConfig['score']['name']) ? $rankConfig['score']['name'] : '成绩' ?></td>
+                        <td style="font-weight: bold;"><?= !empty($rankConfig['score2']['name']) ? $rankConfig['score2']['name'] : '副成绩' ?></td>
                         <td style="font-weight: bold;">差距</td>
                     </tr>
                     <tr>
@@ -63,8 +63,20 @@ $this->title = '消息';
                                 <td style="font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
                                 <td><?= $r->storyModel->story_model_name ?></td>
-                                <td style="font-weight: bold;"><?= $r->score ?></td>
-                                <td><?= $r->score2 ?></td>
+                                <td style="font-weight: bold;"><?php
+                                    if (!empty($rankConfig['score']['format'])) {
+                                        eval('$tmp = ' . $rankConfig['score']['format'] . '($r->score);');
+                                        echo $tmp;
+                                    } else {
+                                        echo $r->score;
+                                    } ?></td>
+                                <td><?php
+                                    if (!empty($rankConfig['score2']['format'])) {
+                                        eval('$tmp = ' . $rankConfig['score2']['format'] . '($r->score2);');
+                                        echo $tmp;
+                                    } else {
+                                        echo $r->score;
+                                    } ?></td>
                                 <td><?= $scoreGap ?></td>
                             </tr>
                             <?php
