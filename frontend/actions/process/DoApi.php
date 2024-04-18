@@ -1173,7 +1173,10 @@ class DoApi extends ApiAction
 
                     $linkStoryModelIds = [];
                     $linkStoryModelDetailIds = [];
+                    $linkStoryModelTagIds = [];
+                    $linkStoryModelTagDetailIds = [];
                     $linkExecArr = [];
+                    $linkStoryModels = [];
                     if (!empty($storyModelLinks)) {
 
                         foreach ($storyModelLinks as $storyModelLink) {
@@ -1181,7 +1184,14 @@ class DoApi extends ApiAction
                                 $linkStoryModelDetailIds[] = $storyModelLink->story_model_detail_id;
                             }
                             $linkStoryModelIds[] = $storyModelLink->story_model_id;
+                            $linkStoryModels[$storyModelLink->story_model_id] = $storyModelLink;
 
+                            if ($storyModelLink->is_tag == StoryModelsLink::IS_TAG_YES) {
+                                if (!empty($storyModelLink->story_model_detail_id)) {
+                                    $linkStoryModelTagDetailIds[] = $storyModelLink->story_model_detail_id;
+                                }
+                                $linkStoryModelTagIds[] = $storyModelLink->story_model_id;
+                            }
 
                             $tmpExec = $storyModelLink->eff_exec;
                             if (\common\helpers\Common::isJson($tmpExec)) {
@@ -1198,13 +1208,28 @@ class DoApi extends ApiAction
                     }
 
                     if ($type == StoryModelsLink::EFF_TYPE_INCLUDE_MODEL_AND_DISPLAY) {
-                        if (\common\helpers\Common::arrayContains($storyModelIds, $linkStoryModelIds)) {
+//                        if (\common\helpers\Common::arrayContains($storyModelIds, $linkStoryModelIds)) {
+//                    else {
+//                            throw new \yii\base\Exception('您的组合没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+//                        }
+                        $checkContains = Yii::$app->models->checkStoryModelWithLinkStoryModel($storyModelIds, $linkStoryModelIds, $linkStoryModelTagIds);
+                        if ( $checkContains !== true ) {
+                            if ($checkContains == false) {
+                                throw new \yii\base\Exception('您的组合选择没有效果', ErrorCode::USER_MODEL_NO_EFFECT);
+                            } else {
+                                $storyModelStrArray = [];
+                                foreach ($checkContains as $diffStoryModelId) {
+                                    $storyModelStrArray[] = !empty($linkStoryModels[$diffStoryModelId]) ? $linkStoryModels[$diffStoryModelId]->storyModel->story_model_name : '';
+                                }
+                                $storyModelStr = implode(',', $storyModelStrArray);
+                                throw new \yii\base\Exception('您欠缺必要物品：' . $storyModelStr, ErrorCode::USER_MODEL_NO_EFFECT);
+                            }
+                        } else {
                             sort($storyModelIds);
                             $userModelStr = implode(',', $storyModelIds);
                             $linkStoryModelStr = implode(',', $storyModelIds);
-                        } else {
-                            throw new \yii\base\Exception('您的组合没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
                         }
+//
                     } else {
                         sort($storyModelIds);
                         $userModelStr = implode(',', $storyModelIds);

@@ -819,6 +819,26 @@ class Models extends Component
         ];
     }
 
+    // 检查storyModelIds是否包含在linkStoryModelIds里（选中模型是否全部在待选模型中）
+    // 并且检查linkStoryModelTagIds是否包含在storyModelIds里（必要模型是否都在）
+    // @return bool/array
+    // 如果返回true，则表示全部符合
+    // 如果返回false，则表示选中模型不全是待选模型，有偏差
+    // 如果返回Array(ids)，则表示必要模型不在选中模型中，并返回了区别模型的ID
+    public function checkStoryModelWithLinkStoryModel($storyModelIds, $linkStoryModelIds, $linkStoryModelTagIds) {
+        $tagCheck = \common\helpers\Common::arrayContains($linkStoryModelTagIds, $storyModelIds);
+        if ( $tagCheck !== true) {
+            return $tagCheck;
+        }
+
+        $linkCheck = \common\helpers\Common::arrayContains($storyModelIds, $linkStoryModelIds);
+        if ( $linkCheck !== true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function computeStoryModelLinkPropWithFormula($linkExecArr, $targetStoryModel, $targetUserModel = [], $useStoryModelIds = []) {
         $ret = [];
         $combineList = [];

@@ -147,7 +147,11 @@ class Common
     // 判断数组1是否包含另一个数组2
     public static function arrayContains($array1, $array2) {
         $difference = array_diff($array1, $array2);
-        return count($difference) === 0;
+        if (count($difference) === 0) {
+            return true;
+        } else {
+            return $difference;
+        }
     }
     public static function decodeJsonToVarexport($json, $needNum = false) {
         if (!empty($json)) {
