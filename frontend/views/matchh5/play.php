@@ -104,9 +104,9 @@ $this->title = '比赛结果';
 
 
             </div>
-<!--                    <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
+                    <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn1">
                         返回
-                    </div> -->
+                    </div>
                 </div>
             </div>
 
@@ -160,7 +160,7 @@ $this->title = '比赛结果';
             // }
             showMsg(i);
             i++;
-        }, 800);
+        }, 400);
 
     };
 

@@ -730,6 +730,14 @@ $(function () {
         Unity.call(data);
     });
 
+    $("#return_btn1").click(function (){
+        var params = {
+            'WebViewOff':1
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
+
     //浏览器页面back
     $(".go-history").click(function (){
         history.go(-1);
