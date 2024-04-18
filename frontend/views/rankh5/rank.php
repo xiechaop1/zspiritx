@@ -109,11 +109,11 @@ $this->title = '消息';
                                 <td style="font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
                                 <?php
-                                if (!empty($rankConfig['score2']['name'])) {
+                                if (!empty($rankConfig['storyModel']['name'])) {
                                     ?>
                                     <td><?php
-                                        if (!empty($rankConfig['score2']['format'])) {
-                                            eval('$tmp = ' . $rankConfig['score2']['format'] . '(' . $r->storyModel->story_model_name . ');');
+                                        if (!empty($rankConfig['storyModel']['format'])) {
+                                            eval('$tmp = ' . $rankConfig['score2']['format'] . '(\'' . $r->storyModel->story_model_name . '\');');
                                             echo $tmp;
                                         } else {
                                             echo $r->storyModel->story_model_name;
