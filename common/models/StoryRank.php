@@ -59,7 +59,7 @@ class StoryRank extends \common\models\gii\StoryRank
                 ],
                 'score' => [
                     'name' => '价值',
-                    'format' => 'number_format(%d)',
+                    'format' => 'number_format(%d/10000)万',
                 ],
 //                'score2' => '总时间',
             ],
