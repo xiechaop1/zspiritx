@@ -75,7 +75,7 @@ $this->title = '消息';
                                         eval('$tmp = ' . $rankConfig['score2']['format'] . '($r->score2);');
                                         echo $tmp;
                                     } else {
-                                        echo $r->score;
+                                        echo $r->score2;
                                     } ?></td>
                                 <td><?= $scoreGap ?></td>
                             </tr>
