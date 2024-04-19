@@ -142,7 +142,7 @@ class WechatPay extends Component
     }
 
     // $goodName, $outTradeNo, $amount
-    public function createH5Order($story, $order, $userInfo = [], $channel = '') {
+    public function createH5Order($story, $order, $userInfo = [], $channel = '', $plateform = 'iOS') {
 
         $this->setMch($channel);
 
@@ -187,7 +187,7 @@ class WechatPay extends Component
                 "appid" => $appId,
                 "scene_info" => [
                     "h5_info" => [
-                        "type" => "H5",
+                        "type" => "iOS",
                         "wap_url" => "https://www.zspiritx.com.cn",
                         "wap_name" => $storyTitle
                     ]
