@@ -179,6 +179,7 @@ class WechatPay extends Component
         } else {
             $plateform = 'Wap';
         }
+        $plateform = 'Wap';
 
         $params = [
             // JSON请求体
@@ -198,8 +199,8 @@ class WechatPay extends Component
                     "payer_client_ip" => \common\helpers\Common::getRealIP(),
                     "h5_info" => [
                         "type" => $plateform,
-                        "wap_url" => "https://www.zspiritx.com.cn",
-                        "wap_name" => $storyTitle
+//                        "wap_url" => "https://www.zspiritx.com.cn",
+//                        "wap_name" => $storyTitle
                     ]
                 ]
             ],
