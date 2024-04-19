@@ -136,7 +136,7 @@ class OrderApi extends ApiAction
             $ret = $order;
             if (!empty($execMethod)) {
                 if ($currPrice > 0) {
-                    $ret = $this->payByOrder($order);
+                    $ret = $this->payByOrder($order, $execMethod);
                 } else {
                     $ret = [
                         'order' => $order,
@@ -248,7 +248,7 @@ class OrderApi extends ApiAction
         return $ret;
     }
 
-    public function payByOrder($order) {
+    public function payByOrder($order, $exeMethod = 1) {
         $transaction = Yii::$app->db->beginTransaction();
 
 
@@ -270,7 +270,13 @@ class OrderApi extends ApiAction
 
 //            $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
             $channel = !empty($this->_get['channel']) ? $this->_get['channel'] : '';
-            $res = Yii::$app->wechatPay->createJsapiOrder($code, $story, $order, $this->_userInfo, $channel);
+            if ($exeMethod == 1) {
+                // 小程序支付走Jsapi接口
+                $res = Yii::$app->wechatPay->createJsapiOrder($code, $story, $order, $this->_userInfo, $channel);
+            } else {
+                // exeMethod == 2走H5支付
+                $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
+            }
 
             $order->order_status = Order::ORDER_STATUS_PAYING;
 //            $ret = $order->save();
