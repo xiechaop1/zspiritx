@@ -211,6 +211,7 @@ class WechatPay extends Component
 
         try {
             $result = $this->_getPostApi($uri, $params, $channel);
+            $result = json_decode($result, true);
             return $result;
         } catch (RequestException $e) {
             throw $e;
