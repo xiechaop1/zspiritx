@@ -32,9 +32,10 @@ class My extends Action
     public function run()
     {
 
+        $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
         $userId = Cookie::getCookie('user_id');
         if (empty($userId)) {
-            header('Location: /passport/web_login');
+            header('Location: /passport/web_login' . !empty($unityVersion) ? '?unity_version=' . $unityVersion : '');
         }
 
         try {
@@ -48,7 +49,7 @@ class My extends Action
                 $user->last_login_device = Client::getAgent();
                 $user->save();
             } else {
-                header('Location: /passport/web_login');
+                header('Location: /passport/web_login' . !empty($unityVersion) ? '?unity_version=' . $unityVersion : '');
             }
         } catch (\Exception $e) {
             //Yii::error($e->getMessage());
