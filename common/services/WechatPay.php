@@ -177,7 +177,7 @@ class WechatPay extends Component
                 "time_expire" => Date('Y-m-dTH:i:s+08:00', strtotime('+' . self::ORDER_TIMEOUT . 'mins')),
                 // "2018-06-08T10:34:56+08:00",
                 "amount" => [
-                    "total" => $amount,
+                    "total" => round($amount * 100),
                     "currency" => "CNY",
                 ],
                 "mchid" => $merchantId,
