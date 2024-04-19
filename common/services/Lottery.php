@@ -40,7 +40,7 @@ class Lottery extends Component
         $lotteryPrize = LotteryPrize::find()
             ->where([
                 'lottery_id'    => $lotteryId,
-                'prize_id'      => $prizeId,
+                'id'      => $prizeId,
             ])
             ->orderBy([
                 'prize_level'   => SORT_DESC
