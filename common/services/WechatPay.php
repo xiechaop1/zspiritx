@@ -142,7 +142,7 @@ class WechatPay extends Component
     }
 
     // $goodName, $outTradeNo, $amount
-    public function createH5Order($story, $order, $userInfo = [], $channel = '', $plateform = 'iOS') {
+    public function createH5Order($story, $order, $userInfo = [], $channel = '') {
 
         $this->setMch($channel);
 
@@ -171,6 +171,15 @@ class WechatPay extends Component
         $merchantSerialNumber = $mch['merchantSerialNumber'];
         $prefix = $mch['prefix'];
 
+        $plateformStr = \common\helpers\Common::chooseSystem();
+        if ($plateformStr == 'ios') {
+            $plateform = 'iOS';
+        } elseif ($plateformStr == 'android') {
+            $plateform = 'Android';
+        } else {
+            $plateform = 'Wap';
+        }
+
         $params = [
             // JSON请求体
             'json' => [
@@ -186,8 +195,9 @@ class WechatPay extends Component
                 "out_trade_no" => $outTradeNo,
                 "appid" => $appId,
                 "scene_info" => [
+                    "payer_client_ip" => \common\helpers\Common::getRealIP(),
                     "h5_info" => [
-                        "type" => "iOS",
+                        "type" => $plateform,
                         "wap_url" => "https://www.zspiritx.com.cn",
                         "wap_name" => $storyTitle
                     ]
