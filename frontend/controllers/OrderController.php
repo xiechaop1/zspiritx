@@ -81,6 +81,10 @@ class OrderController extends Controller
                 'class' => 'frontend\actions\order\OrderApi',
                 'action'    => 'cancel',
             ],
+            'reurl' => [
+                'class' => 'frontend\actions\order\OrderApi',
+                'action'    => 'reurl',
+            ],
         ]);
     }
 }

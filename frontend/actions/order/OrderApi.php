@@ -61,6 +61,9 @@ class OrderApi extends ApiAction
                 case 'cancel':
                     $ret = $this->cancel();
                     break;
+                case 'reurl':
+                    $ret = $this->reurl();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -396,6 +399,16 @@ class OrderApi extends ApiAction
 
         return $order;
 
+    }
+
+    public function reurl(){
+        $redirectUrl = !empty($this->_get['rurl']) ? $this->_get['rurl'] : '';
+
+        if (!empty($redirectUrl)) {
+            header('location: ' . $redirectUrl);
+        }
+
+        return [];
     }
 
 }
