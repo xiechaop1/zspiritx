@@ -90,7 +90,6 @@ $this->title = '消息';
                         <?php
                         }
                         ?>
-                        <td style="font-weight: bold;">差距</td>
                     </tr>
                     <tr>
                         <td style="height: 4px;"> </td>
@@ -141,7 +140,6 @@ $this->title = '消息';
                                 <?php
                             }
                                 ?>
-                                <td><?= $scoreGap ?></td>
                             </tr>
                             <?php
 
