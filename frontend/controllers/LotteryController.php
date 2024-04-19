@@ -25,6 +25,10 @@ class LotteryController extends Controller
                 'class' => 'frontend\actions\lottery\LotteryApi',
                 'action' => 'award',
             ],
+            'award_by_seed' => [
+                'class' => 'frontend\actions\lottery\LotteryApi',
+                'action' => 'award_by_seed',
+            ],
             'award_by_h5' => [
                 'class' => 'frontend\actions\lottery\LotteryApi',
                 'action' => 'award_by_h5',
