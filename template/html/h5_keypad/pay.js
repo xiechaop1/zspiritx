@@ -89,10 +89,11 @@ $(function () {
     }
 
 
-
+    var user_id = $("input[NAME='user_id']").val();
+    var story_id = $("input[NAME='story_id']").val();
+    var order_id ;
     $('.pay,#pay-retry').click(function () {
-        var user_id = $("input[NAME='user_id']").val();
-        var story_id = $("input[NAME='story_id']").val();
+
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -115,23 +116,29 @@ $(function () {
                 var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //新消息获取成功
                 if(obj["code"]==200){
-                    window.location.href=obj.data.pay_res.h5_url;
-                    $(".pay").hide()
-                    $("#pay-retry,#pay-complete").show()
+                    order_id=obj.data.order.order_no;
+                    $(".pay").hide();
+                    $("#pay-retry,#pay-complete").show();
+                    window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
+
+                    // window.location.href=obj.data.pay_res.h5_url;
                 }
                 //新消息获取失败
                 else{
-                    alert(obj.msg);
+                    $.alert(obj.msg);
                 }
 
             }
         });
-
-
         // alert("微信支付");
     });
 
+    function getPayInfo(){
+
+    }
+
+
     $('#pay-complete').click(function () {
-        alert("支付成功，页面跳转");
+        $.alert("支付成功，页面跳转");
     });
 })
