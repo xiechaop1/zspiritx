@@ -89,24 +89,56 @@ $(function () {
     }
 
 
-
+    var user_id = $("input[NAME='user_id']").val();
+    var story_id = $("input[NAME='story_id']").val();
+    var order_id ;
     $('.pay,#pay-retry').click(function () {
-        if (typeof WeixinJSBridge == "undefined"){
-            if( document.addEventListener ){
-                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-            }else if (document.attachEvent){
-                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/order/create',
+            data:{
+                user_id:1,
+                story_id:10,
+                exec_method:2,
+                is_test:1
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //新消息获取成功
+                if(obj["code"]==200){
+                    order_id=obj.data.order.order_no;
+                    $(".pay").hide();
+                    $("#pay-retry,#pay-complete").show();
+                    window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
+
+                    // window.location.href=obj.data.pay_res.h5_url;
+                }
+                //新消息获取失败
+                else{
+                    $.alert(obj.msg);
+                }
+
             }
-        }else{
-            onBridgeReady();
-        }
-        $(".pay").hide()
-        $("#pay-retry,#pay-complete").show()
-        alert("微信支付");
+        });
+        // alert("微信支付");
     });
 
+    function getPayInfo(){
+
+    }
+
+
     $('#pay-complete').click(function () {
-        alert("支付成功，页面跳转");
+        $.alert("支付成功，页面跳转");
     });
 })
