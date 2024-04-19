@@ -120,7 +120,7 @@ $this->title = 'Puzzle';
 <input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
 <input type="hidden" name="qa_id" id="qa_id" value="<?= $qaId ?>">
 <input type="hidden" name="story_id" id="story_id" value="<?= $storyId ?>">
-
+    <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
 <input type="hidden" name="begin_ts" value="<?= time() ?>">
 
 <div class="w-100 m-auto">

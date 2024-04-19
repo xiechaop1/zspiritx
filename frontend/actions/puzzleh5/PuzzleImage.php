@@ -56,6 +56,9 @@ class PuzzleImage extends Action
         $qaOne['selected_json'] = \common\helpers\Common::isJson($qaOne['selected']) ? json_decode($qaOne['selected'], true) : $qaOne['selected'];
         $qaOne['attachment'] = \common\helpers\Attachment::completeUrl($qaOne['attachment'], true);
 
+        // 默认返回的时候执行第二句（不会跳过）
+        $rtnAnswerType = 2;
+
         if (!empty($qaOne['selected_json']['rows'])) {
             $rows = $qaOne['selected_json']['rows'];
         } else {
@@ -164,6 +167,7 @@ class PuzzleImage extends Action
             'storyId'       => $qaOne['story_id'],
             'rightAnswer'   => $qaOne['st_answer'],
             'keyboard'      => $qaOne['selected_json'],
+            'rtnAnswerType' => $rtnAnswerType,
 //            'keyboardArray'    => $keyboardArray,
             'qa'         => $qaOne,
         ]);
