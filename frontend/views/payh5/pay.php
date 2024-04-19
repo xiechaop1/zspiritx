@@ -27,6 +27,8 @@ $this->registerMetaTag([
 <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
   返回
 </div>
+<input type="hidden" name="user_id" value="<?= $userId ?>">
+<input type="hidden" name="story_id" value="<?= $storyId ?>">
 
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
@@ -41,7 +43,7 @@ $this->registerMetaTag([
   <div class="keypad-shop-info">
     <span class="shop-name">支付金额(￥)</span>
   </div>
-  <label class="inputlabel" id="keypadNum" type="text" data-value="100.00">1100.00</label>
+  <label class="inputlabel" id="keypadNum" type="text" data-value="100.00">100.00</label>
 </div>
 <div class="pay-box ">
   <div class="pay">
