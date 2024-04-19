@@ -185,13 +185,13 @@ class WechatPay extends Component
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "out_trade_no" => $outTradeNo,
                 "appid" => $appId,
-//                "scene_info" => [
-//                    "h5_info" => [
-//                        "type" => "Wap",
-//                        "wap_url" => "https://www.zspiritx.com.cn",
-//                        "wap_name" => $goodName
-//                    ]
-//                ]
+                "scene_info" => [
+                    "h5_info" => [
+                        "type" => "H5",
+                        "wap_url" => "https://www.zspiritx.com.cn",
+                        "wap_name" => $storyTitle
+                    ]
+                ]
             ],
             'headers' => [ 'Accept' => 'application/json' ]
         ];
