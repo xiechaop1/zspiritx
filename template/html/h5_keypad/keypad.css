@@ -219,7 +219,7 @@ table tr td:active .keypad-m{
 	text-align: center;
 	padding: 10px 0;
 	z-index: 10000;
-	display: block;
+	/*display: block;*/
 	margin: 20px auto;
 	border-radius: 10px;
 	font-size: 0.35rem;
