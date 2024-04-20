@@ -102,7 +102,7 @@ $(function () {
             url: '/order/create',
             data:{
                 user_id:1,
-                story_id:10,
+                story_id:2,
                 exec_method:2,
                 is_test:1
             },
