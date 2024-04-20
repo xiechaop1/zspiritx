@@ -119,9 +119,13 @@ $(function () {
                     order_id=obj.data.order.order_no;
                     $(".pay").hide();
                     $("#pay-retry,#pay-complete").show();
-                    window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
 
-                    // window.location.href=obj.data.pay_res.h5_url;
+                    Map extraHeaders = new HashMap();
+                    extraHeaders.put("Referer", "https://h5.zspiritx.com.cn/");//例如 http://www.baidu.com )
+
+                    // window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
+
+                    window.location.href=obj.data.pay_res.h5_url;
                 }
                 //新消息获取失败
                 else{
