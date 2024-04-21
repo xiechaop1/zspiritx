@@ -1255,7 +1255,6 @@ $(function () {
         var t = $(this).parent().parent().parent();
         var isDebug = t.find("input[name='isDebug']").val();
         var storyId = t.find("input[name='storyId']").val();
-        var userId = $('#user_id').val();
         var orderStatus = t.find("input[name='orderStatus']").val();
         $('#login_is_debug').val(isDebug);
         $('#login_story_id').val(storyId);
@@ -1289,7 +1288,7 @@ $(function () {
                         console.log(obj.data);
 
                         var order_id=obj.data.order.order_no;
-                        payResult= setInterval(getPayInfo(userId,order_id),3000);
+                        payResult= setInterval(getPayInfo(userId,order_id,storyId,isDebug),3000);
 
                         var form = document.createElement('form');
                         document.body.appendChild(form);
@@ -1414,7 +1413,7 @@ $(function () {
     });
 
     // 查询支付结果
-    function getPayInfo(userId,orderId){
+    function getPayInfo(userId,orderId,storyId,isDebug){
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
