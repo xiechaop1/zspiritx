@@ -93,16 +93,14 @@ $(function () {
     var story_id = $("input[NAME='story_id']").val();
     var order_id ;
     $('.pay,#pay-retry').click(function () {
-
-
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: false,
             url: '/order/create',
             data:{
-                user_id:1,
-                story_id:2,
+                user_id:user_id,
+                story_id:story_id,
                 exec_method:2,
                 is_test:1
             },
