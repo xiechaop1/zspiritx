@@ -1290,6 +1290,8 @@ $(function () {
                         var order_id=obj.data.order.order_no;
                         payResult= setInterval(getPayInfo(userId,order_id,storyId,isDebug),3000);
 
+                        window.location.href=obj.data.pay_res.h5_url;
+
                         var form = document.createElement('form');
                         document.body.appendChild(form);
                         form.method = "post";
