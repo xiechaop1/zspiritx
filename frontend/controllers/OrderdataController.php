@@ -52,6 +52,10 @@ class OrderdataController extends Controller
                 'class'     => 'frontend\actions\order\GetOrderApi',
                 'action'    => 'get_order_list',
             ],
+            'get_order' => [
+                'class'     => 'frontend\actions\order\GetOrderApi',
+                'action'    => 'get_order',
+            ],
         ]);
     }
 }

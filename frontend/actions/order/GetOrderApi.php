@@ -45,6 +45,9 @@ class GetOrderApi extends ApiAction
                 case 'get_order_list':
                     $ret = $this->getOrderList();
                     break;
+                case 'get_order':
+                    $ret = $this->getOrder();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -94,6 +97,25 @@ class GetOrderApi extends ApiAction
 
 
         return $ret;
+    }
+
+    public function getOrder() {
+
+        $orderId = !empty($this->_get['order_id']) ? $this->_get['order_id'] : 0;
+
+        $order = Order::find()
+            ->where([
+                'id' => $orderId,
+                'user_id' => $this->_userId,
+            ])
+            ->one();
+
+        if (empty($order)) {
+            return [];
+        }
+
+        return $order;
+
     }
 
 
