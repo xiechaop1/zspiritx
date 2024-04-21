@@ -447,7 +447,8 @@ $(function () {
                 data:{
                     user_id:userId,
                     story_id:storyId,
-                    is_test:1
+                    is_test:1,
+                    exec_method:2
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
