@@ -114,9 +114,11 @@ $(function () {
                 var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //新消息获取成功
                 if(obj["code"]==200){
-                    order_id=obj.data.order.order_no;
+                    var order_id=obj.data.order.order_no;
                     $(".pay").hide();
                     $("#pay-retry,#pay-complete").show();
+
+                    var payResult = setInterval(getPayInfo(user_id,order_id),3000);
 
                     // Map extraHeaders = new HashMap();
                     // extraHeaders.put("Referer", "https://h5.zspiritx.com.cn/");//例如 http://www.baidu.com )
@@ -141,7 +143,7 @@ $(function () {
         // alert("微信支付");
     });
 
-    var timer = setInterval(getPayInfo,3000);
+
 
     function getPayInfo(userId,orderId){
         $.ajax({
@@ -164,9 +166,11 @@ $(function () {
                 //新消息获取成功
                 if(obj["code"]==200){
                     if(obj.data.order_status==1){
+                        clearInterval(payResult);
 
                     }
                     else if(obj.data.order_status==3){
+                        clearInterval(payResult);
 
                     }
 
