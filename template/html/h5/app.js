@@ -1371,6 +1371,8 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
+                        alert(obj.data.pay_res.h5_url);
+                        
                         var form = document.createElement('form');
                         document.body.appendChild(form);
                         form.method = "post";
@@ -1379,13 +1381,13 @@ $(function () {
                         document.body.removeChild(form);
 
                         // console.log(obj.data);
-                        var order_status = obj.data.order.order_status;
+                       /* var order_status = obj.data.order.order_status;
                         if (order_status != 0 && (order_status == 1 || order_status == 2)) {
                             alert('购买成功！');
                         } else {
                             // 执行支付唤醒
                             alert('如果您遇到支付问题，请您和18500041193联系！');
-                        }
+                        }*/
                     }
                     //新消息获取失败
                     else{

@@ -141,8 +141,43 @@ $(function () {
         // alert("微信支付");
     });
 
-    function getPayInfo(){
+    var timer = setInterval(getPayInfo,3000);
 
+    function getPayInfo(userId,orderId){
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/orderdata/get_order',
+            data:{
+                user_id:userId,
+                order_id:orderId,
+                is_test:1
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {// console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                // $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //新消息获取成功
+                if(obj["code"]==200){
+                    if(obj.data.order_status==1){
+
+                    }
+                    else if(obj.data.order_status==3){
+
+                    }
+
+                }
+                //新消息获取失败
+                else{
+                    // $.alert(obj.msg);
+                }
+
+            }
+        });
     }
 
 
