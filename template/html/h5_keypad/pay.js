@@ -123,13 +123,13 @@ $(function () {
                     // Map extraHeaders = new HashMap();
                     // extraHeaders.put("Referer", "https://h5.zspiritx.com.cn/");//例如 http://www.baidu.com )
 
-                    // window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
-                    var form = document.createElement('form');
+                    window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
+                 /*   var form = document.createElement('form');
                     document.body.appendChild(form);
                     form.method = "post";
                     form.action = obj.data.pay_res.h5_url;
                     form.submit();
-                    document.body.removeChild(form);
+                    document.body.removeChild(form);*/
 
                     // window.location.href=obj.data.pay_res.h5_url;
                 }
