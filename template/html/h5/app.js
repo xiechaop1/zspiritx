@@ -1249,6 +1249,7 @@ $(function () {
         // }
     });
 
+    var payResult
     // H5支付
     $(".owl-carousel .play_btn").click(function() {
         var t = $(this).parent().parent().parent();
@@ -1288,7 +1289,7 @@ $(function () {
                         console.log(obj.data);
 
                         var order_id=obj.data.order.order_no;
-                        var payResult = setInterval(getPayInfo(userId,order_id),3000);
+                        payResult= setInterval(getPayInfo(userId,order_id),3000);
 
                         var form = document.createElement('form');
                         document.body.appendChild(form);
