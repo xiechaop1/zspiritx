@@ -117,29 +117,23 @@ $(function () {
                     var order_id=obj.data.order.order_no;
                     $(".pay").hide();
                     $("#pay-retry,#pay-complete").show();
+                    payResult= setInterval(getPayInfo(user_id,order_id),1000);
 
-                    // window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
                     var form = document.createElement('form');
                     document.body.appendChild(form);
                     form.method = "post";
                     form.action = obj.data.pay_res.h5_url;
                     form.submit();
                     document.body.removeChild(form);
-                    
-                    payResult= setInterval(getPayInfo(user_id,order_id),3000);
-
                 }
                 //新消息获取失败
                 else{
                     alert(obj.msg);
                 }
-
             }
         });
         // alert("微信支付");
     });
-
-
 
     function getPayInfo(userId,orderId){
         $.ajax({
@@ -165,12 +159,10 @@ $(function () {
                     if(order_status==1){
                         alert("支付成功",order_status);
                         clearInterval(payResult);
-
                     }
                     else if(order_status==3){
                         alert("支付成功",order_status);
                         clearInterval(payResult);
-
                     }
 
                 }
