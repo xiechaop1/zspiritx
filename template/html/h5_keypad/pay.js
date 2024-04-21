@@ -118,20 +118,16 @@ $(function () {
                     $(".pay").hide();
                     $("#pay-retry,#pay-complete").show();
 
-                    payResult= setInterval(getPayInfo(user_id,order_id),3000);
-
-                    // Map extraHeaders = new HashMap();
-                    // extraHeaders.put("Referer", "https://h5.zspiritx.com.cn/");//例如 http://www.baidu.com )
-
-                    window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
-                 /*   var form = document.createElement('form');
+                    // window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
+                    var form = document.createElement('form');
                     document.body.appendChild(form);
                     form.method = "post";
                     form.action = obj.data.pay_res.h5_url;
                     form.submit();
-                    document.body.removeChild(form);*/
+                    document.body.removeChild(form);
+                    
+                    payResult= setInterval(getPayInfo(user_id,order_id),3000);
 
-                    // window.location.href=obj.data.pay_res.h5_url;
                 }
                 //新消息获取失败
                 else{
