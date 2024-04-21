@@ -1292,12 +1292,12 @@ $(function () {
 
                         window.location.href=obj.data.pay_res.h5_url;
 
-                        var form = document.createElement('form');
+                       /* var form = document.createElement('form');
                         document.body.appendChild(form);
                         form.method = "post";
                         form.action = obj.data.pay_res.h5_url;
                         form.submit();
-                        document.body.removeChild(form);
+                        document.body.removeChild(form);*/
 
                     }
                     //新消息获取失败
