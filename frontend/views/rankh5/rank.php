@@ -103,8 +103,13 @@ $this->title = '消息';
                                 $firstScore = $r->score;
                             }
                             $scoreGap = $r->score - $firstScore;
+
+                            $trStyle = '';
+                            if ($r->user_id == $userId) {
+                                $trStyle = 'color: #FFD700;';
+                            }
 ?>
-                            <tr>
+                            <tr<?= !empty($trStyle) ? ' style="'. $trStyle . '"' : '' ?>>
                                 <td style="font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
                                 <?php
