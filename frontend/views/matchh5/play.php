@@ -50,7 +50,7 @@ $this->title = '比赛结果';
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
                         比赛结果
                     </div>
-<div id="top_flow" style="position: sticky; top: 0px; background-color: rgba(0,0,0,0.5); z-index: 99999999; padding: 25px; border-radius: 15px;">比赛开始</div>
+<div id="top_flow" style="position: sticky; top: 50px; background-color: rgba(0,0,0,0.5); z-index: 99999999; padding: 25px; border-radius: 15px;">比赛开始</div>
             <div class="row" id="answer-box">
                 <?php
                 $matchFlow = !empty($matchDetail['flow']) ? $matchDetail['flow'] : [];
