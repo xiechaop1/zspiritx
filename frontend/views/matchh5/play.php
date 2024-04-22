@@ -50,7 +50,7 @@ $this->title = '比赛结果';
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
                         比赛结果
                     </div>
-
+<div id="top_flow" style="position: sticky; top: 0px; background-color: rgba(0,0,0,0.5); z-index: 99999999; padding: 25px; border-radius: 15px;">比赛开始</div>
             <div class="row" id="answer-box">
                 <?php
                 $matchFlow = !empty($matchDetail['flow']) ? $matchDetail['flow'] : [];
@@ -104,7 +104,7 @@ $this->title = '比赛结果';
 
 
             </div>
-                    <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn1">
+                    <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; bottom: 0px;" id="return_btn1">
                         返回
                     </div>
                 </div>
@@ -148,6 +148,11 @@ $this->title = '比赛结果';
     window.onload = function () {
         var i = 0;
         var max = <?= $ct ?>;
+
+        var dataContent = <?= $matchAllFlowJson ?>;
+        var dataCon=$.toJSON(dataContent);
+        var obj = eval( "(" + dataCon + ")" );
+
         var matchTimer = setInterval(function() {
             if (i > max) {
                 showMsg(999);
@@ -159,6 +164,7 @@ $this->title = '比赛结果';
             //     $('#msg_' + i).get(0).scrollIntoView();
             // }
             showMsg(i);
+            showFlow(i, obj);
             i++;
         }, 400);
 
@@ -179,6 +185,18 @@ $this->title = '比赛结果';
             $('#match_detail').modal('show');
         }
     }
+
+    function showFlow(j, obj) {
+        var item = obj[j];
+        if (j >= obj.length) {
+            $('#top_flow').html('');
+            return true;
+        }
+        var txt = item.txt;
+        $('#top_flow').html(txt);
+    }
+
+
 </script>
 
 

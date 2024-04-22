@@ -103,6 +103,7 @@ class Play extends Action
         $bestCt = 0;
         $maxSpeed = 0;
         $matchDetail = [];
+        $matchFlow = [];
         while ($i < 86400000) {
             if ($ct<260) {
                 // 前260圈不会出现最快圈速
@@ -177,6 +178,14 @@ class Play extends Action
                     ];
                 }
             }
+
+            $eachLopSecStr = \common\helpers\Common::formatTimeToStr($eachLopSec, 'i:s.ms');
+            $totalSecStr = \common\helpers\Common::formatTimeToStr($i);
+
+            $matchFlow[] = [
+                'ct' => $ct,
+                'txt' => '第' . $ct . '圈' . $eachLopSecStr . '秒，总用时 ' . $totalSecStr . '，最高时速 ' . $nSpeed . '公里/小时',
+            ];
         }
 
         $timeArray = \common\helpers\Common::formatTime($i);
@@ -331,6 +340,8 @@ class Play extends Action
             'storyId'       => $storyId,
             'userModelId'   => $userModelId,
             'matchDetail'   => $matchDetail,
+            'matchAllFlow' => $matchFlow,
+            'matchAllFlowJson' => json_encode($matchFlow, true),
             'storyMatch'   => $storyMatch,
             'rank'  => $rank,
             'ct'    => $ct,

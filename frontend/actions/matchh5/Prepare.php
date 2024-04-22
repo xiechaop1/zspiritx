@@ -82,6 +82,7 @@ class Prepare extends Action
 
             $userModel = $userModel->one();
 
+
 //        if (!empty($userModel)) {
 //            $storyModelId = $userModel->story_model_id;
 //            $storyModelDetailId = $userModel->story_model_detail_id;
