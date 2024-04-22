@@ -75,8 +75,16 @@ $this->title = '消息';
                             $matchDetail = json_decode($r->match_detail, true);
 //                            var_dump($matchDetail);exit;
 
+                            $trStyle = '';
+                            if ($r->user_id == $userId) {
+                                $trStyle = 'color: #FFD700;';
+                            }
+                            if ($r->session_id == $sessionId) {
+                                $trStyle .= ' font-weight: bold;';
+                            }
+
 ?>
-                            <tr>
+                            <tr<?= !empty($trStyle) ? ' style="' . $trStyle . '"' : '' ?>>
                                 <td style="font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
                                 <td><?= $r->storyModel->story_model_name ?></td>
