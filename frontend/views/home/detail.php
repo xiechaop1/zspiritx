@@ -14,14 +14,11 @@
 \frontend\assets\Homeh5Asset::register($this);
 
 
-// $this->registerMetaTag([
-//     'name' => 'referrer',
-//     'content' => 'no-referrer',
-// ]);
 $this->registerMetaTag([
     'name' => 'referrer',
     'content' => 'unsafe-url',
 ]);
+
 //$this->registerMetaTag([
 //    'name' => 'viewport',
 //    'content' => 'width=device-width; initial-scale=1.0',

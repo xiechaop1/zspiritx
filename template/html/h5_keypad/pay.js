@@ -91,7 +91,8 @@ $(function () {
 
     var user_id = $("input[NAME='user_id']").val();
     var story_id = $("input[NAME='story_id']").val();
-    var order_id ;
+    var payResult;
+    var order_id;
     $('.pay,#pay-retry').click(function () {
         $.ajax({
             type: "GET", //用POST方式传输
@@ -99,14 +100,14 @@ $(function () {
             async: false,
             url: '/order/create',
             data:{
-                user_id:user_id,
-                story_id:story_id,
+                user_id:1,
+                story_id:2,
                 exec_method:2,
                 is_test:1
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 // console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
-                $.alert("网络异常，请检查网络情况");
+                alert("网络异常，请检查网络情况");
             },
             success: function (data, status){
                 var dataContent=data;
@@ -118,10 +119,7 @@ $(function () {
                     $(".pay").hide();
                     $("#pay-retry,#pay-complete").show();
 
-                    // Map extraHeaders = new HashMap();
-                    // extraHeaders.put("Referer", "https://h5.zspiritx.com.cn/");//例如 http://www.baidu.com )
 
-                    // window.open("obj.data.pay_res.h5_url");      //在另外新建窗口中打开窗口
                     var form = document.createElement('form');
                     document.body.appendChild(form);
                     form.method = "post";
@@ -129,24 +127,59 @@ $(function () {
                     form.submit();
                     document.body.removeChild(form);
 
-                    // window.location.href=obj.data.pay_res.h5_url;
+                    payResult= setInterval(getPayInfo(user_id,order_id),1000);
                 }
                 //新消息获取失败
                 else{
-                    $.alert(obj.msg);
+                    alert(obj.msg);
                 }
-
             }
         });
         // alert("微信支付");
     });
 
-    function getPayInfo(){
+    function getPayInfo(userId,orderId){
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/orderdata/get_order',
+            data:{
+                user_id:userId,
+                order_id:orderId,
+                is_test:1
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {// console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                // alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //新消息获取成功
+                if(obj["code"]==200){
+                    var order_status=obj.data.order_status
+                    if(order_status==1){
+                        alert("支付成功",order_status);
+                        clearInterval(payResult);
+                    }
+                    else if(order_status==3){
+                        alert("支付成功",order_status);
+                        clearInterval(payResult);
+                    }
 
+                }
+                //新消息获取失败
+                else{
+                    // alert(obj.msg);
+                }
+
+            }
+        });
     }
 
 
     $('#pay-complete').click(function () {
-        $.alert("支付成功，页面跳转");
+        alert("支付成功，页面跳转");
     });
 })

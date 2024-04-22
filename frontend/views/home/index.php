@@ -16,7 +16,7 @@
 
 $this->registerMetaTag([
     'name' => 'referrer',
-    'content' => 'no-referrer',
+    'content' => 'unsafe-url',
 ]);
 //$this->registerMetaTag([
 //    'name' => 'viewport',
@@ -208,7 +208,7 @@ $this->title = 'AR剧本杀';
                 } else {
                   if (!empty($unityVersion)) {
                     if ($story->extend->curr_price != $story->extend->price) {
-                      echo '￥' . $story->extend->curr_price . ' <span class="text-line-through">（￥' . $story->extend->price . '）</span>';
+                      echo '￥' . $story->extend->curr_price . ' <span class="text-line-through pay">（￥' . $story->extend->price . '）</span>';
                     } else {
                       echo '￥' . $story->extend->price;
                     }
