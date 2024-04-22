@@ -1249,7 +1249,8 @@ $(function () {
         // }
     });
 
-    var payResult
+    var payResult;
+    var order_id;
     // H5支付
     $(".owl-carousel .play_btn").click(function() {
         var t = $(this).parent().parent().parent();
@@ -1287,18 +1288,17 @@ $(function () {
                     if(obj["code"]==200){
                         console.log(obj.data);
 
-                        var order_id=obj.data.order.order_no;
-                        payResult= setInterval(getPayInfo(userId,order_id,storyId,isDebug),3000);
+                        order_id=obj.data.order.order_no;
+                        // window.location.href=obj.data.pay_res.h5_url;
 
-                        window.location.href=obj.data.pay_res.h5_url;
-
-                       /* var form = document.createElement('form');
+                        var form = document.createElement('form');
                         document.body.appendChild(form);
                         form.method = "post";
                         form.action = obj.data.pay_res.h5_url;
                         form.submit();
-                        document.body.removeChild(form);*/
+                        document.body.removeChild(form);
 
+                        payResult= setInterval(getPayInfo(userId,order_id,storyId,isDebug),3000);
                     }
                     //新消息获取失败
                     else{

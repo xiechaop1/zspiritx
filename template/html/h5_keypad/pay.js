@@ -92,6 +92,7 @@ $(function () {
     var user_id = $("input[NAME='user_id']").val();
     var story_id = $("input[NAME='story_id']").val();
     var payResult;
+    var order_id;
     $('.pay,#pay-retry').click(function () {
         $.ajax({
             type: "GET", //用POST方式传输
@@ -114,10 +115,10 @@ $(function () {
                 var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //新消息获取成功
                 if(obj["code"]==200){
-                    var order_id=obj.data.order.order_no;
+                    order_id=obj.data.order.order_no;
                     $(".pay").hide();
                     $("#pay-retry,#pay-complete").show();
-                    payResult= setInterval(getPayInfo(user_id,order_id),1000);
+
 
                     var form = document.createElement('form');
                     document.body.appendChild(form);
@@ -125,6 +126,8 @@ $(function () {
                     form.action = obj.data.pay_res.h5_url;
                     form.submit();
                     document.body.removeChild(form);
+
+                    payResult= setInterval(getPayInfo(user_id,order_id),1000);
                 }
                 //新消息获取失败
                 else{
