@@ -77,10 +77,10 @@ $this->title = '消息';
 
                             $trStyle = '';
                             if ($r->user_id == $userId) {
-                                $trStyle = 'color: #FFD700;';
+                                $trStyle = 'color: #FFCC00;';
                             }
-                            if ($r->session_id == $sessionId) {
-                                $trStyle .= ' font-weight: bold;';
+                            if ($r->session_id == $sessionId && $r->user_id == $userId) {
+                                $trStyle = 'color: #FFFF10; font-weight: bold;';
                             }
 
 ?>

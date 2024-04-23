@@ -190,6 +190,7 @@ $this->title = '比赛结果';
         var item = obj[j];
         if (j >= obj.length) {
             $('#top_flow').html('');
+            $('#top_flow').hide();
             return true;
         }
         var txt = item.txt;
