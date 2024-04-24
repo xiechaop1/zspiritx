@@ -104,6 +104,8 @@ class Knowledge extends Component
             throw new \Exception('场次不存在', ErrorCode::SESSION_NOT_FOUND);
         }
 
+        $ret = [];
+
         $userKnowledge = UserKnowledge::find()
             ->where([
                 'user_id' => $userId,
@@ -200,6 +202,7 @@ class Knowledge extends Component
 
                     if (!empty($nextMission)) {
                         Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '开启任务：' . $nextMission->title, Actions::ACTION_TYPE_MSG);
+                        $ret['next_mission'] = $nextMission;
                     }
                 } catch (\Exception $e) {
                     throw new \Exception('更新下一个知识点失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
@@ -209,7 +212,10 @@ class Knowledge extends Component
             }
         }
 
-        return $userKnowledge;
+        $ret['user_knowledge'] = $userKnowledge;
+
+//        return $userKnowledge;
+        return $ret;
     }
 
     public function setByItem($itemId, $itemType, $sessionId, $sessionStageId, $userId, $storyId) {

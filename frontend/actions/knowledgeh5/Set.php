@@ -56,7 +56,9 @@ class Set extends Action
         if (empty($userKnowledge)
         || ($userKnowledge->knowledge_status != $knowledgeStatus)
         ) {
-            $userKnowledge = Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act);
+            $knowledgeRet = Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act);
+            $userKnowledge = !empty($knowledgeRet['user_knowledge']) ? $knowledgeRet['user_knowledge'] : [];
+            $nextKnowledge = !empty($knowledgeRet['next_knowledge']) ? $knowledgeRet['next_knowledge'] : [];
         }
 
         if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_NORMAL) {
@@ -89,6 +91,7 @@ class Set extends Action
             'act'           => $act,
             'msg'           => $msg,
             'knowledge'     => $knowledge,
+            'next_knowledge' => $nextKnowledge,
         ]);
     }
 }
