@@ -58,9 +58,9 @@ class Set extends Action
         ) {
             $knowledgeRet = Yii::$app->knowledge->set($knowledgeId, $sessionId, $sessionStageId, $userId, $storyId, $act);
             $userKnowledge = !empty($knowledgeRet['user_knowledge']) ? $knowledgeRet['user_knowledge'] : [];
-            $nextKnowledge = !empty($knowledgeRet['next_knowledge']) ? $knowledgeRet['next_knowledge'] : [];
-            if (!empty($nextKnowledge)) {
-                $knowledge = $nextKnowledge;
+            $nextMission = !empty($knowledgeRet['next_mission']) ? $knowledgeRet['next_mission'] : [];
+            if (!empty($nextMission)) {
+                $knowledge = $nextMission;
                 $act = 'process';
             }
         }
@@ -95,7 +95,7 @@ class Set extends Action
             'act'           => $act,
             'msg'           => $msg,
             'knowledge'     => $knowledge,
-            'next_knowledge' => $nextKnowledge,
+            'nextMission' => $nextMission,
         ]);
     }
 }
