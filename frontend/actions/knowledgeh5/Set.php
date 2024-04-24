@@ -82,7 +82,7 @@ class Set extends Action
 //        $msg .= '<hr style="border: 0px solid #f1fa8c; ">';
         $msg .= '<br><br>';
         $msg .= '可以到<span style="color: yellow">"我的"->"' . $actionTypeTxt . '"</span>中查看';
-            $msg .= '<br><a style="color:yellow;" href="/knowledgeh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&knowledge_class_id=' . $knowledge->knowledge_class . '&show_knowledge_id=' . $knowledgeId . '">[查看任务]</a><br><br>';
+            $msg .= '<br><a style="color:yellow;" href="/knowledgeh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&knowledge_class_id=' . $knowledge->knowledge_class . '&show_knowledge_id=' . $knowledge->id . '">[查看任务]</a><br><br>';
 //        }
 
         return $this->controller->render('set', [
