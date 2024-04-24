@@ -72,18 +72,19 @@ $this->title = '获取知识';
                     echo $knowledge->content;
                     }
 
-                    if (!empty($next_knowledge)) {
-                        ?>
-                        <hr style="color: white; border: 1px solid white;">
-                    <span style="color: yellow"><?= $next_knowledge->title ?></span><br>
-                    <?php
-                    if (!empty($next_knowledge->image)) {
-                        ?>
-                        <img src="<?= \common\helpers\Attachment::completeUrl($next_knowledge->image) ?>" style="width: 100%;"><br>
-                        <?php
-                    }
-                    echo $next_knowledge->content;
-                    } ?>
+//                    if (!empty($next_knowledge)) {
+//                        ?>
+<!--                        <hr style="color: white; border: 1px solid white;">-->
+<!--                    <span style="color: yellow">--><?php //= $next_knowledge->title ?><!--</span><br>-->
+<!--                    --><?php
+//                    if (!empty($next_knowledge->image)) {
+//                        ?>
+<!--                        <img src="--><?php //= \common\helpers\Attachment::completeUrl($next_knowledge->image) ?><!--" style="width: 100%;"><br>-->
+<!--                        --><?php
+//                    }
+//                    echo $next_knowledge->content;
+//                    }
+                    ?>
                 </div>
             </div>
             <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
