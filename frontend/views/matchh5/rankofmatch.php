@@ -45,7 +45,7 @@ $this->title = '消息';
                     <tr style="border-bottom: 3px white solid;">
                         <td style="width: 5px; font-weight: bold;">排名</td>
                         <td style="font-weight: bold;">参赛者</td>
-                        <td style="width: 60px; font-weight: bold;">赛车</td>
+                        <td colspan="2" style="width: 60px; font-weight: bold;">赛车</td>
 <!--                        <td style="font-weight: bold;">级别</td>-->
                         <td style="font-weight: bold;">圈数</td>
                         <td style="width: 60px; font-weight: bold;">总时长</td>
@@ -87,7 +87,7 @@ $this->title = '消息';
                             <tr<?= !empty($trStyle) ? ' style="' . $trStyle . '"' : '' ?>>
                                 <td style="width: 5px; font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
-                                <td>
+                                <td style="width: 10px;">
                                     <?php
                                     $carLogo = '';
                                     if (strpos($r->storyModel->story_model_name, '奥迪') !== false) {
@@ -102,10 +102,11 @@ $this->title = '消息';
                                     if (!empty($carLogo)) {
                                         $logoUrl = '/story_model/visual/11/carlogo/' . $carLogo;
                                     ?>
-                                    <img src="<?= \common\helpers\Attachment::completeUrl($logoUrl) ?>" style="width: 36px; border-radius: 50%;">
+                                    <img src="<?= \common\helpers\Attachment::completeUrl($logoUrl) ?>" style="width: 24px; border-radius: 50%;">
                                         <?php
                                     }
                                         ?>
+                                </td><td>
                                     <?= $r->storyModel->story_model_name ?></td>
 <!--                                <td>顶级组</td>-->
                                 <td style="font-weight: bold;"><?= $r->score ?></td>
