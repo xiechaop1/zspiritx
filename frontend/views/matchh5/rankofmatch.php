@@ -87,7 +87,25 @@ $this->title = '消息';
                             <tr<?= !empty($trStyle) ? ' style="' . $trStyle . '"' : '' ?>>
                                 <td style="font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
-                                <td><?= $r->storyModel->story_model_name ?></td>
+                                <td>
+                                    <?php
+                                    if (strpos($r->storyModel->story_model_name, '奥迪') === false) {
+                                        $carLogo = 'audi.png';
+                                    } elseif (strpos($r->storyModel->story_model_name, '奔驰') === false) {
+                                        $carLogo = 'benz.png';
+                                    } elseif (strpos($r->storyModel->story_model_name, '福特') === false) {
+                                        $carLogo = 'ford.png';
+                                    }
+                                    ?>
+                                    <?php
+                                    if (!empty($carLogo)) {
+                                        $logoUrl = '/story_model/visual/11/carlogo/' . $carLogo;
+                                    ?>
+                                    <img src="<?= \common\helpers\Attachment::completeUrl($logoUrl) ?>" style="width: 36px; height: 36px; border-radius: 50%;">
+                                        <?php
+                                    }
+                                        ?>
+                                    <?= $r->storyModel->story_model_name ?></td>
                                 <td>顶级组</td>
                                 <td style="font-weight: bold;"><?= $r->score ?></td>
                                 <td><?= $scoreArr['str'] ?></td>
