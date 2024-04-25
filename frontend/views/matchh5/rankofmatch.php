@@ -89,11 +89,12 @@ $this->title = '消息';
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
                                 <td>
                                     <?php
-                                    if (strpos($r->storyModel->story_model_name, '奥迪') === false) {
+                                    $carLogo = '';
+                                    if (strpos($r->storyModel->story_model_name, '奥迪') !== false) {
                                         $carLogo = 'audi.png';
-                                    } elseif (strpos($r->storyModel->story_model_name, '奔驰') === false) {
-                                        $carLogo = 'benz.png';
-                                    } elseif (strpos($r->storyModel->story_model_name, '福特') === false) {
+                                    } elseif (strpos($r->storyModel->story_model_name, '奔驰') !== false) {
+                                        $carLogo = 'mecerdes.png';
+                                    } elseif (strpos($r->storyModel->story_model_name, '福特') !== false) {
                                         $carLogo = 'ford.png';
                                     }
                                     ?>
