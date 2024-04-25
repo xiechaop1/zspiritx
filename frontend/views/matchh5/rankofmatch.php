@@ -102,7 +102,7 @@ $this->title = '消息';
                                     if (!empty($carLogo)) {
                                         $logoUrl = '/story_model/visual/11/carlogo/' . $carLogo;
                                     ?>
-                                    <img src="<?= \common\helpers\Attachment::completeUrl($logoUrl) ?>" style="width: 36px; height: 36px; border-radius: 50%;">
+                                    <img src="<?= \common\helpers\Attachment::completeUrl($logoUrl) ?>" style="width: 36px; border-radius: 50%;">
                                         <?php
                                     }
                                         ?>
