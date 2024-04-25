@@ -40,7 +40,7 @@ $this->title = '消息';
                 <table style="width: 100%; margin: 3px; color: white;">
                     <tr>
                         <td colspan="7"> </td>
-                        <td colspan="3" style="text-align: center; font-weight: bold;">最佳</td>
+                        <td colspan="3" style="text-align: center; font-weight: bold;color: #FFB94F;">最佳</td>
                     </tr>
                     <tr style="border-bottom: 3px white solid;">
                         <td style="width: 10px; font-weight: bold;">排名</td>
@@ -50,9 +50,9 @@ $this->title = '消息';
                         <td style="font-weight: bold;">圈数</td>
                         <td style="width: 50px; font-weight: bold;">总时长</td>
                         <td style="font-weight: bold; width: 20px;">差距</td>
-                        <td>圈数</td>
-                        <td style="width: 35px; font-weight: bold;">时长</td>
-                        <td style="width: 40px;">速度<br>(km/h)</td>
+                        <td style="color: #FFB94F;">圈数</td>
+                        <td style="width: 35px; font-weight: bold;color: #FFB94F;">时长</td>
+                        <td style="width: 40px;color: #FFB94F;">速度<br>(km/h)</td>
                     </tr>
                     <tr>
                         <td style="height: 4px;"> </td>
