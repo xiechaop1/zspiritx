@@ -40,26 +40,26 @@ $this->title = '消息';
                 <table style="width: 100%; margin: 3px; color: white;">
                     <tr>
                         <td colspan="7"> </td>
-<!--                        <td colspan="3" style="text-align: center; font-weight: bold;">最佳</td>-->
+                        <td colspan="3" style="text-align: center; font-weight: bold;">最佳</td>
                     </tr>
                     <tr style="border-bottom: 3px white solid;">
-                        <td style="width: 5px; font-weight: bold;">排名</td>
-                        <td style="font-weight: bold;">参赛者</td>
-                        <td colspan="2" style="width: 60px; font-weight: bold;">赛车</td>
+                        <td style="width: 10px; font-weight: bold;">排名</td>
+                        <td style="width: 40px; font-weight: bold;">参赛者</td>
+                        <td style="width: 50px; font-weight: bold;">赛车</td>
 <!--                        <td style="font-weight: bold;">级别</td>-->
                         <td style="font-weight: bold;">圈数</td>
-                        <td style="width: 60px; font-weight: bold;">总时长</td>
-                        <td style="font-weight: bold;">差距</td>
-<!--                        <td>圈数</td>-->
-<!--                        <td>时长</td>-->
-                        <td style="width: 60px;">速度</td>
+                        <td style="width: 40px; font-weight: bold;">总时长</td>
+                        <td style="font-weight: bold; width: 20px;">差距</td>
+                        <td>圈数</td>
+                        <td style="width: 40px; font-weight: bold;">时长</td>
+                        <td style="width: 60px;">速度(km/h)</td>
                     </tr>
                     <tr>
                         <td style="height: 4px;"> </td>
                     </tr>
                     <tr>
-                        <td style="background-color: red; text-align: left; padding-left: 10px;" colspan="5">顶级组</td>
-                        <td style="background-color: red" colspan="2"></td>
+                        <td style="background-color: red; text-align: left; padding-left: 10px;" colspan="6">顶级组</td>
+                        <td style="background-color: red" colspan="4"></td>
                     </tr>
                     <?php
                     if (!empty($rankList)) {
@@ -87,7 +87,7 @@ $this->title = '消息';
                             <tr<?= !empty($trStyle) ? ' style="' . $trStyle . '"' : '' ?>>
                                 <td style="width: 5px; font-weight: bold;"><?= $rank ?></td>
                                 <td style="font-weight: bold;"><?= $r->user->user_name ?></td>
-                                <td style="width: 10px;">
+                                <td style="text-align: left;">
                                     <?php
                                     $carLogo = '';
                                     if (strpos($r->storyModel->story_model_name, '奥迪') !== false) {
@@ -106,15 +106,14 @@ $this->title = '消息';
                                         <?php
                                     }
                                         ?>
-                                </td><td>
                                     <?= $r->storyModel->story_model_name ?></td>
 <!--                                <td>顶级组</td>-->
                                 <td style="font-weight: bold;"><?= $r->score ?></td>
                                 <td><?= $scoreArr['str'] ?></td>
                                 <td><?= $scoreGap ?></td>
-<!--                                <td>--><?php //= !empty($matchDetail['best_time_lop']) ? $matchDetail['best_time_lop'] : '-' ?><!--</td>-->
-<!--                                <td style="font-weight: bold;">--><?php //= !empty($matchDetail['best_time']) ? $matchDetail['best_time'] : '-' ?><!--</td>-->
-                                <td><?= !empty($matchDetail['max_speed']) ? $matchDetail['max_speed'] : '-' ?>公里/小时</td>
+                                <td><?= !empty($matchDetail['best_time_lop']) ? $matchDetail['best_time_lop'] : '-' ?></td>
+                                <td style="font-weight: bold;"><?= !empty($matchDetail['best_time']) ? $matchDetail['best_time'] : '-' ?></td>
+                                <td><?= !empty($matchDetail['max_speed']) ? $matchDetail['max_speed'] : '-' ?></td>
                             </tr>
                             <?php
 
