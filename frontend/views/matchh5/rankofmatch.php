@@ -45,14 +45,14 @@ $this->title = '消息';
                     <tr style="border-bottom: 3px white solid;">
                         <td style="width: 10px; font-weight: bold;">排名</td>
                         <td style="width: 40px; font-weight: bold;">参赛者</td>
-                        <td style="width: 50px; font-weight: bold;">赛车</td>
+                        <td style="width: 65px; font-weight: bold;">赛车</td>
 <!--                        <td style="font-weight: bold;">级别</td>-->
                         <td style="font-weight: bold;">圈数</td>
-                        <td style="width: 40px; font-weight: bold;">总时长</td>
+                        <td style="width: 50px; font-weight: bold;">总时长</td>
                         <td style="font-weight: bold; width: 20px;">差距</td>
                         <td>圈数</td>
-                        <td style="width: 40px; font-weight: bold;">时长</td>
-                        <td style="width: 60px;">速度(km/h)</td>
+                        <td style="width: 35px; font-weight: bold;">时长</td>
+                        <td style="width: 40px;">速度<br>(km/h)</td>
                     </tr>
                     <tr>
                         <td style="height: 4px;"> </td>
