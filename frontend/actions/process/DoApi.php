@@ -1197,7 +1197,11 @@ class DoApi extends ApiAction
                             $tmpExec = $storyModelLink->eff_exec;
                             if (\common\helpers\Common::isJson($tmpExec)) {
                                 $tmpExecArr = json_decode($tmpExec, true);
-                                $newStoryModelId = !empty($tmpExecArr['target_story_model_id']) ? $tmpExecArr['target_story_model_id'] : 0;
+                                if (is_array($tmpExecArr)) {
+                                    $newStoryModelId = !empty($tmpExecArr['target_story_model_id']) ? $tmpExecArr['target_story_model_id'] : 0;
+                                } else {
+                                    $newStoryModelId = $tmpExecArr;
+                                }
                                 $linkExecArr[$storyModelLink->story_model_id] = $tmpExecArr;
                             } else {
                                 $newStoryModelId = $tmpExec;
