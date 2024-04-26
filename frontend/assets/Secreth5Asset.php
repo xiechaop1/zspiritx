@@ -23,7 +23,7 @@ class Secreth5Asset extends AssetBundle
         'html/html5_sliding_unlock/css/reset.min.css',
         'html/html5_sliding_unlock/css/flickity.css',
         'html/html5_sliding_unlock/css/style.css',
-        'html/h5/diy.css',
+//        'html/h5/diy.css',
 
     ];
     public $js = [
