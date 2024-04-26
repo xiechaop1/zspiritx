@@ -29,6 +29,7 @@ $this->title = '密码锁';
 
 ?>
 <style>
+    body {padding-top: 20px;}
     .hide {display: none;}
 </style>
 <input type="hidden" name="pin_code" value="<?= $stSelected ?>">
@@ -53,6 +54,24 @@ $this->title = '密码锁';
 </div>
 
 <div class="loader"></div>
+    <?php
+    if (!empty($qa['selected_json']) && \common\helpers\Common::isJson($qa['selected_json'])) {
+        $selectedJson = json_decode($qa['selected_json'], true);
+        if (is_array($selectedJson)) {
+            $keyboard = !empty($selectedJson['keyboard']) ? $selectedJson['keyboard'] : [];
+            $suggestion = !empty($selectedJson['suggestion']) ? $selectedJson['suggestion'] : [];
+        } else {
+            $keyboard = $selectedJson;
+        }
+    } else {
+        $keyboard = $selectedJson = $qa['selected_json'];
+    }
+    var_dump($selectedJson);exit;
+
+    ?>
+    <div class="rows" style="color: white; font-size: 24px; margin: 10px;">
+
+</div>
 
 <div class="lock">
   <div class="screen">
@@ -60,16 +79,17 @@ $this->title = '密码锁';
     <div class="status">LOCKED</div>
     <div class="scanlines"></div>
   </div>
+
   <div class="rows">
     <?php
     for ($i=0; $i<strlen($stSelected); $i++) {
       ?>
       <div class="row">
           <?php
-          for ($j=0; $j<mb_strlen($qa['selected_json'], 'UTF8'); $j++) {
+          for ($j=0; $j<mb_strlen($keyboard, 'UTF8'); $j++) {
           ?>
       <div class="cell">
-        <div class="text"><?= mb_substr($qa['selected_json'], $j, 1, 'UTF8') ?></div>
+        <div class="text"><?= mb_substr($keyboard, $j, 1, 'UTF8') ?></div>
       </div>
           <?php
           }
