@@ -201,7 +201,7 @@ class Common
     }
 
     public static function isJson($str) {
-        $r = json_decode($str);
+        $r = json_decode($str, true);
         if (json_last_error() == JSON_ERROR_NONE
             && is_array($r)
         ) {

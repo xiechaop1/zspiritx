@@ -188,6 +188,8 @@ class Model
                     $ret[$type][$platform] = $res;
                 }
             }
+        } else {
+            $ret = $resourcesArr;
         }
 
         return $ret;
