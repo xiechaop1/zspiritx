@@ -201,8 +201,13 @@ class Common
     }
 
     public static function isJson($str) {
-        json_decode($str);
-        return (json_last_error() == JSON_ERROR_NONE);
+        $r = json_decode($str);
+        if (json_last_error() == JSON_ERROR_NONE
+            && is_array($r)
+        ) {
+            return true;
+        }
+        return false;
     }
 
     public static function formatTimeToStr($timeStamp, $returnFormat = 'H:i:s.ms', $needMicSec = true) {
