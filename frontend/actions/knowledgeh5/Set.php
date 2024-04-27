@@ -53,6 +53,7 @@ class Set extends Action
                 break;
         }
 
+        $nextMission = [];
         if (empty($userKnowledge)
         || ($userKnowledge->knowledge_status != $knowledgeStatus)
         ) {
