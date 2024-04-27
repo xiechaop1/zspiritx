@@ -55,8 +55,8 @@ $this->title = '密码锁';
 
 <div class="loader"></div>
     <?php
-    if (!empty($qa['selected_json']) && \common\helpers\Common::isJson($qa['selected_json'])) {
-        $selectedJson = json_decode($qa['selected_json'], true);
+    if (!empty($qa['selected_json'])) {
+        $selectedJson = $qa['selected_json'];
         if (is_array($selectedJson)) {
             $keyboard = !empty($selectedJson['keyboard']) ? $selectedJson['keyboard'] : [];
             $suggestion = !empty($selectedJson['suggestion']) ? $selectedJson['suggestion'] : [];
@@ -66,11 +66,10 @@ $this->title = '密码锁';
     } else {
         $keyboard = $selectedJson = $qa['selected_json'];
     }
-    var_dump($selectedJson);exit;
 
     ?>
-    <div class="rows" style="color: white; font-size: 24px; margin: 10px;">
-
+    <div class="rows" style="color: white; font-size: 18px; margin: 20px; padding-top: 10px;">
+        <?= !empty($suggestion) ? $suggestion : ''; ?>
 </div>
 
 <div class="lock">
