@@ -133,7 +133,7 @@ class Play extends Action
                 $maxSpeed = $nSpeed;
             }
 
-            $badRand = rand(0,10000);
+            $badRand = rand(0,9000);
             if ($badRand > $reliability) {
                 $badSec = rand(1000, 80000);
                 $i += $badSec;

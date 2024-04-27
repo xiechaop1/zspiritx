@@ -166,7 +166,7 @@ $this->title = '比赛结果';
             showMsg(i);
             showFlow(i, obj);
             i++;
-        }, 400);
+        }, 300);
 
     };
 
