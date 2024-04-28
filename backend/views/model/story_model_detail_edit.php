@@ -44,7 +44,7 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('模型');
             echo $form->field($storyModelDetailModel, 'title')->textInput(['value' => $storyModelDetailModel->title])->label('详情名称');
-            echo $form->field($storyModel, 'icon')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+            echo $form->field($storyModelDetailModel, 'icon')->widget('\liyifei\uploadOSS\FileUploadOSS', [
                 'multiple' => false,
                 'isImage' => true,
                 'ossHost' => Yii::$app->params['oss.host'],

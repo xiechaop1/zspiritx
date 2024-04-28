@@ -122,6 +122,16 @@ echo \dmstr\widgets\Alert::widget();
                         },
                     ],
                     [
+                        'label' => '对话',
+                        'attribute' => 'dialog',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty($model->dialog) ?
+                                mb_substr($model->dialog, 0, 100) . '...' : '-';
+                        },
+                        'filter' => Html::activeInput('text', $searchModel, 'dialog'),
+                    ],
+                    [
                         'attribute' => 'model_group',
                         'label' => '模型组',
                     ],

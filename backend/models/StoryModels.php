@@ -85,6 +85,10 @@ class StoryModels extends \common\models\StoryModels
             $query->andFilterWhere(['like', 'model_group', $this->model_group]);
         }
 
+        if (!empty($this->dialog)) {
+            $query->andFilterWhere(['like', 'dialog', $this->dialog]);
+        }
+
         return $dataProvider;
     }
 }
