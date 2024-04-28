@@ -127,7 +127,7 @@ echo \dmstr\widgets\Alert::widget();
                         'format'    => 'raw',
                         'value' => function ($model) {
                             return !empty($model->dialog) ?
-                                mb_substr($model->dialog, 0, 100) . '...' : '-';
+                                mb_substr($model->dialog, 0, 20) . '...' : '-';
                         },
                         'filter' => Html::activeInput('text', $searchModel, 'dialog'),
                     ],
