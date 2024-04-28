@@ -96,7 +96,9 @@ $this->title = 'AR剧本杀';
     }else if (!empty($user) &&
       $user->user_type == \common\models\User::USER_TYPE_INNER
     && $user->mobile != 101
-  && $user->mobile < 90)
+  && ($user->mobile < 90
+    || $user->mobile >120)
+    )
   {
     ?>
     <div class="item">

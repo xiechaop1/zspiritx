@@ -64,7 +64,7 @@ class Index extends Action
                 header('Location: /passport/web_login' . !empty($unityVersion) ? '?unity_version=' . $unityVersion : '');
             }
 
-            if (strlen($user->mobile) < 4) {
+            if (strlen($user->mobile) <= 4) {
                 $user->user_type = User::USER_TYPE_INNER;
             }
         } catch (\Exception $e) {
