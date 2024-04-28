@@ -1291,14 +1291,18 @@ $(function () {
                         order_id=obj.data.order.order_no;
                         // window.location.href=obj.data.pay_res.h5_url;
 
-                        var form = document.createElement('form');
-                        document.body.appendChild(form);
-                        form.method = "post";
-                        form.action = obj.data.pay_res.h5_url;
-                        form.submit();
-                        document.body.removeChild(form);
+                        if (obj.data.amount != "0.00") {
 
-                        payResult= setInterval(getPayInfo(userId,order_id,storyId,isDebug),3000);
+                            var form = document.createElement('form');
+                            document.body.appendChild(form);
+                            form.method = "post";
+                            form.action = obj.data.pay_res.h5_url;
+                            form.submit();
+                            document.body.removeChild(form);
+                        }
+
+                            payResult = setInterval(getPayInfo(userId, order_id, storyId, isDebug), 3000);
+
                     }
                     //新消息获取失败
                     else{
