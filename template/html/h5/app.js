@@ -1288,7 +1288,7 @@ $(function () {
                     if(obj["code"]==200){
                         console.log(obj.data);
 
-                        order_id=obj.data.order.order_no;
+                        order_id=obj.data.order.id;
                         // window.location.href=obj.data.pay_res.h5_url;
 
                         if (obj.data.order.amount != "0.00") {
@@ -1299,9 +1299,23 @@ $(function () {
                             form.action = obj.data.pay_res.h5_url;
                             form.submit();
                             document.body.removeChild(form);
-                        }
-
                             payResult = setInterval(getPayInfo(userId, order_id, storyId, isDebug), 3000);
+
+                        } else {
+                            if (unityVersion != "") {
+                                var params = {
+                                    'WebViewOff': 1,
+                                    'DebugInfo': isDebug,
+                                    'UserId': userId,
+                                    'StoryId': storyId
+                                }
+                                var data = $.toJSON(params);
+                                console.log(data);
+                                Unity.call(data);
+                            } else {
+                                alert('已经购买！');
+                            }
+                        }
 
                     }
                     //新消息获取失败
