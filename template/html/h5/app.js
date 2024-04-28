@@ -1291,7 +1291,7 @@ $(function () {
                         order_id=obj.data.order.order_no;
                         // window.location.href=obj.data.pay_res.h5_url;
 
-                        if (obj.data.amount != "0.00") {
+                        if (obj.data.order.amount != "0.00") {
 
                             var form = document.createElement('form');
                             document.body.appendChild(form);
