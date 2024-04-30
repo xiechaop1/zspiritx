@@ -21,6 +21,9 @@ echo \dmstr\widgets\Alert::widget();
 
     <div class="box box-primary">
         <div class="box-header">
+            <?= \yii\bootstrap\Html::a('添加', '/order/edit', [
+                'class' => 'btn btn-primary pull-right',
+            ]) ?>
         </div>
         <div class="box-body">
             <?php

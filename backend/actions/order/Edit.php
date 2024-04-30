@@ -12,9 +12,12 @@ namespace backend\actions\order;
 use common\models\Order;
 use common\models\Music;
 use common\models\Singer;
+use common\models\Story;
+use common\models\User;
 use liyifei\base\helpers\Net;
 use yii\base\Action;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class Edit extends Action
 {
@@ -24,7 +27,6 @@ class Edit extends Action
 
         if ($id) {
             $model = \backend\models\Order::find()->where(['id' => $id]);
-            $model->with('musicwithoutstatus');
             $model = $model->one();
             $isNew = false;
         } else {
@@ -37,33 +39,17 @@ class Edit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-                $transaction = Yii::$app->db->beginTransaction();
-                if ($model->order_status == Order::ORDER_STATUS_LOCK) {
-                    // 锁定音乐
-                    $musicInfo = Music::findOne($model->music_id);
-                    if ($musicInfo) {
-                        $musicInfo->music_status = Music::MUSIC_STATUS_LOCK;
-                        $musicInfo->save();
-                    }
-                } else if ($model->order_status == Order::ORDER_STATUS_COMPLETED) {
-                    $musicInfo = Music::findOne($model->music_id);
-                    if ($musicInfo) {
-                        $musicInfo->music_status = Music::MUSIC_STATUS_BOUGHT;
-                        $musicInfo->save();
-                    }
-                } else {
-                    $musicInfo = Music::findOne($model->music_id);
-                    if ($musicInfo) {
-                        $musicInfo->music_status = Music::MUSIC_STATUS_NORMAL;
-                        $musicInfo->save();
+
+                if (!empty($_REQUEST['mobile'])) {
+                    $user = User::find()->where(['mobile' => $_REQUEST['mobile']])->one();
+                    if (!empty($user)) {
+                        $model->user_id = $user->id;
                     }
                 }
 
                 if ($model->save()) {
-                    $transaction->commit();
                     Yii::$app->session->setFlash('success', '操作成功');
                 } else {
-                    $transaction->rollBack();
                     $errKey = key($model->getFirstErrors());
                     $error = current($model->getFirstErrors());
 
@@ -77,8 +63,13 @@ class Edit extends Action
             return $this->controller->refresh();
         }
 
+        $storyDatas = Story::find()->orderBy(['id' => SORT_DESC])->all();
+
+        $stories = ArrayHelper::map($storyDatas, 'id', 'title');
+
         return $this->controller->render('edit', [
             'orderModel'    => $model,
+            'stories'       => $stories,
             'orderStatus'   => Order::$orderStatus,
         ]);
     }

@@ -31,37 +31,29 @@ echo \dmstr\widgets\Alert::widget();
                 'enableClientValidation' => true,
             ]);
             echo $form->field($orderModel, 'id')->textInput(['value' => $orderModel->id, 'readonly' => true])->label('ID');
-            echo $form->field($orderModel, 'music_title')->textInput(['value' => $orderModel->musicwithoutstatus->title, 'readonly' => true])->label('歌曲名称');
-            echo $form->field($orderModel, 'music_singer')->textInput(['value' => $orderModel->musicwithoutstatus->singer, 'readonly' => true])->label('歌手');
-            echo $form->field($orderModel, 'music_lyricist')->textInput(['value' => $orderModel->musicwithoutstatus->lyricist, 'readonly' => true])->label('词作者');
-            echo $form->field($orderModel, 'music_composer')->textInput(['value' => $orderModel->musicwithoutstatus->composer, 'readonly' => true])->label('曲作者');
-            echo $form->field($orderModel, 'user_name')->textInput(['value' => $orderModel->user->remarks, 'readonly' => true])->label('备注名');
-            echo $form->field($orderModel, 'mobile')->textInput(['value' => $orderModel->user->mobile, 'readonly' => true])->label('手机号');
-            echo $form->field($orderModel, 'attach')->widget('\liyifei\uploadOSS\FileUploadOSS', [
-                'multiple' => true,
-                'isImage' => false,
-                'ossHost' => Yii::$app->params['oss.host'],
-                'signatureAction' => ['/site/oss-signature?dir=attach/contract/' . Date('Y/m/')],
-                'clientOptions' => ['autoUpload' => true],
-                'options' => ['value' => $orderModel->attach],
-//                'directory' => 'cover/' . Date('Y/m/')
-            ])->label('合同附件');
+            echo $form->field($orderModel, 'story_id')->widget('\kartik\select2\Select2', [
+                'data' => $stories,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('剧本');
+            echo $form->field($orderModel, 'user_id')->textInput(['value' => $orderModel->user_id])->label('用户名');
+            echo $form->field($orderModel, 'mobile')->textInput(['value' => $orderModel->mobile])->label('手机号');
+            echo $form->field($orderModel, 'amount')->textInput(['value' => $orderModel->amount])->label('价格');
+            echo $form->field($orderModel, 'pay_method')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Order::$payMethod2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('支付方式');
             echo $form->field($orderModel, 'order_status')->widget('\kartik\select2\Select2', [
-                'data'  => $orderModel::$orderStatus,
+                'data'  => \common\models\Order::$orderStatus,
                 'options' => [
                     'id'    => 'order_status',
                     'multiple' => false,
                     'value' => $orderModel->order_status,
                 ],
             ])->label('订单状态');
-            echo $form->field($orderModel, 'order_permission')->widget('\kartik\select2\Select2', [
-                'data'  => $orderModel::$orderPermission,
-                'options' => [
-                    'id'    => 'order_permission',
-                    'multiple' => false,
-                    'value' => $orderModel->order_permission,
-                ],
-            ])->label('订单权限');
 
             ?>
             <div class="form-group">
