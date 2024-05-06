@@ -47,7 +47,7 @@ $this->title = 'AR剧本杀';
   <?php
   } else {
   ?>
-  <img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/icon_1024x1024.png" style="width: 50px;"> 灵镜
+<!--  <img src="https://zspiritx.oss-cn-beijing.aliyuncs.com/img/home/icon_1024x1024.png" style="width: 50px;"> 灵镜-->
   <?php
   }
   ?>
@@ -229,7 +229,24 @@ $this->title = 'AR剧本杀';
           ?>
           <!--<img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
         </div>
+        <?php
+        if ($story->story_status == \common\models\Story::STORY_STATUS_ONLINE
+            &&
+            !empty($unityVersion)
+//          && !empty($story->latest_unity_version)
+//          && (\common\helpers\Common::compareUnityVersion($unityVersion, $story->latest_unity_version) >= 0)
+            && empty($orderStatus)
+            && $story->extend->curr_price != 0
+        ) {
+          ?>
+          <div class="btn-m-green m-t-30 float-right m-r-20 idx_pre_btn" style="color: #fe8019;">
+            已购券
+          </div>
+          <?php
+        }
+        ?>
       </div>
+
     </div>
   </div>
   <?php
@@ -338,6 +355,44 @@ $this->title = 'AR剧本杀';
 
 </div>
 
+<div id="codeform" class="w-100 m-auto" style="display: none; position: absolute; left: 0px; top: 50px; z-index: 99999999">
+  <div class="p-20 bg-black">
+    <div class="w-100 p-30  m-b-10">
+      <div class="w-1-0 d-flex">
+        <div class="fs-30 bold w-100 text-FF title-box-border">
+          <input type="hidden" name="verCodeIsDebug" value="0">
+          <input type="hidden" name="verCodeStoryId" value="0">
+          <input type="hidden" name="verCodeOrderStatus" value="0">
+          <div class="npc-name">
+            核销验证
+          </div>
+
+          <div class="row" id="answer-box">
+            <div class="m-t-30 col-sm-12 col-md-12">
+              <div class="answer-border">
+                核销码：<br><input class="answer-border" type="text" name="ver_code" value="" id="ver_code" size="24" style="margin: 5px;" ><br>
+                核销平台：
+                <select class="answer-border" name="ver_platform" id="ver_platform">
+                  <option value="douyin">抖音</option>
+                  <option value="xiaohongshu">小红书</option>
+                </select>
+                <br>
+                <div class="btn-m-green m-t-30 float-right m-r-20" id="idx_create_btn">
+                  核销
+                </div>
+                <div class="btn-m-green m-t-30 float-right m-r-20" id="login_return_btn">
+                  返回
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div id="loginform" class="w-100 m-auto" style="display: none; position: absolute; left: 0px; top: 50px; z-index: 99999999">
 
   <div class="p-20 bg-black">
@@ -378,7 +433,7 @@ $this->title = 'AR剧本杀';
     <div class="row footer-info text-center">
       <div class="col-md-12 col-sm-12 col-xs-12">
         <span class="margin-10 footer-m-span white" style="color: white;"><?= !empty($unityVersion) ? '版本号：' . $unityVersion : ''?> &nbsp; 您有任何问题，欢迎联系我们：18500041193，也可以发邮件：<a href="mailto:choicexie@163.com">choicexie@163.com</a></a></span><br>
-        <span class="margin-10 footer-m-span white" style="color: white;">Copyright © 2023-<?= Date('Y') ?> 庄生科技 zspiritx.com.cn 版权所有</span><br>
+        <span class="margin-10 footer-m-span white" style="color: white;">Copyright © 2023-<?= Date('Y') ?> 庄生科技 灵镜新世界 zspiritx.com.cn 版权所有</span><br>
         <span class="margin-10 footer-m-span"><a href="https://beian.miit.gov.cn" class="white">京ICP备2023021255号</a></span>
       </div>
     </div>

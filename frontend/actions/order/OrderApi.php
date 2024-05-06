@@ -82,7 +82,6 @@ class OrderApi extends ApiAction
      * @return array
      * @throws \yii\db\Exception
      */
-
     public function create() {
 
         if (empty($this->_get['story_id'])) {
@@ -120,12 +119,19 @@ class OrderApi extends ApiAction
             $order->amount = $currPrice;
             $order->story_price = $storyExtend['price'];
 
+            if (!empty($this->_get['ver_code'])
+            && !empty($this->_get['ver_platform'])
+            ) {
+                $order->ver_code = $this->_get['ver_code'];
+                $order->ver_platform = $this->_get['ver_platform'];
+            }
+
             // Todo： 后续去掉
             // 临时增加流程，保证小程序可以支付，app直接游戏
             // 目前只有小程序传入execMethod
             if ($currPrice > 0
-                &&
-                !empty($execMethod)
+                && empty($this->_get['ver_code'])
+                && !empty($execMethod)
             ) {
                 $order->order_status = Order::ORDER_STATUS_WAIT;
                 $order->expire_time = time() + 30 * 60;     // 30分钟过期

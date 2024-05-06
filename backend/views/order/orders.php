@@ -121,6 +121,14 @@ echo \dmstr\widgets\Alert::widget();
                             \common\models\Order::$payMethod2Name, ["class" => "form-control ", 'value' => isset($params['Order']['pay_method']) ? $params['Order']['pay_method'] : ''])
                     ],
                     [
+                        'label' => '核销码',
+                        'attribute' => 'ver_code',
+                    ],
+                    [
+                        'label' => '核销平台',
+                        'attribute' => 'ver_platform',
+                    ],
+                    [
                         'attribute' => 'order_status',
                         'label' => '订单状态',
                         'value' => function($model) {

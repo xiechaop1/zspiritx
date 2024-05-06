@@ -1347,6 +1347,107 @@ $(function () {
         }
     });
 
+    $(".idx_pre_btn").click(function() {
+        console.log('a');
+        var t = $(this).parent().parent().parent();
+        var isDebug = t.find("input[name='isDebug']").val();
+        var storyId = t.find("input[name='storyId']").val();
+        var orderStatus = t.find("input[name='orderStatus']").val();
+        $("input[name='verCodeIsDebug']").val(isDebug);
+        $("input[name='verCodeStoryId']").val(storyId);
+        $("input[name='verCodeOrderStatus']").val(orderStatus);
+
+        $('#codeform').show();
+    });
+
+    $("#idx_create_btn").click(function() {
+        var t = $(this).parent().parent().parent().parent();
+        var isDebug = t.find("input[name='verCodeIsDebug']").val();
+        var storyId = t.find("input[name='verCodeStoryId']").val();
+        var orderStatus = t.find("input[name='verCodeOrderStatus']").val();
+        console.log(orderStatus);
+        $('#login_is_debug').val(isDebug);
+        $('#login_story_id').val(storyId);
+
+        var userId = $('#user_id').val();
+        var unityVersion = $('#unity_version').val();
+        var verCode = $('#ver_code').val();
+        var verPlatform = $('#ver_platform').val();
+        if (orderStatus == 0) {
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: false,
+                url: '/order/create',
+                data:{
+                    user_id:userId,
+                    story_id:storyId,
+                    is_test:1,
+                    ver_code:verCode,
+                    ver_platform:verPlatform
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    var dataContent=data;
+                    var dataCon=$.toJSON(dataContent);
+                    var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    console.log(obj);
+                    //console.log("ajax请求成功:"+data.toString())
+                    //新消息获取成功
+                    if(obj["code"]==200){
+                        console.log(obj.data);
+
+                        order_id=obj.data.order.id;
+                        // window.location.href=obj.data.pay_res.h5_url;
+
+
+                        if (unityVersion != "") {
+                            var params = {
+                                'WebViewOff': 1,
+                                'DebugInfo': isDebug,
+                                'UserId': userId,
+                                'StoryId': storyId
+                            }
+                            var data = $.toJSON(params);
+                            console.log(data);
+                            Unity.call(data);
+                        } else {
+                            alert('已经购买！');
+                        }
+
+                    }
+                    //新消息获取失败
+                    else{
+                        $.alert(obj.msg)
+                    }
+                }
+            });
+
+            return false;
+        }
+
+        if (userId != 0) {
+            if (unityVersion != "") {
+                var params = {
+                    'WebViewOff': 1,
+                    'DebugInfo': isDebug,
+                    'UserId': userId,
+                    'StoryId': storyId
+                }
+                var data = $.toJSON(params);
+                console.log(data);
+                Unity.call(data);
+            } else {
+                alert('已经购买！');
+            }
+        } else {
+            $('#loginform').show();
+        }
+    });
+
     $(".owl-carousel .buy_btn").click(function() {
         var t = $(this).parent().parent().parent();
         var isDebug = t.find("input[name='isDebug']").val();
