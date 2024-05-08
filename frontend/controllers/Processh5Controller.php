@@ -33,6 +33,9 @@ class Processh5Controller extends Controller
             'set_use_models' => [
                 'class'     => 'frontend\actions\processh5\SetUseModels',
             ],
+            'set_session_model' => [
+                'class'     => 'frontend\actions\processh5\SetSessionModel',
+            ],
         ];
     }
 }

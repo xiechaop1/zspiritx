@@ -30,7 +30,7 @@ class StoryModels extends \yii\db\ActiveRecord
                 'is_undertake', 'undertake_alive_timeout', 'undertake_trigger_timeout',
                 'story_stage_id', 'story_id', 'story_model_detail_id',
                 'building_id', 'poi_id', 'timebegin', 'timeend',
-                'rate', 'scan_type', 'pre_story_model_id', 'model_id',
+                'rate', 'scan_type', 'set_type', 'pre_story_model_id', 'model_id',
                  'active_type', 'direction', 'sort_by', 'status'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
             [['active_model_inst_u_id', 'target_model_u_id', 'scan_image_id', 'model_inst_u_id',

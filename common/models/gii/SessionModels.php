@@ -46,7 +46,7 @@ class SessionModels extends \yii\db\ActiveRecord
             [['story_model_id', 'story_stage_id', 'session_id', 'model_id', 'is_unique',
 //                'is_pickup', 'pre_story_model_id',
                 'last_operator_id', 'session_model_status', 'status'], 'integer'],
-            [['created_at', 'updated_at',], 'integer'],
+            [['created_at', 'updated_at', 'set_at'], 'integer'],
             [['snapshot'], 'string'],
         ];
     }

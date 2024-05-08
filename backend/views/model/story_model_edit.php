@@ -156,6 +156,12 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'use_group_name')->textInput(['value' => $storyModel->use_group_name])->label('道具使用背包分组');
             echo $form->field($storyModel, 'sort_by')->textInput(['value' => $storyModel->sort_by])->label('出现顺序');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');
+            echo $form->field($storyModel, 'set_type')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$setType2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('放置方式');
             echo $form->field($storyModel, 'timebegin')->textInput(['value' => $storyModel->timebegin])->label('开始时间');
             echo $form->field($storyModel, 'timeend')->textInput(['value' => $storyModel->timeend])->label('结束时间');
             echo $form->field($storyModel, 'show_x')->textInput(['value' => $storyModel->show_x])->label('坐标X(右)');

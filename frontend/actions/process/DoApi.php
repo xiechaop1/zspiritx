@@ -610,6 +610,20 @@ class DoApi extends ApiAction
             'session_stage_id'  => $sessionStageId,
         ];
 
+        // 个性化属性记录在UserModel里，需要取出来进行替换
+        $userModels = UserModels::find()
+            ->where([
+                'session_id' => $this->_sessionId,
+                'user_id' => $this->_userId,
+            ])
+            ->all();
+        $userModelProps = [];
+        if (!empty($userModels)) {
+            foreach ($userModels as $userModel) {
+                $userModelProps[$userModel->story_model_id] = $userModel->toArray();
+            }
+        }
+
         foreach ($sessoinStages as $sessionStage) {
             $sessionModels = $sessionStage->models;
             $models = [];
@@ -621,11 +635,30 @@ class DoApi extends ApiAction
                     $storyModel = $sessionModel->storymodel;
                     if (!empty($storyModel)) {
                         $storyModel = Model::combineStoryModelWithDetail($storyModel);
+
+                        if (!empty($storyModel->set_type)
+                            && $storyModel->set_type == StoryModels::SET_TYPE_ONE_TIME_PER_DAY
+                        ) {
+                            if (!empty($sessionModel->set_at)
+                                && strtotime($sessionModel->set_at) > strtotime(date('Y-m-d 00:00:00'))
+                            ) {
+                                continue;
+                            }
+                        }
+
+
                         if (!empty($storyModel->dialog)) {
                             $params['story_model_id'] = $storyModel->id;
                             $params['model_id'] = $storyModel->model_id;
                             $params['story_model_detail_id'] = $storyModel->story_model_detail_id;
                             $params['model_inst_u_id'] = $storyModel->model_inst_u_id;
+
+                            // 个性化属性替换
+                            if (!empty($userModelProps[$storyModel->id])) {
+                                $params['show_name'] = !empty($userModelProps[$storyModel->id]['user_model_prop']['show_name'])
+                                    ? $userModelProps[$storyModel->id]['user_model_prop']['show_name'] : $storyModel->story_model_name;
+                            }
+
                             $storyModel->dialog = Model::formatDialog($storyModel, $params);
                         }
                         $models[] = [

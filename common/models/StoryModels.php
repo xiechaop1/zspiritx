@@ -116,6 +116,16 @@ class StoryModels extends \common\models\gii\StoryModels
         self::NAMECARD_DISPLAY_YES => '显示',
     ];
 
+    const SET_TYPE_NORMAL        = 0;    // 正常放置
+    const SET_TYPE_ONE_TIME      = 1;     // 一次性
+    const SET_TYPE_ONE_TIME_PER_DAY = 2;    // 每天一次
+
+    public static $setType2Name = [
+        self::SET_TYPE_NORMAL => '正常放置',
+        self::SET_TYPE_ONE_TIME => '一次性',
+        self::SET_TYPE_ONE_TIME_PER_DAY => '每天一次',
+    ];
+
     public function behaviors()
     {
         return [
