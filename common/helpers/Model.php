@@ -195,13 +195,10 @@ class Model
         return $ret;
     }
 
-    public static function formatStoryModel($storyModel, $params = [])
+    public static function formatStoryModel($storyModel, $params = [], $colList = [])
     {
-        $colList = [
-            'story_model_name', 'model_inst_u_id',
-        ];
         if (!empty($params)) {
-            foreach ($colList as $col) {
+            foreach ($colList as $col => $val) {
                 if (!empty($storyModel->$col)) {
                     foreach ($params as $key => $val) {
                         $storyModel->$col = str_replace('{$' . $key . '}', $val, $storyModel->$col);

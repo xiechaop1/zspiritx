@@ -658,10 +658,11 @@ class DoApi extends ApiAction
                         $preStoryModel = $storyModel;
                         $oldParams = [
                             'story_model_name' => (string)$storyModel->story_model_name,
+                            'dialog' => (string)$storyModel->dialog,
+                            'model_inst_u_id' => (string)$storyModel->model_inst_u_id,
                         ];
                         for ($i=0; $i<$maxCount; $i++) {
 //                            $storyModel = $preStoryModel;
-                            $storyModel->story_model_name = $oldParams['story_model_name'];
                             // 判断概率
                             if (!empty($storyModel->rate)) {
                                 $seed = rand(1, 100);
@@ -670,10 +671,14 @@ class DoApi extends ApiAction
                                 }
                             }
 
+                            foreach ($oldParams as $col => $val) {
+                                $storyModel->$col = $val;
+                            }
+
                             $storyModelParams = [
                                 'i' => $i,
                             ];
-                            $storyModel = Model::formatStoryModel($storyModel, $storyModelParams);
+                            $storyModel = Model::formatStoryModel($storyModel, $storyModelParams, $oldParams);
 
                             if (!empty($storyModel->dialog)) {
                                 $params['story_model_id'] = $storyModel->id;
