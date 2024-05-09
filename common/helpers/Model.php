@@ -195,8 +195,13 @@ class Model
         return $ret;
     }
 
-    public static function formatStoryModel($storyModel, $params = [], $colList = [])
+    public static function formatStoryModel($storyModel, $params = [])
     {
+        $colList = [
+            'model_inst_u_id' => '',
+            'story_model_name' => '',
+//            'dialog' => '',
+        ];
         if (!empty($params)) {
             foreach ($colList as $col => $val) {
                 if (!empty($storyModel->$col)) {

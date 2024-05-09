@@ -655,51 +655,52 @@ class DoApi extends ApiAction
                                 $maxCount = $storyModelProp['repeat'];
                             }
                         }
-                        $preStoryModel = $storyModel;
-                        $oldParams = [
-                            'story_model_name' => (string)$storyModel->story_model_name,
-                            'dialog' => (string)$storyModel->dialog,
-                            'model_inst_u_id' => (string)$storyModel->model_inst_u_id,
-                        ];
+//                        $preStoryModel = $storyModel;
+//                        $oldParams = [
+//                            'story_model_name' => (string)$storyModel->story_model_name,
+//                            'dialog' => (string)$storyModel->dialog,
+//                            'model_inst_u_id' => (string)$storyModel->model_inst_u_id,
+//                        ];
                         for ($i=0; $i<$maxCount; $i++) {
 //                            $storyModel = $preStoryModel;
+                            $storyModel1 = clone $storyModel;
                             // 判断概率
-                            if (!empty($storyModel->rate)) {
+                            if (!empty($storyModel1->rate)) {
                                 $seed = rand(1, 100);
-                                if ($seed > $storyModel->rate) {
+                                if ($seed > $storyModel1->rate) {
                                     continue;
                                 }
                             }
 
-                            foreach ($oldParams as $col => $val) {
-                                $storyModel->$col = $val;
-                            }
+//                            foreach ($oldParams as $col => $val) {
+//                                $storyModel->$col = $val;
+//                            }
 
                             $storyModelParams = [
                                 'i' => $i,
                             ];
-                            $storyModel = Model::formatStoryModel($storyModel, $storyModelParams, $oldParams);
+                            $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
 
-                            if (!empty($storyModel->dialog)) {
-                                $params['story_model_id'] = $storyModel->id;
-                                $params['model_id'] = $storyModel->model_id;
-                                $params['story_model_detail_id'] = $storyModel->story_model_detail_id;
-                                $params['model_inst_u_id'] = $storyModel->model_inst_u_id;
+                            if (!empty($storyModel1->dialog)) {
+                                $params['story_model_id'] = $storyModel1->id;
+                                $params['model_id'] = $storyModel1->model_id;
+                                $params['story_model_detail_id'] = $storyModel1->story_model_detail_id;
+                                $params['model_inst_u_id'] = $storyModel1->model_inst_u_id;
                                 $params['i'] = $i;
 
                                 // 个性化属性替换
-                                if (!empty($userModelProps[$storyModel->id])) {
-                                    $params['show_name'] = !empty($userModelProps[$storyModel->id]['user_model_prop']['show_name'])
-                                        ? $userModelProps[$storyModel->id]['user_model_prop']['show_name'] : $storyModel->story_model_name;
+                                if (!empty($userModelProps[$storyModel1->id])) {
+                                    $params['show_name'] = !empty($userModelProps[$storyModel1->id]['user_model_prop']['show_name'])
+                                        ? $userModelProps[$storyModel1->id]['user_model_prop']['show_name'] : $storyModel1->story_model_name;
                                 }
 
-                                $storyModel->dialog = Model::formatDialog($storyModel, $params);
+                                $storyModel1->dialog = Model::formatDialog($storyModel1, $params);
                             }
 
 
                             $models[] = [
                                 'session_model' => $sessionModel,
-                                'story_model' => $storyModel,
+                                'story_model' => $storyModel1,
                                 'model' => $storyModel->model,
                             ];
                         }
