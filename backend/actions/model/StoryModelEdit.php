@@ -79,6 +79,8 @@ class StoryModelEdit extends Action
 
             $model->story_model_prop = \common\helpers\Common::encodeJson($model->story_model_prop);
 
+//            $model->story_model_config = \common\helpers\Common::encodeJson($model->story_model_config);
+
             if (empty($model->story_model_name)) {
                 if (!empty($model->model_id)) {
                     $modelModel = \common\models\Models::find()

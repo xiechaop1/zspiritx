@@ -167,6 +167,7 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'show_x')->textInput(['value' => $storyModel->show_x])->label('坐标X(右)');
             echo $form->field($storyModel, 'show_y')->textInput(['value' => $storyModel->show_y])->label('坐标Y(高)');
             echo $form->field($storyModel, 'show_z')->textInput(['value' => $storyModel->show_z])->label('坐标Z(前)');
+//            echo $form->field($storyModel, 'story_model_config')->textarea(['value' => \common\helpers\Common::decodeJsonToVarexport($storyModel->story_model_config), 'rows' => 20])->label('扩展配置');
             echo $form->field($storyModel, 'is_unique')->textInput(['value' => $storyModel->is_unique])->label('是否唯一');
             echo $form->field($storyModel, 'active_next')->textarea(['value' => \common\helpers\Model::decodeActiveToShow($storyModel->active_next)])->label('动作内容');
             echo $form->field($storyModel, 'active_expiretime')->textInput(['value' => $storyModel->active_expiretime])->label('动作过期时间');

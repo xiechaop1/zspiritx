@@ -633,9 +633,11 @@ class DoApi extends ApiAction
                     $sessModel = $sessionModel;
 //                    $storyModel = json_decode($sessModel['snapshot'], true);
                     $storyModel = $sessionModel->storymodel;
+
                     if (!empty($storyModel)) {
                         $storyModel = Model::combineStoryModelWithDetail($storyModel);
 
+                        // 判断放置方式，如果当天已经放过，就跳过
                         if (!empty($storyModel->set_type)
                             && $storyModel->set_type == StoryModels::SET_TYPE_ONE_TIME_PER_DAY
                         ) {
@@ -646,26 +648,51 @@ class DoApi extends ApiAction
                             }
                         }
 
+                        $maxCount = 1;
+                        if (!empty($storyModel->story_model_prop)) {
+                            $storyModelProp = json_decode($storyModel->story_model_prop, true);
+                            if (!empty($storyModelProp['repeat'])) {
+                                $maxCount = $storyModelProp['repeat'];
+                            }
+                        }
+                        for ($i=0; $i<$maxCount; $i++) {
 
-                        if (!empty($storyModel->dialog)) {
-                            $params['story_model_id'] = $storyModel->id;
-                            $params['model_id'] = $storyModel->model_id;
-                            $params['story_model_detail_id'] = $storyModel->story_model_detail_id;
-                            $params['model_inst_u_id'] = $storyModel->model_inst_u_id;
-
-                            // 个性化属性替换
-                            if (!empty($userModelProps[$storyModel->id])) {
-                                $params['show_name'] = !empty($userModelProps[$storyModel->id]['user_model_prop']['show_name'])
-                                    ? $userModelProps[$storyModel->id]['user_model_prop']['show_name'] : $storyModel->story_model_name;
+                            // 判断概率
+                            if (!empty($storyModel->rate)) {
+                                $seed = rand(1, 100);
+                                if ($seed > $storyModel->rate) {
+                                    continue;
+                                }
                             }
 
-                            $storyModel->dialog = Model::formatDialog($storyModel, $params);
+                            $storyModelParams = [
+                                'i' => $i,
+                            ];
+                            $storyModel = Model::formatStoryModel($storyModel, $storyModelParams);
+
+                            if (!empty($storyModel->dialog)) {
+                                $params['story_model_id'] = $storyModel->id;
+                                $params['model_id'] = $storyModel->model_id;
+                                $params['story_model_detail_id'] = $storyModel->story_model_detail_id;
+                                $params['model_inst_u_id'] = $storyModel->model_inst_u_id;
+                                $params['i'] = $i;
+
+                                // 个性化属性替换
+                                if (!empty($userModelProps[$storyModel->id])) {
+                                    $params['show_name'] = !empty($userModelProps[$storyModel->id]['user_model_prop']['show_name'])
+                                        ? $userModelProps[$storyModel->id]['user_model_prop']['show_name'] : $storyModel->story_model_name;
+                                }
+
+                                $storyModel->dialog = Model::formatDialog($storyModel, $params);
+                            }
+
+
+                            $models[] = [
+                                'session_model' => $sessionModel,
+                                'story_model' => $storyModel,
+                                'model' => $storyModel->model,
+                            ];
                         }
-                        $models[] = [
-                            'session_model' => $sessionModel,
-                            'story_model' => $storyModel,
-                            'model' => $storyModel->model,
-                        ];
                     }
                 }
             }

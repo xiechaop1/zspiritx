@@ -195,6 +195,18 @@ class Model
         return $ret;
     }
 
+    public static function formatStoryModel($storyModel, $params = [])
+    {
+        if (!empty($params)) {
+            foreach ($params as $key => $val) {
+                $storyModel->$key = str_replace('{$' . $key . '}', $val, $storyModel->$key);
+            }
+        }
+
+        return $storyModel;
+
+    }
+
     public static function formatDialog($storyModel, $params = []) {
         if (!empty($storyModel->dialog)) {
             $ret = $storyModel->dialog;
