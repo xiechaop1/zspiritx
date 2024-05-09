@@ -656,8 +656,12 @@ class DoApi extends ApiAction
                             }
                         }
                         $preStoryModel = $storyModel;
+                        $oldParams = [
+                            'story_model_name' => (string)$storyModel->story_model_name,
+                        ];
                         for ($i=0; $i<$maxCount; $i++) {
-                            $storyModel = $preStoryModel;
+//                            $storyModel = $preStoryModel;
+                            $storyModel->story_model_name = $oldParams['story_model_name'];
                             // 判断概率
                             if (!empty($storyModel->rate)) {
                                 $seed = rand(1, 100);
