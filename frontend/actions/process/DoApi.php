@@ -655,8 +655,9 @@ class DoApi extends ApiAction
                                 $maxCount = $storyModelProp['repeat'];
                             }
                         }
+                        $preStoryModel = $storyModel;
                         for ($i=0; $i<$maxCount; $i++) {
-
+                            $storyModel = $preStoryModel;
                             // 判断概率
                             if (!empty($storyModel->rate)) {
                                 $seed = rand(1, 100);
