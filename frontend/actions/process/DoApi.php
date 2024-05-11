@@ -1442,6 +1442,110 @@ class DoApi extends ApiAction
 //                    }
 
                     break;
+                case StoryModels::ACTIVE_TYPE_MODEL_UNIQUE:
+                    if ($storyModel->use_allow == StoryModels::USE_ALLOW_NEED_TARGET
+                        && empty($targetStoryModelId)
+                    ) {
+                        throw new \yii\base\Exception('您需要选择一个对象', ErrorCode::USER_MODEL_NO_TARGET);
+                    }
+
+                    $targetStoryModel = StoryModels::find()
+                        ->where([
+                            'id' => (int)$targetStoryModelId,
+                        ])
+                        ->one();
+
+                    $storyModelLinks = StoryModelsLink::find()
+                        ->where([
+                            'story_id'          => (int)$storyId,
+                            'story_model_id'    => $storyModel->id,
+//                            'story_model_id2'   => $targetStoryModelId,
+                        ]);
+                    if (!empty($targetStoryModel->story_model_detail_id)) {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_detail_id2' => $targetStoryModel->story_model_detail_id,
+                        ]);
+                    } else {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'story_model_id2' => $targetStoryModel->id,
+                        ]);
+                    }
+                    if (!empty($storyModel->use_group_name)) {
+                        $storyModelLinks = $storyModelLinks->andFilterWhere([
+                            'group_name' => $storyModel->use_group_name,
+                        ]);
+                    }
+//                    var_dump($storyModelLinks->createCommand()->getRawSql());exit;
+                    $storyModelLinks = $storyModelLinks
+                        ->orderBy(['story_model_id' => SORT_ASC])
+                        ->one();
+
+                    if (empty($storyModelLinks)) {
+
+                        throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
+                    } else {
+
+                        $ret = $storyModelLinks->eff_exec;
+                        $type = $storyModelLinks->eff_type;
+                    }
+
+                    $res['code'] = 3;       // 完全匹配
+
+                    if ($type == StoryModelsLink::EFF_TYPE_DIALOG) {
+                        $res['type']  = $type;
+                        $res['ret']   = $ret;
+                    } elseif ($type == StoryModelsLink::EFF_TYPE_PROP_AND_DIALOG) {
+                        $tarUserModel = UserModels::find()
+                            ->where([
+                                'story_model_id' => $targetStoryModelId,
+                                'story_id' => $storyId,
+                                'session_id' => $sessionId,
+                                'user_id' => $userId,
+                            ])
+                            ->one();
+
+                        // 按公式计算新属性
+                        $tmpRes = Yii::$app->models->computeAddStoryModelLinkPropWithFormula([$ret], $tarUserModel);
+                        $propRes = $tmpRes['data'];
+
+                        $res['title'] = '喂食成功';
+                        $res['html'] = '宠物吃得饱饱，';
+
+                        if (!empty($tmpRes['up'])) {
+                            foreach ($tmpRes['up'] as $k => $up) {
+                                $res['html'] .= $up['title'] . '提升了' . $up['value'] . '点，';
+                            }
+                        }
+                        $res['html'] .= '心满意足的睡着了。';
+
+                        if (!empty($propRes['prop'])) {
+                            $tarUserModelProp = !empty($tarUserModel->user_model_prop) ? json_decode($tarUserModel->user_model_prop, true) : [];
+                            $tarUserModelProp['prop'] = $propRes['prop'];
+
+                            // 检查是否升级
+                            $tmpUserModelProp = Yii::$app->models->checkLevel($tarUserModelProp);
+                            $tarUserModelProp = $tmpUserModelProp['data'];
+                            $tarUserModel->user_model_prop = json_encode($tarUserModelProp, true);
+                            $tarUserModel->save();
+
+                            if (!empty($tmpUserModelProp['isUp'])
+                                && $tmpUserModelProp['isUp']
+                            ) {
+                                $res['title'] = '恭喜升级';
+                                $res['html'] = '您成功升级至 ' . $tmpUserModelProp['data']['prop']['level'] . ' 级，属性提升！';
+                            }
+                        }
+
+                        if (!empty($ret['dialog'])) {
+                            $res['type']  = StoryModelsLink::EFF_TYPE_DIALOG;
+                            $res['ret']   = $ret['dialog'];
+                        } else {
+                            $res['type']  = $type;
+                            $res['ret']   = $ret;
+                        }
+                    }
+                    $minCt = !empty($checkRet['min_ct']) ? $checkRet['min_ct'] : 0;
+                    break;
                 case StoryModels::ACTIVE_TYPE_MODEL:
                     if ($storyModel->use_allow == StoryModels::USE_ALLOW_NEED_TARGET
                         && empty($targetStoryModelId)
@@ -1457,7 +1561,7 @@ class DoApi extends ApiAction
 
                     $storyModelLinks = StoryModelsLink::find()
                         ->where([
-                            'story_id'          => $storyId,
+                            'story_id'          => (int)$storyId,
 //                            'story_model_id'    => $storyModel->id,
 //                            'story_model_id2'   => $targetStoryModelId,
                         ]);
@@ -1475,6 +1579,7 @@ class DoApi extends ApiAction
                             'group_name' => $storyModel->use_group_name,
                         ]);
                     }
+//                    var_dump($storyModelLinks->createCommand()->getRawSql());exit;
                     $storyModelLinks = $storyModelLinks
                         ->orderBy(['story_model_id' => SORT_ASC])
                         ->all();
@@ -1485,8 +1590,10 @@ class DoApi extends ApiAction
 //                                'GotoAction'    => 'dialog-empty',
 //                            ]);
 //                            $type = StoryModelsLink::EFF_TYPE_DIALOG;
+
                             throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
                         } else {
+
                             $ret = '';
 //                            foreach ($storyModelLinks as $storyModelLink) {
 //                                if ($storyModelLink->story_model_id == '-1') {
@@ -1537,9 +1644,59 @@ class DoApi extends ApiAction
                             $type = $checkRet['eff_type'];
                         }
                         $res = $checkRet;
+
                         if ($type == StoryModelsLink::EFF_TYPE_DIALOG) {
                             $res['type']  = $type;
                             $res['ret']   = $ret;
+                        } elseif ($type == StoryModelsLink::EFF_TYPE_PROP_AND_DIALOG) {
+                            $tarUserModel = UserModels::find()
+                                ->where([
+                                    'story_model_id' => $targetStoryModelId,
+                                    'story_id' => $storyId,
+                                    'session_id' => $sessionId,
+                                    'user_id' => $userId,
+                                ])
+                                ->one();
+
+                            // 按公式计算新属性
+                            $tmpRes = Yii::$app->models->computeAddStoryModelLinkPropWithFormula([$ret], $tarUserModel);
+                            $propRes = $tmpRes['data'];
+
+                            $res['title'] = '喂食成功';
+                            $res['html'] = '宠物吃得饱饱，';
+
+                            if (!empty($tmpRes['up'])) {
+                                foreach ($tmpRes['up'] as $k => $up) {
+                                    $res['html'] .= $up['title'] . '提升了' . $up['value'] . '点，';
+                                }
+                            }
+                            $res['html'] .= '心满意足的睡着了。';
+
+                            if (!empty($propRes['prop'])) {
+                                $tarUserModelProp = !empty($tarUserModel->user_model_prop) ? json_decode($tarUserModel->user_model_prop, true) : [];
+                                $tarUserModelProp['prop'] = $propRes['prop'];
+
+                                // 检查是否升级
+                                $tmpUserModelProp = Yii::$app->models->checkLevel($tarUserModelProp);
+                                $tarUserModelProp = $tmpUserModelProp['data'];
+                                $tarUserModel->user_model_prop = json_encode($tarUserModelProp, true);
+                                $tarUserModel->save();
+
+                                if (!empty($tmpUserModelProp['isUp'])
+                                    && $tmpUserModelProp['isUp']
+                                ) {
+                                    $res['title'] = '恭喜升级';
+                                    $res['html'] = '您成功升级至 ' . $tmpUserModelProp['data']['prop']['level'] . ' 级，属性提升！';
+                                }
+                            }
+
+                            if (!empty($ret['dialog'])) {
+                                $res['type']  = StoryModelsLink::EFF_TYPE_DIALOG;
+                                $res['ret']   = $ret['dialog'];
+                            } else {
+                                $res['type']  = $type;
+                                $res['ret']   = $ret;
+                            }
                         }
                         $minCt = !empty($checkRet['min_ct']) ? $checkRet['min_ct'] : 0;
                     break;

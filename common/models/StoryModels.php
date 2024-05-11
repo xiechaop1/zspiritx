@@ -55,6 +55,7 @@ class StoryModels extends \common\models\gii\StoryModels
     const ACTIVE_TYPE_HTML    = 6;    // HTML
 
     const ACTIVE_TYPE_COMBINE = 7;    // 组合
+    const ACTIVE_TYPE_MODEL_UNIQUE = 8;    // 模型唯一
 
     public static $activeType2Name = [
         self::ACTIVE_TYPE_SHOW => '展示图片',
@@ -64,6 +65,7 @@ class StoryModels extends \common\models\gii\StoryModels
         self::ACTIVE_TYPE_MODEL_DISPLAY => '模型放出来',
         self::ACTIVE_TYPE_HTML => 'HTML',
         self::ACTIVE_TYPE_COMBINE => '组合',
+        self::ACTIVE_TYPE_MODEL_UNIQUE => '模型动作独立(无SET)',
     ];
 
     const VISIBLE_SHOW        = 0;    // 显示
@@ -124,6 +126,12 @@ class StoryModels extends \common\models\gii\StoryModels
         self::SET_TYPE_NORMAL => '正常放置',
         self::SET_TYPE_ONE_TIME => '一次性',
         self::SET_TYPE_ONE_TIME_PER_DAY => '每天一次',
+    ];
+
+    public static $propLevelConfig = [
+        [
+            'name' => '1级',
+        ],
     ];
 
     public function behaviors()

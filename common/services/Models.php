@@ -32,6 +32,18 @@ class Models extends Component
 
     const KEEP_ALIVE_TIMEOUT = 10;
 
+    public static $prop2Name = [
+        'strength' => '力量',
+        'agility' => '敏捷',
+        'intelligence' => '智力',
+        'hp' => '生命值',
+        'mp' => '魔法值',
+        'exp' => '经验值',
+        'attack' => '攻击力',
+        'defense' => '防御力',
+
+    ];
+
     public function getUnderTakeModelsFromCookie(){
 
 //        $stageCookieJson = Cookie::getCookie(Cookies::UPDATE_STAGE_TIME);
@@ -498,7 +510,6 @@ class Models extends Component
         ])
         ->all();
 
-
         if (!empty($matchUserModelUsed)) {
             $noFoundRet = $partlyFoundRet = '';
             $noFoundType = $partlyFoundType = 0;
@@ -580,7 +591,7 @@ class Models extends Component
 
     }
 
-    public function addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId, $sessionStageId, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
+    public function addPreUserModelUsedByGroup($groupName, $targetStoryModel, $userId, $storyId, $sessionId, $sessionStageId = 0, $useStatus = UserModelsUsed::USE_STATUS_WAITING) {
         $storyModelLinks = StoryModelsLink::find();
         if (!empty($groupName)) {
             $storyModelLinks->where([
@@ -597,7 +608,6 @@ class Models extends Component
             ]);
         }
         $storyModelLinks = $storyModelLinks->all();
-
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
@@ -839,7 +849,81 @@ class Models extends Component
         }
     }
 
-    public function computeStoryModelLinkPropWithFormula($linkExecArr, $targetStoryModel, $targetUserModel = [], $useStoryModelIds = []) {
+    public function computeAddStoryModelLinkPropWithFormula($linkExecArr, $targetUserModel = []) {
+        $ret = [];
+        $combineList = [];
+
+        if (empty($targetUserModel)) {
+            return $ret;
+        }
+
+        $oldProp = [];
+        if (!empty($targetUserModel)) {
+            $tarUserModelProp = !empty($targetUserModel->user_model_prop) ? json_decode($targetUserModel->user_model_prop, true) : [];
+            $combineList = !empty($userModelProp['combine_story_model_list']) ? $userModelProp['combine_story_model_list'] : [];
+
+            if (empty($tarUserModelProp['prop'])) {
+                $targetStoryModel = !empty($targetUserModel->storyModel) ? $targetUserModel->storyModel : [];
+                if (empty($targetStoryModel)) {
+                    return $ret;
+                }
+
+                $tarStoryModelProp = !empty($targetStoryModel->story_model_prop) ? json_decode($targetStoryModel->story_model_prop, true) : [];
+
+                if (!empty($tarStoryModelProp['prop'])) {
+                    $ret = $tarStoryModelProp['prop'];
+                    $storyModelFormula = $tarStoryModelProp['formula'];
+                }
+            } else {
+                $ret = $tarUserModelProp['prop'];
+            }
+        }
+        $oldProps = $ret;
+
+        $up = [];
+
+        if (!empty($linkExecArr)) {
+            foreach ($linkExecArr as $linkExec) {
+                if (\common\helpers\Common::isJson($linkExec)) {
+                    $linkExec = json_decode($linkExec, true);
+                }
+                $userModelProp = !empty($linkExec['user_model_prop']) ? $linkExec['user_model_prop'] : [];
+                $formula = !empty($linkExec['formula']) ? $linkExec['formula'] : '';
+
+                if (empty($formula)
+                    && !empty($storyModelFormula)
+                ) {
+                    $formula = $storyModelFormula;
+                }
+
+                if (empty($formula)) {
+                    continue;
+                }
+
+                eval( $formula . ';');
+
+                if (!empty($ret)) {
+                    foreach ($ret as $k => $v) {
+                        $oldProp = !empty($oldProps[$k]) ? $oldProps[$k] : 0;
+                        if (($v - $oldProp) > 0) {
+                            $up[$k] = [
+                                'title' => !empty(self::$prop2Name[$k]) ? self::$prop2Name[$k] : ' - ',
+                                'value' => $v - $oldProp,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return [
+            'data' => ['prop' => $ret],
+            'up' => $up,
+        ];
+
+    }
+
+    public function computeStoryModelLinkPropWithFormula($linkExecArr, $targetStoryModel, $targetUserModel = [], $useStoryModelIds = [], $needRecordList = true) {
         $ret = [];
         $combineList = [];
 //        if (!empty($targetStoryModel->story_model_prop)) {
@@ -913,10 +997,100 @@ class Models extends Component
             }
         }
 
+        if (!$needRecordList) {
+            $combineList = [];
+        }
+
         return [
             'prop' => $ret,
             'combine_story_model_list' => $combineList,
         ];
+    }
+
+    public function computeUserModelPropWithStoryModel($storyModel) {
+        $ret = [];
+        $formula = '';
+        if (!empty($storyModel->story_model_prop)) {
+            $storyModelProp = json_decode($storyModel->story_model_prop, true);
+            if (!empty($storyModelProp['init_formula'])) {
+                $formula = $storyModelProp['init_formula'];
+            }
+        }
+        if (empty($formula)) {
+            return $ret;
+        }
+
+        eval( $formula . ';');
+
+//        $ret['prop'] = $ret;
+
+        return $ret;
+    }
+
+    public function checkLevel($userModelProp) {
+//        $userModelProp = !empty($userModel->user_model_prop) ? json_decode($userModel->user_model_prop, true) : '';
+
+        $formula = [
+//            'exp' => '$newExp = 115 ^ ($level - 1) + 4;',
+            'level' => '$newProp["level"] = $level + 1;',
+            'intelligence' => '$newProp["intelligence"] = intval($intelligence + 20 * pow(1.2, ($level - 1)) + 5);',
+            'strength' => '$newProp["strength"] = intval($strength + 20 * pow(1.2, ($level - 1)) + 5);',
+            'agility' => '$newProp["agility"] = intval($agility + 20 * pow(1.2, ($level - 1)) + 5);',
+            'attack' => '$newProp["attack"] = intval($attack + 20 * pow(1.2, ($level - 1)) + 5);',
+            'defense' => '$newProp["defense"] = intval($defense + 20 * pow(1.2, ($level - 1)) + 5);',
+            'hp' => '$newProp["hp"] = $newProp["max_hp"] = intval($hp + $newProp["strength"] * pow(1.2, ($level - 1)) + 5);',
+            'mp' => '$newProp["mp"] = $newProp["max_mp"] = intval($mp + $newProp["intelligence"] * pow(1.2, ($level - 1)) + 5);',
+            'att_speed' => '$newProp["att_speed"] = intval($att_speed + $newProp["agility"] * pow(1.2, ($level - 1)) + 5);',
+        ];
+
+        $newProp = [];
+        $up = [];
+        $levelInterval = false;
+        if (!empty($userModelProp)) {
+            $newProp = $prop = !empty($userModelProp['prop']) ? $userModelProp['prop'] : [];
+            if (!empty($prop)) {
+                $level = !empty($prop['level']) ? $prop['level'] : 1;
+                $exp = !empty($prop['exp']) ? $prop['exp'] : 0;
+
+                if ($level == 1) {
+                    $maxExp = 4;
+                } else {
+                    $maxExp = 200 * pow(1.4, ($level - 1)) + 4;
+                }
+                $maxExp = intval($maxExp);
+
+                $newProp['exp'] = $exp;
+//var_dump($exp);var_dump($maxExp);exit;
+                if ($exp >= $maxExp) {
+                    foreach ($formula as $col => $for) {
+                        $$col = !empty($prop[$col]) ? $prop[$col] : 0;
+                        eval($for . ';');
+//                        $newProp[$col] = $col;
+                    }
+                    $levelInterval = true;
+                }
+            }
+            if (!empty($newProp)) {
+                foreach ($newProp as $k => $v) {
+                    $userModelProp['prop'][$k] = $v;
+                    $up[$k] = [
+                        'title' => !empty(self::$prop2Name[$k]) ? self::$prop2Name[$k] : ' - ',
+                        'value' => intval($newProp[$k] - $prop[$k]),
+                    ];
+//                    $upProp[$k] = intval($newProp[$k] - $prop[$k]);
+                }
+            }
+        }
+
+        return [
+            'isUp' => $levelInterval,
+            'up' => $up,
+            'data' => $userModelProp,
+        ];
+
+//        $userModel->user_model_prop = json_encode($newProp, true);
+//
+//        return $userModel;
     }
 
 }

@@ -52,6 +52,13 @@ class Pickup extends Action
 
         $lockCt = !empty($this->_get['lock_ct']) ? $this->_get['lock_ct'] : 0;
 
+        $randRange = !empty($this->_get['rand_range']) ? $this->_get['rand_range'] : '';
+        if (!empty($randRange)) {
+            $randRange = explode(',', $randRange);
+            $randSeed = rand(0, sizeof($randRange));
+            $storyModelId = $randRange[$randSeed];
+        }
+
         $transaction = Yii::$app->db->beginTransaction();
         $sessionModel = SessionModels::find()
             ->where([
@@ -89,10 +96,10 @@ class Pickup extends Action
             $code = ErrorCode::DO_MODELS_PICK_UP_FAIL;
         }
 
-        if (empty($sessionModel)) {
-            $msg = '没有找到物品';
-            $code = ErrorCode::DO_MODELS_PICK_UP_FAIL;
-        }
+//        if (empty($sessionModel)) {
+//            $msg = '没有找到物品';
+//            $code = ErrorCode::DO_MODELS_PICK_UP_FAIL;
+//        }
 
         if ($code != 0) {
             return $this->pickupRender($code, $msg, $this->_params);
@@ -104,6 +111,12 @@ class Pickup extends Action
             $ret = $sessionModel->save();
 
             $storyModelDetailId = !empty($storyModel->story_model_detail_id) ? $storyModel->story_model_detail_id : 0;
+
+            $tmpPropData = Yii::$app->models->computeUserModelPropWithStoryModel($storyModel);
+            $initPropData = [];
+            if (!empty($tmpPropData)) {
+                $initPropData['prop'] = $tmpPropData;
+            }
 
             $userModelBaggage = UserModels::find()
                 ->where([
@@ -128,6 +141,7 @@ class Pickup extends Action
                 $userModelBaggage->story_model_id = $storyModelId;
                 $userModelBaggage->story_model_detail_id = $storyModelDetailId;
                 $userModelBaggage->session_model_id = $sessionModel->id;
+                $userModelBaggage->user_model_prop = !empty($initPropData) ? json_encode($initPropData, true) : '';
                 $userModelBaggage->use_ct = 1;
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
@@ -195,7 +209,7 @@ class Pickup extends Action
             'userId'        => $params['user_id'],
             'sessionId'     => $params['session_id'],
             'msg'           => $msg,
-            'knowledge'     => $params['knowledge'],
+            'knowledge'     => !empty($params['knowledge']) ? $params['knowledge'] : '',
         ]);
     }
 }
