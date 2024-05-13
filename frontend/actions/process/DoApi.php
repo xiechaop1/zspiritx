@@ -1723,6 +1723,12 @@ class DoApi extends ApiAction
                         $minCt = !empty($checkRet['min_ct']) ? $checkRet['min_ct'] : 0;
                     break;
                 case StoryModels::ACTIVE_TYPE_MODEL_DISPLAY:
+                    if ($this->_userInfo->is_new == 0) {
+                        // 新用户
+                        if ($storyModel->id == 442) {
+                            $storyModel = StoryModels::find()->where(['id' => 440])->one();
+                        }
+                    }
                     if (empty($storyModel->active_model_inst_u_id)) {
                         $modelUId = $storyModel->model_inst_u_id;
                     } else {
