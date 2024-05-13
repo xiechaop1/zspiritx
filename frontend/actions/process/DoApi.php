@@ -1726,7 +1726,7 @@ class DoApi extends ApiAction
                     if ($this->_userInfo->is_new == 0) {
                         // 新用户
                         if ($storyModel->id == 442) {
-                            $storyModel = StoryModels::find()->where(['id' => 440])->one();
+                            $storyModel = StoryModels::find()->where(['id' => 443])->one();
                         }
                     }
                     if (empty($storyModel->active_model_inst_u_id)) {
