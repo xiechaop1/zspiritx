@@ -1038,8 +1038,10 @@ class Models extends Component
             'agility' => '$newProp["agility"] = intval($agility + 20 * pow(1.2, ($level - 1)) + 5);',
             'attack' => '$newProp["attack"] = intval($attack + 20 * pow(1.2, ($level - 1)) + 5);',
             'defense' => '$newProp["defense"] = intval($defense + 20 * pow(1.2, ($level - 1)) + 5);',
-            'hp' => '$newProp["hp"] = $newProp["max_hp"] = intval($hp + $newProp["strength"] * pow(1.2, ($level - 1)) + 5);',
-            'mp' => '$newProp["mp"] = $newProp["max_mp"] = intval($mp + $newProp["intelligence"] * pow(1.2, ($level - 1)) + 5);',
+            'max_hp' => '$newProp["max_hp"] = intval($hp + $newProp["strength"] * pow(1.2, ($level - 1)) + 5);',
+            'max_mp' => '$newProp["max_mp"] = intval($mp + $newProp["intelligence"] * pow(1.2, ($level - 1)) + 5);',
+            'hp' => '$newProp["hp"] = $newProp["max_hp"];',
+            'mp' => '$newProp["mp"] = $newProp["max_mp"];',
             'att_speed' => '$newProp["att_speed"] = intval($att_speed + $newProp["agility"] * pow(1.2, ($level - 1)) + 5);',
         ];
 
