@@ -19,7 +19,7 @@ class User extends \common\models\User
     public function rules()
     {
         return [
-            [['user_status', 'user_type', 'status', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['user_status', 'user_type', 'status', 'is_new', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
             [['user_name', 'user_pass', 'nick_name', 'user_pass', 'wx_openid', 'wx_unionid', 'wx_token', 'mobile', 'avatar', ], 'string'],
             [['last_login_geo_lat', 'last_login_geo_lng'], 'number'],
         ];

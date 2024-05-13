@@ -140,6 +140,14 @@ echo \dmstr\widgets\Alert::widget();
                             'user_status',
                             \common\models\User::$userStatus, ["class" => "form-control ", 'value' => !empty($params['User']['user_status']) ? $params['User']['user_status'] : ''])
                     ],
+                    [
+                        'label' => '是否新用户',
+                        'format' => 'raw',
+                        'filter'    => false,
+                        'value' => function ($model) {
+                            return $model->is_new == 0 ? '是' : '否';
+                        }
+                    ],
 
                     [
                         'label' => '用户行为数据',
