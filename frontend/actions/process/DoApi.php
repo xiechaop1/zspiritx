@@ -648,6 +648,14 @@ class DoApi extends ApiAction
                             }
                         }
 
+                        if (!empty($storyModel->set_type)
+                            && $storyModel->set_type == StoryModels::SET_TYPE_ONE_TIME
+                        ) {
+                            if (!empty($sessionModel->set_at)) {
+                                continue;
+                            }
+                        }
+
                         $maxCount = 1;
                         if (!empty($storyModel->story_model_prop)) {
                             $storyModelProp = json_decode($storyModel->story_model_prop, true);
@@ -1443,6 +1451,7 @@ class DoApi extends ApiAction
 
                     break;
                 case StoryModels::ACTIVE_TYPE_MODEL_UNIQUE:
+                    // 宠物喂食
                     if ($storyModel->use_allow == StoryModels::USE_ALLOW_NEED_TARGET
                         && empty($targetStoryModelId)
                     ) {
@@ -1454,6 +1463,19 @@ class DoApi extends ApiAction
                             'id' => (int)$targetStoryModelId,
                         ])
                         ->one();
+
+                    // Todo: 临时处理，用镜像将使用对象强制放到另外一个模型上
+                    if (!empty($targetStoryModel->story_model_prop)) {
+                        $targetStoryModelProp = json_decode($targetStoryModel->story_model_prop, true);
+                        if (!empty($targetStoryModelProp['mirror_story_model_id'])) {
+                            $targetStoryModelId = $targetStoryModelProp['mirror_story_model_id'];
+                            $targetStoryModel = StoryModels::find()
+                                ->where([
+                                    'id' => (int)$targetStoryModelId,
+                                ])
+                                ->one();
+                        }
+                    }
 
                     $storyModelLinks = StoryModelsLink::find()
                         ->where([

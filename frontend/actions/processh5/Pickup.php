@@ -112,12 +112,6 @@ class Pickup extends Action
 
             $storyModelDetailId = !empty($storyModel->story_model_detail_id) ? $storyModel->story_model_detail_id : 0;
 
-            $tmpPropData = Yii::$app->models->computeUserModelPropWithStoryModel($storyModel);
-            $initPropData = [];
-            if (!empty($tmpPropData)) {
-                $initPropData['prop'] = $tmpPropData;
-            }
-
             $userModelBaggage = UserModels::find()
                 ->where([
                     'user_id'           => (int)$userId,
@@ -133,6 +127,12 @@ class Pickup extends Action
             }
                 $userModelBaggage = $userModelBaggage->one();
             if (empty($userModelBaggage)) {
+                $tmpPropData = Yii::$app->models->computeUserModelPropWithStoryModel($storyModel);
+                $initPropData = [];
+                if (!empty($tmpPropData)) {
+                    $initPropData['prop'] = $tmpPropData;
+                }
+
                 $userModelBaggage = new UserModels();
                 $userModelBaggage->user_id = $userId;
                 $userModelBaggage->session_id = $sessionId;
