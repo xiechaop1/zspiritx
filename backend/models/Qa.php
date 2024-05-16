@@ -22,7 +22,7 @@ class Qa extends \common\models\Qa
     public function rules()
     {
         return [
-            [['qa_type', 'story_id', 'knowledge_id', 'story_stage_id', 'score', 'created_at', 'updated_at'], 'integer'],
+            [['qa_type', 'qa_class', 'story_id', 'knowledge_id', 'story_stage_id', 'score', 'created_at', 'updated_at'], 'integer'],
             [['topic', 'voice', 'attachment', 'st_answer', 'st_selected', 'selected'], 'string'],
         ];
     }

@@ -22,14 +22,13 @@ class Qa extends \common\models\gii\Qa
     const QA_TYPE_VERIFYCODE = 8;      // 验证码题
     const QA_TYPE_CHATGPT = 9;      // 闲聊题
     const QA_TYPE_SECRET = 10;      // 密码锁
-
     const QA_TYPE_SUDOKU = 11;      // 数独题
-
     const QA_TYPE_SELECTION = 12;      // 选项
-
     const QA_TYPE_PHONE = 13;      // 手机
-
     const QA_TYPE_PHONE_SMS = 14;      // 手机短信
+
+    const QA_CLASS_NORMAL = 1; // 普通题
+    const QA_CLASS_RANDOM = 2; // 随机题
 
     public static $qaType2Name = [
         self::QA_TYPE_SINGLE  => '单选题',
@@ -46,6 +45,11 @@ class Qa extends \common\models\gii\Qa
         self::QA_TYPE_SELECTION => '选项',
         self::QA_TYPE_PHONE => '手机',
         self::QA_TYPE_PHONE_SMS => '手机短信',
+    ];
+
+    public static $qaClass2Name = [
+        self::QA_CLASS_NORMAL => '普通题',
+        self::QA_CLASS_RANDOM => '随机题',
     ];
 
     public static $qaTypeIsJson = [

@@ -37,6 +37,28 @@ class QaOne extends Action
             $model = \common\models\Qa::findOne($qaId);
         }
 
+        if (empty($qaId)) {
+            $qaRandomIds = Net::get('qa_random_ids');
+            if ($qaRandomIds) {
+                $qaRandomIds = explode(',', $qaRandomIds);
+                $qaId = $qaRandomIds[array_rand($qaRandomIds)];
+                $model = \common\models\Qa::findOne($qaId);
+            }
+        }
+
+        if (empty($model)) {
+            $isRandom = Net::get('is_random');
+            if ($isRandom) {
+                $model = \common\models\Qa::find()
+                    ->where([
+                        'qa_class' => Qa::QA_TYPE_SELECTION,
+                        'is_delete' => Common::STATUS_NORMAL,
+                    ])
+                    ->orderBy('rand()')
+                    ->one();
+            }
+        }
+
         $style = !empty($_GET['style']) ? $_GET['style'] : 'default';
 
         if (empty($model)) {

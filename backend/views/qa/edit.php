@@ -82,6 +82,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('类型');
+            echo $form->field($qaModel, 'qa_class')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Qa::$qaClass2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('分类');
 //            echo $form->field($qaModel, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [
 //                'multiple' => false,
 //                'isImage' => false,
