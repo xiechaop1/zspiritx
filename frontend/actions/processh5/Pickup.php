@@ -55,7 +55,7 @@ class Pickup extends Action
         $randRange = !empty($this->_get['rand_range']) ? $this->_get['rand_range'] : '';
         if (!empty($randRange)) {
             $randRange = explode(',', $randRange);
-            $randSeed = rand(0, sizeof($randRange));
+            $randSeed = rand(0, sizeof($randRange) - 1);
             $storyModelId = $randRange[$randSeed];
         }
 

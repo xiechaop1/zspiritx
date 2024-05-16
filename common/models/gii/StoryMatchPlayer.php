@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "{{%story_match}}".
  *
  */
-class StoryMatch extends \yii\db\ActiveRecord
+class StoryMatchPlayer extends \yii\db\ActiveRecord
 {
 
     /**
@@ -16,7 +16,7 @@ class StoryMatch extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%story_match}}';
+        return '{{%story_match_player}}';
     }
 
     /**
@@ -25,13 +25,11 @@ class StoryMatch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'session_id', 'user_id', 'm_story_model_id', 'm_story_model_detail_id',
-//                'team_id', 'poi_id',        // Todo：这里的字段需要根据实际情况修改
+            [['user_id', 'm_story_model_id', 'm_story_model_detail_id',
+                'team_id', 'poi_id', 'match_id',       // Todo：这里的字段需要根据实际情况修改
                 'user_model_id', 'score', 'score2',], 'integer'],
-            [['created_at', 'updated_at', 'status', 'story_match_status', ], 'integer'],
-            [['match_name', 'match_detail', 'ret',
-//                'match_id',         // Todo：这里的字段需要根据实际情况修改
-                ], 'string'],
+            [['created_at', 'updated_at', 'status', 'match_player_status', ], 'integer'],
+            [['match_detail', 'ret', 'm_user_model_prop', ], 'string'],
         ];
     }
 

@@ -17,6 +17,8 @@ class ErrorCode extends Api
 
     const UNKNOWN_ERROR = -1000;     // 未知错误
 
+    const PARAMS_ERROR = -1001;      // 参数错误
+
     const SMS_FAILED = -1010;
 
     const USER_PARAMETERS_INVALID   = -10001;   // 用户参数校验失败
@@ -93,5 +95,9 @@ class ErrorCode extends Api
     const STORY_MATCH_ALREADY_EXIST_READY = -120002; // 已经有待比赛的车辆
 
     const STORY_MATCH_NOT_EXIST_READY = -120003; // 没有准备参赛的汽车
+
+    const STORY_MATCH_NOT_MODEL_READY = -120004; // 没有准备参赛的模型
+
+    const STORY_MATCH_NOT_READY = -120005; // 比赛未准备好
 
 }

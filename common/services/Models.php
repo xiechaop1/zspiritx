@@ -1033,16 +1033,18 @@ class Models extends Component
         $formula = [
 //            'exp' => '$newExp = 115 ^ ($level - 1) + 4;',
             'level' => '$newProp["level"] = $level + 1;',
-            'intelligence' => '$newProp["intelligence"] = intval($intelligence + 20 * pow(1.2, ($level - 1)) + 5);',
-            'strength' => '$newProp["strength"] = intval($strength + 20 * pow(1.2, ($level - 1)) + 5);',
-            'agility' => '$newProp["agility"] = intval($agility + 20 * pow(1.2, ($level - 1)) + 5);',
-            'attack' => '$newProp["attack"] = intval($attack + 20 * pow(1.2, ($level - 1)) + 5);',
-            'defense' => '$newProp["defense"] = intval($defense + 20 * pow(1.2, ($level - 1)) + 5);',
-            'max_hp' => '$newProp["max_hp"] = intval($max_hp + $newProp["strength"] * pow(1.2, ($level - 1)) + 5);',
-            'max_mp' => '$newProp["max_mp"] = intval($max_mp + $newProp["intelligence"] * pow(1.2, ($level - 1)) + 5);',
+            'intelligence' => '$newProp["intelligence"] = intval($intelligence + 20 * pow(1.02, ($level - 1)) + 5);',
+            'strength' => '$newProp["strength"] = intval($strength + 20 * pow(1.02, ($level - 1)) + 5);',
+            'agility' => '$newProp["agility"] = intval($agility + 20 * pow(1.02, ($level - 1)) + 5);',
+            'attack' => '$newProp["attack"] = intval($attack + 20 * pow(1.02, ($level - 1)) + 5);',
+            'defense' => '$newProp["defense"] = intval($defense + 20 * pow(1.02, ($level - 1)) + 5);',
+            'att_speed' => '$newProp["att_speed"] = number_format(60 / ($newProp["agility"] / 30), 2);',
+            'max_hp' => '$newProp["max_hp"] = intval($newProp["strength"] * pow(1.02, ($level - 1)))+200;',
+            'max_mp' => '$newProp["max_mp"] = intval($newProp["intelligence"] * pow(1.02, ($level - 1)))+150;',
+            'max_exp' => '$newProp["max_exp"] = intval(200 * pow(1.22, $level) + 4);',
             'hp' => '$newProp["hp"] = $newProp["max_hp"];',
             'mp' => '$newProp["mp"] = $newProp["max_mp"];',
-            'att_speed' => '$newProp["att_speed"] = intval($att_speed + $newProp["agility"] * pow(1.2, ($level - 1)) + 5);',
+//            'att_speed' => '$newProp["att_speed"] = intval($newProp["agility"] * pow(1.02, ($level - 1)));',
         ];
 
         $newProp = [];
@@ -1053,13 +1055,14 @@ class Models extends Component
             if (!empty($prop)) {
                 $level = !empty($prop['level']) ? $prop['level'] : 1;
                 $exp = !empty($prop['exp']) ? $prop['exp'] : 0;
+                $maxExp = !empty($prop['max_exp']) ? $prop['max_exp'] : 0;
 
-                if ($level == 1) {
-                    $maxExp = 4;
-                } else {
-                    $maxExp = 200 * pow(1.4, ($level - 1)) + 4;
-                }
-                $maxExp = intval($maxExp);
+//                if ($level == 1) {
+//                    $maxExp = 4;
+//                } else {
+//                    $maxExp = 200 * pow(1.22, $level) + 4;
+//                }
+//                $maxExp = intval($maxExp);
 
                 $newProp['exp'] = $exp;
 //var_dump($exp);var_dump($maxExp);exit;

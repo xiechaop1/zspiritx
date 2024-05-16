@@ -316,6 +316,56 @@ class Model
         return $ret;
     }
 
+    public static function getUserModelProp($userModel, $att = 'user_model_prop') {
+        $ret = [];
+        if (!empty($userModel->$att)) {
+//            var_dump($userModel->$att);
+            $ret = json_decode($userModel->$att, true);
+        }
+//        var_dump($ret);exit;
+        return $ret;
+    }
+
+    public static function getUserModelPropCol($userModel, $col, $att = 'user_model_prop') {
+        $userModelProp = self::getUserModelProp($userModel, $att);
+
+        if (isset($userModelProp['prop'][$col])) {
+            return $userModelProp['prop'][$col];
+        }
+        return '';
+    }
+
+    public static function getUserModelPropColWithPropJson($userModelProp, $col) {
+        if (isset($userModelProp['prop'][$col])) {
+            return $userModelProp['prop'][$col];
+        }
+        return '';
+    }
+
+    public static function setUserModelPropColWithPropJson($userModelProp, $col, $val) {
+        $userModelProp['prop'][$col] = $val;
+        return $userModelProp;
+    }
+
+    public static function setUserModelPropCol($userModel, $col, $val, $att = 'user_model_prop') {
+        $userModelProp = self::getUserModelProp($userModel, $att);
+        $userModelProp['prop'][$col] = $val;
+        $userModel->$att = json_encode($userModelProp);
+        return $userModel;
+    }
+
+    public static function addUserModelPropCol($userModel, $col, $addition = 1, $att = 'user_model_prop') {
+        $userModelProp = self::getUserModelProp($userModel, $att);
+        $userModelProp['prop'][$col] += $addition;
+        $userModel->$att = json_encode($userModelProp);
+        return $userModel;
+    }
+
+    public static function addUserModelPropColWithPropJson($userModelProp, $col, $addition = 1) {
+        $userModelProp['prop'][$col] += $addition;
+        return $userModelProp;
+    }
+
     public static function createActionOnPlaced($dialog, $tag = '') {
         if (empty($dialog['ActionOnPlaced'])) {
             $dialog['ActionOnPlaced'] = [

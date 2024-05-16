@@ -1528,7 +1528,11 @@ class DoApi extends ApiAction
 
                         // 按公式计算新属性
                         $tmpRes = Yii::$app->models->computeAddStoryModelLinkPropWithFormula([$ret], $tarUserModel);
-                        $propRes = $tmpRes['data'];
+                        if (!empty($tmpRes['data'])) {
+                            $propRes = $tmpRes['data'];
+                        } else {
+                            $propRes = [];
+                        }
 
                         $res['title'] = '喂食成功';
                         $res['html'] = '宠物吃得饱饱，';

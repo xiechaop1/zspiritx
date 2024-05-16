@@ -9,23 +9,25 @@
 namespace common\models;
 
 
-class StoryMatch extends \common\models\gii\StoryMatch
+class StoryMatchPlayer extends \common\models\gii\StoryMatchPlayer
 {
 
-    const STORY_MATCH_STATUS_PREPARE = 1; // 准备
-    const STORY_MATCH_STATUS_MATCHING = 2; // 匹配中
-    const STORY_MATCH_STATUS_PLAYING = 3; // 游戏中
-    const STORY_MATCH_STATUS_END = 4; // 结束
-    const STORY_MATCH_STATUS_CANCEL = 5; // 取消
-    const STORY_MATCH_STATUS_TIMEOUT = 6; // 超时
+    const STORY_MATCH_PLAYER_STATUS_PREPARE = 1; // 准备
+    const STORY_MATCH_PLAYER_STATUS_MATCHING = 2; // 匹配中
+    const STORY_MATCH_PLAYER_STATUS_PLAYING = 3; // 游戏中
+    const STORY_MATCH_PLAYER_STATUS_END = 4; // 结束
+    const STORY_MATCH_PLAYER_STATUS_CANCEL = 5; // 取消
+    const STORY_MATCH_PLAYER_STATUS_TIMEOUT = 6; // 超时
+    const STORY_MATCH_PLAYER_STATUS_INJURED = 7; // 受伤
 
-    public static $storyMatchStatus2Name = [
-        self::STORY_MATCH_STATUS_PREPARE => '准备',
-        self::STORY_MATCH_STATUS_MATCHING => '匹配中',
-        self::STORY_MATCH_STATUS_PLAYING => '游戏中',
-        self::STORY_MATCH_STATUS_END => '结束',
-        self::STORY_MATCH_STATUS_CANCEL => '取消',
-        self::STORY_MATCH_STATUS_TIMEOUT => '超时',
+    public static $storyMatchPlayerStatus2Name = [
+        self::STORY_MATCH_PLAYER_STATUS_PREPARE => '准备',
+        self::STORY_MATCH_PLAYER_STATUS_MATCHING => '匹配中',
+        self::STORY_MATCH_PLAYER_STATUS_PLAYING => '游戏中',
+        self::STORY_MATCH_PLAYER_STATUS_END => '结束',
+        self::STORY_MATCH_PLAYER_STATUS_CANCEL => '取消',
+        self::STORY_MATCH_PLAYER_STATUS_TIMEOUT => '超时',
+        self::STORY_MATCH_PLAYER_STATUS_INJURED => '受伤',
     ];
 
     const STORY_MATCH_RESULT_WIN = 1; // 胜利
@@ -57,20 +59,12 @@ class StoryMatch extends \common\models\gii\StoryMatch
         return $this->hasOne('common\models\UserModels',  ['id' => 'user_model_id']);
     }
 
-    public function getStory(){
-        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
+    public function getMatch(){
+        return $this->hasOne('common\models\StoryMatch',  ['id' => 'match_id']);
     }
 
     public function getUser(){
         return $this->hasOne('common\models\User',  ['id' => 'user_id']);
-    }
-
-    public function getSession(){
-        return $this->hasOne('common\models\Session',  ['id' => 'session_id']);
-    }
-
-    public function getPlayers() {
-        return $this->hasMany('common\models\StoryMatchPlayer', ['match_id' => 'id']);
     }
 
 
