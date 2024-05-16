@@ -37,11 +37,13 @@ class Models extends Component
         'agility' => '敏捷',
         'intelligence' => '智力',
         'hp' => '生命值',
+        'max_hp' => '最大生命值',
         'mp' => '魔法值',
+        'max_mp' => '最大魔法值',
         'exp' => '经验值',
+        'max_exp' => '最大经验值',
         'attack' => '攻击力',
         'defense' => '防御力',
-
     ];
 
     public function getUnderTakeModelsFromCookie(){
@@ -1078,9 +1080,10 @@ class Models extends Component
             if (!empty($newProp)) {
                 foreach ($newProp as $k => $v) {
                     $userModelProp['prop'][$k] = $v;
+                    $oldProp = !empty($prop[$k]) ? $prop[$k] : 0;
                     $up[$k] = [
                         'title' => !empty(self::$prop2Name[$k]) ? self::$prop2Name[$k] : ' - ',
-                        'value' => intval($newProp[$k] - $prop[$k]),
+                        'value' => intval($v - $oldProp),
                     ];
 //                    $upProp[$k] = intval($newProp[$k] - $prop[$k]);
                 }
