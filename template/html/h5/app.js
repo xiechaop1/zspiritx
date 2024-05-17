@@ -806,6 +806,26 @@ $(function () {
         Unity.call(data);
     });
 
+    $(".battle_return_btn").click(function (){
+        // Unity.call('WebViewOff&TrueAnswer');
+
+        var answerType = $('#rtn_answer_type').val();
+        if (answerType == undefined) {
+
+            var params = {
+                'WebViewOff': 1
+            }
+        } else {
+            var params = {
+                'WebViewOff': 1,
+                'AnswerType': answerType
+            }
+        }
+        // console.log(params);
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
+
     $(".knowledge-title").click(function (){
         var obj = $(this);
         showKnowledge(obj);

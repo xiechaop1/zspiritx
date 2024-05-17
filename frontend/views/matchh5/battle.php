@@ -39,12 +39,13 @@ $this->title = '对战结果';
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
+<input type="hidden" id="rtn_answer_type" value="<?= $storyMatch->ret == \common\models\StoryMatch::STORY_MATCH_RESULT_WIN ? '2' : 1 ?>">
 <div class="w-100 m-auto">
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border2">
-                    <div class="btn-m-green m-t-30  m-l-30" style="position: absolute; right: 5px; top: -60px;" id="return_btn">
+                    <div class="btn-m-green m-t-30  m-l-30 battle_return_btn" style="position: absolute; right: 5px; top: -60px;">
                         返回
                     </div>
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
@@ -123,7 +124,7 @@ $this->title = '对战结果';
 
 
             </div>
-                    <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; bottom: 0px;" id="return_btn1">
+                    <div class="btn-m-green m-t-30 float-right m-r-20 battle_return_btn" style="position: absolute; bottom: 0px;">
                         返回
                     </div>
                 </div>

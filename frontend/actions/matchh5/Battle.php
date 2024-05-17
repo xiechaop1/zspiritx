@@ -346,7 +346,6 @@ class Battle extends Action
 //            'matchAllFlow' => $matchFlow,
             'matchAllFlowJson' => json_encode($matchDetail, true),
             'storyMatch'   => $storyMatch,
-
         ]);
     }
 
