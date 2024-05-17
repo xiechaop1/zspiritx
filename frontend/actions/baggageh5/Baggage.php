@@ -55,10 +55,21 @@ class Baggage extends Action
 
         $template = 'baggage';
 
-        $title = '我的背包';
+        $allParams = $_GET;
+        unset($allParams['story_model_class']);
+        $params = http_build_query($allParams);
+
+        $title = '背包';
+        $title2 = '<a href="/baggageh5/all?' . $params . '&story_model_class=3">对战</a>';
 
         if ( !empty($storyModelClass) ) {
-            $title = StoryModels::$storyModelClass2Name[$storyModelClass];
+            if ($storyModelClass == StoryModels::STORY_MODEL_CLASS_PET) {
+                $title = '对战';
+                $title2 = '<a href="/baggageh5/all?' . $params . '">背包</a>';
+            } else {
+                $title = StoryModels::$storyModelClass2Name[$storyModelClass];
+                $title2 = '<a href="/baggageh5/all?' . $params . '">背包</a>';
+            }
         }
 
         $bagVersion = !empty($_GET['bag_version']) ? $_GET['bag_version'] : 0;
@@ -70,6 +81,7 @@ class Baggage extends Action
 
         return $this->controller->render($template, [
             'title'         => $title,
+            'title2'        => $title2,
             'model'         => $model,
             'params'        => $_GET,
             'userId'        => $userId,

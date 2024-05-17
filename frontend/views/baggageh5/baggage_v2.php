@@ -45,11 +45,16 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
     ';
 }
  ?>
-
+    a {
+        color: #DAFC70;
+    }
 
     .btn-disable {
         color: #999;
     }
+    /*.npc-name {*/
+    /*    border: 2px solid rgba(218, 162, 252, 0.8);*/
+    /*}*/
 
 </style>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
@@ -72,6 +77,10 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                     </div>
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
                         <?= $title ?>
+                    </div>
+
+                    <div class="npc-name" style="background-color: #333; color: #DAFC70; left: 160px; font-size:24px;">
+                        <?= $title2 ?>
                     </div>
             <div class="row" id="answer-box">
                 <?php

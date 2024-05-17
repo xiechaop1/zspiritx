@@ -87,6 +87,7 @@ class BattlePrepare extends Action
 //                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
                 return $this->renderErr('对战不存在');
             }
+            $matchId = $storyMatch->id;
         } else {
             $storyMatch = new StoryMatch();
             $storyMatch->story_id = $storyId;
@@ -230,6 +231,10 @@ class BattlePrepare extends Action
             }
         } else if (!empty($rivalStoryModels)) {
             foreach ($rivalStoryModels as $rivalStoryModel) {
+                if ($rivalStoryModel->story_model_class != StoryModels::STORY_MODEL_CLASS_PET) {
+                    return $this->renderErr('你选择的对手不能参加战斗！');
+                }
+
                 $userPropTmp = Model::getUserModelProp($rivalStoryModel, 'story_model_prop');
                 $userProp = [];
                 if (!empty($userPropTmp['prop'])) {
@@ -346,12 +351,13 @@ class BattlePrepare extends Action
 
 
 
-        return $this->controller->render('msg', [
+        return $this->controller->render('battle_prepare', [
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'story_match'   => $storyMatch,
+            'match_id'      => $matchId,
             'answerType'    => 2,
             'msg' => $msg,
             'btnName' => '开始战斗',
