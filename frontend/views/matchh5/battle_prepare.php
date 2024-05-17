@@ -28,7 +28,7 @@ $this->registerMetaTag([
 $this->title = '消息';
 
 ?>
-<div class="w-100 m-auto">
+<div class="w-100 m-auto" style="top: 20px;">
 
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
@@ -41,8 +41,8 @@ $this->title = '消息';
                 </div>
             </div>
             <div class="btn-m-green m-t-30 float-right m-r-20">
-                <a href="/matchh5/battle?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&"
-                <?= !empty($btnName) ? $btnName : '返回' ?>
+                <a href="/matchh5/battle?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>">
+                开始战斗
                 </a>
             </div>
         </div>
