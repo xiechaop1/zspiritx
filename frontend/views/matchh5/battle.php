@@ -290,11 +290,15 @@ $this->title = '对战结果';
             if (obj[z].direction == 1) {
                 var shakeObj = $('.avatar_img');
                 var shakeObj1 = $('.rival_avatar_img');
+                shakeObj.attr('src', obj[z].currentAvatar);
+                shakeObj1.attr('src', obj[z].rivalAvatar);
                 shakeObj.css('left', '0px');
                 shakeObj1.css('left', '50px');
             } else {
                 var shakeObj = $('.rival_avatar_img');
                 var shakeObj1 = $('.avatar_img');
+                shakeObj.attr('src', obj[z].currentAvatar);
+                shakeObj1.attr('src', obj[z].rivalAvatar);
                 shakeObj1.css('left', '0px');
                 shakeObj.css('left', '50px');
             }

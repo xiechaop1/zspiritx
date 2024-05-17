@@ -197,8 +197,12 @@ class Battle extends Action
                 $matchDetail[] = [
                     'rivalPlayerId' => $rivalPlayer->id,
                     'rivalPlayerPetName' => $rivalPlayerPetName,
+                    'rivalPlayer' => $rivalPlayer,
+                    'rivalAvatar' => !empty($rivalPlayer->storyModel->icon) ? Attachment::completeUrl($rivalPlayer->storyModel->icon, true) : '',
                     'currentPlayerId' => $currentPlayer->id,
                     'currentPlayerPetName' => $currentPlayerPetName,
+                    'currentPlayer' => $currentPlayer,
+                    'currentAvatar' => !empty($currentPlayer->storyModel->icon) ? Attachment::completeUrl($currentPlayer->storyModel->icon, true) : '',
                     'restHp' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp'),
                     'maxHp' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'max_hp'),
                     'direction' => $direction,

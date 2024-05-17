@@ -200,6 +200,7 @@ class BattlePrepare extends Action
 //        $matchId = time() . rand(1000, 9999);
 
         $ct = 0;
+        $showRivalStoryModel = [];
         if (!empty($rivalUserModels)) {
             foreach ($rivalUserModels as $rivalUserModel) {
                 $userProp = Model::getUserModelProp($rivalUserModel);
@@ -224,6 +225,10 @@ class BattlePrepare extends Action
                 $storyMatchPlayer->m_story_model_detail_id = !empty($rivalUserModel->storyModelDetail->id) ? $rivalUserModel->storyModelDetail->id : 0;
                 $storyMatchPlayer->m_user_model_prop = $rivalUserModel->user_model_prop;
                 $storyMatchPlayer->save();
+
+//                if (empty($showRivalStoryModel)) {
+                    $showRivalStoryModel[] = $rivalUserModel->storyModel;
+//                }
 
                 if ($matchPlayerStatus == StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE) {
                     $ct++;
@@ -266,6 +271,10 @@ class BattlePrepare extends Action
                 $storyMatchPlayer->m_user_model_prop = json_encode($userProp);
                 $storyMatchPlayer->save();
 
+//                if (empty($showRivalStoryModel)) {
+                    $showRivalStoryModel[] = $rivalStoryModel;
+//                }
+
                 if ($matchPlayerStatus == StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE) {
                     $ct++;
                 }
@@ -285,6 +294,8 @@ class BattlePrepare extends Action
             $storyMatchPlayerRet = StoryMatchPlayer::STORY_MATCH_RESULT_WAITTING;
         }
 
+
+        $showStoryModel = [];
             $ct = 0;
             foreach ($userModels as $userModel) {
 
@@ -315,6 +326,10 @@ class BattlePrepare extends Action
                 $storyMatchPlayer->m_story_model_detail_id = !empty($userModel->storyModelDetail->id) ? $userModel->storyModelDetail->id : 0;
                 $storyMatchPlayer->m_user_model_prop = $userModel->user_model_prop;
                 $storyMatchPlayer->save();
+
+//                if (empty($showStoryModel)) {
+                    $showStoryModel[] = $userModel->storyModel;
+//                }
 
                 if ($matchPlayerStatus == StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE) {
                     $ct++;
@@ -358,6 +373,8 @@ class BattlePrepare extends Action
             'storyId'       => $storyId,
             'story_match'   => $storyMatch,
             'matchId'      => $matchId,
+            'showStoryModel' => $showStoryModel,
+            'showRivalStoryModel' => $showRivalStoryModel,
             'answerType'    => 2,
             'msg' => $msg,
             'btnName' => '开始战斗',
