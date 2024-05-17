@@ -357,7 +357,7 @@ class BattlePrepare extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'story_match'   => $storyMatch,
-            'match_id'      => $matchId,
+            'matchId'      => $matchId,
             'answerType'    => 2,
             'msg' => $msg,
             'btnName' => '开始战斗',
