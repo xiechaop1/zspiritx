@@ -55,12 +55,13 @@ class BattlePrepare extends Action
 
         $storyModelId = !empty($_GET['story_model_id']) ? $_GET['story_model_id'] : 0;
         $storyModelDetailId = !empty($_GET['story_model_detail_id']) ? $_GET['story_model_detail_id'] : 0;
-        $rivalStoryModelIds = !empty($_GET['rival_story_model_id']) ? $_GET['rival_story_model_id'] : 0;
+        $rivalStoryModelIds = !empty($_GET['rival_story_model_ids']) ? $_GET['rival_story_model_ids'] : 0;
 //        $rivalStoryModelDetailId = !empty($_GET['rival_story_model_detail_id']) ? $_GET['rival_story_model_detail_id'] : 0;
         $userModelIds = !empty($_GET['user_model_ids']) ? $_GET['user_model_ids'] : 0;
 
         if (empty($userId) || empty($sessionId) || empty($storyId)) {
-            throw new Exception('参数错误', ErrorCode::PARAMS_ERROR);
+//            throw new Exception('参数错误', ErrorCode::PARAMS_ERROR);
+            return $this->renderErr('参数错误');
         }
 
         $userInfo = User::find()
@@ -83,7 +84,8 @@ class BattlePrepare extends Action
                 ->one();
 
             if (empty($storyMatch)) {
-                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
+//                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
+                return $this->renderErr('对战不存在');
             }
         } else {
             $storyMatch = new StoryMatch();
@@ -180,7 +182,8 @@ class BattlePrepare extends Action
                 ->all();
 
             if (empty($userModels)) {
-                throw new Exception('您没有选择宠物出战，请重新选择！', ErrorCode::STORY_MATCH_NOT_MODEL_READY);
+//                throw new Exception('您没有选择宠物出战，请重新选择！', ErrorCode::STORY_MATCH_NOT_MODEL_READY);
+                return $this->renderErr('您没有选择宠物出战，请重新选择！');
             }
 
             $ct = 0;
@@ -313,7 +316,8 @@ class BattlePrepare extends Action
                 }
             }
             if ($ct == 0) {
-                throw new Exception('您的宠物还在养伤，无法出战！', ErrorCode::STORY_MATCH_NOT_MODEL_READY);
+//                throw new Exception('您的宠物还在养伤，无法出战！', ErrorCode::STORY_MATCH_NOT_MODEL_READY);
+                return $this->renderErr('您的宠物还在养伤，无法出战！');
             }
 
             if ($storyMatchStatus == StoryMatch::STORY_MATCH_STATUS_END) {
@@ -348,6 +352,7 @@ class BattlePrepare extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'story_match'   => $storyMatch,
+            'answerType'    => 2,
             'msg' => $msg,
             'btnName' => '开始战斗',
         ]);
@@ -356,6 +361,7 @@ class BattlePrepare extends Action
     public function renderErr($errTxt) {
         return $this->controller->render('msg', [
             'msg' => $errTxt,
+            'answerType' => 1,
         ]);
     }
 }

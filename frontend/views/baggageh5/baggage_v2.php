@@ -29,10 +29,23 @@ $this->title = '我的背包';
 
 ?>
 <style>
+    <?php
+if ( !empty($params['story_model_class']) && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET ) {
+    echo '.bag_selected {
+        border: 1px solid rgba(218, 162, 252, 0.8);
+        background-color: rgba(155, 112, 182, 0.2);
+    }
+    ';
+} else {
+    echo '
     .bag_selected {
         border: 1px solid rgba(218, 252, 112, 0.8);
         background-color: rgba(155, 252, 112, 0.2);
     }
+    ';
+}
+ ?>
+
 
     .btn-disable {
         color: #999;
@@ -58,7 +71,7 @@ $this->title = '我的背包';
                         返回
                     </div>
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
-                        背包
+                        <?= $title ?>
                     </div>
             <div class="row" id="answer-box">
                 <?php
@@ -70,13 +83,16 @@ $this->title = '我的背包';
 //                        $txt .= '： ' . $desc;
 //                    }
 
-
-                    if (!empty($item->storyModel)
-                        && $item->storyModel->use_allow == \common\models\StoryModels::USE_ALLOW_NOT
-                    ) {
-                        $baggageName = 'baggage_nouse';
+                    if (!empty($params['story_model_class']) && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET) {
+                        $baggageName = 'baggage_pet';
                     } else {
-                        $baggageName = 'baggage';
+                        if (!empty($item->storyModel)
+                            && $item->storyModel->use_allow == \common\models\StoryModels::USE_ALLOW_NOT
+                        ) {
+                            $baggageName = 'baggage_nouse';
+                        } else {
+                            $baggageName = 'baggage';
+                        }
                     }
                 ?>
                 <div class="m-t-30 col-sm-3 col-md-12" style="padding: 5px; " id="baggage_area">
@@ -148,12 +164,24 @@ $this->title = '我的背包';
     <div class="w-100 p-30  m-b-10">
         <div class="w-1-0 d-flex">
             <div class="fs-30 bold w-100 text-FF">
-    <div class="btn-m-green m-t-30  m-l-30 use_btn" style="position: absolute; left: 5px; top: -50px;" id="use_btn" act="1">
-        使用
-    </div>
-                <div class="btn-m-green m-t-30  m-l-30 use_btn" act="2" style="position: absolute; left: 155px; top: -50px;" id="combine_btn">
-                    组合
-                </div>
+                <?php
+                if ( !empty($params['story_model_class']) && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET ) {
+                    ?>
+                    <div class="btn-m-green m-t-30  m-l-30 fight_btn" style="position: absolute; left: 5px; top: -50px;" id="fight_btn" act="1">
+                        出战
+                    </div>
+                    <?php
+                } else {
+                    ?>
+                    <div class="btn-m-green m-t-30  m-l-30 use_btn" style="position: absolute; left: 5px; top: -50px;" id="use_btn" act="1">
+                        使用
+                    </div>
+                    <div class="btn-m-green m-t-30  m-l-30 use_btn" act="2" style="position: absolute; left: 155px; top: -50px;" id="combine_btn">
+                        组合
+                    </div>
+                    <?php
+                }
+                ?>
             </div>
         </div>
     </div>

@@ -67,6 +67,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('扫描类型');
+            echo $form->field($storyModel, 'story_model_class')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$storyModelClass2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('模型类型');
             echo $form->field($storyModel, 'misrange')->textInput(['value' => $storyModel->misrange])->label('误差');
             echo $form->field($storyModel, 'trigger_misrange')->textInput(['value' => $storyModel->trigger_misrange])->label('触发误差距离');
             echo $form->field($storyModel, 'act_misrange')->textInput(['value' => $storyModel->act_misrange])->label('动作误差距离');
@@ -154,6 +160,12 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'story_model_prop')->textarea(['value' => \common\helpers\Common::decodeJsonToVarexport($storyModel->story_model_prop), 'rows' => 20])->label('模型属性配置');
             echo $form->field($storyModel, 'story_model_html')->textarea(['value' => !empty($storyModel->story_model_html) ? \common\helpers\Common::decodeJsonToVarexport($storyModel->story_model_html): '', 'rows' => 20])->label('模型Html配置');
             echo $form->field($storyModel, 'use_group_name')->textInput(['value' => $storyModel->use_group_name])->label('道具使用背包分组');
+            echo $form->field($storyModel, 'is_random')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryModels::$isRandom2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('是否在随机范围');
             echo $form->field($storyModel, 'sort_by')->textInput(['value' => $storyModel->sort_by])->label('出现顺序');
             echo $form->field($storyModel, 'rate')->textInput(['value' => $storyModel->rate])->label('出现概率');
             echo $form->field($storyModel, 'set_type')->widget('\kartik\select2\Select2', [

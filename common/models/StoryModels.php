@@ -39,6 +39,16 @@ class StoryModels extends \common\models\gii\StoryModels
         self::SCAN_IMAGE_TYPE_MODEL_COMBINE => '模型组合',
     ];
 
+    const STORY_MODEL_CLASS_NORMAL  = 1; // 普通
+    const STORY_MODEL_CLASS_ITEM    = 2; // 物品
+    const STORY_MODEL_CLASS_PET     = 3; // 宠物
+
+    public static $storyModelClass2Name = [
+        self::STORY_MODEL_CLASS_NORMAL => '普通',
+        self::STORY_MODEL_CLASS_ITEM => '物品',
+        self::STORY_MODEL_CLASS_PET => '宠物',
+    ];
+
     const DIRECTION_DEFAULT     = 1;        // 朝向默认
     const DIRECTION_TO_USER     = 2;        // 朝向用户
 
@@ -117,6 +127,15 @@ class StoryModels extends \common\models\gii\StoryModels
         self::NAMECARD_DISPLAY_NOT => '不显示',
         self::NAMECARD_DISPLAY_YES => '显示',
     ];
+
+    const IS_RANDOM_YES             = 1; // 可随机出现
+    const IS_RANDOM_NOT             = 0; // 不可随机出现
+
+    public static $isRandom2Name = [
+        self::IS_RANDOM_NOT => '不可随机出现',
+        self::IS_RANDOM_YES => '可随机出现',
+    ];
+
 
     const SET_TYPE_NORMAL        = 0;    // 正常放置
     const SET_TYPE_ONE_TIME      = 1;     // 一次性

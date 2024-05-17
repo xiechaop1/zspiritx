@@ -11,6 +11,7 @@ namespace frontend\actions\baggageh5;
 
 use common\definitions\Common;
 use common\models\Story;
+use common\models\StoryModels;
 use common\models\UserModels;
 use yii\base\Action;
 use kartik\form\ActiveForm;
@@ -35,17 +36,30 @@ class Baggage extends Action
         $targetStoryModelDetailId = !empty($_GET['target_story_model_detail_id']) ? $_GET['target_story_model_detail_id'] : 0;
         $targetModelId = !empty($_GET['target_model_id']) ? $_GET['target_model_id'] : 0;
 
+        $storyModelClass = !empty($_GET['story_model_class']) ? $_GET['story_model_class'] : '';
+
         $model = UserModels::find()
-            ->with('model', 'storyModel', 'sessionModel')
+//            ->joinWith('model', 'storyModel', 'sessionModel')
+            ->joinWith('storyModel')
             ->where([
                 'user_id'       => $userId,
                 'session_id'    => $sessionId,
                 'is_delete'     => Common::STATUS_NORMAL,
-            ])
-            ->orderBy(['id' => SORT_DESC])
+            ]);
+        if (!empty($storyModelClass)) {
+//            $model = $model->join()
+            $model = $model->andFilterWhere(['o_story_model.story_model_class' => $storyModelClass]);
+        }
+        $model = $model->orderBy(['id' => SORT_DESC])
             ->all();
 
         $template = 'baggage';
+
+        $title = '我的背包';
+
+        if ( !empty($storyModelClass) ) {
+            $title = StoryModels::$storyModelClass2Name[$storyModelClass];
+        }
 
         $bagVersion = !empty($_GET['bag_version']) ? $_GET['bag_version'] : 0;
         if (!empty($bagVersion)
@@ -55,6 +69,7 @@ class Baggage extends Action
         }
 
         return $this->controller->render($template, [
+            'title'         => $title,
             'model'         => $model,
             'params'        => $_GET,
             'userId'        => $userId,

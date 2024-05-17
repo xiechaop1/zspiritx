@@ -237,7 +237,48 @@ $(function () {
 
     });
 
-    // $("input[name='baggage2']").click(function ()
+    $("input[name='baggage_pet']").click(function () {
+        var v_select = $("input[name='selected_story_model_ids']").val();
+        var obj = $(this).parent();
+        // console.log(obj);
+        var allObjs = obj.parent().parent().find("input[name='baggage_pet']").parent();
+
+        // console.log(allObjs);
+        allObjs.removeClass('bag_selected');
+        obj.addClass('bag_selected');
+        v_select = $(this).val();
+        //
+        // if (v_select == null || v_select == '') {
+        //     v_select = $(this).val();
+        //     obj.addClass('bag_selected');
+        // } else {
+        //     if (v_select.indexOf($(this).val()) >= 0) {
+        //         v_select = v_select.replace(',' + $(this).val(), '');
+        //         v_select = v_select.replace($(this).val() + ',', '');
+        //         v_select = v_select.replace($(this).val(), '');
+        //
+        //         obj.removeClass('bag_selected');
+        //     } else {
+        //         v_select = v_select + ',' + $(this).val();
+        //
+        //         obj.addClass('bag_selected');
+        //     }
+        // }
+        //
+        // if (v_select.indexOf(",") > 0) {
+        //     $('#combine_btn').removeClass('btn-disable');
+        //     $('#use_btn').addClass('btn-disable');
+        // } else {
+        //     $('#combine_btn').addClass('btn-disable');
+        //     $('#use_btn').removeClass('btn-disable');
+        // }
+
+        $("input[name='selected_story_model_ids']").val(v_select);
+
+        console.log(v_select);
+
+    });
+
     $('.use_btn').click(function ()
     {
         if ($(this).hasClass('btn-disable')) {
@@ -275,6 +316,144 @@ $(function () {
                     target_story_model_id:target_story_model_id,
                     target_story_model_detail_id:target_story_model_detail_id,
                     target_model_id:target_model_id,
+                    is_test:1,
+                    act:act,
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status){
+                    var dataContent=data;
+                    var dataCon=$.toJSON(dataContent);
+                    var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                    console.log(obj);
+                    //console.log("ajax请求成功:"+data.toString())
+                    //新消息获取成功
+                    if(obj["code"]==200){
+                        console.log(obj);
+                        if (obj.data.type == 1) {
+                            var params = obj.data.ret;
+                            // var data = $.toJSON(params);
+                            var data = params;
+                            console.log(data);
+                            Unity.call(data);
+                        } else if (obj.data.type == 5) {
+                            // 如果是展现，则直接展现
+                            $('#baggage_title').html(obj.data.title);
+                            $('#baggage_html').html(obj.data.html);
+                            $('#baggage_desc').html(obj.data.desc);
+                            var obj = $('#baggage_detail');
+                            // $('#baggage_detail_back').modal('show');
+                            // obj.show();
+                            obj.modal('show');
+                        }  else if (obj.data.type == 6) {
+                            // 如果是展现，则直接展现
+                            $('#baggage_title').html(obj.data.title);
+                            $('#baggage_html').html(obj.data.html);
+                            $('#baggage_desc').html(obj.data.desc);
+                            var obj = $('#baggage_detail');
+                            $('#dialog_return_btn').attr('need_refresh', 1);
+                            // $('#baggage_detail_back').modal('show');
+                            // obj.show();
+                            obj.modal('show');
+                        } else if (act == 2) {
+                            console.log(obj.data);
+                            $('#baggage_title').html('组合成功！');
+                            $('#baggage_html').html('<img src="' + obj.data.show.icon + '" style="width: 160px;border-radius: 20px; ">');
+                            $('#baggage_desc').html(obj.data.show.story_model_name);
+                            $('#dialog_return_btn').attr('need_refresh', 1);
+                            var obj = $('#baggage_detail');
+                            // obj.attr('style', 'width: 300px; display: grid; place-items: center;');
+                            $('#baggage_html').attr('style', 'justify-content: center;align-items: center;');
+                            $('#baggage_desc').attr('style', 'justify-content: center;align-items: center;');
+                            obj.modal('show');
+                            // $('#baggage_msg_title').html(obj.data.title);
+                            // $('#baggage_msg_html').html(obj.data.html);
+                            // $('#baggage_msg_desc').html(obj.data.desc);
+
+                        } else {
+                            // if(v_ture==v_select){
+                            $.alert('使用成功！');
+                            var params = {
+                                'WebViewOff': 1
+                            }
+                            var data=$.toJSON(params);
+                            Unity.call(data);
+                            // setTimeout(function () {
+                            //     window.location.reload();
+                            // }, 3000);
+                        }
+
+                        $("input[name='selected_story_model_ids']").val('');
+                        $("input[name='baggage']").each(function() {
+                            $(this).parent().removeClass('bag_selected');
+                        });
+                        $('.use_btn').addClass('btn-disable');
+
+                        // }
+                        // else{
+                        //     $.alert('使用失败！');
+                        // }
+                    }
+                    //新消息获取失败
+                    else{
+                        $.alert(obj.msg)
+                    }
+
+                }
+            });
+        }
+    })
+
+    // $("input[name='baggage2']").click(function ()
+    $('.fight_btn').click(function ()
+    {
+        if ($(this).hasClass('btn-disable')) {
+            return false;
+        }
+        var that=$("#answer-info");
+        var user_id=$("input[name='user_id']").val();
+        var story_id=$("input[name='story_id']").val();
+        var session_id=$("input[name='session_id']").val();
+        var target_story_model_id=$("input[name='target_story_model_id']").val();
+        // var target_story_model_detail_id=$("input[name='target_story_model_detail_id']").val();
+        // var target_model_id=$("input[name='target_model_id']").val();
+        // var v_ture=that.attr("data-value");
+        // var v_detail=that.attr("data-detail");
+        // var v_select=$("input[name='baggage']:checked").val();
+        // $("#answer-box").hide();
+        var v_select = $("input[name='selected_story_model_ids']").val();
+        if(v_select==null){
+            $("#h5-null").modal('show');
+        }
+
+        var url = '/matchh5/battle_prepare';
+        url += '?user_id=' + user_id;
+        url += '&story_id=' + story_id;
+        url += '&session_id=' + session_id;
+        url += '&user_model_ids=' + v_select;
+        url += '&rival_story_model_ids=' + target_story_model_id;
+
+        location.href = url;
+        return true;
+
+        var act = $(this).attr('act');
+
+        if(v_select!=null){
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: false,
+                url: '/matchh5/battle_prepare',
+                data:{
+                    user_id:user_id,
+                    story_id:story_id,
+                    session_id:session_id,
+                    user_model_id:v_select,
+                    rival_story_model_id:target_story_model_id,
+                    // target_story_model_detail_id:target_story_model_detail_id,
+                    // target_model_id:target_model_id,
                     is_test:1,
                     act:act,
                 },

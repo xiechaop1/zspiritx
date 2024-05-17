@@ -40,7 +40,7 @@ $this->title = '消息';
                     <?= $msg ?>
                 </div>
             </div>
-            <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
+            <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn"<?= !empty($answerType) ? ' answer_type="' . $answerType . '"' : '' ?>>
                 <?= !empty($btnName) ? $btnName : '返回' ?>
             </div>
         </div>
