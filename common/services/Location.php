@@ -93,8 +93,8 @@ class Location extends Component
             $sql .= ' AND poi_type like "%' . $poitype . '%"';
         }
         $sql .= ' HAVING dist < ' . $radius;
-        $sql .= ' ORDER BY dist ASC;';
-        $sql .= ' LIMIT ' . $offset . ', ' . $limit;
+        $sql .= ' ORDER BY dist ASC';
+        $sql .= ' LIMIT ' . $offset . ', ' . $limit . ';';
 
         $ret = \Yii::$app->db->createCommand($sql)->queryAll();
 
