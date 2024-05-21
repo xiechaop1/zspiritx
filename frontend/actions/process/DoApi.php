@@ -700,11 +700,13 @@ class DoApi extends ApiAction
 
                         if (!empty($sModels)) {
                             foreach ($sModels as $sModelCols) {
-                                foreach ($sModelCols as $sModel) {
+                                $sModelItems = $sModelcols['story_model'];
+                                $sModelLoc = $sModelcols['user_model_loc'];
+                                foreach ($sModelItems as $sModel) {
                                     $models[] = [
                                         'session_model' => $sessionModel,
-                                        'story_model' => $sModel['story_model'],
-                                        'user_model_loc' => $sModel['user_model_loc'],
+                                        'story_model' => $sModel,
+                                        'user_model_loc' => $sModelLoc,
                                         'model' => $storyModel->model,
                                     ];
                                 }
