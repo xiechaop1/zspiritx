@@ -67,7 +67,8 @@ class UserModels extends Component
                             $formula = !empty($propArray['init_formula']) ? $propArray['init_formula'] : '';
 
                             if (!empty($formula)) {
-                                eval('$userModelProp = ' . $formula . ';');
+                                eval($formula . ';');
+                                $userModelProp = $ret;
                             } else {
                                 $userModelProp = [];
                             }
@@ -121,7 +122,7 @@ class UserModels extends Component
         $userModelLoc->story_id = $storyId;
 //        $userModelLoc->session_id = $sessionId;
         $userModelLoc->amap_poi_id = $amapPoiId;
-        $userModelLoc->user_model_prop = json_encode($userModelProp);
+        $userModelLoc->user_model_prop = json_encode(['prop' => $userModelProp]);
         $userModelLoc->user_model_loc_status = $userModelLocStatus;
         $userModelLoc->save();
         $userModelLoc->id = \Yii::$app->db->getLastInsertID();
