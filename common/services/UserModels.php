@@ -57,10 +57,11 @@ class UserModels extends Component
                         ])
                         ->orderBy('rand()')
                         ->limit($limit)
-                        ->all();
+                        ->one();
 
                     if (!empty($storyModels)) {
-                        foreach ($storyModels as $storyModel) {
+                        $storyModel = $storyModels;
+//                        foreach ($storyModels as $storyModel) {
 
                             $propArray = Model::getUserModelProp($storyModel, 'story_model_prop');
                             $formula = !empty($propArray['init_formula']) ? $propArray['init_formula'] : '';
@@ -96,7 +97,7 @@ class UserModels extends Component
                                 'location' => $locations[$locId],
                             ];
 //                            $userModelLoc;
-                        }
+//                        }
                     }
 
                 }
