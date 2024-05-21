@@ -666,6 +666,7 @@ class DoApi extends ApiAction
 
 //                        $storyModelParams = [];
 //                        $params = [];
+                        $sModels = [];
                         if (!empty($setResult)
                             && !empty($setResult['storyModelsResult'][$storyModel->id])
                         ) {
