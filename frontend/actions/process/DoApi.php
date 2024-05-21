@@ -624,6 +624,12 @@ class DoApi extends ApiAction
             }
         }
 
+        // Todo: 临时放到这里
+        // Todo: 根据位置放置模型（位置从高德取）
+        $userLng = !empty($this->_get['lng']) ? $this->_get['lng'] : 0;
+        $userLat = !empty($this->_get['lat']) ? $this->_get['lat'] : 0;
+        $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, 1000, 30);
+
         foreach ($sessoinStages as $sessionStage) {
             $sessionModels = $sessionStage->models;
             $models = [];
@@ -656,62 +662,97 @@ class DoApi extends ApiAction
                             }
                         }
 
-                        $maxCount = 1;
-                        if (!empty($storyModel->story_model_prop)) {
-                            $storyModelProp = json_decode($storyModel->story_model_prop, true);
-                            if (!empty($storyModelProp['repeat'])) {
-                                $maxCount = $storyModelProp['repeat'];
+//                        $storyModelParams = [];
+//                        $params = [];
+                        if (!empty($setResult)
+                            && !empty($setResult['storyModelsResult'][$storyModel->id])
+                        ) {
+                            foreach ($setResult['storyModelsResult'][$storyModel->id] as $userModelLocRet) {
+                                $storyModelParams = [];
+                                $params = [];
+
+                                $storyModel2 = clone $storyModel;
+                                if (!empty($userModelLocRet['location'])) {
+                                    $storyModel2->lng = $userModelLocRet['location']['lng'];
+                                    $storyModel2->lat = $userModelLocRet['location']['lat'];
+                                    $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+//                                    $storyModelParams['lng'] = $userModelLocRet['location']['lng'];
+//                                    $storyModelParams['lat'] = $userModelLocRet['location']['lat'];
+
+                                    $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
+                                    $params['location_id'] = $userModelLocRet['location']['id'];
+                                }
+                                $sModels = $this->_setStoryModelToStage($storyModel, $storyModelParams, $params);
+
+                            }
+                        } else {
+                            $sModels = $this->_setStoryModelToStage($storyModel);
+                        }
+
+                        if (!empty($sModels)) {
+                            foreach ($sModels as $sModel) {
+                                $model[] = [
+                                    'session_model' => $sessionModel,
+                                    'story_model' => $sModel,
+                                    'model' => $storyModel->model,
+                                ];
                             }
                         }
-//                        $preStoryModel = $storyModel;
-//                        $oldParams = [
-//                            'story_model_name' => (string)$storyModel->story_model_name,
-//                            'dialog' => (string)$storyModel->dialog,
-//                            'model_inst_u_id' => (string)$storyModel->model_inst_u_id,
-//                        ];
-                        for ($i=0; $i<$maxCount; $i++) {
-//                            $storyModel = $preStoryModel;
-                            $storyModel1 = clone $storyModel;
-                            // 判断概率
-                            if (!empty($storyModel1->rate)) {
-                                $seed = rand(1, 100);
-                                if ($seed > $storyModel1->rate) {
-                                    continue;
-                                }
-                            }
 
-//                            foreach ($oldParams as $col => $val) {
-//                                $storyModel->$col = $val;
+//                        $maxCount = 1;
+//                        if (!empty($storyModel->story_model_prop)) {
+//                            $storyModelProp = json_decode($storyModel->story_model_prop, true);
+//                            if (!empty($storyModelProp['repeat'])) {
+//                                $maxCount = $storyModelProp['repeat'];
 //                            }
-
-                            $storyModelParams = [
-                                'i' => $i,
-                            ];
-                            $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
-
-                            if (!empty($storyModel1->dialog)) {
-                                $params['story_model_id'] = $storyModel1->id;
-                                $params['model_id'] = $storyModel1->model_id;
-                                $params['story_model_detail_id'] = $storyModel1->story_model_detail_id;
-                                $params['model_inst_u_id'] = $storyModel1->model_inst_u_id;
-                                $params['i'] = $i;
-
-                                // 个性化属性替换
-                                if (!empty($userModelProps[$storyModel1->id])) {
-                                    $params['show_name'] = !empty($userModelProps[$storyModel1->id]['user_model_prop']['show_name'])
-                                        ? $userModelProps[$storyModel1->id]['user_model_prop']['show_name'] : $storyModel1->story_model_name;
-                                }
-
-                                $storyModel1->dialog = Model::formatDialog($storyModel1, $params);
-                            }
-
-
-                            $models[] = [
-                                'session_model' => $sessionModel,
-                                'story_model' => $storyModel1,
-                                'model' => $storyModel->model,
-                            ];
-                        }
+//                        }
+////                        $preStoryModel = $storyModel;
+////                        $oldParams = [
+////                            'story_model_name' => (string)$storyModel->story_model_name,
+////                            'dialog' => (string)$storyModel->dialog,
+////                            'model_inst_u_id' => (string)$storyModel->model_inst_u_id,
+////                        ];
+//                        for ($i=0; $i<$maxCount; $i++) {
+////                            $storyModel = $preStoryModel;
+//                            $storyModel1 = clone $storyModel;
+//                            // 判断概率
+//                            if (!empty($storyModel1->rate)) {
+//                                $seed = rand(1, 100);
+//                                if ($seed > $storyModel1->rate) {
+//                                    continue;
+//                                }
+//                            }
+//
+////                            foreach ($oldParams as $col => $val) {
+////                                $storyModel->$col = $val;
+////                            }
+//
+//                            $storyModelParams['i'] = $i;
+//                            $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
+//
+//                            if (!empty($storyModel1->dialog)) {
+//                                $params['story_model_id'] = $storyModel1->id;
+//                                $params['model_id'] = $storyModel1->model_id;
+//                                $params['story_model_detail_id'] = $storyModel1->story_model_detail_id;
+//                                $params['model_inst_u_id'] = $storyModel1->model_inst_u_id;
+//                                $params['i'] = $i;
+//
+//                                // 个性化属性替换
+//                                if (!empty($userModelProps[$storyModel1->id])) {
+//                                    $params['show_name'] = !empty($userModelProps[$storyModel1->id]['user_model_prop']['show_name'])
+//                                        ? $userModelProps[$storyModel1->id]['user_model_prop']['show_name'] : $storyModel1->story_model_name;
+//                                }
+//
+//                                $storyModel1->dialog = Model::formatDialog($storyModel1, $params);
+//                            }
+//
+//
+//                            $models[] = [
+//                                'session_model' => $sessionModel,
+//                                'story_model' => $storyModel1,
+//                                'model' => $storyModel->model,
+//                            ];
+//                        }
                     }
                 }
             }
@@ -739,6 +780,70 @@ class DoApi extends ApiAction
         }
 
         return $ret;
+    }
+
+    public function _setStoryModelToStage($storyModel, $storyModelParams = [], $params = []) {
+
+        $storyModels = [];
+
+        $maxCount = 1;
+        if (!empty($storyModel->story_model_prop)) {
+            $storyModelProp = json_decode($storyModel->story_model_prop, true);
+            if (!empty($storyModelProp['repeat'])) {
+                $maxCount = $storyModelProp['repeat'];
+            }
+        }
+//                        $preStoryModel = $storyModel;
+//                        $oldParams = [
+//                            'story_model_name' => (string)$storyModel->story_model_name,
+//                            'dialog' => (string)$storyModel->dialog,
+//                            'model_inst_u_id' => (string)$storyModel->model_inst_u_id,
+//                        ];
+        for ($i=0; $i<$maxCount; $i++) {
+//                            $storyModel = $preStoryModel;
+            $storyModel1 = clone $storyModel;
+            // 判断概率
+            if (!empty($storyModel1->rate)) {
+                $seed = rand(1, 100);
+                if ($seed > $storyModel1->rate) {
+                    continue;
+                }
+            }
+
+//                            foreach ($oldParams as $col => $val) {
+//                                $storyModel->$col = $val;
+//                            }
+
+            $storyModelParams = [
+                'i' => $i,
+            ];
+            $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
+
+            if (!empty($storyModel1->dialog)) {
+                $params['story_model_id'] = $storyModel1->id;
+                $params['model_id'] = $storyModel1->model_id;
+                $params['story_model_detail_id'] = $storyModel1->story_model_detail_id;
+                $params['model_inst_u_id'] = $storyModel1->model_inst_u_id;
+                $params['i'] = $i;
+
+                // 个性化属性替换
+                if (!empty($userModelProps[$storyModel1->id])) {
+                    $params['show_name'] = !empty($userModelProps[$storyModel1->id]['user_model_prop']['show_name'])
+                        ? $userModelProps[$storyModel1->id]['user_model_prop']['show_name'] : $storyModel1->story_model_name;
+                }
+
+                $storyModel1->dialog = Model::formatDialog($storyModel1, $params);
+            }
+
+            $storyModels[] = $storyModel1;
+//            $models[] = [
+//                'session_model' => $sessionModel,
+//                'story_model' => $storyModel1,
+//                'model' => $storyModel->model,
+//            ];
+        }
+
+        return $storyModels;
     }
 
     public function getStoryModels(){

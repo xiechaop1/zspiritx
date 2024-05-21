@@ -229,12 +229,20 @@ class Battle extends Action
                                 $exp = 0;
                                 $score += 0;
                             } else {
-                                $expBase = 10 * pow(1.15, $currentPlayerLevel);
+                                if (!empty(Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'exp_base'))) {
+                                    $expBase = Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'exp_base');
+                                } else {
+                                    $expBase = 10 * pow(1.15, $currentPlayerLevel);
+                                }
                                 $expBei = (10 - $levelCha) / 10;
     //                    $expBei = ($expBei > 0) ? $expBei : 0;
                                 $exp = $expBase * $expBei;
 
-                                $scoreBase = 5 * pow(1.15, $currentPlayerLevel);
+                                if (!empty(Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'score_base'))) {
+                                    $scoreBase = Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'score_base');
+                                } else {
+                                    $scoreBase = 5 * pow(1.15, $currentPlayerLevel);
+                                }
                                 $scoreBei = (10 - $levelCha) / 10;
                                 $score += $scoreBase * $scoreBei;
                             }

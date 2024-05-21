@@ -200,6 +200,8 @@ class Model
         $colList = [
             'model_inst_u_id' => '',
             'story_model_name' => '',
+            'lng' => '',
+            'lat' => '',
 //            'dialog' => '',
         ];
         if (!empty($params)) {

@@ -89,6 +89,13 @@ class BattlePrepare extends Action
             }
             $matchId = $storyMatch->id;
         } else {
+//            $storyMatch = StoryMatch ::find()
+//                ->where([
+//                    'user_id' => $userId,
+//                    'session_id' => $sessionId,
+//                    'story_id' => $storyId,
+//                    'm_story_model_id' => $rivalStoryModelIds,
+//                    'story_match_status' => StoryMatch::STORY_MATCH_STATUS_PREPARE,
             $storyMatch = new StoryMatch();
             $storyMatch->story_id = $storyId;
             $storyMatch->user_id = $userId;

@@ -35,6 +35,9 @@ return [
         'baggage'   => 'common\services\Baggage',
         'storyRank'      => 'common\services\StoryRank',
 
+        'location'      => 'common\services\Location',
+        'userModels'      => 'common\services\UserModels',
+
         // add by xiechao
 //        'ocr'               => 'common\services\Orc',
 //        'AipOcr'            => 'aip-php-sdk-2.2.15/AipOcr.php',
