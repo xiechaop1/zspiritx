@@ -62,10 +62,13 @@ class UserModels extends Component
                     if (!empty($storyModels)) {
                         foreach ($storyModels as $storyModel) {
 
-                            $formula = Model::getUserModelPropCol($storyModel, 'init_formula', 'story_model_prop');
+                            $propArray = Model::getUserModelProp($storyModel, 'story_model_prop');
+                            $formula = !empty($propArray['init_formula']) ? $propArray['init_formula'] : '';
 
                             if (!empty($formula)) {
                                 eval('$userModelProp = ' . $formula . ';');
+                            } else {
+                                $userModelProp = [];
                             }
 
                             $amapPoiId = !empty($locations[$locId]['amap_poi_id']) ? $locations[$locId]['amap_poi_id'] : '';
