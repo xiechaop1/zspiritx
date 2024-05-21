@@ -92,7 +92,7 @@ class Location extends Component
         if (!empty($poitype)) {
             $sql .= ' AND poi_type like "%' . $poitype . '%"';
         }
-        $sql .= ' HAVING dist < ' . $radius . ')';
+        $sql .= ' HAVING dist < ' . $radius;
         $sql .= ' ORDER BY dist ASC;';
         $sql .= ' LIMIT ' . $offset . ', ' . $limit;
 
