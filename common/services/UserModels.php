@@ -130,7 +130,7 @@ class UserModels extends Component
         $locationIds = [];
         if (!empty($locations)) {
             foreach ($locations as $loc) {
-                $locationIds[] = $loc->id;
+                $locationIds[] = $loc['id'];
             }
         }
 
