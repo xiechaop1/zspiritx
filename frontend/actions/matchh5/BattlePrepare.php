@@ -23,6 +23,7 @@ use common\models\StoryMatchPlayer;
 use common\models\StoryModels;
 use common\models\User;
 use common\models\UserLottery;
+use common\models\UserModelLoc;
 use common\models\UserModels;
 use common\models\UserPrize;
 use yii\base\Action;
@@ -52,10 +53,11 @@ class BattlePrepare extends Action
         $poiId = !empty($_GET['poi_id']) ? $_GET['poi_id'] : 0;
         $rivalUserModelIds = !empty($_GET['rival_user_model_ids']) ? $_GET['rival_user_model_ids'] : 0;
         $rivalUserId = !empty($_GET['rival_user_id']) ? $_GET['rival_user_id'] : 0;
+        $rivalStoryModelIds = !empty($_GET['rival_story_model_ids']) ? $_GET['rival_story_model_ids'] : 0;
+        $rivalLocationId = !empty($_GET['rival_location_id']) ? $_GET['rival_location_id'] : 0;
 
         $storyModelId = !empty($_GET['story_model_id']) ? $_GET['story_model_id'] : 0;
         $storyModelDetailId = !empty($_GET['story_model_detail_id']) ? $_GET['story_model_detail_id'] : 0;
-        $rivalStoryModelIds = !empty($_GET['rival_story_model_ids']) ? $_GET['rival_story_model_ids'] : 0;
 //        $rivalStoryModelDetailId = !empty($_GET['rival_story_model_detail_id']) ? $_GET['rival_story_model_detail_id'] : 0;
         $userModelIds = !empty($_GET['user_model_ids']) ? $_GET['user_model_ids'] : 0;
 
@@ -118,30 +120,7 @@ class BattlePrepare extends Action
             $userModelIdArray = [];
         }
 
-        if (!empty($rivalUserModelIds)) {
-            if (strpos($rivalUserModelIds, ',') !== false) {
-                $rivalUserModelIdArray = explode(',', $rivalUserModelIds);
-            } else {
-                $rivalUserModelIdArray = [$rivalUserModelIds];
-            }
-        } else {
-            $rivalUserModelIdArray = [];
-        }
 
-        if (empty($rivalUserModelIdArray)
-            && !empty($rivalStoryModelIds)
-        ) {
-            if (strpos($rivalStoryModelIds, ',') !== false) {
-                $rivalStoryModelIdArray = explode(',', $rivalStoryModelIds);
-            } else {
-                $rivalStoryModelIdArray = [$rivalStoryModelIds];
-            }
-            $rivalStoryModels = StoryModels::find()
-                ->where([
-                    'id' => $rivalStoryModelIdArray,
-                ])
-                ->all();
-        }
 
         $storyMatchPlayers = StoryMatchPlayer::find()
             ->where(['match_id' => $matchId])
@@ -160,7 +139,7 @@ class BattlePrepare extends Action
             }
         }
             if (empty($userModelIds)) {
-                $userModels = UserModels::find()
+                $userModels = UserModel::find()
                     ->where([
                         'user_id' => $userId,
                         'session_id' => $sessionId,
@@ -175,7 +154,7 @@ class BattlePrepare extends Action
 
                 $userModels = $userModels->all();
             } else {
-                $userModels = UserModels::find()
+                $userModels = UserModel::find()
                     ->where([
                         'id' => $userModelIdArray,
                     ])
@@ -183,11 +162,50 @@ class BattlePrepare extends Action
 
             }
 
-            $rivalUserModels = UserModels::find()
+        if (!empty($rivalUserModelIds)) {
+            if (strpos($rivalUserModelIds, ',') !== false) {
+                $rivalUserModelIdArray = explode(',', $rivalUserModelIds);
+            } else {
+                $rivalUserModelIdArray = [$rivalUserModelIds];
+            }
+
+            $rivalUserModels = UserModelLoc::find()
                 ->where([
                     'id' => $rivalUserModelIdArray,
+                    'user_model_loc_status' => UserModelLoc::USER_MODEL_LOC_STATUS_LIVE,
                 ])
                 ->all();
+        } else {
+            $rivalUserModelIdArray = [];
+        }
+
+        if (empty($rivalUserModels)
+            && !empty($rivalLocationId)
+        ) {
+            $rivalUserModels = UserModelLoc::find()
+                ->where([
+                    'location_id' => $rivalLocationId,
+                    'story_id' => $storyId,
+                    'user_model_loc_status' => UserModelLoc::USER_MODEL_LOC_STATUS_LIVE,
+                ])
+                ->all();
+        }
+
+        if (empty($rivalUserModels)
+            && !empty($rivalStoryModelIds)
+        ) {
+            if (strpos($rivalStoryModelIds, ',') !== false) {
+                $rivalStoryModelIdArray = explode(',', $rivalStoryModelIds);
+            } else {
+                $rivalStoryModelIdArray = [$rivalStoryModelIds];
+            }
+            $rivalStoryModels = StoryModels::find()
+                ->where([
+                    'id' => $rivalStoryModelIdArray,
+                ])
+                ->all();
+        }
+
 
             if (empty($userModels)) {
 //                throw new Exception('您没有选择宠物出战，请重新选择！', ErrorCode::STORY_MATCH_NOT_MODEL_READY);
