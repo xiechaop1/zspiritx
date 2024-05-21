@@ -139,7 +139,7 @@ class BattlePrepare extends Action
             }
         }
             if (empty($userModelIds)) {
-                $userModels = UserModel::find()
+                $userModels = UserModels::find()
                     ->where([
                         'user_id' => $userId,
                         'session_id' => $sessionId,
@@ -154,7 +154,7 @@ class BattlePrepare extends Action
 
                 $userModels = $userModels->all();
             } else {
-                $userModels = UserModel::find()
+                $userModels = UserModels::find()
                     ->where([
                         'id' => $userModelIdArray,
                     ])
