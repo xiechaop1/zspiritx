@@ -63,6 +63,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
 <input type="hidden" name="target_story_model_id" value="<?= $targetStoryModelId ?>">
 <input type="hidden" name="target_story_model_detail_id" value="<?= $targetStoryModelDetailId ?>">
 <input type="hidden" name="target_model_id" value="<?= $targetModelId ?>">
+<input type="hidden" name="target_user_model_loc_id" value="<?= $targetUserModelLocId ?>">
 
 <input type="hidden" name="selected_story_model_ids" value="">
 <input type="hidden" name="use_btn_disable" value="0">

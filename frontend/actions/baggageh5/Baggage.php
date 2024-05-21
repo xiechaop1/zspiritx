@@ -36,6 +36,8 @@ class Baggage extends Action
         $targetStoryModelDetailId = !empty($_GET['target_story_model_detail_id']) ? $_GET['target_story_model_detail_id'] : 0;
         $targetModelId = !empty($_GET['target_model_id']) ? $_GET['target_model_id'] : 0;
 
+        $targetUserModelLocId = !empty($_GET['target_user_model_loc_id']) ? $_GET['target_user_model_loc_id'] : 0;
+
         $storyModelClass = !empty($_GET['story_model_class']) ? $_GET['story_model_class'] : '';
 
         $model = UserModels::find()
@@ -90,6 +92,7 @@ class Baggage extends Action
             'targetStoryModelId' => $targetStoryModelId,
             'targetStoryModelDetailId' => $targetStoryModelDetailId,
             'targetModelId' => $targetModelId,
+            'targetUserModelLocId' => $targetUserModelLocId,
         ]);
     }
 }

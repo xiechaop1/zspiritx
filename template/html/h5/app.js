@@ -291,6 +291,7 @@ $(function () {
         var target_story_model_id=$("input[name='target_story_model_id']").val();
         var target_story_model_detail_id=$("input[name='target_story_model_detail_id']").val();
         var target_model_id=$("input[name='target_model_id']").val();
+        var target_user_model_loc_id=$("input[name='target_user_model_loc_id']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
         // var v_select=$("input[name='baggage']:checked").val();
@@ -316,6 +317,7 @@ $(function () {
                     target_story_model_id:target_story_model_id,
                     target_story_model_detail_id:target_story_model_detail_id,
                     target_model_id:target_model_id,
+                    target_user_model_loc_id:target_user_model_loc_id,
                     is_test:1,
                     act:act,
                 },
@@ -417,6 +419,7 @@ $(function () {
         var story_id=$("input[name='story_id']").val();
         var session_id=$("input[name='session_id']").val();
         var target_story_model_id=$("input[name='target_story_model_id']").val();
+        var target_user_model_loc_id=$("input[name='target_user_model_loc_id']").val();
         // var target_story_model_detail_id=$("input[name='target_story_model_detail_id']").val();
         // var target_model_id=$("input[name='target_model_id']").val();
         // var v_ture=that.attr("data-value");
@@ -434,6 +437,7 @@ $(function () {
         url += '&session_id=' + session_id;
         url += '&user_model_ids=' + v_select;
         url += '&rival_story_model_ids=' + target_story_model_id;
+        url += '&rival_user_model_ids=' + target_user_model_loc_id;
 
         location.href = url;
         return true;
