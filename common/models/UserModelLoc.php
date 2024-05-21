@@ -14,7 +14,7 @@ class UserModelLoc extends \common\models\gii\UserModelLoc
     const USER_MODEL_LOC_STATUS_LIVE = 1;
     const USER_MODEL_LOC_STATUS_DEAD = 2;
 
-    public static $status2Name = [
+    public static $userModelLocStatus2Name = [
         self::USER_MODEL_LOC_STATUS_LIVE => '存活',
         self::USER_MODEL_LOC_STATUS_DEAD => '死亡',
     ];

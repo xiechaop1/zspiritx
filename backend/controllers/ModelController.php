@@ -25,6 +25,7 @@ class ModelController extends ViewController
                         'actions' => ['story_stage_link', 'story_model_link', 'story_model_link_edit',
                             'story_model', 'story_model_edit',
                             'user_model', 'user_model_edit',
+                            'user_model_loc', 'user_model_loc_edit',
                             'story_model_detail', 'story_model_detail_edit',
                             'models_edit', 'session_model', 'models', 'story_stage', 'story_stage_edit'],
                         'allow' => true,
@@ -50,6 +51,12 @@ class ModelController extends ViewController
             'user_model_edit' => [
                 'class' => 'backend\actions\model\UserModelEdit',
             ],
+            'user_model_loc' => [
+                'class' => 'backend\actions\model\UserModelLoc',
+            ],
+//            'user_model_loc_edit' => [
+//                'class' => 'backend\actions\model\UserModelLocEdit',
+//            ],
 
             'story_model_link' => [
                 'class' => 'backend\actions\model\StoryModelLink',

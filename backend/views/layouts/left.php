@@ -92,6 +92,12 @@
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
+                                'label' => '用户地点模型列表',
+                                'url' => ['/model/user_model_loc'],
+                                'active' => in_array($this->context->route, ['model/user_model_loc', 'model/user_model_loc_edit']),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
                                 'label' => '模型列表',
                                 'url' => ['/model/models'],
                                 'active' => in_array($this->context->route, ['model/models', 'model/models_edit']),
