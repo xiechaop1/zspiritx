@@ -23,6 +23,7 @@ use common\models\StoryMatchPlayer;
 use common\models\StoryRank;
 use common\models\User;
 use common\models\UserLottery;
+use common\models\UserModelLoc;
 use common\models\UserModels;
 use common\models\UserPrize;
 use common\models\UserScore;
@@ -247,14 +248,40 @@ class Battle extends Action
                                 $score += $scoreBase * $scoreBei;
                             }
 
+                            // Todo: 暂时去掉保存，为了调试，最后统一打开
+                            if (!empty($rivalPlayer->userModelLoc)
+                                && 1 != 1
+                            ) {
+                                $rivalPlayer->userModelLoc->user_model_loc_status = UserModelLoc::USER_MODEL_LOC_STATUS_DEAD;
+                                $rivalPlayer->userModelLoc->save();
+                                if (!empty($rivalPlayer->userModelLoc->location_id)) {
+                                    $rivalUserModelLoc = new UserModelLoc();
+                                    $rivalUserModelLoc->user_id = $currentPlayer->user_id;
+                                    $rivalUserModelLoc->user_model_id = $currentPlayer->user_model_id;
+                                    $rivalUserModelLoc->location_id = $rivalPlayer->userModelLoc->location_id;
+                                    $rivalUserModelLoc->story_model_id = $currentPlayer->story_model_id;
+                                    $rivalUserModelLoc->story_id = $currentPlayer->story_id;
+//                                    $rivalUserModelLoc->session_id = $currentPlayer->session_id;
+                                    $rivalUserModelLoc->amap_poi_id = $currentPlayer->userModelLoc->amap_poi_id;
+                                    $rivalUserModelLoc->user_model_prop = $currentPlayer->m_user_model_prop;
+                                    $rivalUserModelLoc->user_model_loc_status = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE;
+                                    $rivalUserModelLoc->save();
+                                }
+                            }
+
                             $currentPlayerProp = Model::addUserModelPropColWithPropJson($currentPlayerProp, 'exp', $exp);
                             $allPlayerProps[$currentPlayer->id] = $currentPlayerProp;
+                            
 //                            $currentPlayerProp = Model::addUserModelPropColWithPropJson($currentPlayerProp, 'score', $score);
                             $currentPlayer->m_user_model_prop = json_encode($currentPlayerProp, true);
+
+                            // Todo: 暂时去掉保存，为了调试，最后统一打开
 //                            $currentPlayer->save();
 
                             if (!empty($currentPlayer->userModel)) {
                                 $currentPlayer->userModel->user_model_prop = Model::addUserModelPropCol($currentPlayer->userModel, 'exp', $exp);
+
+                                // Todo: 暂时去掉保存，为了调试，最后统一打开
 //                                $currentPlayer->userModel->save();
                             }
 

@@ -59,6 +59,10 @@ class StoryMatchPlayer extends \common\models\gii\StoryMatchPlayer
         return $this->hasOne('common\models\UserModels',  ['id' => 'user_model_id']);
     }
 
+    public function getUserModelLoc(){
+        return $this->hasOne('common\models\UserModelLoc',  ['id' => 'user_model_id']);
+    }
+
     public function getMatch(){
         return $this->hasOne('common\models\StoryMatch',  ['id' => 'match_id']);
     }
