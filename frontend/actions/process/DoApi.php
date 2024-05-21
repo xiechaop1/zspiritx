@@ -693,7 +693,7 @@ class DoApi extends ApiAction
 
                         if (!empty($sModels)) {
                             foreach ($sModels as $sModel) {
-                                $model[] = [
+                                $models[] = [
                                     'session_model' => $sessionModel,
                                     'story_model' => $sModel,
                                     'model' => $storyModel->model,
