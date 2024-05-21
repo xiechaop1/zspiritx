@@ -68,8 +68,9 @@ class UserModels extends Component
                                 eval('$userModelProp = ' . $formula . ';');
                             }
 
+                            $amapPoiId = !empty($locations[$locId]['amap_poi_id']) ? $locations[$locId]['amap_poi_id'] : '';
                             $userModelLoc = $this->addUserModelLoc(0, 0,
-                                $locId, $locations[$locId]->amap_poi_id, $storyId, $sessionId,
+                                $locId, $amapPoiId, $storyId, $sessionId,
                                 $storyModel->id, $userModelProp);
 //                            $userModelLoc = new UserModelLoc();
 //                            $userModelLoc->user_id = 0;
