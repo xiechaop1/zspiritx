@@ -816,9 +816,7 @@ class DoApi extends ApiAction
 //                                $storyModel->$col = $val;
 //                            }
 
-            $storyModelParams = [
-                'i' => $i,
-            ];
+            $storyModelParams['i'] = $i;
             $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
 
             if (!empty($storyModel1->dialog)) {
