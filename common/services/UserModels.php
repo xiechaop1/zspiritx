@@ -121,7 +121,7 @@ class UserModels extends Component
         $userModelLoc->story_id = $storyId;
 //        $userModelLoc->session_id = $sessionId;
         $userModelLoc->amap_poi_id = $amapPoiId;
-        $userModelLoc->user_model_prop = $userModelProp;
+        $userModelLoc->user_model_prop = json_encode($userModelProp);
         $userModelLoc->user_model_loc_status = $userModelLocStatus;
         $userModelLoc->save();
         $userModelLoc->id = \Yii::$app->db->getLastInsertID();
