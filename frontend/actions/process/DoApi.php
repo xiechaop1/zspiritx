@@ -684,20 +684,22 @@ class DoApi extends ApiAction
                                     $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
                                     $params['location_id'] = $userModelLocRet['location']['id'];
                                 }
-                                $sModels = $this->_setStoryModelToStage($storyModel, $storyModelParams, $params);
+                                $sModels[] = $this->_setStoryModelToStage($storyModel, $storyModelParams, $params);
 
                             }
                         } else {
-                            $sModels = $this->_setStoryModelToStage($storyModel);
+                            $sModels[] = $this->_setStoryModelToStage($storyModel);
                         }
 
                         if (!empty($sModels)) {
-                            foreach ($sModels as $sModel) {
-                                $models[] = [
-                                    'session_model' => $sessionModel,
-                                    'story_model' => $sModel,
-                                    'model' => $storyModel->model,
-                                ];
+                            foreach ($sModels as $sModelCols) {
+                                foreach ($sModelCols as $sModel) {
+                                    $models[] = [
+                                        'session_model' => $sessionModel,
+                                        'story_model' => $sModel,
+                                        'model' => $storyModel->model,
+                                    ];
+                                }
                             }
                         }
 
