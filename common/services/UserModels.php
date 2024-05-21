@@ -56,7 +56,7 @@ class UserModels extends Component
                             'story_model_class' => StoryModels::STORY_MODEL_CLASS_PET
                         ])
                         ->orderBy('rand()')
-                        ->limit(10)
+                        ->limit($limit)
                         ->all();
 
                     if (!empty($storyModels)) {
@@ -129,12 +129,14 @@ class UserModels extends Component
     }
 
     public function getUserModelLoc($userLng, $userLat, $radius = 1000, $limit = 30) {
-        $locations = Yii::$app->location->getLocationFromDbAndAMap($userLng, $userLat, $radius, $limit);
+        $locationsRet = Yii::$app->location->getLocationFromDbAndAMap($userLng, $userLat, $radius, $limit);
 
+        $locations = [];
         $locationIds = [];
-        if (!empty($locations)) {
-            foreach ($locations as $loc) {
+        if (!empty($locationsRet)) {
+            foreach ($locationsRet as $loc) {
                 $locationIds[] = $loc['id'];
+                $locations[$loc['id']] = $loc;
             }
         }
 
