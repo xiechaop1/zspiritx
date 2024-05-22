@@ -37,6 +37,7 @@ use common\models\StoryRole;
 use common\models\StoryStages;
 use common\models\User;
 use common\models\UserKnowledge;
+use common\models\UserModelLoc;
 use common\models\UserModelsUsed;
 use common\models\UserStory;
 use common\models\UserModels;
@@ -137,6 +138,9 @@ class DoApi extends ApiAction
                     break;
                 case 'get_session_models':
                     $ret = $this->getSessionModels();
+                    break;
+                case 'get_user_model_loc':
+                    $ret = $this->getUserModelLoc();
                     break;
                 case 'get_session_models_by_stage':
                     $ret = $this->getSessionModelsByStage();
@@ -629,7 +633,8 @@ class DoApi extends ApiAction
         if ($this->_storyId == 5) {
             $userLng = !empty($this->_get['lng']) ? $this->_get['lng'] : 0;
             $userLat = !empty($this->_get['lat']) ? $this->_get['lat'] : 0;
-            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, 1000, 30);
+//            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, StoryModels::STORY_MODEL_CLASS_RIVAL, 1000, 30);
+            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, 0, 1000, 30);
         }
 
         foreach ($sessoinStages as $sessionStage) {
@@ -685,11 +690,17 @@ class DoApi extends ApiAction
                                     $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
                                     $params['location_id'] = $userModelLocRet['location']['id'];
                                 }
-                                $sModels[] = [
-                                    'story_model' => $this->_setStoryModelToStage($storyModel, $storyModelParams, $params),
-                                    'user_model_loc' => $userModelLocRet['userModelLoc'],
-                                ];
-
+                                if (!empty($userModelLocRet['userModelLoc']->active_class)
+                                    &&
+                                    ($userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                                        || $userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                                    )
+                                ) {
+                                    $sModels[] = [
+                                        'story_model' => $this->_setStoryModelToStage($storyModel, $storyModelParams, $params),
+                                        'user_model_loc' => $userModelLocRet['userModelLoc'],
+                                    ];
+                                }
                             }
                         } else {
                             $sModels[] = [
@@ -856,6 +867,31 @@ class DoApi extends ApiAction
         }
 
         return $storyModels;
+    }
+
+    public function getUserModelLoc() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+
+        $userLng = !empty($this->_get['lng']) ? $this->_get['lng'] : 0;
+        $userLat = !empty($this->_get['lat']) ? $this->_get['lat'] : 0;
+
+        $userModelLoc = Yii::$app->getUserModelLocByUserId($userId, UserModelLoc::USER_MODEL_LOC_STATUS_LIVE);
+
+        $ret = [];
+
+        if (!empty($userModelLoc)) {
+            foreach ($userModelLoc as $userModelLocItem) {
+                $temp = Yii::$app->setUserModelToLoc($storyId, 0,
+                    $userModelLocItem->lng, $userModelLocItem->lat);
+                $ret += $temp['result'];
+            }
+        } else {
+            $temp = Yii::$app->setUserModelToLoc($storyId, 0, $userLng, $userLat);
+            $ret = $temp['result'];
+        }
+
+        return $ret;
     }
 
     public function getStoryModels(){

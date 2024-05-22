@@ -271,7 +271,7 @@ class Battle extends Action
 
                             $currentPlayerProp = Model::addUserModelPropColWithPropJson($currentPlayerProp, 'exp', $exp);
                             $allPlayerProps[$currentPlayer->id] = $currentPlayerProp;
-                            
+
 //                            $currentPlayerProp = Model::addUserModelPropColWithPropJson($currentPlayerProp, 'score', $score);
                             $currentPlayer->m_user_model_prop = json_encode($currentPlayerProp, true);
 

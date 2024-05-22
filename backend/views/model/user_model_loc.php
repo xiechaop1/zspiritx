@@ -97,6 +97,15 @@ echo \dmstr\widgets\Alert::widget();
                         },
                     ],
                     [
+                        'label' => '动作类型',
+                        'attribute' => 'active_class',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\UserModelLoc::$activeClass2Name[$model->active_class])
+                                ? \common\models\UserModelLoc::$activeClass2Name[$model->active_class] : '未知';
+                        },
+                    ],
+                    [
                         'label' => '位置',
                         'attribute' => 'location_id',
                         'format'    => 'raw',

@@ -42,6 +42,10 @@ class ProcessController extends Controller
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'get_session_stages',
             ],
+            'get_user_model_loc' => [
+                'class'     => 'frontend\actions\process\DoApi',
+                'action'    => 'get_user_model_loc',
+            ],
             'use_model' => [
                 'class'     => 'frontend\actions\process\DoApi',
                 'action'    => 'use_model',

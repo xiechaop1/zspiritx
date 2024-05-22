@@ -21,7 +21,7 @@ use yii;
 class UserModels extends Component
 {
 
-    public function setUserModelToLoc($storyId, $sessionId, $userLng, $userLat, $radius = 1000, $limit = 30) {
+    public function setUserModelToLoc($storyId, $sessionId, $userLng, $userLat, $storyModelClass = 0, $radius = 1000, $limit = 30) {
         $userModelLocRets = $this->getUserModelLoc($userLng, $userLat, $radius, $limit);
 
         $result = [];
@@ -51,9 +51,12 @@ class UserModels extends Component
                         continue;
                     }
 
+                    $storyModelClass = !empty($storyModelClass) ? $storyModelClass
+                        : [StoryModels::STORY_MODEL_CLASS_PET, StoryModels::STORY_MODEL_CLASS_RIVAL];
+
                     $storyModels = StoryModels::find()
                         ->where([
-                            'story_model_class' => StoryModels::STORY_MODEL_CLASS_PET
+                            'story_model_class' => $storyModelClass
                         ])
                         ->orderBy('rand()')
                         ->limit($limit)
@@ -73,10 +76,18 @@ class UserModels extends Component
                                 $userModelProp = [];
                             }
 
+                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET) {
+                                $activeClass = UserModelLoc::ACTIVE_CLASS_CATCH;
+                            } elseif ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
+                                $activeClass = UserModelLoc::ACTIVE_CLASS_BATTLE;
+                            } else {
+                                $activeClass = UserModelLoc::ACTIVE_CLASS_OTHER;
+                            }
+
                             $amapPoiId = !empty($locations[$locId]['amap_poi_id']) ? $locations[$locId]['amap_poi_id'] : '';
                             $userModelLoc = $this->addUserModelLoc(0, 0,
                                 $locId, $amapPoiId, $storyId, $sessionId,
-                                $storyModel->id, $userModelProp);
+                                $storyModel->id, $activeClass, $userModelProp);
 //                            $userModelLoc = new UserModelLoc();
 //                            $userModelLoc->user_id = 0;
 //                            $userModelLoc->location_id = $locId;
@@ -113,12 +124,13 @@ class UserModels extends Component
 
     public function addUserModelLoc($userId, $userModelId,
                                     $locId, $amapPoiId, $storyId, $sessionId,
-                                    $storyModelId, $userModelProp, $userModelLocStatus = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE) {
+                                    $storyModelId, $activeClass, $userModelProp, $userModelLocStatus = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE) {
         $userModelLoc = new UserModelLoc();
         $userModelLoc->user_id = $userId;
         $userModelLoc->user_model_id = $userModelId;
         $userModelLoc->location_id = $locId;
         $userModelLoc->story_model_id = $storyModelId;
+        $userModelLoc->active_class = $activeClass;
         $userModelLoc->story_id = $storyId;
 //        $userModelLoc->session_id = $sessionId;
         $userModelLoc->amap_poi_id = $amapPoiId;
@@ -166,6 +178,21 @@ class UserModels extends Component
         $userModelLocs = UserModelLoc::find()
             ->where([
                 'location_id' => $locationIds,
+            ]);
+        if (!empty($userModelLocStatus)) {
+            $userModelLocs->andFilterWhere([
+                'user_model_loc_status' => $userModelLocStatus,
+            ]);
+        }
+        $userModelLocs = $userModelLocs->all();
+
+        return $userModelLocs;
+    }
+
+    public function getUserModelLocByUserId($userId, $userModelLocStatus = []) {
+        $userModelLocs = UserModelLoc::find()
+            ->where([
+                'user_id' => $userId,
             ]);
         if (!empty($userModelLocStatus)) {
             $userModelLocs->andFilterWhere([

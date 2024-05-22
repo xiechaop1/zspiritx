@@ -25,7 +25,7 @@ class UserModelLoc extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'user_id', 'session_id',
+            [['story_id', 'user_id', 'session_id', 'active_class',
                 'user_model_id', 'story_model_id', 'location_id', ], 'integer'],
             [['is_delete', 'user_model_loc_status', 'created_at', 'updated_at',], 'integer'],
             [['user_model_prop', 'amap_poi_id', ], 'string'],

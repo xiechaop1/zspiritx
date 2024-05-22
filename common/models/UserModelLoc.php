@@ -19,6 +19,18 @@ class UserModelLoc extends \common\models\gii\UserModelLoc
         self::USER_MODEL_LOC_STATUS_DEAD => '死亡',
     ];
 
+    const ACTIVE_CLASS_CATCH = 1; // 捕捉
+    const ACTIVE_CLASS_BATTLE = 2; // 战斗
+    const ACTIVE_CLASS_STORY = 3; // 剧情
+    const ACTIVE_CLASS_OTHER = 4; // 其他
+
+    public static $activeClass2Name = [
+        self::ACTIVE_CLASS_CATCH => '捕捉',
+        self::ACTIVE_CLASS_BATTLE => '战斗',
+        self::ACTIVE_CLASS_STORY => '剧情',
+        self::ACTIVE_CLASS_OTHER => '其他',
+    ];
+
     public function behaviors()
     {
         return [
