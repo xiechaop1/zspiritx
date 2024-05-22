@@ -55,7 +55,7 @@ class UserModels extends Component
 //                        : [StoryModels::STORY_MODEL_CLASS_PET, StoryModels::STORY_MODEL_CLASS_RIVAL];
 
                     if (empty($storyModelClass)) {
-                        $rate = mt_rand(1, 100);
+                        $rate = rand(1, 100);
                         foreach (StoryModels::$storyModelClassRate as $tempStoryModelClass => $tempRate) {
                             if ($rate <= $tempRate) {
                                 $storyModelClass = $tempStoryModelClass;
