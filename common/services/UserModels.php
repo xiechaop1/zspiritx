@@ -58,15 +58,17 @@ class UserModels extends Component
                         $rate = rand(1, 100);
                         foreach (StoryModels::$storyModelClassRate as $tempStoryModelClass => $tempRate) {
                             if ($rate <= $tempRate) {
-                                $storyModelClass = $tempStoryModelClass;
+                                $storyModelClassFind = $tempStoryModelClass;
                                 break;
                             }
                         }
+                    } else {
+                        $storyModelClassFind = $storyModelClass;
                     }
 
                     $storyModels = StoryModels::find()
                         ->where([
-                            'story_model_class' => $storyModelClass
+                            'story_model_class' => $storyModelClassFind
                         ])
                         ->orderBy('rand()')
                         ->limit($limit)
