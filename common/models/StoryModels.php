@@ -51,6 +51,13 @@ class StoryModels extends \common\models\gii\StoryModels
         self::STORY_MODEL_CLASS_RIVAL => '对手',
     ];
 
+    public static $storyModelClassRate = [
+//        self::STORY_MODEL_CLASS_NORMAL => 0.5,
+        self::STORY_MODEL_CLASS_ITEM => 25,
+        self::STORY_MODEL_CLASS_PET => 5,
+        self::STORY_MODEL_CLASS_RIVAL => 70,
+    ];
+
     const DIRECTION_DEFAULT     = 1;        // 朝向默认
     const DIRECTION_TO_USER     = 2;        // 朝向用户
 
