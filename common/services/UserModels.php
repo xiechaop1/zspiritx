@@ -59,7 +59,6 @@ class UserModels extends Component
                         foreach (StoryModels::$storyModelClassRate as $tempStoryModelClass => $tempRate) {
                             if ($rate <= $tempRate) {
                                 $storyModelClass = $tempStoryModelClass;
-                            } else {
                                 break;
                             }
                         }
