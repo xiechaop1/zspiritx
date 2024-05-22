@@ -873,8 +873,8 @@ class DoApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
-        $userLng = !empty($this->_get['lng']) ? $this->_get['lng'] : 0;
-        $userLat = !empty($this->_get['lat']) ? $this->_get['lat'] : 0;
+        $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+        $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
 
         $userModelLoc = Yii::$app->userModels->getUserModelLocByUserId($userId, UserModelLoc::USER_MODEL_LOC_STATUS_LIVE);
 
