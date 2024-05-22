@@ -188,6 +188,7 @@ class UserModels extends Component
 
     public function getUserModelLocByLocIds($locationIds, $userModelLocStatus = []) {
         $userModelLocs = UserModelLoc::find()
+            ->with('storyModel')
             ->where([
                 'location_id' => $locationIds,
             ]);
