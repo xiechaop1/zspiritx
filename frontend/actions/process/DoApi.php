@@ -631,8 +631,8 @@ class DoApi extends ApiAction
         // Todo: 临时放到这里
         // Todo: 根据位置放置模型（位置从高德取）
         if ($this->_storyId == 5) {
-            $userLng = !empty($this->_get['lng']) ? $this->_get['lng'] : 0;
-            $userLat = !empty($this->_get['lat']) ? $this->_get['lat'] : 0;
+            $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+            $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
 //            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, StoryModels::STORY_MODEL_CLASS_RIVAL, 1000, 30);
             $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, 0, 1000, 30);
         }
