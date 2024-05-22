@@ -891,6 +891,19 @@ class DoApi extends ApiAction
             $ret = $temp['result'];
         }
 
+        if (!empty($ret)) {
+            foreach ($ret as &$row) {
+                foreach ($row as &$row1) {
+                    foreach ($row1['userModelLoc'] as &$row2) {
+                        $tmp = $row2->toArray();
+                        $tmp['storyModel']  = $row2->storyModel;
+                        $row2 = $tmp;
+                    }
+                }
+            }
+        }
+
+
         return $ret;
     }
 
