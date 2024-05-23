@@ -349,6 +349,7 @@ $this->title = '对战结果';
                 'font-size': '-=15'
             }, 200, function() {
                 $(this).css('top', height); // 动画完成后重置位置
+                $(this).css('font-size', 70);
             });
     }
     

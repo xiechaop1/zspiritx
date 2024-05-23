@@ -25,7 +25,7 @@ class StoryMatch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['story_id', 'session_id', 'user_id', 'm_story_model_id', 'm_story_model_detail_id',
+            [['story_id', 'session_id', 'user_id', 'match_type', 'm_story_model_id', 'm_story_model_detail_id',
 //                'team_id', 'poi_id',        // Todo：这里的字段需要根据实际情况修改
                 'user_model_id', 'score', 'score2',], 'integer'],
             [['created_at', 'updated_at', 'status', 'story_match_status', ], 'integer'],

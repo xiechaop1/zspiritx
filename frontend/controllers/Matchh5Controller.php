@@ -36,6 +36,12 @@ class Matchh5Controller extends Controller
             'battle_prepare' => [
                 'class' => 'frontend\actions\matchh5\BattlePrepare',
             ],
+            'challenge' => [
+                'class' => 'frontend\actions\matchh5\Challenge',
+            ],
+            'challenge_prepare' => [
+                'class' => 'frontend\actions\matchh5\ChallengePrepare',
+            ],
         ];
     }
 }

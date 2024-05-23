@@ -57,6 +57,7 @@ class Battle extends Action
         $storyMatch = StoryMatch::find()
             ->where([
                 'id'    => $matchId,
+                'match_type' => StoryMatch::MATCH_TYPE_BATTLE,
                 'story_match_status' => StoryMatch::STORY_MATCH_STATUS_PREPARE,
 //                'user_model_id' => $userModelId,
             ])
