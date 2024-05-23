@@ -57,6 +57,13 @@ class PuzzleSudoku extends Action
         $qaOne['selected_json'] = \common\helpers\Common::isJson($qaOne['selected']) ? json_decode($qaOne['selected'], true) : $qaOne['selected'];
         $qaOne['attachment'] = \common\helpers\Attachment::completeUrl($qaOne['attachment'], true);
 
+        if (empty($hole) && !empty($qaOne['selected_json']['hole'])) {
+            $hole = $qaOne['selected_json']['hole'];
+        }
+        if (empty($size) && !empty($qaOne['selected_json']['size'])) {
+            $size = $qaOne['selected_json']['size'];
+        }
+
         $keyboardArray = [];
         if (!empty($qaOne['selected_json']['keyboard'])) {
             $keyboard = $qaOne['selected_json']['keyboard'];

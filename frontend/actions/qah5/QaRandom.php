@@ -80,7 +80,6 @@ class QaRandom extends Action
                 $uri = '/puzzleh5/puzzle';
                 $selectedJson = json_decode($model->selected, true);
                 $params = [
-                    'qa_id' => $qaId,
                     'rows' => !empty($selectedJson['rows']) ? $selectedJson['rows'] : 0,
                     'cols' => !empty($selectedJson['cols']) ? $selectedJson['cols'] : 0,
                     'img_width' => !empty($selectedJson['imgWidth']) ? $selectedJson['imgWidth'] : 0,
