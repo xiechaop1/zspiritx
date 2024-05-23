@@ -704,7 +704,7 @@ class DoApi extends ApiAction
                             }
                         } else {
                             $sModels[] = [
-                                    'story_model' => $this->_setStoryModelToStage($storyModel),
+                                    'story_model' => $this->_setStoryModelToStage($storyModel, [], $params1),
                                     'user_model_loc' => [],
                                 ];
                         }
