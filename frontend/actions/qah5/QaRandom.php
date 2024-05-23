@@ -10,6 +10,7 @@ namespace frontend\actions\qah5;
 
 
 use common\definitions\Common;
+use common\models\Actions;
 use common\models\Story;
 use common\models\UserModels;
 use yii\base\Action;
@@ -76,11 +77,19 @@ class QaRandom extends Action
         }
 
         $qaId = $model->id;
+        $selectedJson = json_decode($model->selected, true);
+
+        if (!empty($selectedJson['model_inst_u_ids'])) {
+            $expirationInterval = 600;
+            foreach ($selectedJson['model_inst_u_ids'] as $modelUId) {
+                Yii::$app->act->add((int)$sessionId, 0,
+                    $storyId, $userId, $modelUId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
+            }
+        }
 
         switch ($model->qa_type) {
             case Qa::QA_TYPE_PUZZLE_PIC:
                 $uri = '/puzzleh5/puzzle';
-                $selectedJson = json_decode($model->selected, true);
                 $params = [
                     'rows' => !empty($selectedJson['rows']) ? $selectedJson['rows'] : 0,
                     'cols' => !empty($selectedJson['cols']) ? $selectedJson['cols'] : 0,
