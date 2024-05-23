@@ -103,6 +103,18 @@ class QaRandom extends Action
                     'story_model_id' => $storyModelId,
                 ];
                 break;
+            case QA::QA_TYPE_SUDOKU:
+                $uri = '/puzzleh5/puzzle_sudoku';
+//                $selectedJson = json_decode($model->selected, true);
+                $params = [
+//                    'size' => !empty($selectedJson['size']) ? $selectedJson['size'] : 0,
+//                    'hole' => !empty($selectedJson['hole']) ? $selectedJson['hole'] : 0,
+                    'qa_id' => $qaId,
+                    'user_id' => $userId,
+                    'session_id' => $sessionId,
+                    'session_stage_id' => $sessionStageId,
+                ];
+                break;
             default:
                 $uri = '/qah5/qa_one';
                 $params = [
