@@ -54,16 +54,16 @@ class QaRandom extends Action
         }
 
         if (empty($model)) {
-            $isRandom = Net::get('is_random');
-            if ($isRandom) {
+//            $isRandom = Net::get('is_random');
+//            if ($isRandom) {
                 $model = \common\models\Qa::find()
                     ->where([
-                        'qa_class' => Qa::QA_TYPE_SELECTION,
-                        'is_delete' => Common::STATUS_NORMAL,
+                        'qa_class' => Qa::QA_CLASS_RANDOM,
+//                        'is_delete' => Common::STATUS_NORMAL,
                     ])
                     ->orderBy('rand()')
                     ->one();
-            }
+//            }
         }
 
         $style = !empty($_GET['style']) ? $_GET['style'] : 'default';
