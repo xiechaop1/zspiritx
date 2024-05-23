@@ -75,6 +75,8 @@ class QaRandom extends Action
             throw new NotFoundHttpException();
         }
 
+        $qaId = $model->id;
+
         switch ($model->qa_type) {
             case Qa::QA_TYPE_PUZZLE_PIC:
                 $uri = '/puzzleh5/puzzle';
