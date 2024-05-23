@@ -24,6 +24,9 @@ class Qah5Controller extends Controller
             'qa_one' => [
                 'class' => 'frontend\actions\qah5\QaOne',
             ],
+            'qa_random' => [
+                'class' => 'frontend\actions\qah5\QaRandom',
+            ],
         ];
     }
 }
