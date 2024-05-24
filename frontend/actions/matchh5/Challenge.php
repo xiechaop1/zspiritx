@@ -99,6 +99,10 @@ class Challenge extends Action
         $allPlayerProps = [];
         $myTeam = [];
         $grade = 1;
+
+        $myFormula = [
+
+        ];
         if (!empty($storyMatchPlayers)) {
             foreach ($storyMatchPlayers as $player) {
                 if ($player->match_player_status != StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE) {
@@ -115,11 +119,24 @@ class Challenge extends Action
 
                 $playerProp = Model::getUserModelProp($player, 'm_user_model_prop');
                 $playerAttSpeed = Model::getUserModelPropColWithPropJson($playerProp, 'att_speed');
+                $playerAttack = Model::getUserModelPropColWithPropJson($playerProp, 'attack');
 
                 if ($player->user_id != $userId) {
                     $rivalPlayers[] = [
                         'player' => $player,
+                        'prop' => $playerProp,
                         'att_speed' => $playerAttSpeed,
+                        'attack' => $playerAttack,
+                    ];
+                } else {
+                    $hit = rand(5,10) + 12 * pow(1.02, ($grade - 1)) + 5;
+                    $hp = rand(20,40) * pow(1.02, ($grade - 1)) + 200;
+                    $myProp = [
+                        'hit' => [
+                            'min' => $hit * 0.8,
+                            'max' => $hit * 1.2,
+                        ],
+                        'hp' => $hp
                     ];
                 }
 
@@ -133,7 +150,15 @@ class Challenge extends Action
             }
             foreach ($rivalPlayers as &$rivalPlayer) {
                 $playerAttSpeed = $rivalPlayer['att_speed'];
-                $rivalPlayer['show_speed'] = ($playerAttSpeed * 70) * (1 + ($grade - 1) * 0.3);
+                $playerAttack = $rivalPlayer['attack'];
+//                $grade = 20;
+//                var_dump(pow($grade, 0.3));exit;
+                $rivalPlayer['show_speed'] = ($playerAttSpeed * 110) * (pow($grade, 0.5));
+//                var_dump($rivalPlayer['show_speed']);exit;
+                $rivalPlayer['show_attack'] = [
+                    'min' => $playerAttack * 0.4,
+                    'max' => $playerAttack * 0.6
+                ];
             }
 //            var_dump($rivalPlayers);exit;
         }
@@ -176,6 +201,9 @@ class Challenge extends Action
             'matchId'       => $matchId,
             'subjects'      => $subjects,
             'matchPlayers'  => $storyMatchPlayers,
+            'myPlayers'     => $myPlayers,
+            'myProp'        => $myProp,
+            'myPropJson'    => json_encode($myProp),
             'rivalPlayers'  => $rivalPlayers,
             'qa'            => $qa,
             'rtnAnswerType' => 2,
@@ -189,19 +217,19 @@ class Challenge extends Action
     public function generateMath($level = 1) {
         $subjects = [];
         if ($level == 1) {
-            $subjects = $this->randMathFormula(2, 20, ['+','-'], 1);
+            $subjects = $this->randMathFormula(2, 20, ['+','-'], $level, 1);
         } else if ($level == 2) {
             $randNumCt = rand(2,3);
             $numMax= 20;
             if ($randNumCt == 2) {
                 $numMax = 100;
             }
-            $subjects = $this->randMathFormula($randNumCt, $numMax, ['+','-'], 2);
+            $subjects = $this->randMathFormula($randNumCt, $numMax, ['+','-'], $level, 2);
         }
         return $subjects;
     }
 
-    public function randMathFormula($numCt = 2, $numMax = 20, $opRange = ['+','-','*','/'], $mode = 1){
+    public function randMathFormula($numCt = 2, $numMax = 20, $opRange = ['+','-','*','/'], $level, $mode = 1){
 
         // $mode = 1: 答案最后
         // $mode = 2: 答案可以在中间
@@ -284,11 +312,21 @@ class Challenge extends Action
 
         $answerRange = $this->randAnswerRange($answer, 6);
 
+        // 根据level算伤害范围和金币值
+        $hitRange = [
+            5 * (1 + ($level - 1) / 5),
+            10 * (1 + ($level - 1) / 5),
+        ];
+        $gold = 10 * (1 + ($level - 1) / 2);
+
         return [
             'formula' => $showFormula,
             'answer' => $answer,
             'standFormula' => $formula,
             'answerRange' => $answerRange,
+            'level' => $level,
+            'hitRange' => $hitRange,
+            'gold'  => $gold,
         ];
 
     }

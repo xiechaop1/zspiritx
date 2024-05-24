@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = $qa['topic'];
+$this->title = $storyMatch->match_name;
 
 ?>
 <style>
@@ -158,6 +158,8 @@ $this->title = $qa['topic'];
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="begin_ts" value="<?= time() ?>">
+<input type="hidden" name="qa_type" id="qa_type" value="<?= $qa['qa_type'] ?>">
+<input type="hidden" name="match_type" id="match_type" value="<?= $storyMatch->match_type ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
@@ -179,20 +181,35 @@ $this->title = $qa['topic'];
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
-                    <div class="npc-name">
-                        问题
-                    </div>
+<!--                    <div class="npc-name">-->
+<!--                        问题-->
+<!--                    </div>-->
                     <div class="npc-name" style="right: 60px;" id="qa_return_btn">
                         X
                     </div>
-                    <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; text-align: right;">
-                        <div style="float: left; width: 30%;">💰 <span id="gold">0</span></div>
-                        <div style="float: left; width: 30%;">📝️ <span id="subjct">0</span></div>
-                        <div style="float: left; width: 30%;">🕒 <span id="timer"><?= $initTimer?></span>秒</div>
-                    </div>
+                    <?php
+                    if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CHALLENGE) {
+                    ?>
+                        <div class="row" style="font-size: 24px;">
+                        <div style="float: left;">HP: </div>
+                        <div class="my_hp" id="my_hp" style="float: left; height: 30px; margin-left: 20px; width:80%; border: 1px #eee solid;">
+                            <div style="width: 100%; background-color: green; height: 30px;">&nbsp; </div>
+                        </div>
+                        </div>
+                    <?php
+                    } else if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CONTEST) {
+                        ?>
+                        <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; text-align: right;">
+                            <div style="float: left; width: 30%;">💰 <span id="gold">0</span></div>
+                            <div style="float: left; width: 30%;">📝️ <span id="subjct">0</span></div>
+                            <div style="float: left; width: 30%;">🕒 <span id="timer"><?= $initTimer?></span>秒</div>
+                        </div>
+                        <?php
+                    }
+                    ?>
                     <div id="number-floater" style="position: absolute; color: #FFB94F; font-size: 48px; top: 36px; left: 180px; text-align: center; z-index: 9999999"></div>
                     <input type="hidden" id="subj_idx" value="0">
-                    <div id="topic" style="font-size: 48px; text-align: center;"></div>
+                    <div id="topic" style="font-size: 60px; text-align: center;"></div>
 <!--                    <div>-->
 <!--                        <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
 <!--                    </div>-->
@@ -200,19 +217,48 @@ $this->title = $qa['topic'];
                         <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
                         播放语音
                     </div>-->
+                    <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; bottom: 0px; margin-top: 30px; text-align: right;">
+                        <div style="float: left; width: 25%;">💰 <span id="gold">0</span></div>
+                        <div style="float: left; width: 45%;">📝️ <span id="subjct">0</span></div>
+<!--                        <div style="float: left; width: 30%;">🕒 <span id="timer">--><?php //= $initTimer?><!--</span>秒</div>-->
+                    </div>
                 </div>
             </div>
             <?php
             if (!empty($rivalPlayers)) {
                 foreach ($rivalPlayers as $rivalPlayer) {
             ?>
-            <div style="clear:both; width: 100%; font-size: 28px; color: #e0c46c; height: 60px; margin: 25px;">
+            <div style="border-radius: 16px 16px 16px 16px;
+    border: 2px solid #666;clear:both; width: 100%; font-size: 28px; color: #e0c46c; height: 120px; margin-top: 25px;">
                 <input type="hidden" class="show_speed" id="<?= $rivalPlayer['player']->id ?>" value="<?= $rivalPlayer['show_speed'] ?>">
-                <div style="float: left; width: 240px;"><img src="<?= \common\helpers\Attachment::completeUrl($rivalPlayer['player']->storyModel->icon, true, 36) ?>">&nbsp; <?= $rivalPlayer['player']->storyModel->story_model_name ?></div>
-                <div style="float: left; width: 30%;">📝️ <span class="riv_subjct" id="riv_subjct_<?= $rivalPlayer['player']->id ?>">0</span></div>
+                <input type="hidden" class="show_attack" id="<?= $rivalPlayer['player']->id ?>" min="<?= $rivalPlayer['show_attack']['min'] ?>" max="<?= $rivalPlayer['show_attack']['max'] ?>" value="10">
+                <?php
+                if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CHALLENGE) {
+                ?>
+                    <div class="riv">
 
-<!--                <div style="float: left; width: 40%;">⏰ <span id="timer">--><?php //= $initTimer?><!--</span>秒</div>-->
-<!--                <div style="float: left; width: 40%;">💰 <span id="gold">0</span></div>-->
+                <div class="riv_avatar" id="riv_avatar" style="float: left; width: 200px; margin: 15px;">
+                    <img src="<?= \common\helpers\Attachment::completeUrl($rivalPlayer['player']->storyModel->icon, true, 60) ?>">
+                    &nbsp; <?= $rivalPlayer['player']->storyModel->story_model_name ?>
+                </div>
+<!--                <div style="float: left; width: 30%;">📝️ <span class="riv_subjct" id="riv_subjct_--><?php //= $rivalPlayer['player']->id ?><!--">0</span></div>-->
+                <div style="float: left; width: 360px; margin: 15px;">
+                    <div class="riv_hp" id="riv_hp_<?= $rivalPlayer['player']->id ?>" style="width:100%; border: 1px #eee solid;">
+                        <div style="width: 100%; background-color: green; height: 30px;">&nbsp; </div>
+                    </div>
+                    <div class="riv_speed" id="riv_speed_<?= $rivalPlayer['player']->id ?>" style="width: 100%; background-color: cornflowerblue; height: 20px; margin-top: 20px;">
+                        &nbsp; </div>
+                </div>
+                    </div>
+                    <?php
+                } else if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CONTEST) {
+                    ?>
+                    <div style="float: left; width: 200px; margin: 15px;"><img src="<?= \common\helpers\Attachment::completeUrl($rivalPlayer['player']->storyModel->icon, true, 36) ?>">&nbsp; <?= $rivalPlayer['player']->storyModel->story_model_name ?></div>
+                <div style="float: left; width: 40%;">⏰ <span id="timer"><?= $initTimer?></span>秒</div>
+                <div style="float: left; width: 40%;">💰 <span id="gold">0</span></div>
+                    <?php
+                }
+                    ?>
             </div>
             <?php
                 }
@@ -490,7 +536,8 @@ $this->title = $qa['topic'];
             </div>
             <div class="row modal fade" id="answer-right-box" style="top: 100px;">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
-                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
+<!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
+                    <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>
                         <div style="clear:both; text-align: center;">
                         <span>
                             <!-- ../../static/img/qa/gold.gif -->
@@ -501,10 +548,11 @@ $this->title = $qa['topic'];
 
                         </span>
                         </div>
-                    <div class="answer-title m-t-40">
-                        恭喜您，挑战成功！
-                    </div>
-                    <div class="btn-m-green m-t-30  m-l-30 confirm_btn hide">
+                    <br>
+<!--                    <div class="answer-title m-t-40">-->
+<!--                        恭喜您，挑战成功！-->
+<!--                    </div>-->
+                    <div class="btn-m-green m-t-30  m-l-30 confirm_btn">
                         继续
                     </div>
 <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
@@ -516,9 +564,11 @@ $this->title = $qa['topic'];
             <div class="row modal fade" id="answer-error-box" style="top: 220px;">
                 <div class="m-t-60 col-sm-12 col-md-12">
                     <div class="answer-detail " >
-                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
-                        <span  class=" d-inline-block vertical-mid">很遗憾，挑战失败！</span>
-                        <div class="btn-m-green m-t-30  m-l-30 retry_btn hide">
+<!--                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+                        <img src="../../static/img/match/bc_lose.png" alt="" class="img-responsive  d-block m-auto"/>
+                        <br>
+<!--                        <span  class=" d-inline-block vertical-mid">很遗憾，挑战失败！</span>-->
+                        <div class="btn-m-green m-t-30  m-l-30 retry_btn">
                             再试一次
                         </div>
                     </div>
@@ -600,42 +650,103 @@ $this->title = $qa['topic'];
 <script>
     var obj;
     var max = 0;
+    var myPropObj;
     window.onload = function () {
         var i = 0;
         var max = <?= $ct ?>;
+        var match_type = $('#match_type').val();
 
-        var matchTimer = setInterval(function() {
-            // $('#msg_' + i).show();
-            // if ($('#msg_' + i).length > 0) {
-            //     $('#msg_' + i).get(0).scrollIntoView();
-            // }
-            compTimer(matchTimer);
-            // console.log(i);
-            i++;
-        }, 1000);
-
-        var rivals = $('.show_speed');
-        rivals.each(function() {
-            console.log($(this).attr('id'));
-            var rivalId = $(this).attr('id');
-            var rivalSpeed = $(this).val();
-            console.log(rivalSpeed);
-            var rivalTimer = setInterval(function() {
-                var chkTimer = $('#timer').html();
-                var rivalSubjct = $('#riv_subjct_' + rivalId).html();
-                rivalSubjct++;
-                $('#riv_subjct_' + rivalId).html(rivalSubjct);
-                if (chkTimer <= 0) {
-                    clearInterval(rivalTimer);
-                }
-            }, rivalSpeed);
-        });
-
-        // showSubject(0, obj);
+        if (match_type == 3) {
+            var matchTimer = setInterval(function() {
+                // $('#msg_' + i).show();
+                // if ($('#msg_' + i).length > 0) {
+                //     $('#msg_' + i).get(0).scrollIntoView();
+                // }
+                compTimer(matchTimer);
+                // console.log(i);
+                i++;
+            }, 1000);
+        }
+// showSubject(0, obj);
         var dataContent = <?= $subjectsJson ?>;
         var dataCon=$.toJSON(dataContent);
         obj = eval( "(" + dataCon + ")" );
+
+        var myProp = <?= $myPropJson ?>;
+        var myPropCon = $.toJSON(myProp);
+        myPropObj = eval( "(" + myPropCon + ")" );
+
         max = <?= $ct ?>;
+
+
+        var rivals = $('.show_speed');
+        if (match_type == 3) {
+            rivals.each(function () {
+                console.log($(this).attr('id'));
+                var rivalId = $(this).attr('id');
+                var rivalSpeed = $(this).val();
+                console.log(rivalSpeed);
+
+                var rivalTimer = setInterval(function() {
+                    var chkTimer = $('#timer').html();
+                    var rivalSubjct = $('#riv_subjct_' + rivalId).html();
+                    rivalSubjct++;
+                    $('#riv_subjct_' + rivalId).html(rivalSubjct);
+                    if (chkTimer <= 0) {
+                        clearInterval(rivalTimer);
+                    }
+                }, rivalSpeed);
+            });
+        } else if (match_type == 2) {
+            rivals.each(function () {
+                console.log($(this).attr('id'));
+                var rivalId = $(this).attr('id');
+                var rivalSpeed = $(this).val();
+                var rivalHitObj = $(this).parent().find('.show_attack');
+                // var rivalHit = rivalHitObj.val();
+                var rivalHitMin = rivalHitObj.attr('min');
+                var rivalHitMax = rivalHitObj.attr('max');
+                // console.log(rivalHitObj.find('.show_attack'));
+                console.log(rivalSpeed);
+
+                var rivalObj = $('#riv_speed_' + rivalId);;
+                rivalObj.css('width', '0px');
+
+                var rivalTimer = setInterval(function() {
+                    var rivalWidth = rivalObj.width();
+
+                    if (checkRivHp() == 0) {
+                        clearRivSpeed(rivalObj);
+                        clearInterval(rivalTimer);
+                    }
+                    if (rivalWidth >= 360) {
+                        var myHp = $('#my_hp');
+                        var rand = Math.random();
+                        rivalHit = parseInt(rand * (rivalHitMax - rivalHitMin + 1)) + parseInt(rivalHitMin);
+                        console.log(rivalHit);
+                        computeHp(myHp, rivalHit);
+                        clearRivSpeed(rivalObj);
+
+                        if (checkMyHp() == 0) {
+                            $('#answer-error-box').modal('show');
+                            clearInterval(rivalTimer);
+                        }
+
+                        return;
+                        // clearInterval(rivalTimer);
+                    }
+
+                    // rivalWidth += rivalSpeed/200;
+                    var addRivalWidth = 13500/rivalSpeed;
+                    var showRivalWidth = rivalWidth + addRivalWidth;
+                    console.log(addRivalWidth);
+                    // console.log(showRivalWidth);
+                    rivalObj.css('width', showRivalWidth);
+
+                }, 50);
+            });
+        }
+
 
         showSubject(0);
     };
@@ -647,17 +758,20 @@ $this->title = $qa['topic'];
 
         $('#subj_idx').val(idx);
 
-        var ansrange = obj[idx].answerRange;
-        var optHtml = '';
-        for (var j = 0; j < ansrange.length; j++) {
-            label = String.fromCharCode(j + 65);
-            optHtml += '<div class="m-t-30 col-sm-12 col-md-6"><div class="answer-border">';
-            optHtml += '<input class="form-check-input" type="radio" name="answer_c" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '" >';
-            optHtml += '<label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
-            optHtml += '    <span class="answer-tag">' + label + '</span>' + ansrange[j];
-            optHtml += '</label> </div></div>';
+        var qa_type = $('#qa_type').val();
+        if (qa_type == 1) {
+            var ansrange = obj[idx].answerRange;
+            var optHtml = '';
+            for (var j = 0; j < ansrange.length; j++) {
+                label = String.fromCharCode(j + 65);
+                optHtml += '<div class="m-t-30 col-sm-6 col-md-6"><div class="answer-border">';
+                optHtml += '<input class="form-check-input" type="radio" name="answer_c" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '" >';
+                optHtml += '<label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
+                optHtml += '    <span class="answer-tag">' + label + '</span>' + ansrange[j];
+                optHtml += '</label> </div></div>';
+            }
+            optHtml += '<input type="hidden" id="add_gold" value="10">';
         }
-        optHtml += '<input type="hidden" id="add_gold" value="10">';
         // console.log(optHtml);
         $('#answer-box').html(optHtml);
         $('input[name=answer_c]').click(function() {
@@ -691,13 +805,117 @@ $this->title = $qa['topic'];
         console.log(chosen);
         console.log(answer);
         if (chosen == answer) {
+
+
             addGold();
             addSubjCt();
+            var ret = computeRivHp();
+
+            if (ret == 0) {
+                // clearInterval(timer);
+                var answer = 1;
+                submitAnswer(answer);
+                // $('#answer-right-box').modal('show');
+
+            }
+
             showSubject(idx+1);
 
         } else {
             $('#add_gold').val('0');
         }
+    }
+
+    function computeRivHp() {
+        var rivals = $('.riv');
+        var result = 0;
+        rivals.each(function() {
+            var rivHp = $(this).find('.riv_hp');
+            if (rivHp.find('div').width() <= 0) {
+                return;
+            }
+
+            hitMin = myPropObj.hit.min;
+            hitMax = myPropObj.hit.max;
+            var hit = Math.floor(Math.random() * (hitMax - hitMin + 1) + hitMin);
+            computeHp(rivHp, hit);
+            avatarAnimate($(this));
+            clearRivSpeed($(this).find('.riv_speed'));
+
+            result = checkRivHp();
+
+            return;
+        });
+        return result;
+    }
+
+    function clearRivSpeed(rivalObj) {
+        rivalObj.css('width', '0px');
+    }
+
+    function checkRivHp() {
+        var rivals = $('.riv');
+        var result = 0;
+        rivals.each(function() {
+            var rivHp = $(this).find('.riv_hp');
+            if (rivHp.find('div').width() <= 0) {
+                return;
+            }
+
+            result = 1;
+            return;
+        });
+        return result;
+    }
+
+    function checkMyHp() {
+        var myHp = $('#my_hp');
+        if (myHp.find('div').width() <= 0) {
+            return 0;
+        }
+        return 1;
+    }
+
+    function computeHp(rivHp, hit) {
+        var hpWidth = rivHp.find('div').width();
+        var hpMaxWidth = rivHp.width();
+        // var hit=300;
+        console.log(hit);
+        hpWidth -= hit;
+        rivHp.find('div').css('width', hpWidth);
+        if (hpWidth/hpMaxWidth > 0.3 && hpWidth/hpMaxWidth <= 0.6) {
+            rivHp.find('div').css('background-color', 'yellow');
+        } else if (hpWidth/hpMaxWidth <= 0.3) {
+            rivHp.find('div').css('background-color', 'red');
+        }
+    }
+
+    function avatarAnimate(hitObj) {
+        var rivAvatar = $(hitObj).find('.riv_avatar');
+        var hitLeft = rivAvatar.position().left - 20;
+        var hitTop = rivAvatar.position().top;
+        var hitDiv = '<div class="riv_hit" style="position: absolute; z-index: 999999; left: ' + hitLeft + 'px; top: ' + hitTop + 'px;"><img width="120" src="../../static/img/match/hit.gif"></div>';
+        $(hitObj).append(hitDiv);
+        $(hitObj).find('.riv_hit').animate({
+            opacity: 100
+        }, 500, function() {
+            shake(rivAvatar.find('img'));
+            $(this).remove();
+        });
+    }
+
+    function shake(shakeObj) {
+        $(shakeObj).animate({left: '+=20'}, 200) // 向右移动20px
+            .animate({left: '-=20', rotate: -10 + "deg"}, 200) // 返回原位
+            .animate({left: '+=10', rotate: 5 + "deg"}, 200) // 稍微右移
+            .animate({left: '-=10', rotate: -5 + "deg"}, 200) // 返回原位
+            .animate({left: '+=5', rotate: 10 + "deg"}, 200)  // 稍微右移
+            .animate({left: '-=5', rotate: 0 + "deg"}, 200); // 返回原位
+        // var shakeInterval = setInterval(function() {
+        //     $(shakeObj).shake(4, 4, 20);
+        // }, 2000);
+        // clearInterval(shakeInterval);
+
     }
 
     function addGold() {
@@ -714,7 +932,7 @@ $this->title = $qa['topic'];
 
     }
 
-    function submitAnswer() {
+    function submitAnswer(answer) {
         var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
         var qa_type=that.attr("data-type");
@@ -737,14 +955,14 @@ $this->title = $qa['topic'];
             }
         });
 
-        var answer;
-        console.log(subjct);
-        console.log(max_riv_subjct);
-        if (subjct > max_riv_subjct) {
-            answer = 1;
-        } else {
-            answer = 0;
-        }
+        // var answer;
+        // console.log(subjct);
+        // console.log(max_riv_subjct);
+        // if (subjct > max_riv_subjct) {
+        //     answer = 1;
+        // } else {
+        //     answer = 0;
+        // }
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -759,9 +977,9 @@ $this->title = $qa['topic'];
                 session_id:session_id,
                 begin_ts:begin_ts,
                 score:score,
-                subjct:subjct,
+                // subjct:subjct,
                 answer:answer,
-                riv_subjct:max_riv_subjct
+                // riv_subjct:max_riv_subjct
             },
             onload: function (data) {
                 $('#answer-border-response').html('处理中……');
@@ -797,15 +1015,15 @@ $this->title = $qa['topic'];
                         }
                         $('#rtn_answer_type').val(1);   // 成功
 
-                        setTimeout(function (){
-                            // Unity.call('WebViewOff&TrueAnswer');
-                            var params = {
-                                'WebViewOff':1,
-                                'AnswerType':1
-                            }
-                            var data=$.toJSON(params);
-                            Unity.call(data);
-                        },2000);
+                        // setTimeout(function (){
+                        //     // Unity.call('WebViewOff&TrueAnswer');
+                        //     var params = {
+                        //         'WebViewOff':1,
+                        //         'AnswerType':1
+                        //     }
+                        //     var data=$.toJSON(params);
+                        //     Unity.call(data);
+                        // },2000);
                     }
                     else{
                         $("#answer-box").hide();
@@ -814,7 +1032,7 @@ $this->title = $qa['topic'];
                         $('#rtn_answer_type').val(2);   // 失败
                         // $("#h5-worry").modal('show');
                         audio_wrong.play();
-                        $(".retry_btn").show();
+                        // $(".retry_btn").show();
                         // setTimeout(function (){
                         //     // Unity.call('WebViewOff&FalseAnswer');
                         //     // var params = {
@@ -856,7 +1074,23 @@ $this->title = $qa['topic'];
             }, 1000);
             clearInterval(matchTimer);
 
-            submitAnswer();
+            var answer;
+            var subjct=$('#subjct').html();
+            var max_riv_subjct = 0;
+            var riv_subjct = $('.riv_subjct').each(function(){
+                var riv_subjct = $(this).html();
+                if (riv_subjct > max_riv_subjct) {
+                    max_riv_subjct = riv_subjct;
+                }
+            });
+            console.log(subjct);
+            console.log(max_riv_subjct);
+            if (subjct > max_riv_subjct) {
+                answer = 1;
+            } else {
+                answer = 0;
+            }
+            submitAnswer(answer);
         }
     }
 

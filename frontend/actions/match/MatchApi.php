@@ -101,7 +101,7 @@ class MatchApi extends ApiAction
                 if (!empty($storyMatch->players)) {
                     foreach ($storyMatch->players as $player) {
                         $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
-                        $player->save();
+//                        $player->save();
                     }
                 }
 
