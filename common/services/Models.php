@@ -1039,7 +1039,7 @@ class Models extends Component
             'strength' => '$newProp["strength"] = intval($strength + 20 * pow(1.02, ($level - 1)) + 5);',
             'agility' => '$newProp["agility"] = intval($agility + 20 * pow(1.02, ($level - 1)) + 5);',
             'attack' => '$newProp["attack"] = intval($attack + 20 * pow(1.02, ($level - 1)) + 5);',
-            'defense' => '$newProp["defense"] = intval($defense + 20 * pow(1.02, ($level - 1)) + 5);',
+            'defense' => '$newProp["defense"] = intval($defense + 15 * pow(1.02, ($level - 1)) + 5);',
             'att_speed' => '$newProp["att_speed"] = number_format(60 / ($newProp["agility"] / 30), 2);',
             'max_hp' => '$newProp["max_hp"] = intval($newProp["strength"] * pow(1.02, ($level - 1)))+200;',
             'max_mp' => '$newProp["max_mp"] = intval($newProp["intelligence"] * pow(1.02, ($level - 1)))+150;',
@@ -1051,7 +1051,7 @@ class Models extends Component
 
         $newProp = [];
         $up = [];
-        $levelInterval = false;
+        $levelup = false;
         if (!empty($userModelProp)) {
             $newProp = $prop = !empty($userModelProp['prop']) ? $userModelProp['prop'] : [];
             if (!empty($prop)) {
@@ -1074,7 +1074,7 @@ class Models extends Component
                         eval($for . ';');
 //                        $newProp[$col] = $col;
                     }
-                    $levelInterval = true;
+                    $levelup = true;
                 }
             }
             if (!empty($newProp)) {
@@ -1091,7 +1091,7 @@ class Models extends Component
         }
 
         return [
-            'isUp' => $levelInterval,
+            'isUp' => $levelup,
             'up' => $up,
             'data' => $userModelProp,
         ];

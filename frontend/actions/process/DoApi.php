@@ -817,6 +817,9 @@ class DoApi extends ApiAction
             if (!empty($storyModelProp['repeat'])) {
                 $maxCount = $storyModelProp['repeat'];
             }
+            if (!empty($storyModels['random_repeat'])) {
+                $maxCount = rand($storyModels['random_repeat']['min'], $storyModels['random_repeat']['max']);
+            }
         }
 //                        $preStoryModel = $storyModel;
 //                        $oldParams = [
@@ -843,6 +846,22 @@ class DoApi extends ApiAction
             $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
 
             if (!empty($storyModel1->dialog)) {
+                if (!empty($storyModelProp['qa_random'])) {
+                    $qaRandom = $storyModelProp['qa_random'];
+
+                    $qaOne = Qa::find()->where([
+                        'qa_class' => Qa::QA_CLASS_RANDOM,
+                    ]);
+                    if (is_array($qaRandom) || is_int($qaRandom)) {
+                        $qaOne = $qaOne->andFilterWhere([
+                            'id' => $qaRandom,
+                        ]);
+                    }
+                    $qaOne = $qaOne->orderBy('rand()')->one();
+
+                    $params['qa_id'] = $qaOne->id;
+                }
+
                 $params['story_model_id'] = $storyModel1->id;
                 $params['model_id'] = $storyModel1->model_id;
                 $params['story_model_detail_id'] = $storyModel1->story_model_detail_id;
