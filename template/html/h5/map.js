@@ -447,7 +447,7 @@ $(function () {
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
         map.remove(markersUser);
-        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +
             '</span>';
         var marker= new AMap.Marker({
             content: markerContent,
@@ -480,7 +480,7 @@ $(function () {
 
 }
 setTimeout(getLocation(39.3442,118.3726),1000);*/
-function showPoiDetail(n) {
+function showPoiDetail() {
     var me=$(this);
     var type=me.attr("data-type");
     var name=me.attr("data-name");
