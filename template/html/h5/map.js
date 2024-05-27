@@ -154,7 +154,7 @@ $(function () {
         getUserLocByTeam(user_id,session_id,user_lng,user_lat,dis_range);
 
         getSessionModels(user_id,story_id,session_id,user_lng,user_lat,story_stage_id,dis_range);
-
+        getUserModels(user_id,story_id,session_id,user_lng,user_lat)
         getUserLoc(user_id)
 
     }
@@ -274,6 +274,63 @@ $(function () {
         });
     }
 
+    //获取用户场景的模型
+    function getUserModels(user_id,story_id,session_id,user_lng,user_lat){
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: 'https://h5.zspiritx.com.cn/process/get_user_model_loc',
+            data:{
+                user_id:user_id,
+                story_id:story_id,
+                session_id:session_id,
+                user_lng:user_lng,
+                user_lat:user_lat,
+                is_test:1
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+
+                //新消息获取成功
+                if(obj["code"]==200){
+                    markersModal = [];
+                    for (var i in obj.data) {
+                        if(obj.data[i].location.lat!=null&&obj.data[i].location.lng!=null){
+                            var marker = {
+                                iconPath: obj.data[i].userModelLoc.storyModel.icon,
+                                active_class:obj.data[i].userModelLoc.active_class,
+                                id: obj.data[i].userModelLoc.id,
+                                name: obj.data[i].userModelLoc.storyModel.story_model_name,
+                                latitude: obj.data[i].location.lat,
+                                longitude: obj.data[i].location.lng,
+                                width: 80,
+                                height: 80,
+                                img: obj.data[i].userModelLoc.storyModel.icon,
+                                title:2
+                            };
+                            markersModal.push(marker)
+                        }
+                    }
+                    $(".marker_modal").closest(".amap-marker").remove();
+                    drawUserModals(markersModal);
+                }
+                //新消息获取失败
+                else{
+                    $.alert(obj.msg)
+                }
+
+            }
+        });
+    }
+
+
     //获取用户位置信息
     function getUserLoc(user_id){
         $.ajax({
@@ -353,6 +410,24 @@ $(function () {
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="marker_modal"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
                 marker.title+'</span>';
+            var marker= new AMap.Marker({
+                content: markerContent,
+                map: map,
+                icon: marker.icon,
+                position: [marker.longitude,marker.latitude],
+                offset: new AMap.Pixel(-13, -30)
+            });
+            // marker.on('click', function(e){
+            //     showPoiDetail(e);
+            // });
+        });
+    }
+
+    //描绘模型User Modal Marker
+    function drawUserModals(markers){
+        markers.forEach(function(marker) {
+            var markerContent= '<span style="left:20%;top:80%;"  class="uer_marker_modal uer_marker_modal'+marker.active_class+'"  onclick="showPoiDetail()" data-id="'+marker.url+'">' +
+                '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
                 map: map,
