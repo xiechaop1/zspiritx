@@ -482,13 +482,11 @@ $(function () {
 setTimeout(getLocation(39.3442,118.3726),1000);*/
 function showPoiDetail(n) {
     var me=$(this);
-    var text=me.find('.marker_text').attr("data-id");
-    text=me.attr("data-id");
-    text=$(this).attr('data-id');
     var type=me.attr("data-type");
     var name=me.attr("data-name");
     var id=me.attr("data-id");
-    $("#modal-detail .map-text-context").empty().html(name);
+    console.log(name,type,id)
+    $("#modal-detail .map-text-context").empty().text(name);
     $("#modal-detail").modal('show');
 }
 
