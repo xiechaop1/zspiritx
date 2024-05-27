@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use common\models\Poem;
 use common\models\UserCompany;
 use liyifei\chinese2pinyin\Chinese2pinyin;
 use common\models\City;
@@ -244,6 +245,84 @@ class ImportController extends Controller
             }
         }
 
+    }
+
+    public function actionPoem() {
+        $poems = file('poem.txt');
+
+//        preg_match_all('/\d\.(.*?)\n(.*?)代：(.*?)\n(.*?)/', $poems, $matches);
+//        var_dump($matches);exit;
+
+        $i = 0;
+        $old = 0;
+        $poemArray = [];
+        $j = 0;
+        foreach ($poems as $poemLine) {
+            $poemLine = trim($poemLine);
+            if (empty($poemLine)) {
+                continue;
+            }
+
+            // 正则匹配以数字开始
+            if (preg_match('/^(\d)+\.(.*)/', $poemLine, $titleMatch)) {
+                $old = $i;
+                if (!empty($poemArray[$old])) {
+                    $model = new \common\models\Poem();
+                    $model->title = $poemArray[$old]['title'];
+                    $model->age = $poemArray[$old]['age'];
+                    $model->author = $poemArray[$old]['auth'];
+                    $model->content = $poemArray[$old]['content'];
+                    $model->poem_type = $old < 71 ? Poem::POEM_TYPE_POEM : Poem::POEM_TYPE_POETRY;
+
+                    $r = $model->save();
+                    if (!$r) {
+                        var_dump($model->getFirstErrors());
+                    }
+                }
+
+                $i++;
+
+                $poemArray[$i]['title'] = $titleMatch[2];
+                continue;
+//                var_dump($titleMatch);exit;
+
+            }
+
+            if (preg_match('/(.*?)：(.*)/', $poemLine, $authMatch)) {
+                $poemArray[$i]['age'] = $authMatch[1];
+                $poemArray[$i]['auth'] = $authMatch[2];
+                continue;
+            }
+
+            if (empty($poemArray[$i]['content'])) {
+                $poemArray[$i]['content'] = $poemLine;
+            } else {
+                $poemArray[$i]['content'] .= $poemLine;
+            }
+//
+//
+////            exit;
+//
+//
+//
+//            $poemArr = explode(' ', $poemLine);
+//
+//            $title = $poemArr[0];
+//            $content = implode(' ', array_slice($poemArr, 1));
+//
+//            $model = new \common\models\Poem();
+//            $model->title = $title;
+//            $model->content = $content;
+//            $model->poem_type = 1;
+//            $model->created_at = time();
+//            $model->updated_at = time();
+//
+//            $r = $model->save();
+//            if (!$r) {
+//                var_dump($model->getFirstErrors());
+//            }
+        }
+        var_dump($poemArray);exit;
     }
 
     public function actionMember()
