@@ -427,7 +427,7 @@ $(function () {
     //描绘模型User Modal Marker
     function drawUserModals(markers){
         markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="uer_marker_modal uer_marker_modal'+marker.active_class+'"  onclick="showPoiDetail()" data-id="'+marker.url+'">' +
+            var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail()" data-id="'+marker.url+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
