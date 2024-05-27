@@ -302,17 +302,17 @@ $(function () {
                 if(obj["code"]==200){
                     markersModal = [];
                     for (var i in obj.data) {
-                        if(obj.data[i].location.lat!=null&&obj.data[i].location.lng!=null){
+                        if(obj.data[i][0].location.lat!=null&&obj.data[i][0].location.lng!=null){
                             var marker = {
-                                iconPath: obj.data[i].userModelLoc.storyModel.icon,
-                                active_class:obj.data[i].userModelLoc.active_class,
-                                id: obj.data[i].userModelLoc.id,
-                                name: obj.data[i].userModelLoc.storyModel.story_model_name,
-                                latitude: obj.data[i].location.lat,
-                                longitude: obj.data[i].location.lng,
+                                iconPath: obj.data[i][0].userModelLoc.storyModel.icon,
+                                active_class:obj.data[i][0].userModelLoc.active_class,
+                                id: obj.data[i][0].userModelLoc.id,
+                                name: obj.data[i][0].userModelLoc.storyModel.story_model_name,
+                                latitude: obj.data[i][0].location.lat,
+                                longitude: obj.data[i][0].location.lng,
                                 width: 80,
                                 height: 80,
-                                img: obj.data[i].userModelLoc.storyModel.icon,
+                                img: obj.data[i][0].userModelLoc.storyModel.icon,
                                 title:2
                             };
                             markersModal.push(marker)
