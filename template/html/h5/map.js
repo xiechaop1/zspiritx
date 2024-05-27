@@ -480,8 +480,8 @@ $(function () {
 
 }
 setTimeout(getLocation(39.3442,118.3726),1000);*/
-function showPoiDetail(this) {
-    var me=$(this);
+function showPoiDetail(e) {
+    var me=$(e);
     var type=me.attr("data-type");
     var name=me.attr("data-name");
     var id=me.attr("data-id");
