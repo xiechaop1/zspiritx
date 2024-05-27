@@ -122,6 +122,10 @@ class Edit extends Action
 //                $model->selected = preg_replace('/\s*\d+\s*=>\s*/', "\n", $model->selected) . ';';
 
             }
+            $model->prop = json_decode($model->prop, true);
+            if (is_array($model->prop)) {
+                $model->prop = var_export($model->prop, true);
+            }
         }
 
         $knowledgeDatas = Knowledge::find()->orderBy(['id' => SORT_DESC])->all();
