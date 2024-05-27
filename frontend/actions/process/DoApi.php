@@ -850,7 +850,7 @@ class DoApi extends ApiAction
                     $qaRandom = $storyModelProp['qa_random'];
 
                     $qaOne = Qa::find()->where([
-                        'qa_class' => Qa::QA_CLASS_RANDOM,
+                        'qa_mode' => Qa::QA_MODE_RANDOM,
                     ]);
                     if (is_array($qaRandom) || is_int($qaRandom)) {
                         $qaOne = $qaOne->andFilterWhere([

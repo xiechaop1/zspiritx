@@ -59,7 +59,7 @@ class QaRandom extends Action
 //            if ($isRandom) {
                 $model = \common\models\Qa::find()
                     ->where([
-                        'qa_class' => Qa::QA_CLASS_RANDOM,
+                        'qa_mode' => Qa::QA_MODE_RANDOM,
 //                        'is_delete' => Common::STATUS_NORMAL,
                     ])
                     ->orderBy('rand()')

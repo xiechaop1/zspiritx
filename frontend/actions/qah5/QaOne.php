@@ -51,7 +51,7 @@ class QaOne extends Action
             if ($isRandom) {
                 $model = \common\models\Qa::find()
                     ->where([
-                        'qa_class' => Qa::QA_TYPE_SELECTION,
+                        'qa_mode' => Qa::QA_MODE_RANDOM,
                         'is_delete' => Common::STATUS_NORMAL,
                     ])
                     ->orderBy('rand()')
@@ -94,6 +94,8 @@ class QaOne extends Action
                 $model['selected_json'] = $newSelectionJson;
             }
         }
+
+
 
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;

@@ -15,7 +15,6 @@ class Qa extends \common\models\gii\Qa
     const QA_TYPE_PIC = 2;      // 图片题
     const QA_TYPE_VIDEO = 3;    // 视频题
     const QA_TYPE_MULTI = 4;    // 多选题
-
     const QA_TYPE_PUZZLE_WORD = 5;     // 拼图文字题
     const QA_TYPE_PUZZLE_PIC = 6;      // 拼图图片题
     const QA_TYPE_WORD = 7;      // 填空题
@@ -27,8 +26,11 @@ class Qa extends \common\models\gii\Qa
     const QA_TYPE_PHONE = 13;      // 手机
     const QA_TYPE_PHONE_SMS = 14;      // 手机短信
 
-    const QA_CLASS_NORMAL = 1; // 普通题
-    const QA_CLASS_RANDOM = 2; // 随机题
+    const QA_CLASS_NORMAL   = 1; // 普通题
+    const QA_CLASS_POEM     = 2; // 诗词题
+
+    const QA_MODE_NORMAL = 1; // 普通模式
+    const QA_MODE_RANDOM = 2; // 随机模式
 
     public static $qaType2Name = [
         self::QA_TYPE_SINGLE  => '单选题',
@@ -48,8 +50,15 @@ class Qa extends \common\models\gii\Qa
     ];
 
     public static $qaClass2Name = [
+//        self::QA_CLASS_NORMAL => '普通题',
+//        self::QA_CLASS_RANDOM => '随机题',
         self::QA_CLASS_NORMAL => '普通题',
-        self::QA_CLASS_RANDOM => '随机题',
+        self::QA_CLASS_POEM => '诗词题',
+    ];
+
+    public static $qaMode2Name = [
+        self::QA_MODE_NORMAL => '普通模式',
+        self::QA_MODE_RANDOM => '随机模式',
     ];
 
     public static $qaTypeIsJson = [

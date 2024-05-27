@@ -82,6 +82,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('类型');
+            echo $form->field($qaModel, 'qa_mode')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Qa::$qaMode2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('模式');
             echo $form->field($qaModel, 'qa_class')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\Qa::$qaClass2Name,
                 'options' => [
