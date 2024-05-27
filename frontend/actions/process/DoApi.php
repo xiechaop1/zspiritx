@@ -915,7 +915,8 @@ class DoApi extends ApiAction
                 foreach ($row as &$row1) {
                     foreach ($row1['userModelLoc'] as &$row2) {
                         $tmp = $row2->toArray();
-                        $tmp['storyModel']  = $row2->storyModel;
+                        $tmp['storyModel']  = $row2->storyModel->toArray();
+                        $tmp['storyModel']['icon'] = Attachment::completeUrl($tmp['storyModel']['icon'], true);
                         $row2 = $tmp;
                     }
                 }
