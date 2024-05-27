@@ -91,6 +91,8 @@ class Edit extends Action
                         $model->selected = json_encode($model->selected);
                     }
                 }
+
+                $model->prop = json_encode($model->prop);
                 
                 if ($model->save()) {
 

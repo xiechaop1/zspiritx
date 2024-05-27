@@ -78,10 +78,11 @@ class QaRandom extends Action
 
         $qaId = $model->id;
         $selectedJson = json_decode($model->selected, true);
+        $propJson = json_decode($model->prop, true);
 
-        if (!empty($selectedJson['model_inst_u_ids'])) {
+        if (!empty($propJson['model_inst_u_ids'])) {
             $expirationInterval = 600;
-            foreach ($selectedJson['model_inst_u_ids'] as $modelUId => $modelUParams) {
+            foreach ($propJson['model_inst_u_ids'] as $modelUId => $modelUParams) {
                 Yii::$app->act->add((int)$sessionId, 0,
                     $storyId, $userId, $modelUId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
             }

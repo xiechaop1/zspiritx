@@ -50,6 +50,7 @@ echo \dmstr\widgets\Alert::widget();
             ////                'directory' => 'cover_thumb/' . Date('Y/m/')
             //            ])->label('缩略图');
             echo $form->field($qaModel, 'selected')->textarea(['rows' => 15])->label('选项');
+            echo $form->field($qaModel, 'prop')->textarea(['rows' => 15])->label('配置');
             echo $form->field($qaModel, 'st_answer')->textarea()->label('标答');
             echo $form->field($qaModel, 'st_selected')->textInput(['value' => $qaModel->st_selected])->label('标准选项');
             echo $form->field($qaModel, 'score')->textInput(['value' => $qaModel->score])->label('分数');
