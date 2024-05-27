@@ -427,7 +427,7 @@ $(function () {
     //描绘模型User Modal Marker
     function drawUserModals(markers){
         markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="uer_marker_modal uer_marker_modal'+marker.active_class+'"  onclick="showPoiDetail()" data-id="'+marker.url+'">' +
+            var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" >' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -447,7 +447,7 @@ $(function () {
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
         map.remove(markersUser);
-        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="showPoiDetail('+marker.id+')" data-id="text id 1">' +
+        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +
             '</span>';
         var marker= new AMap.Marker({
             content: markerContent,
@@ -480,12 +480,13 @@ $(function () {
 
 }
 setTimeout(getLocation(39.3442,118.3726),1000);*/
-function showPoiDetail(n) {
-    var me=$(this);
-    var text=me.find('.marker_text').attr("data-id");
-    text=me.attr("data-id");
-    text=$(this).attr('data-id');
-    $("#modal-detail .map-text-context").empty().text(n);
+function showPoiDetail(e) {
+    var me=$(e);
+    var type=me.attr("data-type");
+    var name=me.attr("data-name");
+    var id=me.attr("data-id");
+    console.log(name,type,id)
+    $("#modal-detail .map-text-context").empty().text(name);
     $("#modal-detail").modal('show');
 }
 
