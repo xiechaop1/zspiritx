@@ -427,7 +427,7 @@ $(function () {
     //描绘模型User Modal Marker
     function drawUserModals(markers){
         markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail()" data-id="'+marker.url+'">' +
+            var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail()" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" >' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -485,7 +485,10 @@ function showPoiDetail(n) {
     var text=me.find('.marker_text').attr("data-id");
     text=me.attr("data-id");
     text=$(this).attr('data-id');
-    $("#modal-detail .map-text-context").empty().text(n);
+    var type=me.attr("data-type");
+    var name=me.attr("data-name");
+    var id=me.attr("data-id");
+    $("#modal-detail .map-text-context").empty().text(name);
     $("#modal-detail").modal('show');
 }
 
