@@ -92,7 +92,7 @@ class Edit extends Action
                     }
                 }
 
-                $model->prop = json_encode($model->prop);
+                $model->prop = json_encode(eval("return {$model->prop};"));
                 
                 if ($model->save()) {
 
