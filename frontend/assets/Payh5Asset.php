@@ -22,7 +22,7 @@ class Payh5Asset extends AssetBundle
     public $js = [
         'html/h5_keypad/jquery.js',
          self::HOST . 'js/jquery/jquery.json.min.js',
-         'http://res.wx.qq.com/open/js/jweixin-1.4.0.js',
+//          'http://res.wx.qq.com/open/js/jweixin-1.4.0.js',
         'html/h5_keypad/pay.js',
         ];
 }
