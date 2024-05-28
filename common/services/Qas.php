@@ -147,6 +147,7 @@ class Qas extends Component
         $ret = [
             'formula' => $retTemp,
             'answer' => $answer,
+            'stAnswer' => $answer,
             'poem' => $poem,
         ];
 
@@ -182,6 +183,7 @@ class Qas extends Component
         $ret = [
             'formula' => $retTemp,
             'answer' => $answer,
+            'stAnswer' => $answer,
             'poem' => $content,
             'sentence' => $sentence,
         ];
@@ -207,7 +209,6 @@ class Qas extends Component
             $retTempIdx = array_rand($matches[1]);
 
             $sentence = $retTemp = $matches[1][$retTempIdx] . $matches[2][$retTempIdx];
-
             for ($i=0; $i < $hole; $i++) {
 
                 $rndCt = rand(0, mb_strlen($retTemp, 'utf-8') - 2);
@@ -227,18 +228,25 @@ class Qas extends Component
                     'similar' => $this->getSimlarWordFromPoem($chosenWord, $resCt - 1),
                 ];
             }
+            asort($answer);
 
             $resCollection = [];
             $tempCollection = [];
 
+            $py = 0; // 偏移量
+            $stAnswers = [];
             foreach ($answer as $i => $a) {
                 $word = $a['word'];
-                $retTemp = str_replace($word, '(?)', $retTemp);
+//                $retTemp = str_replace($word, '(?)', $retTemp);
+                $retTemp = \common\helpers\Common::mbSubStrReplace($retTemp, '(?)', $i + $py, 1);
+                $py += 2;
 
                 $ans = $a['word'];
+                $stAnswers [] = $ans;
                 $resCollection[] = $ans;
                 $tempCollection += $a['similar'];
             }
+            $stAnswer = implode(',', $stAnswers);
 
             $tempCollection = array_unique($tempCollection);
             $tempCollection = array_slice($tempCollection, 0, $resCt - count($resCollection));
@@ -252,6 +260,7 @@ class Qas extends Component
         $ret = [
             'formula' => $retTemp,
             'answer' => $answer,
+            'stAnswer' => $stAnswer,
             'poem' => $content,
             'sentence' => $sentence,
             'selections' => $finalCollection,

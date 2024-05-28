@@ -80,6 +80,7 @@ $(function () {
         var begin_ts=$("input[name='begin_ts']").val();
         var v_ture=that.attr("data-value");
         var v_detail=that.attr("data-detail");
+        var st_answer=$("input[name='st_answer']").val();
         if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
             var v_select = $("input[name='answer']:checked").val();
         } else if (qa_type == 7) {
@@ -115,7 +116,8 @@ $(function () {
                     story_id:story_id,
                     session_id:session_id,
                     session_stage_id:session_stage_id,
-                    begin_ts:begin_ts
+                    begin_ts:begin_ts,
+                    st_answer:st_answer
                 },
                 onload: function (data) {
                     $('#answer-border-response').html('处理中……');
@@ -153,7 +155,9 @@ $(function () {
                             return false;
                         }
 
-                        if(v_ture==v_select){
+                        if(v_ture==v_select
+                            || obj.data.user_qa.is_right == 1
+                        ){
                             $("#answer-box").hide();
                             $("#answer-right-box").removeClass('hide');
                             audio_right.play();
@@ -190,7 +194,7 @@ $(function () {
                                 // var data=$.toJSON(params);
                                 // Unity.call(data);
                                 location.reload();
-                            },2000);
+                            },992000);
                         }
                     }
                     //新消息获取失败

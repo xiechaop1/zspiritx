@@ -31,6 +31,8 @@ class Poem extends Action
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
+        $hole = !empty($_GET['hole']) ? $_GET['hole'] : 0;
+
         $ts = !empty($_GET['ts']) ? $_GET['ts'] : 0;
 
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
@@ -56,11 +58,14 @@ class Poem extends Action
             if (!empty($qaOne['selected_json'])) {
                 $selectedArray = $qaOne['selected_json'];
                 $propArray = $qaOne['prop'];
+                if (!empty($hole)) {
+                    $propArray['hole'] = $hole;
+                }
 //                $selectedArray = json_decode($selectedJson, true);
                 $poemId = !empty($propArray['poem_id']) ? $propArray['poem_id'] : 0;
                 $poemRandom = !empty($propArray['poem_random']) ? $propArray['poem_random'] : 0;
                 $poemType = !empty($propArray['poem_type']) ? $propArray['poem_type'] : 0;
-                $poem = Yii::$app->qas->getPoemById($poemId, $poemType, $ts, $qaOne['qa_type'], $selectedArray, $qaOne['prop']);
+                $poem = Yii::$app->qas->getPoemById($poemId, $poemType, $ts, $qaOne['qa_type'], $selectedArray, $propArray);
 
                 if (empty($poem)) {
                     throw new NotFoundHttpException('Poem not found');
@@ -83,7 +88,8 @@ class Poem extends Action
             'poem'          => $poem,
             'storyId'       => $storyId,
             'rtnAnswerType'    => 2,
-            'rightAnswer'   => $qaOne['st_answer'],
+            'stAnswer' => !empty($poem['stAnswer']) ? $poem['stAnswer'] : '',
+//            'stAnswer'   => $qaOne['st_answer'],
             'stSelected'    => $qaOne['st_selected'],
             'qa'         => $qaOne,
         ]);

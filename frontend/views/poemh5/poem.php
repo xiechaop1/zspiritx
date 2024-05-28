@@ -160,6 +160,8 @@ $this->title = $qa['topic'];
 <input type="hidden" name="session_stage_id" value="<?= $sessionStageId ?>">
 <input type="hidden" name="begin_ts" value="<?= time() ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
+
+<input type="hidden" name="st_answer" value="<?= $stAnswer ?>">
 <div class="w-100 m-auto">
 <audio controls id="audio_right" class="hide">
     <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -242,7 +244,7 @@ $this->title = $qa['topic'];
                         $optstr .= '
                     <div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
-                        <input class="form-check-input" type="radio" name="answer" value="' . $label . '" id="legal_person_yes_' . $label . '" >
+                        <input class="form-check-input" type="radio" name="answer" value="' . $txt . '" id="legal_person_yes_' . $label . '" >
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' . $label . '">
                             <span class="answer-tag">' . $label . '</span>
                     ' . $txt . '
@@ -477,10 +479,10 @@ $this->title = $qa['topic'];
                     }
                     ?>
                     <div class="answer-title m-t-40">
-                        <?php echo ($qa['st_selected'] != 'True') ? $qa['st_selected'] : ''; ?>
+
                     </div>
                     <div class="answer-detail m-t-40" style="line-height: 40px;">
-                         <?php echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
+                        <?php echo $poem['poem']; ?>
                     </div>
                 </div>
 
@@ -537,7 +539,7 @@ $this->title = $qa['topic'];
                         恭喜您答对了
                     </div>
                     <div class="text-center m-t-30">
-                        <?php echo $qa['st_answer']; ?>
+                        <?php echo $poem['poem']; ?>
                     </div>
 
                 </div>
