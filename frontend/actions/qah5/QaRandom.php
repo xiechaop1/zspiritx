@@ -37,6 +37,8 @@ class QaRandom extends Action
 
         $storyModelId = !empty($_GET['story_model_id']) ? $_GET['story_model_id'] : 0;
 
+        $ts = !empty($_GET['ts']) ? $_GET['ts'] : 0;
+
         if (empty($qaId)) {
             $qaId = Net::get('qa_id');
         }
