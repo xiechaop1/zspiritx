@@ -486,8 +486,10 @@ function showPoiDetail(e) {
     var name=me.attr("data-name");
     var id=me.attr("data-id");
     console.log(name,type,id)
-    $("#modal-detail .map-text-context").empty().text(name);
-    $("#modal-detail").modal('show');
+    if(type==2){
+        $("#modal-detail .map-text-context").empty().text(name);
+        $("#modal-detail").modal('show');
+    }
 }
 
 
