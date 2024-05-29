@@ -315,7 +315,9 @@ $(function () {
                                 height: 80,
                                 img: e.userModelLoc[0].storyModel.icon,
                                 title:2,
-                                url:e.userModelLoc[0].link_url
+                                url:e.userModelLoc[0].link_url,
+                                btn_text:e.userModelLoc[0].link_text,
+                                loc_color:e.userModelLoc[0].loc_color
                             };
                             markersModal.push(marker)
                         }
@@ -429,7 +431,7 @@ $(function () {
     function drawUserModals(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
-                ' data-url="'+marker.url+'" >' +
+                ' data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -500,10 +502,12 @@ function showPoiDetail(e) {
     var name=me.attr("data-name");
     var id=me.attr("data-id");
     var url=me.attr("data-url");
-    console.log(name,type,id)
+    var btn=me.attr("data-btn");
+    console.log(name,type,id,btn)
     if(type==2){
         $("#modal-detail .map-text-context").empty().text(name);
         $("#modal-detail .btn-battle").attr("data-url",url);
+        $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
     }
 }
