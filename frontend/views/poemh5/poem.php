@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = $qa['topic'];
+$this->title = '诗词闯关';
 
 ?>
 <style>

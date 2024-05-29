@@ -166,7 +166,15 @@ class QaApi extends ApiAction
             throw new \Exception('问答不存在', ErrorCode::QA_NOT_EXIST);
         }
 
-        $userQa = UserQa::findOne(['user_id' => $userId, 'session_id' => $sessionId, 'qa_id' => $qaId]);
+        $userQa = UserQa::find()->where([
+            'user_id' => $userId,
+            'session_id' => $sessionId,
+            'qa_id' => $qaId,
+        ])
+            ->andFilterWhere([
+                '>', 'created_at', time() - 86400,
+            ])
+            ->one();
 
         if ($qa['qa_type'] == Qa::QA_TYPE_CHATGPT) {
             $knowledges = [];
@@ -245,23 +253,7 @@ class QaApi extends ApiAction
                         Yii::$app->score->add($userId, $storyId, $sessionId, $sessionStageId, $score);
                     }
                     //            $isNew = true;
-                    if (empty($userQa)) {
-                        $userQa = new UserQa();
-                        $userQa->story_id = $qa['story_id'];
-                        $userQa->session_id = $sessionId;
-                        $userQa->user_id = $userId;
-                        $userQa->qa_id = $qaId;
-                        $userQa->answer = $answer;
-                        $userQa->is_right = $isRight;
-                        $saveRet = $userQa->save();
-                        $userQaId = Yii::$app->db->getLastInsertID();
-                        $userQa->id = $userQaId;
 
-                    } else {
-                        $userQa->answer = $answer;
-                        $userQa->is_right = $isRight;
-                        $saveRet = $userQa->save();
-                    }
 
 //                $itemKnowledgeList = ItemKnowledge::find()
 //                    ->where([
@@ -284,6 +276,23 @@ class QaApi extends ApiAction
                         Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
                     }
                 }
+            }
+            if (empty($userQa)) {
+                $userQa = new UserQa();
+                $userQa->story_id = $qa['story_id'];
+                $userQa->session_id = $sessionId;
+                $userQa->user_id = $userId;
+                $userQa->qa_id = $qaId;
+                $userQa->answer = $answer;
+                $userQa->is_right = $isRight;
+                $saveRet = $userQa->save();
+                $userQaId = Yii::$app->db->getLastInsertID();
+                $userQa->id = $userQaId;
+
+            } else {
+                $userQa->answer = $answer;
+                $userQa->is_right = $isRight;
+                $saveRet = $userQa->save();
             }
 
             $transaction->commit();

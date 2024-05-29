@@ -46,7 +46,7 @@ class Qas extends Component
             $answerType = 1;
             $hole = 1;
         }
-//        $answerType = 3;
+        $answerType = 2;
 
         $sentence = '';
         $retTemp = '';
@@ -86,6 +86,32 @@ class Qas extends Component
         return $ret;
 
 //        exit;
+    }
+
+    public function getSimilarSentenceFromPoem($ct = 3) {
+        for ($i=0; $i<$ct; $i++) {
+            $poemIds[] = rand(1,180);
+        }
+
+        $poems = Poem::find()
+            ->where([
+                'id' => $poemIds,
+            ])
+            ->all();
+
+        $ret = [];
+
+        if (!empty($poems)) {
+            foreach ($poems as $poem) {
+                $content = $poem->content;
+                preg_match_all('/(.*?)([，。？]+)/u', $content, $matches);
+                $sentRandom = array_rand($matches[1]);
+                $content = $matches[1][$sentRandom];
+                $ret[] = $content;
+            }
+        }
+
+        return $ret;
     }
 
     public function getSimlarWordFromPoem($word, $ct = 3) {
@@ -133,6 +159,7 @@ class Qas extends Component
             $answer[] = [
                 'title' => $poem->title,
             ];
+            $stAnswer = $poem->title;
 //            $retTemp = str_replace($poem->title, '(?)', $retTemp);
             $retTemp = $content;
         } else {
@@ -141,13 +168,14 @@ class Qas extends Component
             $answer[] = [
                 'author' => $poem->author,
             ];
+            $stAnswer = $poem->author;
             $retTemp = $content;
         }
 
         $ret = [
             'formula' => $retTemp,
             'answer' => $answer,
-            'stAnswer' => $answer,
+            'stAnswer' => $stAnswer,
             'poem' => $poem,
         ];
 
@@ -171,10 +199,18 @@ class Qas extends Component
 
             $answerIdx = array_rand($sentArray);
 
+            $similarCollections = $this->getSimilarSentenceFromPoem(3);
+
             $answer[$answerIdx] = [
                 'i' => $answerIdx,
                 'sentence' => $sentArray[$answerIdx],
+                'similar' => $similarCollections
             ];
+
+            $stAnswer = $sentArray[$answerIdx];
+
+            $finalCollection = $similarCollections;
+            $finalCollection[] = $sentArray[$answerIdx];
 
             $retTemp = str_replace($sentArray[$answerIdx], '(?)', $retTemp);
 
@@ -183,9 +219,10 @@ class Qas extends Component
         $ret = [
             'formula' => $retTemp,
             'answer' => $answer,
-            'stAnswer' => $answer,
+            'stAnswer' => $stAnswer,
             'poem' => $content,
             'sentence' => $sentence,
+            'selections' => $finalCollection,
         ];
 
         return $ret;
