@@ -134,7 +134,7 @@ $this->title = '对战结果';
         </div>
 
     </div>
-<div class="modal fade" id="match_detail" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="match_detail" tabindex="-1" style="position: sticky; display: none;opacity: 100;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content fs-30 bold w-100 text-FF title-box-border">
                 <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 5px;right: 15px;">
@@ -182,6 +182,46 @@ $this->title = '对战结果';
     </div>
 
 </div>
+<div class="row modal fade" id="answer-right-box" style="top: 100px;">
+    <div class="m-t-30 col-sm-12 col-md-12 p-40">
+        <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
+        <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>
+        <div style="clear:both; text-align: center;">
+                        <span>
+                            <!-- ../../static/img/qa/gold.gif -->
+                    <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
+                            </span>
+
+            <span class="answer-detail" id="gold_score" style="color: yellow">
+
+                        </span>
+        </div>
+        <br>
+        <!--                    <div class="answer-title m-t-40">-->
+        <!--                        恭喜您，挑战成功！-->
+        <!--                    </div>-->
+        <div class="btn-m-green m-t-30  m-l-30 confirm_btn">
+            继续
+        </div>
+        <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
+        <!--                        --><?php //echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
+        <!--                    </div>-->
+    </div>
+
+</div>
+<div class="row modal fade" id="answer-error-box" style="top: 220px;">
+    <div class="m-t-60 col-sm-12 col-md-12">
+        <div class="answer-detail " >
+            <!--                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+            <img src="../../static/img/match/bc_lose.png" alt="" class="img-responsive  d-block m-auto"/>
+            <br>
+            <!--                        <span  class=" d-inline-block vertical-mid">很遗憾，挑战失败！</span>-->
+            <div class="btn-m-green m-t-30  m-l-30 retry_btn">
+                再试一次
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     window.onload = function () {
         var i = 0;
@@ -202,8 +242,10 @@ $this->title = '对战结果';
             console.log($(shakeObj1.position().left));
             console.log($(shakeObj.position().left));
             var targetLeft = $(shakeObj1).position().left - 50;
+            var hitTargetLeft = targetLeft + 30;
             if (obj.direction == -1) {
                 targetLeft = -$(shakeObj1).position().left - 150;
+                hitTargetLeft = targetLeft + 150;
             }
             $(shakeObj).animate({
                 left: targetLeft,
@@ -211,7 +253,7 @@ $this->title = '对战结果';
             }, 200, 'swing', function() {
                 clearTimeout(fightInterval);
                 targetTop = $(shakeObj1).position().top;
-                var hitDiv = '<div class="riv_hit" style="position: absolute; z-index: 999999; left: ' + targetLeft + 'px; top: ' + targetTop + 'px;"><img width="120" src="../../static/img/match/hit.gif"></div>';
+                var hitDiv = '<div class="riv_hit" style="position: absolute; z-index: 99999999; left: ' + hitTargetLeft + 'px; top: ' + targetTop + 'px;"><img width="240" src="../../static/img/match/hit.gif"></div>';
                 $(shakeObj1).parent().append(hitDiv);
                 $(shakeObj1).parent().find('.riv_hit').animate({
                     opacity: 100
@@ -295,7 +337,8 @@ $this->title = '对战结果';
             $('#match_detail_title').html(title);
             // $('#match_detail_round').html($('#match_detail_round_' + i).val());
             // $('#match_detail_desc').html($('#match_detail_round_' + i).val() + ' ' + $('#match_detail_desc_' + i).val());
-            $('#match_detail').modal('show');
+            // $('#match_detail').modal('show');
+            $('#match_detail').show();
             if (obj[z].direction == 1) {
                 var shakeObj = $('.avatar_img');
                 var shakeObj1 = $('.rival_avatar_img');
@@ -326,19 +369,21 @@ $this->title = '对战结果';
     }
 
     function showResult(tobj) {
-        var dobj = $('#match_result');
-        dobj.show();
+        // var dobj = $('#match_result');
+        // dobj.show();
         if (tobj.fightRet == 1) {
-            dobj.html('You WIN!');
+            // dobj.html('You WIN!');
+            $('#answer-right-box').modal('show');
         } else {
-            dobj.html('You LOSE!');
+            // dobj.html('You LOSE!');
+            $('#answer-error-box').modal('show');
         }
 
-        dobj.animate({
-            width: '60%',
-            height: '60%',
-            'font-size': '50px',
-        }, 100);
+        // dobj.animate({
+        //     width: '60%',
+        //     height: '60%',
+        //     'font-size': '50px',
+        // }, 100);
     }
 
     function floNumber(num) {
