@@ -80,11 +80,10 @@ $this->registerMetaTag([
           <!--<div class="fs-15 text-33 bold">
            场景简介：
           </div>-->
-          <div class="m-t-20 bg-F5 p-20 fs-15  border-radius-r-5 border-radius-l-5 map-text-context">
-
+          <div class="m-t-10 bg-F5 p-20 fs-15  border-radius-r-5 border-radius-l-5 map-text-context">
           </div>
-          <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
-                      <label class="btn-blue-s">战斗</label>
+          <div class="fs-36 text-F6 text-center bold m-t-20">
+                <label class="btn-blue-s btn-battle" data-url="">战斗</label>
           </div>
         </div>
       </div>
