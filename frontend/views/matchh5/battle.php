@@ -134,7 +134,8 @@ $this->title = '对战结果';
         </div>
 
     </div>
-<div class="modal fade" id="match_detail" tabindex="-1" style="position: sticky; top: 200px; display: none;opacity: 100;" aria-hidden="true">
+<div class="modal fade" id="match_detail" tabindex="-1" style="top: 160px; display: none;opacity: 100;" aria-hidden="true">
+<!--    <div id="match_detail" style="position: sticky; top: 200px; background-color: rgba(0,0,0,0.5); z-index: 99999999; padding: 25px; border-radius: 15px;">-->
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content fs-30 bold w-100 text-FF title-box-border">
                 <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 5px;right: 15px;">
@@ -180,8 +181,9 @@ $this->title = '对战结果';
             </div>
         </div>
     </div>
+    </div>
 
-</div>
+<!--</div>-->
 <div class="row modal fade" id="answer-right-box" style="top: 100px;">
     <div class="m-t-30 col-sm-12 col-md-12 p-40">
         <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
