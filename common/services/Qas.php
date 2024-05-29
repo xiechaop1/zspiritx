@@ -46,7 +46,7 @@ class Qas extends Component
             $answerType = 1;
             $hole = 1;
         }
-        $answerType = 2;
+        $answerType = 3;
 
         $sentence = '';
         $retTemp = '';
@@ -86,6 +86,28 @@ class Qas extends Component
         return $ret;
 
 //        exit;
+    }
+
+    public function getSimilarTitleFromPoem($ct = 3) {
+        for ($i=0; $i<$ct; $i++) {
+            $poemIds[] = rand(1,180);
+        }
+
+        $poems = Poem::find()
+            ->where([
+                'id' => $poemIds,
+            ])
+            ->all();
+
+        $ret = [];
+
+        if (!empty($poems)) {
+            foreach ($poems as $poem) {
+                $ret[] = $poem->title;
+            }
+        }
+
+        return $ret;
     }
 
     public function getSimilarSentenceFromPoem($ct = 3) {
@@ -172,11 +194,17 @@ class Qas extends Component
             $retTemp = $content;
         }
 
+        $finalCollections = $this->getSimilarTitleFromPoem(3);
+        $finalCollections[] = $stAnswer;
+
+        shuffle($finalCollections);
+
         $ret = [
             'formula' => $retTemp,
             'answer' => $answer,
             'stAnswer' => $stAnswer,
-            'poem' => $poem,
+            'poem' => $poem->content,
+            'selections' => $finalCollections,
         ];
 
         return $ret;
@@ -209,8 +237,9 @@ class Qas extends Component
 
             $stAnswer = $sentArray[$answerIdx];
 
-            $finalCollection = $similarCollections;
-            $finalCollection[] = $sentArray[$answerIdx];
+            $finalCollections = $similarCollections;
+            $finalCollections[] = $sentArray[$answerIdx];
+            shuffle($finalCollections);
 
             $retTemp = str_replace($sentArray[$answerIdx], '(?)', $retTemp);
 
@@ -222,7 +251,7 @@ class Qas extends Component
             'stAnswer' => $stAnswer,
             'poem' => $content,
             'sentence' => $sentence,
-            'selections' => $finalCollection,
+            'selections' => $finalCollections,
         ];
 
         return $ret;
