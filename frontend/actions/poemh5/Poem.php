@@ -65,7 +65,7 @@ class Poem extends Action
                 $poemId = !empty($propArray['poem_id']) ? $propArray['poem_id'] : 0;
                 $poemRandom = !empty($propArray['poem_random']) ? $propArray['poem_random'] : 0;
                 $poemType = !empty($propArray['poem_type']) ? $propArray['poem_type'] : 0;
-                $poem = Yii::$app->qas->getPoemById($poemId, $poemType, $ts, $qaOne['qa_type'], $selectedArray, $propArray);
+                $poem = Yii::$app->qas->getPoemById($poemId, $propArray, 0, $poemType, $ts, $qaOne['qa_type'], $selectedArray);
 
                 if (empty($poem)) {
                     throw new NotFoundHttpException('Poem not found');

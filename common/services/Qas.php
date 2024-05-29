@@ -24,7 +24,7 @@ use yii;
 
 class Qas extends Component
 {
-    public function getPoemById($poemId, $poemType, $ts = 0, $qaType = Qa::QA_TYPE_VERIFYCODE, $qaSelected = [], $qaProp = []) {
+    public function getPoemById($poemId, $qaProp = [], $answerType = 0, $poemType, $ts = 0, $qaType = Qa::QA_TYPE_VERIFYCODE, $qaSelected = []) {
         if ($ts > 0) {
             srand($ts);
         }
@@ -39,14 +39,41 @@ class Qas extends Component
             return [];
         }
 
+        $ret = $this->getPoemSubject($poem, $qaProp, $answerType);
+
+
+        return $ret;
+    }
+
+    public function getPoemByRand($poemType = 0, $qaProp = [], $answerType = 0, $ts = 0, $qaType = Qa::QA_TYPE_VERIFYCODE, $qaSelected = []) {
+        if ($ts > 0) {
+            srand($ts);
+        }
+
+        $poem = Poem::find()
+            ->orderBy('rand()')
+            ->limit(1)
+            ->one();
+
+        if (empty($poem)) {
+            return [];
+        }
+
+        $ret = $this->getPoemSubject($poem, $qaProp, $answerType);
+
+        return $ret;
+    }
+
+    public function getPoemSubject($poem, $qaProp = [], $answerType = 0) {
         if (!empty($qaProp)) {
-            $answerType = !empty($qaProp['answer_type']) ? $qaProp['answer_type'] : 1;
+            if (empty($answerType)) {
+                $answerType = !empty($qaProp['answer_type']) ? $qaProp['answer_type'] : 1;
+            }
             $hole = !empty($qaProp['hole']) ? $qaProp['hole'] : 1;
         } else {
-            $answerType = 1;
+            $answerType = empty($answerType) ? 1 : $answerType;
             $hole = 1;
         }
-        $answerType = 3;
 
         $sentence = '';
         $retTemp = '';
@@ -63,8 +90,6 @@ class Qas extends Component
             // 猜标题/作者
             $ret = $this->getPoemTitle($poem);
         }
-
-
         return $ret;
     }
 

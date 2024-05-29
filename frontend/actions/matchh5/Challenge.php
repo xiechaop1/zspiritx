@@ -183,6 +183,27 @@ class Challenge extends Action
                     $subjects[] = $this->generateMath($level);
                 }
             }
+        } elseif ($storyMatch->match_class == StoryMatch::MATCH_CLASS_CHINESE) {
+            // 生成1000道诗词题
+            $subjects = [];
+            $level = 1;
+            switch ($grade) {
+                case 1:
+                default:
+                    $level = 1;
+                    break;
+            }
+
+            for ($i=0; $i<100; $i++) {
+                $subjects[] = $this->generatePoem($level, 1);
+                if ($i == 10) {
+                    $level = 2;
+                    $subjects[] = $this->generatePoem($level,2);
+                }
+            }
+        } else {
+            return $this->renderErr('比赛类型不支持！');
+
         }
 
 //        var_dump($subjects);exit;
@@ -212,6 +233,33 @@ class Challenge extends Action
             'storyMatch'   => $storyMatch,
             'initTimer' => 60,
         ]);
+    }
+
+    public function generatePoem($level = 1, $answerType = 1) {
+        $poem = Yii::$app->qas->getPoemByRand(0, [], $answerType);
+
+        $hitRange = [
+            5 * (1 + ($level - 1) / 5),
+            10 * (1 + ($level - 1) / 5),
+        ];
+        $gold = 10 * (1 + ($level - 1) / 2);
+
+        $showFormula = $poem['formula'];
+        $answer = $poem['stAnswer'];
+        $formula = $poem['poem'];
+        $answerRange = $poem['selections'];
+
+        $subjects = [
+            'formula' => $showFormula,
+            'answer' => $answer,
+            'standFormula' => $formula,
+            'answerRange' => $answerRange,
+            'level' => $level,
+            'hitRange' => $hitRange,
+            'gold'  => $gold,
+        ];
+
+        return $subjects;
     }
 
     public function generateMath($level = 1) {
