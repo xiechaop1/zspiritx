@@ -920,7 +920,7 @@ class DoApi extends ApiAction
                         $tmp['storyModel']['icon'] = Attachment::completeUrl($tmp['storyModel']['icon'], true);
 
                         if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE) {
-                            $tmp['link_url'] = 'https://h5.zspiritx.com.cn/baggageh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&bag_version=2&story_model_class=3&target_story_model_id=' . $tmp['storyModel']['id'];
+                            $tmp['link_url'] = 'https://h5.zspiritx.com.cn/baggageh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&bag_version=2&story_model_class=3&target_story_model_id=' . $tmp['storyModel']['id'] . '&target_user_model_loc_id=' . $row2['id'];
                         }
 
                         $row2 = $tmp;
