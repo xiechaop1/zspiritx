@@ -134,7 +134,7 @@ $this->title = '对战结果';
         </div>
 
     </div>
-<div class="modal fade" id="match_detail" tabindex="-1" style="position: sticky; display: none;opacity: 100;" aria-hidden="true">
+<div class="modal fade" id="match_detail" tabindex="-1" style="position: sticky; top: 200px; display: none;opacity: 100;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content fs-30 bold w-100 text-FF title-box-border">
                 <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 5px;right: 15px;">
