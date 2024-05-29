@@ -937,6 +937,8 @@ class DoApi extends ApiAction
                             } else {
                                 $tmp['loc_color'] = Attachment::completeUrl('img/map/loc_color_blue.png', true);
                             }
+                        } else {
+                            $tmp['loc_color'] = Attachment::completeUrl('img/map/loc_color_blue.png', true);
                         }
 
                         $row2 = $tmp;
