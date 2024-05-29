@@ -314,7 +314,8 @@ $(function () {
                                 width: 80,
                                 height: 80,
                                 img: e.userModelLoc[0].storyModel.icon,
-                                title:2
+                                title:2,
+                                url:e.userModelLoc[0].link_url
                             };
                             markersModal.push(marker)
                         }
@@ -427,7 +428,8 @@ $(function () {
     //描绘模型User Modal Marker
     function drawUserModals(markers){
         markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" >' +
+            var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
+                ' data-url="'+marker.url+'" >' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -469,6 +471,18 @@ $(function () {
     setInterval(getPoi,10000);
     setInterval(getUserLoc,5000);
     // setInterval(removeMarkers,3000);
+
+    //打开url
+    $(".btn-battle").click(function (){
+        var me=$(this);
+        var url=me.attr('data-url');
+        if(url.length>0){
+            window.location.href=url
+        }
+        else{
+            $.alert("数据异常，请刷新后重试");
+        }
+    })
     
 });
 
@@ -485,9 +499,11 @@ function showPoiDetail(e) {
     var type=me.attr("data-type");
     var name=me.attr("data-name");
     var id=me.attr("data-id");
+    var url=me.attr("data-url");
     console.log(name,type,id)
     if(type==2){
         $("#modal-detail .map-text-context").empty().text(name);
+        $("#modal-detail .btn-battle").attr("data-url",url);
         $("#modal-detail").modal('show');
     }
 }
