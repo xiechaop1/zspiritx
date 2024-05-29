@@ -156,6 +156,8 @@ class QaApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $beginTs = !empty($this->_get['begin_ts']) ? $this->_get['begin_ts'] : 0;
 
+        $stAnswer = !empty($this->_get['st_answer']) ? $this->_get['st_answer'] : '';
+
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
@@ -189,10 +191,16 @@ class QaApi extends ApiAction
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
-            if ($qa['st_selected'] == $answer) {
+            if (!empty($stAnswer) && $stAnswer == $answer) {
                 $isRight = 1;
-            } else {
+            } elseif (!empty($stAnswer) && $stAnswer != $answer) {
                 $isRight = 0;
+            } elseif (empty($stAnswer)) {
+                if ($qa['st_selected'] == $answer) {
+                    $isRight = 1;
+                } else {
+                    $isRight = 0;
+                }
             }
 
 
@@ -210,6 +218,7 @@ class QaApi extends ApiAction
                 'x' => 1.00,
                 'addtion' => 0,
             ];
+
             if ($isRight == 1) {
                 // 临时处理
                 // 10w以上目前认为是小程序可能调用的场次
@@ -235,7 +244,6 @@ class QaApi extends ApiAction
 
                         Yii::$app->score->add($userId, $storyId, $sessionId, $sessionStageId, $score);
                     }
-
                     //            $isNew = true;
                     if (empty($userQa)) {
                         $userQa = new UserQa();

@@ -210,6 +210,15 @@ $this->title = '对战结果';
                 width: $(shakeObj1).width()
             }, 200, 'swing', function() {
                 clearTimeout(fightInterval);
+                targetTop = $(shakeObj1).position().top;
+                var hitDiv = '<div class="riv_hit" style="position: absolute; z-index: 999999; left: ' + targetLeft + 'px; top: ' + targetTop + 'px;"><img width="120" src="../../static/img/match/hit.gif"></div>';
+                $(shakeObj1).parent().append(hitDiv);
+                $(shakeObj1).parent().find('.riv_hit').animate({
+                    opacity: 100
+                }, 500, function() {
+                    $(this).remove();
+                });
+
                 $('#number-floater').css('left', shakeObj1.position().left + 10);
                 $('#number-floater').css('font-size', 70);
                 var num = obj.hint;

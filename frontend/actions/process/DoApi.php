@@ -891,6 +891,7 @@ class DoApi extends ApiAction
     public function getUserModelLoc() {
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
 
         $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
         $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
@@ -917,6 +918,11 @@ class DoApi extends ApiAction
                         $tmp = $row2->toArray();
                         $tmp['storyModel']  = $row2->storyModel->toArray();
                         $tmp['storyModel']['icon'] = Attachment::completeUrl($tmp['storyModel']['icon'], true);
+
+                        if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE) {
+                            $tmp['link_url'] = 'https://h5.zspiritx.com.cn/baggageh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&bag_version=2&story_model_class=3&target_story_model_id=' . $tmp['storyModel']['id'];
+                        }
+
                         $row2 = $tmp;
                     }
                 }

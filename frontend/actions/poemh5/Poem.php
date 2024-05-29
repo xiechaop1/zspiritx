@@ -31,7 +31,14 @@ class Poem extends Action
         $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
+        $hole = !empty($_GET['hole']) ? $_GET['hole'] : 0;
+
+        $ts = !empty($_GET['ts']) ? $_GET['ts'] : 0;
+
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
+
+        $poemId = 0;
+        $poem = [];
 
         if (!empty($qaId)) {
             $qaOne = Qa::find()
@@ -50,30 +57,39 @@ class Poem extends Action
 
             if (!empty($qaOne['selected_json'])) {
                 $selectedArray = $qaOne['selected_json'];
+                $propArray = $qaOne['prop'];
+                if (!empty($hole)) {
+                    $propArray['hole'] = $hole;
+                }
 //                $selectedArray = json_decode($selectedJson, true);
-                $poemId = !empty($selectedArray['poem_id']) ? $selectedArray['poem_id'] : 0;
-                $poemRandom = !empty($selectedArray['poem_random']) ? $selectedArray['poem_random'] : 0;
-                $poemType = !empty($selectedArray['poem_type']) ? $selectedArray['poem_type'] : 0;
+                $poemId = !empty($propArray['poem_id']) ? $propArray['poem_id'] : 0;
+                $poemRandom = !empty($propArray['poem_random']) ? $propArray['poem_random'] : 0;
+                $poemType = !empty($propArray['poem_type']) ? $propArray['poem_type'] : 0;
+                $poem = Yii::$app->qas->getPoemById($poemId, $poemType, $ts, $qaOne['qa_type'], $selectedArray, $propArray);
 
-                $poem = Yii::$app->qas->getPoemById($poemId, $poemType, $qaOne['qa_type'], $selectedArray, $qaOne['prop']);
-
-                var_dump($poem);exit;
+                if (empty($poem)) {
+                    throw new NotFoundHttpException('Poem not found');
+                }
+//                var_dump($poem);exit;
 
 
             }
 
         }
-        exit;
+//        exit;
 
-        return $this->controller->render('secret', [
+        return $this->controller->render('poem', [
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'sessionStageId'=> $sessionStageId,
             'qaId'          => $qaId,
+            'poemId'        => $poemId,
+            'poem'          => $poem,
             'storyId'       => $storyId,
-            'pinCode'       => $pinCode,
-            'rightAnswer'   => $qaOne['st_answer'],
+            'rtnAnswerType'    => 2,
+            'stAnswer' => !empty($poem['stAnswer']) ? $poem['stAnswer'] : '',
+//            'stAnswer'   => $qaOne['st_answer'],
             'stSelected'    => $qaOne['st_selected'],
             'qa'         => $qaOne,
         ]);

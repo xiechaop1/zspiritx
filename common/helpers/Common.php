@@ -80,6 +80,10 @@ class Common
 
     }
 
+    public static function mbSubStrReplace($str, $replace, $start, $length) {
+        return mb_substr($str, 0, $start) . $replace . mb_substr($str, $start + $length);
+    }
+
     public static function generateNo($prefix, $dateTag, $sort, $randMin = 1000, $randMax = 9999) {
         $rand = rand($randMin, $randMax);
         return $prefix . $dateTag . $sort . $rand;

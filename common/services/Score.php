@@ -64,9 +64,9 @@ class Score extends Component
         $nowTime = time();
         if (!empty($beginTs)) {
             $timeInterval = intval($nowTime - $beginTs);
-            if ($timeInterval < 60) {
+            if ($timeInterval < 30) {
                 $addition = $qaScore;
-            } elseif ($timeInterval >= 60 && $timeInterval < 120) {
+            } elseif ($timeInterval >= 30 && $timeInterval < 90) {
                 $addition = $qaScore * 0.5;
             } else {
                 $addition = 0;
@@ -75,12 +75,17 @@ class Score extends Component
 
         if (!empty($userQa)) {
 
-            if ($userQa['is_right'] == 1) {
-                $score = 0;
-                $addition = 0;
-            } else {
+            // 超过半天重新加金币
+            if (time() - $userQa['created_at'] > 43200) {
                 $score = $qaScore;
-                $x *= 0.5;
+            } else {
+                if ($userQa['is_right'] == 1) {
+                    $score = 0;
+                    $addition = 0;
+                } else {
+                    $score = $qaScore;
+                    $x *= 0.5;
+                }
             }
         } else {
             $score = $qaScore;
