@@ -921,6 +921,24 @@ class DoApi extends ApiAction
 
                         if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE) {
                             $tmp['link_url'] = 'https://h5.zspiritx.com.cn/baggageh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&bag_version=2&story_model_class=3&target_story_model_id=' . $tmp['storyModel']['id'] . '&target_user_model_loc_id=' . $row2['id'];
+                            $tmp['link_text'] = '战斗';
+                        } elseif ($row2->active_class == UserModelLoc::ACTIVE_CLASS_CATCH) {
+                            $tmp['link_url'] = '';
+                            $tmp['link_text'] = '捕捉';
+                        } elseif ($row2->active_class == UserModelLoc::ACTIVE_CLASS_OTHER) {
+                            $tmp['link_url'] = '';
+                            $tmp['link_text'] = '探寻';
+                        }
+
+                        $tmp['loc_color'] = '';
+                        if (!empty($row2->user_id)) {
+                            if ($row2->user_id == $userId) {
+                                $tmp['loc_color'] = Attachment::completeUrl('img/map/loc_color_red.png', true);
+                            } else {
+                                $tmp['loc_color'] = Attachment::completeUrl('img/map/loc_color_blue.png', true);
+                            }
+                        } else {
+                            $tmp['loc_color'] = Attachment::completeUrl('img/map/loc_color_blue.png', true);
                         }
 
                         $row2 = $tmp;
