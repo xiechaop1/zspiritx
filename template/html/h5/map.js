@@ -503,7 +503,7 @@ $(function () {
     ];
 
     // 10万辆北京公共交通车辆
-    $.get('//a.amap.com/Loca/static/mock/traffic_110000.csv', function (csv) {
+    $.get('https://a.amap.com/Loca/static/mock/traffic_110000.csv', function (csv) {
         var layer = Loca.visualLayer({
             container: map,
             type: 'point',
