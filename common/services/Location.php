@@ -153,7 +153,7 @@ class Location extends Component
                     !empty($poi['tel']) ? json_encode($poi['tel']) : '',
                     '',
                     $amapRetSave,
-                    $amapProp,
+                    $amapProp
                 );
             }
         }
@@ -173,6 +173,7 @@ class Location extends Component
                     '',
                     '',
                     $aoiType,
+                    '',
                     ''
                 );
             }
