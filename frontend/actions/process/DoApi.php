@@ -689,6 +689,9 @@ class DoApi extends ApiAction
 
                                     $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
                                     $params1['location_id'] = $userModelLocRet['location']['id'];
+                                    if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
+                                        $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
+                                    }
                                 }
                                 if (!empty($userModelLocRet['userModelLoc']->active_class)
                                     &&
@@ -867,6 +870,7 @@ class DoApi extends ApiAction
                 $params['story_model_detail_id'] = $storyModel1->story_model_detail_id;
                 $params['model_inst_u_id'] = $storyModel1->model_inst_u_id;
                 $params['i'] = $i;
+                $params['ts'] = time() . rand(1000,9999);
 
                 // 个性化属性替换
                 if (!empty($userModelProps[$storyModel1->id])) {

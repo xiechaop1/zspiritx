@@ -90,56 +90,68 @@ class QaRandom extends Action
             }
         }
 
-        switch ($model->qa_type) {
-            case Qa::QA_TYPE_PUZZLE_PIC:
-                $uri = '/puzzleh5/puzzle';
-                $params = [
-                    'rows' => !empty($selectedJson['rows']) ? $selectedJson['rows'] : 0,
-                    'cols' => !empty($selectedJson['cols']) ? $selectedJson['cols'] : 0,
-                    'img_width' => !empty($selectedJson['imgWidth']) ? $selectedJson['imgWidth'] : 0,
-                    'prefix' => !empty($selectedJson['prefix']) ? $selectedJson['prefix'] : '',
-                    'qa_id' => $qaId,
-                    'user_id' => $userId,
-                    'session_id' => $sessionId,
-                    'session_stage_id' => $sessionStageId,
-                    'story_id' => $storyId,
+        if ($model->qa_class == Qa::QA_CLASS_POEM) {
+            $uri = '/poemh5/poem';
+            $params = [
+                'ts' => $ts,
+                'qa_id' => $qaId,
+                'user_id' => $userId,
+                'session_id' => $sessionId,
+                'session_stage_id' => $sessionStageId,
+                'story_id' => $storyId,
+            ];
+        } else {
+            switch ($model->qa_type) {
+                case Qa::QA_TYPE_PUZZLE_PIC:
+                    $uri = '/puzzleh5/puzzle';
+                    $params = [
+                        'rows' => !empty($selectedJson['rows']) ? $selectedJson['rows'] : 0,
+                        'cols' => !empty($selectedJson['cols']) ? $selectedJson['cols'] : 0,
+                        'img_width' => !empty($selectedJson['imgWidth']) ? $selectedJson['imgWidth'] : 0,
+                        'prefix' => !empty($selectedJson['prefix']) ? $selectedJson['prefix'] : '',
+                        'qa_id' => $qaId,
+                        'user_id' => $userId,
+                        'session_id' => $sessionId,
+                        'session_stage_id' => $sessionStageId,
+                        'story_id' => $storyId,
                     ];
 
-                break;
-            case Qa::QA_TYPE_SECRET:
-                $uri = '/secreth5/secret';
-                $params = [
-                    'qa_id' => $qaId,
-                    'user_id' => $userId,
-                    'session_id' => $sessionId,
-                    'session_stage_id' => $sessionStageId,
-                    'story_id' => $storyId,
-                    'story_model_id' => $storyModelId,
-                ];
-                break;
-            case QA::QA_TYPE_SUDOKU:
-                $uri = '/puzzleh5/puzzle_sudoku';
+                    break;
+                case Qa::QA_TYPE_SECRET:
+                    $uri = '/secreth5/secret';
+                    $params = [
+                        'qa_id' => $qaId,
+                        'user_id' => $userId,
+                        'session_id' => $sessionId,
+                        'session_stage_id' => $sessionStageId,
+                        'story_id' => $storyId,
+                        'story_model_id' => $storyModelId,
+                    ];
+                    break;
+                case QA::QA_TYPE_SUDOKU:
+                    $uri = '/puzzleh5/puzzle_sudoku';
 //                $selectedJson = json_decode($model->selected, true);
-                $params = [
+                    $params = [
 //                    'size' => !empty($selectedJson['size']) ? $selectedJson['size'] : 0,
 //                    'hole' => !empty($selectedJson['hole']) ? $selectedJson['hole'] : 0,
-                    'qa_id' => $qaId,
-                    'user_id' => $userId,
-                    'session_id' => $sessionId,
-                    'session_stage_id' => $sessionStageId,
-                ];
-                break;
-            default:
-                $uri = '/qah5/qa_one';
-                $params = [
-                    'id' => $qaId,
-                    'user_id' => $userId,
-                    'session_id' => $sessionId,
-                    'session_stage_id' => $sessionStageId,
-                    'story_id' => $storyId,
-                ];
-                break;
+                        'qa_id' => $qaId,
+                        'user_id' => $userId,
+                        'session_id' => $sessionId,
+                        'session_stage_id' => $sessionStageId,
+                    ];
+                    break;
+                default:
+                    $uri = '/qah5/qa_one';
+                    $params = [
+                        'id' => $qaId,
+                        'user_id' => $userId,
+                        'session_id' => $sessionId,
+                        'session_stage_id' => $sessionStageId,
+                        'story_id' => $storyId,
+                    ];
+                    break;
 
+            }
         }
         $url = $uri . '?' . http_build_query($params);
 

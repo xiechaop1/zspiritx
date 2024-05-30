@@ -8,7 +8,8 @@ use Yii;
  * This is the model class for table "{{%story_model}}".
  *
  */
-class StoryModelDetail extends \yii\db\ActiveRecord
+class
+StoryModelDetail extends \yii\db\ActiveRecord
 {
 
     /**
