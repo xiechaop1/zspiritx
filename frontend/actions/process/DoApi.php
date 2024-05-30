@@ -924,8 +924,10 @@ class DoApi extends ApiAction
                         $tmp['storyModel']['icon'] = Attachment::completeUrl($tmp['storyModel']['icon'], true);
 
                         if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE) {
-                            $tmp['link_url'] = 'https://h5.zspiritx.com.cn/baggageh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&bag_version=2&story_model_class=3&target_story_model_id=' . $tmp['storyModel']['id'] . '&target_user_model_loc_id=' . $row2['id'];
-                            $tmp['link_text'] = '战斗';
+                            if ($row2->user_id != $userId) {
+                                $tmp['link_url'] = 'https://h5.zspiritx.com.cn/baggageh5/all?user_id=' . $userId . '&session_id=' . $sessionId . '&story_id=' . $storyId . '&bag_version=2&story_model_class=3&target_story_model_id=' . $tmp['storyModel']['id'] . '&target_user_model_loc_id=' . $row2['id'];
+                                $tmp['link_text'] = '战斗';
+                            }
                         } elseif ($row2->active_class == UserModelLoc::ACTIVE_CLASS_CATCH) {
                             $tmp['link_url'] = '';
                             $tmp['link_text'] = '捕捉';
