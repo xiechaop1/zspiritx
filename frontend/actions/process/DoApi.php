@@ -988,7 +988,7 @@ class DoApi extends ApiAction
                                         'strokeWeight' => 2,
                                     ];
                                 }
-                                
+
                                 if (!empty($locationProp['geofence']['circle'])) {
                                     $locationProp['geofence']['circle'] = array_merge($propTmp, $locationProp['geofence']['circle']);
                                 } elseif (!empty($locationProp['geofence']['polygon'])) {
@@ -997,6 +997,7 @@ class DoApi extends ApiAction
                                     $locationProp['geofence']['rectangle'] = array_merge($propTmp, $locationProp['geofence']['rectangle']);
                                 }
                                 $location['amap_prop'] = json_encode($locationProp);
+                                $row1['location'] = $location;
                             }
                         }
 
