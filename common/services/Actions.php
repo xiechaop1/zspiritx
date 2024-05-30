@@ -149,6 +149,14 @@ class Actions extends Component
         return $model;
     }
 
+    public function hideModel($sessionId, $storyId, $modelUId) {
+        $msg = json_encode([
+            'hideModels' => [$modelUId],
+        ]);
+        $this->add((int)$sessionId, 0,
+            $storyId, 0, $msg, \common\models\Actions::ACTION_TYPE_MODEL_DISPLAY);
+    }
+
     public function readOne($actionId) {
         $model = \common\models\Actions::find()
             ->where([

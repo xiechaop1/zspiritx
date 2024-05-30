@@ -295,6 +295,15 @@ class QaApi extends ApiAction
                 $saveRet = $userQa->save();
             }
 
+            $propJson = json_decode($qa->prop, true);
+
+            if (!empty($propJson['model_inst_u_ids'])) {
+//                $expirationInterval = 600;
+                foreach ($propJson['model_inst_u_ids'] as $modelUId => $modelUParams) {
+                    Yii::$app->act->hideModels((int)$sessionId, $storyId, $modelUId);
+                }
+            }
+
             $transaction->commit();
 
         } catch (\Exception $e) {
