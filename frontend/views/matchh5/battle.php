@@ -41,7 +41,7 @@ $this->title = '对战结果';
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" id="rtn_answer_type" value="<?= $storyMatch->ret == \common\models\StoryMatch::STORY_MATCH_RESULT_WIN ? '2' : 1 ?>">
 
-<audio autoplay="" loop="" id="bgm">
+<audio  autoplay loop  id="bgm">
     <source src="<?= \common\helpers\Attachment::completeUrl('/bgm/home/5/fight.mp3', false) ?>" type="audio/mpeg">
     您的浏览器不支持 audio 元素。
 </audio>
