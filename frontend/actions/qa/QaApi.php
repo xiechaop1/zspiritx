@@ -295,7 +295,7 @@ class QaApi extends ApiAction
                 $saveRet = $userQa->save();
             }
 
-            $propJson = json_decode($qa->prop, true);
+            $propJson = json_decode($qa['prop'], true);
 
             if (!empty($propJson['model_inst_u_ids'])) {
 //                $expirationInterval = 600;
