@@ -726,8 +726,14 @@ class DoApi extends ApiAction
                                                 'strokeWeight' => 2,
                                             ];
                                         }
-                                        $locationProp = array_merge($propTmp, $locationProp);
-                                        $location->amap_prop = json_encode($locationProp);
+                                        if (!empty($locationProp['geofence']['circle'])) {
+                                            $locationProp['geofence']['circle'] = array_merge($propTmp, $locationProp['geofence']['circle']);
+                                        } elseif (!empty($locationProp['geofence']['polygon'])) {
+                                            $locationProp['geofence']['polygon'] = array_merge($propTmp, $locationProp['geofence']['polygon']);
+                                        } elseif (!empty($locationProp['geofence']['rectangle'])) {
+                                            $locationProp['geofence']['rectangle'] = array_merge($propTmp, $locationProp['geofence']['rectangle']);
+                                        }
+                                        $location['amap_prop'] = json_encode($locationProp);
                                     }
 
                                     if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
