@@ -25,6 +25,7 @@ $(function () {
 
     if(user_lng!=null&&user_lng!=undefined&&user_lng!=0&&user_lat!=null&&user_lat!=undefined&&user_lat!=0){
         var map = new AMap.Map('container', {
+            mapStyle: 'amap://styles/dark',
             resizeEnable: true,
             center: [user_lng, user_lat],
             zoom: 25
@@ -32,6 +33,7 @@ $(function () {
     }
     else{
         var map = new AMap.Map('container', {
+            mapStyle: 'amap://styles/dark',
             resizeEnable: true,
             center: [116.397428, 39.90923],
             zoom: 25
@@ -485,7 +487,79 @@ $(function () {
             $.alert("数据异常，请刷新后重试");
         }
     })
-    
+
+
+    var startRotation = 30;
+    var startPitch = 60;
+    var startZoom = 12;
+    var startCenter = [116.397217, 39.909071];
+
+    var colors = [
+        '#c57f34',
+        '#cbfddf',
+        '#edea70',
+        '#8cc9f1',
+        '#2c7bb6'
+    ];
+
+    // 10万辆北京公共交通车辆
+    $.get('//a.amap.com/Loca/static/mock/traffic_110000.csv', function (csv) {
+        var layer = Loca.visualLayer({
+            container: map,
+            type: 'point',
+            shape: 'circle'
+        });
+
+        layer.setData(csv, {
+            lnglat: function (obj) {
+                var value = obj.value;
+                return [value['lng'], value['lat']];
+            },
+            type: 'csv'
+        });
+
+        layer.setOptions({
+            style: {
+                // 根据车辆类型设定不同半径
+                radius: function (obj) {
+                    var value = obj.value;
+                    switch (parseInt(value.type)) {
+                        case 3:
+                            return 1;
+                        case 4:
+                            return 1.2;
+                        case 41:
+                            return 1.4;
+                        case 5:
+                            return 1.2;
+                        default:
+                            return 1;
+                    }
+                },
+                // 根据车辆类型设定不同填充颜色
+                color: function (obj) {
+                    var value = obj.value;
+                    switch (parseInt(value.type)) {
+                        case 3:
+                            return colors[0];
+                        case 4:
+                            return colors[1];
+                        case 41:
+                            return colors[2];
+                        case 5:
+                            return colors[3];
+                        default:
+                            return colors[4];
+                    }
+                },
+                opacity: 0.8
+            }
+        });
+
+        layer.render();
+    });
+
+
 });
 
 /*function getLocation(lat,lng){
