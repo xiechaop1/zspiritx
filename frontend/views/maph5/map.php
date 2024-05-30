@@ -100,10 +100,10 @@ $this->registerMetaTag([
 </script>
 <script type="text/javascript">
   window._AMapSecurityConfig = {
-    securityJsCode: "e76f16df23c869ad2c13dac40978da1c",
+    securityJsCode: "3d66e948d9c6ebc21ee6d90470ce405e",
   };
 </script>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=af1d4bafe8f99e4c53e02ba0eef6087c&plugin=AMap.ElasticMarker"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=c86c9e45ba1226a8777f3e90dfceab3d&plugin=AMap.ElasticMarker"></script>
 
 <script src="//webapi.amap.com/ui/1.1/main.js?v=1.1.1"></script>
 
