@@ -751,7 +751,7 @@ class DoApi extends ApiAction
                             $sModels[] = [
                                     'story_model' => $this->_setStoryModelToStage($storyModel, [], $params),
                                     'user_model_loc' => [],
-                                    'locaiton' => [],
+                                    'location' => [],
                                 ];
                         }
 
