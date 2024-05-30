@@ -40,6 +40,11 @@ $this->title = '对战结果';
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" id="rtn_answer_type" value="<?= $storyMatch->ret == \common\models\StoryMatch::STORY_MATCH_RESULT_WIN ? '2' : 1 ?>">
+
+<audio autoplay="" loop="" id="bgm">
+    <source src="<?= \common\helpers\Attachment::completeUrl('/bgm/home/5/fight.mp3', false) ?>" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
 <div class="w-100 m-auto">
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
@@ -233,10 +238,32 @@ $this->title = '对战结果';
         var dataCon=$.toJSON(dataContent);
         var obj = eval( "(" + dataCon + ")" );
 
+        // var bgm = $('#bgm')[0];
+        // if (bgm.paused) {
+        //     console.log(bgm);
+        //     bgm.play();
+        // }
+        autoPlayBgm();
             showMsg(0, obj.flow);
 
 
     };
+
+    function autoPlayBgm() {
+        var bgm = $('#bgm')[0],
+            play = function() {
+                bgm.play();
+                document.removeEventListener('touchstart', play, false);
+            };
+        bgm.play();
+        document.addEventListener('WeixinJSBridgeReady', function() {
+            play();
+        }, false);
+        document.addEventListener('YixinJSBridgeReady', function() {
+            play();
+        }, false);
+        document.addEventListener('touchstart', play, false);
+    }
 
     function fight(shakeObj, shakeObj1, obj) {
         var fightInterval = setInterval(function() {
