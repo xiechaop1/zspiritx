@@ -752,6 +752,7 @@ $(function () {
     });
 
     $("#return_btn").click(function (){
+        $("#bgm")[0].pause();
         var params = {
             'WebViewOff':1
         }
