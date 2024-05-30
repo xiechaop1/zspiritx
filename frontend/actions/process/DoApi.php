@@ -691,51 +691,6 @@ class DoApi extends ApiAction
                                     $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
                                     $params1['location_id'] = $userModelLocRet['location']['id'];
 
-                                    $location = $userModelLocRet['location'];
-                                    $locationProp = !empty($location['amap_prop']) ? json_decode($location['amap_prop'], true) : [];
-                                    if (!empty($locationProp['geofence'])) {
-                                        $propTmp = [];
-                                        if ($userModelLocRet['userModelLoc']->user_id == $this->_userId) {
-                                            $propTmp = [
-                                                'fillColor' => '#0b3452',
-                                                'fillOpacity' => 0.4,
-                                                'borderWeight' => 1,
-                                                'strokeColor' => '#0c84ff',
-                                                'strokeStyle' => 'solid',
-                                                'strokeOpacity' => 0.8,
-                                                'strokeWeight' => 2,
-                                            ];
-                                        } elseif ($userModelLocRet['userModelLoc']->user_id != 0) {
-                                            $propTmp = [
-                                                'fillColor' => '#a83800',
-                                                'fillOpacity' => 0.4,
-                                                'borderWeight' => 1,
-                                                'strokeColor' => '#a80057',
-                                                'strokeStyle' => 'solid',
-                                                'strokeOpacity' => 0.8,
-                                                'strokeWeight' => 2,
-                                            ];
-                                        } else {
-                                            $propTmp = [
-                                                'fillColor' => '#DAFFCE',
-                                                'fillOpacity' => 0.4,
-                                                'borderWeight' => 1,
-                                                'strokeColor' => '#DAFC70',
-                                                'strokeStyle' => 'solid',
-                                                'strokeOpacity' => 0.8,
-                                                'strokeWeight' => 2,
-                                            ];
-                                        }
-                                        if (!empty($locationProp['geofence']['circle'])) {
-                                            $locationProp['geofence']['circle'] = array_merge($propTmp, $locationProp['geofence']['circle']);
-                                        } elseif (!empty($locationProp['geofence']['polygon'])) {
-                                            $locationProp['geofence']['polygon'] = array_merge($propTmp, $locationProp['geofence']['polygon']);
-                                        } elseif (!empty($locationProp['geofence']['rectangle'])) {
-                                            $locationProp['geofence']['rectangle'] = array_merge($propTmp, $locationProp['geofence']['rectangle']);
-                                        }
-                                        $location['amap_prop'] = json_encode($locationProp);
-                                    }
-
                                     if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                         $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
                                     }
@@ -997,8 +952,57 @@ class DoApi extends ApiAction
                             $tmp['loc_color'] = Attachment::completeUrl('img/map/loc_color_blue.png', true);
                         }
 
+                        if (!empty($row1['location'])) {
+                            $location = $row1['location'];
+                            $locationProp = !empty($location['amap_prop']) ? json_decode($location['amap_prop'], true) : [];
+                            if (!empty($locationProp['geofence'])) {
+                                $propTmp = [];
+                                if ($row2->user_id == $this->_userId) {
+                                    $propTmp = [
+                                        'fillColor' => '#0b3452',
+                                        'fillOpacity' => 0.4,
+                                        'borderWeight' => 1,
+                                        'strokeColor' => '#0c84ff',
+                                        'strokeStyle' => 'solid',
+                                        'strokeOpacity' => 0.8,
+                                        'strokeWeight' => 2,
+                                    ];
+                                } elseif ($row2->user_id != 0) {
+                                    $propTmp = [
+                                        'fillColor' => '#a83800',
+                                        'fillOpacity' => 0.4,
+                                        'borderWeight' => 1,
+                                        'strokeColor' => '#a80057',
+                                        'strokeStyle' => 'solid',
+                                        'strokeOpacity' => 0.8,
+                                        'strokeWeight' => 2,
+                                    ];
+                                } else {
+                                    $propTmp = [
+                                        'fillColor' => '#DAFFCE',
+                                        'fillOpacity' => 0.4,
+                                        'borderWeight' => 1,
+                                        'strokeColor' => '#DAFC70',
+                                        'strokeStyle' => 'solid',
+                                        'strokeOpacity' => 0.8,
+                                        'strokeWeight' => 2,
+                                    ];
+                                }
+                                
+                                if (!empty($locationProp['geofence']['circle'])) {
+                                    $locationProp['geofence']['circle'] = array_merge($propTmp, $locationProp['geofence']['circle']);
+                                } elseif (!empty($locationProp['geofence']['polygon'])) {
+                                    $locationProp['geofence']['polygon'] = array_merge($propTmp, $locationProp['geofence']['polygon']);
+                                } elseif (!empty($locationProp['geofence']['rectangle'])) {
+                                    $locationProp['geofence']['rectangle'] = array_merge($propTmp, $locationProp['geofence']['rectangle']);
+                                }
+                                $location['amap_prop'] = json_encode($locationProp);
+                            }
+                        }
+
                         $row2 = $tmp;
                     }
+
                 }
             }
         }
