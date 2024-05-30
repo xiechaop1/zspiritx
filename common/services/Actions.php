@@ -58,12 +58,6 @@ class Actions extends Component
 
     public function add($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
 
-        if ($expirationInterval > 0) {
-            $expireTime = time() + $expirationInterval;
-        } else {
-            $expireTime = 0;
-        }
-
         // 如果类型是转场
         // $sessionStageId 获取为新StageID
         if ($actType == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
@@ -105,16 +99,72 @@ class Actions extends Component
             $actDetail = json_encode(['showModels' => $actDetail ]);
         }
 
+        $model = $this->_exec($sessionId, $sessionStageId, $storyId, $toUser,
+            $actDetail, $actType, $expirationInterval, $senderId);
+
+
+        return $model;
+    }
+
+    public function _exec($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
+
+        if ($expirationInterval > 0) {
+            $expireTime = time() + $expirationInterval;
+        } else {
+            $expireTime = 0;
+        }
+
+        // 如果类型是转场
+        // $sessionStageId 获取为新StageID
+        if ($actType == \common\models\Actions::ACTION_TYPE_CHANGE_STAGE) {
+            $stageUId = $actDetail;
+
+//            $session = Session::find()
+//                ->where(['id' => $sessionId])
+//                ->one();
+//
+//            if (!empty($session)) {
+            $storyStage = StoryStages::find()
+                ->where([
+                    'story_id' => $storyId,
+                    'stage_u_id' => $stageUId,
+                ])
+                ->one();
+            if (!empty($storyStage)) {
+                $sessionStage = SessionStages::find()
+                    ->where([
+                        'session_id' => $sessionId,
+                        'story_stage_id' => $storyStage->id,
+                        'story_id' => $storyId,
+                    ])
+                    ->one();
+
+                if (!empty($sessionStage)) {
+                    $sessionStageId = $sessionStage->id;
+                }
+            }
+//            }
+
+        }
+//        if ($actType == \common\models\Actions::ACTION_TYPE_MODEL_DISPLAY) {
+//            if (strpos($actDetail, ',') !== false) {
+//                $actDetail = explode(',', $actDetail);
+//            } else {
+//                $actDetail = [$actDetail];
+//            }
+//            $actDetail = json_encode(['showModels' => $actDetail ]);
+//        }
+
         $model = \common\models\Actions::find()
-        ->where([
-            'session_id' => $sessionId,
-            'session_stage_id' => $sessionStageId,
-            'sender_id' => $senderId,
-            'to_user' => $toUser,
-            'action_type' => $actType,
-            'action_detail' => $actDetail,
+            ->where([
+                'session_id' => $sessionId,
+                'session_stage_id' => $sessionStageId,
+                'sender_id' => $senderId,
+                'to_user' => $toUser,
+                'action_type' => $actType,
+                'action_detail' => $actDetail,
 //            'action_status' => \common\models\Actions::ACTION_STATUS_NORMAL,
-        ])
+            ])
             ->andFilterWhere([
                 'or',
                 ['expire_time' => (int)0],
@@ -136,14 +186,14 @@ class Actions extends Component
             $model->expire_time = $expireTime;
         }
 
-            try {
-                $r = $model->save();
+        try {
+            $r = $model->save();
 
-                $model->id = Yii::$app->db->getLastInsertID();
-            } catch (\Exception $e) {
-                Yii::error($e->getMessage());
-                throw $e;
-            }
+            $model->id = Yii::$app->db->getLastInsertID();
+        } catch (\Exception $e) {
+            Yii::error($e->getMessage());
+            throw $e;
+        }
 
 
         return $model;
@@ -160,7 +210,7 @@ class Actions extends Component
         $msg = json_encode([
             'hideModels' => $modelUIds,
         ]);
-        $this->add((int)$sessionId, 0,
+        return $this->_exec((int)$sessionId, 0,
             $storyId, 0, $msg, \common\models\Actions::ACTION_TYPE_MODEL_DISPLAY);
     }
 
