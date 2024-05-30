@@ -680,6 +680,7 @@ class DoApi extends ApiAction
                                 $params1 = $params;
 
                                 $storyModel2 = clone $storyModel;
+                                $location = [];
                                 if (!empty($userModelLocRet['location'])) {
                                     $storyModel2->lng = $userModelLocRet['location']['lng'];
                                     $storyModel2->lat = $userModelLocRet['location']['lat'];
@@ -689,6 +690,46 @@ class DoApi extends ApiAction
 
                                     $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
                                     $params1['location_id'] = $userModelLocRet['location']['id'];
+
+                                    $location = $userModelLocRet['location'];
+                                    $locationProp = !empty($location['amap_prop']) ? json_decode($location['amap_prop'], true) : [];
+                                    if (!empty($locationProp['geofence'])) {
+                                        $propTmp = [];
+                                        if ($userModelLocRet['userModelLoc']->user_id == $this->_userId) {
+                                            $propTmp = [
+                                                'fillColor' => '#0b3452',
+                                                'fillOpacity' => 0.4,
+                                                'borderWeight' => 1,
+                                                'strokeColor' => '#0c84ff',
+                                                'strokeStyle' => 'solid',
+                                                'strokeOpacity' => 0.8,
+                                                'strokeWeight' => 2,
+                                            ];
+                                        } elseif ($userModelLocRet['userModelLoc']->user_id != 0) {
+                                            $propTmp = [
+                                                'fillColor' => '#a83800',
+                                                'fillOpacity' => 0.4,
+                                                'borderWeight' => 1,
+                                                'strokeColor' => '#a80057',
+                                                'strokeStyle' => 'solid',
+                                                'strokeOpacity' => 0.8,
+                                                'strokeWeight' => 2,
+                                            ];
+                                        } else {
+                                            $propTmp = [
+                                                'fillColor' => '#DAFFCE',
+                                                'fillOpacity' => 0.4,
+                                                'borderWeight' => 1,
+                                                'strokeColor' => '#DAFC70',
+                                                'strokeStyle' => 'solid',
+                                                'strokeOpacity' => 0.8,
+                                                'strokeWeight' => 2,
+                                            ];
+                                        }
+                                        $locationProp = array_merge($propTmp, $locationProp);
+                                        $location->amap_prop = json_encode($locationProp);
+                                    }
+
                                     if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                         $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
                                     }
@@ -702,6 +743,7 @@ class DoApi extends ApiAction
                                     $sModels[] = [
                                         'story_model' => $this->_setStoryModelToStage($storyModel2, $storyModelParams, $params1),
                                         'user_model_loc' => $userModelLocRet['userModelLoc'],
+                                        'location' => $location,
                                     ];
                                 }
                             }
@@ -709,6 +751,7 @@ class DoApi extends ApiAction
                             $sModels[] = [
                                     'story_model' => $this->_setStoryModelToStage($storyModel, [], $params),
                                     'user_model_loc' => [],
+                                    'locaiton' => [],
                                 ];
                         }
 
@@ -722,6 +765,7 @@ class DoApi extends ApiAction
                                         'story_model' => $sModel,
                                         'user_model_loc' => $sModelLoc,
                                         'model' => $storyModel->model,
+                                        'location' => $sModelCols['location'],
                                     ];
                                 }
                             }

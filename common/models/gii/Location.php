@@ -31,7 +31,7 @@ class Location extends \yii\db\ActiveRecord
             [['is_delete', 'status', 'created_at', 'updated_at'], 'integer'],
             [['location_name', 'location_type', 'address',
                 'businessarea', 'adcode', 'tel', 'aoi_type',
-                'amap_ret', 'resource', ], 'string'],
+                'amap_ret', 'amap_prop', 'resource', ], 'string'],
             [['lng','lat'], 'number']
         ];
     }

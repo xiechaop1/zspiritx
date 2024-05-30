@@ -20,7 +20,7 @@ class Location extends Component
 
     public function addOrUpdateLocation($amapPoiId, $locationName, $locationType, $lat, $lng,
                                         $address, $businessArea, $adcode, $tel, $aoiType,
-                                        $amapRet, $resource = 'amap') {
+                                        $amapRet, $amapProp, $resource = 'amap') {
         $location = \common\models\Location::find()
             ->where([
                 'amap_poi_id' => $amapPoiId,
@@ -41,6 +41,7 @@ class Location extends Component
             $location->tel = $tel;
             $location->aoi_type = $aoiType;
             $location->amap_ret = $amapRet;
+            $location->amap_prop = $amapProp;
             $location->resource = $resource;
             $location->save();
 
@@ -69,6 +70,9 @@ class Location extends Component
             }
             if (!empty($amapRet)) {
                 $location->amap_ret = $amapRet;
+            }
+            if (empty($location->amap_prop) && !empty($amapProp)) {
+                $location->amap_prop = $amapProp;
             }
             if (!empty($resource)) {
                 $location->resource = $resource;
@@ -119,9 +123,24 @@ class Location extends Component
 //        unset($amapRet['regeocode']['aois']);
         $amapRetSave = json_encode($amapRet);
 
+
         if (!empty($pois)) {
             foreach ($pois as $poi) {
                 $poiLocation = explode(',', $poi['location']);
+
+                $amapPropArray = [
+                    'geofence' => [
+                        'circle' => [
+                            'center' => [
+                                'lat' => $poiLocation[1],
+                                'lng' => $poiLocation[0],
+                            ],
+                            'radius' => 50,
+                        ],
+                    ],
+                ];
+                $amapProp = json_encode($amapPropArray);
+
                 $this->addOrUpdateLocation(
                     $poi['id'],
                     $poi['name'],
@@ -133,7 +152,8 @@ class Location extends Component
                     !empty($poi['adcode']) ? $poi['adcode'] : '',
                     !empty($poi['tel']) ? json_encode($poi['tel']) : '',
                     '',
-                    $amapRetSave
+                    $amapRetSave,
+                    $amapProp,
                 );
             }
         }
