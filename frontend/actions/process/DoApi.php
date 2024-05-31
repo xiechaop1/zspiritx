@@ -736,6 +736,7 @@ class DoApi extends ApiAction
                                         $storyModel2->lng = $userModelLocRet['location']['lng'];
                                         $storyModel2->lat = $userModelLocRet['location']['lat'];
                                         $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+                                        $storyModel2->misrange = 5;
 //                                    $storyModelParams['lng'] = $userModelLocRet['location']['lng'];
 //                                    $storyModelParams['lat'] = $userModelLocRet['location']['lat'];
 
@@ -745,6 +746,7 @@ class DoApi extends ApiAction
                                         $sessionStage->stage->stage_u_id = $tmpStageUId;
                                         $sessionStage->stage->lat = $userModelLocRet['location']['lat'];
                                         $sessionStage->stage->lng = $userModelLocRet['location']['lng'];
+                                        $sessionStage->stage->misrange = 20;
                                         $sessionStage->stage->scan_type = StoryStages::SCAN_TYPE_LATLNG;
 
                                         if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
