@@ -615,6 +615,7 @@ class DoApi extends ApiAction
                                     $hasLoc = 1;
                                     $stageArray['lng'] = $userModelLocRets['location']['lng'];
                                     $stageArray['lat'] = $userModelLocRets['location']['lat'];
+                                    $stageArray['scan_type'] = StoryStages::SCAN_TYPE_LATLNG;
 
                                     $stageArray['stage_u_id'] = str_replace('{$location_id}', $userModelLocRets['location']['id'], $stageArray['stage_u_id']);
                                     $sessionStageArray['stage'] = $stageArray;
@@ -740,6 +741,11 @@ class DoApi extends ApiAction
 
                                         $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
                                         $params1['location_id'] = $userModelLocRet['location']['id'];
+
+                                        $sessionStage->stage->stage_u_id = $tmpStageUId;
+                                        $sessionStage->stage->lat = $userModelLocRet['location']['lat'];
+                                        $sessionStage->stage->lng = $userModelLocRet['location']['lng'];
+                                        $sessionStage->stage->scan_type = StoryStages::SCAN_TYPE_LATLNG;
 
                                         if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                             $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
