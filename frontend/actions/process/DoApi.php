@@ -602,7 +602,7 @@ class DoApi extends ApiAction
                 $sessionStageArray = $sessionStage->toArray();
                 $stageArrayTmp = $sessionStage->stage->toArray();
 
-                if (!empty($stageArray['bgm'])) {
+                if (!empty($stageArrayTmp['bgm'])) {
                     $stageArrayTmp['bgm'] = Attachment::completeUrl($stageArrayTmp['bgm'], false);
                 }
                 if (!empty($setResult)) {
@@ -631,7 +631,7 @@ class DoApi extends ApiAction
 //                    $sessionStage->stage->bgm = Attachment::completeUrl($sessionStage->stage->bgm, false);
 //                }
 
-                    $sessionStageArray['stage'] = $stageArray;
+                    $sessionStageArray['stage'] = $stageArrayTmp;
                     $ret[] = $sessionStageArray;
                 }
             }
