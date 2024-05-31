@@ -92,13 +92,17 @@ class Location extends Component
 
 
     public function getLocationsByLngLat($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poitype = '') {
-        $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_location';
-        if (!empty($poitype)) {
-            $sql .= ' AND poi_type like "%' . $poitype . '%"';
+        if (YII_DEBUG) {
+            $sql = 'SELECT * FROM o_location LIMIT ' . $offset . ', ' . $limit . ';';
+        } else {
+            $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_location';
+            if (!empty($poitype)) {
+                $sql .= ' AND poi_type like "%' . $poitype . '%"';
+            }
+            $sql .= ' HAVING dist < ' . $radius;
+            $sql .= ' ORDER BY dist ASC';
+            $sql .= ' LIMIT ' . $offset . ', ' . $limit . ';';
         }
-        $sql .= ' HAVING dist < ' . $radius;
-        $sql .= ' ORDER BY dist ASC';
-        $sql .= ' LIMIT ' . $offset . ', ' . $limit . ';';
 
         $ret = \Yii::$app->db->createCommand($sql)->queryAll();
 

@@ -172,6 +172,7 @@ class DoApi extends ApiAction
 
             }
         } catch (\Exception $e) {
+//            var_dump($e);
             return $this->fail($e->getMessage(), $e->getCode());
         }
 
@@ -572,6 +573,14 @@ class DoApi extends ApiAction
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $isTest = !empty($this->_get['test']) ? $this->_get['test'] : 0;
+
+        if ($storyId == 5 || $isTest == 1) {
+            $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
+            $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+//            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, StoryModels::STORY_MODEL_CLASS_RIVAL, 1000, 30);
+            $setResult = Yii::$app->userModels->setUserModelToLoc($storyId, 0, $userLng, $userLat, 0, 1000, 30);
+        }
 
         $sessionStages = SessionStages::find()
             ->where([
@@ -586,19 +595,54 @@ class DoApi extends ApiAction
             ])
             ->all();
 
+        $ret = [];
         if (!empty($sessionStages)) {
             foreach ($sessionStages as $sessionStage) {
-                if (!empty($sessionStage->stage->bgm)) {
-                    $sessionStage->stage->bgm = Attachment::completeUrl($sessionStage->stage->bgm, false);
+                $hasLoc = 0;
+                $sessionStageArray = $sessionStage->toArray();
+                $stageArrayTmp = $sessionStage->stage->toArray();
+
+                if (!empty($stageArray['bgm'])) {
+                    $stageArrayTmp['bgm'] = Attachment::completeUrl($stageArrayTmp['bgm'], false);
+                }
+                if (!empty($setResult)) {
+
+                    foreach ($setResult['result'] as $locId => $userModelLocCollections) {
+                        foreach ($userModelLocCollections as $userModelLocRets) {
+                            foreach ($userModelLocRets['userModelLoc'] as $userModelLocRet) {
+                                $stageArray = $stageArrayTmp;
+                                if ($userModelLocRet->story_stage_id == $sessionStage->story_stage_id) {
+                                    $hasLoc = 1;
+                                    $stageArray['lng'] = $userModelLocRets['location']['lng'];
+                                    $stageArray['lat'] = $userModelLocRets['location']['lat'];
+
+                                    $stageArray['stage_u_id'] = str_replace('{$location_id}', $userModelLocRets['location']['id'], $stageArray['stage_u_id']);
+                                    $sessionStageArray['stage'] = $stageArray;
+                                    $ret[] = $sessionStageArray;
+                                }
+                            }
+                        }
+                    }
+                }
+                if ($hasLoc == 0) {
+
+//                var_dump($sessionStage->stage->bgm);exit;
+//                if (!empty($sessionStage->stage->bgm)) {
+//                    $sessionStage->stage->bgm = Attachment::completeUrl($sessionStage->stage->bgm, false);
+//                }
+
+                    $sessionStageArray['stage'] = $stageArray;
+                    $ret[] = $sessionStageArray;
                 }
             }
         }
 
-        return $sessionStages;
+        return $ret;
     }
 
     public function getSessionModelsByStage() {
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+        $stageUId = !empty($this->_get['stage_u_id']) ? $this->_get['stage_u_id'] : '';
 
         $sessoinStages = SessionStages::find()
             ->where(['id' => $sessionStageId])
@@ -676,37 +720,44 @@ class DoApi extends ApiAction
                             && !empty($setResult['storyModelsResult'][$storyModel->id])
                         ) {
                             foreach ($setResult['storyModelsResult'][$storyModel->id] as $userModelLocRet) {
-                                $storyModelParams = [];
-                                $params1 = $params;
+//                                foreach ($userModelLocRets as $userModelLocRet) {
+                                    $storyModelParams = [];
+                                    $params1 = $params;
 
-                                $storyModel2 = clone $storyModel;
-                                $location = [];
-                                if (!empty($userModelLocRet['location'])) {
-                                    $storyModel2->lng = $userModelLocRet['location']['lng'];
-                                    $storyModel2->lat = $userModelLocRet['location']['lat'];
-                                    $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+                                    $storyModel2 = clone $storyModel;
+                                    $location = [];
+                                    if (!empty($userModelLocRet['location'])) {
+                                        $tmpStageUId = str_replace($sessionStage->stage->stage_u_id, '{$location_id}', $userModelLocRet['location']['id']);
+                                        if ($tmpStageUId != $stageUId) {
+                                            continue;
+                                        }
+
+                                        $storyModel2->lng = $userModelLocRet['location']['lng'];
+                                        $storyModel2->lat = $userModelLocRet['location']['lat'];
+                                        $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
 //                                    $storyModelParams['lng'] = $userModelLocRet['location']['lng'];
 //                                    $storyModelParams['lat'] = $userModelLocRet['location']['lat'];
 
-                                    $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
-                                    $params1['location_id'] = $userModelLocRet['location']['id'];
+                                        $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
+                                        $params1['location_id'] = $userModelLocRet['location']['id'];
 
-                                    if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
-                                        $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
+                                        if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
+                                            $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
+                                        }
                                     }
-                                }
-                                if (!empty($userModelLocRet['userModelLoc']->active_class)
-                                    &&
-                                    ($userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
-                                        || $userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
-                                    )
-                                ) {
-                                    $sModels[] = [
-                                        'story_model' => $this->_setStoryModelToStage($storyModel2, $storyModelParams, $params1),
-                                        'user_model_loc' => $userModelLocRet['userModelLoc'],
-                                        'location' => $location,
-                                    ];
-                                }
+                                    if (!empty($userModelLocRet['userModelLoc']->active_class)
+                                        &&
+                                        ($userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                                            || $userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                                        )
+                                    ) {
+                                        $sModels[] = [
+                                            'story_model' => $this->_setStoryModelToStage($storyModel2, $storyModelParams, $params1),
+                                            'user_model_loc' => $userModelLocRet['userModelLoc'],
+                                            'location' => $location,
+                                        ];
+                                    }
+//                                }
                             }
                         } else {
                             $sModels[] = [

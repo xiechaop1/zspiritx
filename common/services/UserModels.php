@@ -31,8 +31,8 @@ class UserModels extends Component
             $locations = !empty($userModelLocRets['locations']) ? $userModelLocRets['locations'] : [];
             $locationIds = !empty($userModelLocRets['locationIds']) ? $userModelLocRets['locationIds'] : [];
             $userModelLocs = !empty($userModelLocRets['userModelLocs']) ? $userModelLocRets['userModelLocs'] : [];
-//            $storyModelsKv = !empty($userModelLocRets['storyModelsKv']) ? $userModelLocRets['storyModelsKv'] : [];
 
+//            $storyModelsKv = !empty($userModelLocRets['storyModelsKv']) ? $userModelLocRets['storyModelsKv'] : [];
             if (!empty($locationIds)) {
                 foreach ($locationIds as $locId) {
                     if (isset($userModelLocKv[$locId])) {
@@ -99,7 +99,7 @@ class UserModels extends Component
                             $amapPoiId = !empty($locations[$locId]['amap_poi_id']) ? $locations[$locId]['amap_poi_id'] : '';
                             $userModelLoc = $this->addUserModelLoc(0, 0,
                                 $locId, $amapPoiId, $storyId, $sessionId,
-                                $storyModel->id, $activeClass, $userModelProp);
+                                $storyModel->id, $storyModel->story_stage_id, $activeClass, $userModelProp);
 //                            $userModelLoc = new UserModelLoc();
 //                            $userModelLoc->user_id = 0;
 //                            $userModelLoc->location_id = $locId;
@@ -111,14 +111,17 @@ class UserModels extends Component
 //                            $userModelLoc->user_model_loc_status = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE;
 //                            $userModelLoc->save();
 //                            $userModelLoc->id = \Yii::$app->db->getLastInsertID();
+
                             $result[$locId][] = [
-                                'userModelLoc' => $userModelLoc,
+                                'userModelLoc' => [$userModelLoc],
                                 'location' => $locations[$locId],
+//                                'storyModels' => $storyModel,
                             ];
 //                            $userModelLoc;
                             $storyModelsResult[$storyModel->id][] = [
                                 'userModelLoc' => $userModelLoc,
                                 'location' => $locations[$locId],
+//                                'storyModels' => $storyModel,
                             ];
 //                            $userModelLoc;
 //                        }
@@ -136,12 +139,13 @@ class UserModels extends Component
 
     public function addUserModelLoc($userId, $userModelId,
                                     $locId, $amapPoiId, $storyId, $sessionId,
-                                    $storyModelId, $activeClass, $userModelProp, $userModelLocStatus = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE) {
+                                    $storyModelId, $storyStageId, $activeClass, $userModelProp, $userModelLocStatus = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE) {
         $userModelLoc = new UserModelLoc();
         $userModelLoc->user_id = $userId;
         $userModelLoc->user_model_id = $userModelId;
         $userModelLoc->location_id = $locId;
         $userModelLoc->story_model_id = $storyModelId;
+        $userModelLoc->story_stage_id = $storyStageId;
         $userModelLoc->active_class = $activeClass;
         $userModelLoc->story_id = $storyId;
 //        $userModelLoc->session_id = $sessionId;
