@@ -102,6 +102,15 @@ echo \dmstr\widgets\Alert::widget();
 //                        'filter' => Html::activeInput('text', $searchModel, 'story_model_id'),
                     ],
                     [
+                        'label' => '模型分类',
+                        'attribute' => 'scan_type',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\StoryModels::$storyModelClass2Name[$model->story_model_class]) ?
+                                \common\models\StoryModels::$storyModelClass2Name[$model->story_model_class] : '未知';
+                        },
+                    ],
+                    [
                         'label' => '模型',
                         'attribute' => 'model_id',
                         'format'    => 'raw',

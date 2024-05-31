@@ -97,6 +97,10 @@ echo \dmstr\widgets\Alert::widget();
                         },
                     ],
                     [
+                        'label' => '场景ID',
+                        'attribute' => 'story_stage_id',
+                    ],
+                    [
                         'label' => '动作类型',
                         'attribute' => 'active_class',
                         'format'    => 'raw',
