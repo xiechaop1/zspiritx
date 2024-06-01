@@ -613,7 +613,13 @@ class UserApi extends ApiAction
         }
 
         // 获取当前的stage
-        if ($storyId == 5) {
+        if ($storyId == 5
+            && !empty($userId)
+            && !empty($sessionId)
+            && !empty($storyId)
+            && !empty($storyStageId)
+            && !empty($sessionStageId)
+        ) {
 //            $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
 //                . ' WHERE story_id = ' . $storyId
 //                . ' AND ('
@@ -656,7 +662,7 @@ class UserApi extends ApiAction
             ) {
                 if ($storyStageRet->id != $storyStageId) {
                     $expirationInterval = 600;
-                    Yii::$app->act->add((int)$this->_sessionId,
+                    Yii::$app->act->add((int)$sessionId,
                         $sessionStageId,
                         $storyId, $userId,
                         $storyStageRet->stage_u_id, Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
