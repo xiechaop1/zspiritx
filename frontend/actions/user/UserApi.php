@@ -589,6 +589,11 @@ class UserApi extends ApiAction
         $lng = !empty($this->_get['lng']) ? $this->_get['lng'] : 0;
         $lat = !empty($this->_get['lat']) ? $this->_get['lat'] : 0;
 
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         $userLoc = UserLoc::findOne(['user_id' => $userId]);
 
         if (empty($userLoc)) {
@@ -605,6 +610,34 @@ class UserApi extends ApiAction
             throw $e;
 //            return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
+
+        // 获取当前的stage
+        if ($storyId == 5) {
+            $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
+                . ' WHERE story_id = ' . $storyId
+                . ' AND ('
+                . '(scan_type = ' . StoryStages::SCAN_TYPE_IMAGE . ')'
+                . ' OR (scan_type = ' . StoryStages::SCAN_TYPE_LATLNG . ' AND st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 < misrange)'
+//                      . ' HAVING dist < ' . $radius;
+                . ' ORDER BY sort_by DESC'
+                . ' LIMIT 1;';
+
+            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
+
+            if (!empty($storyStageRet)
+                && 1 != 1
+            ) {
+                if ($storyStageRet->id != $storyStageId) {
+                    $expirationInterval = 600;
+                    Yii::$app->act->add((int)$this->_sessionId,
+                        $sessionStageId,
+                        $storyId, $userId,
+                        $storyStageRet->stage_u_id, Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
+                }
+            }
+        }
+
+
 
         // 判断一下兜底模型是否进入经纬度范围
         $underTake = Yii::$app->models->getUnderTakeModelsFromCookie();

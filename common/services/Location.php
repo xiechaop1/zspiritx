@@ -97,7 +97,7 @@ class Location extends Component
         } else {
             $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_location';
             if (!empty($poitype)) {
-                $sql .= ' AND poi_type like "%' . $poitype . '%"';
+                $sql .= ' WHERE poi_type like "%' . $poitype . '%"';
             }
             $sql .= ' HAVING dist < ' . $radius;
             $sql .= ' ORDER BY dist ASC';
