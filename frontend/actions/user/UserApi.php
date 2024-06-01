@@ -617,7 +617,9 @@ class UserApi extends ApiAction
                 . ' WHERE story_id = ' . $storyId
                 . ' AND ('
                 . '(scan_type = ' . StoryStages::SCAN_TYPE_IMAGE . ')'
-                . ' OR (scan_type = ' . StoryStages::SCAN_TYPE_LATLNG . ' AND st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 < misrange)'
+                . ' OR '
+                . '(scan_type = ' . StoryStages::SCAN_TYPE_LATLNG . ' AND st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 < misrange)'
+                . ')'
 //                      . ' HAVING dist < ' . $radius;
                 . ' ORDER BY sort_by DESC'
                 . ' LIMIT 1;';
