@@ -752,7 +752,7 @@ $(function () {
     });
 
     $("#return_btn").click(function (){
-        if ($("#bgm")[0] != undefined && $("#bgm")[0].paused == false))
+        if ($("#bgm")[0] != undefined && $("#bgm")[0].paused == false)
         {
             $("#bgm")[0].pause();
         }
