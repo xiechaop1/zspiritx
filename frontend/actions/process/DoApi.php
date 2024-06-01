@@ -1872,7 +1872,8 @@ class DoApi extends ApiAction
                                 $res['html'] .= $up['title'] . '提升了' . $up['value'] . '点，';
                             }
                         }
-                        $res['html'] .= '心满意足的睡着了。';
+                        $res['html'] .= '吃的可开心了。';
+                        $dialogTag = 'normal';
 
                         if (!empty($propRes['prop'])) {
                             $tarUserModelProp = !empty($tarUserModel->user_model_prop) ? json_decode($tarUserModel->user_model_prop, true) : [];
@@ -1889,13 +1890,14 @@ class DoApi extends ApiAction
                             ) {
                                 $res['title'] = '恭喜升级';
                                 $res['html'] = '您成功升级至 ' . $tmpUserModelProp['data']['prop']['level'] . ' 级，属性提升！';
+                                $dialogTag = 'update';
                             }
                         }
 
                         $retJson = json_decode($ret, true);
                         if (!empty($retJson['dialog'])) {
                             $res['type']  = StoryModelsLink::EFF_TYPE_DIALOG;
-                            $res['ret']   = $retJson['dialog'];
+                            $res['ret']   = $retJson['dialog'][$dialogTag];
                         } else {
                             $res['type']  = $type;
                             $res['ret']   = $ret;
