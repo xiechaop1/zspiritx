@@ -1897,7 +1897,7 @@ class DoApi extends ApiAction
                         $retJson = json_decode($ret, true);
                         if (!empty($retJson['dialog'])) {
                             $res['type']  = StoryModelsLink::EFF_TYPE_DIALOG;
-                            $res['ret']   = $retJson['dialog'][$dialogTag];
+                            $res['ret']   = json_encode($retJson['dialog'][$dialogTag]);
                         } else {
                             $res['type']  = $type;
                             $res['ret']   = $ret;
