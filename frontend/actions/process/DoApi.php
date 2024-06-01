@@ -1892,7 +1892,8 @@ class DoApi extends ApiAction
                             }
                         }
 
-                        if (!empty($ret['dialog'])) {
+                        $retJson = json_decode($ret, true);
+                        if (!empty($retJson['dialog'])) {
                             $res['type']  = StoryModelsLink::EFF_TYPE_DIALOG;
                             $res['ret']   = $ret['dialog'];
                         } else {

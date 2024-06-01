@@ -752,7 +752,10 @@ $(function () {
     });
 
     $("#return_btn").click(function (){
-        $("#bgm")[0].pause();
+        if ($("#bgm")[0] != undefined && $("#bgm")[0].paused == false))
+        {
+            $("#bgm")[0].pause();
+        }
         var params = {
             'WebViewOff':1
         }
