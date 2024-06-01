@@ -680,7 +680,7 @@ class DoApi extends ApiAction
             $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
             $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
 
-            $user = User::find()->where(['id' => $userId])->one();
+            $user = User::find()->where(['id' => $this->_userId])->one();
             if (empty($user->home_lng) || empty($user->home_lat)) {
                 $user->home_lng = $userLng;
                 $user->home_lat = $userLat;
