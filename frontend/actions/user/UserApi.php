@@ -631,7 +631,7 @@ class UserApi extends ApiAction
             if (empty($tmpLocation)) {
                 $stageClass = StoryStages::STAGE_CLASS_NORMAL;
             } else {
-                $stageClass = $tmpLocation[0]['stage_class'];
+                $stageClass = StoryStages::STAGE_CLASS_EXTEND;
             }
             $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
                 . ' WHERE story_id = ' . $storyId . ' AND stage_class = ' . $stageClass
