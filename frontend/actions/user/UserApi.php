@@ -9,6 +9,7 @@
 namespace frontend\actions\user;
 
 
+use backend\actions\model\StoryStage;
 use common\definitions\Common;
 use common\definitions\Cookies;
 use common\definitions\ErrorCode;
@@ -627,7 +628,7 @@ class UserApi extends ApiAction
 //            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
 
             // Todo：临时处理，直接调用Location，正确的应该是从Cache调用SessionStage，但是现在Cache这块写起来比较麻烦
-            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 1000, 1);
+            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 5, 1);
             if (empty($tmpLocation)) {
                 $stageClass = StoryStages::STAGE_CLASS_NORMAL;
             } else {
@@ -646,8 +647,12 @@ class UserApi extends ApiAction
 
             $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
 
+            if (!empty($tmpLocation[0]) && $stageClass == StoryStages::STAGE_CLASS_EXTEND) {
+                $storyStageRet['stage_u_id'] = str_replace('{$location_id}', $tmpLocation[0]['id'], $storyStageRet['stage_u_id']);
+            }
+
             if (!empty($storyStageRet)
-                && 1 != 1
+//                && 1 != 1
             ) {
                 if ($storyStageRet->id != $storyStageId) {
                     $expirationInterval = 600;
