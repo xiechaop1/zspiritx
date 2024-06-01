@@ -40,6 +40,12 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyStage, 'pre_stage_id')->textInput(['value' => $storyStage->pre_stage_id])->label('前置Stage ID');
             echo $form->field($storyStage, 'stage_u_id')->textInput(['value' => $storyStage->stage_u_id])->label('Stage UnityID');
             echo $form->field($storyStage, 'scan_image_id')->textInput(['value' => $storyStage->scan_image_id])->label('Scan Image ID');
+            echo $form->field($storyStage, 'stage_class')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\StoryStages::$stageClass2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('类型');
             echo $form->field($storyStage, 'scan_type')->widget('\kartik\select2\Select2', [
                 'data' => $scanImageTypes,
                 'options' => [

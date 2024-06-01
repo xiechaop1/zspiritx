@@ -20,6 +20,14 @@ class StoryStages extends \common\models\gii\StoryStages
         self::SCAN_TYPE_LATLNG => '经纬度识别',
     ];
 
+    const STAGE_CLASS_NORMAL    = 1; // 普通
+    const STAGE_CLASS_EXTEND    = 2; // 扩展
+
+    public static $stageClass2Name = [
+        self::STAGE_CLASS_NORMAL => '普通',
+        self::STAGE_CLASS_EXTEND => '扩展',
+    ];
+
     public function behaviors()
     {
         return [

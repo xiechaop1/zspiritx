@@ -613,8 +613,28 @@ class UserApi extends ApiAction
 
         // 获取当前的stage
         if ($storyId == 5) {
+//            $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
+//                . ' WHERE story_id = ' . $storyId
+//                . ' AND ('
+//                . '(scan_type = ' . StoryStages::SCAN_TYPE_IMAGE . ')'
+//                . ' OR '
+//                . '(scan_type = ' . StoryStages::SCAN_TYPE_LATLNG . ' AND st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 < misrange)'
+//                . ')'
+////                      . ' HAVING dist < ' . $radius;
+//                . ' ORDER BY sort_by DESC'
+//                . ' LIMIT 1;';
+//
+//            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
+
+            // Todo：临时处理，直接调用Location，正确的应该是从Cache调用SessionStage，但是现在Cache这块写起来比较麻烦
+            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 1000, 1);
+            if (empty($tmpLocation)) {
+                $stageClass = StoryStages::STAGE_CLASS_NORMAL;
+            } else {
+                $stageClass = $tmpLocation[0]['stage_class'];
+            }
             $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
-                . ' WHERE story_id = ' . $storyId
+                . ' WHERE story_id = ' . $storyId . ' AND stage_class = ' . $stageClass
                 . ' AND ('
                 . '(scan_type = ' . StoryStages::SCAN_TYPE_IMAGE . ')'
                 . ' OR '
