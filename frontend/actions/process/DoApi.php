@@ -578,6 +578,7 @@ class DoApi extends ApiAction
         if ($storyId == 5 || $isTest == 1) {
             $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
             $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+
 //            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, StoryModels::STORY_MODEL_CLASS_RIVAL, 1000, 30);
             $setResult = Yii::$app->userModels->setUserModelToLoc($storyId, 0, $userLng, $userLat, 0, 1000, 30);
         }
@@ -678,6 +679,14 @@ class DoApi extends ApiAction
         if ($this->_storyId == 5) {
             $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
             $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+
+            $user = User::find()->where(['id' => $userId])->one();
+            if (empty($user->home_lng) || empty($user->home_lat)) {
+                $user->home_lng = $userLng;
+                $user->home_lat = $userLat;
+                $user->save();
+            }
+
 //            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, StoryModels::STORY_MODEL_CLASS_RIVAL, 1000, 30);
             $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, 0, 1000, 30);
         }
@@ -768,8 +777,15 @@ class DoApi extends ApiAction
 //                                }
                             }
                         } else {
+                            $storyModelParams = [];
+                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET) {
+                                $storyModel->lng = $user->home_lng;
+                                $storyModel->lat = $user->home_lat;
+                                $storyModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG;
+                                $storyModel->misrange = 5;
+                            }
                             $sModels[] = [
-                                    'story_model' => $this->_setStoryModelToStage($storyModel, [], $params),
+                                    'story_model' => $this->_setStoryModelToStage($storyModel, $storyModelParams, $params),
                                     'user_model_loc' => [],
                                     'location' => [],
                                 ];

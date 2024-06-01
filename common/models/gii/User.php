@@ -44,7 +44,7 @@ class User extends \yii\db\ActiveRecord
         return [
             [['user_status','user_type', 'is_new', 'status', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
             [['user_name', 'user_pass', 'nick_name', 'user_pass', 'wx_openid', 'wx_unionid', 'wx_token', 'mobile', 'avatar', 'last_login_device', ], 'string'],
-            [['last_login_geo_lat', 'last_login_geo_lng'], 'number'],
+            [['last_login_geo_lat', 'last_login_geo_lng', 'home_lng', 'home_lat', ], 'number'],
         ];
     }
 
