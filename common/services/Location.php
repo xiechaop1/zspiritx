@@ -151,7 +151,7 @@ class Location extends Component
                     $poi['type'],
                     $poiLocation[1],
                     $poiLocation[0],
-                    $poi['address'],
+                    !empty($poi['address']) ? $poi['address'] : '',
                     !empty($poi['businessarea']) ? $poi['businessarea'] : '',
                     !empty($poi['adcode']) ? $poi['adcode'] : '',
                     !empty($poi['tel']) ? json_encode($poi['tel']) : '',
