@@ -324,10 +324,11 @@ $(function () {
                             };
                             markersModal.push(marker)
                         }
+                        console.log(i,e.location,e.location.amap_prop,e.location.amap_prop.geofence,e.location.amap_prop.geofence.circle);
+
                         if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
                             circle.push(e.location.amap_prop.geofence.circle)
                         }
-                        console.log(i,e.location,e.location.amap_prop,e.location.amap_prop.geofence,e.location.amap_prop.geofence.circle);
 
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
