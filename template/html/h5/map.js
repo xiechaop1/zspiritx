@@ -324,7 +324,7 @@ $(function () {
                             };
                             markersModal.push(marker)
                         }
-                        if(e.location.amap_prop.geofence.circle!=null&&e.location.amap_prop.geofence.circle!=undefined){
+                        if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
                             circle.push(e.location.amap_prop.geofence.circle)
                         }
 
