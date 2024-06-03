@@ -327,7 +327,7 @@ $(function () {
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    drawCircle(markersModal)
+                    drawCircle(markersModal);
                 }
                 //新消息获取失败
                 else{
@@ -494,10 +494,11 @@ $(function () {
     $("#user_center").click(function (){
         getUserPoi();
     })
-    drawCircle();
+
     getPoi();
     getUserLoc();
     getUserPoi();
+    
     setInterval(getPoi,10000);
     setInterval(getUserLoc,5000);
     // setInterval(removeMarkers,3000);
