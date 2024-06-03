@@ -478,17 +478,28 @@ $(function () {
             if(marker.radius>0){
                 var circle = new AMap.Circle({
                     center: [marker.lng,marker.lat],
-                    radius: marker.radius, //半径
-                    borderWeight: marker.borderWeight,
-                    strokeColor: marker.strokeColor,
-                    strokeWeight: marker.strokeWeight,
-                    strokeOpacity: marker.strokeOpacity,
-                    fillOpacity:marker.fillOpacity,
-                    strokeStyle: marker.strokeStyle,
+                    // radius: marker.radius, //半径
+                    // borderWeight: marker.borderWeight,
+                    // strokeColor: marker.strokeColor,
+                    // strokeWeight: marker.strokeWeight,
+                    // strokeOpacity: marker.strokeOpacity,
+                    // fillOpacity:marker.fillOpacity,
+                    // strokeStyle: marker.strokeStyle,
+                    // strokeDasharray: [10, 10],
+                    // // 线样式还支持 'dashed'
+                    // fillColor: marker.fillColor,
+                    // zIndex: 10
+                    radius: 50, //半径
+                    borderWeight: 3,
+                    strokeColor: "#FF33FF",
+                    strokeWeight: 1,
+                    strokeOpacity: 0.2,
+                    fillOpacity: 0.4,
+                    strokeStyle: 'dashed',
                     strokeDasharray: [10, 10],
                     // 线样式还支持 'dashed'
-                    fillColor: marker.fillColor,
-                    zIndex: 10
+                    fillColor: '#1791fc',
+                    zIndex: 10,
                 })
                 map.add(circle);
             }
