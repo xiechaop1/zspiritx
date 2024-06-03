@@ -475,7 +475,7 @@ $(function () {
     //画圆
     function  drawCircle(markers){
         markers.forEach(function(marker) {
-            if(marker.radius>0){
+            if(1>0){
                 var circle = new AMap.Circle({
                     center:[marker.longitude,marker.latitude],
                     // center: [marker.lng,marker.lat],
