@@ -320,11 +320,11 @@ $(function () {
                                 title:2,
                                 url:e.userModelLoc[0].link_url,
                                 btn_text:e.userModelLoc[0].link_text,
-                                loc_color:e.userModelLoc[0].loc_color,
+                                loc_color:e.userModelLoc[0].loc_color
                             };
                             markersModal.push(marker)
                         }
-                        if(e.location.amap_prop.geofence.circle!=null&&e.location.amap_prop.geofence.circle!=undefined){
+                        if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
                             circle.push(e.location.amap_prop.geofence.circle)
                         }
                         console.log(i,e.location,e.location.amap_prop,e.location.amap_prop.geofence,e.location.amap_prop.geofence.circle);
