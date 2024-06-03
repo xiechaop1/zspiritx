@@ -333,7 +333,7 @@ $(function () {
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    // drawCircle(circle);
+                    drawCircle(markersModal);
                 }
                 //新消息获取失败
                 else{
@@ -477,7 +477,8 @@ $(function () {
         markers.forEach(function(marker) {
             if(marker.radius>0){
                 var circle = new AMap.Circle({
-                    center: [marker.lng,marker.lat],
+                    center:[marker.longitude,marker.latitude],
+                    // center: [marker.lng,marker.lat],
                     // radius: marker.radius, //半径
                     // borderWeight: marker.borderWeight,
                     // strokeColor: marker.strokeColor,
