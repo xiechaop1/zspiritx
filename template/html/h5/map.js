@@ -319,13 +319,15 @@ $(function () {
                                 title:2,
                                 url:e.userModelLoc[0].link_url,
                                 btn_text:e.userModelLoc[0].link_text,
-                                loc_color:e.userModelLoc[0].loc_color
+                                loc_color:e.userModelLoc[0].loc_color,
+                                circle:e.location.amap_prop.geofence.circle
                             };
                             markersModal.push(marker)
                         }
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
+                    drawCircle(markersModal)
                 }
                 //新消息获取失败
                 else{
@@ -464,11 +466,35 @@ $(function () {
         });
     }
 
+    //画圆
+    function  drawCircle(markers){
+        markers.forEach(function(marker) {
+            if(marker.circle.radius>0){
+                var circle = new AMap.Circle({
+                    center: [marker.circle.lng,marker.circle.lat],
+                    radius: marker.circle.radius, //半径
+                    borderWeight: marker.circle.borderWeight,
+                    strokeColor: marker.circle.strokeColor,
+                    strokeWeight: marker.circle.strokeWeight,
+                    strokeOpacity: marker.circle.strokeOpacity,
+                    fillOpacity:marker.circle.fillOpacity,
+                    strokeStyle: marker.circle.strokeStyle,
+                    strokeDasharray: [10, 10],
+                    // 线样式还支持 'dashed'
+                    fillColor: marker.circle.fillColor,
+                    zIndex: 10
+                })
+                map.add(circle);
+            }
+        })
+
+    }
+
     //绑定点击定位
     $("#user_center").click(function (){
         getUserPoi();
     })
-
+    drawCircle();
     getPoi();
     getUserLoc();
     getUserPoi();
