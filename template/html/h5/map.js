@@ -324,11 +324,9 @@ $(function () {
                             };
                             markersModal.push(marker)
                         }
-                        console.log(i,e.location.amap_prop);
 
-                        var circleE=$.toJSON(e.location.amap_prop);
-                        var circleObj = eval( "(" + circleE + ")" );//转换后的JSON对象
-                        console.log(i,circleObj.geofence.circle);
+                        var circleE=JSON.parse(e.location.amap_prop);
+                        console.log(i,circleE.geofence.circle);
                         // if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
                         //     circle.push(e.location.amap_prop.geofence.circle)
                         // }
