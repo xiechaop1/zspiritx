@@ -325,16 +325,15 @@ $(function () {
                             markersModal.push(marker)
                         }
 
-                        var circleE=JSON.parse(e.location.amap_prop);
-                        console.log(i,circleE.geofence.circle);
-                        // if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
-                        //     circle.push(e.location.amap_prop.geofence.circle)
-                        // }
+                        if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
+                            var circleE=JSON.parse(e.location.amap_prop);
+                            circle.push(circleE.geofence.circle)
+                        }
 
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    // drawCircle(circle);
+                    drawCircle(circle);
                 }
                 //新消息获取失败
                 else{
