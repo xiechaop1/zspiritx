@@ -303,6 +303,7 @@ $(function () {
                 //新消息获取成功
                 if(obj["code"]==200){
                     markersModal = [];
+                    circle=[];
                     for (var i in obj.data) {
                         var e=obj.data[i][0];
                         if(e.location.lat!=null&&e.location.lng!=null){
@@ -320,14 +321,17 @@ $(function () {
                                 url:e.userModelLoc[0].link_url,
                                 btn_text:e.userModelLoc[0].link_text,
                                 loc_color:e.userModelLoc[0].loc_color,
-                                circle:e.location.amap_prop.geofence.circle
                             };
                             markersModal.push(marker)
                         }
+                        if(e.location.amap_prop.geofence.circle!=null&&e.location.amap_prop.geofence.circle!=undefined){
+                            circle.push(e.location.amap_prop.geofence.circle)
+                        }
+
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    drawCircle(markersModal);
+                    drawCircle(circle);
                 }
                 //新消息获取失败
                 else{
@@ -469,19 +473,19 @@ $(function () {
     //画圆
     function  drawCircle(markers){
         markers.forEach(function(marker) {
-            if(marker.circle.radius>0){
+            if(marker.radius>0){
                 var circle = new AMap.Circle({
-                    center: [marker.circle.lng,marker.circle.lat],
-                    radius: marker.circle.radius, //半径
-                    borderWeight: marker.circle.borderWeight,
-                    strokeColor: marker.circle.strokeColor,
-                    strokeWeight: marker.circle.strokeWeight,
-                    strokeOpacity: marker.circle.strokeOpacity,
-                    fillOpacity:marker.circle.fillOpacity,
-                    strokeStyle: marker.circle.strokeStyle,
+                    center: [marker.lng,marker.lat],
+                    radius: marker.radius, //半径
+                    borderWeight: marker.borderWeight,
+                    strokeColor: marker.strokeColor,
+                    strokeWeight: marker.strokeWeight,
+                    strokeOpacity: marker.strokeOpacity,
+                    fillOpacity:marker.fillOpacity,
+                    strokeStyle: marker.strokeStyle,
                     strokeDasharray: [10, 10],
                     // 线样式还支持 'dashed'
-                    fillColor: marker.circle.fillColor,
+                    fillColor: marker.fillColor,
                     zIndex: 10
                 })
                 map.add(circle);
@@ -498,7 +502,7 @@ $(function () {
     getPoi();
     getUserLoc();
     getUserPoi();
-    
+
     setInterval(getPoi,10000);
     setInterval(getUserLoc,5000);
     // setInterval(removeMarkers,3000);
