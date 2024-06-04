@@ -778,7 +778,9 @@ class DoApi extends ApiAction
                             }
                         } else {
                             $storyModelParams = [];
-                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET) {
+                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET
+                             || $storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET_ITEM
+                            ) {
                                 $storyModel->lng = $user->home_lng;
                                 $storyModel->lat = $user->home_lat;
                                 $storyModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG;
