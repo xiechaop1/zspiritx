@@ -617,6 +617,9 @@ class DoApi extends ApiAction
                                     $stageArray['lng'] = $userModelLocRets['location']['lng'];
                                     $stageArray['lat'] = $userModelLocRets['location']['lat'];
                                     $stageArray['scan_type'] = StoryStages::SCAN_TYPE_LATLNG;
+                                    if (empty($stageArray['misrange'])) {
+                                        $stageArray['misrange'] = 50;
+                                    }
 
                                     $stageArray['stage_u_id'] = str_replace('{$location_id}', $userModelLocRets['location']['id'], $stageArray['stage_u_id']);
                                     $sessionStageArray['stage'] = $stageArray;
