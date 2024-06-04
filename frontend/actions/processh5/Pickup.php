@@ -52,7 +52,9 @@ class Pickup extends Action
 
         $lockCt = !empty($this->_get['lock_ct']) ? $this->_get['lock_ct'] : 0;
 
-        $randRange = !empty($this->_get['rand_range']) ? $this->_get['rand_range'] : '';
+        $randRange = !empty($this->_get['rand_range']) ? $this->_get['rand_range'] : '';        // 随机StoryModelId
+        $randClass = !empty($this->_get['rand_class']) ? $this->_get['rand_class'] : '';        // 随机分类
+
         if (!empty($randRange)) {
             $randRange = explode(',', $randRange);
             $randSeed = rand(0, sizeof($randRange) - 1);
@@ -76,10 +78,18 @@ class Pickup extends Action
 //            ])
             ->one();
 
-        $storyModel = StoryModels::find()
-            ->where(['id' => (int)$storyModelId])
-            ->with('buff')
-            ->one();
+        if (empty($randRange) && !empty($randClass)) {
+            $storyModel = StoryModels::find()
+                ->where(['story_class' => $randClass])
+                ->with('buff')
+                ->orderBy('rand()')
+                ->one();
+        } else {
+            $storyModel = StoryModels::find()
+                ->where(['id' => (int)$storyModelId])
+                ->with('buff')
+                ->one();
+        }
 
         $this->_params = [
             'session_id'    => $sessionId,

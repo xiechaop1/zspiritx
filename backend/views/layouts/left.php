@@ -136,6 +136,18 @@
                         ]
                     ],
                     [
+                        'label' => '地盘管理',
+                        'icon' => 'folder-open',
+                        'items' => [
+                            [
+                                'label' => '地盘列表',
+                                'url' => ['/location/location'],
+                                'active' => in_array($this->context->route, ['location/location', 'location/edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                        ]
+                    ],
+                    [
                         'label' => '抽奖管理',
                         'icon' => 'folder-open',
                         'items' => [
