@@ -784,7 +784,7 @@ class DoApi extends ApiAction
                                 $storyModel->lng = $user->home_lng;
                                 $storyModel->lat = $user->home_lat;
                                 $storyModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG;
-//                                $storyModel->misrange = 7;
+                                $storyModel->misrange = empty($storyModel->misrange) ? 7 : $storyModel->misrange;
                             }
                             $sModels[] = [
                                     'story_model' => $this->_setStoryModelToStage($storyModel, $storyModelParams, $params),
