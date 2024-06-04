@@ -1,4 +1,7 @@
 var map = new AMap.Map('container', {
+    mapStyle: 'amap://styles/dark',
+    resizeEnable: true,
+    zoom: 25
 });
 $(function () {
     var location=[];
