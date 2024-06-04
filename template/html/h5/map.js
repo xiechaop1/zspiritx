@@ -303,6 +303,7 @@ $(function () {
                 //新消息获取成功
                 if(obj["code"]==200){
                     markersModal = [];
+                    circle=[];
                     for (var i in obj.data) {
                         var e=obj.data[i][0];
                         if(e.location.lat!=null&&e.location.lng!=null){
@@ -323,9 +324,16 @@ $(function () {
                             };
                             markersModal.push(marker)
                         }
+
+                        // if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
+                        //     var circleE=JSON.parse(e.location.amap_prop);
+                        //     circle.push(circleE.geofence.circle)
+                        // }
+
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
+                    // drawCircle(markersModal);
                 }
                 //新消息获取失败
                 else{
@@ -464,6 +472,42 @@ $(function () {
         });
     }
 
+    //画圆
+    function  drawCircle(markers){
+        markers.forEach(function(marker) {
+            if(1>0){
+                var circle = new AMap.Circle({
+                    center:[marker.longitude,marker.latitude],
+                    // center: [marker.lng,marker.lat],
+                    // radius: marker.radius, //半径
+                    // borderWeight: marker.borderWeight,
+                    // strokeColor: marker.strokeColor,
+                    // strokeWeight: marker.strokeWeight,
+                    // strokeOpacity: marker.strokeOpacity,
+                    // fillOpacity:marker.fillOpacity,
+                    // strokeStyle: marker.strokeStyle,
+                    // strokeDasharray: [10, 10],
+                    // // 线样式还支持 'dashed'
+                    // fillColor: marker.fillColor,
+                    // zIndex: 10
+                    radius: 10, //半径
+                    borderWeight: 3,
+                    strokeColor: "#FF33FF",
+                    strokeWeight: 1,
+                    strokeOpacity: 0.2,
+                    fillOpacity: 0.4,
+                    strokeStyle: 'dashed',
+                    strokeDasharray: [10, 10],
+                    // 线样式还支持 'dashed'
+                    fillColor: '#1791fc',
+                    zIndex: 10,
+                })
+                map.add(circle);
+            }
+        })
+
+    }
+
     //绑定点击定位
     $("#user_center").click(function (){
         getUserPoi();
@@ -472,6 +516,7 @@ $(function () {
     getPoi();
     getUserLoc();
     getUserPoi();
+
     setInterval(getPoi,10000);
     setInterval(getUserLoc,5000);
     // setInterval(removeMarkers,3000);
