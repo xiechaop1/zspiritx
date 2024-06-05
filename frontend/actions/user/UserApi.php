@@ -637,7 +637,7 @@ class UserApi extends ApiAction
 //            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
 
             // Todo：临时处理，直接调用Location，正确的应该是从Cache调用SessionStage，但是现在Cache这块写起来比较麻烦
-            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 50, 1);
+            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 100, 1);
             if (empty($tmpLocation)) {
                 $stageClass = StoryStages::STAGE_CLASS_NORMAL;
             } else {
@@ -663,7 +663,9 @@ class UserApi extends ApiAction
             if (!empty($storyStageRet)
 //                && 1 != 1
             ) {
-                if ($storyStageRet['id'] != $storyStageId) {
+                if ($storyStageRet['id'] != $storyStageId
+                    && $stageClass == StoryStages::STAGE_CLASS_NORMAL
+                ) {
                     $expirationInterval = 600;
                     Yii::$app->act->add((int)$sessionId,
                         $sessionStageId,
