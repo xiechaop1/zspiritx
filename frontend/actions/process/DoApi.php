@@ -408,6 +408,7 @@ class DoApi extends ApiAction
 //            return $this->fail('玩家已经存在', ErrorCode::PLAYER_EXIST);
             $lastStoryStageId = $userStory->last_story_stage_id;
             $lastSessionStageId = $userStory->last_session_stage_id;
+            $lastSessionStageUId = $userStory->last_session_stage_u_id;
         } else {
 
             if (!empty($this->_sessionInfo['password_code'])
@@ -461,27 +462,32 @@ class DoApi extends ApiAction
             }
         }
 
-        if ( empty($lastSessionStageId)
-            || empty($lastStoryStageId)
-        ) {
-            $sessionStage = SessionStages::find()
-                ->where([
-                    'story_id'      => (int)$this->_storyId,
-                    'session_id'    => (int)$this->_sessionId,
-                ])
-                ->andFilterWhere(['>', 'sort_by', 0])
-                ->one();
+        if (empty($sessionStageUId)) {
+            if (empty($lastSessionStageId)
+                || empty($lastStoryStageId)
+            ) {
+                $sessionStage = SessionStages::find()
+                    ->where([
+                        'story_id' => (int)$this->_storyId,
+                        'session_id' => (int)$this->_sessionId,
+                    ])
+                    ->andFilterWhere(['>', 'sort_by', 0])
+                    ->one();
 
-            $lastStoryStageId   = $sessionStage->story_stage_id;
-            $lastSessionStageId = $sessionStage->id;
-
+                $lastStoryStageId = $sessionStage->story_stage_id;
+                $lastSessionStageId = $sessionStage->id;
+            }
+            $storyStage = StoryStages::findOne($lastStoryStageId);
+            $stageUId = $storyStage['stage_u_id'];
+        } else {
+            $stageUId = $sessionStageUId;
         }
 
 //        Yii::$app->knowledge->setByItem($lastStoryStageId, ItemKnowledge::ITEM_TYPE_STAGE, (int)$this->_sessionId, $lastSessionStageId, (int)$this->_userId, (int)$this->_storyId);
 
         $storyStage = StoryStages::findOne($lastStoryStageId);
         $expirationInterval = 60;        // 消息超时时间
-        Yii::$app->act->add((int)$this->_sessionId, $lastSessionStageId, (int)$this->_storyId, (int)$this->_userId, $storyStage['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
+        Yii::$app->act->add((int)$this->_sessionId, $lastSessionStageId, (int)$this->_storyId, (int)$this->_userId, $stageUId, Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
 
         return $userStory;
     }
@@ -618,7 +624,7 @@ class DoApi extends ApiAction
                                     $stageArray['lat'] = $userModelLocRets['location']['lat'];
                                     $stageArray['scan_type'] = StoryStages::SCAN_TYPE_LATLNG;
                                     if (empty($stageArray['misrange'])) {
-                                        $stageArray['misrange'] = 50;
+                                        $stageArray['misrange'] = 100;
                                     }
 
                                     $stageArray['stage_u_id'] = str_replace('{$location_id}', $userModelLocRets['location']['id'], $stageArray['stage_u_id']);

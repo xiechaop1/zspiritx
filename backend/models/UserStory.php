@@ -20,7 +20,11 @@ class UserStory extends \common\models\UserStory
     public function rules()
     {
         return [
-            [['user_id', 'role_id', 'story_id', 'session_id', 'team_id', 'building_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'role_id', 'story_id',
+                'session_id', 'team_id', 'building_id',
+                'last_story_stage_id', 'last_session_stage_id', 'last_session_stage_u_id',
+                'buff', 'debuff', 'buff_expiretime', 'debuff_expiretime',
+                'status', 'created_at', 'updated_at'], 'integer'],
             [['goal', 'goal_correct'], 'string'],
         ];
     }

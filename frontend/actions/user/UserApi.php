@@ -437,6 +437,7 @@ class UserApi extends ApiAction
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+        $sessionStageUId = !empty($this->_get['session_stage_u_id']) ? $this->_get['session_stage_u_id'] : 0;
 
         $storyStage = StoryStages::find()
             ->where([
@@ -465,6 +466,7 @@ class UserApi extends ApiAction
 
                 $userStory->last_story_stage_id = $storyStageId;
                 $userStory->last_session_stage_id = $sessionStageId;
+                $userStory->last_session_stage_u_id = $sessionStageUId;
                 $userStory->save();
 
 
@@ -532,6 +534,7 @@ class UserApi extends ApiAction
             $stageCookie = [
                 'story_stage_id' => $storyStageId,
                 'session_stage_id' => $sessionStageId,
+                'session_stage_u_id' => $sessionStageUId,
                 'story_id'    => $storyId,
 //                'ts'    => time(),
                 'ts'    => 0,
@@ -634,7 +637,7 @@ class UserApi extends ApiAction
 //            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
 
             // Todo：临时处理，直接调用Location，正确的应该是从Cache调用SessionStage，但是现在Cache这块写起来比较麻烦
-            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 5, 1);
+            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 50, 1);
             if (empty($tmpLocation)) {
                 $stageClass = StoryStages::STAGE_CLASS_NORMAL;
             } else {
@@ -660,12 +663,12 @@ class UserApi extends ApiAction
             if (!empty($storyStageRet)
 //                && 1 != 1
             ) {
-                if ($storyStageRet->id != $storyStageId) {
+                if ($storyStageRet['id'] != $storyStageId) {
                     $expirationInterval = 600;
                     Yii::$app->act->add((int)$sessionId,
                         $sessionStageId,
                         $storyId, $userId,
-                        $storyStageRet->stage_u_id, Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
+                        $storyStageRet['stage_u_id'], Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
                 }
             }
         }
