@@ -350,6 +350,9 @@ $(function () {
 
     //获取用户位置信息
     function getUserLoc(user_id){
+        if (user_id==undefined) {
+            user_id=$("input[name='user_id']").val();
+        }
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
