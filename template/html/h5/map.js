@@ -521,7 +521,7 @@ $(function () {
     getUserPoi();
 
     setInterval(getPoi,10000);
-    setInterval(getUserLoc,5000);
+    setInterval(getUserLoc,500);
     // setInterval(removeMarkers,3000);
 
     //打开url
