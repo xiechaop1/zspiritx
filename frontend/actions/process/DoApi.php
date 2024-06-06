@@ -685,11 +685,11 @@ class DoApi extends ApiAction
 
         // Todo: 临时放到这里
         // Todo: 根据位置放置模型（位置从高德取）
+        $user = User::find()->where(['id' => $this->_userId])->one();
         if ($this->_storyId == 5) {
             $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
             $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
 
-            $user = User::find()->where(['id' => $this->_userId])->one();
             if (empty($user->home_lng) || empty($user->home_lat)) {
                 $user->home_lng = $userLng;
                 $user->home_lat = $userLat;
@@ -705,19 +705,20 @@ class DoApi extends ApiAction
             $models = [];
             if (!empty($sessionModels)) {
 //                $models = [];
-                $tmpStoryModelsByStoryModelClass = [];
-                foreach ($sessionModels as $sessionModel) {
-                    $tmpStoryModel = $sessionModel->storymodel;
-                    if (!empty($tmpStoryModel)) {
-                        $tmpStoryModelsByStoryModelClass[$tmpStoryModel->story_model_class][] = $tmpStoryModel;
-                    }
-                }
+//                $tmpStoryModelsByStoryModelClass = [];
+//                foreach ($sessionModels as $sessionModel) {
+//                    $tmpStoryModel = $sessionModel->storymodel;
+//                    if (!empty($tmpStoryModel)) {
+//                        $tmpStoryModelsByStoryModelClass[$tmpStoryModel->story_model_class][] = $tmpStoryModel;
+//                    }
+//                }
                 foreach ($sessionModels as $sessionModel) {
                     $sessModel = $sessionModel;
 //                    $storyModel = json_decode($sessModel['snapshot'], true);
                     $storyModel = $sessionModel->storymodel;
 
                     if (!empty($storyModel)) {
+
                         $storyModel = Model::combineStoryModelWithDetail($storyModel);
 
                         // 判断放置方式，如果当天已经放过，就跳过
@@ -742,10 +743,66 @@ class DoApi extends ApiAction
 //                        $storyModelParams = [];
 //                        $params = [];
                         $sModels = [];
-                        if (!empty($setResult)
-                            && !empty($setResult['storyModelsResult'][$storyModel->id])
-                        ) {
-                            foreach ($setResult['storyModelsResult'][$storyModel->id] as $userModelLocRet) {
+                        if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_STAGE) {
+
+                                if (!empty($setResult)) {
+                                    foreach ($setResult['result'] as $locId => $userModelLocs) {
+                                        foreach ($userModelLocs['userModelLoc'] as $tmpUserModelLoc) {
+                                            if (!empty($tmpUserModelLoc->story_stage_id)) {
+                                                foreach ($sessionStage->stage->nextstage as $nStage) {
+                                                    if ($nStage->id == $tmpUserModelLoc->story_stage_id) {
+                                                        $stageStoryModel = clone $storyModel;
+                                                        $stageStoryModel->lng = $userModelLocs['location']->lng;
+                                                        $stageStoryModel->lat = $userModelLocs['location']->lat;
+                                                        $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+                                                        $stageStoryModel->misrange = 50;
+                                                        $stageStoryModel->trigger_misrange = 50;
+                                                        $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
+                                                        $stageStoryModel->stage_id = $sessionStage->stage->id;
+
+                                                        $params1 = $params;
+                                                        $storyModelParams['location_id'] = $userModelLocs['location']->id;
+                                                        $storyModelParams['stage_id'] = $nStage->id;
+
+                                                        $sModels[] = [
+                                                            'story_model' => $this->_setStoryModelToStage($stageStoryModel, $storyModelParams, $params1),
+                                                            'user_model_loc' => [],
+                                                            'location' => $userModelLocs['location'],
+                                                        ];
+//                                                        $models[] = $stageStoryModel;
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                } else {
+                                    foreach ($sessionStage->stage->nextstage as $nStage) {
+                                            $stageStoryModel = clone $storyModel;
+                                            $stageStoryModel->lng = $nStage->lng;
+                                            $stageStoryModel->lat = $nStage->lat;
+                                            $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+                                            $stageStoryModel->misrange = 50;
+                                            $stageStoryModel->trigger_misrange = 50;
+                                            $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
+                                            $stageStoryModel->stage_id = $sessionStage->stage->id;
+
+                                        $params1 = $params;
+
+                                            $sModels[] = [
+                                                'story_model' => $this->_setStoryModelToStage($stageStoryModel, [], $params1),
+                                                'user_model_loc' => [],
+                                                'location' => [],
+                                            ];
+//                                                        $models[] = $stageStoryModel;
+                                    }
+                                }
+
+                        } else {
+                            if (!empty($setResult)
+                                && !empty($setResult['storyModelsResult'][$storyModel->id])
+                            ) {
+                                foreach ($setResult['storyModelsResult'][$storyModel->id] as $userModelLocRet) {
 //                                foreach ($userModelLocRets as $userModelLocRet) {
                                     $storyModelParams = [];
                                     $params1 = $params;
@@ -792,44 +849,27 @@ class DoApi extends ApiAction
                                             'user_model_loc' => $userModelLocRet['userModelLoc'],
                                             'location' => $location,
                                         ];
-
-                                        // 场景放置一个基础模型
-                                        if (!empty($tmpStoryModelsByStoryModelClass[StoryModels::STORY_MODEL_CLASS_STAGE])) {
-                                            $stageStoryModel = clone current($tmpStoryModelsByStoryModelClass[StoryModels::STORY_MODEL_CLASS_STAGE]);
-
-                                            $stageStoryModel->lng = $userModelLocRet['location']['lng'];
-                                            $stageStoryModel->lat = $userModelLocRet['location']['lat'];
-                                            $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
-                                            $stageStoryModel->misrange = 50;
-                                            $stageStoryModel->trigger_misrange = 50;
-                                            $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
-
-                                            $sModels[] = [
-                                                'story_model' => $this->_setStoryModelToStage($stageStoryModel, $storyModelParams, $params1),
-                                                'user_model_loc' => [],
-                                                'location' => $userModelLocRet['location'],
-                                            ];
-                                        }
                                     }
 //                                }
-                            }
-                        } else {
-                            $storyModelParams = [];
-                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET
-                             || $storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET_ITEM
-                            ) {
-                                $storyModel->lng = $user->home_lng;
-                                $storyModel->lat = $user->home_lat;
-                                $storyModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG;
-                                $storyModel->misrange = empty($storyModel->misrange) ? 3 : $storyModel->misrange;
-                                $storyModel->trigger_misrange = empty($storyModel->trigger_misrange) ? 7 : $storyModel->trigger_misrange;
-                            }
-                            $sModels[] = [
+                                }
+                            } else {
+                                $storyModelParams = [];
+                                if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET
+                                    || $storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET_ITEM
+                                ) {
+                                    $storyModel->lng = $user->home_lng;
+                                    $storyModel->lat = $user->home_lat;
+                                    $storyModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_RANDOM_PLANE_LATLNG;
+                                    $storyModel->misrange = empty($storyModel->misrange) ? 3 : $storyModel->misrange;
+                                    $storyModel->trigger_misrange = empty($storyModel->trigger_misrange) ? 7 : $storyModel->trigger_misrange;
+                                }
+                                $sModels[] = [
                                     'story_model' => $this->_setStoryModelToStage($storyModel, $storyModelParams, $params),
                                     'user_model_loc' => [],
                                     'location' => [],
                                 ];
 
+                            }
                         }
 
                         if (!empty($sModels)) {
