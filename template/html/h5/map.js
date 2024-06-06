@@ -448,7 +448,7 @@ $(function () {
     function drawUserModals(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
-                ' data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'">' +
+                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -469,7 +469,7 @@ $(function () {
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
         n=n+1;
-        console.log("定位的经纬度",marker[0].longitude,marker[0].latitude)
+        console.log("定位的经纬度",markers[0].longitude,markers[0].latitude)
         map.remove(markersUser);
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +n+
@@ -630,17 +630,28 @@ $(function () {
 setTimeout(getLocation(39.3442,118.3726),1000);*/
 function showPoiDetail(e) {
     var me=$(e);
+    var user_id=$("input[name='user_id']").val();
     var type=me.attr("data-type");
     var name=me.attr("data-name");
     var id=me.attr("data-id");
     var url=me.attr("data-url");
     var btn=me.attr("data-btn");
+    var target_lat=me.attr("data-lat");
+    var target_lng=me.attr("data-lng");
     console.log(name,type,id,btn)
     if(type==2){
         $("#modal-detail .map-text-context").empty().text(name);
         $("#modal-detail .btn-battle").attr("data-url",url);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
+    }
+    else{
+        var params = {
+            'user_model_loc_id':id
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+        window.location.href="/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng
     }
 }
 
