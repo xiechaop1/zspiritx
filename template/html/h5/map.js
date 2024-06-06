@@ -387,7 +387,7 @@ $(function () {
                             height: 80,
                             title:2
                         };
-                        markersUser.push(marker)
+                        markersUser=marker
                         drawUser(markersUser);
 
                         console.log("地图中心",lat,lng)
@@ -465,23 +465,21 @@ $(function () {
 
     //描绘用户Marker
     var n=1;
-    function drawUser(markers){
+    function drawUser(marker){
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
         n=n+1;
-        console.log("定位的经纬度",markers[0].longitude,markers[0].latitude)
+        console.log("定位的经纬度",markers.longitude,marker.latitude)
         map.remove(markersUser);
-        markers.forEach(function(marker) {
-            var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +n+
-                '</span>';
-            var marker= new AMap.Marker({
-                content: markerContent,
-                map: map,
-                icon: marker.icon,
-                position: [marker.longitude,marker.latitude],
-                offset: new AMap.Pixel(-13, -30)
-            });
-        })
+        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +n+
+            '</span>';
+        var marker= new AMap.Marker({
+            content: markerContent,
+            map: map,
+            icon: marker.icon,
+            position: [marker.longitude,marker.latitude],
+            offset: new AMap.Pixel(-13, -30)
+        });
 
     }
 
