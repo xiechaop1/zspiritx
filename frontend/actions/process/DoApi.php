@@ -751,7 +751,7 @@ class DoApi extends ApiAction
                                             foreach ($tmpUserModelLocs['userModelLoc'] as $tmpUserModelLoc) {
                                                 if (!empty($tmpUserModelLoc->story_stage_id)) {
                                                     foreach ($sessionStage->stage->nextstage as $nStage) {
-                                                        if ($nStage->id == $tmpUserModelLoc->story_stage_id) {
+                                                        if ($nStage->story_stage_id == $tmpUserModelLoc->story_stage_id) {
                                                             $stageStoryModel = clone $storyModel;
                                                             $stageStoryModel->lng = $userModelLocs['location']->lng;
                                                             $stageStoryModel->lat = $userModelLocs['location']->lat;
@@ -763,7 +763,7 @@ class DoApi extends ApiAction
 
                                                             $params1 = $params;
                                                             $storyModelParams['location_id'] = $userModelLocs['location']->id;
-                                                            $storyModelParams['stage_id'] = $nStage->id;
+                                                            $storyModelParams['stage_id'] = $nStage->story_stage_id;
 
                                                             $sModels[] = [
                                                                 'story_model' => $this->_setStoryModelToStage($stageStoryModel, $storyModelParams, $params1),
