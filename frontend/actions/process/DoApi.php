@@ -759,7 +759,7 @@ class DoApi extends ApiAction
                                                             $stageStoryModel->misrange = 50;
                                                             $stageStoryModel->trigger_misrange = 50;
                                                             $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
-                                                            $stageStoryModel->stage_id = $sessionStage->stage->id;
+//                                                            $stageStoryModel->stage_id = $sessionStage->stage->id;
 
                                                             $params1 = $params;
                                                             $storyModelParams['location_id'] = $tmpUserModelLocs['location']['id'];
