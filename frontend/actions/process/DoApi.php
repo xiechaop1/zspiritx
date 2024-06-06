@@ -747,29 +747,31 @@ class DoApi extends ApiAction
 
                                 if (!empty($setResult)) {
                                     foreach ($setResult['result'] as $locId => $userModelLocs) {
-                                        foreach ($userModelLocs['userModelLoc'] as $tmpUserModelLoc) {
-                                            if (!empty($tmpUserModelLoc->story_stage_id)) {
-                                                foreach ($sessionStage->stage->nextstage as $nStage) {
-                                                    if ($nStage->id == $tmpUserModelLoc->story_stage_id) {
-                                                        $stageStoryModel = clone $storyModel;
-                                                        $stageStoryModel->lng = $userModelLocs['location']->lng;
-                                                        $stageStoryModel->lat = $userModelLocs['location']->lat;
-                                                        $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
-                                                        $stageStoryModel->misrange = 50;
-                                                        $stageStoryModel->trigger_misrange = 50;
-                                                        $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
-                                                        $stageStoryModel->stage_id = $sessionStage->stage->id;
+                                        foreach ($userModelLocs as $tmpUserModelLocs) {
+                                            foreach ($tmpUserModelLocs['userModelLoc'] as $tmpUserModelLoc) {
+                                                if (!empty($tmpUserModelLoc->story_stage_id)) {
+                                                    foreach ($sessionStage->stage->nextstage as $nStage) {
+                                                        if ($nStage->id == $tmpUserModelLoc->story_stage_id) {
+                                                            $stageStoryModel = clone $storyModel;
+                                                            $stageStoryModel->lng = $userModelLocs['location']->lng;
+                                                            $stageStoryModel->lat = $userModelLocs['location']->lat;
+                                                            $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+                                                            $stageStoryModel->misrange = 50;
+                                                            $stageStoryModel->trigger_misrange = 50;
+                                                            $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
+                                                            $stageStoryModel->stage_id = $sessionStage->stage->id;
 
-                                                        $params1 = $params;
-                                                        $storyModelParams['location_id'] = $userModelLocs['location']->id;
-                                                        $storyModelParams['stage_id'] = $nStage->id;
+                                                            $params1 = $params;
+                                                            $storyModelParams['location_id'] = $userModelLocs['location']->id;
+                                                            $storyModelParams['stage_id'] = $nStage->id;
 
-                                                        $sModels[] = [
-                                                            'story_model' => $this->_setStoryModelToStage($stageStoryModel, $storyModelParams, $params1),
-                                                            'user_model_loc' => [],
-                                                            'location' => $userModelLocs['location'],
-                                                        ];
-//                                                        $models[] = $stageStoryModel;
+                                                            $sModels[] = [
+                                                                'story_model' => $this->_setStoryModelToStage($stageStoryModel, $storyModelParams, $params1),
+                                                                'user_model_loc' => [],
+                                                                'location' => $userModelLocs['location'],
+                                                            ];
+    //                                                        $models[] = $stageStoryModel;
+                                                        }
                                                     }
                                                 }
                                             }
