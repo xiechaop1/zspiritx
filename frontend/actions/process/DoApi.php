@@ -1154,9 +1154,10 @@ class DoApi extends ApiAction
                                 } elseif (!empty($locationProp['geofence']['rectangle'])) {
                                     $locationProp['geofence']['rectangle'] = array_merge($propTmp, $locationProp['geofence']['rectangle']);
                                 }
+                            }
                                 $location['amap_prop'] = json_encode($locationProp);
                                 $row1['location'] = $location;
-                            }
+
                         }
 
                         $row2 = $tmp;
