@@ -45,6 +45,8 @@ class StoryModels extends \common\models\gii\StoryModels
     const STORY_MODEL_CLASS_RIVAL   = 4; // 对手
     const STORY_MODEL_CLASS_PET_OUTSIDE = 5; // 外部宠物（显示地图上）
     const STORY_MODEL_CLASS_PET_ITEM = 6; // 宠物物品
+    const STORY_MODEL_CLASS_STAGE    = 20; // 场景
+    const STORY_MODEL_CLASS_POS      = 21; // 位置
 
     public static $storyModelClass2Name = [
         self::STORY_MODEL_CLASS_NORMAL => '普通',
@@ -53,6 +55,8 @@ class StoryModels extends \common\models\gii\StoryModels
         self::STORY_MODEL_CLASS_PET_ITEM => '宠物物品',
         self::STORY_MODEL_CLASS_RIVAL => '对手',
         self::STORY_MODEL_CLASS_PET_OUTSIDE => '外部宠物（地图上）',
+        self::STORY_MODEL_CLASS_STAGE => '场景',
+        self::STORY_MODEL_CLASS_POS => '位置',
     ];
 
     public static $storyModelClassRate = [

@@ -705,6 +705,13 @@ class DoApi extends ApiAction
             $models = [];
             if (!empty($sessionModels)) {
 //                $models = [];
+                $tmpStoryModelsByStoryModelClass = [];
+                foreach ($sessionModels as $sessionModel) {
+                    $tmpStoryModel = $sessionModel->storymodel;
+                    if (!empty($tmpStoryModel)) {
+                        $tmpStoryModelsByStoryModelClass[$tmpStoryModel->story_model_class][] = $tmpStoryModel;
+                    }
+                }
                 foreach ($sessionModels as $sessionModel) {
                     $sessModel = $sessionModel;
 //                    $storyModel = json_decode($sessModel['snapshot'], true);
@@ -754,7 +761,8 @@ class DoApi extends ApiAction
                                         $storyModel2->lng = $userModelLocRet['location']['lng'];
                                         $storyModel2->lat = $userModelLocRet['location']['lat'];
                                         $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
-                                        $storyModel2->misrange = 5;
+                                        $storyModel2->misrange = 2;
+                                        $storyModel2->trigger_misrange = 10;
 //                                    $storyModelParams['lng'] = $userModelLocRet['location']['lng'];
 //                                    $storyModelParams['lat'] = $userModelLocRet['location']['lat'];
 
@@ -764,12 +772,14 @@ class DoApi extends ApiAction
                                         $sessionStage->stage->stage_u_id = $tmpStageUId;
                                         $sessionStage->stage->lat = $userModelLocRet['location']['lat'];
                                         $sessionStage->stage->lng = $userModelLocRet['location']['lng'];
-                                        $sessionStage->stage->misrange = 20;
+                                        $sessionStage->stage->misrange = 50;
                                         $sessionStage->stage->scan_type = StoryStages::SCAN_TYPE_LATLNG;
 
                                         if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                             $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
                                         }
+
+
                                     }
                                     if (!empty($userModelLocRet['userModelLoc']->active_class)
                                         &&
@@ -782,6 +792,24 @@ class DoApi extends ApiAction
                                             'user_model_loc' => $userModelLocRet['userModelLoc'],
                                             'location' => $location,
                                         ];
+
+                                        // 场景放置一个基础模型
+                                        if (!empty($tmpStoryModelsByStoryModelClass[StoryModels::STORY_MODEL_CLASS_STAGE])) {
+                                            $stageStoryModel = clone current($tmpStoryModelsByStoryModelClass[StoryModels::STORY_MODEL_CLASS_STAGE]);
+
+                                            $stageStoryModel->lng = $userModelLocRet['location']['lng'];
+                                            $stageStoryModel->lat = $userModelLocRet['location']['lat'];
+                                            $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+                                            $stageStoryModel->misrange = 50;
+                                            $stageStoryModel->trigger_misrange = 50;
+                                            $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
+
+                                            $sModels[] = [
+                                                'story_model' => $this->_setStoryModelToStage($stageStoryModel, $storyModelParams, $params1),
+                                                'user_model_loc' => [],
+                                                'location' => $userModelLocRet['location'],
+                                            ];
+                                        }
                                     }
 //                                }
                             }
@@ -801,6 +829,7 @@ class DoApi extends ApiAction
                                     'user_model_loc' => [],
                                     'location' => [],
                                 ];
+
                         }
 
                         if (!empty($sModels)) {

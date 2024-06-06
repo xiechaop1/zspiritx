@@ -58,6 +58,7 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'story_model_desc')->textarea(['value' => $storyModel->story_model_desc])->label('剧本模型描述');
 
             echo $form->field($storyModel, 'story_stage_id')->textInput(['value' => $storyModel->story_stage_id])->label('Stage ID');
+            echo $form->field($storyModel, 'pos_story_model_id')->textInput(['value' => $storyModel->pos_story_model_id])->label('位置基本模型ID');
             echo $form->field($storyModel, 'model_inst_u_id')->textInput(['value' => $storyModel->model_inst_u_id])->label('Model Inst UID');
             echo $form->field($storyModel, 'target_model_u_id')->textInput(['value' => $storyModel->target_model_u_id])->label('目标模型UnityID');
             echo $form->field($storyModel, 'scan_image_id')->textInput(['value' => $storyModel->scan_image_id])->label('Scan Image ID');
