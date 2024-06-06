@@ -464,11 +464,13 @@ $(function () {
     }
 
     //描绘用户Marker
+    var n=1;
     function drawUser(marker){
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
+        n=n+1;
         map.remove(markersUser);
-        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +
+        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +n+
             '</span>';
         var marker= new AMap.Marker({
             content: markerContent,
