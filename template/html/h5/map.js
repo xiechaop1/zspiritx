@@ -323,7 +323,8 @@ $(function () {
                                 title:2,
                                 url:e.userModelLoc[0].link_url,
                                 btn_text:e.userModelLoc[0].link_text,
-                                loc_color:e.userModelLoc[0].loc_color
+                                loc_color:e.userModelLoc[0].loc_color,
+                                amap_prop:e.location.amap_prop
                             };
                             markersModal.push(marker)
                         }
@@ -336,7 +337,7 @@ $(function () {
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    // drawCircle(markersModal);
+                    drawCircle(markersModal);
                 }
                 //新消息获取失败
                 else{
@@ -481,7 +482,7 @@ $(function () {
     //画圆
     function  drawCircle(markers){
         markers.forEach(function(marker) {
-            if(1>0){
+            if(marker.amap_prop!=null&&marker.amap_prop!=undefined){
                 var circle = new AMap.Circle({
                     center:[marker.longitude,marker.latitude],
                     // center: [marker.lng,marker.lat],
