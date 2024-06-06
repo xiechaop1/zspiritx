@@ -469,7 +469,7 @@ $(function () {
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
         n=n+1;
-        console.log("定位的经纬度",markers.longitude,marker.latitude)
+        console.log("定位的经纬度",marker.longitude,marker.latitude)
         map.remove(markersUser);
         var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +n+
             '</span>';
