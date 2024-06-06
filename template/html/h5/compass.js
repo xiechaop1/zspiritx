@@ -288,6 +288,6 @@
         }
 
         //定时更新距离信息
-        setInterval(getDistance,1000);
+        setInterval(getDistance,500);
 
     })
