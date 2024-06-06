@@ -465,20 +465,24 @@ $(function () {
 
     //描绘用户Marker
     var n=1;
-    function drawUser(marker){
+    function drawUser(markers){
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
         n=n+1;
+        console.log(定位的经纬度,marker[0].longitude,marker[0].latitude)
         map.remove(markersUser);
-        var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +n+
-            '</span>';
-        var marker= new AMap.Marker({
-            content: markerContent,
-            map: map,
-            icon: marker[0].icon,
-            position: [marker[0].longitude,marker[0].latitude],
-            offset: new AMap.Pixel(-13, -30)
-        });
+        markers.forEach(function(marker) {
+            var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +n+
+                '</span>';
+            var marker= new AMap.Marker({
+                content: markerContent,
+                map: map,
+                icon: marker.icon,
+                position: [marker.longitude,marker.latitude],
+                offset: new AMap.Pixel(-13, -30)
+            });
+        })
+
     }
 
     //画圆
