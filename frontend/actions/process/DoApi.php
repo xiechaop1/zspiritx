@@ -801,7 +801,10 @@ class DoApi extends ApiAction
                                 }
 
                         } else {
-                            $tmpSessionStage = $sessionStage->stage->toArray();
+//                            $tmpSessionStage = $sessionStage->stage->toArray();
+                            $tmpSessionStageCloned = clone $sessionStage->stage;
+                            $tmpSessionStage = $tmpSessionStageCloned->toArray();
+                            $hasLoc = 0;
                             if (!empty($setResult)
                                 && !empty($setResult['storyModelsResult'][$storyModel->id])
                             ) {
@@ -812,7 +815,9 @@ class DoApi extends ApiAction
 
                                     $storyModel2 = clone $storyModel;
                                     $location = [];
-                                    if (!empty($userModelLocRet['location'])) {
+                                    if (!empty($userModelLocRet['location'])
+                                        && $hasLoc == 0
+                                    ) {
                                         $tmpSessionStageUId = $tmpSessionStage['stage_u_id'];
                                         $tmpStageUId = str_replace('{$location_id}', $userModelLocRet['location']['id'], $tmpSessionStageUId);
                                         if ($tmpStageUId != $stageUId) {
@@ -835,6 +840,7 @@ class DoApi extends ApiAction
                                         $sessionStage->stage->lng = $userModelLocRet['location']['lng'];
                                         $sessionStage->stage->misrange = 50;
                                         $sessionStage->stage->scan_type = StoryStages::SCAN_TYPE_LATLNG;
+                                        $hasLoc = 1;
 
                                         if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                             $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
