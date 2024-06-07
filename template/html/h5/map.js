@@ -501,12 +501,12 @@ $(function () {
                     // // 线样式还支持 'dashed'
                     // fillColor: marker.fillColor,
                     // zIndex: 10
-                    radius: 50, //半径
+                    radius: 25, //半径
                     borderWeight: 3,
                     strokeColor: "#FF33FF",
                     strokeWeight: 1,
                     strokeOpacity: 0.2,
-                    fillOpacity: 0.4,
+                    fillOpacity: 0.3,
                     strokeStyle: 'dashed',
                     strokeDasharray: [10, 10],
                     // 线样式还支持 'dashed'
