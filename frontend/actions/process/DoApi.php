@@ -838,6 +838,7 @@ class DoApi extends ApiAction
                                         if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                             $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
                                         }
+                                        break;
 
 
                                     }
