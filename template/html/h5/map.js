@@ -323,7 +323,8 @@ $(function () {
                                 title:2,
                                 url:e.userModelLoc[0].link_url,
                                 btn_text:e.userModelLoc[0].link_text,
-                                loc_color:e.userModelLoc[0].loc_color
+                                loc_color:e.userModelLoc[0].loc_color,
+                                amap_prop:e.location.amap_prop
                             };
                             markersModal.push(marker)
                         }
@@ -336,7 +337,7 @@ $(function () {
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    // drawCircle(markersModal);
+                    drawCircle(markersModal);
                 }
                 //新消息获取失败
                 else{
@@ -386,7 +387,7 @@ $(function () {
                             height: 80,
                             title:2
                         };
-                        markersUser.push(marker)
+                        markersUser=marker
                         drawUser(markersUser);
 
                         console.log("地图中心",lat,lng)
@@ -447,7 +448,7 @@ $(function () {
     function drawUserModals(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
-                ' data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'">' +
+                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -463,25 +464,29 @@ $(function () {
     }
 
     //描绘用户Marker
+    var n=1;
     function drawUser(marker){
         $(".marker_user").closest(".amap-marker,.amap-markers").remove();
         $(".marker_user").remove();
+        // n=n+1;
+        // console.log("定位的经纬度",marker.longitude,marker.latitude)
         map.remove(markersUser);
         var markerContent= '<span style="left:20%;top:80%;"  class="marker_user"  onclick="" data-id="text id 1">' +
             '</span>';
         var marker= new AMap.Marker({
             content: markerContent,
             map: map,
-            icon: marker[0].icon,
-            position: [marker[0].longitude,marker[0].latitude],
+            icon: marker.icon,
+            position: [marker.longitude,marker.latitude],
             offset: new AMap.Pixel(-13, -30)
         });
+
     }
 
     //画圆
     function  drawCircle(markers){
         markers.forEach(function(marker) {
-            if(1>0){
+            if(marker.amap_prop!=null&&marker.amap_prop!=undefined){
                 var circle = new AMap.Circle({
                     center:[marker.longitude,marker.latitude],
                     // center: [marker.lng,marker.lat],
@@ -623,17 +628,28 @@ $(function () {
 setTimeout(getLocation(39.3442,118.3726),1000);*/
 function showPoiDetail(e) {
     var me=$(e);
+    var user_id=$("input[name='user_id']").val();
     var type=me.attr("data-type");
     var name=me.attr("data-name");
     var id=me.attr("data-id");
     var url=me.attr("data-url");
     var btn=me.attr("data-btn");
+    var target_lat=me.attr("data-lat");
+    var target_lng=me.attr("data-lng");
     console.log(name,type,id,btn)
     if(type==2){
         $("#modal-detail .map-text-context").empty().text(name);
         $("#modal-detail .btn-battle").attr("data-url",url);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
+    }
+    else{
+        var params = {
+            'user_model_loc_id':id
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+        window.location.href="/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng
     }
 }
 

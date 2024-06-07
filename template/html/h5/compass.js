@@ -237,8 +237,8 @@
         //更具用户经纬度获取和目的地的信息
         function getDistance(){
             var user_id=$("input[name='user_id']").val();
-            var target_lng=$("input[name='user_lng']").val();
-            var target_lat=$("input[name='user_lat']").val();
+            var target_lng=$("input[name='target_lng']").val();
+            var target_lat=$("input[name='target_lat']").val();
             var lnglat1 = new AMap.LngLat(target_lng, target_lat);
 
             $.ajax({
@@ -288,6 +288,6 @@
         }
 
         //定时更新距离信息
-        setInterval(getDistance,1000);
+        setInterval(getDistance,500);
 
     })
