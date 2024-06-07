@@ -812,7 +812,8 @@ class DoApi extends ApiAction
                                     $storyModel2 = clone $storyModel;
                                     $location = [];
                                     if (!empty($userModelLocRet['location'])) {
-                                        $tmpStageUId = str_replace('{$location_id}', $userModelLocRet['location']['id'], $sessionStage->stage->stage_u_id);
+                                        $tmpSessionStageUId = $sessionStage->stage->stage_u_id;
+                                        $tmpStageUId = str_replace('{$location_id}', $userModelLocRet['location']['id'], $tmpSessionStageUId);
                                         if ($tmpStageUId != $stageUId) {
                                             continue;
                                         }
