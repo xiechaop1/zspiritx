@@ -496,7 +496,7 @@ $(function () {
                     // // 线样式还支持 'dashed'
                     // fillColor: marker.fillColor,
                     // zIndex: 10
-                    radius: 10, //半径
+                    radius: 50, //半径
                     borderWeight: 3,
                     strokeColor: "#FF33FF",
                     strokeWeight: 1,
