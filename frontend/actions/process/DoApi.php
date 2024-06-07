@@ -801,6 +801,7 @@ class DoApi extends ApiAction
                                 }
 
                         } else {
+                            $tmpSessionStage = $sessionStage->stage->toArray();
                             if (!empty($setResult)
                                 && !empty($setResult['storyModelsResult'][$storyModel->id])
                             ) {
@@ -812,7 +813,7 @@ class DoApi extends ApiAction
                                     $storyModel2 = clone $storyModel;
                                     $location = [];
                                     if (!empty($userModelLocRet['location'])) {
-                                        $tmpSessionStageUId = $sessionStage->stage->stage_u_id;
+                                        $tmpSessionStageUId = $tmpSessionStage['stage_u_id'];
                                         $tmpStageUId = str_replace('{$location_id}', $userModelLocRet['location']['id'], $tmpSessionStageUId);
                                         if ($tmpStageUId != $stageUId) {
                                             continue;
@@ -838,8 +839,6 @@ class DoApi extends ApiAction
                                         if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                             $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
                                         }
-                                        break;
-
 
                                     }
                                     if (!empty($userModelLocRet['userModelLoc']->active_class)
