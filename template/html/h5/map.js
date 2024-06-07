@@ -527,7 +527,7 @@ $(function () {
         getUserPoi();
     })
 
-    var userModelLocIds;
+    var userModelLocIds = new Array();
 
     getPoi();
     getUserLoc();
