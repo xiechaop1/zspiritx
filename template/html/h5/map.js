@@ -309,7 +309,9 @@ $(function () {
                     circle=[];
                     for (var i in obj.data) {
                         var e=obj.data[i][0];
-                        if(e.location.lat!=null&&e.location.lng!=null){
+                        if(e.location.lat!=null&&e.location.lng!=null
+                            && userModelLocIds.includes(e.userModelLoc[0].id)==false
+                        ){
                             var marker = {
                                 iconPath: e.userModelLoc[0].storyModel.icon,
                                 active_class:e.userModelLoc[0].active_class,
@@ -326,7 +328,8 @@ $(function () {
                                 loc_color:e.userModelLoc[0].loc_color,
                                 amap_prop:e.location.amap_prop
                             };
-                            markersModal.push(marker)
+                            markersModal.push(marker);
+                            userModelLocIds.push(e.userModelLoc[0].id);
                         }
 
                         // if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
@@ -523,6 +526,8 @@ $(function () {
     $("#user_center").click(function (){
         getUserPoi();
     })
+
+    var userModelLocIds;
 
     getPoi();
     getUserLoc();
