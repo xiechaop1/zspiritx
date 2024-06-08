@@ -1019,6 +1019,8 @@ class DoApi extends ApiAction
             $storyModelParams['i'] = $i;
             $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
 
+            $storyModel1->icon = Attachment::completeUrl($storyModel1->icon, true);
+
             if (!empty($storyModel1->dialog)) {
                 if (!empty($storyModelProp['qa_random'])) {
                     $qaRandom = $storyModelProp['qa_random'];
