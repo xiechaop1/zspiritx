@@ -701,6 +701,7 @@ class DoApi extends ApiAction
         }
 
         foreach ($sessoinStages as $sessionStage) {
+            $stageUIdTemplate = $sessionStage->stage->stage_u_id;
             $sessionModels = $sessionStage->models;
             $models = [];
             if (!empty($sessionModels)) {
@@ -818,7 +819,7 @@ class DoApi extends ApiAction
                                     if (!empty($userModelLocRet['location'])
                                         && $hasLoc == 0
                                     ) {
-                                        $tmpSessionStageUId = $tmpSessionStage['stage_u_id'];
+                                        $tmpSessionStageUId = $stageUIdTemplate;
                                         $tmpStageUId = str_replace('{$location_id}', $userModelLocRet['location']['id'], $tmpSessionStageUId);
                                         if ($tmpStageUId != $stageUId) {
                                             continue;
