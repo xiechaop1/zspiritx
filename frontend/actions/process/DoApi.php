@@ -617,19 +617,24 @@ class DoApi extends ApiAction
                     foreach ($setResult['result'] as $locId => $userModelLocCollections) {
                         foreach ($userModelLocCollections as $userModelLocRets) {
                             foreach ($userModelLocRets['userModelLoc'] as $userModelLocRet) {
-                                $stageArray = $stageArrayTmp;
-                                if ($userModelLocRet->story_stage_id == $sessionStage->story_stage_id) {
-                                    $hasLoc = 1;
-                                    $stageArray['lng'] = $userModelLocRets['location']['lng'];
-                                    $stageArray['lat'] = $userModelLocRets['location']['lat'];
-                                    $stageArray['scan_type'] = StoryStages::SCAN_TYPE_LATLNG;
-                                    if (empty($stageArray['misrange'])) {
-                                        $stageArray['misrange'] = 100;
-                                    }
+                                if ($userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                                    || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                                    || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_STORY
+                                ) {
+                                    $stageArray = $stageArrayTmp;
+                                    if ($userModelLocRet->story_stage_id == $sessionStage->story_stage_id) {
+                                        $hasLoc = 1;
+                                        $stageArray['lng'] = $userModelLocRets['location']['lng'];
+                                        $stageArray['lat'] = $userModelLocRets['location']['lat'];
+                                        $stageArray['scan_type'] = StoryStages::SCAN_TYPE_LATLNG;
+                                        if (empty($stageArray['misrange'])) {
+                                            $stageArray['misrange'] = 100;
+                                        }
 
-                                    $stageArray['stage_u_id'] = str_replace('{$location_id}', $userModelLocRets['location']['id'], $stageArray['stage_u_id']);
-                                    $sessionStageArray['stage'] = $stageArray;
-                                    $ret[] = $sessionStageArray;
+                                        $stageArray['stage_u_id'] = str_replace('{$location_id}', $userModelLocRets['location']['id'], $stageArray['stage_u_id']);
+                                        $sessionStageArray['stage'] = $stageArray;
+                                        $ret[] = $sessionStageArray;
+                                    }
                                 }
                             }
                         }
