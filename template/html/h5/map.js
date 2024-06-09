@@ -317,6 +317,7 @@ $(function () {
                                 active_class:e.userModelLoc[0].active_class,
                                 id: e.userModelLoc[0].id,
                                 name: e.userModelLoc[0].storyModel.story_model_name,
+                                location_name:e.location.location_name,
                                 latitude: e.location.lat,
                                 longitude: e.location.lng,
                                 width: 80,
@@ -451,7 +452,7 @@ $(function () {
     function drawUserModals(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
-                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'">' +
+                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'" data-loc-name="'+marker.location_name+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -636,6 +637,7 @@ function showPoiDetail(e) {
     var user_id=$("input[name='user_id']").val();
     var type=me.attr("data-type");
     var name=me.attr("data-name");
+    var location_name=me.attr("data-loc-name");
     var id=me.attr("data-id");
     var url=me.attr("data-url");
     var btn=me.attr("data-btn");
@@ -643,7 +645,12 @@ function showPoiDetail(e) {
     var target_lng=me.attr("data-lng");
     console.log(name,type,id,btn)
     if(type==2){
-        $("#modal-detail .map-text-context").empty().text(name);
+        $("#modal-detail .map-text-context").empty().text(location_name + "<br>" + name);
+        $("#modal-detail .btn-battle").attr("data-url",url);
+        $("#modal-detail .btn-battle").empty().text(btn);
+        $("#modal-detail").modal('show');
+    } else {
+        $("#modal-detail .map-text-context").empty().text(location_name);
         $("#modal-detail .btn-battle").attr("data-url",url);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
