@@ -645,7 +645,7 @@ function showPoiDetail(e) {
     var target_lng=me.attr("data-lng");
     console.log(name,type,id,btn)
     if(type==2){
-        $("#modal-detail .map-text-context").empty().text(location_name + "<br>" + name);
+        $("#modal-detail .map-text-context").empty().html(location_name + "<br>" + name);
         $("#modal-detail .btn-battle").attr("data-url",url);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
