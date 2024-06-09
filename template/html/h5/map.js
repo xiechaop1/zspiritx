@@ -650,19 +650,20 @@ function showPoiDetail(e) {
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
     } else {
+        url = "/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng;
         $("#modal-detail .map-text-context").empty().text(location_name);
         $("#modal-detail .btn-battle").attr("data-url",url);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
     }
-    else{
-        var params = {
-            'user_model_loc_id':id
-        }
-        var data=$.toJSON(params);
-        Unity.call(data);
-        window.location.href="/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng
-    }
+    // else{
+    //     var params = {
+    //         'user_model_loc_id':id
+    //     }
+    //     var data=$.toJSON(params);
+    //     Unity.call(data);
+    //     window.location.href="/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng
+    // }
 }
 
 
