@@ -358,7 +358,11 @@ class Model
 
     public static function addUserModelPropCol($userModel, $col, $addition = 1, $att = 'user_model_prop') {
         $userModelProp = self::getUserModelProp($userModel, $att);
-        $userModelProp['prop'][$col] += $addition;
+        if (!empty($userModelProp['prop'][$col])) {
+            $userModelProp['prop'][$col] += $addition;
+        } else {
+            $userModelProp['prop'][$col] = $addition;
+        }
         $userModel->$att = json_encode($userModelProp);
         return $userModel;
     }
