@@ -872,18 +872,19 @@ class DoApi extends ApiAction
                                             $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
                                         }
 
-                                    }
-                                    if (!empty($userModelLocRet['userModelLoc']->active_class)
-                                        &&
-                                        ($userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
-                                            || $userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
-                                        )
-                                    ) {
-                                        $sModels[] = [
-                                            'story_model' => $this->_setStoryModelToStage($storyModel2, $storyModelParams, $params1),
-                                            'user_model_loc' => $userModelLocRet['userModelLoc'],
-                                            'location' => $location,
-                                        ];
+                                        if (!empty($userModelLocRet['userModelLoc']->active_class)
+                                            &&
+                                            ($userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                                                || $userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                                            )
+                                        ) {
+                                            $sModels[] = [
+                                                'story_model' => $this->_setStoryModelToStage($storyModel2, $storyModelParams, $params1),
+                                                'user_model_loc' => $userModelLocRet['userModelLoc'],
+                                                'location' => $location,
+                                            ];
+                                        }
+
                                     }
 //                                }
                                 }
