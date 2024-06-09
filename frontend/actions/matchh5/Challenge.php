@@ -60,9 +60,10 @@ class Challenge extends Action
             ])
             ->one();
 
-        $qa = $qa->toArray();
-
-        $qa['selected_json'] = \common\helpers\Common::isJson($qa['selected']) ? json_decode($qa['selected'], true) : $qa['selected'];
+        if (!empty($qa)) {
+            $qa = $qa->toArray();
+            $qa['selected_json'] = \common\helpers\Common::isJson($qa['selected']) ? json_decode($qa['selected'], true) : $qa['selected'];
+        }
 
         $storyMatch = StoryMatch::find()
             ->where([

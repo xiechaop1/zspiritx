@@ -589,6 +589,10 @@ class DoApi extends ApiAction
             $setResult = Yii::$app->userModels->setUserModelToLoc($storyId, 0, $userLng, $userLat, 0, 1000, 30);
         }
 
+        $user = User::find()->where(['id' => $userId])->one();
+        $userLng = $user->home_lng;
+        $userLat = $user->home_lat;
+
         $sessionStages = SessionStages::find()
             ->where([
                 'session_id' => (int)$sessionId,
@@ -617,6 +621,17 @@ class DoApi extends ApiAction
                     foreach ($setResult['result'] as $locId => $userModelLocCollections) {
                         foreach ($userModelLocCollections as $userModelLocRets) {
                             foreach ($userModelLocRets['userModelLoc'] as $userModelLocRet) {
+
+                                if (!empty($userModelLocRets['location'])) {
+                                    // 家周围150米之内不出现扩展stage
+                                    $dis = \common\helpers\Common::computeDistanceWithLatLng(
+                                        $userModelLocRets['location']['lng'], $userModelLocRets['location']['lat'],
+                                        $userLng, $userLat, 1, 0);
+                                    if ($dis <= 150) {
+                                        continue;
+                                    }
+                                }
+
                                 if ($userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
                                     || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
                                     || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_STORY
