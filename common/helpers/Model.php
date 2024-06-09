@@ -364,7 +364,11 @@ class Model
     }
 
     public static function addUserModelPropColWithPropJson($userModelProp, $col, $addition = 1) {
-        $userModelProp['prop'][$col] += $addition;
+        if (!empty($userModelProp['prop'][$col])) {
+            $userModelProp['prop'][$col] += $addition;
+        } else {
+            $userModelProp['prop'][$col] = $addition;
+        }
         return $userModelProp;
     }
 
