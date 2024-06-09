@@ -621,18 +621,18 @@ class DoApi extends ApiAction
                 if (!empty($stageArrayTmp['bgm'])) {
                     $stageArrayTmp['bgm'] = Attachment::completeUrl($stageArrayTmp['bgm'], false);
                 }
-                if (!empty($setResult)) {
+                if (!empty($setResult) && $stageArrayTmp['stage_class'] == StoryStages::STAGE_CLASS_EXTEND) {
 
                     foreach ($setResult['result'] as $locId => $userModelLocCollections) {
                         foreach ($userModelLocCollections as $userModelLocRets) {
                             foreach ($userModelLocRets['userModelLoc'] as $userModelLocRet) {
 
                                 if (!empty($userModelLocRets['location'])) {
-                                    // 家周围150米之内不出现扩展stage
+                                    // 家周围100米之内不出现扩展stage
                                     $dis = \common\helpers\Common::computeDistanceWithLatLng(
                                         $userModelLocRets['location']['lng'], $userModelLocRets['location']['lat'],
                                         $userLng, $userLat, 1, 0);
-                                    if ($dis <= 150) {
+                                    if ($dis <= 100) {
                                         continue;
                                     }
                                 }
