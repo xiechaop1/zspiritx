@@ -587,11 +587,16 @@ class DoApi extends ApiAction
 
 //            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, StoryModels::STORY_MODEL_CLASS_RIVAL, 1000, 30);
             $setResult = Yii::$app->userModels->setUserModelToLoc($storyId, 0, $userLng, $userLat, 0, 1000, 30);
+
+            $user = User::find()->where(['id' => $userId])->one();
+            if (empty($user->home_lng) || empty($user->home_lat)) {
+                $user->home_lng = $userLng;
+                $user->home_lat = $userLat;
+                $user->save();
+            }
         }
 
-        $user = User::find()->where(['id' => $userId])->one();
-        $userLng = $user->home_lng;
-        $userLat = $user->home_lat;
+
 
         $sessionStages = SessionStages::find()
             ->where([
