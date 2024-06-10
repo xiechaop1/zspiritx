@@ -1134,11 +1134,13 @@ class DoApi extends ApiAction
         }
 
         $uniqueList = [];
+        $ret2 = [];
         if (!empty($ret)) {
             foreach ($ret as &$row) {
                 foreach ($row as &$row1) {
                     foreach ($row1['userModelLoc'] as &$row2) {
 
+                        $row2['is_show'] = true;
                         if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE
                             || $row2->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
                         ) {
@@ -1147,7 +1149,7 @@ class DoApi extends ApiAction
                                 $uniqueList = $uniqueRet['uniqueList'];
                                 $uniqueCheck = $uniqueRet['ret'];
                                 if (!$uniqueCheck) {
-                                    continue;
+                                    $row2['is_show'] = false;
                                 }
                             }
                         }
