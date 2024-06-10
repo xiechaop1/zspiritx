@@ -1140,7 +1140,7 @@ class DoApi extends ApiAction
                 foreach ($row as &$row1) {
                     $tmp2 = [];
                     foreach ($row1['userModelLoc'] as &$row2) {
-                        $row2->is_show=true;
+                        $isShow = true;
                         if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE
                             || $row2->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
                         ) {
@@ -1149,12 +1149,15 @@ class DoApi extends ApiAction
                                 $uniqueList = $uniqueRet['uniqueList'];
                                 $uniqueCheck = $uniqueRet['ret'];
                                 if (!$uniqueCheck) {
-                                    $row2->is_show=false;
+                                    $isShow = false;
                                 }
                             }
                         }
 
                         $tmp = $row2->toArray();
+
+                        $tmp['is_show'] = $isShow;
+
                         $tmp['storyModel']  = $row2->storyModel->toArray();
                         $tmp['storyModel']['icon'] = Attachment::completeUrl($tmp['storyModel']['icon'], true);
 
