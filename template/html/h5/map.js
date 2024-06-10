@@ -311,6 +311,7 @@ $(function () {
                         var e=obj.data[i][0];
                         if(e.location.lat!=null&&e.location.lng!=null
                             && userModelLocIds.includes(e.userModelLoc[0].id)==false
+                            && e.userModelLoc[0].is_show == true
                         ){
                             var marker = {
                                 iconPath: e.userModelLoc[0].storyModel.icon,
