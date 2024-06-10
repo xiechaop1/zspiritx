@@ -754,6 +754,10 @@ $this->title = $storyMatch->match_name;
     function showSubject(idx) {
         var topic = obj[idx].formula;
         console.log(topic);
+        if (topic == undefined) {
+            idx = 0;
+            var topic = obj[idx].formula;
+        }
         $('#topic').html(topic);
 
         $('#subj_idx').val(idx);

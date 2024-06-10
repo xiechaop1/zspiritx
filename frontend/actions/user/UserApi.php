@@ -644,7 +644,7 @@ class UserApi extends ApiAction
                 $stageClass = StoryStages::STAGE_CLASS_EXTEND;
             }
             $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
-                . ' WHERE story_id = ' . $storyId . ' AND stage_class = ' . $stageClass
+                . ' WHERE story_id = ' . $storyId . ' AND id <> 66 AND stage_class = ' . $stageClass
                 . ' AND ('
                 . '(scan_type = ' . StoryStages::SCAN_TYPE_IMAGE . ')'
                 . ' OR '
