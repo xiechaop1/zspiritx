@@ -1141,7 +1141,8 @@ class DoApi extends ApiAction
                     $tmp2 = [];
                     foreach ($row1['userModelLoc'] as &$row2) {
                         $isShow = true;
-                        if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE
+                        if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                            || $row2->active_class == UserModelLoc::ACTIVE_CLASS_STORY
                             || $row2->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
                         ) {
                             $uniqueRet = Yii::$app->userModels->checkUniqueUserModelLocWithLngLat($row1['location']['lng'], $row1['location']['lat'], $uniqueList);
