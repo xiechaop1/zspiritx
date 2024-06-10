@@ -22,6 +22,7 @@ use yii\web\NotFoundHttpException;
 class Compass extends Action
 {
 
+    public $tpl = 'compass';
     
     public function run()
     {
@@ -36,7 +37,8 @@ class Compass extends Action
         $targetLat = !empty($_GET['target_lat']) ? $_GET['target_lat'] : 0;
         $disRange = !empty($_GET['dis_range']) ? $_GET['dis_range'] : 0;
 
-        return $this->controller->render('compass', [
+
+        return $this->controller->render($this->tpl, [
             'userId'        => $userId,
             'storyId'       => $storyId,
             'sessionId'     => $sessionId,

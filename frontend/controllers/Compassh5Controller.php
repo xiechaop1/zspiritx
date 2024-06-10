@@ -24,6 +24,10 @@ class Compassh5Controller extends Controller
             'compass' => [
                 'class' => 'frontend\actions\compassh5\Compass',
             ],
+            'compass1' => [
+                'class' => 'frontend\actions\compassh5\Compass',
+                'tpl' => 'compass1',
+            ],
 
         ];
     }
