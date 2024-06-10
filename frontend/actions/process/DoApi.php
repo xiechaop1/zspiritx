@@ -1233,7 +1233,7 @@ class DoApi extends ApiAction
                         }
 
                         $row2 = $tmp;
-                        $tmp2 = $row2;
+                        $tmp2[] = $row2;
                     }
                     $row1['userModelLoc'] = $tmp2;
 
