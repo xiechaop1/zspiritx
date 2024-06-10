@@ -612,6 +612,7 @@ class DoApi extends ApiAction
             ->all();
 
         $ret = [];
+        $uniqueList = [];
         if (!empty($sessionStages)) {
             foreach ($sessionStages as $sessionStage) {
                 $hasLoc = 0;
@@ -641,6 +642,16 @@ class DoApi extends ApiAction
                                     || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
                                     || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_STORY
                                 ) {
+
+                                    $uniqueRet = Yii::$app->userModels->checkUniqueUserModelLocWithLngLat($userModelLocRets['location']['lng'], $userModelLocRets['location']['lat'], $uniqueList);
+                                    if (!empty($uniqueRet)) {
+                                        $uniqueList = $uniqueRet['uniqueList'];
+                                        $uniqueCheck = $uniqueRet['ret'];
+                                        if (!$uniqueCheck) {
+                                            continue;
+                                        }
+                                    }
+
                                     $stageArray = $stageArrayTmp;
                                     if ($userModelLocRet->story_stage_id == $sessionStage->story_stage_id) {
                                         $hasLoc = 1;
@@ -1107,6 +1118,8 @@ class DoApi extends ApiAction
 
         $userModelLoc = Yii::$app->userModels->getUserModelLocByUserId($userId, UserModelLoc::USER_MODEL_LOC_STATUS_LIVE);
 
+        $user = User::find()->where(['id' => $userId])->one();
+
         $ret = [];
 
         if (!empty($userModelLoc)) {
@@ -1120,10 +1133,25 @@ class DoApi extends ApiAction
             $ret = $temp['result'];
         }
 
+        $uniqueList = [];
         if (!empty($ret)) {
             foreach ($ret as &$row) {
                 foreach ($row as &$row1) {
                     foreach ($row1['userModelLoc'] as &$row2) {
+
+                        if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE
+                            || $row2->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                        ) {
+                            $uniqueRet = Yii::$app->userModels->checkUniqueUserModelLocWithLngLat($row1['location']['lng'], $row1['location']['lat'], $uniqueList);
+                            if (!empty($uniqueRet)) {
+                                $uniqueList = $uniqueRet['uniqueList'];
+                                $uniqueCheck = $uniqueRet['ret'];
+                                if (!$uniqueCheck) {
+                                    continue;
+                                }
+                            }
+                        }
+
                         $tmp = $row2->toArray();
                         $tmp['storyModel']  = $row2->storyModel->toArray();
                         $tmp['storyModel']['icon'] = Attachment::completeUrl($tmp['storyModel']['icon'], true);

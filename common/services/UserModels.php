@@ -137,6 +137,32 @@ class UserModels extends Component
 
     }
 
+    public function checkUniqueUserModelLocWithLngLat($locLng, $locLat, $uniqueList, $radius = 50, $userId = 0) {
+        if (!empty($uniqueList)) {
+            foreach ($uniqueList as $uniOne) {
+                $uniLng = !empty($uniOne['lng']) ? $uniOne['lng'] : 0;
+                $uniLat = !empty($uniOne['lat']) ? $uniOne['lat'] : 0;
+
+                $dis = \common\helpers\Common::computeDistanceWithLatLng($locLng, $locLat, $uniLng, $uniLat, 1, 0);
+                if ($dis < $radius) {
+                    return [
+                        'uniqueList' => $uniqueList,
+                        'ret' => false,
+                    ];
+                }
+            }
+        }
+        $uniqueList[] = [
+            'lng' => $locLng,
+            'lat' => $locLat,
+        ];
+
+        return [
+            'uniqueList' => $uniqueList,
+            'ret' => true,
+        ];
+    }
+
     public function addUserModelLoc($userId, $userModelId,
                                     $locId, $amapPoiId, $storyId, $sessionId,
                                     $storyModelId, $storyStageId, $activeClass, $userModelProp, $userModelLocStatus = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE) {
