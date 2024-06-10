@@ -11,6 +11,9 @@ namespace common\models;
 
 class UserModelLoc extends \common\models\gii\UserModelLoc
 {
+
+    public $is_show;
+
     const USER_MODEL_LOC_STATUS_LIVE = 1;
     const USER_MODEL_LOC_STATUS_DEAD = 2;
 
