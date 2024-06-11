@@ -266,7 +266,7 @@
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
-                $.alert("网络异常，请检查网络情况");
+                // $.alert("网络异常，请检查网络情况");
             },
             success: function (data, status){
                 var dataContent=data;
@@ -278,8 +278,10 @@
                     var lat=obj.data.lat;
                     var lng=obj.data.lng;
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
-                        calculateAzimuth(lat,lng,target_lat,target_lng)
-
+                        // calculateAzimuth(lat,lng,target_lat,target_lng)
+                        calculateAzimuth(user_lat,user_lng,lat,lng)
+                        user_lat=lat;
+                        user_lng=lng;
                     }
                 }
                 //新消息获取失败
@@ -341,7 +343,7 @@
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
-                    $.alert("网络异常，请检查网络情况");
+                    // $.alert("网络异常，请检查网络情况");
                 },
                 success: function (data, status){
                     var dataContent=data;
