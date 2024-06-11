@@ -2251,7 +2251,7 @@ class DoApi extends ApiAction
                     }
                     $expirationInterval = 3600;
 
-                    if (!empty($storyModel->target_model_u_id)) {
+                    if ($storyModel->scan_type == StoryModels::SCAN_IMAGE_TYPE_MODEL_COMBINE !empty($storyModel->target_model_u_id)) {
                         Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $storyModel->target_model_u_id, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
                     }
                     Yii::$app->act->add((int)$this->_sessionId, 0, (int)$this->_storyId, (int)$this->_userId, $modelUId, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
