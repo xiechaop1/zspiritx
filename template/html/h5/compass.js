@@ -90,7 +90,7 @@
         'stroke-width': 0
     })
     redTriangle.degPosition = 0
-    compass.push(redTriangle)
+    // compass.push(redTriangle)
 
     var alphaText = compassPaper.text((paperWidth / 2), 880, '0°').attr({
         fill: 'white',
@@ -211,6 +211,96 @@
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
     }
+
+
+    function calculateAzimuth(lat1, lon1, lat2, lon2) {
+        var dLat = toRadians(lat2-lat1);
+        var dLon = toRadians(lon2-lon1);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        var R = 6371; // 地球半径，单位：公里
+        var d = R * c; // 两点之间的距离，单位：公里
+
+        var bearing = toDegrees(Math.atan2(Math.sin(dLon) * Math.cos(toRadians(lat2)),
+            Math.cos(toRadians(lat1)) * Math.sin(toRadians(lat2)) -
+            Math.sin(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.cos(dLon)));
+
+        if (bearing < 0) {
+            bearing = 360 + bearing;
+        }
+        redTriangle.transform('R' + (redTriangle.degPosition - bearing) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+
+        // return bearing;
+    }
+
+    function toRadians(angle) {
+        return angle * (Math.PI / 180);
+    }
+
+    function toDegrees(angle) {
+        return angle * (180 / Math.PI);
+    }
+
+    //初始化距离信息
+    var user_lng=$("input[name='user_lng']").val();
+    var user_lat=$("input[name='user_lat']").val();
+    var target_lng=$("input[name='target_lng']").val();
+    var target_lat=$("input[name='target_lat']").val();
+
+    calculateAzimuth(user_lat,user_lng,target_lat,target_lng);
+
+    //更具用户经纬度获取和目的地的信息
+    function getDirection(){
+        var user_id=$("input[name='user_id']").val();
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: 'https://h5.zspiritx.com.cn/user/get_user_loc',
+            data:{
+                user_id:user_id
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+                //新消息获取成功
+                if(obj["code"]==200){
+                    var lat=obj.data.lat;
+                    var lng=obj.data.lng;
+                    if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
+                        calculateAzimuth(lat,lng,target_lat,target_lng)
+
+                    }
+                }
+                //新消息获取失败
+                else{
+
+                }
+
+            }
+        });
+
+
+
+
+
+
+    }
+
+    //定时更新距离信息
+    setInterval(getDirection,500);
+
+
 
 
     $(function (){
