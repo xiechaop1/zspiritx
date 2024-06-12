@@ -645,7 +645,7 @@ function showPoiDetail(e) {
     var target_lat=me.attr("data-lat");
     var target_lng=me.attr("data-lng");
     console.log(name,type,id,btn)
-    window.location.href="/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng
+    // window.location.href="/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng
     if(type==2){
         $("#modal-detail .map-text-context").empty().html(location_name + "<br>" + name);
         $("#modal-detail .btn-battle").attr("data-url",url);
