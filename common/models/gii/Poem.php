@@ -32,8 +32,8 @@ class Poem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['poem_type', 'level', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'content', 'image', 'author', 'content', 'age', 'prop'], 'string'],
+            [['poem_type', 'level', 'poem_class', 'poem_class2', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'content', 'story', 'image', 'author', 'content', 'age', 'prop'], 'string'],
         ];
     }
 

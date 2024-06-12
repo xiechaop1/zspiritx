@@ -247,6 +247,82 @@ class ImportController extends Controller
 
     }
 
+    public function actionIdiom() {
+        $idiom = file('idiom.txt');
+        $idiomStory = file('idiom_story.txt');
+
+        $ret = [];
+        foreach ($idiom as $idiomOne) {
+            $idiomOne = str_replace("\n", '', $idiomOne);
+            if (preg_match('/(\d+) (.*)/', $idiomOne, $match)) {
+                $idiomClass = 500 + $match[1];
+                if ($idiomClass == 509) {
+                    $idiomClass = 508;
+                }
+                $idiomClass2 = 0;
+            }
+            if (preg_match('/【(.*?)】/', $idiomOne, $match)) {
+                $class2Txt = $match[1];
+
+                foreach (Poem::$poemClass22Name as $class2Id => $class2Name) {
+                    if (strpos($class2Txt, $class2Name) !== false) {
+                        $idiomClass2 = $class2Id;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            $ret[$idiomOne] = [
+                'class' => $idiomClass,
+                'class2' => $idiomClass2,
+            ];
+        }
+
+        foreach ($idiomStory as $idiomStoryOne) {
+            $idiomStoryOne = str_replace("\n", '', $idiomStoryOne);
+            if (preg_match('/(\d+)\. (.*)/', $idiomStoryOne, $match)) {
+                $idiom = $match[2];
+                $lastSentence = 0;
+                continue;
+            }
+            if (preg_match('/\[注释\](.*?)/', $idiomStoryOne, $match)) {
+                $prop['comment'] = $match[1];
+                $lastSentence = 1;
+                continue;
+            }
+            if ($lastSentence == 0) {
+                $story = $idiomStoryOne;
+            }
+            if ($lastSentence == 1) {
+                $prop['desc'] = $idiomStoryOne;
+
+                $ret[$idiom]['story'] = $story;
+                $ret[$idiom]['prop'] = json_encode($prop);
+
+            }
+        }
+
+//        var_dump($ret);
+
+        foreach ($ret as $idiom => $values) {
+            $model = new \common\models\Poem();
+            $model->title = $idiom;
+            $model->content = $idiom;
+            $model->poem_type = Poem::POEM_TYPE_IDIOM;
+            $model->poem_class = !empty($values['class']) ? $values['class'] : Poem::POEM_CLASS_IDIOM_NORMAL;
+            $model->poem_class2 = !empty($values['class2']) ? $values['class2'] : 0;
+            $model->story = !empty($values['story']) ? $values['story'] : '';
+            
+
+            $r = $model->save();
+            if (!$r) {
+                var_dump($model->getFirstErrors());
+            }
+        }
+
+    }
+
     public function actionPoem() {
         $poems = file('poem.txt');
 
