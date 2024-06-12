@@ -196,6 +196,8 @@ class UserModels extends Component
             }
         }
 
+        sort($locationIds);
+
         $userModelLocs = $this->getUserModelLocByLocIds($locationIds, UserModelLoc::USER_MODEL_LOC_STATUS_LIVE);
 
         $userModelLocsKv = [];
