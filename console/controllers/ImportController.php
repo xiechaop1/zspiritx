@@ -313,7 +313,7 @@ class ImportController extends Controller
             $model->poem_class = !empty($values['class']) ? $values['class'] : Poem::POEM_CLASS_IDIOM_NORMAL;
             $model->poem_class2 = !empty($values['class2']) ? $values['class2'] : 0;
             $model->story = !empty($values['story']) ? $values['story'] : '';
-            
+
 
             $r = $model->save();
             if (!$r) {

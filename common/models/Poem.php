@@ -25,6 +25,23 @@ class Poem extends \common\models\gii\Poem
         self::POEM_TYPE_IDIOM => '成语',
     ];
 
+    const POEM_ANSWER_TYPE_WORD             = 1; // 填字
+    const POEM_ANSWER_TYPE_SENTENCE         = 2; // 上下句
+    const POEM_ANSWER_TYPE_TITLE            = 30; // 猜名字
+    const POEM_ANSWER_TYPE_TITLE_FROM_IMAGE = 31; // 看图片猜名字
+    const POEM_ANSWER_TYPE_TITLE_FROM_STORY = 32; // 看故事猜名字
+    const POEM_ANSWER_TYPE_AUTHOR           = 40; // 猜作者
+
+
+    public static $poemAnswerType2Name = [
+        self::POEM_ANSWER_TYPE_WORD => '填字',
+        self::POEM_ANSWER_TYPE_SENTENCE => '上下句',
+        self::POEM_ANSWER_TYPE_TITLE => '猜名字',
+        self::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE => '看图片猜名字',
+        self::POEM_ANSWER_TYPE_TITLE_FROM_STORY => '看故事猜名字',
+        self::POEM_ANSWER_TYPE_AUTHOR => '猜作者',
+    ];
+
     const POEM_CLASS_IDIOM_NORMAL = 500; // 成语普通
     const POEM_CLASS_IDIOM_NUMBER = 501; // 成语数字
     const POEM_CLASS_IDIOM_ANIMAL = 502; // 成语动物

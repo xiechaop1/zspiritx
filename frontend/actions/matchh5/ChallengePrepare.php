@@ -64,6 +64,8 @@ class ChallengePrepare extends Action
 //        $rivalStoryModelDetailId = !empty($_GET['rival_story_model_detail_id']) ? $_GET['rival_story_model_detail_id'] : 0;
         $userModelIds = !empty($_GET['user_model_ids']) ? $_GET['user_model_ids'] : 0;
 
+        $answerType = !empty($_GET['answer_type']) ? $_GET['answer_type'] : 0;
+
         if (empty($userId) || empty($sessionId) || empty($storyId)) {
 //            throw new Exception('参数错误', ErrorCode::PARAMS_ERROR);
             return $this->renderErr('参数错误');
@@ -105,6 +107,12 @@ class ChallengePrepare extends Action
                 $matchClassId = array_rand(StoryMatch::$matchClassRandList);
                 $matchClass = StoryMatch::$matchClassRandList[$matchClassId];
             }
+
+            if (!empty($answerType)) {
+                $storyMatchProp['answer_type'] = $answerType;
+            }
+            $storyMatchProp = [];
+
             $storyMatch = new StoryMatch();
             $storyMatch->story_id = $storyId;
             $storyMatch->user_id = $userId;
@@ -112,6 +120,7 @@ class ChallengePrepare extends Action
             $storyMatch->match_name = $matchName;
             $storyMatch->match_type = StoryMatch::MATCH_TYPE_CHALLENGE;
             $storyMatch->match_class = $matchClass;
+            $storyMatch->story_match_prop = json_encode($storyMatchProp);
             $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PREPARE;
 //            $storyMatch->match_id = time() . rand(1000, 9999);
             $storyMatch->save();

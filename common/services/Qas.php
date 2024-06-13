@@ -45,13 +45,38 @@ class Qas extends Component
         return $ret;
     }
 
-    public function getPoemByRand($poemType = 0, $qaProp = [], $answerType = 0, $ts = 0, $qaType = Qa::QA_TYPE_VERIFYCODE, $qaSelected = []) {
+    public function getPoemByRand($poemType = 0, $poemClass = 0, $poemClass2 = 0, $qaProp = [], $answerType = 0, $ts = 0, $qaType = Qa::QA_TYPE_VERIFYCODE, $qaSelected = []) {
         if ($ts > 0) {
             srand($ts);
         }
 
-        $poem = Poem::find()
-            ->orderBy('rand()')
+        $poem = Poem::find();
+        if (!empty($poemType)) {
+            $poem = $poem->andFilterWhere([
+                'poem_type' => $poemType,
+            ]);
+        }
+        if (!empty($poemClass)) {
+            $poem = $poem->andFilterWhere([
+                'poem_class' => $poemClass,
+            ]);
+        }
+        if (!empty($poemClass2)) {
+            $poem = $poem->andFilterWhere([
+                'poem_class2' => $poemClass2,
+            ]);
+        }
+        if ($answerType == Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE) {
+            $poem = $poem->andFilterWhere([
+                '<>', 'image', '',
+            ]);
+        }
+        if ($answerType == Poem::POEM_ANSWER_TYPE_TITLE_FROM_STORY) {
+            $poem = $poem->andFilterWhere([
+                '<>', 'story', '',
+            ]);
+        }
+        $poem = $poem->orderBy('rand()')
             ->limit(1)
             ->one();
 
@@ -71,7 +96,7 @@ class Qas extends Component
             }
             $hole = !empty($qaProp['hole']) ? $qaProp['hole'] : 1;
         } else {
-            $answerType = empty($answerType) ? 1 : $answerType;
+            $answerType = empty($answerType) ? Poem::POEM_ANSWER_TYPE_WORD : $answerType;
             $hole = 1;
         }
 
@@ -80,15 +105,24 @@ class Qas extends Component
         $answer = [];
 //        $content = '';
         $content = $poem->content;
-        if ($answerType == 1) {
-            // 填字
-            $ret = $this->getWordFromSentence($content, $hole);
-        } elseif ($answerType == 2) {
-            // 猜上下句
-            $ret = $this->getSentence($content, $hole);
-        } elseif ($answerType == 3) {
-            // 猜标题/作者
-            $ret = $this->getPoemTitle($poem);
+        switch ($answerType) {
+            case Poem::POEM_ANSWER_TYPE_SENTENCE:
+                // 猜上下句
+                $ret = $this->getSentence($content, $hole, 0, $poem);
+                break;
+            case Poem::POEM_ANSWER_TYPE_TITLE:
+            case Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE:
+            case Poem::POEM_ANSWER_TYPE_TITLE_FROM_STORY:
+            case Poem::POEM_ANSWER_TYPE_AUTHOR:
+                // 猜标题 or 作者
+                $ret = $this->getPoemTitle($poem, $answerType);
+                break;
+            case Poem::POEM_ANSWER_TYPE_WORD:
+            default:
+                // 填字
+                $ret = $this->getWordFromSentence($content, $hole, 4, 0, $poem);
+                break;
+
         }
         return $ret;
     }
@@ -113,16 +147,8 @@ class Qas extends Component
 //        exit;
     }
 
-    public function getSimilarTitleFromPoem($ct = 3) {
-        for ($i=0; $i<$ct; $i++) {
-            $poemIds[] = rand(1,180);
-        }
-
-        $poems = Poem::find()
-            ->where([
-                'id' => $poemIds,
-            ])
-            ->all();
+    public function getSimilarTitleFromPoem($ct = 3, $answerType = 0, $rightPoem = null) {
+        $poems = $this->getSimilarPoems($ct, $rightPoem);
 
         $ret = [];
 
@@ -135,16 +161,8 @@ class Qas extends Component
         return $ret;
     }
 
-    public function getSimilarSentenceFromPoem($ct = 3) {
-        for ($i=0; $i<$ct; $i++) {
-            $poemIds[] = rand(1,180);
-        }
-
-        $poems = Poem::find()
-            ->where([
-                'id' => $poemIds,
-            ])
-            ->all();
+    public function getSimilarSentenceFromPoem($ct = 3, $rightPoem = null) {
+        $poems = $this->getSimilarPoems($ct, $rightPoem);
 
         $ret = [];
 
@@ -161,24 +179,21 @@ class Qas extends Component
         return $ret;
     }
 
-    public function getSimlarWordFromPoem($word, $ct = 3) {
+    public function getSimlarWordFromPoem($word, $ct = 3, $rightPoem = null) {
 
         // Todo：确定固定180首诗，随机抽取
         // 用代码的好处是，每次随机结果固定（srand设置）
-        for ($i=0; $i<$ct; $i++) {
-            $poemIds[] = rand(1,180);
-        }
+//        for ($i=0; $i<$ct; $i++) {
+//            $poemIds[] = rand(1,180);
+//        }
+
+        $poems = $this->getSimilarPoems($ct, $rightPoem);
 
 //        $poems = Poem::find()
-//            ->orderBy('rand()')
-//            ->limit($ct)
+//            ->where([
+//                'id' => $poemIds,
+//            ])
 //            ->all();
-
-        $poems = Poem::find()
-            ->where([
-                'id' => $poemIds,
-            ])
-            ->all();
 
 //        $pinyin = Yii::$app->chinesePinyin->transformWithoutTone($word, '', false);
 //        $wordList = Yii::$app->chinesePinyin->getWordFromPinyinWithoutTone($pinyin);
@@ -196,30 +211,61 @@ class Qas extends Component
         return $ret;
     }
 
-    public function getPoemTitle($poem) {
-        $chosen = rand(1,2);
+    public function getPoemTitle($poem, $answerType = 0) {
+        if ($answerType == 0) {
+//            $chosen = rand(1, 2);
+            $randAnswerType = [
+                Poem::POEM_ANSWER_TYPE_TITLE,
+                Poem::POEM_ANSWER_TYPE_AUTHOR,
+                Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE,
+                Poem::POEM_ANSWER_TYPE_TITLE_FROM_STORY,
+            ];
+            $answerTypeIdx = array_rand($randAnswerType);
+            $answerType = $randAnswerType[$answerTypeIdx];
+        }
 
         // 1. 猜标题
         $content = $poem->content;
-        $content = preg_replace('/([。？]+)/u', '${1}<br>', $content);if ($chosen == 1) {
-            $retTemp = $poem->title;
-            $answer[] = [
-                'title' => $poem->title,
-            ];
-            $stAnswer = $poem->title;
-//            $retTemp = str_replace($poem->title, '(?)', $retTemp);
-            $retTemp = $content;
-        } else {
-            // 2. 猜作者
-            $retTemp = $poem->author;
-            $answer[] = [
-                'author' => $poem->author,
-            ];
-            $stAnswer = $poem->author;
-            $retTemp = $content;
+        $content = preg_replace('/([。？]+)/u', '${1}<br>', $content);
+        switch ($answerType) {
+            case Poem::POEM_ANSWER_TYPE_AUTHOR:
+                // 2. 猜作者
+    //            $retTemp = $poem->author;
+                $answer[] = [
+                    'author' => $poem->author,
+                ];
+                $stAnswer = $poem->author;
+                $retTemp = $content;
+                break;
+            case Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE:
+                // 3. 看图片猜名字
+                $answer[] = [
+                    'title' => $poem->title,
+                ];
+                $stAnswer = $poem->title;
+                $retTemp = $poem->image;
+                break;
+            case Poem::POEM_ANSWER_TYPE_TITLE_FROM_STORY:
+                // 4. 看故事猜名字
+                $answer[] = [
+                    'title' => $poem->title,
+                ];
+                $stAnswer = $poem->title;
+                $retTemp = $poem->story;
+                break;
+            case Poem::POEM_ANSWER_TYPE_TITLE:
+            default:
+                //            $retTemp = $poem->title;
+                $answer[] = [
+                    'title' => $poem->title,
+                ];
+                $stAnswer = $poem->title;
+                //            $retTemp = str_replace($poem->title, '(?)', $retTemp);
+                $retTemp = $content;
+                break;
         }
 
-        $finalCollections = $this->getSimilarTitleFromPoem(3);
+        $finalCollections = $this->getSimilarTitleFromPoem(3, $answerType, $poem);
         $finalCollections[] = $stAnswer;
 
         shuffle($finalCollections);
@@ -235,7 +281,7 @@ class Qas extends Component
         return $ret;
     }
 
-    public function getSentence($content, $hole = 1, $ts = 0) {
+    public function getSentence($content, $hole = 1, $ts = 0, $rightPoem = null) {
 //        if ($ts > 0) {
 //            srand($ts);
 //        }
@@ -252,7 +298,7 @@ class Qas extends Component
 
             $answerIdx = array_rand($sentArray);
 
-            $similarCollections = $this->getSimilarSentenceFromPoem(3);
+            $similarCollections = $this->getSimilarSentenceFromPoem(3, $rightPoem);
 
             $answer[$answerIdx] = [
                 'i' => $answerIdx,
@@ -284,7 +330,7 @@ class Qas extends Component
 
     }
 
-    public function getWordFromSentence($content, $hole = 1, $resCt = 4, $ts = 0) {
+    public function getWordFromSentence($content, $hole = 1, $resCt = 4, $ts = 0, $rightPoem = null) {
 
 //        if ($ts > 0) {
 //            srand($ts);
@@ -318,7 +364,7 @@ class Qas extends Component
                     'i' => $rndCt,
                     'word' => $chosenWord,
 //                    'similarPinyin' => $this->getSimilarWord($chosenWord),
-                    'similar' => $this->getSimlarWordFromPoem($chosenWord, $resCt - 1),
+                    'similar' => $this->getSimlarWordFromPoem($chosenWord, $resCt - 1, $poem),
                 ];
             }
             asort($answer);
@@ -362,5 +408,56 @@ class Qas extends Component
         return $ret;
     }
 
+    public function getSimilarPoems($ct, $rightPoem = null) {
+        if (empty($rightPoem)) {
+            for ($i = 0; $i < $ct; $i++) {
+                $poemIds[] = rand(1, 180);
+            }
+
+            $poems = Poem::find()
+                ->where([
+                    'id' => $poemIds,
+                ])
+                ->all();
+        } else {
+            $rightPoemType = $rightPoem->type;
+            $rightPoemLevel = $rightPoem->level;
+            $rightPoemClass = $rightPoem->poem_class;
+            $rightPoemClass2 = $rightPoem->poem_class2;
+            $rightPoemId = $rightPoem->id;
+
+            $poems = Poem::find();
+            if (!empty($rightPoemType)) {
+                $poems = $poems->andFilterWhere([
+                    'poem_type' => $rightPoemType,
+                ]);
+            }
+            if (!empty($rightPoemLevel)) {
+                $poems = $poems->andFilterWhere([
+                    'level' => $rightPoemLevel,
+                ]);
+            }
+            if (!empty($rightPoemClass)) {
+                $poems = $poems->andFilterWhere([
+                    'poem_class' => $rightPoemClass,
+                ]);
+            }
+            if (!empty($rightPoemClass2)) {
+                $poems = $poems->andFilterWhere([
+                    'poem_class2' => $rightPoemClass2,
+                ]);
+            }
+            if (!empty($rightPoemId)) {
+                $poems = $poems->andFilterWhere([
+                    '<>', 'id', $rightPoemId,
+                ]);
+            }
+            $poems = $poems->orderBy('rand()')
+                ->limit($ct)
+                ->all();
+        }
+
+        return $poems;
+    }
 
 }

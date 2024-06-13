@@ -29,7 +29,7 @@ class StoryMatch extends \yii\db\ActiveRecord
 //                'team_id', 'poi_id',        // Todo：这里的字段需要根据实际情况修改
                 'user_model_id', 'score', 'score2',], 'integer'],
             [['created_at', 'updated_at', 'status', 'story_match_status', ], 'integer'],
-            [['match_name', 'match_detail', 'ret',
+            [['match_name', 'match_detail', 'ret', 'story_match_prop',
 //                'match_id',         // Todo：这里的字段需要根据实际情况修改
                 ], 'string'],
         ];

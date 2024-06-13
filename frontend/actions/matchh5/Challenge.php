@@ -17,6 +17,7 @@ use common\helpers\Cookie;
 use common\helpers\Model;
 use common\models\LotteryPrize;
 use common\models\Order;
+use common\models\Poem;
 use common\models\Story;
 use common\models\StoryMatch;
 use common\models\StoryMatchPlayer;
@@ -180,7 +181,7 @@ class Challenge extends Action
             for ($i=0; $i<1000; $i++) {
                 $subjects[] = $this->generateMath($level);
                 if ($i == 30) {
-                    $level = 2;
+                    $level++;
                     $subjects[] = $this->generateMath($level);
                 }
             }
@@ -196,10 +197,14 @@ class Challenge extends Action
             }
 
             for ($i=0; $i<100; $i++) {
-                $subjects[] = $this->generatePoem($level, 1);
+                $subjects[] = $this->generatePoem($level,
+                    [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+                    0, 0, Poem::POEM_ANSWER_TYPE_WORD);
                 if ($i == 10) {
-                    $level = 2;
-                    $subjects[] = $this->generatePoem($level,2);
+                    $level++;
+                    $subjects[] = $this->generatePoem($level,
+                        [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+                        0, 0,Poem::POEM_ANSWER_TYPE_SENTENCE);
                 }
             }
         } else {
@@ -236,8 +241,8 @@ class Challenge extends Action
         ]);
     }
 
-    public function generatePoem($level = 1, $answerType = 1) {
-        $poem = Yii::$app->qas->getPoemByRand(0, [], $answerType);
+    public function generatePoem($level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
+        $poem = Yii::$app->qas->getPoemByRand($poemType, $poemClass, $poemClass2, [], $answerType);
 
         $hitRange = [
             5 * (1 + ($level - 1) / 5),

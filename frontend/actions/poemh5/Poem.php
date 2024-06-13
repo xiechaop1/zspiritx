@@ -37,7 +37,7 @@ class Poem extends Action
 
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
 
-        $poemId = 0;
+        $poemId = !empty($_GET['poem_id']) ? $_GET['poem_id'] : 0;
         $poem = [];
 
         if (!empty($qaId)) {
@@ -62,7 +62,8 @@ class Poem extends Action
                     $propArray['hole'] = $hole;
                 }
 //                $selectedArray = json_decode($selectedJson, true);
-                $poemId = !empty($propArray['poem_id']) ? $propArray['poem_id'] : 0;
+//                $poemId = !empty($propArray['poem_id']) ? $propArray['poem_id'] : 0;
+                $poemId = empty($poemId) ? $propArray['poem_id'] : $poemId;
                 $poemRandom = !empty($propArray['poem_random']) ? $propArray['poem_random'] : 0;
                 $poemType = !empty($propArray['poem_type']) ? $propArray['poem_type'] : 0;
                 $poem = Yii::$app->qas->getPoemById($poemId, $propArray, 0, $poemType, $ts, $qaOne['qa_type'], $selectedArray);
