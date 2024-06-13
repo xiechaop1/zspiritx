@@ -242,7 +242,11 @@ class Challenge extends Action
     }
 
     public function generatePoem($level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
-        $poem = Yii::$app->qas->getPoemByRand($poemType, $poemClass, $poemClass2, [], $answerType);
+        $prop = [
+            'poem_class' => $poemClass,
+            'poem_class2' => $poemClass2,
+        ];
+        $poem = Yii::$app->qas->getPoemByRand($poemType, $prop, $answerType);
 
         $hitRange = [
             5 * (1 + ($level - 1) / 5),

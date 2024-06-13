@@ -38,6 +38,9 @@ class Poem extends Action
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
 
         $poemId = !empty($_GET['poem_id']) ? $_GET['poem_id'] : 0;
+        $poemRandom = !empty($_GET['poem_random']) ? $_GET['poem_random'] : 0;
+        $poemType = !empty($_GET['poem_type']) ? $_GET['poem_type'] : 0;
+        $answerType = !empty($_GET['answer_type']) ? $_GET['answer_type'] : 0;
         $poem = [];
 
         if (!empty($qaId)) {
@@ -63,10 +66,28 @@ class Poem extends Action
                 }
 //                $selectedArray = json_decode($selectedJson, true);
 //                $poemId = !empty($propArray['poem_id']) ? $propArray['poem_id'] : 0;
-                $poemId = empty($poemId) ? $propArray['poem_id'] : $poemId;
-                $poemRandom = !empty($propArray['poem_random']) ? $propArray['poem_random'] : 0;
-                $poemType = !empty($propArray['poem_type']) ? $propArray['poem_type'] : 0;
-                $poem = Yii::$app->qas->getPoemById($poemId, $propArray, 0, $poemType, $ts, $qaOne['qa_type'], $selectedArray);
+                if (empty($poemId) && !empty($propArray['poem_id'])) {
+                    $poemId = $propArray['poem_id'];
+                }
+                if (empty($poemRandom) && !empty($propArray['poem_random'])) {
+                    $poemRandom = $propArray['poem_random'];
+                }
+                if (empty($poemType) && !empty($propArray['poem_type'])) {
+                    $poemType = $propArray['poem_type'];
+                }
+
+                if (empty($answerType) && !empty($propArray['answer_type'])) {
+                    $answerType = $propArray['answer_type'];
+                }
+//                $poemId = empty($poemId) ? $propArray['poem_id'] : $poemId;
+//                $poemRandom = empty($poemRandom) ? $propArray['poem_random'] : $poemRandom;
+//                $poemType = empty($poemType) ? $propArray['poem_type'] : $poemType;
+                if (!empty($poemId)) {
+                    $poem = Yii::$app->qas->getPoemById($poemId, $propArray, $answerType, $poemType, $ts, $qaOne['qa_type'], $selectedArray);
+                } else {
+                    $poem = Yii::$app->qas->getPoemByRand($poemType, $propArray, $answerType, $ts, $qaOne['qa_type'], $selectedArray);
+                }
+
 
                 if (empty($poem)) {
                     throw new NotFoundHttpException('Poem not found');
