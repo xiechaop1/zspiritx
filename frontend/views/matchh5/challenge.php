@@ -210,9 +210,9 @@ $this->title = $storyMatch->match_name;
                     <div id="number-floater" style="position: absolute; color: #FFB94F; font-size: 48px; top: 36px; left: 180px; text-align: center; z-index: 9999999"></div>
                     <input type="hidden" id="subj_idx" value="0">
                     <div id="topic" style="font-size: 60px; text-align: center;"></div>
-<!--                    <div>-->
+                    <div id="image">
 <!--                        <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
-<!--                    </div>-->
+                    </div>
                     <!--<div class="hpa-ctr">
                         <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
                         播放语音
@@ -757,6 +757,12 @@ $this->title = $storyMatch->match_name;
         if (topic == undefined) {
             idx = 0;
             var topic = obj[idx].formula;
+        }
+        if (topic.indexOf('http') >= 0) {
+            $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
+            topic = '';
+        } else {
+            $('#image').html('');
         }
         $('#topic').html(topic);
 
