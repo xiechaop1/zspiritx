@@ -133,6 +133,18 @@
                                 'active' => in_array($this->context->route, ['qa/user_qa', ]),
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
+                            [
+                                'label' => '诗词列表',
+                                'url' => ['/qa/poem'],
+                                'active' => in_array($this->context->route, ['qa/poem', 'qa/poem_edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+//                            [
+//                                'label' => '诗词编辑',
+//                                'url' => ['/qa/poem_edit'],
+//                                'active' => in_array($this->context->route, ['qa/poem_edit' ]),
+//                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+//                            ],
                         ]
                     ],
                     [
