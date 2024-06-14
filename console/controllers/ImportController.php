@@ -285,6 +285,13 @@ class ImportController extends Controller
             if (preg_match('/(\d+)\. (.*)/', $idiomStoryOne, $match)) {
                 $idiom = $match[2];
                 $lastSentence = 0;
+
+                if (empty($ret[$idiom])) {
+                    $ret[$idiom] = [
+                        'class' => 0,
+                        'class2' => 0,
+                    ];
+                }
                 continue;
             }
             if (preg_match('/\[注释\](.*?)/', $idiomStoryOne, $match)) {
@@ -294,6 +301,8 @@ class ImportController extends Controller
             }
             if ($lastSentence == 0) {
                 $story = $idiomStoryOne;
+                $ret[$idiom]['story'] = $story;
+                $lastSentence = 1;
             }
             if ($lastSentence == 1) {
                 $prop['desc'] = $idiomStoryOne;
