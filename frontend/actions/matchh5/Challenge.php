@@ -221,13 +221,13 @@ class Challenge extends Action
                         case 2:
                             $subjects[] = $this->generatePoem($level,
                                 Poem::POEM_TYPE_IDIOM,
-                                0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                                0, 0, Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
                             break;
                         case 1:
                         default:
                             $subjects[] = $this->generatePoem($level,
                                 Poem::POEM_TYPE_IDIOM,
-                                0, 0,Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
+                                0, 0,Poem::POEM_ANSWER_TYPE_WORD);
                             break;
                     }
                     if ($i == 10) {
