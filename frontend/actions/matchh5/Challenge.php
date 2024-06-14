@@ -182,9 +182,9 @@ class Challenge extends Action
 
                 for ($i=0; $i<1000; $i++) {
                     $subjects[] = $this->generateMath($level);
-                    if ($i == 30) {
+                    if ($i == 15) {
                         $level++;
-                        $subjects[] = $this->generateMath($level);
+//                        $subjects[] = $this->generateMath($level);
                     }
                 }
                 break;
@@ -193,28 +193,45 @@ class Challenge extends Action
                 $subjects = [];
 
                 for ($i=0; $i<100; $i++) {
-                    $subjects[] = $this->generatePoem($level,
-                        [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
-                        0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                    switch ($level) {
+                        case 2:
+                            $subjects[] = $this->generatePoem($level,
+                                [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+                                0, 0, Poem::POEM_ANSWER_TYPE_SENTENCE);
+                            break;
+                        case 1:
+                        default:
+                            $subjects[] = $this->generatePoem($level,
+                                [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+                                0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                            break;
+                    }
                     if ($i == 10) {
                         $level++;
-                        $subjects[] = $this->generatePoem($level,
-                            [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
-                            0, 0,Poem::POEM_ANSWER_TYPE_SENTENCE);
+//                        $subjects[] = $this->generatePoem($level,
+//                            [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+//                            0, 0,Poem::POEM_ANSWER_TYPE_SENTENCE);
                     }
                 }
                 break;
             case StoryMatch::MATCH_CLASS_POEM_IDIOM:
                 $subjects = [];
                 for ($i=0; $i<100; $i++) {
-                    $subjects[] = $this->generatePoem($level,
-                        Poem::POEM_TYPE_IDIOM,
-                        0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                    switch ($level) {
+                        case 2:
+                            $subjects[] = $this->generatePoem($level,
+                                Poem::POEM_TYPE_IDIOM,
+                                0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                            break;
+                        case 1:
+                        default:
+                            $subjects[] = $this->generatePoem($level,
+                                Poem::POEM_TYPE_IDIOM,
+                                0, 0,Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
+                            break;
+                    }
                     if ($i == 10) {
                         $level++;
-                        $subjects[] = $this->generatePoem($level,
-                            Poem::POEM_TYPE_IDIOM,
-                            0, 0,Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
                     }
                 }
                 break;
