@@ -92,7 +92,7 @@ class PoemEdit extends Action
             $model->prop = var_export($model->prop, true);
         }
 
-        if (Common::isJson($model->story)) {
+        if (\common\helpers\Common::isJson($model->story)) {
             $model->story = var_export(json_decode($model->story, true), true);
         }
 
