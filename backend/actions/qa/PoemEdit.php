@@ -67,6 +67,10 @@ class PoemEdit extends Action
                 if (!empty($model->prop)) {
                     $model->prop = json_encode(eval("return {$model->prop};"));
                 }
+
+                if (!empty($model->story) && substr($model->story, 0, 5) == 'array') {
+                    $model->story = json_encode(eval("return {$model->story};"));
+                }
                 
                 if ($model->save()) {
 
@@ -86,6 +90,10 @@ class PoemEdit extends Action
         $model->prop = json_decode($model->prop, true);
         if (is_array($model->prop)) {
             $model->prop = var_export($model->prop, true);
+        }
+
+        if (Common::isJson($model->story)) {
+            $model->story = var_export(json_decode($model->story, true), true);
         }
 
         $poemTypes = ['0' => '全部'] + \common\models\Poem::$poemType2Name;

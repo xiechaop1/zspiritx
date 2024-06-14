@@ -260,6 +260,7 @@ class ImportController extends Controller
                     $idiomClass = 508;
                 }
                 $idiomClass2 = 0;
+                continue;
             }
             if (preg_match('/【(.*?)】/', $idiomOne, $match)) {
                 $class2Txt = $match[1];
@@ -303,17 +304,31 @@ class ImportController extends Controller
             }
         }
 
+
 //        var_dump($ret);
 
         foreach ($ret as $idiom => $values) {
-            $model = new \common\models\Poem();
+            $model = Poem::find()
+                ->where([
+                    'title' => $idiom,
+                    'poem_type' => Poem::POEM_TYPE_IDIOM,
+                ])
+                ->one();
+            if (empty($model)) {
+                echo '没有找到 ' . $idiom . ' 正在创建 ……' . "\n";
+                $model = new \common\models\Poem();
+            } else {
+                echo '没有找到 ' . $idiom . ' 正在更新 ……' . "\n";
+            }
             $model->title = $idiom;
             $model->content = $idiom;
             $model->poem_type = Poem::POEM_TYPE_IDIOM;
             $model->poem_class = !empty($values['class']) ? $values['class'] : Poem::POEM_CLASS_IDIOM_NORMAL;
             $model->poem_class2 = !empty($values['class2']) ? $values['class2'] : 0;
             $model->story = !empty($values['story']) ? $values['story'] : '';
+            $model->prop = !empty($values['prop']) ? $values['prop'] : '';
 
+            echo '正在保存 ' . $idiom . ' ……' . "\n";
 
             $r = $model->save();
             if (!$r) {
