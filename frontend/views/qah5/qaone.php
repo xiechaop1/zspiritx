@@ -230,7 +230,12 @@ $this->title = $qa['topic'];
 //                }
 
                 if ($inputType == 'radio') {
-                    $selected = explode("\n", $str);
+                    if (is_array($str)) {
+                        $opts = $str['selected'];
+                    } else {
+                        $opts = $str;
+                    }
+                    $selected = explode("\n", $opts);
 
                     $optstr = '';
                     foreach ($selected as $sel) {
