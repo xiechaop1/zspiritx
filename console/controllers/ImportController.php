@@ -318,7 +318,7 @@ class ImportController extends Controller
                 echo '没有找到 ' . $idiom . ' 正在创建 ……' . "\n";
                 $model = new \common\models\Poem();
             } else {
-                echo '没有找到 ' . $idiom . ' 正在更新 ……' . "\n";
+                echo '找到 ' . $idiom . ' 正在更新 ……' . "\n";
             }
             $model->title = $idiom;
             $model->content = $idiom;
