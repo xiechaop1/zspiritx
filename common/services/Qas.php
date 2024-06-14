@@ -10,6 +10,7 @@ namespace common\services;
 
 
 use common\definitions\ErrorCode;
+use common\helpers\Attachment;
 use common\models\Actions;
 use common\models\ItemKnowledge;
 use common\models\Poem;
@@ -249,7 +250,7 @@ class Qas extends Component
                     'title' => $poem->title,
                 ];
                 $stAnswer = $poem->title;
-                $retTemp = $poem->image;
+                $retTemp = Attachment::completeUrl($poem->image, true);
                 break;
             case Poem::POEM_ANSWER_TYPE_TITLE_FROM_STORY:
                 // 4. 看故事猜名字
@@ -281,6 +282,7 @@ class Qas extends Component
             'answer' => $answer,
             'stAnswer' => $stAnswer,
             'poem' => $poem->content,
+            'data' => $poem,
             'selections' => $finalCollections,
         ];
 

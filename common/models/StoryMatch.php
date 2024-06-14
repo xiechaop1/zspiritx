@@ -26,6 +26,8 @@ class StoryMatch extends \common\models\gii\StoryMatch
     const MATCH_CLASS_MATH          = 20; // 数学
     const MATCH_CLASS_ENGLISH       = 30; // 英语
     const MATCH_CLASS_CHINESE       = 40; // 语文
+    const MATCH_CLASS_POEM          = 41; // 诗词
+    const MATCH_CLASS_POEM_IDIOM    = 42; // 成语
     const MATCH_CLASS_HISTORY       = 50; // 历史
     const MATCH_CLASS_PHYSICS       = 60; // 物理
 
@@ -34,15 +36,19 @@ class StoryMatch extends \common\models\gii\StoryMatch
         self::MATCH_CLASS_MATH => '数学',
         self::MATCH_CLASS_ENGLISH => '英语',
         self::MATCH_CLASS_CHINESE => '语文',
+        self::MATCH_CLASS_POEM => '诗词',
+        self::MATCH_CLASS_POEM_IDIOM => '成语',
         self::MATCH_CLASS_HISTORY => '历史',
         self::MATCH_CLASS_PHYSICS => '物理',
     ];
 
     public static $matchClassRandList = [
         self::MATCH_CLASS_MATH,
-        self::MATCH_CLASS_ENGLISH,
-        self::MATCH_CLASS_CHINESE,
-        self::MATCH_CLASS_HISTORY,
+//        self::MATCH_CLASS_ENGLISH,
+//        self::MATCH_CLASS_CHINESE,
+        self::MATCH_CLASS_POEM,
+        self::MATCH_CLASS_POEM_IDIOM,
+//        self::MATCH_CLASS_HISTORY,
     ];
 
     const STORY_MATCH_STATUS_PREPARE = 1; // 准备

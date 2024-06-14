@@ -165,50 +165,61 @@ class Challenge extends Action
 //            var_dump($rivalPlayers);exit;
         }
 
-        if ($storyMatch->match_class == StoryMatch::MATCH_CLASS_MATH) {
-            // 数学
-            // 生成1000道数学题
-            $subjects = [];
+        $level = 1;
+        switch ($grade) {
+            case 1:
+            default:
+                $level = 1;
+                break;
+        }
 
-            $level = 1;
-            switch ($grade) {
-                case 1:
-                default:
-                    $level = 1;
-                    break;
-            }
+        switch ($storyMatch->match_class) {
+            case StoryMatch::MATCH_CLASS_MATH:
+                // 数学
+                // 生成1000道数学题
+                $subjects = [];
 
-            for ($i=0; $i<1000; $i++) {
-                $subjects[] = $this->generateMath($level);
-                if ($i == 30) {
-                    $level++;
+
+                for ($i=0; $i<1000; $i++) {
                     $subjects[] = $this->generateMath($level);
+                    if ($i == 30) {
+                        $level++;
+                        $subjects[] = $this->generateMath($level);
+                    }
                 }
-            }
-        } elseif ($storyMatch->match_class == StoryMatch::MATCH_CLASS_CHINESE) {
-            // 生成1000道诗词题
-            $subjects = [];
-            $level = 1;
-            switch ($grade) {
-                case 1:
-                default:
-                    $level = 1;
-                    break;
-            }
+                break;
+            case StoryMatch::MATCH_CLASS_POEM:
+                // 生成1000道诗词题
+                $subjects = [];
 
-            for ($i=0; $i<100; $i++) {
-                $subjects[] = $this->generatePoem($level,
-                    [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
-                    0, 0, Poem::POEM_ANSWER_TYPE_WORD);
-                if ($i == 10) {
-                    $level++;
+                for ($i=0; $i<100; $i++) {
                     $subjects[] = $this->generatePoem($level,
                         [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
-                        0, 0,Poem::POEM_ANSWER_TYPE_SENTENCE);
+                        0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                    if ($i == 10) {
+                        $level++;
+                        $subjects[] = $this->generatePoem($level,
+                            [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+                            0, 0,Poem::POEM_ANSWER_TYPE_SENTENCE);
+                    }
                 }
-            }
-        } else {
-            return $this->renderErr('比赛类型不支持！');
+                break;
+            case StoryMatch::MATCH_CLASS_POEM_IDIOM:
+                $subjects = [];
+                for ($i=0; $i<100; $i++) {
+                    $subjects[] = $this->generatePoem($level,
+                        Poem::POEM_TYPE_IDIOM,
+                        0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                    if ($i == 10) {
+                        $level++;
+                        $subjects[] = $this->generatePoem($level,
+                            Poem::POEM_TYPE_IDIOM,
+                            0, 0,Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
+                    }
+                }
+                break;
+            default:
+                return $this->renderErr('比赛类型不支持！');
 
         }
 

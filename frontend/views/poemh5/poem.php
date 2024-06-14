@@ -188,9 +188,9 @@ $this->title = '诗词闯关';
                     <div class="npc-name" style="right: 60px;" id="qa_return_btn">
                         X
                     </div>
-                     <?= $poem['formula'] ?>
+                     <?= (!\common\helpers\Common::isUrl($poem['formula'])) ? $poem['formula'] : '' ?>
                     <div>
-<!--                     <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
+                     <img src=" <?= \common\helpers\Attachment::completeUrl($poem['data']->image, true ) ?>" width="100" alt="" class="img-responsive d-block"/>
                     </div>
                     <!--<div class="hpa-ctr">
                         <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>

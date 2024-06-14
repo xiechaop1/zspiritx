@@ -210,6 +210,10 @@ class Common
         return false;
     }
 
+    public static function isUrl($url) {
+        return filter_var($url, FILTER_VALIDATE_URL) !== false;
+    }
+
     public static function isJson($str) {
         $r = json_decode($str, true);
         if (json_last_error() == JSON_ERROR_NONE
