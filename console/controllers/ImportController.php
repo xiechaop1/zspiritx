@@ -280,9 +280,11 @@ class ImportController extends Controller
             ];
         }
 
+        $line = 0;
         foreach ($idiomStory as $idiomStoryOne) {
             $idiomStoryOne = str_replace("\n", '', $idiomStoryOne);
             if (preg_match('/(\d+)\. (.*)/', $idiomStoryOne, $match)) {
+                $line = 1;
                 $idiom = $match[2];
                 $lastSentence = 0;
 
@@ -294,23 +296,39 @@ class ImportController extends Controller
                 }
                 continue;
             }
-            if (preg_match('/\[注释\](.*?)/', $idiomStoryOne, $match)) {
+            if ($line >= 2 && preg_match('/\[注释\](.*?)/', $idiomStoryOne, $match)) {
+                $line++;
                 $prop['comment'] = $match[1];
+                $ret[$idiom]['prop'] = json_encode($prop, JSON_UNESCAPED_UNICODE);
                 $lastSentence = 1;
                 continue;
             }
-            if ($lastSentence == 0) {
+            if ($line >= 2 &&
+                (mb_strpos($idiomStoryOne, '形容') !== false
+                    || mb_strpos($idiomStoryOne, '比喻') !== false
+                )) {
+                $line++;
+                $prop['desc'] = $idiomStoryOne;
+                $ret[$idiom]['prop'] = json_encode($prop, JSON_UNESCAPED_UNICODE);
+                continue;
+            }
+            if ($line >= 1) {
+                $line++;
                 $story = $idiomStoryOne;
-                $ret[$idiom]['story'] = $story;
+                if (empty($ret[$idiom]['story'])) {
+                    $ret[$idiom]['story'] = $story;
+                } else {
+                    $ret[$idiom]['story'] .= "\n" . $story;
+                }
                 $lastSentence = 1;
             }
-            if ($lastSentence == 1) {
-                $prop['desc'] = $idiomStoryOne;
-
-                $ret[$idiom]['story'] = $story;
-                $ret[$idiom]['prop'] = json_encode($prop);
-
-            }
+//            if ($lastSentence == 1) {
+//                $prop['desc'] = $idiomStoryOne;
+//
+//                $ret[$idiom]['story'] = $story;
+//                $ret[$idiom]['prop'] = json_encode($prop, JSON_UNESCAPED_UNICODE);
+//
+//            }
         }
 
 

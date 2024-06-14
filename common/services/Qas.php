@@ -258,7 +258,7 @@ class Qas extends Component
                     'title' => $poem->title,
                 ];
                 $stAnswer = $poem->title;
-                $retTemp = $poem->story;
+                $retTemp = str_replace("\n", "<br>", $poem->story);
                 break;
             case Poem::POEM_ANSWER_TYPE_TITLE:
             default:
