@@ -25,6 +25,7 @@ use common\models\User;
 //use liyifei\base\actions\ApiAction;
 use common\models\UserKnowledge;
 use common\models\UserList;
+use common\models\UserModelLoc;
 use common\models\UserScore;
 use common\models\UserStory;
 use common\models\UserLoc;
@@ -637,34 +638,53 @@ class UserApi extends ApiAction
 //            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
 
             // Todo：临时处理，直接调用Location，正确的应该是从Cache调用SessionStage，但是现在Cache这块写起来比较麻烦
-            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 100, 1);
-            if (empty($tmpLocation)) {
-                $stageClass = StoryStages::STAGE_CLASS_NORMAL;
-            } else {
-                $stageClass = StoryStages::STAGE_CLASS_EXTEND;
+            // 如果UserModelLoc里是否是宝箱或者金蛋，进入范围内最近的stage
+            $tmpUserModelLoc = Yii::$app->userModels->getUserModelLoc($lng, $lat, 50, 10);
+//            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 100, 20);
+//            if (empty($tmpLocation)) {
+//                $stageClass = StoryStages::STAGE_CLASS_NORMAL;
+//            } else {
+//                $stageClass = StoryStages::STAGE_CLASS_EXTEND;
+//            }
+            // 兜底stageID = 67，5号剧本基础ID
+            $storyStageId = 67;
+            if (!empty($tmpUserModelLoc)) {
+                foreach ($tmpUserModelLoc as $userModelLoc) {
+                    if ($userModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                        || $userModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                    ) {
+                        $tmpLocationId = $userModelLoc->location_id;
+//                        $stageClass = StoryStages::STAGE_CLASS_EXTEND;
+                        // 强制stageID = 68（外域ID）
+                        $storyStageId = 68;
+                        break;
+                    }
+                }
             }
-            $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
-                . ' WHERE story_id = ' . $storyId . ' AND id <> 66 AND stage_class = ' . $stageClass
-                . ' AND ('
-                . '(scan_type = ' . StoryStages::SCAN_TYPE_IMAGE . ')'
-                . ' OR '
-                . '(scan_type = ' . StoryStages::SCAN_TYPE_LATLNG . ' AND st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 < misrange)'
-                . ')'
-//                      . ' HAVING dist < ' . $radius;
-                . ' ORDER BY sort_by DESC'
-                . ' LIMIT 1;';
+//            $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
+//                . ' WHERE story_id = ' . $storyId . ' AND id <> 66 AND lng != null AND lat != null AND stage_class = ' . $stageClass
+//                . ' AND ('
+//                . '(scan_type = ' . StoryStages::SCAN_TYPE_IMAGE . ')'
+//                . ' OR '
+//                . '(scan_type = ' . StoryStages::SCAN_TYPE_LATLNG . ' AND st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 < misrange)'
+//                . ')'
+////                      . ' HAVING dist < ' . $radius;
+//                . ' ORDER BY sort_by DESC'
+//                . ' LIMIT 1;';
+//
+//            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
 
-            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
+            $storyStageRet = StoryStages::find()->where(['id' => $storyStageId])->asArray()->one();
 
-            if (!empty($tmpLocation[0]) && $stageClass == StoryStages::STAGE_CLASS_EXTEND) {
-                $storyStageRet['stage_u_id'] = str_replace('{$location_id}', $tmpLocation[0]['id'], $storyStageRet['stage_u_id']);
+            if (!empty($tmpLocationId) && $storyStageRet['stage_class'] == StoryStages::STAGE_CLASS_EXTEND) {
+                $storyStageRet['stage_u_id'] = str_replace('{$location_id}', $tmpLocationId, $storyStageRet['stage_u_id']);
             }
 
             if (!empty($storyStageRet)
 //                && 1 != 1
             ) {
                 if ($storyStageRet['id'] != $storyStageId
-                    && $stageClass == StoryStages::STAGE_CLASS_NORMAL
+                    && $storyStageRet['stage_class'] == StoryStages::STAGE_CLASS_NORMAL
                 ) {
                     $expirationInterval = 600;
                     Yii::$app->act->add((int)$sessionId,
