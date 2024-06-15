@@ -212,8 +212,8 @@
         alert("Sorry your browser doesn't support Device Orientation");
     }
 
-
     function calculateAzimuth(lat1, lon1, lat2, lon2) {
+        var alpha = event.webkitCompassHeading || event.alpha;
         var dLat = toRadians(lat2-lat1);
         var dLon = toRadians(lon2-lon1);
 
@@ -232,7 +232,7 @@
         if (bearing < 0) {
             bearing = 360 + bearing;
         }
-        redTriangle.transform('R' + (redTriangle.degPosition - bearing) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+        redTriangle.transform('R' + (redTriangle.degPosition - bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
         // return bearing;
     }
@@ -301,9 +301,6 @@
 
     //定时更新距离信息
     setInterval(getDirection,500);
-
-
-
 
     $(function (){
         var winH=$(window).height()-260;
