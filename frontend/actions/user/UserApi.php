@@ -639,7 +639,7 @@ class UserApi extends ApiAction
 
             // Todo：临时处理，直接调用Location，正确的应该是从Cache调用SessionStage，但是现在Cache这块写起来比较麻烦
             // 如果UserModelLoc里是否是宝箱或者金蛋，进入范围内最近的stage
-            $tmpUserModelLoc = Yii::$app->userModels->getUserModelLoc($lng, $lat, 50, 10);
+            $tmpUserModelLoc = Yii::$app->userModels->getUserModelLoc($lng, $lat, 100, 10);
 //            $tmpLocation = Yii::$app->location->getLocationFromDbAndAMap($lng, $lat, 100, 20);
 //            if (empty($tmpLocation)) {
 //                $stageClass = StoryStages::STAGE_CLASS_NORMAL;
