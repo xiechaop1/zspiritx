@@ -632,7 +632,7 @@ class DoApi extends ApiAction
                                     // 家周围100米之内不出现扩展stage
                                     $dis = \common\helpers\Common::computeDistanceWithLatLng(
                                         $userModelLocRets['location']['lng'], $userModelLocRets['location']['lat'],
-                                        $userLng, $userLat, 1, 0);
+                                        $user->home_lng, $user->home_lat, 1, 0);
                                     if ($dis <= 100) {
                                         continue;
                                     }
