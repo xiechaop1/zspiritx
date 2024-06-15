@@ -462,7 +462,7 @@ class DoApi extends ApiAction
             }
         }
 
-        if (empty($lastSessionStageUId)) {
+//        if (empty($lastSessionStageUId)) {
             if (empty($lastSessionStageId)
                 || empty($lastStoryStageId)
             ) {
@@ -479,13 +479,13 @@ class DoApi extends ApiAction
             }
             $storyStage = StoryStages::findOne($lastStoryStageId);
             $stageUId = $storyStage['stage_u_id'];
-        } else {
-            $stageUId = $lastSessionStageUId;
-        }
+//        } else {
+//            $stageUId = $lastSessionStageUId;
+//        }
 
 //        Yii::$app->knowledge->setByItem($lastStoryStageId, ItemKnowledge::ITEM_TYPE_STAGE, (int)$this->_sessionId, $lastSessionStageId, (int)$this->_userId, (int)$this->_storyId);
 
-        $storyStage = StoryStages::findOne($lastStoryStageId);
+//        $storyStage = StoryStages::findOne($lastStoryStageId);
         $expirationInterval = 60;        // 消息超时时间
         Yii::$app->act->add((int)$this->_sessionId, $lastSessionStageId, (int)$this->_storyId, (int)$this->_userId, $stageUId, Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
 
