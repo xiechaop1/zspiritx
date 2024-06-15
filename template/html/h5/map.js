@@ -318,7 +318,7 @@ $(function () {
                                 active_class:e.userModelLoc[0].active_class,
                                 id: e.userModelLoc[0].id,
                                 name: e.userModelLoc[0].storyModel.story_model_name,
-                                location_name:e.location.location_name,
+                                location_name:e.location.location_name + e.location.id,
                                 latitude: e.location.lat,
                                 longitude: e.location.lng,
                                 width: 80,
