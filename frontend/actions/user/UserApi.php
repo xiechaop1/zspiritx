@@ -648,8 +648,8 @@ class UserApi extends ApiAction
 //            }
             // 兜底stageID = 67，5号剧本基础ID
             $storyStageId = 67;
-            if (!empty($tmpUserModelLoc)) {
-                foreach ($tmpUserModelLoc as $userModelLoc) {
+            if (!empty($tmpUserModelLoc['userModelLocs'])) {
+                foreach ($tmpUserModelLoc['userModelLocs'] as $userModelLoc) {
                     if ($userModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
                         || $userModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
                     ) {
