@@ -42,10 +42,10 @@ class UserStory extends \yii\db\ActiveRecord
         return [
             [['user_id', 'role_id', 'story_id',
                 'session_id', 'team_id', 'building_id',
-                'last_story_stage_id', 'last_session_stage_id', 'last_session_stage_u_id',
+                'last_story_stage_id', 'last_session_stage_id',
                 'buff', 'debuff', 'buff_expiretime', 'debuff_expiretime',
                 'status', 'created_at', 'updated_at'], 'integer'],
-            [['goal', 'goal_correct'], 'string'],
+            [['goal', 'goal_correct', 'last_session_stage_u_id',], 'string'],
         ];
     }
 
