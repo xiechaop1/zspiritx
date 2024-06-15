@@ -214,6 +214,15 @@ class Actions extends Component
             $storyId, 0, $msg, \common\models\Actions::ACTION_TYPE_MODEL_DISPLAY);
     }
 
+    public function naviModel($sessionId, $storyId, $modelUId, $userId = 0) {
+
+            $msg = json_encode([
+                'naviModel' => $modelUId,
+            ]);
+            return $this->_exec((int)$sessionId, 0,
+                $storyId, $userId, $msg, \common\models\Actions::ACTION_TYPE_MODEL_DISPLAY);
+    }
+
     public function readOne($actionId) {
         $model = \common\models\Actions::find()
             ->where([

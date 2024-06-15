@@ -471,6 +471,34 @@ class UserApi extends ApiAction
                 $userStory->save();
 
 
+                if ($storyId == 5) {
+                    // 0号剧本特殊处理
+                    if ($storyStage->stage_class == StoryStages::STAGE_CLASS_EXTEND) {
+                        $tmpStoryStageUId = $storyStage->stage_u_id;
+                        $storyStageUIdPReg = '/' . str_replace('{$locationId}', '(\\d+)', $tmpStoryStageUId) . '/';
+                        preg_match($storyStageUIdPReg, $sessionStageUId, $matches);
+
+                        if (!empty($matches[1])) {
+                            $locationId = $matches[1][0];
+
+                            $storyModel = StoryModels::find()
+                                ->where([
+                                    'story_stage_id' => $storyStageId,
+                                    'story_id' => $storyId,
+                                ])
+                                ->one();
+
+                            if (!empty($storyModel->model_inst_u_id)) {
+                                $targetStoryModelUId = str_replace('{$locationId}', $locationId, $storyModel->model_inst_u_id);
+
+                                // 如果是0号剧本，且扩展场景（室外场景），进入场景以后，加入导航机制
+                                Yii::$app->act->naviModel($sessionId, $storyId, $targetStoryModelUId);
+                            }
+
+                        }
+                    }
+                }
+
                 $knowledges = Knowledge::find()
                     ->where([
                         'story_stage_id' => $storyStageId
