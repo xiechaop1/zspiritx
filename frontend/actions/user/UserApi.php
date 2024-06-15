@@ -647,7 +647,7 @@ class UserApi extends ApiAction
 //                $stageClass = StoryStages::STAGE_CLASS_EXTEND;
 //            }
             // 兜底stageID = 67，5号剧本基础ID
-            $storyStageId = 67;
+            $tmpStoryStageId = 67;
             if (!empty($tmpUserModelLoc['userModelLocs'])) {
                 foreach ($tmpUserModelLoc['userModelLocs'] as $userModelLoc) {
                     if ($userModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
@@ -656,7 +656,7 @@ class UserApi extends ApiAction
                         $tmpLocationId = $userModelLoc->location_id;
 //                        $stageClass = StoryStages::STAGE_CLASS_EXTEND;
                         // 强制stageID = 68（外域ID）
-                        $storyStageId = 68;
+                        $tmpStoryStageId = 68;
                         break;
                     }
                 }
@@ -674,7 +674,7 @@ class UserApi extends ApiAction
 //
 //            $storyStageRet = \Yii::$app->db->createCommand($storyStageSql)->queryOne();
 
-            $storyStageRet = StoryStages::find()->where(['id' => $storyStageId])->asArray()->one();
+            $storyStageRet = StoryStages::find()->where(['id' => $tmpStoryStageId])->asArray()->one();
 
             if (!empty($tmpLocationId) && $storyStageRet['stage_class'] == StoryStages::STAGE_CLASS_EXTEND) {
                 $storyStageRet['stage_u_id'] = str_replace('{$location_id}', $tmpLocationId, $storyStageRet['stage_u_id']);
