@@ -677,9 +677,10 @@ class DoApi extends ApiAction
 //                if (!empty($sessionStage->stage->bgm)) {
 //                    $sessionStage->stage->bgm = Attachment::completeUrl($sessionStage->stage->bgm, false);
 //                }
-
-                    $sessionStageArray['stage'] = $stageArrayTmp;
-                    $ret[] = $sessionStageArray;
+                    if ($stageArrayTmp['stage_class'] != StoryStages::STAGE_CLASS_EXTEND) {
+                        $sessionStageArray['stage'] = $stageArrayTmp;
+                        $ret[] = $sessionStageArray;
+                    }
                 }
             }
         }
