@@ -462,7 +462,7 @@ class DoApi extends ApiAction
             }
         }
 
-        if (empty($sessionStageUId)) {
+        if (empty($lastSessionStageUId)) {
             if (empty($lastSessionStageId)
                 || empty($lastStoryStageId)
             ) {
@@ -480,7 +480,7 @@ class DoApi extends ApiAction
             $storyStage = StoryStages::findOne($lastStoryStageId);
             $stageUId = $storyStage['stage_u_id'];
         } else {
-            $stageUId = $sessionStageUId;
+            $stageUId = $lastSessionStageUId;
         }
 
 //        Yii::$app->knowledge->setByItem($lastStoryStageId, ItemKnowledge::ITEM_TYPE_STAGE, (int)$this->_sessionId, $lastSessionStageId, (int)$this->_userId, (int)$this->_storyId);
