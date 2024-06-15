@@ -148,6 +148,13 @@
         })
     }
 
+    function deviceOrientationListener1(event) {
+
+        var alpha = event.webkitCompassHeading || event.alpha;
+
+        return alpha;
+    }
+
     // 是否是iOS手机
     function getIos() {
         var u = window.navigator.userAgent;
@@ -208,12 +215,14 @@
         window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 10))
         // alert(" support Device Orientation");
 
+        window.addEventListener('deviceorientation', throttle(deviceOrientationListener1, 10, 10))
+
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
     }
 
-
     function calculateAzimuth(lat1, lon1, lat2, lon2) {
+        var alpha = deviceOrientationListener1;
         var dLat = toRadians(lat2-lat1);
         var dLon = toRadians(lon2-lon1);
 
@@ -232,7 +241,7 @@
         if (bearing < 0) {
             bearing = 360 + bearing;
         }
-        redTriangle.transform('R' + (redTriangle.degPosition - bearing) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+        redTriangle.transform('R' + (redTriangle.degPosition - bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
         // return bearing;
     }
@@ -301,9 +310,6 @@
 
     //定时更新距离信息
     setInterval(getDirection,500);
-
-
-
 
     $(function (){
         var winH=$(window).height()-260;
