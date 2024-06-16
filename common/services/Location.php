@@ -122,6 +122,8 @@ class Location extends Component
 
         $pois = $amapV5Ret['pois'];
 
+        $amapRetSave = json_encode($amapV5Ret, JSON_UNESCAPED_UNICODE);
+
         if (!empty($pois)) {
             foreach ($pois as $poi) {
                 $poiLocation = explode(',', $poi['location']);
