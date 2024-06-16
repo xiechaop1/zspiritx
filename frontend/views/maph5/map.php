@@ -84,6 +84,7 @@ $this->registerMetaTag([
           </div>
           <div class="fs-36 text-F6 text-center bold m-t-20">
                 <label class="btn-blue-s btn-battle" data-url=""></label>
+<!--              <label class="btn-blue-s btn-btn1" data-target-stage-u-id="" data-url=""></label>-->
           </div>
         </div>
       </div>

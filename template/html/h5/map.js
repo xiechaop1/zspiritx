@@ -11,8 +11,9 @@ $(function () {
 
     $("#return_btn").click(function (){
         var params = {
-            'WebViewOff':1
+            'WebViewOff': 1
         }
+
         var data=$.toJSON(params);
         Unity.call(data);
     });
@@ -319,6 +320,7 @@ $(function () {
                                 id: e.userModelLoc[0].id,
                                 name: e.userModelLoc[0].storyModel.story_model_name,
                                 location_name:e.location.location_name + e.location.id,
+                                location_id:e.location.id,
                                 latitude: e.location.lat,
                                 longitude: e.location.lng,
                                 width: 80,
@@ -453,7 +455,7 @@ $(function () {
     function drawUserModals(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
-                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'" data-loc-name="'+marker.location_name+'">' +
+                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'" data-loc-id="'+marker.location_id+'" data-loc-name="'+marker.location_name+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -543,13 +545,21 @@ $(function () {
     $(".btn-battle").click(function (){
         var me=$(this);
         var url=me.attr('data-url');
+
+        // var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + me.attr('data-loc-id');
+        // var params = {
+        //     'naviModel': target_stage_u_id
+        // }
+        // var data=$.toJSON(params);
+        // Unity.call(data);
+
         if(url.length>0){
             window.location.href=url
         }
         else{
             $.alert("数据异常，请刷新后重试");
         }
-    })
+    });
 
 
     var startRotation = 30;
@@ -639,6 +649,7 @@ function showPoiDetail(e) {
     var type=me.attr("data-type");
     var name=me.attr("data-name");
     var location_name=me.attr("data-loc-name");
+    var location_id=me.attr("data-loc-id");
     var id=me.attr("data-id");
     var url=me.attr("data-url");
     var btn=me.attr("data-btn");
@@ -649,12 +660,15 @@ function showPoiDetail(e) {
     if(type==2){
         $("#modal-detail .map-text-context").empty().html(location_name + "<br>" + name);
         $("#modal-detail .btn-battle").attr("data-url",url);
+        $("#modal-detail .btn-battle").attr("data-loc-id",location_id);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
     } else {
+        var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + location_id;
         url = "/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng;
         $("#modal-detail .map-text-context").empty().text(location_name);
         $("#modal-detail .btn-battle").attr("data-url",url);
+        $("#modal-detail .btn-battle").attr("data-loc-id",location_id);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
     }
