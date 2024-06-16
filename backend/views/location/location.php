@@ -55,6 +55,7 @@ echo \dmstr\widgets\Alert::widget();
                     ]);
                     echo $form->field($model, 'location_name')->label('地盘名称');
                     echo $form->field($model, 'location_type')->label('地盘类型');
+                    echo $form->field($model, 'location_typecode')->label('地盘类型Code');
                     echo $form->field($model, 'lng')->label('经度');
                     echo $form->field($model, 'lat')->label('纬度');
                     echo $form->field($model, 'amap_prop')->textarea([

@@ -83,7 +83,7 @@ class AMap extends Component
             }
             $paramStr = implode('&', $paramStrs);
             $signStr = md5($paramStr . $this->appSecret);
-            
+
             $params['sig'] = $signStr;
         }
 

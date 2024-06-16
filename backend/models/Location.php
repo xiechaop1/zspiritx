@@ -24,7 +24,7 @@ class Location extends \common\models\Location
         return [
             [['is_delete', 'status', 'created_at', 'updated_at'], 'integer'],
             [['location_name', 'location_type', 'address',
-                'businessarea', 'adcode', 'tel', 'aoi_type',
+                'businessarea', 'adcode', 'tel', 'aoi_type','location_typecode',
                 'amap_ret', 'amap_prop', 'resource', ], 'string'],
             [['lng','lat'], 'number']
         ];

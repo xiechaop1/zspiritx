@@ -18,7 +18,7 @@ use yii;
 class Location extends Component
 {
 
-    public function addOrUpdateLocation($amapPoiId, $locationName, $locationType, $lat, $lng,
+    public function addOrUpdateLocation($amapPoiId, $locationName, $locationType, $locationTypeCode, $lat, $lng,
                                         $address, $businessArea, $adcode, $tel, $aoiType,
                                         $amapRet, $amapProp, $resource = 'amap') {
         $location = \common\models\Location::find()
@@ -33,6 +33,7 @@ class Location extends Component
             $location->amap_poi_id = $amapPoiId;
             $location->location_name = $locationName;
             $location->location_type = $locationType;
+            $location->location_typecode = $locationTypeCode;
             $location->lng = $lng;
             $location->lat = $lat;
             $location->address = $address;
@@ -107,6 +108,55 @@ class Location extends Component
         $ret = \Yii::$app->db->createCommand($sql)->queryAll();
 
         return $ret;
+    }
+
+    public function addOrUpdateLocationByAMapV5($amapV5RetJson) {
+        if (empty($amapV5RetJson)) {
+            return false;
+        }
+
+        $amapV5Ret = $amapV5RetJson;
+        if (empty($amapV5Ret['pois'])) {
+            return false;
+        }
+
+        $pois = $amapV5Ret['pois'];
+
+        if (!empty($pois)) {
+            foreach ($pois as $poi) {
+                $poiLocation = explode(',', $poi['location']);
+
+                // 高德地图画圆用的属性
+                $amapPropArray = [
+                    'geofence' => [
+                        'circle' => [
+                            'center' => [
+                                'lat' => $poiLocation[1],
+                                'lng' => $poiLocation[0],
+                            ],
+                            'radius' => 50,
+                        ],
+                    ],
+                ];
+                $amapProp = json_encode($amapPropArray);
+
+                $this->addOrUpdateLocation(
+                    $poi['id'],
+                    $poi['name'],
+                    $poi['type'],
+                    $poi['typecode'],
+                    $poiLocation[1],
+                    $poiLocation[0],
+                    !empty($poi['address']) ? $poi['address'] : '',
+                    !empty($poi['businessarea']) ? $poi['businessarea'] : '',
+                    !empty($poi['adcode']) ? $poi['adcode'] : '',
+                    !empty($poi['tel']) ? json_encode($poi['tel']) : '',
+                    '',
+                    $amapRetSave,
+                    $amapProp
+                );
+            }
+        }
     }
 
     public function addOrUpdateLocationByAMap($amapRetJson) {
@@ -208,7 +258,8 @@ class Location extends Component
         $amapRet = Yii::$app->amap->getAMapARoundByLngLat($userLng, $userLat, $poiTypeStr, $radius, 1, $limit);
 
         if (!empty($amapRet)) {
-            $this->addOrUpdateLocationByAMap($amapRet);
+//            $this->addOrUpdateLocationByAMap($amapRet);
+            $this->addOrUpdateLocationByAMapV5($amapRet);
         }
 
         $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius, $limit, $offset, $poitype);
