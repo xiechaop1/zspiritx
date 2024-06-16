@@ -10,20 +10,10 @@ $(function () {
     var markersModal = [];
 
     $("#return_btn").click(function (){
-        var target_stage_u_id = $('#target_stage_u_id').val();
-        if (target_stage_u_id !== undefined
-            && target_stage_u_id != ""
-            && target_stage_u_id != null
-        ) {
-            var params = {
-                'WebViewOff': 1
-            }
-        } {
-            var params = {
-                'WebViewOff': 1,
-                'naviModel': target_stage_u_id
-            }
+        var params = {
+            'WebViewOff': 1
         }
+
         var data=$.toJSON(params);
         Unity.call(data);
     });
@@ -555,14 +545,21 @@ $(function () {
     $(".btn-battle").click(function (){
         var me=$(this);
         var url=me.attr('data-url');
-        $('#target_stage_u_id').val('LJ-WORLD-OUTSIDE-' + me.attr('data-loc-id'));
+
+        var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + me.attr('data-loc-id');
+        var params = {
+            'naviModel': target_stage_u_id
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+
         if(url.length>0){
             window.location.href=url
         }
         else{
             $.alert("数据异常，请刷新后重试");
         }
-    })
+    });
 
 
     var startRotation = 30;
@@ -652,6 +649,7 @@ function showPoiDetail(e) {
     var type=me.attr("data-type");
     var name=me.attr("data-name");
     var location_name=me.attr("data-loc-name");
+    var location_id=me.attr("data-loc-id");
     var id=me.attr("data-id");
     var url=me.attr("data-url");
     var btn=me.attr("data-btn");
@@ -662,12 +660,15 @@ function showPoiDetail(e) {
     if(type==2){
         $("#modal-detail .map-text-context").empty().html(location_name + "<br>" + name);
         $("#modal-detail .btn-battle").attr("data-url",url);
+        $("#modal-detail .btn-battle").attr("data-loc-id",location_id);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
     } else {
+        var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + location_id;
         url = "/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng;
         $("#modal-detail .map-text-context").empty().text(location_name);
         $("#modal-detail .btn-battle").attr("data-url",url);
+        $("#modal-detail .btn-battle").attr("data-loc-id",location_id);
         $("#modal-detail .btn-battle").empty().text(btn);
         $("#modal-detail").modal('show');
     }

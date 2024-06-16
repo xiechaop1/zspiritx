@@ -83,8 +83,8 @@ $this->registerMetaTag([
           <div class="m-t-10 bg-F5 p-20 fs-15  border-radius-r-5 border-radius-l-5 map-text-context">
           </div>
           <div class="fs-36 text-F6 text-center bold m-t-20">
-              <input type="hidden" name="target_stage_u_id" id="target_stage_u_id" value="">
                 <label class="btn-blue-s btn-battle" data-url=""></label>
+<!--              <label class="btn-blue-s btn-btn1" data-target-stage-u-id="" data-url=""></label>-->
           </div>
         </div>
       </div>
