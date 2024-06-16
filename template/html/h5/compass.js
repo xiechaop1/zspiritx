@@ -318,7 +318,7 @@
     }
 
     //定时更新距离信息
-    // setInterval(getDirection,500);
+    setInterval(getDirection,500);
 
     $(function (){
         var winH=$(window).height()-260;
