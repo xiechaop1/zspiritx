@@ -146,7 +146,10 @@
         compass.forEach(function(item) {
             item.transform('R' + (item.degPosition - alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
         })
-        getDirection(alpha)
+
+        $("input[name='alpha']").val(alpha)
+
+
     }
 
     function deviceOrientationListener1(event) {
@@ -224,8 +227,9 @@
         alert("Sorry your browser doesn't support Device Orientation");
     }
 
-    function calculateAzimuth(lat1, lon1, lat2, lon2,alpha) {
-        // var alpha = deviceOrientationListener1;
+    function calculateAzimuth(lat1, lon1, lat2, lon2) {
+        var alpha = $("input[name='alpha']").val();
+        alpha.length>0?"":alpha=0;
         var dLat = toRadians(lat2-lat1);
         var dLon = toRadians(lon2-lon1);
 
@@ -244,7 +248,7 @@
         if (bearing < 0) {
             bearing = 360 + bearing;
         }
-        redTriangle.transform('R' + (redTriangle.degPosition - bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+        redTriangle.transform('R' + (redTriangle.degPosition + bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
         console.log(lat1,lon1,lat2,lon2,bearing,alpha)
         // return bearing;
@@ -291,7 +295,7 @@
                     var lat=obj.data.lat;
                     var lng=obj.data.lng;
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
-                        calculateAzimuth(lat,lng,target_lat,target_lng,alpha)
+                        calculateAzimuth(lat,lng,target_lat,target_lng)
 
                         // calculateAzimuth(user_lat,user_lng,lat,lng)
                         // user_lat=lat;
