@@ -248,7 +248,7 @@
         if (bearing < 0) {
             bearing = 360 + bearing;
         }
-        redTriangle.transform('R' + (redTriangle.degPosition + bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+        redTriangle.transform('R' + (redTriangle.degPosition -bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
         console.log(lat1,lon1,lat2,lon2,bearing,alpha)
         // return bearing;
@@ -318,7 +318,7 @@
     }
 
     //定时更新距离信息
-    // setInterval(getDirection,500);
+    setInterval(getDirection,500);
 
     $(function (){
         var winH=$(window).height()-260;
