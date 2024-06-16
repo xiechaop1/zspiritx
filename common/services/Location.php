@@ -125,7 +125,7 @@ class Location extends Component
         $aois = !empty($amapRet['regeocode']['aois']) ? $amapRet['regeocode']['aois'] : [];
         unset($amapRet['regeocode']['pois']);
 //        unset($amapRet['regeocode']['aois']);
-        $amapRetSave = json_encode($amapRet);
+        $amapRetSave = json_encode($amapRet, JSON_UNESCAPED_UNICODE);
 
 
         if (!empty($pois)) {
@@ -190,18 +190,19 @@ class Location extends Component
 
     public function getLocationFromDbAndAMap($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poitype = '') {
 //        $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius);
-        $poiTypes = [
-            // 住宅区
-            '120300',
-            '120301',
-            '120302',
-            '120303',
-            '120304',
-            // 公园
-            '110000',
-
-        ];
-        $poiTypeStr = implode('|', $poiTypes);
+//        $poiTypes = [
+//            // 住宅区
+//            '120300',
+//            '120301',
+//            '120302',
+//            '120303',
+//            '120304',
+//            // 公园
+//            '110000',
+//
+//        ];
+//        $poiTypeStr = implode('|', $poiTypes);
+        $poiTypeStr = '';
         $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, $poiTypeStr, $radius);
 
         if (!empty($amapRet)) {
