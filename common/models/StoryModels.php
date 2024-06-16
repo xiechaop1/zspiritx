@@ -63,9 +63,9 @@ class StoryModels extends \common\models\gii\StoryModels
 
     public static $storyModelClassRate = [
 //        self::STORY_MODEL_CLASS_NORMAL => 0.5,
-        self::STORY_MODEL_CLASS_PET_OUTSIDE => 10,
-        self::STORY_MODEL_CLASS_ITEM => 30,
-        self::STORY_MODEL_CLASS_RIVAL => 100,
+        self::STORY_MODEL_CLASS_PET_OUTSIDE => 30,
+        self::STORY_MODEL_CLASS_ITEM => 70,
+//        self::STORY_MODEL_CLASS_RIVAL => 100,
     ];
 
     const DIRECTION_DEFAULT     = 1;        // 朝向默认
