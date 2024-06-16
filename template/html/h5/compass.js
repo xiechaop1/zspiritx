@@ -241,7 +241,7 @@
         if (bearing < 0) {
             bearing = 360 + bearing;
         }
-        redTriangle.transform('R' + (redTriangle.degPosition - bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+        redTriangle.transform('R' + (redTriangle.degPosition + bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
         // return bearing;
     }
