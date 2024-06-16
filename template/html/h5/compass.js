@@ -146,6 +146,7 @@
         compass.forEach(function(item) {
             item.transform('R' + (item.degPosition - alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
         })
+        getDirection(alpha)
     }
 
     function deviceOrientationListener1(event) {
@@ -153,7 +154,7 @@
         var alpha = event.webkitCompassHeading || event.alpha;
 
         getDirection(alpha)
-        
+
         // return alpha;
     }
 
@@ -217,7 +218,7 @@
         window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 10))
         // alert(" support Device Orientation");
 
-        window.addEventListener('deviceorientation', throttle(deviceOrientationListener1, 10, 10))
+        // window.addEventListener('deviceorientation', throttle(deviceOrientationListener1, 10, 10))
 
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
