@@ -537,7 +537,7 @@ $(function () {
     getUserLoc();
     getUserPoi();
 
-    setInterval(getPoi,10000);
+    // setInterval(getPoi,10000);
     setInterval(getUserLoc,500);
     // setInterval(removeMarkers,3000);
 

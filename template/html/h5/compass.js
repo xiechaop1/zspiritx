@@ -146,13 +146,16 @@
         compass.forEach(function(item) {
             item.transform('R' + (item.degPosition - alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
         })
+        getDirection(alpha)
     }
 
     function deviceOrientationListener1(event) {
 
         var alpha = event.webkitCompassHeading || event.alpha;
 
-        return alpha;
+        getDirection(alpha)
+
+        // return alpha;
     }
 
     // 是否是iOS手机
@@ -215,14 +218,14 @@
         window.addEventListener('deviceorientation', throttle(deviceOrientationListener, 10, 10))
         // alert(" support Device Orientation");
 
-        window.addEventListener('deviceorientation', throttle(deviceOrientationListener1, 10, 10))
+        // window.addEventListener('deviceorientation', throttle(deviceOrientationListener1, 10, 10))
 
     } else {
         alert("Sorry your browser doesn't support Device Orientation");
     }
 
-    function calculateAzimuth(lat1, lon1, lat2, lon2) {
-        var alpha = deviceOrientationListener1;
+    function calculateAzimuth(lat1, lon1, lat2, lon2,alpha) {
+        // var alpha = deviceOrientationListener1;
         var dLat = toRadians(lat2-lat1);
         var dLon = toRadians(lon2-lon1);
 
@@ -243,6 +246,7 @@
         }
         redTriangle.transform('R' + (redTriangle.degPosition - bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
+        console.log(lat1,lon1,lat2,lon2,bearing,alpha)
         // return bearing;
     }
 
@@ -260,10 +264,10 @@
     var target_lng=$("input[name='target_lng']").val();
     var target_lat=$("input[name='target_lat']").val();
 
-    calculateAzimuth(user_lat,user_lng,target_lat,target_lng);
+    // calculateAzimuth(user_lat,user_lng,target_lat,target_lng);
 
     //更具用户经纬度获取和目的地的信息
-    function getDirection(){
+    function getDirection(alpha){
         var user_id=$("input[name='user_id']").val();
         $.ajax({
             type: "GET", //用POST方式传输
@@ -287,7 +291,8 @@
                     var lat=obj.data.lat;
                     var lng=obj.data.lng;
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
-                        calculateAzimuth(lat,lng,target_lat,target_lng)
+                        calculateAzimuth(lat,lng,target_lat,target_lng,alpha)
+
                         // calculateAzimuth(user_lat,user_lng,lat,lng)
                         // user_lat=lat;
                         // user_lng=lng;
@@ -309,7 +314,7 @@
     }
 
     //定时更新距离信息
-    setInterval(getDirection,500);
+    // setInterval(getDirection,500);
 
     $(function (){
         var winH=$(window).height()-260;
