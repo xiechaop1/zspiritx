@@ -20,6 +20,7 @@ class AMap extends Component
     const AMAP_HOST = 'https://restapi.amap.com';
 
     public $appKey;
+    public $appSecret;
 
     public function getAMapReGeoCodeByLngLat($lng, $lat, $poitype = '', $radius = 1000, $extensions = 'all', $roadlevel = 0) {
         $uri = '/v3/geocode/regeo';
@@ -44,9 +45,40 @@ class AMap extends Component
         return $ret;
     }
 
+    public function getAMapARoundByLngLat($lng, $lat, $poitype = '', $radius = 1000, $page = 1, $pageSize = 100, $sortrule = 'distance', $keywords = '') {
+        $uri = '/v5/place/around';
 
-    private function _createUri($uri, $host, $params = []) {
+        $params = [
+            'key'       => $this->appKey,
+            'keywords'  => $keywords,
+            'types'     => $poitype,
+            'location'  => $lng . ',' . $lat,
+            'radius'    => $radius,
+            'sortrule'  => $sortrule,
+            'page_num'  => $page,
+            'page_size' => $pageSize,
+
+        ];
+
+        $uri = $this->_createUri($uri, self::AMAP_HOST, $params, true);
+
+        try {
+            $ret = $this->_getApi($uri);
+        } catch (\Exception $e) {
+            throw new \Exception('获取数据失败：' . $e->getMessage(), $e->getCode());
+        }
+
+        return $ret;
+    }
+
+
+    private function _createUri($uri, $host, $params = [], $needSign = false) {
         $uri = $host . $uri;
+
+        if ($needSign) {
+            $params['sig'] = $this->appSecret;
+        }
+
         if (!empty($params)) {
             $uri .= '?' . http_build_query($params);
         }

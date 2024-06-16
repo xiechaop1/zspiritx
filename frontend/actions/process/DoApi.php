@@ -1156,6 +1156,17 @@ class DoApi extends ApiAction
                             }
                         }
 
+                        if ($row2->active_class == UserModelLoc::ACTIVE_CLASS_BATTLE) {
+                            $uniqueRetBattle = Yii::$app->userModels->checkUniqueUserModelLocWithLngLat($row1['location']['lng'], $row1['location']['lat'], $uniqueListBattle);
+                            if (!empty($uniqueRetBattle)) {
+                                $uniqueListBattle = $uniqueRetBattle['uniqueList'];
+                                $uniqueCheckBattle = $uniqueRetBattle['ret'];
+                                if (!$uniqueCheckBattle) {
+                                    $isShow = false;
+                                }
+                            }
+                        }
+
                         $tmp = $row2->toArray();
 
                         $tmp['is_show'] = $isShow;
@@ -1232,7 +1243,7 @@ class DoApi extends ApiAction
                                     $locationProp['geofence']['rectangle'] = array_merge($propTmp, $locationProp['geofence']['rectangle']);
                                 }
                             }
-                                $location['amap_prop'] = json_encode($locationProp);
+                                $location['amap_prop'] = json_encode($locationProp, JSON_UNESCAPED_UNICODE);
                                 $row1['location'] = $location;
 
                         }
