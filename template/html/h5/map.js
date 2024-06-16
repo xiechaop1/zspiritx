@@ -10,8 +10,19 @@ $(function () {
     var markersModal = [];
 
     $("#return_btn").click(function (){
-        var params = {
-            'WebViewOff':1
+        var target_stage_u_id = $('#target_stage_u_id').val();
+        if (target_stage_u_id !== undefined
+            && target_stage_u_id != ""
+            && target_stage_u_id != null
+        ) {
+            var params = {
+                'WebViewOff': 1
+            }
+        } {
+            var params = {
+                'WebViewOff': 1,
+                'naviModel': target_stage_u_id
+            }
         }
         var data=$.toJSON(params);
         Unity.call(data);
@@ -319,6 +330,7 @@ $(function () {
                                 id: e.userModelLoc[0].id,
                                 name: e.userModelLoc[0].storyModel.story_model_name,
                                 location_name:e.location.location_name + e.location.id,
+                                location_id:e.location.id,
                                 latitude: e.location.lat,
                                 longitude: e.location.lng,
                                 width: 80,
@@ -453,7 +465,7 @@ $(function () {
     function drawUserModals(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
-                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'" data-loc-name="'+marker.location_name+'">' +
+                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'" data-loc-id="'+marker.location_id+'" data-loc-name="'+marker.location_name+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -543,6 +555,7 @@ $(function () {
     $(".btn-battle").click(function (){
         var me=$(this);
         var url=me.attr('data-url');
+        $('#target_stage_u_id').val('LJ-WORLD-OUTSIDE-' + me.attr('data-loc-id'));
         if(url.length>0){
             window.location.href=url
         }
