@@ -241,8 +241,9 @@
         if (bearing < 0) {
             bearing = 360 + bearing;
         }
-        redTriangle.transform('R' + (redTriangle.degPosition -alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+        redTriangle.transform('R' + (redTriangle.degPosition + bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
+        console.log(lat1,lon1,lat2,lon2,bearing,alpha)
         // return bearing;
     }
 
@@ -288,6 +289,7 @@
                     var lng=obj.data.lng;
                     if(lat!=0&&lat!=null&&lat!=undefined&&lng!=0&&lng!=null&&lng!=undefined){
                         calculateAzimuth(lat,lng,target_lat,target_lng)
+
                         // calculateAzimuth(user_lat,user_lng,lat,lng)
                         // user_lat=lat;
                         // user_lng=lng;
