@@ -77,7 +77,13 @@ class AMap extends Component
 
         if ($needSign) {
             ksort($params);
-            $signStr = md5(http_build_query($params) . $this->appSecret);
+            $paramStrs = [];
+            foreach ($params as $key => $val) {
+                $paramStrs[] = $key . '=' . $val;
+            }
+            $paramStr = implode('&', $paramStrs);
+            $signStr = md5($paramStr . $this->appSecret);
+            
             $params['sig'] = $signStr;
         }
 
