@@ -204,8 +204,8 @@ class Location extends Component
 //        ];
 //        $poiTypeStr = implode('|', $poiTypes);
         $poiTypeStr = '';
-        $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, $poiTypeStr, $radius);
-//        $amapRet = Yii::$app->amap->getAMapARoundByLngLat($userLng, $userLat, $poiTypeStr, $radius, 1, $limit);
+//        $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, $poiTypeStr, $radius);
+        $amapRet = Yii::$app->amap->getAMapARoundByLngLat($userLng, $userLat, $poiTypeStr, $radius, 1, $limit);
 
         if (!empty($amapRet)) {
             $this->addOrUpdateLocationByAMap($amapRet);
