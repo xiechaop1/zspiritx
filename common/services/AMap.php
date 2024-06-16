@@ -76,7 +76,9 @@ class AMap extends Component
         $uri = $host . $uri;
 
         if ($needSign) {
-            $params['sig'] = $this->appSecret;
+            ksort($params);
+            $signStr = md5(http_build_query($params) . $this->appSecret);
+            $params['sig'] = $signStr;
         }
 
         if (!empty($params)) {
