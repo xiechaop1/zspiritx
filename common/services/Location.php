@@ -190,7 +190,19 @@ class Location extends Component
 
     public function getLocationFromDbAndAMap($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poitype = '') {
 //        $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius);
-        $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, '', $radius);
+        $poiTypes = [
+            // 住宅区
+            '120300',
+            '120301',
+            '120302',
+            '120303',
+            '120304',
+            // 公园
+            '110000',
+
+        ];
+        $poiTypeStr = implode('|', $poiTypes);
+        $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, $poiTypeStr, $radius);
 
         if (!empty($amapRet)) {
             $this->addOrUpdateLocationByAMap($amapRet);
