@@ -546,12 +546,12 @@ $(function () {
         var me=$(this);
         var url=me.attr('data-url');
 
-        var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + me.attr('data-loc-id');
-        var params = {
-            'naviModel': target_stage_u_id
-        }
-        var data=$.toJSON(params);
-        Unity.call(data);
+        // var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + me.attr('data-loc-id');
+        // var params = {
+        //     'naviModel': target_stage_u_id
+        // }
+        // var data=$.toJSON(params);
+        // Unity.call(data);
 
         if(url.length>0){
             window.location.href=url
