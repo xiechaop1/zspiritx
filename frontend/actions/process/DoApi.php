@@ -1135,6 +1135,7 @@ class DoApi extends ApiAction
         }
 
         $uniqueList = [];
+        $uniqueListBattle = [];
 //        $ret2 = [];
         if (!empty($ret)) {
             foreach ($ret as &$row) {
