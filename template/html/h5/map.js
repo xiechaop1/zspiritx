@@ -342,7 +342,7 @@ $(function () {
 
                             var circleE=JSON.parse(e.location.amap_prop);
                             console.log("circle:",circleE,c)
-                            circle.push(c.geofence)
+                            circle.push(circleE.geofence.circle)
                         }
 
                         console.log("circleArr:",circle)
