@@ -212,7 +212,7 @@ class Location extends Component
                     $poi['id'],
                     $poi['name'],
                     $poi['type'],
-                    $poi['typecode'],
+                    !empty($poi['typecode']) ? $poi['typecode'] : '',
                     $poiLocation[1],
                     $poiLocation[0],
                     !empty($poi['address']) ? $poi['address'] : '',
