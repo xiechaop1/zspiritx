@@ -202,6 +202,7 @@ class Location extends Component
                     $poi['id'],
                     $poi['name'],
                     $poi['type'],
+                    $poi['typecode'],
                     $poiLocation[1],
                     $poiLocation[0],
                     !empty($poi['address']) ? $poi['address'] : '',
@@ -229,6 +230,7 @@ class Location extends Component
                     '',
                     '',
                     '',
+                    '',
                     $aoiType,
                     '',
                     ''
@@ -243,19 +245,24 @@ class Location extends Component
 
     public function getLocationFromDbAndAMap($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poitype = '') {
 //        $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius);
-//        $poiTypes = [
-//            // 住宅区
-//            '120300',
-//            '120301',
-//            '120302',
-//            '120303',
-//            '120304',
-//            // 公园
-//            '110000',
-//
-//        ];
-//        $poiTypeStr = implode('|', $poiTypes);
-        $poiTypeStr = '';
+        //        $poiTypeStr = '';
+        $poiTypes = [
+            // 餐饮
+            '050000',
+            // 购物
+            '060000',
+            // 体育
+            '080000',
+            // 住宿
+            '100000',
+            // 公园
+            '110000',
+            // 科教
+            '140000',
+            // 室内
+            '970000',
+        ];
+        $poiTypeStr = implode('|', $poiTypes);
 //        $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, $poiTypeStr, $radius);
         $amapRet = Yii::$app->amap->getAMapARoundByLngLat($userLng, $userLat, $poiTypeStr, $radius, 1, $limit);
 
