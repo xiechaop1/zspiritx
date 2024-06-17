@@ -334,18 +334,20 @@ $(function () {
                             };
                             markersModal.push(marker);
                             userModelLocIds.push(e.userModelLoc[0].id);
-                        }
-                        var amap_prop=e.location?.amap_prop;
-                        if(amap_prop!=null&&amap_prop!=undefined){
-                            // var n=$.toJSON(e.location.amap_prop);
-                            // var c = eval( "(" + n + ")" );//转换后的JSON对象
-                            var circleE=JSON.parse(e.location.amap_prop);
-                            console.log("circle:",circleE)
-                            var v=circleE.geofence?.circle;
-                            if(v!=null&&v!=undefined) {
-                                circle.push(v);
+
+                            var amap_prop=e.location?.amap_prop;
+                            if(amap_prop!=null&&amap_prop!=undefined){
+                                // var n=$.toJSON(e.location.amap_prop);
+                                // var c = eval( "(" + n + ")" );//转换后的JSON对象
+                                var circleE=JSON.parse(e.location.amap_prop);
+                                console.log("circle:",circleE)
+                                var v=circleE.geofence?.circle;
+                                if(v!=null&&v!=undefined) {
+                                    circle.push(v);
+                                }
                             }
                         }
+
 
                         console.log("circleArr:",circle)
 
