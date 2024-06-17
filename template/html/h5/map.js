@@ -503,17 +503,35 @@ $(function () {
     function  drawCircle(markers){
         markers.forEach(function(marker) {
             if(marker!=null&&marker!=undefined){
+
+                var radius=marker.radius;
+                radius!=null&&radius!=undefined?'':radius=25;
+                var borderWeight= marker.borderWeight;
+                borderWeight!=null&&borderWeight!=undefined?'':borderWeight=3;
+                var strokeColor=marker.strokeColor;
+                strokeColor!=null&&strokeColor!=undefined?'':strokeColor="#FF33FF";
+                var fillColor=marker.fillColor;
+                fillColor!=null&&fillColor!=undefined?'':fillColor='#1791fc';
+                var fillOpacity=marker.fillOpacity;
+                fillOpacity!=null&&fillOpacity!=undefined?'':fillOpacity=0.3;
+                var strokeStyle=marker.strokeStyle;
+                strokeStyle!=null&&strokeStyle!=undefined?'':strokeStyle='dashed';
+                var strokeWeight=marker.strokeWeight;
+                strokeWeight!=null&& strokeWeight!=undefined?'': strokeWeight=1;
+                var strokeOpacity=marker.strokeOpacity;
+                strokeOpacity!=null&&strokeOpacity!=undefined?'':strokeOpacity=0.2;
+                
                 var circle = new AMap.Circle({
                     center:[marker.center.lat,marker.center.lng],
                     // center: [marker.lng,marker.lat],
-                    radius: marker.radius, //半径
-                    borderWeight: marker.borderWeight,
-                    strokeColor: marker.strokeColor,
-                    fillColor: marker.fillColor,
-                    fillOpacity:marker.fillOpacity,
-                    strokeStyle: marker.strokeStyle,
-                    strokeWeight: marker.strokeWeight,
-                    strokeOpacity: marker.strokeOpacity,
+                    radius: radius,
+                    borderWeight: borderWeight,
+                    strokeColor: strokeColor,
+                    fillColor: fillColor,
+                    fillOpacity:fillOpacity,
+                    strokeStyle: strokeStyle,
+                    strokeWeight: strokeWeight,
+                    strokeOpacity: strokeOpacity,
                     strokeDasharray: [10, 10],
                     zIndex: 10
                   /*  radius: 25, //半径
