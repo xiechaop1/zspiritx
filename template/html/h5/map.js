@@ -307,7 +307,7 @@ $(function () {
                 //新消息获取成功
                 if(obj["code"]==200){
                     markersModal = [];
-                    circle=[];
+                    var circle=[];
                     for (var i in obj.data) {
                         var e=obj.data[i][0];
                         if(e.location.lat!=null&&e.location.lng!=null
