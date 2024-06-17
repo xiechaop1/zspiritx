@@ -147,8 +147,10 @@
             item.transform('R' + (item.degPosition - alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
         })
 
-        $("input[name='alpha']").val(alpha)
-
+        // $("input[name='alpha']").val(alpha);
+        var bearing = $("input[name='bearing']").val();
+        bearing.length>0?"":bearing=0;
+        redTriangle.transform('R' + (redTriangle.degPosition -bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
     }
 
@@ -248,7 +250,8 @@
         if (bearing < 0) {
             bearing = 360 + bearing;
         }
-        redTriangle.transform('R' + (redTriangle.degPosition -bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
+        $("input[name='bearing']").val(bearing);
+        // redTriangle.transform('R' + (redTriangle.degPosition -bearing-alpha) + ',' + (paperWidth / 2) + ', ' + paperHeight / 2)
 
         console.log(lat1,lon1,lat2,lon2,bearing,alpha)
         // return bearing;
