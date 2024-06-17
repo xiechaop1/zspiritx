@@ -173,7 +173,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
 <div style="position: fixed; bottom: 0px; margin:10px; width: 100%;">
     <div class="w-100 p-30  m-b-10">
         <div class="w-1-0 d-flex">
-            <div class="fs-30 bold w-100 text-FF">
+            <div class="fs-30 bold w-100 text-FF" style="float: left;">
                 <?php
                 if ( !empty($params['story_model_class']) && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET ) {
                     ?>
@@ -193,6 +193,14 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                 }
                 ?>
             </div>
+            <div class="fs-30 bold w-100 text-FF" style="float: left; position: relative; right: 0px;">
+                <div style="position: absolute; top: -50px;right: 20px; ">
+                    <img src="../../static/img/qa/gold.png" width="50">
+                    <?= \common\helpers\Common::formatNumberToStr($userScore->score, true) ?>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>

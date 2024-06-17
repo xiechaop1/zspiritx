@@ -224,6 +224,23 @@ class Common
         return false;
     }
 
+    public static function formatNumberToStr($num, $changeUnit = true, $decimal = 0, $decTag = '.', $thousandTag = ',') {
+        if ($changeUnit) {
+            if ($num > 100000000) {
+                $num = $num / 100000000;
+                $num = number_format($num, 2, $decTag, $thousandTag) . '亿';
+            } elseif ($num > 10000) {
+                $num = $num / 10000;
+                $num = number_format($num, 2, $decTag, $thousandTag) . '万';
+            } else {
+                $num = number_format($num, $decimal, $decTag, $thousandTag);
+            }
+        } else {
+            $num = number_format($num, $decimal, $decTag, $thousandTag);
+        }
+        return $num;
+    }
+
     public static function formatTimeToStr($timeStamp, $returnFormat = 'H:i:s.ms', $needMicSec = true) {
         $time = self::formatTime($timeStamp, $returnFormat, $needMicSec);
         return !empty($time['str']) ? $time['str'] : $timeStamp;

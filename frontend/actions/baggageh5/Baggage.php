@@ -13,6 +13,7 @@ use common\definitions\Common;
 use common\models\Story;
 use common\models\StoryModels;
 use common\models\UserModels;
+use common\models\UserScore;
 use yii\base\Action;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
@@ -55,6 +56,14 @@ class Baggage extends Action
         $model = $model->orderBy(['id' => SORT_DESC])
             ->all();
 
+        $userScore = UserScore::find()
+            ->where([
+                'user_id'       => $userId,
+                'session_id'    => $sessionId,
+                'story_id'      => $storyId
+            ])
+            ->one();
+
         $template = 'baggage';
 
         $allParams = $_GET;
@@ -87,6 +96,7 @@ class Baggage extends Action
             'model'         => $model,
             'params'        => $_GET,
             'userId'        => $userId,
+            'userScore'     => $userScore,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'targetStoryModelId' => $targetStoryModelId,
