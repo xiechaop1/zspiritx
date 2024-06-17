@@ -353,7 +353,7 @@ $(function () {
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    // drawCircle(circle);
+                    drawCircle(circle);
                 }
                 //新消息获取失败
                 else{
