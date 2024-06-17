@@ -182,7 +182,7 @@ class Challenge extends Action
 
                 for ($i=0; $i<1000; $i++) {
                     $subjects[] = $this->generateMath($level);
-                    if ($i == 15) {
+                    if ($i == 12) {
                         $level++;
 //                        $subjects[] = $this->generateMath($level);
                     }

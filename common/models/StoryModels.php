@@ -48,6 +48,7 @@ class StoryModels extends \common\models\gii\StoryModels
     const STORY_MODEL_CLASS_RANDOM_CLUE = 7; // 随机线索
     const STORY_MODEL_CLASS_STAGE    = 20; // 场景
     const STORY_MODEL_CLASS_POS      = 21; // 位置
+    const STORY_MODEL_CLASS_GOODS    = 30; // 商品
 
     public static $storyModelClass2Name = [
         self::STORY_MODEL_CLASS_NORMAL => '普通',
@@ -59,6 +60,7 @@ class StoryModels extends \common\models\gii\StoryModels
         self::STORY_MODEL_CLASS_RANDOM_CLUE => '随机线索',
         self::STORY_MODEL_CLASS_STAGE => '场景',
         self::STORY_MODEL_CLASS_POS => '位置',
+        self::STORY_MODEL_CLASS_GOODS => '商品',
     ];
 
     public static $storyModelClassRate = [

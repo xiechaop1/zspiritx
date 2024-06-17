@@ -255,40 +255,43 @@ class Location extends Component
 
     public function getLocationFromDbAndAMap($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poiTypeCode = '') {
 //        $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius);
-        //        $poiTypeStr = '';
-        $poiTypes = [
-            // 餐饮
-            '050000',
-            // 购物
-            '060000',
-            // 体育
-            '070000',
-            // 生活服务
-            '080000',
-            // 住宿
-            '100000',
-            // 住宅
-            '120000',
-            // 公园
-            '110000',
-            // 科教
-            '140000',
-            // 室内
-            '970000',
-        ];
-        $poiTypeStr = implode('|', $poiTypes);
-//        $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, $poiTypeStr, $radius);
-        $amapRet = Yii::$app->amap->getAMapARoundByLngLat($userLng, $userLat, $poiTypeStr, $radius, 1, $limit);
+                $poiTypeStr = '';
+//        $poiTypes = [
+//            // 餐饮
+//            '050000',
+//            // 购物
+//            '060000',
+//            // 体育
+//            '070000',
+//            // 生活服务
+//            '080000',
+//            // 住宿
+//            '100000',
+//            // 住宅
+//            '120000',
+//            // 公园
+//            '110000',
+//            // 科教
+//            '140000',
+//            // 室内
+//            '970000',
+//        ];
+//        $poiTypeStr = implode('|', $poiTypes);
+        $amapRet = Yii::$app->amap->getAMapReGeoCodeByLngLat($userLng, $userLat, $poiTypeStr, $radius);
+//        $amapRet = Yii::$app->amap->getAMapARoundByLngLat($userLng, $userLat, $poiTypeStr, $radius, 1, $limit);
 
         if (!empty($amapRet)) {
-//            $this->addOrUpdateLocationByAMap($amapRet);
-            $locations = $this->addOrUpdateLocationByAMapV5($amapRet);
+            $this->addOrUpdateLocationByAMap($amapRet);
+//            $locations = $this->addOrUpdateLocationByAMapV5($amapRet);
         }
 
         $vitualLimit = 10;
         if (!empty($locations)) {
             foreach ($locations as $loc) {
-                if (substr($loc->location_typecode, 0, 4) == '1203') {
+                if (
+                    (!empty($loc->location_typecode) && substr($loc->location_typecode, 0, 4) == '1203')
+                    || (!empty($loc->location_type) && mb_strpos($loc->location_type, '住宅区') !== false)
+                ){
 
                     $vitualRet = $this->getLocationsByLngLat($userLng, $userLat, $radius, $vitualLimit, $offset, $poiTypeCode, 'vitual');
                     if (!empty($vitualRet)) {
