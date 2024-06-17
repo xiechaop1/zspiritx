@@ -633,7 +633,7 @@ class DoApi extends ApiAction
                                     $dis = \common\helpers\Common::computeDistanceWithLatLng(
                                         $userModelLocRets['location']['lng'], $userModelLocRets['location']['lat'],
                                         $user->home_lng, $user->home_lat, 1, 0);
-                                    if ($dis <= 100) {
+                                    if ($dis <= 60) {
                                         continue;
                                     }
                                 }
