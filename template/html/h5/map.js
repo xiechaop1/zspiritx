@@ -337,14 +337,20 @@ $(function () {
                         }
 
                         if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
+                            var n=$.toJSON(e.location.amap_prop);
+                            var c = eval( "(" + n + ")" );//转换后的JSON对象
+
                             var circleE=JSON.parse(e.location.amap_prop);
-                            circle.push(circleE.geofence.circle)
+                            console.log("circle:",circleE,c)
+                            circle.push(c.geofence)
                         }
+
+                        console.log("circleArr:",circle)
 
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    drawCircle(circle);
+                    // drawCircle(circle);
                 }
                 //新消息获取失败
                 else{
@@ -397,7 +403,7 @@ $(function () {
                         markersUser=marker
                         drawUser(markersUser);
 
-                        console.log("地图中心",lat,lng)
+                        // console.log("地图中心",lat,lng)
                     }
 
                 }
