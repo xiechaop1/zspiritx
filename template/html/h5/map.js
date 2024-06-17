@@ -337,12 +337,15 @@ $(function () {
                         }
 
                         if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
-                            var n=$.toJSON(e.location.amap_prop);
-                            var c = eval( "(" + n + ")" );//转换后的JSON对象
+                            // var n=$.toJSON(e.location.amap_prop);
+                            // var c = eval( "(" + n + ")" );//转换后的JSON对象
 
                             var circleE=JSON.parse(e.location.amap_prop);
-                            console.log("circle:",circleE,c)
-                            circle.push(circleE.geofence.circle)
+                            console.log("circle:",circleE)
+                            var v=circleE.geofence.circle;
+                            if(v!=null&&v!=undefined) {
+                                circle.push(v);
+                            }
                         }
 
                         console.log("circleArr:",circle)
@@ -499,22 +502,21 @@ $(function () {
     //画圆
     function  drawCircle(markers){
         markers.forEach(function(marker) {
-            if(marker.amap_prop!=null&&marker.amap_prop!=undefined){
+            if(marker!=null&&marker!=undefined){
                 var circle = new AMap.Circle({
-                    center:[marker.longitude,marker.latitude],
+                    center:[marker.center.lat,marker.center.lng],
                     // center: [marker.lng,marker.lat],
-                    // radius: marker.radius, //半径
-                    // borderWeight: marker.borderWeight,
-                    // strokeColor: marker.strokeColor,
-                    // strokeWeight: marker.strokeWeight,
-                    // strokeOpacity: marker.strokeOpacity,
-                    // fillOpacity:marker.fillOpacity,
-                    // strokeStyle: marker.strokeStyle,
-                    // strokeDasharray: [10, 10],
-                    // // 线样式还支持 'dashed'
-                    // fillColor: marker.fillColor,
-                    // zIndex: 10
-                    radius: 25, //半径
+                    radius: marker.radius, //半径
+                    borderWeight: marker.borderWeight,
+                    strokeColor: marker.strokeColor,
+                    fillColor: marker.fillColor,
+                    fillOpacity:marker.fillOpacity,
+                    strokeStyle: marker.strokeStyle,
+                    strokeWeight: marker.strokeWeight,
+                    strokeOpacity: marker.strokeOpacity,
+                    strokeDasharray: [10, 10],
+                    zIndex: 10
+                  /*  radius: 25, //半径
                     borderWeight: 3,
                     strokeColor: "#FF33FF",
                     strokeWeight: 1,
@@ -524,7 +526,7 @@ $(function () {
                     strokeDasharray: [10, 10],
                     // 线样式还支持 'dashed'
                     fillColor: '#1791fc',
-                    zIndex: 10,
+                    zIndex: 10,*/
                 })
                 map.add(circle);
             }
