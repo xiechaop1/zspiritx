@@ -798,8 +798,8 @@ class DoApi extends ApiAction
                                                                 $stageStoryModel->lng = $tmpUserModelLocs['location']['lng'];
                                                                 $stageStoryModel->lat = $tmpUserModelLocs['location']['lat'];
                                                                 $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
-                                                                $stageStoryModel->misrange = 50;
-                                                                $stageStoryModel->trigger_misrange = 50;
+//                                                                $stageStoryModel->misrange = 50;
+//                                                                $stageStoryModel->trigger_misrange = 50;
                                                                 $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
 //                                                            $stageStoryModel->stage_id = $sessionStage->stage->id;
 
