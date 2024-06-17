@@ -305,7 +305,7 @@ class Location extends Component
                                 'link_location_id' => $loc->id,
                             ]);
                             $this->addOrUpdateLocation(
-                                '',
+                                $loc->amap_poi_id . '_vitual_' . $i,
                                 $loc->location_name . ' 虚拟点',
                                 $loc->location_type,
                                 $loc->location_typecode,
