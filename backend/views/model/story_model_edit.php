@@ -118,6 +118,7 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('是否显示名牌');
+            echo $form->field($storyModel, 'price')->textInput(['value' => $storyModel->price])->label('价格');
 //            echo $form->field($storyModel, 'is_undertake')->widget('\kartik\select2\Select2', [
 //                'data' => \common\models\StoryModels::$isUndertake2Name,
 //                'options' => [
