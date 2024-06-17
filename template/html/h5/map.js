@@ -336,15 +336,15 @@ $(function () {
                             userModelLocIds.push(e.userModelLoc[0].id);
                         }
 
-                        // if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
-                        //     var circleE=JSON.parse(e.location.amap_prop);
-                        //     circle.push(circleE.geofence.circle)
-                        // }
+                        if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
+                            var circleE=JSON.parse(e.location.amap_prop);
+                            circle.push(circleE.geofence.circle)
+                        }
 
                     }
                     $(".marker_modal").closest(".amap-marker").remove();
                     drawUserModals(markersModal);
-                    drawCircle(markersModal);
+                    drawCircle(circle);
                 }
                 //新消息获取失败
                 else{
