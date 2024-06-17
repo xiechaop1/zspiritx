@@ -92,13 +92,20 @@ class Location extends Component
     }
 
 
-    public function getLocationsByLngLat($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poitype = '') {
+    public function getLocationsByLngLat($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poiTypeCode = '', $resource = '') {
         if (YII_DEBUG) {
             $sql = 'SELECT * FROM o_location LIMIT ' . $offset . ', ' . $limit . ';';
         } else {
             $sql = 'SELECT *, st_distance(point(lng, lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_location';
-            if (!empty($poitype)) {
-                $sql .= ' WHERE poi_type like "%' . $poitype . '%"';
+//            if (!empty($poitype)) {
+//                $sql .= ' WHERE poi_type like "%' . $poitype . '%"';
+//            }
+            $sql .= ' WHERE 1 = 1';
+            if (!empty($resource)) {
+                $sql .= ' AND resource = "' . $resource . '"';
+            }
+            if (!empty($poiTypeCode)) {
+                $sql .= " AND location_typecode = '" . $poiTypeCode . "'";
             }
             $sql .= ' HAVING dist < ' . $radius;
             $sql .= ' ORDER BY dist ASC';
@@ -124,6 +131,7 @@ class Location extends Component
 
         $amapRetSave = json_encode($amapV5Ret, JSON_UNESCAPED_UNICODE);
 
+        $ret = [];
         if (!empty($pois)) {
             foreach ($pois as $poi) {
                 $poiLocation = explode(',', $poi['location']);
@@ -142,7 +150,7 @@ class Location extends Component
                 ];
                 $amapProp = json_encode($amapPropArray);
 
-                $this->addOrUpdateLocation(
+                $ret[] = $this->addOrUpdateLocation(
                     $poi['id'],
                     $poi['name'],
                     $poi['type'],
@@ -159,6 +167,8 @@ class Location extends Component
                 );
             }
         }
+
+        return $ret;
     }
 
     public function addOrUpdateLocationByAMap($amapRetJson) {
@@ -243,7 +253,7 @@ class Location extends Component
 
     }
 
-    public function getLocationFromDbAndAMap($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poitype = '') {
+    public function getLocationFromDbAndAMap($userLng, $userLat, $radius = 1000, $limit = 30, $offset = 0, $poiTypeCode = '') {
 //        $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius);
         //        $poiTypeStr = '';
         $poiTypes = [
@@ -272,10 +282,52 @@ class Location extends Component
 
         if (!empty($amapRet)) {
 //            $this->addOrUpdateLocationByAMap($amapRet);
-            $this->addOrUpdateLocationByAMapV5($amapRet);
+            $locations = $this->addOrUpdateLocationByAMapV5($amapRet);
         }
 
-        $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius, $limit, $offset, $poitype);
+        $limit = 10;
+        if (!empty($locations)) {
+            foreach ($locations as $loc) {
+                if (substr($loc->location_typecode, 0, 4) == '1203') {
+
+                    $vitualRet = $this->getLocationsByLngLat($userLng, $userLat, $radius, $limit, $offset, $poiTypeCode, 'vitual');
+                    if (!empty($vitualRet)) {
+                        $vCount = sizeof($vitualRet);
+                    } else {
+                        $vCount = 0;
+                    }
+                    $restVCount = $limit - $vCount;
+                    if ($restVCount > 0) {
+                        for ($i = 0; $i < $restVCount; $i++) {
+                            $latRand = (rand(0, 200) - 100) / 10000;
+                            $lngRand = (rand(0, 200) - 100) / 10000;
+                            $linkRet = json_encode([
+                                'link_location_id' => $loc->id,
+                            ]);
+                            $this->addOrUpdateLocation(
+                                '',
+                                $loc->location_name . ' 虚拟点',
+                                $loc->location_type,
+                                $loc->location_typecode,
+                                $loc->lat + $latRand,
+                                $loc->lng + $lngRand,
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                $linkRet,
+                                '',
+                                'vitual'
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+
+        $dbRet = $this->getLocationsByLngLat($userLng, $userLat, $radius, $limit, $offset, $poiTypeCode);
 
         return $dbRet;
 
