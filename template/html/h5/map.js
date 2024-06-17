@@ -335,11 +335,10 @@ $(function () {
                             markersModal.push(marker);
                             userModelLocIds.push(e.userModelLoc[0].id);
                         }
-
-                        if(e.location.amap_prop!=null&&e.location.amap_prop!=undefined){
+                        var amap_prop=e.location?.amap_prop;
+                        if(amap_prop!=null&&amap_prop!=undefined){
                             // var n=$.toJSON(e.location.amap_prop);
                             // var c = eval( "(" + n + ")" );//转换后的JSON对象
-
                             var circleE=JSON.parse(e.location.amap_prop);
                             console.log("circle:",circleE)
                             var v=circleE.geofence?.circle;
@@ -504,7 +503,7 @@ $(function () {
         markers.forEach(function(marker) {
             if(marker!=null&&marker!=undefined){
 
-                var radius=marker.radius;
+                var radius=marker.radius/2;
                 radius!=null&&radius!=undefined?'':radius=25;
                 var borderWeight= marker.borderWeight;
                 borderWeight!=null&&borderWeight!=undefined?'':borderWeight=3;
