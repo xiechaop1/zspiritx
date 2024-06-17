@@ -34,7 +34,7 @@ class AMap extends Component
             'roadlevel' => $roadlevel,
         ];
 
-        $uri = $this->_createUri($uri, self::AMAP_HOST, $params);
+        $uri = $this->_createUri($uri, self::AMAP_HOST, $params, true);
 
         try {
             $ret = $this->_getApi($uri);
