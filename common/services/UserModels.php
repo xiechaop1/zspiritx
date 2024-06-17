@@ -21,7 +21,7 @@ use yii;
 class UserModels extends Component
 {
 
-    public function setUserModelToLoc($storyId, $sessionId, $userLng, $userLat, $storyModelClass = 0, $radius = 1000, $limit = 30) {
+    public function setUserModelToLoc($storyId, $sessionId, $userLng, $userLat, $storyModelClass = 0, $radius = 1000, $limit = 50) {
         $userModelLocRets = $this->getUserModelLoc($userLng, $userLat, $radius, $limit);
 
         $result = [];

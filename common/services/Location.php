@@ -299,8 +299,8 @@ class Location extends Component
                     $restVCount = $vitualLimit - $vCount;
                     if ($restVCount > 0) {
                         for ($i = 0; $i < $restVCount; $i++) {
-                            $latRand = (rand(0, 200) - 100) / 10000;
-                            $lngRand = (rand(0, 200) - 100) / 10000;
+                            $latRand = (rand(0, 200) - 100) / 100000;
+                            $lngRand = (rand(0, 200) - 100) / 100000;
                             $linkRet = json_encode([
                                 'link_location_id' => $loc->id,
                             ]);
