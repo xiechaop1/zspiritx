@@ -520,9 +520,9 @@ $(function () {
                 strokeWeight!=null&& strokeWeight!=undefined?'': strokeWeight=1;
                 var strokeOpacity=marker.strokeOpacity;
                 strokeOpacity!=null&&strokeOpacity!=undefined?'':strokeOpacity=0.2;
-                
+
                 var circle = new AMap.Circle({
-                    center:[marker.center.lat,marker.center.lng],
+                    center:[marker.center.lng,marker.center.lat],
                     // center: [marker.lng,marker.lat],
                     radius: radius,
                     borderWeight: borderWeight,
