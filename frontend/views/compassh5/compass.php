@@ -48,6 +48,8 @@ $this->title = '罗盘';
 <input type="hidden" name="story_stage_id" value="<?= $storyStageId ?>">
 <input type="hidden" name="dis_range" value="<?= $disRange ?>">
 <input type="hidden" name="alpha" value="">
+<input type="hidden" name="bearing" value="0">
+
 
 <div class="btn-m-green m-t-30  m-l-30 go-history" >
     返回
