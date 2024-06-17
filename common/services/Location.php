@@ -285,18 +285,18 @@ class Location extends Component
             $locations = $this->addOrUpdateLocationByAMapV5($amapRet);
         }
 
-        $limit = 10;
+        $vitualLimit = 10;
         if (!empty($locations)) {
             foreach ($locations as $loc) {
                 if (substr($loc->location_typecode, 0, 4) == '1203') {
 
-                    $vitualRet = $this->getLocationsByLngLat($userLng, $userLat, $radius, $limit, $offset, $poiTypeCode, 'vitual');
+                    $vitualRet = $this->getLocationsByLngLat($userLng, $userLat, $radius, $vitualLimit, $offset, $poiTypeCode, 'vitual');
                     if (!empty($vitualRet)) {
                         $vCount = sizeof($vitualRet);
                     } else {
                         $vCount = 0;
                     }
-                    $restVCount = $limit - $vCount;
+                    $restVCount = $vitualLimit - $vCount;
                     if ($restVCount > 0) {
                         for ($i = 0; $i < $restVCount; $i++) {
                             $latRand = (rand(0, 200) - 100) / 10000;
