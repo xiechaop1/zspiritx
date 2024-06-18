@@ -297,7 +297,7 @@ class Qas extends Component
         $answer = [];
         $sentence = '';
 
-        preg_match_all('/(.*?)([。？]+)/u', $content, $matches);
+        preg_match_all('/(.*?)([。！？]+)/u', $content, $matches);
         if (!empty($matches[1])) {
             $retTempIdx = array_rand($matches[1]);
             $sentence = $retTemp = $matches[1][$retTempIdx] . $matches[2][$retTempIdx];
