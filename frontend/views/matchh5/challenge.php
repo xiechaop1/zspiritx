@@ -816,6 +816,7 @@ $this->title = $storyMatch->match_name;
         console.log(answer);
         if (chosen == answer) {
 
+            showRetAnimate(chosenObj, 1);
 
             addGold();
             addSubjCt();
@@ -833,7 +834,7 @@ $this->title = $storyMatch->match_name;
 
         } else {
             $('#add_gold').val('0');
-            wrongAnimate(chosenObj);
+            showRetAnimate(chosenObj, 2);
             console.log($(this));
             addRivSpeed($('.riv'));
         }
@@ -925,10 +926,15 @@ $this->title = $storyMatch->match_name;
         });
     }
 
-    function wrongAnimate(wrongObj) {
-        var wrongDiv = '<div class="wrong_hit" style="position: absolute; z-index: 999999; left: 0px; top: 0px;"><img width="75" src="../../static/img/qa/icon_错误@2x.png"></div>';
-        $(wrongObj).parent().append(wrongDiv);
-        $(wrongObj).parent().find('.wrong_hit').animate({
+    function showRetAnimate(retObj, answer) {
+        if (answer == 1) {
+            var imgUrl = '../../static/img/qa/icon_正确@2x.png';
+        } else {
+            var imgUrl = '../../static/img/qa/icon_错误@2x.png';
+        }
+        var retDiv = '<div class="ret_hit" style="position: absolute; z-index: 999999; left: 0px; top: 0px;"><img width="75" src="' + imgUrl + '"></div>';
+        $(retObj).parent().append(retDiv);
+        $(retObj).parent().find('.ret_hit').animate({
             opacity: 100
         }, 500, function() {
             $(this).remove();
