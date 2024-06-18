@@ -262,7 +262,7 @@ class Challenge extends Action
             'rivalPlayers'  => $rivalPlayers,
             'qa'            => $qa,
             'rtnAnswerType' => 2,
-            'subjectsJson' => json_encode($subjects),
+            'subjectsJson' => json_encode($subjects, JSON_UNESCAPED_UNICODE),
             'ct'            => sizeof($subjects),
             'storyMatch'   => $storyMatch,
             'initTimer' => 60,

@@ -297,10 +297,12 @@ class Qas extends Component
         $answer = [];
         $sentence = '';
 
-        preg_match_all('/(.*?)([。！？]+)/u', $content, $matches);
+        preg_match_all('/(.*?)([。！？；]+)/u', $content, $matches);
         if (!empty($matches[1])) {
             $retTempIdx = array_rand($matches[1]);
             $sentence = $retTemp = $matches[1][$retTempIdx] . $matches[2][$retTempIdx];
+
+//            var_dump($retTemp);
 
             $sentArray = explode('，', $sentence);
 
@@ -351,8 +353,11 @@ class Qas extends Component
 
         $stAnswer = '';
 
-        if (!empty($rightPoem) && $rightPoem->poem_type == Poem::POEM_TYPE_POEM) {
-            preg_match_all('/(.*?)([。？]+)/u', $content, $matches);
+        if (!empty($rightPoem) &&
+            ($rightPoem->poem_type == Poem::POEM_TYPE_POEM
+                || $rightPoem->poem_type == Poem::POEM_TYPE_POETRY
+            )) {
+            preg_match_all('/(.*?)([。？！；]+)/u', $content, $matches);
             if (!empty($matches[1])) {
                 $retTempIdx = array_rand($matches[1]);
 

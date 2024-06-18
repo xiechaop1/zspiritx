@@ -833,6 +833,9 @@ $this->title = $storyMatch->match_name;
 
         } else {
             $('#add_gold').val('0');
+            wrongAnimate(chosenObj);
+            console.log($(this));
+            addRivSpeed($('.riv'));
         }
     }
 
@@ -861,6 +864,14 @@ $this->title = $storyMatch->match_name;
 
     function clearRivSpeed(rivalObj) {
         rivalObj.css('width', '0px');
+    }
+
+    function addRivSpeed(rivalObj) {
+        console.log(rivalObj);
+        var rivalSpeedObj = $(rivalObj).find('.riv_speed');
+        var speed = (13500 / $(rivalObj).parent().find('.show_speed').val()) * 10;
+        console.log(speed);
+        rivalSpeedObj.css('width', rivalSpeedObj.width() + speed);
     }
 
     function checkRivHp() {
@@ -910,6 +921,16 @@ $this->title = $storyMatch->match_name;
             opacity: 100
         }, 500, function() {
             shake(rivAvatar.find('img'));
+            $(this).remove();
+        });
+    }
+
+    function wrongAnimate(wrongObj) {
+        var wrongDiv = '<div class="wrong_hit" style="position: absolute; z-index: 999999; left: 0px; top: 0px;"><img width="75" src="../../static/img/qa/icon_错误@2x.png"></div>';
+        $(wrongObj).parent().append(wrongDiv);
+        $(wrongObj).parent().find('.wrong_hit').animate({
+            opacity: 100
+        }, 500, function() {
             $(this).remove();
         });
     }

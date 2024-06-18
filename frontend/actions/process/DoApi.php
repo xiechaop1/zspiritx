@@ -867,11 +867,11 @@ class DoApi extends ApiAction
                                             continue;
                                         }
 
-                                        $storyModel2->lng = $userModelLocRet['location']['lng'];
-                                        $storyModel2->lat = $userModelLocRet['location']['lat'];
-                                        $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
-                                        $storyModel2->misrange = 2;
-                                        $storyModel2->trigger_misrange = 10;
+//                                        $storyModel2->lng = $userModelLocRet['location']['lng'];
+//                                        $storyModel2->lat = $userModelLocRet['location']['lat'];
+//                                        $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+//                                        $storyModel2->misrange = 2;
+//                                        $storyModel2->trigger_misrange = 10;
 //                                    $storyModelParams['lng'] = $userModelLocRet['location']['lng'];
 //                                    $storyModelParams['lat'] = $userModelLocRet['location']['lat'];
 
