@@ -106,6 +106,12 @@ class ChallengePrepare extends Action
             if (empty($matchClass)) {
                 $matchClassId = array_rand(StoryMatch::$matchClassRandList);
                 $matchClass = StoryMatch::$matchClassRandList[$matchClassId];
+            } else {
+                if (strpos($matchClass, ',') !== false) {
+                    $matchClassArray = explode(',', $matchClass);
+                    $matchClassId = array_rand($matchClassArray);
+                    $matchClass = $matchClassArray[$matchClassId];
+                }
             }
 
             if (!empty($answerType)) {
