@@ -462,6 +462,12 @@ class DoApi extends ApiAction
             }
         }
 
+        // Todo: 特殊处理，如果是剧本5，并且是68（外域），切回67（室内）
+        if ($this->_storyId == 5 && $lastStoryStageId == 68) {
+            $lastStoryStageId = 67;
+            $lastSessionStageUId = '';
+        }
+
 //        if (empty($lastSessionStageUId)) {
             if (empty($lastSessionStageId)
                 || empty($lastStoryStageId)
