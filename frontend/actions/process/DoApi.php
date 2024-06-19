@@ -477,8 +477,12 @@ class DoApi extends ApiAction
                 $lastStoryStageId = $sessionStage->story_stage_id;
                 $lastSessionStageId = $sessionStage->id;
             }
-            $storyStage = StoryStages::findOne($lastStoryStageId);
-            $stageUId = $storyStage['stage_u_id'];
+            if (empty($lastSessionStageUId)) {
+                $storyStage = StoryStages::findOne($lastStoryStageId);
+                $stageUId = $storyStage['stage_u_id'];
+            } else {
+                $stageUId = $lastSessionStageUId;
+            }
 //        } else {
 //            $stageUId = $lastSessionStageUId;
 //        }
