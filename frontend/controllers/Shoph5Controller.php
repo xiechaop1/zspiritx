@@ -21,7 +21,7 @@ class Shoph5Controller extends Controller
         $request = \Yii::$app->request;
 
         return [
-            'all' => [
+            'shop' => [
                 'class' => 'frontend\actions\shoph5\Shop',
             ],
 

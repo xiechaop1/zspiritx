@@ -160,6 +160,18 @@
                         ]
                     ],
                     [
+                        'label' => '商品管理',
+                        'icon' => 'folder-open',
+                        'items' => [
+                            [
+                                'label' => '商品列表',
+                                'url' => ['/shop/shop_ware'],
+                                'active' => in_array($this->context->route, ['shop/shop_ware', 'shop/shop_ware_edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                        ]
+                    ],
+                    [
                         'label' => '抽奖管理',
                         'icon' => 'folder-open',
                         'items' => [

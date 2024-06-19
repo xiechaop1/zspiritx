@@ -40,8 +40,8 @@ class Shop extends Action
 //            ->joinWith('model', 'storyModel', 'sessionModel')
 //            ->joinWith('storyModel')
             ->where([
-                'user_id'       => $userId,
-                'session_id'    => $sessionId,
+//                'user_id'       => $userId,
+//                'session_id'    => $sessionId,
                 'is_delete'     => Common::STATUS_NORMAL,
             ]);
         if (!empty($storyModelClass)) {
@@ -49,8 +49,9 @@ class Shop extends Action
             $model = $model->andFilterWhere(['o_story_model.story_model_class' => $storyModelClass]);
         }
         $model = $model->orderBy(['id' => SORT_DESC])
-            ->toArray()
+//            ->asArray()
             ->all();
+
 
         $userScore = UserScore::find()
             ->where([
@@ -61,16 +62,16 @@ class Shop extends Action
             ->one();
 
 
-        if (!empty($model)) {
-            foreach ($model as &$data) {
-                switch ($data['link_type']) {
-                    case ShopWares::LINK_TYPE_STORY_MODEL:
-                    default:
-                        $data['item'] = StoryModels::findOne($data['link_id']);
-                        break;
-                }
-            }
-        }
+//        if (!empty($model)) {
+//            foreach ($model as &$data) {
+//                switch ($data['link_type']) {
+//                    case ShopWares::LINK_TYPE_STORY_MODEL:
+//                    default:
+//                        $data['item'] = StoryModels::findOne($data['link_id']);
+//                        break;
+//                }
+//            }
+//        }
 
         $allParams = $_GET;
         unset($allParams['story_model_class']);
@@ -85,6 +86,7 @@ class Shop extends Action
             'userScore'     => $userScore,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
+            'title'         => '商店',
         ]);
     }
 }

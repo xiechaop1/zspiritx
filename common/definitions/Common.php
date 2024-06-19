@@ -75,6 +75,11 @@ class Common extends Api
         self::DATE_RANGE_180_DAYS => '近180天',
     ];
 
+    public static $deleteStatus = [
+        self::STATUS_DELETED => '删除',
+        self::STATUS_NORMAL => '正常',
+    ];
+
     public static $firstCity = [
         '北京市','上海市','重庆市','天津市'
     ];

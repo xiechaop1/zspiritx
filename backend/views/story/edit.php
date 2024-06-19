@@ -55,7 +55,7 @@ echo \dmstr\widgets\Alert::widget();
                 'clientOptions' => ['autoUpload' => true],
                 'options' => ['value' => $storyModel->thumbnail],
 //                'directory' => 'cover/' . Date('Y/m/')
-            ])->label('封面图');
+            ])->label('图标');
             if (!empty($storyModel->story_bg)) {
                 $tmpTxt = var_export(\common\helpers\Model::decodeDialog($storyModel->story_bg), true);
                 // 去掉数组中下标
