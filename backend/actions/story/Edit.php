@@ -60,17 +60,17 @@ class Edit extends Action
 
             if (!empty($model->guide)) {
                 eval('$guideTmp = ' . $model->guide);
-                $model->guide = json_encode($guideTmp, true);
+                $model->guide = json_encode($guideTmp, JSON_UNESCAPED_UNICODE);
             }
 
             if (!empty($model->story_bg)) {
                 eval('$storyBgTmp = ' . $model->story_bg);
-                $model->story_bg = json_encode($storyBgTmp, true);
+                $model->story_bg = json_encode($storyBgTmp, JSON_UNESCAPED_UNICODE);
             }
 
             if (!empty($model->resources)) {
                 eval('$resourcesTmp = ' . $model->resources);
-                $model->resources = json_encode($resourcesTmp, true);
+                $model->resources = json_encode($resourcesTmp, JSON_UNESCAPED_UNICODE);
             }
 
             if ($model->validate()) {
@@ -91,11 +91,10 @@ class Edit extends Action
 
         $storyTypes = Story::$storyType2Name;
 
-        $model->guide = !empty($model->guide)
-            ? var_export(json_decode($model->guide, true), true) . ';' : '';
-
-        $model->story_bg = !empty($model->story_bg)
-            ? var_export(json_decode($model->story_bg, true), true) . ';' : '';
+//        $model->guide = !empty($model->guide)
+//            ? var_export(json_decode($model->guide, true), true) . ';' : '';
+//        $model->story_bg = !empty($model->story_bg)
+//            ? var_export(json_decode($model->story_bg, true), true) . ';' : '';
 
 
         return $this->controller->render('edit', [
