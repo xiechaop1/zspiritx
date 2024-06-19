@@ -138,6 +138,7 @@ class Guide extends Action
 //            ],
 //        ];
 
+        $pageCount = 0;
         if (!empty($txt)) {
             if (empty($page) || $page < 1) {
                 $page = 1;
@@ -151,13 +152,14 @@ class Guide extends Action
                     $content['image'] = Attachment::completeUrl($content['image'], true);
                 }
             }
+            $pageCount = sizeof($txt);
         }
 
 
         return $this->controller->render('guide', [
             'params'      => $_GET,
             'page'        => $page,
-            'pageCount'   => sizeof($txt),
+            'pageCount'   => $pageCount,
             'storyId'     => $storyId,
             'content'     => $txt[$page - 1],
             'type'          => $type,
