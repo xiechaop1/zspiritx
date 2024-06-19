@@ -785,9 +785,19 @@ $this->title = $storyMatch->match_name;
         // console.log(optHtml);
         $('#answer-box').html(optHtml);
         $('input[name=answer_c]').click(function() {
+            $('input[name=answer_c]').attr('disabled', true);
             submitSubject(idx, $(this));
+            // $('input[name=answer_c]').attr('disabled', false);
+
         });
     }
+
+    function sleep(ms) {
+        setTimeout(function (){
+
+        },ms);
+    }
+
 
     function submitSubject(idx, chosenObj) {
         var answer = obj[idx].answer;
@@ -817,26 +827,32 @@ $this->title = $storyMatch->match_name;
         if (chosen == answer) {
 
             showRetAnimate(chosenObj, 1);
+            setTimeout(function (){
 
-            addGold();
-            addSubjCt();
-            var ret = computeRivHp();
 
-            if (ret == 0) {
-                // clearInterval(timer);
-                var answer = 1;
-                submitAnswer(answer);
-                // $('#answer-right-box').modal('show');
+                addGold();
+                addSubjCt();
+                var ret = computeRivHp();
 
-            }
+                if (ret == 0) {
+                    // clearInterval(timer);
+                    var answer = 1;
+                    submitAnswer(answer);
+                    // $('#answer-right-box').modal('show');
 
-            showSubject(idx+1);
+                }
+
+                showSubject(idx+1);
+                $('input[name=answer_c]').attr('disabled', false);
+            },500);
 
         } else {
             $('#add_gold').val('0');
             showRetAnimate(chosenObj, 2);
-            console.log($(this));
-            addRivSpeed($('.riv'));
+            setTimeout(function () {
+                addRivSpeed($('.riv'), 10);
+                $('input[name=answer_c]').attr('disabled', false);
+            }, 1000);
         }
     }
 
@@ -867,12 +883,12 @@ $this->title = $storyMatch->match_name;
         rivalObj.css('width', '0px');
     }
 
-    function addRivSpeed(rivalObj) {
+    function addRivSpeed(rivalObj, speedBei = 10) {
         console.log(rivalObj);
         var rivalSpeedObj = $(rivalObj).find('.riv_speed');
-        var speed = (13500 / $(rivalObj).parent().find('.show_speed').val()) * 10;
-        console.log(speed);
-        rivalSpeedObj.css('width', rivalSpeedObj.width() + speed);
+        var speed = (13500 / $(rivalObj).parent().find('.show_speed').val()) ;
+        var addSpeed = speed * speedBei;
+        rivalSpeedObj.css('width', rivalSpeedObj.width() + addSpeed);
     }
 
     function checkRivHp() {
