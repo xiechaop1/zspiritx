@@ -438,7 +438,7 @@ class UserApi extends ApiAction
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $storyStageId = !empty($this->_get['story_stage_id']) ? $this->_get['story_stage_id'] : 0;
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
-        $sessionStageUId = !empty($this->_get['session_stage_u_id']) ? $this->_get['session_stage_u_id'] : 0;
+        $sessionStageUId = !empty($this->_get['session_stage_u_id']) ? $this->_get['session_stage_u_id'] : '';
 
         $storyStage = StoryStages::find()
             ->where([
