@@ -138,14 +138,14 @@ class Guide extends Action
 //            ],
 //        ];
 
-        if (empty($page) || $page < 1) {
-            $page = 1;
-        }
-        if ($page > sizeof($txt)) {
-            $page = sizeof($txt);
-        }
-
         if (!empty($txt)) {
+            if (empty($page) || $page < 1) {
+                $page = 1;
+            }
+            if ($page > sizeof($txt)) {
+                $page = sizeof($txt);
+            }
+
             foreach ($txt as &$content) {
                 if (!empty($content['image'])) {
                     $content['image'] = Attachment::completeUrl($content['image'], true);
