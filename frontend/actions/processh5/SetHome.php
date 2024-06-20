@@ -53,7 +53,7 @@ class SetHome extends Action
                 $user->home_lat = $userLat;
                 $user->save();
             }
-            $msg = '迁入了新家，欢迎随时回家！';
+            $msg = '迁入了新家！你需要重启一下app，你的新家就完成最后一步啦！';
         } catch (\Exception $e) {
             return $this->pickupRender($e->getCode(), $e->getMessage(), $this->_params);
 //            return $this->fail($e->getMessage(), $e->getCode());
