@@ -280,7 +280,9 @@ class ShopApi extends ApiAction
             $userScore->score = $userScore->score - $priceScore;
 //            $userScore->save();
 
-            $result['user_score'] = $userScore;
+            $userScoreRet = $userScore->toArray();
+            $userScoreRet['score'] = \common\helpers\Common::formatNumberToStr($userScore->score, true);
+            $result['user_score'] = $userScoreRet;
 
 
             $result['msg'] = '购买成功';

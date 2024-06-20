@@ -98,6 +98,12 @@ $(function () {
                 if(obj["code"]==200){
                     var shop_ware_name = obj.data.ware_name;
 
+                    var user_score_ret = obj.data.user_score.score;
+                    console.log(user_score_ret);
+                    var scoreObj = $('#user_score_ret');
+                    scoreObj.hide();
+                    scoreObj.html(user_score_ret);
+                    scoreObj.fadeIn();
 
                 }
                 //新消息获取失败
