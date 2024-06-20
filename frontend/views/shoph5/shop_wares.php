@@ -110,7 +110,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
 <!--                        <input class="form-check-input" type="radio" name="item" value="--><?php //= $item->id ?><!--" id="legal_person_yes_--><?php //= $item->id ?><!--" >-->
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_<?= $item->id ?>" style="padding-top: 20px;">
 <!--                            <span class="answer-tag2">--><?php //= $item->store_ct ?><!--</span>-->
-                            <div class="col-sm-3" style="float: left;">
+                            <div class="col-sm-2" style="float: left;">
                             <?php
                             if (!empty($icon)) {
                                 echo '<img src="' . \common\helpers\Attachment::completeUrl($icon, true) . '" width="80" class=" m-r-10" style="border-radius: 20px;" title="' . $txt . '">';
@@ -119,10 +119,12 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                             }
                             ?>
                             </div>
-                            <div class="col-sm-5" style="float: left; width: 350px; text-align: left;">
+                            <div class="col-sm-6" style="float: left; width: 350px; text-align: left;">
                                 <?= $txt ?>
                                 <br>
+                                <span class="fs-20" style="color: #999">
                                 <?= $desc ?>
+                                </span>
                             </div>
                             <div class="col-sm-4" style="float: left;">
 
