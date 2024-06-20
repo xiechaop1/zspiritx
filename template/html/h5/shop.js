@@ -10,12 +10,24 @@ $(function () {
         var me=$(this);
         var dataId=me.attr('data-id');
         $("#"+dataId).modal('show');
-    })
+    });
+
+    $("#return_btn").click(function (){
+        if ($("#bgm")[0] != undefined && $("#bgm")[0].paused == false)
+        {
+            $("#bgm")[0].pause();
+        }
+        var params = {
+            'WebViewOff':1
+        }
+        var data=$.toJSON(params);
+        Unity.call(data);
+    });
 
     //页面重新加载
     $(".window-reload").on('click',function () {
         window.location.reload()
-    })
+    });
 
     $('.code-input input').on('keyup', function(e) {
         // 转换为大写

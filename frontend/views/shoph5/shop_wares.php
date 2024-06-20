@@ -75,9 +75,6 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
 <input type="hidden" name="session_id" value="<?= $sessionId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 
-<input type="hidden" name="selected_story_model_ids" value="">
-<input type="hidden" name="use_btn_disable" value="0">
-<input type="hidden" name="combine_btn_disable" value="0">
 <div class="w-100 m-auto">
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
         <div class="w-100 p-30  m-b-10">
