@@ -100,4 +100,8 @@ class ErrorCode extends Api
 
     const STORY_MATCH_NOT_READY = -120005; // 比赛未准备好
 
+    const SHOP_BUY_FAILED = -130000; // 商店购买失败
+    const SHOP_BUY_NOT_ENOUGH_SCORE = -130001; // 商店购买失败，金币不足
+    const SHOP_WARE_NOT_EXIST = -130002; // 商店商品不存在
+
 }

@@ -14,7 +14,7 @@
  * @var \common\models\QA $qa
  */
 
-\frontend\assets\Marginh5Asset::register($this);
+\frontend\assets\Shoph5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
@@ -56,7 +56,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
     /*    border: 2px solid rgba(218, 162, 252, 0.8);*/
     /*}*/
 
-    .buy_btn {
+    .shop_buy_btn {
         border-radius: 24px 24px 24px 24px;
         border: 2px solid #DAFC70;
         background-color: #DAFC70;
@@ -128,7 +128,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                             </div>
                             <div class="col-sm-4" style="float: left;">
 
-                                <div class="buy_btn" id="buy_btn" act="1">
+                                <div class="shop_buy_btn" id="shop_buy_btn" data-id="<?= $item->id ?>" act="1">
                                     <?php
                                     echo '<div style="float: left;">';
                                     switch ($item->pay_way) {
@@ -177,7 +177,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
         </div>
         </div>
 
-    <div class="modal fade" id="baggage_detail" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal fade" id="shop_ware_detail" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content fs-30 bold w-100 text-FF title-box-border">
                 <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 5px;right: 15px;">
@@ -185,14 +185,14 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                 </span>
 <!--                <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">-->
                     <div>
-                            <div class="npc-name" id="baggage_title">
+                            <div class="npc-name" id="title">
 
                             </div>
 
-                            <div class="row" id="baggage_html">
+                            <div class="row" id="html">
 
                             </div>
-                            <div class="row" id="baggage_desc">
+                            <div class="row" id="desc">
 
                             </div>
                         <div>

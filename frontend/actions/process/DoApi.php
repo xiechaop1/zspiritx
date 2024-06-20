@@ -39,6 +39,7 @@ use common\models\User;
 use common\models\UserKnowledge;
 use common\models\UserModelLoc;
 use common\models\UserModelsUsed;
+use common\models\UserScore;
 use common\models\UserStory;
 use common\models\UserModels;
 use frontend\actions\ApiAction;
@@ -2386,6 +2387,8 @@ class DoApi extends ApiAction
         $storyModelId = !empty($this->_get['story_model_id']) ? $this->_get['story_model_id'] : 0;
         $lockCt = !empty($this->_get['lock_ct']) ? $this->_get['lock_ct'] : 0;
 
+//        $priceScore = !empty($this->_get['price_score']) ? $this->_get['price_score'] : 0;
+
         $transaction = Yii::$app->db->beginTransaction();
         $sessionModel = SessionModels::find()
             ->where([
@@ -2407,17 +2410,34 @@ class DoApi extends ApiAction
             return $this->fail('没有找到物品', ErrorCode::DO_MODELS_PICK_UP_FAIL);
         }
 
-        if (!empty($sessionModel)) {
+//        if (!empty($sessionModel)) {
+//
+//            if ($sessionModel->last_operator_id != $userId
+//                && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_OPERATING
+//            ) {
+//                return $this->fail('物品正被他人拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+//            } elseif ($sessionModel->is_unique == SessionModels::IS_UNIQUE_YES && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_PICKUP) {
+//                return $this->fail('物品可能已经被拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+//            }
+//        }
 
-            if ($sessionModel->last_operator_id != $userId
-                && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_OPERATING
-            ) {
-                return $this->fail('物品正被他人拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
-            } elseif ($sessionModel->is_unique == SessionModels::IS_UNIQUE_YES && $sessionModel->session_model_status == SessionModels::SESSION_MODEL_STATUS_PICKUP) {
-                return $this->fail('物品可能已经被拾取', ErrorCode::DO_MODELS_PICK_UP_FAIL);
-            }
-        }
+//        if (!empty($priceScore)) {
+//            $userScore = UserScore::find()
+//                ->where([
+//                    'user_id' => $userId,
+//                    'session_id' => $sessionId,
+//                    'story_id' => $storyId,
+//                ])
+//                ->one();
 
+//            if (!empty($userScore)) {
+//                    if ($userScore->score < $priceScore) {
+//                        return $this->fail('金币不足', ErrorCode::DO_MODELS_PICK_UP_FAIL);
+//                    }
+////                $userScore->score = $userScore->score - $priceScore;
+////                $userScore->save();
+//            }
+//        }
 
 //        $sessionModel->is_pickup = SessionModels::IS_PICKUP_YES;
         $sessionModel->session_model_status = SessionModels::SESSION_MODEL_STATUS_PICKUP;
@@ -2478,6 +2498,7 @@ class DoApi extends ApiAction
                 ->one();
 
 //            if ($storyModel->active_next)
+
 
             $result['msg'] = '获取成功';
 
