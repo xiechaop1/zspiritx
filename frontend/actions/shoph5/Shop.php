@@ -56,7 +56,7 @@ class Shop extends Action
         $userScore = UserScore::find()
             ->where([
                 'user_id'       => $userId,
-                'session_id'    => $sessionId,
+//                'session_id'    => $sessionId,
                 'story_id'      => $storyId
             ])
             ->one();
