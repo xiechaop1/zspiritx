@@ -80,9 +80,15 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                         <?= $title ?>
                     </div>
 
+                    <?php
+                    if ($storyId == 5) {
+                    ?>
                     <div class="npc-name" style="background-color: #333; color: #DAFC70; left: 160px; font-size:24px;">
                         <?= $title2 ?>
                     </div>
+                    <?php
+                    }
+                    ?>
             <div class="row" id="answer-box">
                 <?php
                 foreach ($model as $item) {
