@@ -55,6 +55,7 @@ echo \dmstr\widgets\Alert::widget();
                     <?php
                     echo $form->field($userStoryModel, 'last_story_stage_id')->textarea(['value' => $model->last_story_stage_id])->label('最后场景');
                     echo $form->field($userStoryModel, 'last_session_stage_id')->textarea(['value' => $model->last_session_stage_id])->label('最后场次场景');
+                    echo $form->field($userStoryModel, 'last_session_stage_u_id')->textarea(['value' => $model->last_session_stage_u_id])->label('最后场次场景Uid');
                     ?>
                     <div class="form-group">
                         <label class="control-label col-sm-2"></label>
@@ -118,6 +119,7 @@ echo \dmstr\widgets\Alert::widget();
                     ],
                     ['attribute' => 'last_story_stage_id', 'label' => '最后场景'],
                     ['attribute' => 'last_session_stage_id', 'label' => '最后场次场景'],
+                    ['attribute' => 'last_session_stage_u_id', 'label' => '最后场次场景Uid'],
                     ['attribute' => 'goal', 'label' => '结论'],
                     [
                         'label' => '创建时间',
