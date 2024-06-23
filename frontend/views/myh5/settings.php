@@ -61,6 +61,10 @@ $this->title = '我的';
         border-radius: 10px;
         background-color: rgba(64,128,0,0.2);
     }
+    .curr {
+        font-weight: bold;
+        color: #3a8104;
+    }
 </style>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <div class="w-100 m-auto">
@@ -97,9 +101,17 @@ $this->title = '我的';
                                     <div class="school"><?= \common\models\UserExtends::$userSchool2Name[$school] ?></div>
                                     <?php
                                     foreach ($grades as $grade) {
+                                        if (!empty($userExtends->grade) && $grade == $userExtends->grade) {
+                                            ?>
+                                            <div class="fs-30 grade curr"><?= \common\models\UserExtends::$userGrade2Name[$grade] ?></div>
+
+                                            <?php
+
+                                        } else {
                                         ?>
                                         <div class="fs-30 grade"><a href="?user_id=<?= $userId ?>&grade=<?= $grade ?>"><?= \common\models\UserExtends::$userGrade2Name[$grade] ?></a></div>
                                         <?php
+                                        }
                                     }
                                     ?>
 
