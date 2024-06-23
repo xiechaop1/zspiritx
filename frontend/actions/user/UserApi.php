@@ -23,6 +23,7 @@ use common\models\StoryModels;
 use common\models\StoryStages;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
+use common\models\UserExtends;
 use common\models\UserKnowledge;
 use common\models\UserList;
 use common\models\UserModelLoc;
@@ -106,6 +107,9 @@ class UserApi extends ApiAction
                     break;
                 case 'get_user_score':
                     $ret = $this->getUserScore();
+                    break;
+                case 'update_user_extends':
+                    $ret = $this->updateUserExtends();
                     break;
                 default:
                     $ret = [];
@@ -429,6 +433,38 @@ class UserApi extends ApiAction
         } catch (\Exception $e) {
             throw $e;
 //            return $this->fail($e->getCode() . ': ' . $e->getMessage());
+        }
+    }
+
+    public function updateUserExtends() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+
+        $user = \common\models\UserExtends::findOne($userId);
+
+        if (empty($user)) {
+            return $this->fail('用户不存在', -100);
+        }
+
+        if (empty($user)) {
+            $user = new UserExtends();
+            $user->user_id = $userId;
+        }
+        $user->load(['UserExtends' => $this->_get]);
+        try {
+            if (!empty($user->level)) {
+                if (!empty(UserExtends::$userGradeLevelMap[$user->grade])
+                     && UserExtends::$userGradeLevelMap[$user->grade] > $user->level
+                ) {
+                    $user->level = UserExtends::$userGradeLevelMap[$user->grade];
+                }
+            } else {
+                $user->level = UserExtends::$userGradeLevelMap[$user->grade];
+            }
+
+            $ret = $user->save();
+            return $user->toArray();
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 
