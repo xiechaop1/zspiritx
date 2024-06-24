@@ -38,6 +38,7 @@ return [
         'location'      => 'common\services\Location',
         'userModels'      => 'common\services\UserModels',
         'qas'      => 'common\services\Qas',
+        'userService'      => 'common\services\User',
         'chinesePinyin'      => 'common\services\ChinesePinyin',
 
         // add by xiechao

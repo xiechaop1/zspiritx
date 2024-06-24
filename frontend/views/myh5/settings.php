@@ -65,6 +65,11 @@ $this->title = '我的';
         font-weight: bold;
         color: #3a8104;
     }
+    .change {
+        font-weight: normal;
+        color: yellow;
+        font-size: 24px;
+    }
 </style>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <div class="w-100 m-auto">
@@ -91,7 +96,7 @@ $this->title = '我的';
                             </span>
                             <div class="set">
                                 年级：<?= !empty($userExtends->grade) ? \common\models\UserExtends::$userGrade2Name[$userExtends->grade] .
-                                    ' <span id="change">[修改]</span>'
+                                    '&nbsp; <span id="change" class="change">[修改]</span>'
                                     : ' - ' ?>
                             </div>
                             <div class="grade_options"<?= !empty($userExtends->grade) ? ' style="display: none"' : '' ?>>

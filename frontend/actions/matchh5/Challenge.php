@@ -302,15 +302,42 @@ class Challenge extends Action
 
     public function generateMath($level = 1) {
         $subjects = [];
-        if ($level == 1) {
-            $subjects = $this->randMathFormula(2, 20, ['+','-'], $level, 1);
-        } else if ($level == 2) {
-            $randNumCt = rand(2,3);
-            $numMax= 20;
-            if ($randNumCt == 2) {
-                $numMax = 100;
-            }
-            $subjects = $this->randMathFormula($randNumCt, $numMax, ['+','-'], $level, 2);
+        switch ($level) {
+            case 1:
+                $subjects = $this->randMathFormula(2, 20, ['+','-'], $level, 1);
+                break;
+            case 2:
+                $randNumCt = rand(2,3);
+                $numMax= 20;
+                if ($randNumCt == 2) {
+                    $numMax = 100;
+                }
+                $subjects = $this->randMathFormula($randNumCt, $numMax, ['+','-'], $level, 2);
+                break;
+            case 3:
+                $randNumCt = rand(2,3);
+                $numMax= 100;
+                $computeTag = ['+','-',];
+                $mode = 2;
+                if ($randNumCt == 2) {
+                    $numMax = 10;
+                    $computeTag = ['*'];
+                    $mode = 1;
+                }
+                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode);
+                break;
+            case 4:
+                $randNumCt = rand(2,3);
+                $numMax= 100;
+                $computeTag = ['+','-','*'];
+                $mode = 2;
+                if ($randNumCt == 2) {
+                    $numMax = 10;
+                    $computeTag = ['*','/'];
+                    $mode = 1;
+                }
+                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode);
+                break;
         }
         return $subjects;
     }

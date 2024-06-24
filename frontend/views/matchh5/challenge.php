@@ -219,7 +219,8 @@ $this->title = $storyMatch->match_name;
                     </div>-->
                     <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; bottom: 0px; margin-top: 30px; text-align: right;">
                         <div style="float: left; width: 25%;">💰 <span id="gold">0</span></div>
-                        <div style="float: left; width: 45%;">📝️ <span id="subjct">0</span></div>
+                        <div style="float: left; width: 25%;">📝️ <span id="subjct">0</span></div>
+                        <div style="float: left; width: 35%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
 <!--                        <div style="float: left; width: 30%;">🕒 <span id="timer">--><?php //= $initTimer?><!--</span>秒</div>-->
                     </div>
                 </div>
@@ -254,8 +255,9 @@ $this->title = $storyMatch->match_name;
                 } else if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CONTEST) {
                     ?>
                     <div style="float: left; width: 200px; margin: 15px;"><img src="<?= \common\helpers\Attachment::completeUrl($rivalPlayer['player']->storyModel->icon, true, 36) ?>">&nbsp; <?= $rivalPlayer['player']->storyModel->story_model_name ?></div>
-                <div style="float: left; width: 40%;">⏰ <span id="timer"><?= $initTimer?></span>秒</div>
-                <div style="float: left; width: 40%;">💰 <span id="gold">0</span></div>
+                <div style="float: left; width: 30%;">⏰ <span id="timer"><?= $initTimer?></span>秒</div>
+                <div style="float: left; width: 25%;">💰 <span id="gold">0</span></div>
+                    <div style="float: left; width: 30%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
                     <?php
                 }
                     ?>
@@ -732,6 +734,10 @@ $this->title = $storyMatch->match_name;
                             clearInterval(rivalTimer);
                         }
 
+                        $('#add_gold').val('0');
+                        $('#add_right').val('0');
+                        $('#add_wrong').val('1');
+
                         return;
                         // clearInterval(rivalTimer);
                     }
@@ -781,6 +787,8 @@ $this->title = $storyMatch->match_name;
                 optHtml += '</label> </div></div>';
             }
             optHtml += '<input type="hidden" id="add_gold" value="10">';
+            optHtml += '<input type="hidden" id="add_right" value="1">';
+            optHtml += '<input type="hidden" id="add_wrong" value="0">';
         }
         // console.log(optHtml);
         $('#answer-box').html(optHtml);
@@ -831,6 +839,8 @@ $this->title = $storyMatch->match_name;
 
 
                 addGold();
+                addRight();
+                addWrong();
                 addSubjCt();
                 var ret = computeRivHp();
 
@@ -848,6 +858,8 @@ $this->title = $storyMatch->match_name;
 
         } else {
             $('#add_gold').val('0');
+            $('#add_right').val('0');
+            $('#add_wrong').val('1');
             showRetAnimate(chosenObj, 2);
             setTimeout(function () {
                 addRivSpeed($('.riv'), 10);
@@ -982,7 +994,32 @@ $this->title = $storyMatch->match_name;
                 opacity: 1
             }, 1000);
         }
+    }
 
+    function addRight() {
+        var right = $('#right_ct').html();
+        var addRight = $('#add_right').val();
+        if (addRight > 0) {
+            floNumber(addRight);
+            right = parseInt(right) + parseInt(addRight);
+            $('#right_ct').html(right);
+            $('#right_ct').css('opacity', 0).animate({
+                opacity: 1
+            }, 1000);
+        }
+    }
+
+    function addWrong() {
+        var wrong = $('#wrong_ct').html();
+        var addWrong = $('#add_wrong').val();
+        if (addWrong > 0) {
+            floNumber(addWrong);
+            wrong = parseInt(wrong) + parseInt(addWrong);
+            $('#wrong_ct').html(wrong);
+            $('#wrong_ct').css('opacity', 0).animate({
+                opacity: 1
+            }, 1000);
+        }
     }
 
     function submitAnswer(answer) {
@@ -1000,6 +1037,8 @@ $this->title = $storyMatch->match_name;
 
         var score=$('#gold').html();
         var subjct=$('#subjct').html();
+        var right_ct=$('#right_ct').html();
+        var wrong_ct=$('#wrong_ct').html();
         var max_riv_subjct = 0;
         var riv_subjct = $('.riv_subjct').each(function(){
             var riv_subjct = $(this).html();
@@ -1030,7 +1069,9 @@ $this->title = $storyMatch->match_name;
                 session_id:session_id,
                 begin_ts:begin_ts,
                 score:score,
-                // subjct:subjct,
+                subjct:subjct,
+                right_ct:right_ct,
+                wrong_ct:wrong_ct,
                 answer:answer,
                 // riv_subjct:max_riv_subjct
             },

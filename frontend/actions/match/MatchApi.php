@@ -79,6 +79,8 @@ class MatchApi extends ApiAction
         $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
         $score = !empty($this->_get['score']) ? $this->_get['score'] : 0;
         $subjectCt = !empty($this->_get['subjct']) ? $this->_get['subjct'] : 0;
+        $rightCt = !empty($this->_get['right_ct']) ? $this->_get['right_ct'] : 0;
+        $wrongCt = !empty($this->_get['wrong_ct']) ? $this->_get['wrong_ct'] : 0;
 
         $storyMatch = StoryMatch::find()->where(['id' => $matchId])->one();
 
@@ -87,6 +89,15 @@ class MatchApi extends ApiAction
             $transaction = Yii::$app->db->beginTransaction();
 
             Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
+
+            if ( ($rightCt / $subjectCt) > 0.8) {
+                $addLevel = 1;
+                Yii::$app->userService->updateUserLevel($userId, $addLevel);
+            } elseif ( ($rightCt / $subjectCt) < 0.4 ) {
+                $addLevel = -1;
+                Yii::$app->userService->updateUserLevel($userId, $addLevel);
+            }
+
 
             $matchDetail = [
                 'qa_id' => $qaId,
