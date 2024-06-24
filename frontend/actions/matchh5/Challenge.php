@@ -69,7 +69,7 @@ class Challenge extends Action
         $storyMatch = StoryMatch::find()
             ->where([
                 'id'    => $matchId,
-                'match_type' => StoryMatch::MATCH_TYPE_CHALLENGE,
+//                'match_type' => StoryMatch::MATCH_TYPE_CHALLENGE,
                 'story_match_status' => StoryMatch::STORY_MATCH_STATUS_PREPARE,
 //                'user_model_id' => $userModelId,
             ])
@@ -155,7 +155,7 @@ class Challenge extends Action
                 $playerAttack = $rivalPlayer['attack'];
 //                $grade = 20;
 //                var_dump(pow($grade, 0.3));exit;
-                $rivalPlayer['show_speed'] = ($playerAttSpeed * 110) * (pow($grade, 0.5));
+                $rivalPlayer['show_speed'] = ($playerAttSpeed * 160) * (pow($grade, 0.5));
 //                var_dump($rivalPlayer['show_speed']);exit;
                 $rivalPlayer['show_attack'] = [
                     'min' => $playerAttack * 0.4,

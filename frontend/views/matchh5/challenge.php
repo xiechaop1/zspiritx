@@ -203,6 +203,7 @@ $this->title = $storyMatch->match_name;
                             <div style="float: left; width: 30%;">💰 <span id="gold">0</span></div>
                             <div style="float: left; width: 30%;">📝️ <span id="subjct">0</span></div>
                             <div style="float: left; width: 30%;">🕒 <span id="timer"><?= $initTimer?></span>秒</div>
+                            <div style="display:none;float: left; width: 35%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
                         </div>
                         <?php
                     }
@@ -217,12 +218,18 @@ $this->title = $storyMatch->match_name;
                         <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
                         播放语音
                     </div>-->
+                    <?php
+                    if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CHALLENGE) {
+                        ?>
                     <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; bottom: 0px; margin-top: 30px; text-align: right;">
                         <div style="float: left; width: 25%;">💰 <span id="gold">0</span></div>
                         <div style="float: left; width: 25%;">📝️ <span id="subjct">0</span></div>
                         <div style="float: left; width: 35%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
 <!--                        <div style="float: left; width: 30%;">🕒 <span id="timer">--><?php //= $initTimer?><!--</span>秒</div>-->
                     </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
             <?php
@@ -257,7 +264,8 @@ $this->title = $storyMatch->match_name;
                     <div style="float: left; width: 200px; margin: 15px;"><img src="<?= \common\helpers\Attachment::completeUrl($rivalPlayer['player']->storyModel->icon, true, 36) ?>">&nbsp; <?= $rivalPlayer['player']->storyModel->story_model_name ?></div>
                 <div style="float: left; width: 30%;">⏰ <span id="timer"><?= $initTimer?></span>秒</div>
                 <div style="float: left; width: 25%;">💰 <span id="gold">0</span></div>
-                    <div style="float: left; width: 30%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
+                <div style="float: left; width: 30%;">📝️ <span class="riv_subjct" id="riv_subjct_<?= $rivalPlayer['player']->id ?>">0</span></div>
+<!--                    <div style="float: left; width: 30%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>-->
                     <?php
                 }
                     ?>
@@ -810,6 +818,7 @@ $this->title = $storyMatch->match_name;
     function submitSubject(idx, chosenObj) {
         var answer = obj[idx].answer;
         var that=$("#answer-info");
+        var match_type = $('#match_type').val();
         var qa_type=that.attr("data-type");
         if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
             var v_select = $("input[name='answer_c']:checked").val();
@@ -842,14 +851,16 @@ $this->title = $storyMatch->match_name;
                 addRight();
                 addWrong();
                 addSubjCt();
-                var ret = computeRivHp();
+                if (match_type == 2) {
+                    var ret = computeRivHp();
 
-                if (ret == 0) {
-                    // clearInterval(timer);
-                    var answer = 1;
-                    submitAnswer(answer);
-                    // $('#answer-right-box').modal('show');
+                    if (ret == 0) {
+                        // clearInterval(timer);
+                        var answer = 1;
+                        submitAnswer(answer);
+                        // $('#answer-right-box').modal('show');
 
+                    }
                 }
 
                 showSubject(idx+1);
@@ -1159,7 +1170,7 @@ $this->title = $storyMatch->match_name;
         var timer = $('#timer').html();
         timer--;
         $('#timer').html(timer);
-        if (timer == 58) {
+        if (timer == 0) {
             $('#answer-box').hide();
             $('.confirm_btn').css('opacity', 0);
             $('.confirm_btn').removeClass('hide');
@@ -1179,10 +1190,12 @@ $this->title = $storyMatch->match_name;
             });
             console.log(subjct);
             console.log(max_riv_subjct);
-            if (subjct > max_riv_subjct) {
+            if (parseInt(subjct) > parseInt(max_riv_subjct)) {
                 answer = 1;
+                console.log(answer);
             } else {
                 answer = 0;
+                console.log(answer);
             }
             submitAnswer(answer);
         }

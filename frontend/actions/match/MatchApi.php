@@ -90,12 +90,14 @@ class MatchApi extends ApiAction
 
             Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
 
-            if ( ($rightCt / $subjectCt) > 0.8) {
-                $addLevel = 1;
-                Yii::$app->userService->updateUserLevel($userId, $addLevel);
-            } elseif ( ($rightCt / $subjectCt) < 0.4 ) {
-                $addLevel = -1;
-                Yii::$app->userService->updateUserLevel($userId, $addLevel);
+            if ($subjectCt > 0) {
+                if (($rightCt / $subjectCt) > 0.8) {
+                    $addLevel = 1;
+                    Yii::$app->userService->updateUserLevel($userId, $addLevel);
+                } elseif (($rightCt / $subjectCt) < 0.4) {
+                    $addLevel = -1;
+                    Yii::$app->userService->updateUserLevel($userId, $addLevel);
+                }
             }
 
 
