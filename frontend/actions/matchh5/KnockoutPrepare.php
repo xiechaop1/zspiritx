@@ -131,7 +131,7 @@ class KnockoutPrepare extends Action
                         ],
                     ])
                     ->one();
-                $matchId = $storyMatch->id;
+                $matchId = !empty($storyMatch->id) ? $storyMatch->id : 0;
             }
 
             if (empty($matchId)) {
@@ -209,7 +209,7 @@ class KnockoutPrepare extends Action
             'userId'        => $userId,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
-            'story_match'   => $storyMatch,
+            'storyMatch'   => $storyMatch,
             'qaId'          => $qaId,
             'matchId'      => $matchId,
 //            'answerType'    => 2,

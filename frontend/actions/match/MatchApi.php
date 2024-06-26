@@ -11,6 +11,7 @@ namespace frontend\actions\match;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\helpers\Attachment;
 use common\models\Actions;
 use common\models\ItemKnowledge;
 use common\models\Qa;
@@ -131,7 +132,9 @@ class MatchApi extends ApiAction
                 $status = 'playing';
             } else {
 
-                if ($storyMatch->join_expire_time < time()) {
+                if ($storyMatch->join_expire_time < time()
+                    && 1 != 1
+                ) {
                     $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PLAYING;
                     $storyMatch->save();
 
@@ -160,7 +163,7 @@ class MatchApi extends ApiAction
                     $playersCt = StoryMatchPlayer::find()
                         ->where([
                             'match_id' => $matchId,
-                            'story_match_player_status' => [
+                            'match_player_status' => [
                                 StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
                             ],
                         ])
@@ -186,19 +189,24 @@ class MatchApi extends ApiAction
         $playersData = StoryMatchPlayer::find()
             ->where([
                 'match_id' => $matchId,
-                'story_match_player_status' => [
+                'match_player_status' => [
                     StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
 //                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
                 ],
             ])
-            ->asArray()
+//            ->asArray()
             ->all();
 
         $players = [];
         if (!empty($playersData)) {
             foreach ($playersData as $player) {
-                $tmp = $player;
-                $tmp['user'] = $player->user;
+                $tmp = $player->toArray();
+                $tmp['user'] = $player->user->toArray();
+                if (!empty($tmp['user']['avatar'])) {
+                    $tmp['user']['avatar'] = Attachment::completeUrl($tmp['user']['avatar']);
+                } else {
+                    $tmp['user']['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+                }
                 $players[] = $tmp;
             }
         }
