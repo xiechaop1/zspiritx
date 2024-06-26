@@ -183,10 +183,30 @@ class MatchApi extends ApiAction
             }
         }
 
+        $playersData = StoryMatchPlayer::find()
+            ->where([
+                'match_id' => $matchId,
+                'story_match_player_status' => [
+                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+//                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+                ],
+            ])
+            ->asArray()
+            ->all();
+
+        $players = [];
+        if (!empty($playersData)) {
+            foreach ($playersData as $player) {
+                $tmp = $player;
+                $tmp['user'] = $player->user;
+                $players[] = $tmp;
+            }
+        }
+
         return [
             'status' => $status,
             'match' => $storyMatch,
-            'players' => $storyMatch->players,
+            'players' => $players,
         ];
 
     }
