@@ -55,6 +55,15 @@ class MatchApi extends ApiAction
                 case 'update_match':
                     $ret = $this->updateMatch();
                     break;
+                case 'update_knock_players':
+                    $ret = $this->updateKnockPlayers();
+                    break;
+                case 'get_knockout_status':
+                    $ret = $this->getKnockoutStatus();
+                    break;
+                case 'get_knockout_players_in_match':
+                    $ret = $this->getKnockoutPlayersInMatch();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -67,6 +76,120 @@ class MatchApi extends ApiAction
         return $this->success($ret);
     }
 
+    public function updateKnockPlayers() {
+        $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $knockoutStatus = !empty($this->_get['knockout_status']) ? $this->_get['knockout_status'] : 0;
+        $player = StoryMatchPlayer::find()
+            ->where([
+                'match_id' => $matchId,
+                'user_id' => $userId,
+                'story_match_player_status' => StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+            ])
+            ->one();
+
+        if (!empty($player)) {
+            $player->match_player_status = $knockoutStatus;
+            $player->save();
+        }
+
+        return $player;
+    }
+
+    public function getKnockoutPlayersInMatch() {
+        $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
+        $players = StoryMatchPlayer::find()
+            ->where([
+                'match_id' => $matchId,
+                'story_match_player_status' => StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+            ])
+            ->all();
+
+        return $players;
+    }
+
+    public function getKnockoutStatus() {
+        $status = 'matching';
+        $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
+
+        $storyMatch = StoryMatch::find()
+            ->where([
+                'id' => $matchId,
+                'story_match_status' => [
+                    StoryMatch::STORY_MATCH_STATUS_MATCHING,
+                    StoryMatch::STORY_MATCH_STATUS_PLAYING,
+                ],
+            ])
+            ->one();
+
+        if (empty($storyMatch)) {
+            throw new \Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
+        }
+
+        if (!empty($storyMatch)) {
+            if ($storyMatch->story_match_status == StoryMatch::STORY_MATCH_STATUS_PLAYING) {
+                $status = 'playing';
+            } else {
+
+                if ($storyMatch->join_expire_time < time()) {
+                    $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PLAYING;
+                    $storyMatch->save();
+
+                    if (!empty($storyMatch->players)) {
+                        $playerCt = 0;
+                        foreach ($storyMatch->players as $player) {
+                            $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING;
+                            $player->save();
+                            $playerCt++;
+                        }
+
+                        if ($playerCt < $storyMatch->max_players_ct) {
+                            for ($i=0; $i<$storyMatch->max_players_ct - $playerCt; $i++) {
+                                $player = new StoryMatchPlayer();
+                                $player->user_id = 0;
+
+                                $player->match_id = $matchId;
+                                $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING;
+                                $player->save();
+                            }
+                        }
+                    }
+
+                    $status = 'playing';
+                } else {
+                    $playersCt = StoryMatchPlayer::find()
+                        ->where([
+                            'match_id' => $matchId,
+                            'story_match_player_status' => [
+                                StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+                            ],
+                        ])
+                        ->count();
+
+                    if ($playersCt >= $storyMatch->max_players_ct) {
+                        $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PLAYING;
+                        $storyMatch->save();
+                        $status = 'playing';
+
+                        if (!empty($storyMatch->players)) {
+                            foreach ($storyMatch->players as $player) {
+                                $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING;
+                                $player->save();
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return [
+            'status' => $status,
+            'match' => $storyMatch,
+            'players' => $storyMatch->players,
+        ];
+
+    }
 
     public function updateMatch() {
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;

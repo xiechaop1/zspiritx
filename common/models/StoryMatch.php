@@ -15,11 +15,13 @@ class StoryMatch extends \common\models\gii\StoryMatch
     const MATCH_TYPE_BATTLE         = 1; // 战斗
     const MATCH_TYPE_CHALLENGE      = 2; // 挑战
     const MATCH_TYPE_CONTEST        = 3; // 比赛
+    const MATCH_TYPE_KNOCKOUT       = 4; // 淘汰赛
 
     public static $matchType2Name = [
         self::MATCH_TYPE_BATTLE => '战斗',
         self::MATCH_TYPE_CHALLENGE => '挑战',
         self::MATCH_TYPE_CONTEST => '比赛',
+        self::MATCH_TYPE_KNOCKOUT => '淘汰赛',
     ];
 
     const MATCH_CLASS_NORMAL        = 1; // 普通

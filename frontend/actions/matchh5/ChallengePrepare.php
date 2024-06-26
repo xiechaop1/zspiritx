@@ -48,6 +48,7 @@ class ChallengePrepare extends Action
 //        $sessionStageId = !empty($_GET['session_stage_id']) ? $_GET['session_stage_id'] : 0;
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 
+        $matchType = !empty($_GET['match_type']) ? $_GET['match_type'] : StoryMatch::MATCH_TYPE_CHALLENGE;
         $matchName = !empty($_GET['match_name']) ? $_GET['match_name'] : '';
         $matchId = !empty($_GET['match_id']) ? $_GET['match_id'] : 0;
         $matchClass = !empty($_GET['match_class']) ? $_GET['match_class'] : 0;
@@ -124,7 +125,7 @@ class ChallengePrepare extends Action
             $storyMatch->user_id = $userId;
             $storyMatch->session_id = $sessionId;
             $storyMatch->match_name = $matchName;
-            $storyMatch->match_type = StoryMatch::MATCH_TYPE_CHALLENGE;
+            $storyMatch->match_type = $matchType;
             $storyMatch->match_class = $matchClass;
             $storyMatch->story_match_prop = json_encode($storyMatchProp);
             $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PREPARE;

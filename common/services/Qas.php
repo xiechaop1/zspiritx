@@ -25,6 +25,79 @@ use yii;
 
 class Qas extends Component
 {
+    public function generatePoem($level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
+        $prop = [
+            'poem_class' => $poemClass,
+            'poem_class2' => $poemClass2,
+        ];
+        $poem = $this->getPoemByRand($poemType, $prop, $answerType);
+
+        $hitRange = [
+            5 * (1 + ($level - 1) / 5),
+            10 * (1 + ($level - 1) / 5),
+        ];
+        $gold = 10 * (1 + ($level - 1) / 2);
+
+        $showFormula = $poem['formula'];
+        $answer = $poem['stAnswer'];
+        $formula = $poem['poem'];
+        $answerRange = $poem['selections'];
+
+        $subjects = [
+            'formula' => $showFormula,
+            'answer' => $answer,
+            'standFormula' => $formula,
+            'answerRange' => $answerRange,
+            'level' => $level,
+            'hitRange' => $hitRange,
+            'gold'  => $gold,
+        ];
+
+        return $subjects;
+    }
+
+    public function generateMath($level = 1) {
+        $subjects = [];
+        switch ($level) {
+            case 1:
+                $subjects = $this->randMathFormula(2, 20, ['+','-'], $level, 1);
+                break;
+            case 2:
+                $randNumCt = rand(2,3);
+                $numMax= 20;
+                if ($randNumCt == 2) {
+                    $numMax = 100;
+                }
+                $subjects = $this->randMathFormula($randNumCt, $numMax, ['+','-'], $level, 2);
+                break;
+            case 3:
+                $randNumCt = rand(2,3);
+                $numMax= 100;
+                $computeTag = ['+','-',];
+                $mode = 2;
+                if ($randNumCt == 2) {
+                    $numMax = 10;
+                    $computeTag = ['*'];
+                    $mode = 1;
+                }
+                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode);
+                break;
+            case 4:
+                $randNumCt = rand(2,3);
+                $numMax= 100;
+                $computeTag = ['+','-','*'];
+                $mode = 2;
+                if ($randNumCt == 2) {
+                    $numMax = 10;
+                    $computeTag = ['*','/'];
+                    $mode = 1;
+                }
+                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode);
+                break;
+        }
+        return $subjects;
+    }
+
     public function getPoemById($poemId, $qaProp = [], $answerType = 0, $poemType, $ts = 0, $qaType = Qa::QA_TYPE_VERIFYCODE, $qaSelected = []) {
         if ($ts > 0) {
             srand($ts);
@@ -476,6 +549,139 @@ class Qas extends Component
         }
 
         return $poems;
+    }
+
+
+    public function randMathFormula($numCt = 2, $numMax = 20, $opRange = ['+','-','*','/'], $level, $mode = 1){
+
+        // $mode = 1: 答案最后
+        // $mode = 2: 答案可以在中间
+
+
+        $formula = '';
+
+        $answerTag = 0;
+        $nums = [];
+        $tmpAnswer = 0;
+        $op = '+';
+        $tmpNumMax = $numMax;
+        for ($i=0; $i<$numCt; $i++) {
+
+
+            if ($mode == 2
+                && $answerTag == 0
+            ) {
+                $answerTag1 = rand(0,1);
+                $answerTag = $answerTag1;
+            } else {
+                $answerTag1 = 0;
+            }
+
+            if ($i > 0) {
+                $opIdx = array_rand($opRange);
+                $op = $opRange[$opIdx];
+                if ($op == '-') {
+                    $tmpNumMax = $tmpAnswer;
+                } else {
+                    $tmpNumMax = $numMax;
+                }
+                $nums[] = [
+                    'num'    => $op,
+//                    'num'   => $num,
+//                    'answerTag' => $answerTag,
+                ];
+            }
+            if ($op == '/') {
+                $num = rand(1, $tmpNumMax);
+            } else {
+                $num = rand(0, $tmpNumMax);
+            }
+
+            $tmpAnswer = eval('return $tmpAnswer ' . $op . ' $num;');
+
+            $nums[] = [
+                'num'  => $num,
+                'answerTag' => $answerTag1,
+            ];
+        }
+
+        $formula = '';
+        foreach ($nums as $numOne) {
+            $formula .= $numOne['num'] . ' ';
+        }
+
+        eval('$ret = ' . $formula . ';');
+
+        $showFormula = '';
+        $isAnswerTag = 0;
+        foreach ($nums as $numOne) {
+            if ($isAnswerTag != 1) {
+                $isAnswerTag = !empty($numOne['answerTag']) ? $numOne['answerTag'] : 0;
+            }
+            if ( !empty($numOne['answerTag']) && $numOne['answerTag'] == 1) {
+                $showFormula .= '? ';
+                $answer = $numOne['num'];
+            } else {
+                $showFormula .= $numOne['num'] . ' ';
+            }
+        }
+        $showFormula .= '= ';
+        if ($isAnswerTag == 1) {
+            $showFormula .= $ret;
+        } else {
+            $showFormula .= '?';
+            $answer = $ret;
+        }
+
+        $answerRange = $this->randAnswerRange($answer, 6);
+
+        // 根据level算伤害范围和金币值
+        $hitRange = [
+            5 * (1 + ($level - 1) / 5),
+            10 * (1 + ($level - 1) / 5),
+        ];
+        $gold = 10 * (1 + ($level - 1) / 2);
+
+        return [
+            'formula' => $showFormula,
+            'answer' => $answer,
+            'standFormula' => $formula,
+            'answerRange' => $answerRange,
+            'level' => $level,
+            'hitRange' => $hitRange,
+            'gold'  => $gold,
+        ];
+
+    }
+
+    public function randAnswerRange($answer, $mis = 5) {
+        $answerRange = [$answer];
+        $range1 = $answer > $mis ? rand($answer - $mis, $answer + $mis) : rand(0, $answer + $mis);
+        if (in_array($range1, $answerRange)) {
+            $range1++;
+        }
+        $answerRange[] = $range1;
+//        $range1 = $range1 == $answer ? $range1 + 1 : $range1;
+        $range2 = $range1 + rand(1,$mis);
+        if (in_array($range2, $answerRange)) {
+            $range2 = max($answerRange) + 1;
+        }
+        $answerRange[] = $range2;
+        $range3 = ($range1 - $mis) < 0 ? $range2 + rand(1,$mis) : $range1 - rand(1,$mis);
+        if (in_array($range3, $answerRange)) {
+            $range3 = max($answerRange) + 1;
+        }
+        $answerRange[] = $range3;
+//        $answerRange = [
+//            $range1,
+//            $range2,
+//            $range3,
+//            $answer
+//        ];
+
+        shuffle($answerRange);
+
+        return $answerRange;
     }
 
 }

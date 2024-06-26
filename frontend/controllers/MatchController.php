@@ -25,6 +25,18 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'update_match',
             ],
+            'update_knock_players' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'update_knock_players',
+            ],
+            'get_knockout_status' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_knockout_status',
+            ],
+            'get_knockout_players_in_match' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_knockout_players_in_match',
+            ],
 
         ];
     }

@@ -19,6 +19,7 @@ class StoryMatchPlayer extends \common\models\gii\StoryMatchPlayer
     const STORY_MATCH_PLAYER_STATUS_CANCEL = 5; // 取消
     const STORY_MATCH_PLAYER_STATUS_TIMEOUT = 6; // 超时
     const STORY_MATCH_PLAYER_STATUS_INJURED = 7; // 受伤
+    const STORY_MATCH_PLAYER_STATUS_LOST = 8; // 失败
 
     public static $storyMatchPlayerStatus2Name = [
         self::STORY_MATCH_PLAYER_STATUS_PREPARE => '准备',
@@ -28,6 +29,7 @@ class StoryMatchPlayer extends \common\models\gii\StoryMatchPlayer
         self::STORY_MATCH_PLAYER_STATUS_CANCEL => '取消',
         self::STORY_MATCH_PLAYER_STATUS_TIMEOUT => '超时',
         self::STORY_MATCH_PLAYER_STATUS_INJURED => '受伤',
+        self::STORY_MATCH_PLAYER_STATUS_LOST => '失败',
     ];
 
     const STORY_MATCH_RESULT_WIN = 1; // 胜利

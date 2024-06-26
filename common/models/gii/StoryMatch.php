@@ -27,7 +27,7 @@ class StoryMatch extends \yii\db\ActiveRecord
         return [
             [['story_id', 'session_id', 'user_id', 'match_type', 'm_story_model_id', 'm_story_model_detail_id',
 //                'team_id', 'poi_id',        // Todo：这里的字段需要根据实际情况修改
-                'user_model_id', 'score', 'score2',], 'integer'],
+                'max_players_ct', 'join_expire_time', 'user_model_id', 'score', 'score2',], 'integer'],
             [['created_at', 'updated_at', 'status', 'story_match_status', ], 'integer'],
             [['match_name', 'match_detail', 'ret', 'story_match_prop',
 //                'match_id',         // Todo：这里的字段需要根据实际情况修改
