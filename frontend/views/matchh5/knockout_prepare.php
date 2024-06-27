@@ -31,11 +31,13 @@ $this->title = '消息';
 <style>
     .avatar {
         margin: 15px 5px 5px 5px;
+        float: left;
+        width: 120px;
     }
 </style>
 <input type="hidden" name="match_id" value="<?= $matchId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
-<input type="hidden" name="join_expire_time" value="<?= !empty($storyMatch->join_expire_time) ? $storyMatch->join_expire_time : 0 ?>">
+<input type="hidden" name="join_expire_time" value="<?= !empty($storyMatch->join_expire_time) ? $storyMatch->join_expire_time + 86400 : 0 ?>">
 
 <div class="w-100 m-auto" style="top: 20px;">
 
@@ -44,7 +46,7 @@ $this->title = '消息';
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
                     <div class="npc-name">
-                        匹配中
+                        匹配中 (<span id="matching_player_ct"></span>/<span><?= $storyMatch->max_players_ct ?></span>)
                     </div>
                     <div id="players">
                         <div style="float: left; width: 50px;"></div>
@@ -68,16 +70,19 @@ $this->title = '消息';
 </div>
 <script>
     window.onload = function(){
+        var intervalObjs = new Array();
         var matching = setInterval(function(){
-            getKnockoutStatus(matching);
+            getKnockoutStatus(intervalObjs);
             // clearInterval(matching);
         }, 1000);
+        intervalObjs.push(matching);
         var timer = setInterval(function(){
-            computeTimer();
+            computeTimer(intervalObjs);
         }, 1000);
+        intervalObjs.push(timer);
     };
 
-    function computeTimer() {
+    function computeTimer(intervalObjs) {
         // 获取当前时间
         var nowTime = new Date();
         var timeInt = parseInt(nowTime.getTime()/1000);
@@ -86,13 +91,17 @@ $this->title = '消息';
         if (cha > 0) {
             $('#timer').html('倒计时：' + cha + 's');
         } else {
+            for (i in intervalObjs) {
+                clearInterval(intervalObjs[i]);
+            }
+            // clearInterval(intervalObj);
             $('#timer').fadeOut();
             $('#match_btn').fadeIn();
         }
     }
 
     var playerIds = new Array();
-    function getKnockoutStatus(intervalObj) {
+    function getKnockoutStatus(intervalObjs) {
         var match_id = $('input[name="match_id"]').val();
         var story_id = $('input[name="story_id"]').val();
         $.ajax({
@@ -123,6 +132,7 @@ $this->title = '消息';
                 if(obj["code"] == 200){
 
                     // $('#players').html('');
+                    $('#matching_player_ct').html(obj.data.players_ct);
                     if (obj.data.players.length > 0) {
                         for (i in obj.data.players) {
                             if (playerIds.indexOf(obj.data.players[i].user.id) > -1) {
@@ -131,13 +141,15 @@ $this->title = '消息';
                             var playerAvatar = obj.data.players[i].user.avatar;
                             console.log(obj.data.players[i].user.id);
                             playerIds.push(obj.data.players[i].user.id);
-                            var avatarDiv = '<div id="avatar_' + obj.data.players[i].user.id + '" class="w-100 d-flex m-b-10 avatar"><img src="' + playerAvatar + '" width="100"></div>';
+                            var avatarDiv = '<div id="avatar_' + obj.data.players[i].user.id + '" class="d-flex m-b-10 avatar"><img src="' + playerAvatar + '" width="100"></div>';
                             $('#players').append(avatarDiv);
                         }
                     }
                     if (obj.data.status == 'playing') {
                         // 开始比赛
-                        clearInterval(intervalObj);
+                        for (i in intervalObjs) {
+                            clearInterval(intervalObj[i]);
+                        }
                         $('#match_btn').fadeIn();
                         $('#timer').fadeOut();
                     }

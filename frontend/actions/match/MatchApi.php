@@ -215,6 +215,7 @@ class MatchApi extends ApiAction
             'status' => $status,
             'match' => $storyMatch,
             'players' => $players,
+            'players_ct' => sizeof($players),
         ];
 
     }

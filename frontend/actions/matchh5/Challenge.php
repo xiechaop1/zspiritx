@@ -235,6 +235,16 @@ class Challenge extends Action
                     }
                 }
                 break;
+            case StoryMatch::MATCH_CLASS_ENGLISH:
+                $subjects = [];
+                for ($i=0; $i<100; $i++) {
+                    $subjects[] = Yii::$app->doubao->generateSubject($level, $storyMatch->match_class, 2);
+                    var_dump($subjects);exit;
+                    if ($i == 10) {
+                        $level++;
+                    }
+                }
+                break;
             default:
                 return $this->renderErr('比赛类型不支持！');
 

@@ -192,8 +192,8 @@ class KnockoutPrepare extends Action
 
         if (empty($storyMatchPlayer)) {
             $playerProp = [
-                'grade' => $userExtends->grade,
-                'level' => $userExtends->level,
+                'grade' => !empty($userExtends->grade) ? $userExtends->grade : 1,
+                'level' => !empty($userExtends->level) ? $userExtends->level : 1,
             ];
             $storyMatchPlayer = new StoryMatchPlayer();
             $storyMatchPlayer->user_id = $userId;
