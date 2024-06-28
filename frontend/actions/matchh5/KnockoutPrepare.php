@@ -133,9 +133,10 @@ class KnockoutPrepare extends Action
                         'story_match_status' => [
                             StoryMatch::STORY_MATCH_STATUS_PREPARE,
                             StoryMatch::STORY_MATCH_STATUS_MATCHING,
-                            StoryMatch::STORY_MATCH_STATUS_PLAYING,
+//                            StoryMatch::STORY_MATCH_STATUS_PLAYING,
                         ],
                     ])
+                    ->orderBy('id desc')
                     ->one();
                 $matchId = !empty($storyMatch->id) ? $storyMatch->id : 0;
 
