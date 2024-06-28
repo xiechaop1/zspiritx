@@ -121,7 +121,9 @@ class KnockoutPrepare extends Action
                     ],
                 ])
                 ->one();
-            $matchId = $storyMatch->id;
+            if (!empty($storyMatch)) {
+                $matchId = $storyMatch->id;
+            }
 
 //            if (empty($storyMatch)) {
 ////                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
@@ -213,7 +215,7 @@ class KnockoutPrepare extends Action
                 $storyMatch->save();
                 $matchId = Yii::$app->db->getLastInsertID();
             }
-        
+
 
         $storyMatchPlayer = StoryMatchPlayer::find()
             ->where([
