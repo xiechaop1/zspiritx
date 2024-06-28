@@ -121,29 +121,32 @@ class KnockoutPrepare extends Action
                     ],
                 ])
                 ->one();
+            $matchId = $storyMatch->id;
 
-            if (empty($storyMatch)) {
-//                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
-                return $this->renderErr('对战不存在');
-            }
-        } else {
+//            if (empty($storyMatch)) {
+////                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
+//                return $this->renderErr('对战不存在');
+//            }
+        }
 
+        if (empty($matchId)) {
 
-                $storyMatch = StoryMatch::find()
-                    ->where([
-                        'match_type' => $matchType,
-                        'match_class' => $matchClass,
+            $storyMatch = StoryMatch::find()
+                ->where([
+                    'match_type' => $matchType,
+                    'match_class' => $matchClass,
 //                    'session_id' => $sessionId,
-                        'story_id' => $storyId,
-                        'story_match_status' => [
-                            StoryMatch::STORY_MATCH_STATUS_PREPARE,
-                            StoryMatch::STORY_MATCH_STATUS_MATCHING,
+                    'story_id' => $storyId,
+                    'story_match_status' => [
+                        StoryMatch::STORY_MATCH_STATUS_PREPARE,
+                        StoryMatch::STORY_MATCH_STATUS_MATCHING,
 //                            StoryMatch::STORY_MATCH_STATUS_PLAYING,
-                        ],
-                    ])
-                    ->orderBy('id desc')
-                    ->one();
-                $matchId = !empty($storyMatch->id) ? $storyMatch->id : 0;
+                    ],
+                ])
+                ->orderBy('id desc')
+                ->one();
+            $matchId = !empty($storyMatch->id) ? $storyMatch->id : 0;
+        }
 
 
             // 如果比赛开始，但是玩家已经结束，那么重新建立比赛
@@ -210,7 +213,7 @@ class KnockoutPrepare extends Action
                 $storyMatch->save();
                 $matchId = Yii::$app->db->getLastInsertID();
             }
-        }
+        
 
         $storyMatchPlayer = StoryMatchPlayer::find()
             ->where([
