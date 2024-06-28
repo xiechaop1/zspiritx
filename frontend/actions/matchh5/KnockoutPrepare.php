@@ -85,10 +85,10 @@ class KnockoutPrepare extends Action
         }
 
         if (empty($matchId)) {
-            $storyMatchPlayer = StoryMatchPlayer::find()
+            $storyMatchPlayers = StoryMatchPlayer::find()
                 ->where([
                     'user_id' => $userId,
-                    'match_type' => $matchType,
+//                    'match_type' => $matchType,
                     'match_player_status' => [
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
@@ -96,17 +96,20 @@ class KnockoutPrepare extends Action
                     ],
                 ])
                 ->orderBy('id desc')
-                ->one();
+                ->all();
 
-            if (!empty($storyMatchPlayer)) {
-                $matchId = $storyMatchPlayer->match_id;
+            $matchIds = [];
+            if (!empty($storyMatchPlayers)) {
+                foreach ($storyMatchPlayers as $storyMatchPlayer) {
+                    $matchIds[] = $storyMatchPlayer->match_id;
+                }
             }
         }
 
-        if (!empty($matchId)) {
+        if (!empty($matchIds)) {
             $storyMatch = StoryMatch::find()
                 ->where([
-                    'id' => $matchId,
+                    'id' => $matchIds,
                     'match_type' => $matchType,
 //                    'user_id' => $userId,
 //                    'session_id' => $sessionId,
