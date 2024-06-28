@@ -68,7 +68,18 @@ class Doubao extends Component
             $matchCLassName = StoryMatch::$matchClass2Name[$matchClass];
         }
 
-        $userMessage = '这是一道' . $matchCLassName . '题目，题目内容是：' . $topic . '，问号(?)是要求的数字。现在你扮演一名教育专家，不要给出答案，引导一名' . $gradeName . '的学生，请给出提示，200字之内';
+        switch ($matchClass) {
+            case StoryMatch::MATCH_CLASS_POEM:
+                $userMessage = '这是一首诗的一句，题目内容是：' . $topic . '，问号(?)是原诗缺少的字。请说出这首诗的出处，作者和当时背景故事';
+//                是语文老师，不说答案，通过这首诗的出处，作者，故事，引导学生作答
+                break;
+            case StoryMatch::MATCH_CLASS_POEM_IDIOM:
+                $userMessage = '这是一个成语，题目内容是：' . $topic . '，问号(?)是原成语缺少的字。请描述这个成语表达的含义，但是不要说出答案';
+                break;
+            case StoryMatch::MATCH_CLASS_MATH:
+            default:
+            $userMessage = '这是一道' . $matchCLassName . '题目，题目内容是：' . $topic . '，问号(?)是要填写的答案。现在你扮演一名教育专家，不要给出答案，引导一名' . $gradeName . '的学生，请给出提示，200字之内';
+        }
 //        $userMessage .= '#输出格式#' . '输出提示方法';
 
         $response = $this->chatWithDoubao($userMessage);
@@ -102,7 +113,8 @@ class Doubao extends Component
 //        var_dump($messages);exit;
 
         $data = array(
-            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
+//            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
+            'model' => 'ep-20240628070258-6m88j',
             'messages' => $messages,
             'temperature' => 0.7,
 //            'stream' => false,
