@@ -70,7 +70,10 @@ class Knockout extends Action
             ->where([
                 'id'    => $matchId,
 //                'match_type' => StoryMatch::MATCH_TYPE_CHALLENGE,
-                'story_match_status' => StoryMatch::STORY_MATCH_STATUS_PLAYING,
+                'story_match_status' => [
+                    StoryMatch::STORY_MATCH_STATUS_MATCHING,
+                    StoryMatch::STORY_MATCH_STATUS_PLAYING
+                ],
 //                'user_model_id' => $userModelId,
             ])
             ->one();
@@ -89,6 +92,9 @@ class Knockout extends Action
             return $this->renderErr('挑战还没有准备好！');
 //            throw new Exception('您没有准备参赛的赛车，请您用钥匙启动准备好以后，联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
+
+        $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PLAYING;
+        $storyMatch->save();
 
         $playersData = $storyMatch->players;
 

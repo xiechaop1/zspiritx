@@ -165,7 +165,7 @@ class MatchApi extends ApiAction
                 $status = 'playing';
             } else {
 
-                if ($storyMatch->join_expire_time < time()
+                if ($storyMatch->join_expire_time <= time()
 //                    && 1 != 1
                 ) {
                     $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PLAYING;
