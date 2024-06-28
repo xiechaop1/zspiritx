@@ -68,7 +68,8 @@ class Doubao extends Component
             $matchCLassName = StoryMatch::$matchClass2Name[$matchClass];
         }
 
-        $userMessage = '这是一道' . $matchCLassName . '题目，内容是：' . $topic . '，你是教育专家，你正在引导一名' . $gradeName . '的学生，请给出提示，但是不要给出答案';
+        $userMessage = '这是一道' . $matchCLassName . '题目，题目内容是：' . $topic . '。现在你扮演一名教育专家，你正在引导一名' . $gradeName . '的学生，请给出提示，60字之内，但是不要给出答案';
+//        $userMessage .= '#输出格式#' . '输出提示方法';
 
         $response = $this->chatWithDoubao($userMessage);
 

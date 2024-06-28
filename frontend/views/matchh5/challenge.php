@@ -215,9 +215,6 @@ $this->title = $storyMatch->match_name;
                     <div id="number-floater" style="position: absolute; color: #FFB94F; font-size: 48px; top: 36px; left: 180px; text-align: center; z-index: 9999999"></div>
                     <input type="hidden" id="subj_idx" value="0">
                     <div id="topic" style="font-size: 60px; text-align: center;"></div>
-                    <div id="suggestion" class="fs-30 text-FF">提示
-                    <div id="suggestion_content" class="fs-24 text-FF" style="border-top: 1px solid #c0c0c0;"></div>
-                    </div>
                     <div id="image">
 <!--                        <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
                     </div>
@@ -229,11 +226,14 @@ $this->title = $storyMatch->match_name;
                     if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CHALLENGE) {
                         ?>
                     <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; bottom: 0px; margin-top: 30px; text-align: right;">
-                        <div style="float: left; width: 25%;">💰 <span id="gold">0</span></div>
-                        <div style="float: left; width: 25%;">📝️ <span id="subjct">0</span></div>
-                        <div style="float: left; width: 35%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
+                        <div style="float: left; width: 20%;">💰 <span id="gold">0</span></div>
+                        <div style="float: left; width: 20%;">📝️ <span id="subjct">0</span></div>
+                        <div style="float: left; width: 30%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
+                        <div id="suggestion" class="fs-30" style="color: yellow; float: left; width: 20%;">❓提示
+                        </div>
 <!--                        <div style="float: left; width: 30%;">🕒 <span id="timer">--><?php //= $initTimer?><!--</span>秒</div>-->
                     </div>
+                        <div id="suggestion_content" class="fs-24 text-FF" style="display:none; border-top: 1px solid #c0c0c0;"></div>
                     <?php
                     }
                     ?>
@@ -770,8 +770,13 @@ $this->title = $storyMatch->match_name;
         showSubject(0);
 
         $('#suggestion').click(function() {
+            $('#suggestion_content').show();
+            $('#suggestion_content').html('正在思考……');
 
-            getSugg();
+            setTimeout(function () {
+                getSugg();
+            }, 500);
+
         });
 
     };
@@ -865,6 +870,7 @@ $this->title = $storyMatch->match_name;
             // $('input[name=answer_c]').attr('disabled', false);
 
         });
+        $('#suggestion_content').fadeOut();
     }
 
     function sleep(ms) {
