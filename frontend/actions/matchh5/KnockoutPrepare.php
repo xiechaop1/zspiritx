@@ -88,6 +88,7 @@ class KnockoutPrepare extends Action
             $storyMatchPlayer = StoryMatchPlayer::find()
                 ->where([
                     'user_id' => $userId,
+                    'match_type' => $matchType,
                     'match_player_status' => [
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
@@ -106,6 +107,7 @@ class KnockoutPrepare extends Action
             $storyMatch = StoryMatch::find()
                 ->where([
                     'id' => $matchId,
+                    'match_type' => $matchType,
 //                    'user_id' => $userId,
 //                    'session_id' => $sessionId,
 //                    'story_id' => $storyId,

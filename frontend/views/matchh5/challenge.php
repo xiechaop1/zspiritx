@@ -725,7 +725,7 @@ $this->title = $storyMatch->match_name;
                 // console.log(rivalHitObj.find('.show_attack'));
                 console.log(rivalSpeed);
 
-                var rivalObj = $('#riv_speed_' + rivalId);;
+                var rivalObj = $('#riv_speed_' + rivalId);
                 rivalObj.css('width', '0px');
 
                 var rivalTimer = setInterval(function() {
@@ -780,6 +780,45 @@ $this->title = $storyMatch->match_name;
         });
 
     };
+
+    function startRivalTimer(match_type) {
+        var rivalTimer = setInterval(function() {
+            var rivalWidth = rivalObj.width();
+
+            if (checkRivHp() == 0) {
+                clearRivSpeed(rivalObj);
+                clearInterval(rivalTimer);
+            }
+            if (rivalWidth >= 360) {
+                var myHp = $('#my_hp');
+                var rand = Math.random();
+                rivalHit = parseInt(rand * (rivalHitMax - rivalHitMin + 1)) + parseInt(rivalHitMin);
+                console.log(rivalHit);
+                computeHp(myHp, rivalHit);
+                clearRivSpeed(rivalObj);
+
+                if (checkMyHp() == 0) {
+                    $('#answer-error-box').modal('show');
+                    clearInterval(rivalTimer);
+                }
+
+                $('#add_gold').val('0');
+                $('#add_right').val('0');
+                $('#add_wrong').val('1');
+
+                return;
+                // clearInterval(rivalTimer);
+            }
+
+            // rivalWidth += rivalSpeed/200;
+            var addRivalWidth = 13500/rivalSpeed;
+            var showRivalWidth = rivalWidth + addRivalWidth;
+            console.log(addRivalWidth);
+            // console.log(showRivalWidth);
+            rivalObj.css('width', showRivalWidth);
+
+        }, 50);
+    }
 
     function getSugg() {
         // $('#suggestion_content').toggle();

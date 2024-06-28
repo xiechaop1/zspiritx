@@ -143,10 +143,12 @@ class MatchApi extends ApiAction
     public function getKnockoutStatus() {
         $status = 'matching';
         $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
+        $matchType = !empty($this->_get['match_type']) ? $this->_get['match_type'] : StoryMatch::MATCH_TYPE_KNOCKOUT;
 
         $storyMatch = StoryMatch::find()
             ->where([
                 'id' => $matchId,
+                'match_type' => $matchType,
                 'story_match_status' => [
                     StoryMatch::STORY_MATCH_STATUS_MATCHING,
                     StoryMatch::STORY_MATCH_STATUS_PLAYING,
