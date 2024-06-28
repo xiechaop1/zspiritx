@@ -56,11 +56,11 @@ class Qas extends Component
         return $subjects;
     }
 
-    public function generateMath($level = 1) {
+    public function generateMath($level = 1, $gold = 0) {
         $subjects = [];
         switch ($level) {
             case 1:
-                $subjects = $this->randMathFormula(2, 20, ['+','-'], $level, 1);
+                $subjects = $this->randMathFormula(2, 20, ['+','-'], $level, 1, $gold);
                 break;
             case 2:
                 $randNumCt = rand(2,3);
@@ -68,7 +68,7 @@ class Qas extends Component
                 if ($randNumCt == 2) {
                     $numMax = 100;
                 }
-                $subjects = $this->randMathFormula($randNumCt, $numMax, ['+','-'], $level, 2);
+                $subjects = $this->randMathFormula($randNumCt, $numMax, ['+','-'], $level, 2, $gold);
                 break;
             case 3:
                 $randNumCt = rand(2,3);
@@ -80,7 +80,7 @@ class Qas extends Component
                     $computeTag = ['*'];
                     $mode = 1;
                 }
-                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode);
+                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode, $gold);
                 break;
             case 4:
                 $randNumCt = rand(2,3);
@@ -92,7 +92,7 @@ class Qas extends Component
                     $computeTag = ['*','/'];
                     $mode = 1;
                 }
-                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode);
+                $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode, $gold);
                 break;
         }
         return $subjects;
@@ -552,7 +552,7 @@ class Qas extends Component
     }
 
 
-    public function randMathFormula($numCt = 2, $numMax = 20, $opRange = ['+','-','*','/'], $level, $mode = 1){
+    public function randMathFormula($numCt = 2, $numMax = 20, $opRange = ['+','-','*','/'], $level, $mode = 1, $gold = 0){
 
         // $mode = 1: 答案最后
         // $mode = 2: 答案可以在中间
@@ -640,7 +640,10 @@ class Qas extends Component
             5 * (1 + ($level - 1) / 5),
             10 * (1 + ($level - 1) / 5),
         ];
-        $gold = 10 * (1 + ($level - 1) / 2);
+
+        if (empty($gold)) {
+            $gold = 10 * (1 + ($level - 1) / 2);
+        }
 
         return [
             'formula' => $showFormula,

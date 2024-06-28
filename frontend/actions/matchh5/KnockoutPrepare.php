@@ -59,6 +59,9 @@ class KnockoutPrepare extends Action
 
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
 
+        $fee = 200;
+        $gold = intval($fee / 5);
+
 
         $answerType = !empty($_GET['answer_type']) ? $_GET['answer_type'] : 0;
 
@@ -79,6 +82,24 @@ class KnockoutPrepare extends Action
 
         if (empty($matchId) && empty($matchName)) {
             $matchName = date('Y-m-d H:i:s') . ' ' . $userInfo->user_name . '发起淘汰赛';
+        }
+
+        if (empty($matchId)) {
+            $storyMatchPlayer = StoryMatchPlayer::find()
+                ->where([
+                    'user_id' => $userId,
+                    'match_player_status' => [
+                        StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
+                        StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+                        StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+                    ],
+                ])
+                ->orderBy('id desc')
+                ->one();
+
+            if (!empty($storyMatchPlayer)) {
+                $matchId = $storyMatchPlayer->match_id;
+            }
         }
 
         if (!empty($matchId)) {
@@ -102,26 +123,11 @@ class KnockoutPrepare extends Action
             }
         } else {
 
-            $storyMatch = StoryMatch::find()
-                ->where([
-                    'user_id' => $userId,
-                    'match_type' => $matchType,
-//                    'session_id' => $sessionId,
-                    'story_id' => $storyId,
-                    'story_match_status' => [
-                        StoryMatch::STORY_MATCH_STATUS_PREPARE,
-                        StoryMatch::STORY_MATCH_STATUS_MATCHING,
-                        StoryMatch::STORY_MATCH_STATUS_PLAYING,
-                    ],
-                ])
-                ->one();
 
-            if (!empty($storyMatch)) {
-                $matchId = $storyMatch->id;
-            } else {
                 $storyMatch = StoryMatch::find()
                     ->where([
                         'match_type' => $matchType,
+                        'match_class' => $matchClass,
 //                    'session_id' => $sessionId,
                         'story_id' => $storyId,
                         'story_match_status' => [
@@ -132,7 +138,29 @@ class KnockoutPrepare extends Action
                     ])
                     ->one();
                 $matchId = !empty($storyMatch->id) ? $storyMatch->id : 0;
-            }
+
+
+            // 如果比赛开始，但是玩家已经结束，那么重新建立比赛
+//            if (!empty($matchId)) {
+//                $userPlayer = StoryMatchPlayer::find()
+//                    ->where([
+//                        'match_id' => $matchId,
+//                        'user_id' => $userId,
+//                    ])
+//                    ->one();
+//
+//                if (!empty($userPlayer)
+//                    && !in_array(
+//                        $userPlayer->match_player_status, [
+//                            StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
+//                            StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+//                            StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+//                    ])
+//                ) {
+//                    $matchId = 0;
+//                }
+//
+//            }
 
             if (empty($matchId)) {
                 if (empty($matchClass)) {
@@ -156,8 +184,8 @@ class KnockoutPrepare extends Action
                 switch ($matchClass) {
                     case StoryMatch::MATCH_CLASS_MATH:
                         $ct = 2;
-                        for ($level = 1; $level < 4; $level++) {
-                            $subjects = array_merge($subjects, $this->generateMathWithCt($ct, $level));
+                        for ($level = 1; $level <= 4; $level++) {
+                            $subjects = array_merge($subjects, $this->generateMathWithCt($ct, $level, $gold));
                         }
                 }
                 $storyMatchProp['subjects'] = $subjects;
@@ -218,12 +246,12 @@ class KnockoutPrepare extends Action
         ]);
     }
 
-    public function generateMathWithCt($ct, $level = 1) {
+    public function  generateMathWithCt($ct, $level = 1, $gold = 0) {
         $subjects = [];
         for ($i=0; $i<$ct; $i++) {
             $subjects[] = [
                 'level' => $level,
-                'topic' => Yii::$app->qas->generateMath($level),
+                'topic' => Yii::$app->qas->generateMath($level, $gold),
                 'max_time' => 180,
             ];
         }

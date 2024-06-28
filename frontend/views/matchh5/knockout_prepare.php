@@ -37,7 +37,7 @@ $this->title = '消息';
 </style>
 <input type="hidden" name="match_id" value="<?= $matchId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
-<input type="hidden" name="join_expire_time" value="<?= !empty($storyMatch->join_expire_time) ? $storyMatch->join_expire_time + 86400 : 0 ?>">
+<input type="hidden" name="join_expire_time" value="<?= !empty($storyMatch->join_expire_time) ? $storyMatch->join_expire_time : 0 ?>">
 
 <div class="w-100 m-auto" style="top: 20px;">
 
@@ -133,14 +133,17 @@ $this->title = '消息';
 
                     // $('#players').html('');
                     $('#matching_player_ct').html(obj.data.players_ct);
+                    var playerCt = 0;
                     if (obj.data.players.length > 0) {
                         for (i in obj.data.players) {
-                            if (playerIds.indexOf(obj.data.players[i].user.id) > -1) {
+                            if (playerIds.indexOf(obj.data.players[i].id) > -1
+                                || i >= 12
+                            ) {
                                 continue;
                             }
                             var playerAvatar = obj.data.players[i].user.avatar;
-                            console.log(obj.data.players[i].user.id);
-                            playerIds.push(obj.data.players[i].user.id);
+                            console.log(obj.data.players[i].id);
+                            playerIds.push(obj.data.players[i].id);
                             var avatarDiv = '<div id="avatar_' + obj.data.players[i].user.id + '" class="d-flex m-b-10 avatar"><img src="' + playerAvatar + '" width="100"></div>';
                             $('#players').append(avatarDiv);
                         }
@@ -148,7 +151,7 @@ $this->title = '消息';
                     if (obj.data.status == 'playing') {
                         // 开始比赛
                         for (i in intervalObjs) {
-                            clearInterval(intervalObj[i]);
+                            clearInterval(intervalObjs[i]);
                         }
                         $('#match_btn').fadeIn();
                         $('#timer').fadeOut();

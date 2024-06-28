@@ -102,11 +102,24 @@ class MatchApi extends ApiAction
         $players = StoryMatchPlayer::find()
             ->where([
                 'match_id' => $matchId,
-                'story_match_player_status' => StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+                'match_player_status' => StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
             ])
             ->all();
 
-        return $players;
+        $playerIds = [];
+        $playersCt = 0;
+        if (!empty($players)) {
+            foreach ($players as $player) {
+                $playerIds[] = $player->id;
+                $playersCt++;
+            }
+        }
+
+        return [
+            'players' => $players,
+            'playerIds' => $playerIds,
+            'players_ct' => $playersCt,
+        ];
     }
 
     public function getKnockoutStatus() {
@@ -133,7 +146,7 @@ class MatchApi extends ApiAction
             } else {
 
                 if ($storyMatch->join_expire_time < time()
-                    && 1 != 1
+//                    && 1 != 1
                 ) {
                     $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_PLAYING;
                     $storyMatch->save();
@@ -146,16 +159,17 @@ class MatchApi extends ApiAction
                             $playerCt++;
                         }
 
-                        if ($playerCt < $storyMatch->max_players_ct) {
-                            for ($i=0; $i<$storyMatch->max_players_ct - $playerCt; $i++) {
-                                $player = new StoryMatchPlayer();
-                                $player->user_id = 0;
-
-                                $player->match_id = $matchId;
-                                $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING;
-                                $player->save();
-                            }
-                        }
+                        // Todo： 暂时去掉补充机器人
+//                        if ($playerCt < $storyMatch->max_players_ct) {
+//                            for ($i=0; $i<$storyMatch->max_players_ct - $playerCt; $i++) {
+//                                $player = new StoryMatchPlayer();
+//                                $player->user_id = 0;
+//
+//                                $player->match_id = $matchId;
+//                                $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING;
+//                                $player->save();
+//                            }
+//                        }
                     }
 
                     $status = 'playing';
@@ -165,6 +179,7 @@ class MatchApi extends ApiAction
                             'match_id' => $matchId,
                             'match_player_status' => [
                                 StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+                                StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
                             ],
                         ])
                         ->count();
@@ -191,7 +206,7 @@ class MatchApi extends ApiAction
                 'match_id' => $matchId,
                 'match_player_status' => [
                     StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
-//                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
                 ],
             ])
 //            ->asArray()
@@ -201,9 +216,13 @@ class MatchApi extends ApiAction
         if (!empty($playersData)) {
             foreach ($playersData as $player) {
                 $tmp = $player->toArray();
-                $tmp['user'] = $player->user->toArray();
+                if (!empty($player->user)) {
+                    $tmp['user'] = $player->user->toArray();
+                } else {
+                    $tmp['user']['user_name'] = 'AI-' . rand(1000,9999);
+                }
                 if (!empty($tmp['user']['avatar'])) {
-                    $tmp['user']['avatar'] = Attachment::completeUrl($tmp['user']['avatar']);
+                    $tmp['user']['avatar'] = Attachment::completeUrl($tmp['user']['avatar'], 60);
                 } else {
                     $tmp['user']['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
                 }
@@ -242,13 +261,15 @@ class MatchApi extends ApiAction
 
             Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
 
-            if ($subjectCt > 0) {
-                if (($rightCt / $subjectCt) > 0.8) {
-                    $addLevel = 1;
-                    Yii::$app->userService->updateUserLevel($userId, $addLevel);
-                } elseif (($rightCt / $subjectCt) < 0.4) {
-                    $addLevel = -1;
-                    Yii::$app->userService->updateUserLevel($userId, $addLevel);
+            if ($storyMatch->match_type != StoryMatch::MATCH_TYPE_KNOCKOUT) {
+                if ($subjectCt > 0) {
+                    if (($rightCt / $subjectCt) > 0.8) {
+                        $addLevel = 1;
+                        Yii::$app->userService->updateUserLevel($userId, $addLevel);
+                    } elseif (($rightCt / $subjectCt) < 0.4) {
+                        $addLevel = -1;
+                        Yii::$app->userService->updateUserLevel($userId, $addLevel);
+                    }
                 }
             }
 
@@ -262,24 +283,44 @@ class MatchApi extends ApiAction
                 'score' => $score,
             ];
 
-            if ($answer == 1) {
-                if (!empty($storyMatch->players)) {
-                    foreach ($storyMatch->players as $player) {
-                        $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
-//                        $player->save();
-                    }
+            if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_KNOCKOUT) {
+                $myPlayer = StoryMatchPlayer::find()
+                    ->where([
+                        'match_id' => $matchId,
+                        'user_id' => $userId,
+                    ])
+                    ->one();
+//                var_dump($answer);
+                if ($answer == 1) {
+                    $myPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
+                    $myPlayer->save();
+//                    echo '1';
+                } else {
+                    $myPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_LOST;
+                    $myPlayer->save();
+//                    echo '2';
                 }
-
-                $storyMatch->match_detail = json_encode($matchDetail, true);
-                $storyMatch->score = $score;
-                $storyMatch->score2 = $subjectCt;
-                $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_END;
-//                $storyMatch->save();
             } else {
-                $storyMatch->match_detail = json_encode($matchDetail, true);
-                $storyMatch->score = $score;
-                $storyMatch->score2 = $subjectCt;
+                if ($answer == 1) {
+                    if (!empty($storyMatch->players)) {
+                        foreach ($storyMatch->players as $player) {
+                            $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
+//                        $player->save();
+                        }
+                    }
+
+                    $storyMatch->match_detail = json_encode($matchDetail, true);
+                    $storyMatch->score = $score;
+                    $storyMatch->score2 = $subjectCt;
+                    $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_END;
 //                $storyMatch->save();
+                } else {
+                    $storyMatch->match_detail = json_encode($matchDetail, true);
+                    $storyMatch->score = $score;
+                    $storyMatch->score2 = $subjectCt;
+
+//                $storyMatch->save();
+                }
             }
 
             $transaction->commit();
