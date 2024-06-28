@@ -169,7 +169,7 @@ class Challenge extends Action
         switch ($grade) {
             case 1:
             default:
-                $level = 2;
+                $level = 1;
                 break;
         }
 
