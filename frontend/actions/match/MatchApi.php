@@ -65,6 +65,9 @@ class MatchApi extends ApiAction
                 case 'get_knockout_players_in_match':
                     $ret = $this->getKnockoutPlayersInMatch();
                     break;
+                case 'get_suggestion_from_subject':
+                    $ret = $this->getSuggestionFromSubject();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -75,6 +78,21 @@ class MatchApi extends ApiAction
         }
 
         return $this->success($ret);
+    }
+
+    public function getSuggestionFromSubject() {
+        $topic = !empty($this->_get['topic']) ? $this->_get['topic'] : '';
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
+        $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
+
+        $suggestion = Yii::$app->doubao->generateSuggestionFromSubject($topic, $level, $matchClass);
+
+        $ret = [
+            'suggestion' => $suggestion,
+        ];
+//        var_dump($ret);exit;
+
+        return $ret;
     }
 
     public function updateKnockPlayers() {

@@ -160,7 +160,11 @@ $this->title = $storyMatch->match_name;
 <input type="hidden" name="begin_ts" value="<?= time() ?>">
 <input type="hidden" name="qa_type" id="qa_type" value="<?= $qa['qa_type'] ?>">
 <input type="hidden" name="match_type" id="match_type" value="<?= $storyMatch->match_type ?>">
+<input type="hidden" name="match_id" value="<?= $matchId ?>">
+<input type="hidden" name="story_id" value="<?= $storyId ?>">
+<input type="hidden" name="match_class" value="<?= !empty($storyMatch->match_class) ? $storyMatch->match_class : 0 ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
+<input type="hidden" name="level" value="<?= $level ?>">
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
         <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -211,6 +215,9 @@ $this->title = $storyMatch->match_name;
                     <div id="number-floater" style="position: absolute; color: #FFB94F; font-size: 48px; top: 36px; left: 180px; text-align: center; z-index: 9999999"></div>
                     <input type="hidden" id="subj_idx" value="0">
                     <div id="topic" style="font-size: 60px; text-align: center;"></div>
+                    <div id="suggestion" class="fs-30 text-FF">提示
+                    <div id="suggestion_content" class="fs-24 text-FF" style="border-top: 1px solid #c0c0c0;"></div>
+                    </div>
                     <div id="image">
 <!--                        <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
                     </div>
@@ -688,7 +695,6 @@ $this->title = $storyMatch->match_name;
 
         max = <?= $ct ?>;
 
-
         var rivals = $('.show_speed');
         if (match_type == 3) {
             rivals.each(function () {
@@ -761,9 +767,62 @@ $this->title = $storyMatch->match_name;
             });
         }
 
-
         showSubject(0);
+
+        $('#suggestion').click(function() {
+
+            getSugg();
+        });
+
     };
+
+    function getSugg() {
+        // $('#suggestion_content').toggle();
+        var topic = $('#topic').html();
+        var level = $('input[name=level]').val();
+        var match_class = $('input[name=match_class]').val();
+        var user_id = $('input[name=user_id]').val();
+        var story_id = $('input[name=story_id]').val();
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/match/get_suggestion_from_subject',
+            data:{
+                story_id:story_id,
+                user_id:user_id,
+                topic:topic,
+                level:level,
+                match_class:match_class,
+            },
+            onload: function (data) {
+                $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                //新消息获取成功
+                if(obj["code"]==200){
+                    console.log(obj);
+                    var suggestion = obj.data.suggestion;
+                    $('#suggestion_content').html(suggestion);
+                }
+                //新消息获取失败
+                else{
+                    $.alert(obj.msg)
+                }
+
+            }
+        });
+    }
 
     function showSubject(idx) {
         var topic = obj[idx].formula;

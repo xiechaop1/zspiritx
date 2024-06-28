@@ -270,6 +270,7 @@ class Challenge extends Action
             'myProp'        => $myProp,
             'myPropJson'    => json_encode($myProp),
             'rivalPlayers'  => $rivalPlayers,
+            'level'         => $level,
             'qa'            => $qa,
             'rtnAnswerType' => 2,
             'subjectsJson' => json_encode($subjects, JSON_UNESCAPED_UNICODE),

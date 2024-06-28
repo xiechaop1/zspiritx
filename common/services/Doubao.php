@@ -29,25 +29,29 @@ class Doubao extends Component
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
     public function generateSubject($level = 0, $matchClass = 0, $ct = 10, $templateContents = array()) {
-        foreach (UserExtends::$userGradeLevelMap as $grade => $gradeLevel) {
-            if ($level >= $gradeLevel) {
-                $gradeName = UserExtends::$userGrade2Name[$grade];
-            } else {
-                break;
-            }
-        }
+//        foreach (UserExtends::$userGradeLevelMap as $grade => $gradeLevel) {
+//            if ($level >= $gradeLevel) {
+//                $gradeName = UserExtends::$userGrade2Name[$grade];
+//            } else {
+//                break;
+//            }
+//        }
+        $gradeName = $this->_getGradeNameFromLevel($level);
         $oldMessages = [];
         $roleTxt = self::ROLE_GENERATE_SUBJECT;
-        if ($matchClass == StoryMatch::MATCH_CLASS_ENGLISH) {
-            $userMessage = '请出' . $ct . '道英语题目，题目是一个英文短句，答案是这个英文单词对应的中文。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';
-            $userMessage .= '#输出格式#' . '输出题目、选项和答案。输出格式为JSON';
-            $userMessage .= '#输出样例#' . json_encode([
-                    'SUBJECT' => 'WORD',
-                    'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
-                    'ANSWER' => 'A',
-                ], JSON_UNESCAPED_UNICODE);
-        } else {
-            $userMessage = '我没有想好出什么题';
+        switch ($matchClass) {
+            case StoryMatch::MATCH_CLASS_ENGLISH:
+                $userMessage = '请出' . $ct . '道英语题目，题目是一个英文短句，答案是这个英文单词对应的中文。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';
+                $userMessage .= '#输出格式#' . '输出题目、选项和答案。输出格式为JSON';
+                $userMessage .= '#输出样例#' . json_encode([
+                        'SUBJECT' => 'WORD',
+                        'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
+                        'ANSWER' => 'A',
+                    ], JSON_UNESCAPED_UNICODE);
+                break;
+            default:
+                $userMessage = '请出' . $ct . '到题目，题目可以是数学，英语，语文，历史，生物，物理，或者冷门知识。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';
+                break;
         }
         $response = $this->chatWithDoubao($userMessage, $oldMessages, $templateContents, $roleTxt);
 
@@ -56,10 +60,28 @@ class Doubao extends Component
         return $messages;
     }
 
+    public function generateSuggestionFromSubject($topic, $level = 0, $matchClass) {
+        $gradeName = $this->_getGradeNameFromLevel($level);
+
+        $matchCLassName = '';
+        if (!empty(StoryMatch::$matchClass2Name[$matchClass])) {
+            $matchCLassName = StoryMatch::$matchClass2Name[$matchClass];
+        }
+
+        $userMessage = '这是一道' . $matchCLassName . '题目，内容是：' . $topic . '，你是教育专家，你正在引导一名' . $gradeName . '的学生，请给出提示，但是不要给出答案';
+
+        $response = $this->chatWithDoubao($userMessage);
+
+//        var_dump($response);exit;
+        $messages = $response['choices'][0]['message']['content'];
+
+        return $messages;
+    }
+
     public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxt = '') {
 
         if (empty($roleTxt)) {
-            $roleTxt = '你是一个小灵镜，负责出题和解答';
+            $roleTxt = '你是一个教育方面的老师，负责出题，解答和解析';
         }
 
         $messages = array(
@@ -190,11 +212,23 @@ class Doubao extends Component
         } else {
             $response = Curl::curlGet($url);
         }
-        file_put_contents('/tmp/tmp.tmp', $response);
-        var_dump($response);exit;
+//        file_put_contents('/tmp/tmp.tmp', $response);
+//        var_dump($response);exit;
 
 //        return json_decode($response, true);
         return $response;
+    }
+
+    private function _getGradeNameFromLevel($level = 0) {
+        $gradeName = '';
+        foreach (UserExtends::$userGradeLevelMap as $grade => $gradeLevel) {
+            if ($level >= $gradeLevel) {
+                $gradeName = UserExtends::$userGrade2Name[$grade];
+            } else {
+                break;
+            }
+        }
+        return $gradeName;
     }
 
 //// 示例调用

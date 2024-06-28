@@ -37,6 +37,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_knockout_players_in_match',
             ],
+            'get_suggestion_from_subject' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_suggestion_from_subject',
+            ],
 
         ];
     }
