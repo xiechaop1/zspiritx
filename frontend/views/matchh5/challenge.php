@@ -14,7 +14,7 @@
  * @var \common\models\QA $qa
  */
 
-\frontend\assets\Qah5Asset::register($this);
+\frontend\assets\Matchh5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
@@ -551,6 +551,37 @@ $this->title = $storyMatch->match_name;
                                 </div>
                 -->
             </div>
+            <div class="row modal" id="message-box" style="top: 150px;">
+                <div class="m-t-30 col-sm-12 col-md-12 p-40">
+<!--                    <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>-->
+                    <div style="clear:both; margin: 10px; padding: 30px; border: 2px solid yellow; text-align: left; background-color: rgba(0,0,0, 0.5)">
+
+                        <input type="hidden" name="message_id" id="message-id">
+                        <input type="hidden" name="message_topic" id="message-topic">
+                        <span style="float: left; width: 100px;">
+                        <img src="../../static/img/match/sugg.png" style="width: 80px;" alt="" class="img-responsive  d-block m-auto"/>
+                        </span>
+                        <span class="fs-50 bold" style="color: #ffa227;">提&nbsp;示</span>
+                        <div style="clear: both; border-top: 1px solid #ffa227; padding-top: 15px; ">
+                        <span class="answer-detail" id="message-content" style="line-height: 45px; color: yellow">
+
+                        </span>
+                        </div>
+                    </div>
+                    <br>
+                    <!--                    <div class="answer-title m-t-40">-->
+                    <!--                        恭喜您，挑战成功！-->
+                    <!--                    </div>-->
+                    <div class="btn-m-green m-t-30  m-l-30 msg-rtn-btn">
+                        继续
+                    </div>
+                    <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
+                    <!--                        --><?php //echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
+                    <!--                    </div>-->
+                </div>
+
+            </div>
+
             <div class="row modal fade" id="answer-right-box" style="top: 100px;">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
 <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
@@ -570,6 +601,9 @@ $this->title = $storyMatch->match_name;
 <!--                        恭喜您，挑战成功！-->
 <!--                    </div>-->
                     <div class="btn-m-green m-t-30  m-l-30 confirm_btn">
+                        继续
+                    </div>
+                    <div class="btn-m-green m-t-30  m-l-30 msg-rtn-btn">
                         继续
                     </div>
 <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
@@ -668,10 +702,14 @@ $this->title = $storyMatch->match_name;
     var obj;
     var max = 0;
     var myPropObj;
+    var rivalTimerObj;
+    var rivalTimerRunning;
+    var topicSuggestion;
     window.onload = function () {
         var i = 0;
         var max = <?= $ct ?>;
         var match_type = $('#match_type').val();
+
 
         if (match_type == 3) {
             var matchTimer = setInterval(function() {
@@ -684,6 +722,7 @@ $this->title = $storyMatch->match_name;
                 i++;
             }, 1000);
         }
+
 // showSubject(0, obj);
         var dataContent = <?= $subjectsJson ?>;
         var dataCon=$.toJSON(dataContent);
@@ -695,6 +734,118 @@ $this->title = $storyMatch->match_name;
 
         max = <?= $ct ?>;
 
+        // var rivals = $('.show_speed');
+        // if (match_type == 3) {
+        //     rivals.each(function () {
+        //         console.log($(this).attr('id'));
+        //         var rivalId = $(this).attr('id');
+        //         var rivalSpeed = $(this).val();
+        //         console.log(rivalSpeed);
+        //
+        //         rivalTimerObj = setInterval(function() {
+        //             var chkTimer = $('#timer').html();
+        //             var rivalSubjct = $('#riv_subjct_' + rivalId).html();
+        //             rivalSubjct++;
+        //             $('#riv_subjct_' + rivalId).html(rivalSubjct);
+        //             if (chkTimer <= 0) {
+        //                 clearInterval(rivalTimerObj);
+        //             }
+        //         }, rivalSpeed);
+        //     });
+        // } else if (match_type == 2) {
+        //     rivals.each(function () {
+        //         console.log($(this).attr('id'));
+        //         var rivalId = $(this).attr('id');
+        //         var rivalSpeed = $(this).val();
+        //         var rivalHitObj = $(this).parent().find('.show_attack');
+        //         // var rivalHit = rivalHitObj.val();
+        //         var rivalHitMin = rivalHitObj.attr('min');
+        //         var rivalHitMax = rivalHitObj.attr('max');
+        //         // console.log(rivalHitObj.find('.show_attack'));
+        //         console.log(rivalSpeed);
+        //
+        //         var rivalObj = $('#riv_speed_' + rivalId);
+        //         rivalObj.css('width', '0px');
+        //
+        //         rivalTimerObj = setInterval(function() {
+        //             var rivalWidth = rivalObj.width();
+        //
+        //             if (checkRivHp() == 0) {
+        //                 clearRivSpeed(rivalObj);
+        //                 clearInterval(rivalTimerObj);
+        //             }
+        //             if (rivalWidth >= 360) {
+        //                 var myHp = $('#my_hp');
+        //                 var rand = Math.random();
+        //                 rivalHit = parseInt(rand * (rivalHitMax - rivalHitMin + 1)) + parseInt(rivalHitMin);
+        //                 console.log(rivalHit);
+        //                 computeHp(myHp, rivalHit);
+        //                 clearRivSpeed(rivalObj);
+        //
+        //                 if (checkMyHp() == 0) {
+        //                     $('#answer-error-box').modal('show');
+        //                     clearInterval(rivalTimer);
+        //                 }
+        //
+        //                 $('#add_gold').val('0');
+        //                 $('#add_right').val('0');
+        //                 $('#add_wrong').val('1');
+        //
+        //                 return;
+        //                 // clearInterval(rivalTimer);
+        //             }
+        //
+        //             // rivalWidth += rivalSpeed/200;
+        //             var addRivalWidth = 13500/rivalSpeed;
+        //             var showRivalWidth = rivalWidth + addRivalWidth;
+        //             console.log(addRivalWidth);
+        //             // console.log(showRivalWidth);
+        //             rivalObj.css('width', showRivalWidth);
+        //
+        //         }, 50);
+        //     });
+        // }
+
+        startRivalTimer(match_type);
+
+        showSubject(0);
+
+        $('.msg-rtn-btn').click(function() {
+            $('#message-box').modal('hide');
+            // startRivalTimer($('#match_type').val());
+        });
+
+        $('#suggestion').click(function() {
+            // $('#message-box').modal('show');
+            $('#message-box').modal('show');
+            if ($('#message-topic').val() == $('#topic').html()) {
+                return;
+            }
+            $('#message-content').html('正在思考……');
+
+            setTimeout(function () {
+                getSugg();
+            }, 500);
+            stopRivalTimer();
+
+        });
+
+    };
+
+    
+    function stopRivalTimer() {
+        if (!rivalTimerRunning) {
+            return;
+        }
+        clearInterval(rivalTimerObj);
+        rivalTimerRunning = false;
+    }
+
+    function startRivalTimer(match_type) {
+        console.log(rivalTimerRunning);
+        if (rivalTimerRunning) {
+            return;
+        }
         var rivals = $('.show_speed');
         if (match_type == 3) {
             rivals.each(function () {
@@ -703,13 +854,13 @@ $this->title = $storyMatch->match_name;
                 var rivalSpeed = $(this).val();
                 console.log(rivalSpeed);
 
-                var rivalTimer = setInterval(function() {
+                rivalTimerObj = setInterval(function() {
                     var chkTimer = $('#timer').html();
                     var rivalSubjct = $('#riv_subjct_' + rivalId).html();
                     rivalSubjct++;
                     $('#riv_subjct_' + rivalId).html(rivalSubjct);
                     if (chkTimer <= 0) {
-                        clearInterval(rivalTimer);
+                        clearInterval(rivalTimerObj);
                     }
                 }, rivalSpeed);
             });
@@ -728,12 +879,12 @@ $this->title = $storyMatch->match_name;
                 var rivalObj = $('#riv_speed_' + rivalId);
                 rivalObj.css('width', '0px');
 
-                var rivalTimer = setInterval(function() {
+                rivalTimerObj = setInterval(function() {
                     var rivalWidth = rivalObj.width();
 
                     if (checkRivHp() == 0) {
                         clearRivSpeed(rivalObj);
-                        clearInterval(rivalTimer);
+                        clearInterval(rivalTimerObj);
                     }
                     if (rivalWidth >= 360) {
                         var myHp = $('#my_hp');
@@ -745,7 +896,7 @@ $this->title = $storyMatch->match_name;
 
                         if (checkMyHp() == 0) {
                             $('#answer-error-box').modal('show');
-                            clearInterval(rivalTimer);
+                            clearInterval(rivalTimerObj);
                         }
 
                         $('#add_gold').val('0');
@@ -766,58 +917,7 @@ $this->title = $storyMatch->match_name;
                 }, 50);
             });
         }
-
-        showSubject(0);
-
-        $('#suggestion').click(function() {
-            $('#suggestion_content').show();
-            $('#suggestion_content').html('正在思考……');
-
-            setTimeout(function () {
-                getSugg();
-            }, 500);
-
-        });
-
-    };
-
-    function startRivalTimer(match_type) {
-        var rivalTimer = setInterval(function() {
-            var rivalWidth = rivalObj.width();
-
-            if (checkRivHp() == 0) {
-                clearRivSpeed(rivalObj);
-                clearInterval(rivalTimer);
-            }
-            if (rivalWidth >= 360) {
-                var myHp = $('#my_hp');
-                var rand = Math.random();
-                rivalHit = parseInt(rand * (rivalHitMax - rivalHitMin + 1)) + parseInt(rivalHitMin);
-                console.log(rivalHit);
-                computeHp(myHp, rivalHit);
-                clearRivSpeed(rivalObj);
-
-                if (checkMyHp() == 0) {
-                    $('#answer-error-box').modal('show');
-                    clearInterval(rivalTimer);
-                }
-
-                $('#add_gold').val('0');
-                $('#add_right').val('0');
-                $('#add_wrong').val('1');
-
-                return;
-                // clearInterval(rivalTimer);
-            }
-
-            // rivalWidth += rivalSpeed/200;
-            var addRivalWidth = 13500/rivalSpeed;
-            var showRivalWidth = rivalWidth + addRivalWidth;
-            console.log(addRivalWidth);
-            // console.log(showRivalWidth);
-            rivalObj.css('width', showRivalWidth);
-
-        }, 50);
+        rivalTimerRunning = true;
     }
 
     function getSugg() {
@@ -827,6 +927,7 @@ $this->title = $storyMatch->match_name;
         var match_class = $('input[name=match_class]').val();
         var user_id = $('input[name=user_id]').val();
         var story_id = $('input[name=story_id]').val();
+
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -857,7 +958,9 @@ $this->title = $storyMatch->match_name;
                 if(obj["code"]==200){
                     console.log(obj);
                     var suggestion = obj.data.suggestion;
-                    $('#suggestion_content').html(suggestion);
+                    $('#message-content').html(suggestion);
+                    $('#message-topic').val(topic);
+                    // $('#message-box').modal('show');
                 }
                 //新消息获取失败
                 else{
@@ -869,6 +972,7 @@ $this->title = $storyMatch->match_name;
     }
 
     function showSubject(idx) {
+        startRivalTimer($('#match_type').val());
         var topic = obj[idx].formula;
         console.log(topic);
         if (topic == undefined) {
