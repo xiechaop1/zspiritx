@@ -93,7 +93,9 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'user_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
-                            return '[ID: ' . $model->user_id .'] ' . !empty($model->user->mobile) ? $model->user->mobile : ' - ';
+                            $ret = '[ID: ' . $model->user_id .'] ';
+                            $ret .= !empty($model->user->mobile) ? $model->user->mobile : ' - ';
+                            return $ret;
                         },
                         'filter'    => Html::activeInput('text', $searchModel, 'user_id', ['value' => !empty($params['Order']['user_id']) ? $params['Order']['user_id'] : '']),
                     ],
