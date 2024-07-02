@@ -740,6 +740,8 @@ class Qas extends Component
             'level' => $level,
             'hitRange' => $hitRange,
             'gold'  => $gold,
+            'size' => 60,
+            'speed_rate' => 1,
         ];
 
     }

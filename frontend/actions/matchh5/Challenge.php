@@ -180,22 +180,23 @@ class Challenge extends Action
                 $subjects = [];
 
                 // Todo： 测试用的，上线的话，从订单里找到qaPackage，取出qaIds，然后生成题目
-                $qa = Qa::find()
-                    ->where(['id' => $qaId])
-                    ->one();
-
-                $tmp = Yii::$app->qas->getSubjectWithQa($qa, $storyMatch->match_class, $level+1, 5);
-                if (!empty($tmp)) {
-                    foreach ($tmp as $t) {
-                        if (mb_strlen($t['topic']) > 10) {
-                            $t['size'] = '40';
-                            $t['speed_rate'] = 0.3;
-                        } else {
-                            $t['size'] = '60';
-                        }
-                        $subjects[] = $t;
-                    }
-                }
+//                $qa = Qa::find()
+//                    ->where(['id' => $qaId])
+//                    ->one();
+//
+//                $tmp = Yii::$app->qas->getSubjectWithQa($qa, $storyMatch->match_class, $level+1, 5);
+//                if (!empty($tmp)) {
+//                    foreach ($tmp as $t) {
+//                        if (mb_strlen($t['topic']) > 10) {
+//                            $t['size'] = '40';
+//                            $t['speed_rate'] = 0.3;
+//                        } else {
+//                            $t['size'] = '60';
+//                            $t['speed_rate'] = 1;
+//                        }
+//                        $subjects[] = $t;
+//                    }
+//                }
 
                 for ($i=0; $i<1000; $i++) {
                     $subjects[] = Yii::$app->qas->generateMath($level);

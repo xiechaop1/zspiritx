@@ -165,6 +165,8 @@ $this->title = $storyMatch->match_name;
 <input type="hidden" name="match_class" value="<?= !empty($storyMatch->match_class) ? $storyMatch->match_class : 0 ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
 <input type="hidden" name="level" value="<?= $level ?>">
+
+<input type="hidden" name="rival_speed_rate" id="rival_speed_rate" value="1">
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
         <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -881,14 +883,20 @@ $this->title = $storyMatch->match_name;
                 var rivalObj = $('#riv_speed_' + rivalId);
                 rivalObj.css('width', '0px');
 
+                var time_ct = 0;
                 rivalTimerObj = setInterval(function() {
+                    time_ct++;
                     var rivalWidth = rivalObj.width();
+
+                    var rivalSpeedRate = $('#rival_speed_rate').val();
 
                     if (checkRivHp() == 0) {
                         clearRivSpeed(rivalObj);
                         clearInterval(rivalTimerObj);
                     }
                     if (rivalWidth >= 360) {
+                        console.log(time_ct);
+                        time_ct = 0;
                         var myHp = $('#my_hp');
                         var rand = Math.random();
                         rivalHit = parseInt(rand * (rivalHitMax - rivalHitMin + 1)) + parseInt(rivalHitMin);
@@ -910,13 +918,12 @@ $this->title = $storyMatch->match_name;
                     }
 
                     // rivalWidth += rivalSpeed/200;
-                    var addRivalWidth = 13500/rivalSpeed;
+                    var addRivalWidth = 54000/rivalSpeed * rivalSpeedRate;
                     var showRivalWidth = rivalWidth + addRivalWidth;
-                    console.log(addRivalWidth);
                     // console.log(showRivalWidth);
                     rivalObj.css('width', showRivalWidth);
 
-                }, 50);
+                }, 200);
             });
         }
         rivalTimerRunning = true;
@@ -977,11 +984,18 @@ $this->title = $storyMatch->match_name;
         startRivalTimer($('#match_type').val());
         var topic = obj[idx].topic;
         var size = obj[idx].size;
+        var speedrate = obj[idx].speed_rate;
         console.log(topic);
         if (topic == undefined) {
             idx = 0;
             var topic = obj[idx].topic;
         }
+        if (speedrate == undefined
+        || speedrate == NaN
+        ) {
+            speedrate = 1;
+        }
+        $('#rival_speed_rate').val(speedrate);
         if (topic.indexOf('http') >= 0) {
             $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
             topic = '';
@@ -1125,8 +1139,10 @@ $this->title = $storyMatch->match_name;
     function addRivSpeed(rivalObj, speedBei = 10) {
         console.log(rivalObj);
         var rivalSpeedObj = $(rivalObj).find('.riv_speed');
-        var speed = (13500 / $(rivalObj).parent().find('.show_speed').val()) ;
+        var speed = (540000 / $(rivalObj).parent().find('.show_speed').val()) ;
         var addSpeed = speed * speedBei;
+        var speedRate = $('#rival_speed_rate').val();
+        addSpeed = addSpeed * speedRate;
         rivalSpeedObj.css('width', rivalSpeedObj.width() + addSpeed);
     }
 
