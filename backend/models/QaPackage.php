@@ -15,9 +15,9 @@ use yii\data\ActiveDataProvider;
 
 class QaPackage extends \common\models\QaPackage
 {
-    public $date_range;
+    public $qaids;
 
-    public $category_ids;
+    public $date_range;
 
     public function rules()
     {
@@ -25,7 +25,11 @@ class QaPackage extends \common\models\QaPackage
             [['package_type', 'package_class', 'story_id', 'grade', 'level',
                 'link_story_model_id', 'package_status',
                 'created_at', 'updated_at'], 'integer'],
-            [['package_name', 'qa_ids', 'package_desc', 'prop', ], 'string'],
+//            [['qaids'], 'each', 'rule' => ['integer']],
+//            [['qa_ids'], 'each',  'rule' => ['integer']],
+            [['package_name',
+                'qa_ids',
+                'package_desc', 'prop', ], 'string'],
         ];
     }
 
@@ -49,9 +53,9 @@ class QaPackage extends \common\models\QaPackage
             'like', 'package_name', $this->package_name
         ]);
         
-        $query->andFilterWhere([
-            'like', 'qa_ids', ',' . $this->qa_ids . ','
-        ]);
+//        $query->andFilterWhere([
+//            'like', 'qa_ids', ',' . $this->qa_ids . ','
+//        ]);
 
         $query->andFilterWhere([
             'story_id' => $this->story_id,
