@@ -15,6 +15,7 @@ use common\models\Actions;
 use common\models\ItemKnowledge;
 use common\models\Poem;
 use common\models\Qa;
+use common\models\QaPackage;
 use common\models\Session;
 use common\models\UserKnowledge;
 use common\models\UserQa;
@@ -25,6 +26,72 @@ use yii;
 
 class Qas extends Component
 {
+
+    public function getSubjectWithQa($qaModel, $matchClass = 0, $level = 1, $ct = 1) {
+        $ret = [];
+        switch ($qaModel->qa_type) {
+            case Qa::QA_TYPE_CHATGPT:
+            default:
+                if (!empty($qaModel->prop)) {
+                    $qaProp = json_decode($qaModel->prop, true);
+                    if (!empty($qaProp['prompt'])) {
+                        $prompt = $qaProp['prompt'];
+
+                        if (!empty($qaProp['ct'])) {
+                            $ct = $qaProp['ct'];
+                        }
+
+                        if (!empty($qaProp['level'])) {
+                            $level = $qaProp['level'];
+                        }
+
+                        $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct);
+
+//                        var_dump($subjects);exit;
+
+                        if (!empty($subjects)) {
+                            foreach ($subjects as $subj) {
+                                $tmpSubj = \common\helpers\Qa::formatSubjectFromGPT($subj);
+                                $tmpSubj = \common\helpers\Qa::generateChallengePropByLevel($level, $tmpSubj);
+                                $ret[] = $tmpSubj;
+                            }
+                        }
+
+                    }
+                } else {
+                    $qaProp = [];
+                }
+                break;
+        }
+
+        return $ret;
+    }
+
+    public function getQaByPackageIds($qaPackageIds) {
+        $qaPackages = QaPackage::find()
+            ->where([
+                'id' => $qaPackageIds
+            ])
+            ->all();
+
+        $qaCollections = [];
+        if (!empty($qaPackages)) {
+            foreach ($qaPackages as $qaPackage) {
+                $qaIds = explode(',', $qaPackage->qa_ids);
+
+                if (!empty($qaIds)) {
+                    $qaCollections[$qaPackage->id] = Qa::find()
+                        ->where([
+                            'id' => $qaIds
+                        ])
+                        ->all();
+                }
+            }
+        }
+
+        return $qaCollections;
+    }
+
     public function generatePoem($level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
         $prop = [
             'poem_class' => $poemClass,
@@ -45,9 +112,13 @@ class Qas extends Component
 
         $subjects = [
             'formula' => $showFormula,
+            'topic' => $showFormula,
             'answer' => $answer,
+            'st_answer' => $answer,
             'standFormula' => $formula,
             'answerRange' => $answerRange,
+            'selected' => json_encode($answerRange, JSON_UNESCAPED_UNICODE),
+            'selected_json' => $answerRange,
             'level' => $level,
             'hitRange' => $hitRange,
             'gold'  => $gold,
@@ -352,11 +423,15 @@ class Qas extends Component
 
         $ret = [
             'formula' => $retTemp,
+            'topic' => $retTemp,
             'answer' => $answer,
+            'st_answer' => $stAnswer,
             'stAnswer' => $stAnswer,
             'poem' => $poem->content,
             'data' => $poem,
             'selections' => $finalCollections,
+            'selected_json' => $finalCollections,
+            'selected' => json_encode($finalCollections, JSON_UNESCAPED_UNICODE),
         ];
 
         return $ret;
@@ -401,11 +476,15 @@ class Qas extends Component
 
         $ret = [
             'formula' => $retTemp,
+            'topic' => $retTemp,
             'answer' => $answer,
+            'st_answer' => $stAnswer,
             'stAnswer' => $stAnswer,
             'poem' => $content,
             'sentence' => $sentence,
             'selections' => $finalCollections,
+            'selected_json' => $finalCollections,
+            'selected' => json_encode($finalCollections, JSON_UNESCAPED_UNICODE),
         ];
 
         return $ret;
@@ -489,11 +568,15 @@ class Qas extends Component
 
         $ret = [
             'formula' => $retTemp,
+            'topic' => $retTemp,
             'answer' => $answer,
             'stAnswer' => $stAnswer,
+            'st_answer' => $stAnswer,
             'poem' => $content,
             'sentence' => $sentence,
             'selections' => $finalCollection,
+            'selected_json' => $finalCollection,
+            'selected' => json_encode($finalCollection, JSON_UNESCAPED_UNICODE),
         ];
 
         return $ret;
@@ -647,9 +730,13 @@ class Qas extends Component
 
         return [
             'formula' => $showFormula,
+            'topic'     => $showFormula,
+            'st_answer' => $answer,
             'answer' => $answer,
             'standFormula' => $formula,
             'answerRange' => $answerRange,
+            'selected_json' => $answerRange,
+            'selected' => json_encode($answerRange, JSON_UNESCAPED_UNICODE),
             'level' => $level,
             'hitRange' => $hitRange,
             'gold'  => $gold,

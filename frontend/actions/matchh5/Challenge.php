@@ -179,6 +179,17 @@ class Challenge extends Action
                 // 生成1000道数学题
                 $subjects = [];
 
+                // Todo： 测试用的，上线的话，从订单里找到qaPackage，取出qaIds，然后生成题目
+                $qa = Qa::find()
+                    ->where(['id' => $qaId])
+                    ->one();
+
+                $tmp = Yii::$app->qas->getSubjectWithQa($qa, $storyMatch->match_class, $level+1, 5);
+                if (!empty($tmp)) {
+                    foreach ($tmp as $t) {
+                        $subjects[] = $t;
+                    }
+                }
 
                 for ($i=0; $i<1000; $i++) {
                     $subjects[] = Yii::$app->qas->generateMath($level);
@@ -238,7 +249,7 @@ class Challenge extends Action
             case StoryMatch::MATCH_CLASS_ENGLISH:
                 $subjects = [];
                 for ($i=0; $i<100; $i++) {
-                    $subjects[] = Yii::$app->doubao->generateSubject($level, $storyMatch->match_class, 2);
+                    $subjects[] = Yii::$app->doubao->generateSubjectWithMode($level, $storyMatch->match_class, 2);
                     var_dump($subjects);exit;
                     if ($i == 10) {
                         $level++;

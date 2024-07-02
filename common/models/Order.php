@@ -48,6 +48,14 @@ class Order extends \common\models\gii\Order
         self::PAY_METHOD_THIRD_DOUYIN => '抖音支付',
     ];
 
+    const ITEM_TYPE_STORY       = 1; // 剧本
+    const ITEM_TYPE_PACKAGE     = 2; // 题包
+
+    public static $itemType2Name = [
+        self::ITEM_TYPE_STORY   => '剧本',
+        self::ITEM_TYPE_PACKAGE => '题包',
+    ];
+
     public function behaviors()
     {
         return [

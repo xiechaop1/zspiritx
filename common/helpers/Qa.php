@@ -19,6 +19,56 @@ class Qa
         $qa['attachment'] = Attachment::completeUrl($qa['attachment'], true);
     }
 
+    public static function formatSubjectFromGPT($gpt) {
+//        $ret = [];
+
+//        if (!empty($gptResponse)) {
+//            foreach ($gptResponse as $gpt) {
+                $answerIdx = $gpt['ANSWER'];
+                if (in_array($answerIdx, ['A', 'B', 'C', 'D'])) {
+                    $answer = !empty($gpt['OPTIONS'][$answerIdx]) ? $gpt['OPTIONS'][$answerIdx] : $answer;
+                } else {
+                    $answer = $answerIdx;
+                }
+
+                $options = $gpt['OPTIONS'];
+//                unset($options[$answerIdx]);
+                $opts = [];
+                foreach ($options as $opt) {
+                    $opts[] = $opt;
+                }
+
+                $ret = [
+                    'formula' => $gpt['SUBJECT'],
+                    'topic' => $gpt['SUBJECT'],
+                    'standFormula' => $gpt['SUBJECT'],
+                    'answerRange' => $opts,
+                    'selected_json' => $opts,
+                    'selected' => json_encode($opts, JSON_UNESCAPED_UNICODE),
+                    'answer' => $answer,
+                    'st_answer' => $answer,
+                ];
+
+//            }
+//        }
+
+        return $ret;
+    }
+
+    public static function generateChallengePropByLevel($level, $prop) {
+        $hitRange = [
+            5 * (1 + ($level - 1) / 5),
+            10 * (1 + ($level - 1) / 5),
+        ];
+        $gold = 10 * (1 + ($level - 1) / 2);
+
+        $prop['level'] = $level;
+        $prop['hitRange'] = $hitRange;
+        $prop['gold'] = $gold;
+
+        return $prop;
+    }
+
     public static function formatSelect($qa) {
         $str = $qa['selected_json'];
         $str = str_replace("[div]", '<div>', $str);

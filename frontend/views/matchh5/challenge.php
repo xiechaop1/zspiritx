@@ -291,7 +291,7 @@ $this->title = $storyMatch->match_name;
             </div>
             <div class="row" id="answer-box">
                 <?php
-                $str = $qa['selected_json'];
+                $str = !empty($qa['selected_json']) ? $qa['selected_json'] : '';
                 //                $str = str_replace("[div]", '<div>', $str);
                 //                $str = str_replace("[/div]", '</div>', $str);
                 //                    echo $qa['selected_json'];
@@ -312,6 +312,7 @@ $this->title = $storyMatch->match_name;
                         $inputType = 'verifycode';
                         break;
                     case \common\models\Qa::QA_TYPE_SINGLE:
+                    case \common\models\Qa::QA_TYPE_GPT_SUBJECT:
                     default:
                         $inputType = 'radio';
                         break;
@@ -603,9 +604,10 @@ $this->title = $storyMatch->match_name;
                     <div class="btn-m-green m-t-30  m-l-30 confirm_btn">
                         继续
                     </div>
-                    <div class="btn-m-green m-t-30  m-l-30 msg-rtn-btn">
-                        继续
-                    </div>
+
+<!--                    <div class="btn-m-green m-t-30  m-l-30 msg-rtn-btn">-->
+<!--                        继续-->
+<!--                    </div>-->
 <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
 <!--                        --><?php //echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
 <!--                    </div>-->
@@ -973,11 +975,11 @@ $this->title = $storyMatch->match_name;
 
     function showSubject(idx) {
         startRivalTimer($('#match_type').val());
-        var topic = obj[idx].formula;
+        var topic = obj[idx].topic;
         console.log(topic);
         if (topic == undefined) {
             idx = 0;
-            var topic = obj[idx].formula;
+            var topic = obj[idx].topic;
         }
         if (topic.indexOf('http') >= 0) {
             $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
@@ -990,8 +992,9 @@ $this->title = $storyMatch->match_name;
         $('#subj_idx').val(idx);
 
         var qa_type = $('#qa_type').val();
-        if (qa_type == 1) {
-            var ansrange = obj[idx].answerRange;
+        if (qa_type == 1 || qa_type == 30) {
+            var ansrange = obj[idx].selected_json;
+            console.log(ansrange);
             var optHtml = '';
             for (var j = 0; j < ansrange.length; j++) {
                 label = String.fromCharCode(j + 65);
@@ -1024,11 +1027,11 @@ $this->title = $storyMatch->match_name;
 
 
     function submitSubject(idx, chosenObj) {
-        var answer = obj[idx].answer;
+        var answer = obj[idx].st_answer;
         var that=$("#answer-info");
         var match_type = $('#match_type').val();
         var qa_type=that.attr("data-type");
-        if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
+        if (qa_type == 1 || qa_type == 30 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
             var v_select = $("input[name='answer_c']:checked").val();
         } else if (qa_type == 7) {
             var v_select = $("input[name='answer_txt']").val();

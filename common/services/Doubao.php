@@ -28,7 +28,45 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
-    public function generateSubject($level = 0, $matchClass = 0, $ct = 10, $templateContents = array()) {
+    public function generateSubject($userMessagePre = '', $level = 0, $matchClass = 0, $ct = 10, $templateContents = array()) {
+        $ret = [];
+        $gradeName = $this->_getGradeNameFromLevel($level);
+
+        $matchClassName = !empty(StoryMatch::$matchClass2Name[$matchClass]) ? StoryMatch::$matchClass2Name[$matchClass] : '任意';
+
+        if (!empty($userMessagePre)) {
+            $msgTemplate = [
+                '适合' . $gradeName . '同学的题目，请出'. $ct . '道' . $matchClassName . '类型题目',
+                '#输出格式#' . '输出题目、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
+                '#输出样例#' . json_encode([[
+                    'SUBJECT' => 'SUBJECT1',
+                    'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
+                    'ANSWER' => 'A',
+                ],[
+                    'SUBJECT' => 'SUBJECT2',
+                    'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
+                    'ANSWER' => 'A',
+                ]], JSON_UNESCAPED_UNICODE),
+            ];
+
+//            $userMessageTmp = $userMesssagePre . "\n" . implode("\n", $msgTemplate);
+
+
+            $response = $this->chatWithDoubao($userMessagePre, [], $msgTemplate, self::ROLE_GENERATE_SUBJECT);
+            $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
+
+            if (!empty($messages)) {
+                $ret = json_decode($messages, true);
+            }
+
+        } else {
+
+        }
+
+        return $ret;
+    }
+
+    public function generateSubjectWithMode($level = 0, $matchClass = 0, $ct = 10, $templateContents = array()) {
 //        foreach (UserExtends::$userGradeLevelMap as $grade => $gradeLevel) {
 //            if ($level >= $gradeLevel) {
 //                $gradeName = UserExtends::$userGrade2Name[$grade];
@@ -55,7 +93,7 @@ class Doubao extends Component
         }
         $response = $this->chatWithDoubao($userMessage, $oldMessages, $templateContents, $roleTxt);
 
-        $messages = $response['choices'][0]['message']['content'];
+        $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
 
         return $messages;
     }

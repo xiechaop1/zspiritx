@@ -27,6 +27,8 @@ class Qa extends \common\models\gii\Qa
     const QA_TYPE_PHONE_SMS = 14;      // 手机短信
     const QA_TYPE_AR = 21;      // AR
 
+    const QA_TYPE_GPT_SUBJECT = 30; // GPT出题
+
     const QA_CLASS_NORMAL   = 1; // 普通题
     const QA_CLASS_POEM     = 2; // 诗词题
 
@@ -49,7 +51,8 @@ class Qa extends \common\models\gii\Qa
         self::QA_TYPE_PHONE => '手机',
         self::QA_TYPE_PHONE_SMS => '手机短信',
 
-        self::QA_TYPE_AR => '',
+        self::QA_TYPE_AR => 'AR',
+        self::QA_TYPE_GPT_SUBJECT => 'GPT出题',
 
     ];
 
