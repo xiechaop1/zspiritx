@@ -128,6 +128,12 @@
                                 'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                             ],
                             [
+                                'label' => '课包列表',
+                                'url' => ['/qa/qa_package'],
+                                'active' => in_array($this->context->route, ['qa/qa_package', 'qa/package_edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
                                 'label' => '用户作答',
                                 'url' => ['/qa/user_qa'],
                                 'active' => in_array($this->context->route, ['qa/user_qa', ]),

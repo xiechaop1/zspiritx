@@ -23,7 +23,7 @@ class QaController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['qa', 'edit', 'user_qa', 'poem', 'poem_edit'],
+                        'actions' => ['qa', 'edit', 'user_qa', 'poem', 'poem_edit', 'qa_package', 'package_edit'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -40,6 +40,12 @@ class QaController extends ViewController
             ],
             'edit' => [
                 'class' => 'backend\actions\qa\Edit',
+            ],
+            'qa_package' => [
+                'class' => 'backend\actions\qa\QaPackage',
+            ],
+            'package_edit' => [
+                'class' => 'backend\actions\qa\PackageEdit',
             ],
             'user_qa' => [
                 'class' => 'backend\actions\qa\Userqa',
