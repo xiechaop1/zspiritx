@@ -976,6 +976,7 @@ $this->title = $storyMatch->match_name;
     function showSubject(idx) {
         startRivalTimer($('#match_type').val());
         var topic = obj[idx].topic;
+        var size = obj[idx].size;
         console.log(topic);
         if (topic == undefined) {
             idx = 0;
@@ -988,6 +989,10 @@ $this->title = $storyMatch->match_name;
             $('#image').html('');
         }
         $('#topic').html(topic);
+        console.log(size);
+        if (size != undefined) {
+            $('#topic').css('font-size', size + 'px');
+        }
 
         $('#subj_idx').val(idx);
 

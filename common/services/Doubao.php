@@ -36,7 +36,7 @@ class Doubao extends Component
 
         if (!empty($userMessagePre)) {
             $msgTemplate = [
-                '适合' . $gradeName . '同学的题目，请出'. $ct . '道' . $matchClassName . '类型题目',
+                '适合' . $gradeName . '同学的题目，请出'. $ct . '道',
                 '#输出格式#' . '输出题目、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
                 '#输出样例#' . json_encode([[
                     'SUBJECT' => 'SUBJECT1',
@@ -81,11 +81,15 @@ class Doubao extends Component
             case StoryMatch::MATCH_CLASS_ENGLISH:
                 $userMessage = '请出' . $ct . '道英语题目，题目是一个英文短句，答案是这个英文单词对应的中文。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';
                 $userMessage .= '#输出格式#' . '输出题目、选项和答案。输出格式为JSON';
-                $userMessage .= '#输出样例#' . json_encode([
-                        'SUBJECT' => 'WORD',
+                $userMessage .= '#输出样例#' . json_encode([[
+                        'SUBJECT' => 'SUBJECT1',
                         'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                         'ANSWER' => 'A',
-                    ], JSON_UNESCAPED_UNICODE);
+                    ],[
+                        'SUBJECT' => 'SUBJECT2',
+                        'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
+                        'ANSWER' => 'A',
+                    ]], JSON_UNESCAPED_UNICODE);
                 break;
             default:
                 $userMessage = '请出' . $ct . '到题目，题目可以是数学，英语，语文，历史，生物，物理，或者冷门知识。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';

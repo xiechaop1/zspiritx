@@ -187,6 +187,12 @@ class Challenge extends Action
                 $tmp = Yii::$app->qas->getSubjectWithQa($qa, $storyMatch->match_class, $level+1, 5);
                 if (!empty($tmp)) {
                     foreach ($tmp as $t) {
+                        if (mb_strlen($t['topic']) > 10) {
+                            $t['size'] = '40';
+                            $t['speed_rate'] = 0.3;
+                        } else {
+                            $t['size'] = '60';
+                        }
                         $subjects[] = $t;
                     }
                 }
