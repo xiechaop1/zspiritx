@@ -66,7 +66,126 @@ $(function () {
         }
     });
 
-    $(".shop_buy_btn").click(function () {
+    $(".shop_buy_pay_btn").click(function () {
+        buyWareByPay($(this));
+    });
+
+    function buyWareByPay(thisObj) {
+        var that=$("#answer-info");
+        var story_id=$("input[name='story_id']").val();
+        var user_id=$("input[name='user_id']").val();
+        var session_id=$("input[name='session_id']").val();
+        var shop_ware_id=$(thisObj).attr('data-id');
+        // var session_stage_id=$("input[name='session_stage_id']").val();
+        // var begin_ts=$("input[name='begin_ts']").val();
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/order/create',
+            data:{
+                user_id:user_id,
+                story_id:story_id,
+                session_id:session_id,
+                item_id:shop_ware_id,
+                item_type:2,
+                exec_method:2,
+                is_test:1
+            },
+            onload: function (data) {
+                $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                console.log(obj["code"]);
+
+                //新消息获取成功
+                if(obj["code"]==200){
+                    // alert(obj.data.pay_res.h5_url);
+                    var payResult = setInterval(getPayInfo(user_id,order_id),3000);
+
+                    var form = document.createElement('form');
+                    document.body.appendChild(form);
+                    form.method = "post";
+                    form.action = obj.data.pay_res.h5_url;
+                    form.submit();
+                    document.body.removeChild(form);
+
+                    // console.log(obj.data);
+                    /* var order_status = obj.data.order.order_status;
+                     if (order_status != 0 && (order_status == 1 || order_status == 2)) {
+                         alert('购买成功！');
+                     } else {
+                         // 执行支付唤醒
+                         alert('如果您遇到支付问题，请您和18500041193联系！');
+                     }*/
+                }
+                //新消息获取失败
+                else{
+                    $.alert(obj.msg)
+                }
+
+            }
+        });
+    };
+
+    function getPayInfo(userId,orderId,storyId,isDebug){
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/orderdata/get_order',
+            data:{
+                user_id:userId,
+                order_id:orderId,
+                is_test:1
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {// console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                // $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //新消息获取成功
+                if(obj["code"]==200){
+                    var order_status = obj.data.order.order_status;
+                    if(order_status==1){
+                        window.location.reload();
+                        // clearInterval(payResult);
+                    }
+                    if(order_status==3){
+                        // window.location.reload();
+                        clearInterval(payResult);
+                    }
+
+                    if (order_status != 0 && (order_status == 1 || order_status == 2)) {
+                            alert('购买成功！现在您可以去参加挑战答题等活动，您的课包已经生效！');
+                    } else {
+                        // 执行支付唤醒
+                        alert('如果您遇到支付问题，请您和18500041193联系！');
+                    }
+
+                }
+                //新消息获取失败
+                else{
+                    // $.alert(obj.msg);
+                }
+
+            }
+        });
+    }
+
+    $(".shop_buy_score_btn").click(function () {
         buyWare($(this));
     });
 

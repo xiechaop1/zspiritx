@@ -1717,7 +1717,7 @@ $(function () {
                     //console.log("ajax请求成功:"+data.toString())
                     //新消息获取成功
                     if(obj["code"]==200){
-                        alert(obj.data.pay_res.h5_url);
+                        // alert(obj.data.pay_res.h5_url);
                         var payResult = setInterval(getPayInfo(user_id,order_id),3000);
                         
                         var form = document.createElement('form');

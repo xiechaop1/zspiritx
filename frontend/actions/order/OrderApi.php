@@ -12,6 +12,7 @@ namespace frontend\actions\order;
 use common\definitions\ErrorCode;
 use common\helpers\Common;
 use common\models\Order;
+use common\models\ShopWares;
 use common\models\Story;
 use common\models\StoryExtend;
 use common\models\User;
@@ -96,28 +97,66 @@ class OrderApi extends ApiAction
             }
         }
 
+        $itemId = !empty($this->_get['item_id']) ? $this->_get['item_id'] : 0;
+        $itemType = !empty($this->_get['item_type']) ? $this->_get['item_type'] : 0;
+
+        switch ($itemType) {
+            case Order::ITEM_TYPE_PACKAGE:
+                $prefix = 'P';
+                $shopWare = ShopWares::find()
+                    ->where([
+                        'id' => $itemId,
+                        'ware_type' => ShopWares::SHOP_WARE_TYPE_PACKAGE,
+                    ])
+                    ->one();
+
+                if (empty($shopWare)) {
+                    throw new \Exception('题包不存在', ErrorCode::STORY_NOT_FOUND);
+                }
+
+                $oldPrice = $shopWare['price'];
+                if (!empty($shopWare['discount'])) {
+                    $currPrice = $shopWare['discount'];
+                } else {
+                    $currPrice = $shopWare['price'];
+                }
+
+                break;
+            case Order::ITEM_TYPE_STORY:
+            default:
+                if (empty($itemId)) {
+                    $itemId = $this->_storyId;
+                }
+                $prefix = 'Z';
+                $storyExtend = StoryExtend::findOne(['story_id' => $this->_storyId]);
+
+                if (empty($storyExtend)) {
+                    throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+                }
+
+                $currPrice = $storyExtend['curr_price'];
+                $oldPrice = $storyExtend['price'];
+                break;
+        }
+
         $execMethod = !empty($this->_get['exec_method']) ? $this->_get['exec_method'] : 0;
 
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
-            $storyExtend = StoryExtend::findOne(['story_id' => $this->_storyId]);
 
-            if (empty($storyExtend)) {
-                throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
-            }
-
-            $currPrice = $storyExtend['curr_price'];
 
             $payMethod = !empty($this->_get['pay_method']) ? $this->_get['pay_method'] : Order::PAY_METHOD_WECHAT;     // 微信支付
 
             $order = new Order();
             $order->user_id = $this->_userId;
             $order->story_id = $this->_storyId;
+            $order->item_id = $itemId;
+            $order->item_type = $itemType;
             $order->pay_method = $payMethod;
-            $order->order_no = \common\helpers\Order::generateOutTradeNo($this->_userInfo, $this->_storyId, $payMethod);
+            $order->order_no = \common\helpers\Order::generateOutTradeNo($this->_userInfo, $itemId, $payMethod, $prefix);
             $order->amount = $currPrice;
-            $order->story_price = $storyExtend['price'];
+            $order->story_price = $oldPrice;
 
             if (!empty($this->_get['ver_code'])
             && !empty($this->_get['ver_platform'])
@@ -286,7 +325,11 @@ class OrderApi extends ApiAction
             } else {
                 // exeMethod == 2走H5支付
 //                $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
-                $res = Yii::$app->wechatPay->createH5OrderWithStory($story, $order, $this->_userInfo);
+                if ($order->item_type == Order::ITEM_TYPE_PACKAGE) {
+                    $res = Yii::$app->wechatPay->createH5Order($order, $this->_userInfo);
+                } else {
+                    $res = Yii::$app->wechatPay->createH5OrderWithStory($story, $order, $this->_userInfo);
+                }
             }
 
             $order->order_status = Order::ORDER_STATUS_PAYING;

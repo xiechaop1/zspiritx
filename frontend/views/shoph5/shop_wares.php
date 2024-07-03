@@ -147,31 +147,37 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                                 </span>
                             </div>
                             <div class="col-sm-4" style="float: left;">
+                                <?php
+                                switch ($item->pay_way) {
+                                    case \common\models\ShopWares::PAY_WAY_MONEY:
+//                                            echo '<img src="../../static/img/pay/wechat_pay_icon.png" width="30">';
+                                        if ($item->discount >= 1000) {
+                                            $discount = '￥' . number_format($item->discount, 0);
+                                        } else {
+                                            $discount = '￥' . number_format($item->discount, 2);
+                                        }
+                                        if ($item->price >= 1000) {
+                                            $price = '￥' . number_format($item->price, 0);
+                                        } else {
+                                            $price = '￥' . number_format($item->price, 2);
+                                        }
+                                        $buyIcon = '';
+                                        $buyClass = 'shop_buy_pay_btn';
+                                        break;
+                                    case \common\models\ShopWares::PAY_WAY_SCORE:
+                                    default:
+                                        $buyIcon = '<img src="../../static/img/qa/gold.png" width="50">';
+                                        $discount = \common\helpers\Common::formatNumberToStr($item->discount, true);
+                                        $price = \common\helpers\Common::formatNumberToStr($item->price, true);
+                                        $buyClass = 'shop_buy_score_btn';
+                                        break;
+                                }
+                                ?>
 
-                                <div class="shop_buy_btn" id="shop_buy_btn" data-id="<?= $item->id ?>" act="1">
+                                <div class="shop_buy_btn <?= $buyClass ?>" id="shop_buy_btn" data-id="<?= $item->id ?>" act="1">
                                     <?php
                                     echo '<div style="float: left; margin-right: 3px;">';
-                                    switch ($item->pay_way) {
-                                        case \common\models\ShopWares::PAY_WAY_MONEY:
-//                                            echo '<img src="../../static/img/pay/wechat_pay_icon.png" width="30">';
-                                            if ($item->discount >= 1000) {
-                                                $discount = '￥' . number_format($item->discount, 0);
-                                            } else {
-                                                $discount = '￥' . number_format($item->discount, 2);
-                                            }
-                                            if ($item->price >= 1000) {
-                                                $price = '￥' . number_format($item->price, 0);
-                                            } else {
-                                                $price = '￥' . number_format($item->price, 2);
-                                            }
-                                            break;
-                                        case \common\models\ShopWares::PAY_WAY_SCORE:
-                                        default:
-                                            echo '<img src="../../static/img/qa/gold.png" width="50">';
-                                            $discount = \common\helpers\Common::formatNumberToStr($item->discount, true);
-                                            $price = \common\helpers\Common::formatNumberToStr($item->price, true);
-                                            break;
-                                    }
+                                    echo $buyIcon;
                                     echo '</div>';
 
                                     echo '<div style="float: left; line-height: 150%; text-align: right; ">';
