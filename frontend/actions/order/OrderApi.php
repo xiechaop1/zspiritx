@@ -285,7 +285,8 @@ class OrderApi extends ApiAction
                 $res = Yii::$app->wechatPay->createJsapiOrder($code, $story, $order, $this->_userInfo, $channel);
             } else {
                 // exeMethod == 2走H5支付
-                $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
+//                $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
+                $res = Yii::$app->wechatPay->createH5OrderWithStory($story, $order, $this->_userInfo);
             }
 
             $order->order_status = Order::ORDER_STATUS_PAYING;

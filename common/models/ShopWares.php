@@ -15,17 +15,21 @@ class ShopWares extends \common\models\gii\ShopWares
     const SHOP_WARE_TYPE_GAME_ITEM = 1;
     const SHOP_WARE_TYPE_VITUAL_WARE = 2;
     const SHOP_WARE_TYPE_REAL_WARE = 3;
+    const SHOP_WARE_TYPE_PACKAGE = 4;
 
     public static $shopWareType2Name = [
         self::SHOP_WARE_TYPE_GAME_ITEM => '游戏道具',
         self::SHOP_WARE_TYPE_VITUAL_WARE => '虚拟商品',
         self::SHOP_WARE_TYPE_REAL_WARE => '实物商品',
+        self::SHOP_WARE_TYPE_PACKAGE => '题包',
     ];
 
     const LINK_TYPE_STORY_MODEL = 1;
+    const LINK_TYPE_QA_PACKAGE  = 2;
 
     public static $linkType2Name = [
         self::LINK_TYPE_STORY_MODEL => '模型',
+        self::LINK_TYPE_QA_PACKAGE => '题包',
     ];
 
     const SHOP_WARE_STATUS_NORMAL = 1;

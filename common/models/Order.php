@@ -77,4 +77,9 @@ class Order extends \common\models\gii\Order
         return $this->hasOne('common\models\Story', ['id' => 'story_id']);
     }
 
+    public function getShopWare()
+    {
+        return $this->hasOne('common\models\ShopWares', ['id' => 'item_id']);
+    }
+
 }

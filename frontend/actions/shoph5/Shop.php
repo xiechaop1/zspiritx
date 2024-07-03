@@ -36,10 +36,13 @@ class Shop extends Action
 
         $storyModelClass = !empty($_GET['story_model_class']) ? $_GET['story_model_class'] : '';
 
+        $shopWareType = !empty($_GET['shop_ware_type']) ? $_GET['shop_ware_type'] : ShopWares::SHOP_WARE_TYPE_GAME_ITEM;
+
         $model = ShopWares::find()
 //            ->joinWith('model', 'storyModel', 'sessionModel')
 //            ->joinWith('storyModel')
             ->where([
+                'ware_type' => $shopWareType,
 //                'user_id'       => $userId,
 //                'session_id'    => $sessionId,
                 'is_delete'     => Common::STATUS_NORMAL,
@@ -79,6 +82,11 @@ class Shop extends Action
 
         $template = 'shop_wares';
 
+        $menus = [
+            ShopWares::SHOP_WARE_TYPE_GAME_ITEM => '道具',
+            ShopWares::SHOP_WARE_TYPE_PACKAGE   => '题包',
+        ];
+
         return $this->controller->render($template, [
             'model'         => $model,
             'params'        => $_GET,
@@ -87,6 +95,8 @@ class Shop extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'title'         => '商店',
+            'menus'         => $menus,
+            'shopWareType'  => $shopWareType,
         ]);
     }
 }

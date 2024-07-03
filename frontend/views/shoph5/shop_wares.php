@@ -86,7 +86,30 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
                         <?= $title ?>
                     </div>
-
+                    <div style="clear:both; color: white; font-size: 28px; font-weight: bold; margin-top: 30px; padding-bottom: 15px; border-bottom: 1px #fff solid;">
+                        <?php
+                        if (!empty($menus)) {
+                            foreach ($menus as $menuType => $menuName) {
+                                if ($menuType == $shopWareType) {
+                                    $style = 'border-bottom: 4px #DAFC70 solid; color: #DAFC70';
+                                } else {
+                                    $style = 'color: #fff';
+                                }
+                                $req = $_REQUEST;
+                                $req['shop_ware_type'] = $menuType;
+                                $urlParams = http_build_query($req);
+                                ?>
+                                <a href="/shoph5/shop?<?= $urlParams ?>">
+                        <span style="<?= $style ?>; padding: 15px; ">
+                            <?= !empty($menus[$menuType])
+                                ? $menus[$menuType] : '未知' ?>
+                        </span>
+                                </a>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </div>
             <div class="row" id="answer-box" style="margin-top: 20px;">
                 <?php
                 foreach ($model as $item) {
@@ -127,27 +150,39 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
 
                                 <div class="shop_buy_btn" id="shop_buy_btn" data-id="<?= $item->id ?>" act="1">
                                     <?php
-                                    echo '<div style="float: left;">';
+                                    echo '<div style="float: left; margin-right: 3px;">';
                                     switch ($item->pay_way) {
                                         case \common\models\ShopWares::PAY_WAY_MONEY:
-                                            echo '<img src="../../static/img/qa/money.png" width="50">';
+//                                            echo '<img src="../../static/img/pay/wechat_pay_icon.png" width="30">';
+                                            if ($item->discount >= 1000) {
+                                                $discount = '￥' . number_format($item->discount, 0);
+                                            } else {
+                                                $discount = '￥' . number_format($item->discount, 2);
+                                            }
+                                            if ($item->price >= 1000) {
+                                                $price = '￥' . number_format($item->price, 0);
+                                            } else {
+                                                $price = '￥' . number_format($item->price, 2);
+                                            }
                                             break;
                                         case \common\models\ShopWares::PAY_WAY_SCORE:
                                         default:
                                             echo '<img src="../../static/img/qa/gold.png" width="50">';
+                                            $discount = \common\helpers\Common::formatNumberToStr($item->discount, true);
+                                            $price = \common\helpers\Common::formatNumberToStr($item->price, true);
                                             break;
                                     }
                                     echo '</div>';
 
                                     echo '<div style="float: left; line-height: 150%; text-align: right; ">';
                                     if (!empty($item->discount)) {
-                                    echo '<span class="fs-32 bold">' . \common\helpers\Common::formatNumberToStr($item->discount) . '</span><br>';
-                                    echo '<span class="fs-24 bold" style="color: #666666; text-decoration: line-through; ">' . \common\helpers\Common::formatNumberToStr($item->price) . '</span>';
+                                    echo '<span class="fs-32 bold">' . $discount . '</span><br>';
+                                    echo '<span class="fs-24 bold" style="color: #666666; text-decoration: line-through; ">' . $price . '</span>';
                                     echo '</div>';
                                 }
                                 else {
                                     echo '<div style="float: left; line-height: 150%;">';
-                                    echo '<span class="fs-32 bold">' . \common\helpers\Common::formatNumberToStr($item->price) . '</span>';
+                                    echo '<span class="fs-32 bold">' . $price . '</span>';
                                     echo '</div>';
                                 }
 

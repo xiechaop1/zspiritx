@@ -141,8 +141,14 @@ class WechatPay extends Component
         return $this->_client;
     }
 
+    public function createH5OrderWithStory($story, $order, $userInfo = [], $channel = '') {
+        $storyTitle = !empty($story->title) ? $story->title : '未知故事';
+
+        return $this->createH5Order($order, $userInfo, $channel, $storyTitle);
+    }
+
     // $goodName, $outTradeNo, $amount
-    public function createH5Order($story, $order, $userInfo = [], $channel = '') {
+    public function createH5Order($order, $userInfo = [], $channel = '', $desc = '') {
 
         $this->setMch($channel);
 
@@ -150,8 +156,20 @@ class WechatPay extends Component
         $host = 'https://api.mch.weixin.qq.com';
         $uri = $this->_createUri($uri, $host);
 
-        $storyTitle = !empty($story->title) ? $story->title : '未知故事';
-        $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
+//        $storyTitle = !empty($story->title) ? $story->title : '未知故事';
+        switch ($order->item_type) {
+            case \common\models\Order::ITEM_TYPE_PACKAGE:
+                $prefix = 'P';
+                $id = $order->item_id;
+                break;
+            case \common\models\Order::ITEM_TYPE_STORY:
+            default:
+                $prefix = 'Z';
+                $id = $order->story_id;
+                break;
+
+        }
+        $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $id, $order->pay_method, $prefix);
         $amount = !empty($order->amount) ? $order->amount : 0;
 
         $this->_appId = $appId = $this->jsApiAppId;
@@ -181,6 +199,21 @@ class WechatPay extends Component
         }
         $plateform = 'Wap';
 
+        if (empty($desc)) {
+            switch ($order->order_type) {
+                case \common\models\Order::ITEM_TYPE_STORY:
+                    $desc = '购买故事：' . $order->story->story_name;
+                    break;
+                case \common\models\Order::ITEM_TYPE_PACKAGE:
+                    $desc = '购买题包：' . $order->shopWare->ware_name;
+                    break;
+                default:
+                    $desc = '购买商品';
+                    break;
+
+            }
+        }
+
         $params = [
             // JSON请求体
             'json' => [
@@ -191,7 +224,7 @@ class WechatPay extends Component
                     "currency" => "CNY",
                 ],
                 "mchid" => $merchantId,
-                "description" => $storyTitle,
+                "description" => $desc,
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "out_trade_no" => $outTradeNo,
                 "appid" => $appId,
