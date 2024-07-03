@@ -200,7 +200,7 @@ class WechatPay extends Component
         $plateform = 'Wap';
 
         if (empty($desc)) {
-            switch ($order->order_type) {
+            switch ($order->item_type) {
                 case \common\models\Order::ITEM_TYPE_STORY:
                     $desc = '购买故事：' . $order->story->story_name;
                     break;
