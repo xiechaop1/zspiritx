@@ -76,6 +76,7 @@ $(function () {
         var user_id=$("input[name='user_id']").val();
         var session_id=$("input[name='session_id']").val();
         var shop_ware_id=$(thisObj).attr('data-id');
+        // var order_id = 0;
         // var session_stage_id=$("input[name='session_stage_id']").val();
         // var begin_ts=$("input[name='begin_ts']").val();
 
@@ -111,6 +112,7 @@ $(function () {
                 //新消息获取成功
                 if(obj["code"]==200){
                     // alert(obj.data.pay_res.h5_url);
+                    var order_id = obj.data.order.id;
                     var payResult = setInterval(getPayInfo(user_id,order_id),3000);
 
                     var form = document.createElement('form');
