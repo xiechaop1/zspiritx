@@ -13,7 +13,7 @@ use yii\web\Controller;
 
 class ShopController extends Controller
 {
-    public $layout = '@frontend/views/layouts/main_n.php';
+    public $layout = '@frontend/views/layouts/main_h5.php';
 
     public function actions()
     {
