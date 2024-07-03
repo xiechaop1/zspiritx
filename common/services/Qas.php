@@ -9,6 +9,7 @@
 namespace common\services;
 
 
+use backend\actions\shop\ShopWare;
 use common\definitions\ErrorCode;
 use common\helpers\Attachment;
 use common\models\Actions;
@@ -17,15 +18,62 @@ use common\models\Poem;
 use common\models\Qa;
 use common\models\QaPackage;
 use common\models\Session;
+use common\models\ShopWares;
+use common\models\StoryMatch;
 use common\models\UserKnowledge;
 use common\models\UserQa;
 use common\models\UserScore;
+use common\models\UserWare;
 use liyifei\chinese2pinyin\Chinese2pinyin;
 use yii\base\Component;
 use yii;
 
 class Qas extends Component
 {
+
+    public function getSubjectsWithUserWare($userId, $matchClass = 0, $level = 1, $ct = 10) {
+        $ret = [];
+        $userWare = UserWare::find()
+            ->where([
+                'user_id' => $userId,
+                'status' => UserWare::USER_WARE_STATUS_NORMAL,
+            ])
+            ->andFilterWhere([
+                '>', 'expire_time', time(),
+            ])
+            ->all();
+
+        if (!empty($userWare)) {
+            foreach ($userWare as $ware) {
+                switch ($ware->link_type) {
+                    case ShopWares::LINK_TYPE_QA_PACKAGE:
+                    default:
+                        $packageClass = [];
+                        if (!empty($matchClass)) {
+                            $packageClass = StoryMatch::$matchClass2PackageClass[$matchClass];
+                        }
+                        $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
+                        if (!empty($qaCollections)) {
+                            foreach ($qaCollections as $qaPackageId => $qaCollection) {
+                                foreach ($qaCollection as $qaModel) {
+                                    $tmp = $this->getSubjectWithQa($qaModel, $matchClass, $level, $ct);
+                                    if (!empty($tmp)) {
+                                        foreach ($tmp as $t) {
+                                            $ret[] = $t;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+//                $ret[] = $this->getSubjectWithWare($ware, $matchClass, $level, $ct);
+            }
+        }
+
+        return $ret;
+    }
+
 
     public function getSubjectWithQa($qaModel, $matchClass = 0, $level = 1, $ct = 1) {
         $ret = [];
@@ -53,6 +101,7 @@ class Qas extends Component
                             foreach ($subjects as $subj) {
                                 $tmpSubj = \common\helpers\Qa::formatSubjectFromGPT($subj);
                                 $tmpSubj = \common\helpers\Qa::generateChallengePropByLevel($level, $tmpSubj);
+                                $tmpSubj = \common\helpers\Qa::formatChallengeProp($tmpSubj);
                                 $ret[] = $tmpSubj;
                             }
                         }
@@ -67,12 +116,17 @@ class Qas extends Component
         return $ret;
     }
 
-    public function getQaByPackageIds($qaPackageIds) {
+    public function getQaByPackageIds($qaPackageIds, $packageClass = []) {
         $qaPackages = QaPackage::find()
             ->where([
                 'id' => $qaPackageIds
-            ])
-            ->all();
+            ]);
+        if (!empty($packageClass)) {
+            $qaPackages = $qaPackages->andFilterWhere([
+                'package_class' => $packageClass,
+            ]);
+        }
+        $qaPackages = $qaPackages->all();
 
         $qaCollections = [];
         if (!empty($qaPackages)) {

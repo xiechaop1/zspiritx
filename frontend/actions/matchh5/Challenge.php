@@ -173,11 +173,13 @@ class Challenge extends Action
                 break;
         }
 
+        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
+
         switch ($storyMatch->match_class) {
             case StoryMatch::MATCH_CLASS_MATH:
                 // 数学
                 // 生成1000道数学题
-                $subjects = [];
+//                $subjects = [];
 
                 // Todo： 测试用的，上线的话，从订单里找到qaPackage，取出qaIds，然后生成题目
 //                $qa = Qa::find()
@@ -208,7 +210,7 @@ class Challenge extends Action
                 break;
             case StoryMatch::MATCH_CLASS_POEM:
                 // 生成1000道诗词题
-                $subjects = [];
+//                $subjects = [];
 
                 for ($i=0; $i<100; $i++) {
                     switch ($level) {
@@ -233,7 +235,7 @@ class Challenge extends Action
                 }
                 break;
             case StoryMatch::MATCH_CLASS_POEM_IDIOM:
-                $subjects = [];
+//                $subjects = [];
                 for ($i=0; $i<100; $i++) {
                     switch ($level) {
                         case 2:
@@ -254,7 +256,7 @@ class Challenge extends Action
                 }
                 break;
             case StoryMatch::MATCH_CLASS_ENGLISH:
-                $subjects = [];
+//                $subjects = [];
                 for ($i=0; $i<100; $i++) {
                     $subjects[] = Yii::$app->doubao->generateSubjectWithMode($level, $storyMatch->match_class, 2);
                     var_dump($subjects);exit;

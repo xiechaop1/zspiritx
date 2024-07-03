@@ -145,6 +145,16 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                                 <span class="fs-20" style="color: #999">
                                 <?= $desc ?>
                                 </span>
+                                <br>
+                                <span class="fs-20" style="color: #999">
+                                有效期：<?php
+                                    if (empty($item->period)) {
+                                        echo '永久';
+                                    } else {
+                                        echo $item->period . '天';
+                                    }
+                                    ?>
+                                </span>
                             </div>
                             <div class="col-sm-4" style="float: left;">
                                 <?php

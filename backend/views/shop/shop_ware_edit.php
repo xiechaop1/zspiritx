@@ -54,6 +54,7 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('链接类型');
             echo $form->field($shopWareModel, 'link_id')->textInput(['value' => $shopWareModel->link_id])->label('链接ID');
+            echo $form->field($shopWareModel, 'period')->textInput(['value' => $shopWareModel->period])->label('有效期(天)');
             echo $form->field($shopWareModel, 'price')->textInput(['value' => $shopWareModel->price])->label('价格');
             echo $form->field($shopWareModel, 'discount')->textInput(['value' => $shopWareModel->discount])->label('折扣');
             echo $form->field($shopWareModel, 'pay_way')->widget('\kartik\select2\Select2', [

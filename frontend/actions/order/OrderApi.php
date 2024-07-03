@@ -16,6 +16,7 @@ use common\models\ShopWares;
 use common\models\Story;
 use common\models\StoryExtend;
 use common\models\User;
+use common\models\UserWare;
 use frontend\actions\ApiAction;
 use Yii;
 
@@ -195,6 +196,29 @@ class OrderApi extends ApiAction
                 $ret = [
                     'order' => $order,
                 ];
+            }
+
+            if ($itemType == Order::ITEM_TYPE_PACKAGE) {
+                $shopWare = ShopWares::find()
+                    ->where(['id' => $itemId])
+                    ->one();
+
+                if (empty($shopWare->period)) {
+                    $expireTime = time() + '10 * 365 * 86400';
+                } else {
+                    $expireTime = time() + $shopWare->period * 24 * 3600;
+                }
+
+                $userWare = new UserWare();
+                $userWare->user_id = $this->_userId;
+                $userWare->story_id = $this->_storyId;
+                $userWare->ware_id = $itemId;
+                $userWare->ware_type = ShopWares::SHOP_WARE_TYPE_PACKAGE;
+                $userWare->link_id = $shopWare->link_id;
+                $userWare->link_type = $shopWare->link_type;
+                $userWare->user_ware_status = UserWare::USER_WARE_STATUS_NORMAL;
+                $userWare->expire_time = $expireTime;
+                $userWare->save();
             }
         } catch (\Exception $e) {
             $transaction->rollBack();

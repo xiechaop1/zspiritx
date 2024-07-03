@@ -19,6 +19,17 @@ class Qa
         $qa['attachment'] = Attachment::completeUrl($qa['attachment'], true);
     }
 
+    public static function formatChallengeProp($t) {
+        if (mb_strlen($t['topic']) > 10) {
+            $t['size'] = '40';
+            $t['speed_rate'] = 0.3;
+        } else {
+            $t['size'] = '60';
+            $t['speed_rate'] = 1;
+        }
+        return $t;
+    }
+
     public static function formatSubjectFromGPT($gpt) {
 //        $ret = [];
 

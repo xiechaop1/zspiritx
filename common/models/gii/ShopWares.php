@@ -26,8 +26,8 @@ class ShopWares extends \yii\db\ActiveRecord
     {
         return [
             [['ware_name', 'intro', 'icon',], 'string'],
-            [['price', 'discount', ], 'number'],
-            [['link_id', 'link_type', 'ware_type', 'pay_way', 'store_ct', 'ware_status', 'status'], 'integer'],
+            [['price', 'discount',  ], 'number'],
+            [['link_id', 'link_type', 'period', 'ware_type', 'pay_way', 'store_ct', 'ware_status', 'status'], 'integer'],
             [['is_delete', 'created_at', 'updated_at',], 'integer'],
         ];
     }
