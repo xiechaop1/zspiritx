@@ -14,7 +14,7 @@
  * @var \common\models\QA $qa
  */
 
-\frontend\assets\Qah5Asset::register($this);
+\frontend\assets\Marginh5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
@@ -41,13 +41,53 @@ $this->title = '消息';
                 </div>
             </div>
             <div class="btn-m-green m-t-30 float-right m-r-20">
-                <a href="/matchh5/challenge?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&qa_id=<?= $qaId ?>">
+                <span id="start_btn" href="/matchh5/challenge?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&qa_id=<?= $qaId ?>">
                 开始战斗
-                </a>
+                </span>
             </div>
         </div>
         </div>
 
     </div>
+<div class="row modal" id="message-box" style="top: 150px; z-index: 999999999;">
+    <div class="m-t-30 col-sm-12 col-md-12 p-40">
+        <!--                    <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>-->
+        <div style="clear:both; margin: 10px; padding: 30px; border: 2px solid yellow; text-align: left; background-color: rgba(0,0,0, 0.5)">
+
+            <input type="hidden" name="message_id" id="message-id">
+            <input type="hidden" name="message_topic" id="message-topic">
+            <span style="float: left; width: 100px;">
+                        <img src="../../static/img/match/sugg.png" style="width: 80px;" alt="" class="img-responsive  d-block m-auto"/>
+                        </span>
+            <span class="fs-50 bold" style="color: #ffa227;">提&nbsp;示</span>
+            <div style="clear: both; border-top: 1px solid #ffa227; padding-top: 15px; ">
+                        <span class="answer-detail" id="message-content" style="line-height: 45px; color: yellow">
+
+                        </span>
+            </div>
+        </div>
+        <br>
+        <!--                    <div class="answer-title m-t-40">-->
+        <!--                        恭喜您，挑战成功！-->
+        <!--                    </div>-->
+<!--        <div class="btn-m-green m-t-30  m-l-30 msg-rtn-btn">-->
+<!--            继续-->
+<!--        </div>-->
+        <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
+        <!--                        --><?php //echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
+        <!--                    </div>-->
+    </div>
 
 </div>
+
+</div>
+<script>
+    window.onload = function () {
+        var url = $('#start_btn').attr('href');
+        $('#start_btn').click(function () {
+            $('#message-content').html('正在生成题目，请稍等...');
+            $('#message-box').modal('show');
+            location.href = url;
+        });
+    };
+</script>
