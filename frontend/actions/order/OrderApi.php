@@ -204,7 +204,7 @@ class OrderApi extends ApiAction
                     ->one();
 
                 if (empty($shopWare->period)) {
-                    $expireTime = time() + '10 * 365 * 86400';
+                    $expireTime = time() + 10 * 365 * 86400;
                 } else {
                     $expireTime = time() + $shopWare->period * 24 * 3600;
                 }
