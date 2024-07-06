@@ -72,7 +72,7 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeInput('text', $searchModel, 'story_id'),
                     ],
                     [
-                        'label' => '题目分类',
+                        'label' => '题目类型',
                         'format' => 'raw',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
@@ -82,6 +82,23 @@ echo \dmstr\widgets\Alert::widget();
 
                             $ret = !empty(\common\models\Qa::$qaType2Name[$model->qa_type])
                                 ? \common\models\Qa::$qaType2Name[$model->qa_type]
+                                : '未知';
+
+                            return $ret;
+
+                        }
+                    ],
+                    [
+                        'label' => '题目分类',
+                        'format' => 'raw',
+                        'filter' => Html::activeDropDownList(
+                            $searchModel,
+                            'qa_class',
+                            $qaTypes, ["class" => "form-control ", 'value' => !empty($params['Qa']['qa_class']) ? $params['Qa']['qa_class'] : '']),
+                        'value' => function ($model) {
+
+                            $ret = !empty(\common\models\Qa::$qaClass2Name[$model->qa_class])
+                                ? \common\models\Qa::$qaClass2Name[$model->qa_class]
                                 : '未知';
 
                             return $ret;
@@ -109,7 +126,8 @@ echo \dmstr\widgets\Alert::widget();
                         'format' => 'raw',
                         'filter'    => false,
                         'value' => function ($model) {
-                            return \common\helpers\Common::isJson($model->st_selected) ? json_decode($model->st_selected, true) : $model->st_selected;
+                                return $model->st_selected;
+//                            return \common\helpers\Common::isJson($model->st_selected) ? json_decode($model->st_selected, true) : $model->st_selected;
                         }
                     ],
 

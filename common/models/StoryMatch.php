@@ -55,6 +55,17 @@ class StoryMatch extends \common\models\gii\StoryMatch
         self::MATCH_CLASS_PHYSICS => QaPackage::PACKAGE_CLASS_PHYSICS,
     ];
 
+    public static $matchClass2QaClass = [
+        self::MATCH_CLASS_NORMAL => Qa::QA_CLASS_NORMAL,
+        self::MATCH_CLASS_MATH => Qa::QA_CLASS_MATH,
+        self::MATCH_CLASS_ENGLISH => Qa::QA_CLASS_ENGLISH,
+        self::MATCH_CLASS_CHINESE => Qa::QA_CLASS_CHINESE,
+        self::MATCH_CLASS_POEM => Qa::QA_CLASS_POEM,
+        self::MATCH_CLASS_POEM_IDIOM => Qa::QA_CLASS_POEM_IDIOM,
+        self::MATCH_CLASS_HISTORY => Qa::QA_CLASS_HISTORY,
+        self::MATCH_CLASS_PHYSICS => Qa::QA_CLASS_PHYSICS,
+    ];
+
     public static $matchClassRandList = [
         self::MATCH_CLASS_MATH,
 //        self::MATCH_CLASS_ENGLISH,

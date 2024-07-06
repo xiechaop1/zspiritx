@@ -56,7 +56,57 @@ class Qas extends Component
                         if (!empty($qaCollections)) {
                             foreach ($qaCollections as $qaPackageId => $qaCollection) {
                                 foreach ($qaCollection as $qaModel) {
-                                    $tmp = $this->getSubjectWithQa($qaModel, $matchClass, $level, $ct);
+                                    $extends = [];
+                                    if (!empty($qaModel->prop)) {
+                                        // Todo: 准备读取qaProp，判断题目模式，引入相似题（增加例题字段）
+                                        $qaProp = json_decode($qaModel->prop, true);
+//                                        if (!empty($qaProp['example_qa_ids'])) {$ct = $qaProp['ct'];
+//                                        }
+                                        if (!empty($qaProp['user_qa'])) {
+                                            $userQaTmp = UserQa::find()
+                                                ->where([
+                                                    'user_id' => $userId,
+                                                    'is_right' => UserQa::ANSWER_WRONG,
+                                                ])
+                                                ->andFilterWhere([
+                                                    '>', 'updated_at', time() - 3600 * 24 * 3,
+                                                ])
+                                                ->orderBy(['updated_at' => SORT_DESC])
+                                                ->limit(20)
+                                                ->all();
+
+                                            $qaIds = [];
+
+                                            if (!empty($userQaTmp)) {
+                                                foreach ($userQaTmp as $uq) {
+                                                    $qaIds[] = $uq->qa_id;
+                                                }
+
+                                                $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : 0;
+                                                $qaTmp = Qa::find()
+                                                    ->where([
+                                                        'id' => $qaIds,
+                                                        'qa_class' => $qaClass
+                                                    ])
+                                                    ->orderBy(['updated_at' => SORT_DESC])
+                                                    ->limit(5)
+                                                    ->all();
+
+                                                $exampleTopics = [];
+                                                if (!empty($qaTmp)) {
+                                                    foreach ($qaTmp as $q) {
+                                                        $exampleTopics[] = [
+                                                            'topic' => $q->topic
+                                                        ];
+                                                    }
+                                                    $extends['exampleTopics'] = $exampleTopics;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        $qaProp = [];
+                                    }
+                                    $tmp = $this->getSubjectWithQa($qaModel, $matchClass, $level, $ct, $extends);
                                     if (!empty($tmp)) {
                                         foreach ($tmp as $t) {
                                             $ret[] = $t;
@@ -75,7 +125,7 @@ class Qas extends Component
     }
 
 
-    public function getSubjectWithQa($qaModel, $matchClass = 0, $level = 1, $ct = 1) {
+    public function getSubjectWithQa($qaModel, $matchClass = 0, $level = 1, $ct = 1, $extends = []) {
         $ret = [];
         switch ($qaModel->qa_type) {
             case Qa::QA_TYPE_CHATGPT:
@@ -93,7 +143,7 @@ class Qas extends Component
                             $level = $qaProp['level'];
                         }
 
-                        $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct);
+                        $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct, $extends);
 
 //                        var_dump($subjects);exit;
 

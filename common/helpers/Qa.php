@@ -53,6 +53,7 @@ class Qa
                     'formula' => $gpt['SUBJECT'],
                     'topic' => $gpt['SUBJECT'],
                     'standFormula' => $gpt['SUBJECT'],
+                    'subject_type' => $gpt['TYPE'],
                     'answerRange' => $opts,
                     'selected_json' => $opts,
                     'selected' => json_encode($opts, JSON_UNESCAPED_UNICODE),

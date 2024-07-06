@@ -46,7 +46,20 @@ class Score extends Component
     }
 
     public function computeWithQa($userId, $storyId, $sessionId, $qaId, $qaScore = 0, $beginTs = 0) {
-        $userQa = UserQa::findOne(['user_id' => $userId, 'session_id' => $sessionId, 'qa_id' => $qaId]);
+        $userQa = UserQa::find()
+            ->where([
+                'user_id' => $userId,
+                'session_id' => $sessionId,
+                'qa_id' => $qaId,
+            ])
+            ->andFilterWhere([
+                '>', 'created_at', time() - 43200
+            ])
+            ->orderBy([
+                'created_at' => SORT_DESC
+            ])
+            ->one()
+            ->toArray();
 
         $score = 0;
         if (empty($qaScore)) {

@@ -28,7 +28,7 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
-    public function generateSubject($userMessagePre = '', $level = 0, $matchClass = 0, $ct = 10, $templateContents = array()) {
+    public function generateSubject($userMessagePre = '', $level = 0, $matchClass = 0, $ct = 10, $extends = array()) {
         $ret = [];
         $gradeName = $this->_getGradeNameFromLevel($level);
 
@@ -36,18 +36,29 @@ class Doubao extends Component
 
         if (!empty($userMessagePre)) {
             $msgTemplate = [
-                '适合' . $gradeName . '同学的题目，请出'. $ct . '道',
-                '#输出格式#' . '输出题目、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
+                '适合' . $gradeName . '同学的题目，请出'. $ct . '道，题目随机一些，尽可能规避历史已经出过的',
+                '#输出格式#' . '输出题目、题型、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
                 '#输出样例#' . json_encode([[
                     'SUBJECT' => 'SUBJECT1',
                     'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                     'ANSWER' => 'A',
+                    'TYPE'  => '题型',
                 ],[
                     'SUBJECT' => 'SUBJECT2',
                     'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                     'ANSWER' => 'A',
+                    'TYPE'  => '题型',
                 ]], JSON_UNESCAPED_UNICODE),
             ];
+
+            if (!empty($extends['exampleTopics'])) {
+                $tmpTopics = [];
+                foreach ($extends['exampleTopics'] as $exampleTopic) {
+                    $tmpTopics[] = $exampleTopic['topic'];
+                }
+                $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
+                $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
+            }
 
 //            $userMessageTmp = $userMesssagePre . "\n" . implode("\n", $msgTemplate);
 
@@ -80,15 +91,17 @@ class Doubao extends Component
         switch ($matchClass) {
             case StoryMatch::MATCH_CLASS_ENGLISH:
                 $userMessage = '请出' . $ct . '道英语题目，题目是一个英文短句，答案是这个英文单词对应的中文。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';
-                $userMessage .= '#输出格式#' . '输出题目、选项和答案。输出格式为JSON';
+                $userMessage .= '#输出格式#' . '输出题目、题型、选项和答案。输出格式为JSON';
                 $userMessage .= '#输出样例#' . json_encode([[
                         'SUBJECT' => 'SUBJECT1',
                         'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                         'ANSWER' => 'A',
+                        'TYPE'  => '题型',
                     ],[
                         'SUBJECT' => 'SUBJECT2',
                         'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                         'ANSWER' => 'A',
+                        'TYPE'  => '题型',
                     ]], JSON_UNESCAPED_UNICODE);
                 break;
             default:
@@ -152,7 +165,8 @@ class Doubao extends Component
 
         $messages = array_merge($oldMessages, $messages);
         $messages = array_merge($templateMessages, $messages);
-//        var_dump($messages);exit;
+//        var_dump($messages);
+//        exit;
 
         $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
@@ -165,6 +179,8 @@ class Doubao extends Component
 //        Yii::info('chatGPT data: ' . json_encode($data));
 
         $response = $this->_call('/v3/chat/completions', $data, 'POST');
+//        var_dump($response);
+//        exit;
 
         return json_decode($response, true);
     }

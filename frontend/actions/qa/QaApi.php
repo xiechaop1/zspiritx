@@ -15,6 +15,7 @@ use common\models\Actions;
 use common\models\ItemKnowledge;
 use common\models\Qa;
 use common\models\SessionQa;
+use common\models\StoryMatch;
 use common\models\StoryStages;
 use common\models\UserQa;
 use common\models\User;
@@ -160,18 +161,83 @@ class QaApi extends ApiAction
 
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
+        $qaMode = !empty($this->_get['qa_mode']) ? $this->_get['qa_mode'] : Qa::QA_MODE_NORMAL;
+
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
 
-        if (empty($qa)) {
+        if ($qaMode == Qa::QA_MODE_NORMAL && empty($qa)) {
             throw new \Exception('问答不存在', ErrorCode::QA_NOT_EXIST);
+        } else if (empty($qa)) {
+            $topic = !empty($this->_get['topic']) ? $this->_get['topic'] : '';
+            if (empty($topic)) {
+                throw new \Exception('您提供的问答参数不完整', ErrorCode::QA_PARAMETERS_INVALID);
+            }
+
+            $qa = Qa::find()
+                    ->where([
+                        'topic' => $topic,
+                        'qa_mode' => $qaMode,
+                    ])
+                    ->one();
+            if (empty($qa)) {
+
+                $selected = !empty($this->_get['selected']) ? $this->_get['selected'] : '';
+                // 如果没有指定TYPE，默认按照GPT TYPE
+                $qaType = !empty($this->_get['qa_type']) ? $this->_get['qa_type'] : Qa::QA_TYPE_GPT_SUBJECT;
+//                $qaClass = !empty($this->_get['qa_class']) ? $this->_get['qa_class'] : Qa::QA_CLASS_MATH;
+                $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : StoryMatch::MATCH_CLASS_MATH;
+                // 默认10金币
+                $score = !empty($this->_get['score']) ? $this->_get['score'] : 10;
+                $stSelected = !empty($this->_get['st_selected']) ? $this->_get['st_selected'] : '';
+                $prop = !empty($this->_get['prop']) ? $this->_get['prop'] : '';
+
+                $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : Qa::QA_CLASS_MATH;
+
+                $qa = new Qa();
+                $qa->topic = $topic;
+                $qa->qa_type = $qaType;
+                $qa->qa_class = $qaClass;
+                $qa->qa_mode = $qaMode;
+                $qa->st_answer = $stAnswer;
+                $qa->story_id = $storyId;
+                $qa->selected = $selected;
+                $qa->st_selected = $stSelected;
+                $qa->score = $score;
+                $qa->prop = $prop;
+                $qa->save();
+                $qaId = $qa->id = Yii::$app->db->getLastInsertID();
+            } else {
+                $qaId = $qa->id;
+            }
+
+
         }
+
+        $isRight = 0;
+        if (!empty($stAnswer) && $stAnswer == $answer) {
+            $isRight = 1;
+        } elseif (!empty($stAnswer) && $stAnswer != $answer) {
+            $isRight = 0;
+        } elseif (empty($stAnswer)) {
+            if ($qa['st_selected'] == $answer) {
+                $isRight = 1;
+            } else {
+                $isRight = 0;
+            }
+        }
+
 
         $userQa = UserQa::find()->where([
             'user_id' => $userId,
             'session_id' => $sessionId,
             'qa_id' => $qaId,
-        ])
-            ->andFilterWhere([
+        ]);
+        if ($qaMode != Qa::QA_MODE_NORMAL) {
+            $userQa = $userQa->andFilterWhere([
+                'is_right' => $isRight,
+            ]);
+        }
+        $userQa = $userQa->andFilterWhere([
                 '>', 'created_at', time() - 86400,
             ])
             ->one();
@@ -199,17 +265,7 @@ class QaApi extends ApiAction
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
-            if (!empty($stAnswer) && $stAnswer == $answer) {
-                $isRight = 1;
-            } elseif (!empty($stAnswer) && $stAnswer != $answer) {
-                $isRight = 0;
-            } elseif (empty($stAnswer)) {
-                if ($qa['st_selected'] == $answer) {
-                    $isRight = 1;
-                } else {
-                    $isRight = 0;
-                }
-            }
+
 
 
             if (!empty($sessionId)) {

@@ -11,6 +11,11 @@ namespace common\models;
 
 class UserQa extends \common\models\gii\UserQa
 {
+
+    const ANSWER_RIGHT = 1;
+    const ANSWER_WRONG = 0;
+
+
     public function behaviors()
     {
         return [

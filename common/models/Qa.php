@@ -30,10 +30,27 @@ class Qa extends \common\models\gii\Qa
     const QA_TYPE_GPT_SUBJECT = 30; // GPT出题
 
     const QA_CLASS_NORMAL   = 1; // 普通题
-    const QA_CLASS_POEM     = 2; // 诗词题
+//    const QA_CLASS_POEM     = 2; // 诗词题
+    const QA_CLASS_MATH          = 20; // 数学
+    const QA_CLASS_ENGLISH       = 30; // 英语
+    const QA_CLASS_CHINESE       = 40; // 语文
+    const QA_CLASS_POEM          = 41; // 诗词
+    const QA_CLASS_POEM_IDIOM    = 42; // 成语
+    const QA_CLASS_HISTORY       = 50; // 历史
+    const QA_CLASS_PHYSICS       = 60; // 物理
 
-    const QA_MODE_NORMAL = 1; // 普通模式
-    const QA_MODE_RANDOM = 2; // 随机模式
+    public static $qaClass2Name = [
+//        self::QA_CLASS_NORMAL => '普通题',
+//        self::QA_CLASS_RANDOM => '随机题',
+        self::QA_CLASS_NORMAL => '普通题',
+        self::QA_CLASS_MATH => '数学题',
+        self::QA_CLASS_ENGLISH  => '英语题',
+        self::QA_CLASS_CHINESE  => '语文题',
+        self::QA_CLASS_POEM => '诗词题',
+        self::QA_CLASS_POEM_IDIOM   => '成语题',
+        self::QA_CLASS_HISTORY  => '历史题',
+        self::QA_CLASS_PHYSICS => '物理题',
+    ];
 
     public static $qaType2Name = [
         self::QA_TYPE_SINGLE  => '单选题',
@@ -56,16 +73,14 @@ class Qa extends \common\models\gii\Qa
 
     ];
 
-    public static $qaClass2Name = [
-//        self::QA_CLASS_NORMAL => '普通题',
-//        self::QA_CLASS_RANDOM => '随机题',
-        self::QA_CLASS_NORMAL => '普通题',
-        self::QA_CLASS_POEM => '诗词题',
-    ];
+    const QA_MODE_NORMAL = 1; // 普通模式
+    const QA_MODE_RANDOM = 2; // 随机模式
+    const QA_MODE_MATCH  = 3; // 竞赛模式
 
     public static $qaMode2Name = [
         self::QA_MODE_NORMAL => '普通模式',
         self::QA_MODE_RANDOM => '随机模式',
+        self::QA_MODE_MATCH => '竞赛模式',
     ];
 
     public static $qaTypeIsJson = [

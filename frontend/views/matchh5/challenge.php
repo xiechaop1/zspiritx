@@ -1102,11 +1102,78 @@ $this->title = $storyMatch->match_name;
             $('#add_right').val('0');
             $('#add_wrong').val('1');
             showRetAnimate(chosenObj, 2);
+            recordQa(obj[idx], chosen);
             setTimeout(function () {
                 addRivSpeed($('.riv'), 10);
                 $('input[name=answer_c]').attr('disabled', false);
             }, 1000);
         }
+    }
+
+    function recordQa(subjectObj, chosen) {
+        console.log(subjectObj);
+        var user_id = $('input[name=user_id]').val();
+        var story_id = $('input[name=story_id]').val();
+        var session_id=$("input[name='session_id']").val();
+        // var session_stage_id=$("input[name='session_stage_id']").val();
+        var begin_ts=$("input[name='begin_ts']").val();
+        var qa_mode = 3;
+        var qa_type = $('#qa_type').val();
+        var match_class = $('input[name=match_class]').val();
+        var st_answer = subjectObj.st_answer;
+        var topic = subjectObj.topic;
+        var selected = subjectObj.selected;
+        var st_selected = selected;
+        var score = subjectObj.gold;
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/qa/add_user_answer',
+            data:{
+                user_id:user_id,
+                answer:chosen,
+                story_id:story_id,
+                session_id:session_id,
+                // session_stage_id:session_stage_id,
+                begin_ts:begin_ts,
+                st_answer:st_answer,
+                topic:topic,
+                selected:selected,
+                score:score,
+                qa_mode:qa_mode,
+                qa_type:qa_type,
+                match_class:match_class,
+                st_selected:st_selected,
+            },
+            onload: function (data) {
+                $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+
+                //新消息获取成功
+                if(obj["code"]==200){
+
+                }
+                //新消息获取失败
+                else{
+                    // $.alert(obj.msg)
+                    console.log(obj.msg);
+                }
+
+            }
+        });
+
     }
 
     function computeRivHp() {

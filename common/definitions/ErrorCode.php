@@ -53,6 +53,7 @@ class ErrorCode extends Api
     const QA_NOT_EXIST              = -70001;   // 问答不存在
 
     const QA_SAVE_FAILED            = -70002;   // 问答保存失败
+    const QA_PARAMETERS_INVALID     = -70003;   // 参数错误
 
     const USER_MODEL_NOT_FOUND      = -80001;   // 用户模型不存在
     const USER_MODEL_NOT_ENOUGH     = -80002;   // 用户模型不足
