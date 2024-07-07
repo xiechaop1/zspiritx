@@ -32,6 +32,7 @@ class StoryMatch extends \common\models\gii\StoryMatch
     const MATCH_CLASS_POEM_IDIOM    = 42; // 成语
     const MATCH_CLASS_HISTORY       = 50; // 历史
     const MATCH_CLASS_PHYSICS       = 60; // 物理
+    const MATCH_CLASS_ANY           = 999;    // 通用
 
     public static $matchClass2Name = [
         self::MATCH_CLASS_NORMAL => '普通',
@@ -42,6 +43,7 @@ class StoryMatch extends \common\models\gii\StoryMatch
         self::MATCH_CLASS_POEM_IDIOM => '成语',
         self::MATCH_CLASS_HISTORY => '历史',
         self::MATCH_CLASS_PHYSICS => '物理',
+        self::MATCH_CLASS_ANY => '通用',
     ];
 
     public static $matchClass2PackageClass = [
@@ -53,6 +55,7 @@ class StoryMatch extends \common\models\gii\StoryMatch
         self::MATCH_CLASS_POEM_IDIOM => QaPackage::PACKAGE_CLASS_POEM_IDIOM,
         self::MATCH_CLASS_HISTORY => QaPackage::PACKAGE_CLASS_HISTORY,
         self::MATCH_CLASS_PHYSICS => QaPackage::PACKAGE_CLASS_PHYSICS,
+        self::MATCH_CLASS_ANY => QaPackage::PACKAGE_CLASS_ANY,
     ];
 
     public static $matchClass2QaClass = [
@@ -64,6 +67,7 @@ class StoryMatch extends \common\models\gii\StoryMatch
         self::MATCH_CLASS_POEM_IDIOM => Qa::QA_CLASS_POEM_IDIOM,
         self::MATCH_CLASS_HISTORY => Qa::QA_CLASS_HISTORY,
         self::MATCH_CLASS_PHYSICS => Qa::QA_CLASS_PHYSICS,
+        self::MATCH_CLASS_ANY => Qa::QA_CLASS_ANY,
     ];
 
     public static $matchClassRandList = [

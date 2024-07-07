@@ -38,6 +38,7 @@ class Qa extends \common\models\gii\Qa
     const QA_CLASS_POEM_IDIOM    = 42; // 成语
     const QA_CLASS_HISTORY       = 50; // 历史
     const QA_CLASS_PHYSICS       = 60; // 物理
+    const QA_CLASS_ANY           = 999;    // 通用
 
     public static $qaClass2Name = [
 //        self::QA_CLASS_NORMAL => '普通题',
@@ -50,6 +51,7 @@ class Qa extends \common\models\gii\Qa
         self::QA_CLASS_POEM_IDIOM   => '成语题',
         self::QA_CLASS_HISTORY  => '历史题',
         self::QA_CLASS_PHYSICS => '物理题',
+        self::QA_CLASS_ANY => '通用题',
     ];
 
     public static $qaType2Name = [
