@@ -53,6 +53,7 @@ class Qas extends Component
                             $packageClass = StoryMatch::$matchClass2PackageClass[$matchClass];
                         }
                         $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
+
                         if (!empty($qaCollections)) {
                             foreach ($qaCollections as $qaPackageId => $qaCollection) {
                                 foreach ($qaCollection as $qaModel) {
@@ -173,7 +174,10 @@ class Qas extends Component
             ]);
         if (!empty($packageClass)) {
             $qaPackages = $qaPackages->andFilterWhere([
-                'package_class' => $packageClass,
+                'package_class' => [
+                    QaPackage::PACKAGE_CLASS_ANY,
+                    $packageClass
+                ],
             ]);
         }
         $qaPackages = $qaPackages->all();

@@ -26,6 +26,7 @@ class QaPackage extends \common\models\gii\QaPackage
         self::PACKAGE_TYPE_NORMAL => '普通题包',
     ];
 
+    const PACKAGE_CLASS_ANY           = 999;    // 通用
     const PACKAGE_CLASS_NORMAL        = 1; // 普通
     const PACKAGE_CLASS_MATH          = 20; // 数学
     const PACKAGE_CLASS_ENGLISH       = 30; // 英语
@@ -36,6 +37,7 @@ class QaPackage extends \common\models\gii\QaPackage
     const PACKAGE_CLASS_PHYSICS       = 60; // 物理
 
     public static $packageClass2Name = [
+        self::PACKAGE_CLASS_ANY => '通用',
         self::PACKAGE_CLASS_NORMAL => '普通',
         self::PACKAGE_CLASS_MATH => '数学',
         self::PACKAGE_CLASS_ENGLISH => '英语',
