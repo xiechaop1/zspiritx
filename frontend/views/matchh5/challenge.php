@@ -29,6 +29,10 @@ $this->title = $storyMatch->match_name;
 
 ?>
 <style>
+    .answer-tag-word {
+        position: relative;
+        margin-left: 80px;
+    }
     .code-input {
         display: flex;
     }
@@ -1020,7 +1024,7 @@ $this->title = $storyMatch->match_name;
                 optHtml += '<div class="m-t-30 col-sm-6 col-md-6"><div class="answer-border">';
                 optHtml += '<input class="form-check-input" type="radio" name="answer_c" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '" >';
                 optHtml += '<label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
-                optHtml += '    <span class="answer-tag">' + label + '</span>' + ansrange[j];
+                optHtml += '    <span class="answer-tag">' + label + '</span>' + '<span class="answer-tag-word">' + ansrange[j] + '</span>';
                 optHtml += '</label> </div></div>';
             }
             optHtml += '<input type="hidden" id="add_gold" value="10">';
