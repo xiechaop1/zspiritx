@@ -41,6 +41,7 @@ class Qas extends Component
             ->andFilterWhere([
                 '>', 'expire_time', time(),
             ])
+            ->orderBy(['updated_at' => SORT_DESC])
             ->all();
 
         if (!empty($userWare)) {
