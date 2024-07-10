@@ -102,6 +102,8 @@ class Qas extends Component
                                                         ];
                                                     }
                                                     $extends['exampleTopics'] = $exampleTopics;
+                                                } else {
+                                                    $genSub = false;
                                                 }
                                             } else {
                                                 $genSub = false;
