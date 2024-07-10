@@ -58,6 +58,7 @@ class Qas extends Component
                             foreach ($qaCollections as $qaPackageId => $qaCollection) {
                                 foreach ($qaCollection as $qaModel) {
                                     $extends = [];
+                                    $genSub = true;
                                     if (!empty($qaModel->prop)) {
                                         // Todo: 准备读取qaProp，判断题目模式，引入相似题（增加例题字段）
                                         $qaProp = json_decode($qaModel->prop, true);
@@ -102,15 +103,20 @@ class Qas extends Component
                                                     }
                                                     $extends['exampleTopics'] = $exampleTopics;
                                                 }
+                                            } else {
+                                                $genSub = false;
                                             }
                                         }
                                     } else {
                                         $qaProp = [];
                                     }
-                                    $tmp = $this->getSubjectWithQa($qaModel, $matchClass, $level, $ct, $extends);
-                                    if (!empty($tmp)) {
-                                        foreach ($tmp as $t) {
-                                            $ret[] = $t;
+                                    if ($genSub) {
+                                        $tmp = $this->getSubjectWithQa($qaModel, $matchClass, $level, $ct, $extends);
+
+                                        if (!empty($tmp)) {
+                                            foreach ($tmp as $t) {
+                                                $ret[] = $t;
+                                            }
                                         }
                                     }
                                 }
