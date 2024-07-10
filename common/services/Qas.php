@@ -33,6 +33,7 @@ class Qas extends Component
 
     public function getSubjectsWithUserWare($userId, $matchClass = 0, $level = 1, $ct = 10) {
         $ret = [];
+        $maxWareLimit = 2;      // 暂时就支持2个商品同时运行
         $userWare = UserWare::find()
             ->where([
                 'user_id' => $userId,
@@ -42,7 +43,9 @@ class Qas extends Component
                 '>', 'expire_time', time(),
             ])
             ->orderBy(['updated_at' => SORT_DESC])
+            ->limit($maxWareLimit)
             ->all();
+
 
         if (!empty($userWare)) {
             foreach ($userWare as $ware) {
