@@ -165,6 +165,7 @@ class Doubao extends Component
 
         $messages = array_merge($oldMessages, $messages);
         $messages = array_merge($templateMessages, $messages);
+        Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
 //        var_dump($messages);
 //        exit;
 
@@ -179,6 +180,7 @@ class Doubao extends Component
 //        Yii::info('chatGPT data: ' . json_encode($data));
 
         $response = $this->_call('/v3/chat/completions', $data, 'POST');
+//        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 //        var_dump($response);
 //        exit;
 
@@ -283,6 +285,7 @@ class Doubao extends Component
         } else {
             $response = Curl::curlGet($url);
         }
+        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 //        file_put_contents('/tmp/tmp.tmp', $response);
 //        var_dump($response);exit;
 
