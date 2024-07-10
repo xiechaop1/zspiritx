@@ -23,6 +23,7 @@ use common\models\StoryMatch;
 use common\models\StoryMatchPlayer;
 use common\models\StoryRank;
 use common\models\User;
+use common\models\UserExtends;
 use common\models\UserLottery;
 use common\models\UserModelLoc;
 use common\models\UserModels;
@@ -165,12 +166,25 @@ class Challenge extends Action
 //            var_dump($rivalPlayers);exit;
         }
 
-        $level = 1;
-        switch ($grade) {
-            case 1:
-            default:
-                $level = 1;
-                break;
+//        $level = 1;
+//        switch ($grade) {
+//            case 1:
+//            default:
+//                $level = 1;
+//                break;
+//        }
+
+        $userExtends = UserExtends::find()
+            ->where([
+                'user_id'   => $userId,
+            ])
+            ->one();
+
+        if (!empty($userExtends->level)) {
+            $level = $userExtends->level;
+        } else {
+            $grade = $userExtends->grade;
+            $level = !empty(UserExtends::$userGradeLevelMap[$grade]) ? UserExtends::$userGradeLevelMap[$grade] : 1;
         }
 
         $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);

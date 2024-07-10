@@ -46,4 +46,9 @@ class User extends \common\models\gii\User
         $ret = $this->save();
         return $ret;
     }
+
+    public function getExtends()
+    {
+        return $this->hasOne(UserExtends::className(), ['user_id' => 'id']);
+    }
 }
