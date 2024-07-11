@@ -143,6 +143,31 @@ html, body {
     color: #FFFFFF;
     position: relative;
 }
+.answer-border2{
+    width: 660px;
+    height: 110px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 48px;
+    border: 1px solid rgba(255,255,255,0.4);
+
+    display: block;
+    margin:40px auto 0 auto;
+    opacity: 1;
+    padding: 12px;
+    text-align: center;
+    font-size: 32px;
+    line-height: 80px;
+    font-weight: 600;
+    color: #FFFFFF;
+    position: relative;
+}
+.answer-border2 input[type="checkbox"] + label::before {
+    display: none;
+}
+.answer-border2 .answer-btn{
+    text-align: center;
+    display: block;
+}
 .login-box-sm{
     background: rgba(31,38,40,0.8);
     border-radius: 48px;
@@ -788,6 +813,161 @@ input[type="radio"]:checked+label::before {
 .btn-green-m.active{
     background: #DAFC70;
     color: #1F2628;
+}
+.match-qa-header-left{
+    min-width: 134px;
+    height: 66px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 100px;
+    border: 1px solid #DAFC70;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 28px;
+    color: #FED34C;
+    line-height: 62px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+    padding: 0 20px 0 0;
+    margin-left: 40px;
+}
+.match-qa-header-left2{
+    min-width: 134px;
+    height: 66px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 100px;
+    border: 1px solid #DAFC70;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 28px;
+    color: #FED34C;
+    line-height: 62px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+    padding: 0 20px 0 0;
+    margin-left: 40px;
+}
+.match-qa-header-right{
+    min-width: 250px;
+    height: 66px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 100px;
+    border: 1px solid #DAFC70;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 28px;
+    color: #FED34C;
+    line-height: 62px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+    padding: 0 20px 0 20px;
+    float: right;
+    margin-right: 40px;
+}
+.match-info{
+    min-width: 134px;
+    height: 76px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 100px;
+    border: 2px solid #DAFC70;
+    font-weight: 500;
+    font-size: 28px;
+    color: #FED34C;
+    line-height: 70px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+    padding: 0 40px 0 40px;
+    display: inline-block;
+    margin: 40px auto;
+}
+.header-m{
+    width: 64px;
+    height: 64px;
+    border-radius:32px;
+    border: 1px solid #DAFC70;
+    margin: -4px 0 0 -4px;
+}
+.img-coin{
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+.match-qa-box{
+    position: relative;
+    width: 660px;
+    min-height: 200px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 48px;
+    border: 4px solid #DAFC70;
+    display: block;
+    margin: 80px auto 0 auto;
+}
+.match-clock-bottom{
+    width: 660px;
+    height: 48px;
+    background: #DAFC70;
+    border-radius: 0px 0px 48px 48px;
+    text-align: center;
+    margin-left: -4px;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 48px;
+    color: #000000;
+    font-style: normal;
+    text-transform: none;
+}
+.match-clock{
+    width: 176px;
+    height: 56px;
+    background: #DAFC70;
+    border-radius: 50px;
+    border: 4px solid #DAFC70;
+    font-weight: 800;
+    font-size:28px;
+    color: #1F2628;
+    line-height: 44px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+    position: absolute;
+    left: 50%;
+    margin-left: -88px;
+    margin-top: -28px;
+}
+.match-qa-content-text{
+    padding: 60px 20px;
+    font-weight: 600;
+    font-size: 80px;
+    color: #FFFFFF;
+    line-height: 94px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+}
+.match-qa-content-worry{
+    padding: 60px 20px;
+    font-weight: 600;
+    font-size: 80px;
+    color: #FF566B;
+    line-height: 94px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+}
+.match-qa-content-right{
+    padding: 60px 20px;
+    font-weight: 600;
+    font-size: 80px;
+    color:#DAFC70;
+    line-height: 94px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+}
+.match-qa-content-worry img,.match-qa-content-right img{
+    vertical-align: text-bottom;
 }
 @media (min-width: 576px){
     .modal-dialog {

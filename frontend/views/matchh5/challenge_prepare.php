@@ -29,9 +29,6 @@ $this->title = '消息';
 
 ?>
 <div class="w-100 m-auto">
-    <label class="close-btn">
-        <img src="../../img/icon-close.png" class="img-40">
-    </label>
     <div class="p-20 bg-black">
         <div class="match-circle m-t-50">
             <div class="match-circle1">
