@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+       <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=750,user-scalable=no, target-densitydpi=device-dpi">
+ 
+    <title>首页</title>
+    <link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/theme.css">
+    <link rel="stylesheet" href="../../css/dropdown/dropdowm.css">
+    <link rel="stylesheet" href="../../css/iconfont.css">
+    <link rel="stylesheet" href="../../css/datePicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../../css/animate.css">
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="qa.css">
+</head>
+
+<body class="bg-black">
+<audio controls id="audio_right" class="hide">
+    <source src="../../audio/qa_right.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+<audio controls id="audio_wrong" class="hide">
+    <source src="../../audio/qa_wrong.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+
+<div id="play" style="
+    font-size: 50px;
+    color: #fff;
+">播放音乐</div>
+<button type="button" class="btn btn-primary " data-toggle="modal" data-target="#lottery-success">
+    h5-login-success
+</button>
+<button type="button" class="btn btn-primary " data-toggle="modal" data-target="#lottery-success-pink">
+    lottery-success-pink
+</button>
+<button type="button" class="btn btn-primary " data-toggle="modal" data-target="#h5-like-success">
+    h5-like-success
+</button>
+<button type="button" class="btn btn-primary " data-toggle="modal" data-target="#h5-worry">
+    h5-worry
+</button>
+
+<div class="w-100 m-auto">
+    <label class="close-btn">
+        <img src="../../img/icon-close.png" class="img-40">
+    </label>
+    <div class="p-20 bg-black">
+        <div class="match-circle m-t-50">
+            <div class="match-circle1">
+                <div class="match-circle2">
+                    <div class="match-circle3">
+                        <div class="match-circle4">
+                            <img src="../../img/example.png" class="header-m">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="match-title1 m-t-80">
+            匹配中(<span class="match-title-tag-1">1</span>/<span class="match-title-tag-2">30</span>)
+        </div>
+        <div class="match-text1 m-t-20">
+            倒计时：<span class="match-text-tag-1">115</span>/<sapn class="match-text-tag-1">s</sapn>)
+        </div>
+        <div class="text-center m-t-200 m-b-20">
+            <label class="btn-green-m" >开始比赛</label>
+            <label class="btn-green-m active">开始比赛</label>
+        </div>
+
+    </div>
+</div>
+
+<div class="w-100 m-auto">
+    <div class="show" style="display: block;" >
+        <div class="modal-dialog modal-dialog-centered lottery-pink-modal">
+            <div class="modal-content modal-lottery-bg">
+                <div class="modal-lottery-bg-border">
+                    <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width:100%">
+                        <div class="m-t-50">
+                            <div class="fs-36 text-F6 text-center bold lottery-error-title">
+                                <img src="../../img/lottery/lottery-tymj.png" class="img-350">
+                            </div>
+                            <div class="fs-36  m-t-50 text-F6 text-center bold lottery-error-title">
+                                <img src="../../img/lottery/lottery-gift.png" class="img-350">
+                            </div>
+                            <div class="fs-36  text-33 text-center bold lottery-error-title">
+                                3333
+                            </div>
+                            <div class="fs-24 m-t-20  text-66 text-center bold lottery-error-title">
+                                3333
+                            </div>
+
+                            <div class="fs-36 text-33 text-center bold m-t-50 m-b-20" >
+                                无奖券
+                                <label class="btn-pink-m">兑换</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="p-20 bg-white qa-pink">
+        <div class="w-100 p-30  m-b-10 pink-border">
+            <div class="w-1-0 d-flex">
+                <div class="fs-30 bold w-100 text-FF ">
+                    <img src="../../img/example.png" alt="" class="img-responsive  d-block"/>
+                </div>
+            </div>
+            <div class="w-1-0 d-flex m-t-20">
+                <div class="fs-30 bold w-100  title-box-border">
+                    <div class="row">
+                        <div class="col-sm-8 text-center">
+                            <img src="../../img/pic-right.png" alt="" class="pink-right d-block m-b-15"/>
+                            小猫有100块钱，小狗有100块钱，他们一共多少钱？
+                        </div>
+                        <div class="col-sm-4">
+                            <img src="../../img/pic-help.png" alt="" class="pink-help d-block"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="answer-box">
+
+                <div class="m-t-30 col-sm-6 col-md-6">
+                    <div class="">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_A" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_A">
+                            <span class="pink-ans-text">
+                                 <img src="../../img/example.png" alt="" class="img-responsive"/>
+                                小猫有100块钱，小狗有100块钱，他
+                            </span>
+                            <span class="answer-tag">A</span>
+
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-6 col-md-6">
+                    <div class="">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_A" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_A">
+                            <span class="pink-ans-text">
+                                 <img src="../../img/example.png" alt="" class="img-responsive"/>
+                                小猫有100块钱，小狗有100块钱，他
+                            </span>
+                            <span class="answer-tag">
+                                <img src="../../img/my/task.png" alt="" class="img-responsive"/>
+                            </span>
+
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row " id="answer-error-box">
+                <div class="m-t-60 col-sm-12 col-md-12">
+                    <div class="answer-detail " >
+                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        <span  class=" d-inline-block vertical-mid">很遗憾，答错了，再想想~</span>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="p-20 bg-black ">
+        <div class="w-100 p-30  m-b-10">
+            <div class="w-1-0 d-flex">
+                <div class="fs-30 bold w-100 text-FF title-box-border">
+                    <div class="npc-name">
+                        角色NPC名
+                    </div>
+                    小猫有100块钱，小狗有100块钱，他们一共多少钱？
+                    <img src="../../img/example.png" alt="" class="img-responsive  d-block"/>
+
+                    <div class="hpa-ctr">
+                        <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        播放语音
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="answer-box">
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="checkbox" name="answer" value="1" id="legal_person_yes_1" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
+
+                            8跟
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_A" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_A">
+                             <span class="answer-tag">
+                                <img src="../../img/my/know.png" class="list-icon-s"/>
+                            </span>
+                            8跟
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_B" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_B">
+                            <span class="answer-tag">B</span>
+                            8跟
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_C" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_C">
+                            <span class="answer-tag">C</span>
+                            8跟
+                        </label>
+                    </div>
+                </div>
+                <div class="m-t-30 col-sm-12 col-md-6">
+                    <div class="answer-border">
+                        <input class="form-check-input" type="radio" name="answer" value="1" id="legal_person_yes_D" >
+                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_D">
+                            <span class="answer-tag">D</span>
+                            8跟
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row hide" id="answer-right-box">
+                <div class="m-t-30 col-sm-12 col-md-12 p-40">
+                    <img src="../../img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
+                    <div class="answer-title m-t-40">
+                        B
+                    </div>
+                    <div class="answer-detail m-t-40">
+                        8根
+                    </div>
+                </div>
+
+            </div>
+            <div class="row hide" id="answer-right-box">
+                <div class="m-t-30 col-sm-12 col-md-12 p-40">
+                    <img src="../../img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>
+                    <div class="answer-title m-t-40">
+                        B
+                    </div>
+                    <div class="answer-detail m-t-40">
+                        8根
+                    </div>
+                </div>
+
+            </div>
+            <div class="row hide" id="answer-error-box">
+                <div class="m-t-36 col-sm-12 col-md-12">
+                    <div class="answer-detail " >
+                        <img src="../../img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        <span  class=" d-inline-block vertical-mid">很遗憾，答错了…</span>
+
+                    </div>
+                </div>
+            </div>
+
+
+             <div class="m-t-20">
+                <div class="form-check form-check-inline m-t-5">
+                                            <input class="form-check-input" type="radio" name="answer" value="2" id="legal_person_no">
+                                            <label class="form-check-label fs-30 text-66" for="legal_person_no">
+                                                <span>是</span>
+                                                <img src="../../img/example.png" alt="" class="img-responsive  d-block"/>
+                                            </label>
+                                        </div>
+                 <div class="form-check form-check-inline m-t-5">
+                     <input class="form-check-input" type="checkbox" name="agreement" value="2" id="agreement1">
+                     <label class="form-check-label fs-30 text-66" for="agreement1">
+                         <span></span>
+                     </label>
+                     <a href="https://zspiritx.oss-cn-beijing.aliyuncs.com/doc/zspiritx_useragreement.docx">用户协议</a><br>
+                 </div>
+                 <div class="form-check form-check-inline m-t-5">
+                     <input class="form-check-input" type="checkbox" name="answer" value="2" id="legal_person_no1">
+                     <label class="form-check-label fs-30 text-66" for="legal_person_no1">
+                         <span>是</span>
+                         <img src="../../img/example.png" alt="" class="img-responsive  d-block"/>
+                     </label>
+                 </div>
+            </div>
+                    <div class="text-center m-t-30">
+            <label class="h5-btn-green-big answer-btn" data-value="1" data-detail="B，因为它每天吃2根胡萝卜，1天是2根，2天是4根，3天是6根，3天的时候，就不够吃了，6>5">
+                提交
+            </label>
+        </div>
+        </div>
+       
+    </div>
+
+</div>
+
+
+
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="lottery-success" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-lottery-bg">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
+                <img src="../../img/icon-close.png" class="img-40">
+            </span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="m-t-50">
+                    <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
+                        <img src="../../img/bg-lottery-text1.png" class="img-250">
+                    </div>
+                    <div class="fs-36 text-F6 text-center bold lottery-error-title">
+                        <img src="../../img/lottery-error-top.png" class="lottery-error-top">
+                        <img src="../../img/lottery-error.png" class="img-350">
+                    </div>
+
+                    <div class="fs-40 text-FF text-center bold m-t-50 lottery-content">
+                        恭喜您答对了
+                    </div>
+                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
+                        <label class="btn-blue-m">确认提交</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="lottery-success-pink" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered lottery-pink-modal">
+        <div class="modal-content modal-lottery-bg">
+            <div class="modal-lottery-bg-border">
+                <span class="close m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal">
+                <img src="../../img/icon-close.png" class="img-40">
+            </span>
+                <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width:100%">
+                    <div class="m-t-50">
+                        <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
+                            <img src="../../img/bg-lottery-text1.png" class="img-250">
+                        </div>
+                        <div class="fs-36 text-F6 text-center bold lottery-error-title">
+                            <img src="../../img/lottery/lottery-tymj.png" class="img-350">
+                        </div>
+                        <div class="fs-40 text-center  lottery-title bold m-t-50 lottery-pink-content m-t-50">
+                            恭喜您答对了
+                        </div>
+
+                        <div class="fs-24 m-t-20  text-33 lottery-detail text-center bold lottery-error-title">
+                            3333
+                        </div>
+                        <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" data-dismiss="modal">
+                            <label class="btn-pink-m">兑换</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="h5-worry" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div>
+                    <div class="fs-36 text-F6 text-center bold">
+                        很稀罕，打错了
+                    </div>
+                    <div class="m-t-40 bg-F5 p-20 fs-26 text-orange border-radius-r-5 border-radius-l-5">
+                        正确答案是XXX
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="../../js/jquery/jquery.js"></script>
+<script src="../../js/jquery.scrollto.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+<script src="../../js/popper/Popper.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/CheckForm.js"></script>
+<script src="../../js/vcode.js"></script>
+<script src="../../js/rightfixed.js"></script>
+<script src="../../js/login.js"></script>
+<script src="../../js/header.js"></script>
+<script src="../../js/alert.js"></script>
+<script src="../../js/myslideup.js"></script>
+<script src="../../js/dropdown/dropdown.js"></script>
+<script src="../../js/datePicker/bootstrap-datepicker.min.js"></script>
+<script src="../../js/datePicker/bootstrap-datepicker.zh-CN.min.js"></script>
+<script src="../../js/datePicker.js"></script>
+<script src="../../js/owl.carousel/owl.carousel.js"></script>
+<script src="../../js/toTopH5.js"></script>
+<script src="app.js"></script>
+<script src="qa.js"></script>
+<script src="lottery_app.js"></script>
+</body>
+</html>
