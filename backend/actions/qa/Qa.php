@@ -75,12 +75,15 @@ class Qa extends Action
         $searchModel = new \backend\models\Qa();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $qaTypes = \common\models\Qa::$qaType2Name;
+        $qaTypes = ['0' => '全部'] + \common\models\Qa::$qaType2Name;
+
+        $qaClass = ['0' => '全部'] + \common\models\Qa::$qaClass2Name;
 
         return $this->controller->render('qalist', [
             'dataProvider'  => $dataProvider,
             'searchModel'   => $searchModel,
             'qaTypes'   => $qaTypes,
+            'qaClass'   => $qaClass,
             'qaModel'    => $model,
             'params'        => $_GET,
         ]);

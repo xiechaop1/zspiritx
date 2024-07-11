@@ -94,7 +94,7 @@ echo \dmstr\widgets\Alert::widget();
                         'filter' => Html::activeDropDownList(
                             $searchModel,
                             'qa_class',
-                            $qaTypes, ["class" => "form-control ", 'value' => !empty($params['Qa']['qa_class']) ? $params['Qa']['qa_class'] : '']),
+                            $qaClass, ["class" => "form-control ", 'value' => !empty($params['Qa']['qa_class']) ? $params['Qa']['qa_class'] : '']),
                         'value' => function ($model) {
 
                             $ret = !empty(\common\models\Qa::$qaClass2Name[$model->qa_class])
