@@ -58,8 +58,8 @@ class Score extends Component
             ->orderBy([
                 'created_at' => SORT_DESC
             ])
-            ->one()
-            ->toArray();
+            ->one();
+//            ->toArray();
 
         $score = 0;
         if (empty($qaScore)) {
