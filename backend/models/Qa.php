@@ -52,6 +52,13 @@ class Qa extends \common\models\Qa
             'story_id' => $this->story_id,
         ]);
 
+        $query->andFilterWhere([
+            'qa_type'   => $this->qa_type,
+        ]);
+        $query->andFilterWhere([
+            'qa_class'   => $this->qa_class,
+        ]);
+
         return $dataProvider;
     }
 }
