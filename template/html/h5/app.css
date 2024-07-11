@@ -168,6 +168,13 @@ html, body {
     text-align: center;
     display: block;
 }
+.answer-border2.worry{
+    background: #FF566B;
+}
+.answer-border2.right{
+    background: #DAFC70;
+    color: #1F2628;
+}
 .login-box-sm{
     background: rgba(31,38,40,0.8);
     border-radius: 48px;
@@ -758,7 +765,7 @@ input[type="radio"]:checked+label::before {
     width: 250px;
     height: 250px;
     border-radius: 300px;
-    border: 1px solid #DAFC70;
+    border: 2px solid #DAFC70;
     margin: 50px auto;
     display: block;
 }
@@ -766,7 +773,7 @@ input[type="radio"]:checked+label::before {
     width: 150px;
     height: 150px;
     border-radius: 100px;
-    border: 1px solid #DAFC70;
+    border: 2px solid #DAFC70;
     margin: 50px auto;
     display: block;
 }
@@ -774,7 +781,7 @@ input[type="radio"]:checked+label::before {
     width: 150px;
     height: 150px;
     border-radius: 100px;
-    border: 1px solid #DAFC70;
+    border: 2px solid #DAFC70;
 }
 .match-title1{
     font-family: PingFang SC, PingFang SC;
@@ -819,7 +826,7 @@ input[type="radio"]:checked+label::before {
     height: 66px;
     background: rgba(31,38,40,0.8);
     border-radius: 100px;
-    border: 1px solid #DAFC70;
+    border: 2px solid #DAFC70;
     display: inline-block;
     font-weight: 500;
     font-size: 28px;
@@ -836,7 +843,7 @@ input[type="radio"]:checked+label::before {
     height: 66px;
     background: rgba(31,38,40,0.8);
     border-radius: 100px;
-    border: 1px solid #DAFC70;
+    border: 2px solid #DAFC70;
     display: inline-block;
     font-weight: 500;
     font-size: 28px;
@@ -848,12 +855,33 @@ input[type="radio"]:checked+label::before {
     padding: 0 20px 0 0;
     margin-left: 40px;
 }
+.match-qa-header-left3{
+    min-width: 134px;
+    height: 70px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 100px;
+    border: 2px solid #DAFC70;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 28px;
+    color: #FED34C;
+    line-height: 62px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+    padding: 0 20px 0 90px;
+    margin-left: 40px;
+    position: relative;
+}
+.match-qa-header-left3 img{
+    vertical-align: text-bottom;
+}
 .match-qa-header-right{
     min-width: 250px;
     height: 66px;
     background: rgba(31,38,40,0.8);
     border-radius: 100px;
-    border: 1px solid #DAFC70;
+    border: 2px solid #DAFC70;
     display: inline-block;
     font-weight: 500;
     font-size: 28px;
@@ -883,12 +911,33 @@ input[type="radio"]:checked+label::before {
     display: inline-block;
     margin: 40px auto;
 }
+.progress-bar {
+    background-color: #DAFC70;
+    border-radius: 2rem;
+}
+.progress {
+    background: rgba(255,255,255,0.1);
+    border-radius: 2rem;
+}
+.progress-title{
+    height: 52px;
+    margin-top: -8px;
+}
 .header-m{
     width: 64px;
     height: 64px;
     border-radius:32px;
-    border: 1px solid #DAFC70;
+    border: 2px solid #DAFC70;
     margin: -4px 0 0 -4px;
+}
+.header-l{
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    border: 2px solid #DAFC70;
+    margin: -8px 0 0 -4px;
+    position: absolute;
+    left: 0;
 }
 .img-coin{
     display: inline-block;
@@ -904,6 +953,10 @@ input[type="radio"]:checked+label::before {
     display: block;
     margin: 80px auto 0 auto;
 }
+.match-qa-box.worry{
+    background: rgba(31,38,40,0.8);
+    border: 4px solid #FF566B;
+}
 .match-clock-bottom{
     width: 660px;
     height: 48px;
@@ -911,12 +964,26 @@ input[type="radio"]:checked+label::before {
     border-radius: 0px 0px 48px 48px;
     text-align: center;
     margin-left: -4px;
+    margin-bottom: -2px;
     font-weight: 600;
     font-size: 28px;
     line-height: 48px;
     color: #000000;
     font-style: normal;
     text-transform: none;
+}
+.match-qa-box.worry .match-clock-bottom{
+    background: #FF566B;
+}
+
+.match-clock-bottom-left{
+    display: inline-block;
+    margin-left: 40px;
+    float: left;
+}
+.match-clock-bottom-right{
+    float: right;
+    margin-right: 40px;
 }
 .match-clock{
     width: 176px;
