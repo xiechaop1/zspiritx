@@ -47,6 +47,7 @@ class Matchh5Asset extends AssetBundle
         self::HOST . 'js/getOptions.js',
         self::HOST . 'js/jquery.SuperSlide.2.1.3.js',
         'html/h5/app.js',
+        'html/h5/match.js',
 //        'html/h5/jquery-hashtable.js',
         ];
 

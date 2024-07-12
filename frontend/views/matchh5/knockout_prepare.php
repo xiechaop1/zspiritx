@@ -39,6 +39,48 @@ $this->title = '消息';
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="join_expire_time" value="<?= !empty($storyMatch->join_expire_time) ? $storyMatch->join_expire_time : 0 ?>">
 
+<div class="w-100 m-auto">
+    <!--组队倒计时时间-->
+    <input type="hidden" name="countdown" value="10">
+
+    <div class="p-20 bg-black">
+        <div class="match-circle m-t-50">
+            <div class="match-circle1">
+                <div class="match-circle2">
+                    <div class="match-circle3">
+                        <div class="match-circle4">
+                            <img src="../../img/example.png" class="header-m">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="match-text-box m-t-80">
+            <div class="match-title1 start-race hide">
+                匹配成功
+            </div>
+
+            <div class="match-title1  start-race-disable">
+                匹配中(<span class="match-title-tag-1">1</span>/<span class="match-title-tag-2">30</span>)
+            </div>
+            <div class="match-text1 m-t-20 start-race-disable">
+                倒计时：<span class="match-text-tag-1">115</span>s
+            </div>
+        </div>
+
+        <div class="text-center m-t-200 m-b-20">
+            <label class="btn-green-m start-race-disable" >开始比赛</label>
+            <a href="">
+                <label class="btn-green-m active hide start-race">开始比赛</label>
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+
+
 <div class="w-100 m-auto" style="top: 20px;">
 
     <div class="p-20 bg-black">

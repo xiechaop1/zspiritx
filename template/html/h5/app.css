@@ -803,6 +803,9 @@ input[type="radio"]:checked+label::before {
     font-style: normal;
     text-transform: none;
 }
+.match-text-box{
+    min-height:100px ;
+}
 .btn-green-m{
     width: 480px;
     height: 88px;
