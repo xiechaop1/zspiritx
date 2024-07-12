@@ -28,6 +28,33 @@ $this->registerMetaTag([
 $this->title = '消息';
 
 ?>
+<div class="w-100 m-auto">
+    <div class="p-20 bg-black">
+        <div class="match-circle m-t-50">
+            <div class="match-circle1">
+                <div class="match-circle2">
+                    <div class="match-circle3">
+                        <div class="match-circle4">
+                            <img src="../../img/example.png" class="header-m">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="match-title1 m-t-80">
+            匹配中(<span class="match-title-tag-1">1</span>/<span class="match-title-tag-2">30</span>)
+        </div>
+        <div class="match-text1 m-t-20">
+            倒计时：<span class="match-text-tag-1">115</span>/<sapn class="match-text-tag-1">s</sapn>)
+        </div>
+        <div class="text-center m-t-200 m-b-20">
+            <label class="btn-green-m" >开始比赛</label>
+            <label class="btn-green-m active">开始比赛</label>
+        </div>
+
+    </div>
+</div>
+
 <div class="w-100 m-auto" style="top: 20px;">
 
     <div class="p-20 bg-black">
