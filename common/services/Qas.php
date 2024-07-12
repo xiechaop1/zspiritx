@@ -9,22 +9,14 @@
 namespace common\services;
 
 
-use backend\actions\shop\ShopWare;
-use common\definitions\ErrorCode;
 use common\helpers\Attachment;
-use common\models\Actions;
-use common\models\ItemKnowledge;
 use common\models\Poem;
 use common\models\Qa;
 use common\models\QaPackage;
-use common\models\Session;
 use common\models\ShopWares;
 use common\models\StoryMatch;
-use common\models\UserKnowledge;
 use common\models\UserQa;
-use common\models\UserScore;
 use common\models\UserWare;
-use liyifei\chinese2pinyin\Chinese2pinyin;
 use yii\base\Component;
 use yii;
 

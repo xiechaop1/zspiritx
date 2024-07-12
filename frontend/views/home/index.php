@@ -52,6 +52,24 @@ $this->title = 'AR剧本杀';
   }
   ?>
 </div>
+<?php
+for ($i=1; $i<100; $i++) {
+
+//  $colorNum = intval(abs(pow($i, $i) % 100000)) + intval(abs(pow($i, $i) % 10000000)) + $i;
+//  $color = dechex($colorNum);
+//  $len = strlen($color);
+//    if ($len < 6) {
+//      for ($j = 0; $j < 6 - $len; $j++) {
+//        $color = '0' . $color;
+//      }
+//    }
+  $colorNum = $i;
+  $color = substr(md5($i), 0, 6);
+
+    echo '<div style="position: relative; z-index: 999; margin: 20px; color: white; font-size: 24px; background-color: #' . $color . ';">' . $colorNum . ' ' . $color . '</div>';
+}
+exit;
+?>
 <div class="owl-carousel owl-theme" id="banner">
   <?php
   if (

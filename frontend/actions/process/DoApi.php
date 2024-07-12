@@ -1215,22 +1215,27 @@ class DoApi extends ApiAction
                             $locationProp = !empty($location['amap_prop']) ? json_decode($location['amap_prop'], true) : [];
                             if (!empty($locationProp['geofence'])) {
                                 $propTmp = [];
+                                $fillColor = '#' . substr(md5($row2->user_id), 0, 6);
+                                $strokeColor = '#' . dechex(hexdec($fillColor) + 100);
                                 if ($row2->user_id == $this->_userId) {
                                     $propTmp = [
-                                        'fillColor' => '#0b3452',
+//                                        'fillColor' => '#0b3452',
+                                        'fillColor' => $fillColor,
                                         'fillOpacity' => 0.4,
                                         'borderWeight' => 1,
-                                        'strokeColor' => '#0c84ff',
+                                        'strokeColor' => $strokeColor,
+//                                        'strokeColor' => '#0c84ff',
                                         'strokeStyle' => 'solid',
                                         'strokeOpacity' => 0.8,
                                         'strokeWeight' => 2,
                                     ];
                                 } elseif ($row2->user_id != 0) {
                                     $propTmp = [
-                                        'fillColor' => '#a83800',
+                                        'fillColor' => $fillColor,
                                         'fillOpacity' => 0.4,
                                         'borderWeight' => 1,
-                                        'strokeColor' => '#a80057',
+                                        'strokeColor' => $strokeColor,
+//                                        'strokeColor' => '#a80057',
                                         'strokeStyle' => 'solid',
                                         'strokeOpacity' => 0.8,
                                         'strokeWeight' => 2,
