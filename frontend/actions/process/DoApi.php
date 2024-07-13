@@ -1136,8 +1136,10 @@ class DoApi extends ApiAction
 
         if (!empty($userModelLoc)) {
             foreach ($userModelLoc as $userModelLocItem) {
+                $lng = !empty($userModelLocItem->location->lng) ? $userModelLocItem->location->lng : $userLng;
+                $lat = !empty($userModelLocItem->location->lat) ? $userModelLocItem->location->lat : $userLat;
                 $temp = Yii::$app->userModels->setUserModelToLoc($storyId, 0,
-                    $userModelLocItem->lng, $userModelLocItem->lat);
+                    $lng, $lat);
                 $ret += $temp['result'];
             }
         } else {
