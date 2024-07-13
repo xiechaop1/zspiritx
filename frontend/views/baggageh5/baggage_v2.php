@@ -125,7 +125,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                             }
                             ?>
                             </div>
-                            <div class="answer-txt" style="line-height: 30px;">
+                            <div class="answer-txt" style="padding-top: 5px; line-height: 30px;">
                                 <?= $txt ?>
                             </div>
 
