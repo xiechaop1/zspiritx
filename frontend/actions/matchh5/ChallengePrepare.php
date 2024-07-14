@@ -251,6 +251,8 @@ class ChallengePrepare extends Action
 
         $ct = 0;
         $showRivalStoryModel = [];
+        $rivalAvatar = '';
+        $avatar = '';
         if (!empty($rivalUserModels)) {
             foreach ($rivalUserModels as $rivalUserModel) {
 //                $userProp = Model::getUserModelProp($rivalUserModel);
@@ -275,6 +277,14 @@ class ChallengePrepare extends Action
                 $storyMatchPlayer->m_story_model_detail_id = !empty($rivalUserModel->storyModelDetail->id) ? $rivalUserModel->storyModelDetail->id : 0;
                 $storyMatchPlayer->m_user_model_prop = $rivalUserModel->user_model_prop;
                 $storyMatchPlayer->save();
+
+                if (empty($rivalAvatar)) {
+                    if (!empty($rivalUserModel->storyModel->icon)) {
+                        $rivalAvatar = Attachment::completeUrl($rivalUserModel->storyModel->icon);
+                    } else {
+                        $rivalAvatar = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+                    }
+                }
 
 //                if (empty($showRivalStoryModel)) {
                     $showRivalStoryModel[] = $rivalUserModel->storyModel;
@@ -320,6 +330,12 @@ class ChallengePrepare extends Action
                 $storyMatchPlayer->m_story_model_detail_id = !empty($rivalStoryModel->story_model_detail_id) ? $rivalStoryModel->story_model_detail_id : 0;
                 $storyMatchPlayer->m_user_model_prop = json_encode($userProp);
                 $storyMatchPlayer->save();
+
+                if (!empty($rivalStoryModel->icon)) {
+                    $rivalAvatar = Attachment::completeUrl($rivalStoryModel->icon);
+                } else {
+                    $rivalAvatar = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+                }
 
 //                if (empty($showRivalStoryModel)) {
                     $showRivalStoryModel[] = $rivalStoryModel;
@@ -449,6 +465,8 @@ class ChallengePrepare extends Action
             'msg' => $msg,
             'timeRest' => $timeRest,
             'btnName' => '开始挑战',
+            'avatar' => $avatar,
+            'rivalAvatar' => $rivalAvatar,
         ]);
     }
 

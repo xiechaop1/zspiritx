@@ -61,7 +61,7 @@ $this->title = '消息';
             </div>
 
             <div class="match-title1  start-race-disable">
-                匹配中(<span class="match-title-tag-1">1</span>/<span class="match-title-tag-2">30</span>)
+                匹配中(<span class="match-title-tag-1">1</span>/<span class="match-title-tag-2"><?= $storyMatch->max_players_ct ?></span>)
             </div>
             <div class="match-text1 m-t-20 start-race-disable">
                 倒计时：<span class="match-text-tag-1">115</span>s
@@ -70,7 +70,7 @@ $this->title = '消息';
 
         <div class="text-center m-t-200 m-b-20">
             <label class="btn-green-m start-race-disable" >开始比赛</label>
-            <a href="">
+            <a href="/matchh5/knockout?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&qa_id=<?= $qaId ?>">
                 <label class="btn-green-m active hide start-race">开始比赛</label>
             </a>
 

@@ -38,30 +38,30 @@ $this->title = '消息';
                 <div class="match-circle2">
                     <div class="match-circle3">
                         <div class="match-circle4">
-                            <img src="../../img/example.png" class="header-m">
+                            <img src="<?= $rivalAvatar ?>" class="header-m">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="match-text-box m-t-80">
-            <div class="match-title1 start-race hide">
+            <div class="match-title1 start-race">
                 匹配成功
             </div>
 
-            <div class="match-title1  start-race-disable">
+            <div class="match-title1  start-race-disable hide">
                 匹配中(<span class="match-title-tag-1">1</span>/<span class="match-title-tag-2">30</span>)
             </div>
-            <div class="match-text1 m-t-20 start-race-disable">
+            <div class="match-text1 m-t-20 start-race-disable hide">
                 倒计时：<span class="match-text-tag-1">115</span>s
             </div>
         </div>
 
         <div class="text-center m-t-200 m-b-20">
-            <label class="btn-green-m start-race-disable" >开始比赛</label>
-            <a href="">
-                <label class="btn-green-m active hide start-race">开始比赛</label>
-            </a>
+            <label class="btn-green-m start-race-disable hide" >开始比赛</label>
+            <span id="start_btn" href="/matchh5/challenge?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&qa_id=<?= $qaId ?>">
+                <label class="btn-green-m active  start-race">开始比赛</label>
+            </span>
 
         </div>
 
@@ -70,7 +70,7 @@ $this->title = '消息';
 
 
 
-<div class="w-100 m-auto" style="top: 20px;">
+<div class="w-100 m-auto" style="display: none; top: 20px;">
 
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
@@ -83,7 +83,7 @@ $this->title = '消息';
                 </div>
             </div>
             <div class="btn-m-green m-t-30 float-right m-r-20">
-                <span id="start_btn" href="/matchh5/challenge?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&qa_id=<?= $qaId ?>">
+                <span id="start_btn1" href="/matchh5/challenge?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&qa_id=<?= $qaId ?>">
                 开始战斗
                 </span>
             </div>
