@@ -64,7 +64,7 @@ $this->title = '消息';
                 匹配中(<span class="match-title-tag-1" id="matching_player_ct">1</span>/<span class="match-title-tag-2"><?= $storyMatch->max_players_ct ?></span>)
             </div>
             <div class="match-text1 m-t-20 start-race-disable">
-                倒计时：<span class="match-text-tag-1" id="timer">115</span>s
+                倒计时：<span class="match-text-tag-1" id="timer"><?= !empty($storyMatch->join_expire_time) && $storyMatch->join_expire_time > time() ? $storyMatch->join_expire_time - time() : 0 ?></span>s
             </div>
         </div>
 
@@ -130,6 +130,8 @@ $this->title = '消息';
         var timeInt = parseInt(nowTime.getTime()/1000);
         var cha = $('input[name="join_expire_time"]').val() - timeInt;
 
+        // console.log(cha)
+
         if (cha > 0) {
             $('#timer').html(cha);
         } else {
@@ -137,8 +139,10 @@ $this->title = '消息';
                 clearInterval(intervalObjs[i]);
             }
             // clearInterval(intervalObj);
-            $('#timer').fadeOut();
-            $('#match_btn').fadeIn();
+            // $('#timer').fadeOut();
+            // $('#match_btn').fadeIn();
+            $('.start-race').removeClass('hide');
+            $('.start-race-disable').hide();
         }
     }
 
@@ -195,8 +199,10 @@ $this->title = '消息';
                         for (i in intervalObjs) {
                             clearInterval(intervalObjs[i]);
                         }
-                        $('#match_btn').fadeIn();
-                        $('#timer').fadeOut();
+                        // $('#match_btn').fadeIn();
+                        // $('#timer').fadeOut();
+                        $('.start-race').removeClass('hide');
+                        $('.start-race-disable').hide();
                     }
 
                 }
