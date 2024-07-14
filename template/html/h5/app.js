@@ -102,7 +102,6 @@ $(function () {
             $("#h5-null").modal('show');
         }
 
-
         if(v_select!=null){
             $.ajax({
                 type: "GET", //用POST方式传输

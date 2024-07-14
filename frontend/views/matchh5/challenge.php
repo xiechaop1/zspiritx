@@ -186,6 +186,95 @@ $this->title = $storyMatch->match_name;
         您的浏览器不支持 audio 元素。
     </audio>
 
+    <div class="w-100 m-auto">
+        <div class="p-20 bg-black">
+            <div class="m-t-20">
+                <div class="match-qa-header-left3">
+                    <img src="../../img/example.png" class="header-l">
+                    <div class="progress-title">
+                        <span class="text-1 text-FF">灵境小宠物-文学</span>
+                        <img src="../../img/match/coin.png" class="m-l-20 m-r-10">
+                        <span>0</span>
+                    </div>
+                    <div class="progress w-100">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="match-qa-box worry">
+                <!--文本问题-->
+                <div class="match-qa-content-text">
+                    ︎开并百花丛，独立疏篱趣未穷。
+                </div>
+                <!--图片问题-->
+                <div class="match-qa-content-img">
+                    <img src="../../img/example.png" class="img-w-100">
+                </div>
+                <div class="match-qa-content-worry hide">
+                    <img src="../../img/match/worry.png">
+                    <span>17</span>
+                </div>
+                <div class="match-qa-content-right hide">
+                    <img src="../../img/match/right.png">
+                    <span>17</span>
+                </div>
+
+                <div class="match-clock-bottom">
+                    <div class="match-clock-bottom-left hide">
+                        答题进度
+                        <span class="text-1">1</span>/
+                        <span class="text-2">30</span>
+                    </div>
+                    <div class="match-clock-bottom-right hide">
+                        正确
+                        <span class="text-1">1</span>/错误
+                        <span class="text-2">30</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="m-t-100">
+                <div class="answer-border2 worry">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
+                        15
+                    </label>
+                </div>
+                <div class="answer-border2 right">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_2">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_2">
+                        15
+                    </label>
+                </div>
+                <div class="answer-border2">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_3">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_3">
+                        15
+                    </label>
+                </div>
+                <div class="answer-border2">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_4">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_4">
+                        15
+                    </label>
+                </div>
+            </div>
+            <div class="d-block text-center m-t-50">
+                <div class="match-info" data-toggle="modal" data-target="#challenge-info">
+                    <img src="../../img/match/Frame.png" class="img-coin">
+                    提示
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
     <!--原QA样式-->
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
