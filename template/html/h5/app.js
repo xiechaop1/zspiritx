@@ -54,6 +54,18 @@ $(function () {
         }
     });
 
+
+    // var subLock = 0;
+    // $(".answer-btn").parent().click(function() {
+    //     if (subLock == 1) {
+    //         return false;
+    //     }
+    //     subLock = 1;
+    //     var obj = $(this).find("input[name='answer_opt']");
+    //     console.log(obj.first().attr('checked', true));
+    //     submitAnswer(obj.first());
+    // });
+
     //判断是否答对
     $("input[name='answer']").click(function () {
         submitAnswer($(this));
@@ -70,6 +82,9 @@ $(function () {
     });
 
     function submitAnswer(thisObj) {
+        // console.log(subLock);
+
+        // subLock = 1;
         var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
         var qa_type=that.attr("data-type");
@@ -194,17 +209,19 @@ $(function () {
                                 // var data=$.toJSON(params);
                                 // Unity.call(data);
                                 location.reload();
-                            },992000);
+                            },2000);
                         }
                     }
                     //新消息获取失败
                     else{
                         $.alert(obj.msg)
                     }
+                    // subLock = 0;
 
                 }
             });
         }
+        // subLock = 0;
     };
 
     $("input[name='baggage']").click(function () {
