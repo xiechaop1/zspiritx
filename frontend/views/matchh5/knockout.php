@@ -182,8 +182,8 @@ $this->title = $storyMatch->match_name;
         <div class="p-20 bg-black">
             <div class="m-t-20 m-b-60">
                 <div class="match-qa-header-left2">
-                    <img src="../../img/example.png"  class="header-m">
-                    <img src="../../img/match/coin.png">
+                    <img src="../../static/img/example.png"  class="header-m">
+                    <img src="../../static/img/match/coin.png">
                     <span>0</span>
                 </div>
                 <div class="match-qa-header-right">
@@ -194,7 +194,7 @@ $this->title = $storyMatch->match_name;
             </div>
             <div class="match-qa-box m-t-50">
                 <div class="match-clock">
-                    <img src="../../img/match/clock.png">
+                    <img src="../../static/img/match/clock.png">
                     <span class="text-1">177</span>秒
                 </div>
                 <!--文本问题-->
@@ -203,14 +203,14 @@ $this->title = $storyMatch->match_name;
                 </div>
                 <!--图片问题-->
                 <div class="match-qa-content-img">
-                    <img src="../../img/example.png" class="img-w-100">
+                    <img src="../../static/img/example.png" class="img-w-100">
                 </div>
                 <div class="match-qa-content-worry hide">
-                    <img src="../../img/match/worry.png">
+                    <img src="../../static/img/match/worry.png">
                     <span>17</span>
                 </div>
                 <div class="match-qa-content-right hide">
-                    <img src="../../img/match/right.png">
+                    <img src="../../static/img/match/right.png">
                     <span>17</span>
                 </div>
 

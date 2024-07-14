@@ -190,10 +190,10 @@ $this->title = $storyMatch->match_name;
         <div class="p-20 bg-black">
             <div class="m-t-20">
                 <div class="match-qa-header-left3">
-                    <img src="../../img/example.png" class="header-l">
+                    <img src="../../static/img/example.png" class="header-l">
                     <div class="progress-title">
                         <span class="text-1 text-FF">灵境小宠物-文学</span>
-                        <img src="../../img/match/coin.png" class="m-l-20 m-r-10">
+                        <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
                         <span>0</span>
                     </div>
                     <div class="progress w-100">
@@ -213,14 +213,14 @@ $this->title = $storyMatch->match_name;
                 </div>
                 <!--图片问题-->
                 <div class="match-qa-content-img">
-                    <img src="../../img/example.png" class="img-w-100">
+                    <img src="../../static/img/example.png" class="img-w-100">
                 </div>
                 <div class="match-qa-content-worry hide">
-                    <img src="../../img/match/worry.png">
+                    <img src="../../static/img/match/worry.png">
                     <span>17</span>
                 </div>
                 <div class="match-qa-content-right hide">
-                    <img src="../../img/match/right.png">
+                    <img src="../../static/img/match/right.png">
                     <span>17</span>
                 </div>
 
@@ -266,7 +266,7 @@ $this->title = $storyMatch->match_name;
             </div>
             <div class="d-block text-center m-t-50">
                 <div class="match-info" data-toggle="modal" data-target="#challenge-info">
-                    <img src="../../img/match/Frame.png" class="img-coin">
+                    <img src="../../static/img/match/Frame.png" class="img-coin">
                     提示
                 </div>
             </div>
@@ -314,7 +314,7 @@ $this->title = $storyMatch->match_name;
 <!--                        <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
                     </div>
                     <!--<div class="hpa-ctr">
-                        <img src="../../img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
+                        <img src="../../static/img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
                         播放语音
                     </div>-->
                     <?php
@@ -739,12 +739,12 @@ $this->title = $storyMatch->match_name;
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-lottery-bg">
             <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
-                <img src="../../img/icon-close.png" class="img-40">
+                <img src="../../static/img/icon-close.png" class="img-40">
             </span>
             <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
                 <div class="m-t-50">
                     <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
-                        <img src="../../img/bg-lottery-text1.png" class="img-250">
+                        <img src="../../static/img/bg-lottery-text1.png" class="img-250">
                     </div>
                     <div class="fs-36  text-FF  text-center bold lottery-error-title">
                         提示信息标题
