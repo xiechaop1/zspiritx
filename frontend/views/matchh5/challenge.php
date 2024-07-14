@@ -730,11 +730,37 @@ $this->title = $storyMatch->match_name;
                 </label>
             </div>
         </div>
-
     </div>
-
 </div>
 
+
+<!-- 按钮：提示信息 -->
+<div class="modal fade" id="challenge-info" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-lottery-bg">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
+                <img src="../../img/icon-close.png" class="img-40">
+            </span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="m-t-50">
+                    <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
+                        <img src="../../img/bg-lottery-text1.png" class="img-250">
+                    </div>
+                    <div class="fs-36  text-FF  text-center bold lottery-error-title">
+                        提示信息标题
+                    </div>
+
+                    <div class="fs-40 text-FF text-center bold m-t-50 lottery-content">
+                        提示信息信息内容XXXX
+                    </div>
+                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
+                        <label class="btn-green-m active ">知道了</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- 按钮：用于打开模态框 -->
