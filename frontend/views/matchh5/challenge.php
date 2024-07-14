@@ -965,6 +965,7 @@ $this->title = $storyMatch->match_name;
     }
 
     function startRivalTimer(match_type) {
+        return;
         console.log(rivalTimerRunning);
         if (rivalTimerRunning) {
             return;

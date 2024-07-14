@@ -49,7 +49,7 @@ $this->title = '消息';
                 <div class="match-circle2">
                     <div class="match-circle3">
                         <div class="match-circle4">
-                            <img src="../../img/example.png" class="header-m">
+                            <img src="<?= $userInfo['avatar'] ?>" class="header-m">
                         </div>
                     </div>
                 </div>
@@ -61,10 +61,10 @@ $this->title = '消息';
             </div>
 
             <div class="match-title1  start-race-disable">
-                匹配中(<span class="match-title-tag-1">1</span>/<span class="match-title-tag-2"><?= $storyMatch->max_players_ct ?></span>)
+                匹配中(<span class="match-title-tag-1" id="matching_player_ct">1</span>/<span class="match-title-tag-2"><?= $storyMatch->max_players_ct ?></span>)
             </div>
             <div class="match-text1 m-t-20 start-race-disable">
-                倒计时：<span class="match-text-tag-1">115</span>s
+                倒计时：<span class="match-text-tag-1" id="timer">115</span>s
             </div>
         </div>
 
@@ -81,7 +81,7 @@ $this->title = '消息';
 
 
 
-<div class="w-100 m-auto" style="top: 20px;">
+<div class="w-100 m-auto" style="top: 20px; display: none;">
 
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">
@@ -131,7 +131,7 @@ $this->title = '消息';
         var cha = $('input[name="join_expire_time"]').val() - timeInt;
 
         if (cha > 0) {
-            $('#timer').html('倒计时：' + cha + 's');
+            $('#timer').html(cha);
         } else {
             for (i in intervalObjs) {
                 clearInterval(intervalObjs[i]);

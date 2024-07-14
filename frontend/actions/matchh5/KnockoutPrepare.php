@@ -243,6 +243,12 @@ class KnockoutPrepare extends Action
             $storyMatchPlayer->save();
         }
 
+        if (!empty($userInfo['avatar'])) {
+            $userInfo['avatar'] = Attachment::completeUrl($userInfo['avatar']);
+        } else {
+            $userInfo['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+        }
+
         return $this->controller->render('knockout_prepare', [
             'params'        => $_GET,
             'userId'        => $userId,
@@ -251,6 +257,7 @@ class KnockoutPrepare extends Action
             'storyMatch'   => $storyMatch,
             'qaId'          => $qaId,
             'matchId'      => $matchId,
+            'userInfo'         => $userInfo,
 //            'answerType'    => 2,
 //            'msg' => $msg,
 //            'btnName' => '开始挑战',
