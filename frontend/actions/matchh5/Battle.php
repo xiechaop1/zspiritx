@@ -260,10 +260,10 @@ class Battle extends Action
                                     $rivalUserModelLoc->user_id = $currentPlayer->user_id;
                                     $rivalUserModelLoc->user_model_id = $currentPlayer->user_model_id;
                                     $rivalUserModelLoc->location_id = $rivalPlayer->userModelLoc->location_id;
-                                    $rivalUserModelLoc->story_model_id = $currentPlayer->story_model_id;
-                                    $rivalUserModelLoc->story_id = $currentPlayer->story_id;
+                                    $rivalUserModelLoc->story_model_id = $currentPlayer->m_story_model_id;
+//                                    $rivalUserModelLoc->story_id = $currentPlayer->story_id;
 //                                    $rivalUserModelLoc->session_id = $currentPlayer->session_id;
-                                    $rivalUserModelLoc->amap_poi_id = $currentPlayer->userModelLoc->amap_poi_id;
+//                                    $rivalUserModelLoc->amap_poi_id = $currentPlayer->userModelLoc->amap_poi_id;
                                     $rivalUserModelLoc->user_model_prop = $currentPlayer->m_user_model_prop;
                                     $rivalUserModelLoc->user_model_loc_status = UserModelLoc::USER_MODEL_LOC_STATUS_LIVE;
                                     $rivalUserModelLoc->save();

@@ -112,7 +112,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                     }
                 ?>
                 <div class="m-t-30 col-sm-3 col-md-12" style="padding: 5px; " id="baggage_area">
-                    <div class="answer-border2" style="height: 260px;">
+                    <div class="answer-border2" style="width: 160px; height: 260px;">
                         <input class="form-check-input" type="radio" name="<?= $baggageName ?>" value="<?= $item->id ?>" id="legal_person_yes_<?= $item->id ?>" >
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_<?= $item->id ?>" style="padding-top: 20px;">
                             <span class="answer-tag2"><?= $item->use_ct ?></span>
@@ -125,7 +125,7 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                             }
                             ?>
                             </div>
-                            <div class="answer-txt">
+                            <div class="answer-txt" style="padding-top: 5px; line-height: 30px;">
                                 <?= $txt ?>
                             </div>
 

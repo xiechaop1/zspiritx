@@ -64,7 +64,7 @@ echo \dmstr\widgets\Alert::widget();
                     ],
                     [
                         'label' => '剧本',
-                        'attribute' => 'title',
+                        'attribute' => 'story_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
                             $storyName = !empty($model->story->title) ?
