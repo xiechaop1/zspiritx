@@ -178,6 +178,79 @@ $this->title = $storyMatch->match_name;
         您的浏览器不支持 audio 元素。
     </audio>
 
+    <div class="w-100 m-auto">
+        <div class="p-20 bg-black">
+            <div class="m-t-20 m-b-60">
+                <div class="match-qa-header-left2">
+                    <img src="../../img/example.png"  class="header-m">
+                    <img src="../../img/match/coin.png">
+                    <span>0</span>
+                </div>
+                <div class="match-qa-header-right">
+                    本场选手
+                    <span class="text-1">1</span>/
+                    <span class="text-2">30</span>
+                </div>
+            </div>
+            <div class="match-qa-box m-t-50">
+                <div class="match-clock">
+                    <img src="../../img/match/clock.png">
+                    <span class="text-1">177</span>秒
+                </div>
+                <!--文本问题-->
+                <div class="match-qa-content-text">
+                    ︎开并百花丛，独立疏篱趣未穷。
+                </div>
+                <!--图片问题-->
+                <div class="match-qa-content-img">
+                    <img src="../../img/example.png" class="img-w-100">
+                </div>
+                <div class="match-qa-content-worry hide">
+                    <img src="../../img/match/worry.png">
+                    <span>17</span>
+                </div>
+                <div class="match-qa-content-right hide">
+                    <img src="../../img/match/right.png">
+                    <span>17</span>
+                </div>
+
+                <div class="match-clock-bottom">
+                    答题
+                    <span class="text-1">1</span>/
+                    <span class="text-2">30</span>
+                </div>
+            </div>
+            <div class="m-t-100">
+                <div class="answer-border2 worry">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
+                        15
+                    </label>
+                </div>
+                <div class="answer-border2 right">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
+                        15
+                    </label>
+                </div>
+                <div class="answer-border2">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
+                        15
+                    </label>
+                </div>
+                <div class="answer-border2">
+                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
+                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
+                        15
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
     <!--原QA样式-->
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10">

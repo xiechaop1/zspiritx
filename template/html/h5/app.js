@@ -71,6 +71,11 @@ $(function () {
         submitAnswer($(this));
     });
 
+    //match & challenge判断是否答对
+    $("input[name='challenge_answer']").click(function () {
+        submitAnswer($(this));
+    });
+
     $(".verify_code input[name='answer_txt']").change(function () {
         var v_selects = $("input[name='answer_txt']");
         for (i = 0; i < v_selects.length; i++) {
@@ -116,7 +121,6 @@ $(function () {
         if(v_select==null){
             $("#h5-null").modal('show');
         }
-
 
         if(v_select!=null){
             $.ajax({
