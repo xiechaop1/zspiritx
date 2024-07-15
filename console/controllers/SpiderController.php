@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use common\models\EnglishWords;
 use common\models\Poem;
 use common\models\UserCompany;
 use liyifei\chinese2pinyin\Chinese2pinyin;
@@ -35,30 +36,93 @@ use Yii;
 class SpiderController extends Controller
 {
     public $urlList = [];
+    public $urlConf = [];
 
     public function actionEnglish() {
-        $url = 'http://www.danciku.cn/words/xiaoxueyingyu/';
+        $url = 'http://www.danciku.cn/words/';
+//        $url = 'http://www.danciku.cn/words/xiaoxueyingyu/';
+//        $url = 'http://www.danciku.cn/words/renjiaobanxiaoxueyingyusannianjidanci/';
 
-        $menuHtml = file_get_contents($url);
+        $this->urlList[] = $url;
 
-        // 解析menuHtml
-        preg_match_all('/<a href="\/w\/(.*?)" title="(.*?)">/', $menuHtml, $menuMatch);
+        while (!empty($this->urlList)) {
+            var_dump($this->urlList);
+            $url = array_shift($this->urlList);
 
-        var_dump($menuMatch);exit;
+            $html = $this->_getHtml($url);
 
-        if (!empty($menuMatch[1])) {
-            foreach ($menuMatch[1] as $key => $value) {
-                $urlList[] = [
-                    'url' => 'http://www.danciku.cn/words/' . $value,
-                    'class' => $menuMatch[2][$key],
-                ];
+            $wordRet = $this->_spiderWordWithUrl($html, $url);
+
+            if ($wordRet === false) {
+                $this->_spiderMenuWithUrl($html);
+            }
+        }
+        return true;
+
+    }
+
+    private function _getHtml($url) {
+        echo 'get url: ' . $url . "\n";
+        return file_get_contents($url);
+    }
+
+
+    private function _spiderWordWithUrl($wordHtml, $url, $page = '') {
+        if (empty($wordHtml)) {
+            if (!empty($page)) {
+                $getUrl = $url . $page . '/';
+                echo 'get page url: ' . $getUrl . "\n";
+            }
+            $wordHtml = file_get_contents($getUrl);
+        }
+        preg_match_all('/<a href="\/w\/(.*?)" title="(.*?)">.*?<\/a>.*?<span>(.*?)<\/span>/s', $wordHtml, $wordMatch);
+        if (!empty($wordMatch[1])) {
+//            var_dump($wordMatch);exit;
+            echo 'url ' . $url . ' is word! ' . "\n";
+            $this->urlConf[$url]['is_word'] = true;
+
+            $class = !empty($this->urlConf[$url]['class']) ? $this->urlConf[$url]['class'] : [];
+            foreach ($wordMatch[1] as $key => $value) {
+                $word = htmlspecialchars_decode($wordMatch[2][$key]);
+                echo 'Insert Word ' . $word . ' Into DB ... ' . "\n";
+                $eng = EnglishWords::find()->where(['word' => $wordMatch[2][$key]])->one();
+                if (empty($eng)) {
+                    $eng = new EnglishWords();
+                    $eng->word = $word;
+                    $eng->first_word = strtoupper(substr($wordMatch[2][$key], 0, 1));
+                }
+                $chinese = $wordMatch[3][$key];
+                if (strpos($chinese, '. ') !== false) {
+                    $chinese = explode('. ', $chinese);
+                    $adv = $chinese[0] . '.';
+                    $chinese = $chinese[1];
+                } else {
+                    $adv = '';
+                }
+                $eng->chinese = htmlspecialchars_decode(strip_tags($chinese));
+                $eng->adv = $adv;
+
+                $eng->word_class1 = !empty($class[0]) ? $class[0] : '';
+                $eng->word_class2 = !empty($class[1]) ? $class[1] : '';
+                $eng->save();
+
+            }
+            $nextPage = empty($page) ? 2 : $page + 1;
+            return $this->_spiderWordWithUrl('', $url, $nextPage);
+        } else {
+            $isWord = !empty($this->urlConf[$url]['is_word']) ? $this->urlConf[$url]['is_word'] : false;
+
+            if (!$isWord) {
+                return false;
+            } else {
+                return [];
             }
         }
 
     }
 
-    private function _spiderMenuWithUrl($url, $class = []) {
-        $menuHtml = file_get_contents($url);
+    private function _spiderMenuWithUrl($menuHtml, $class = []) {
+//        $menuHtml = file_get_contents($url);
 
         // 解析menuHtml
         preg_match_all('/<a href="\/words\/(.*?)" title="(.*?)">/', $menuHtml, $menuMatch);
@@ -66,16 +130,20 @@ class SpiderController extends Controller
         $urlList = [];
         if (!empty($menuMatch[1])) {
             foreach ($menuMatch[1] as $key => $value) {
+                echo 'Get Directory ' . $value . ' ... ' . "\n";
                 $tmpClass = $class;
                 $tmpClass[] = $menuMatch[2][$key];
-                $urlList[] = [
-                    'url' => 'http://www.danciku.cn/words/' . $value,
+                $menuUrl = 'http://www.danciku.cn/words/' . $value;
+                $this->urlList[] = $menuUrl;
+                $this->urlConf[$menuUrl] = [
+//                    'url' => $menuUrl,
                     'class' => $tmpClass,
                 ];
             }
         }
+//        var_dump($this->urlList);
 
-        return $urlList;
+        return true;
     }
 
 
