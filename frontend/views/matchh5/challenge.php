@@ -194,7 +194,7 @@ $this->title = $storyMatch->match_name;
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
                         <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
-                        <span>0</span>
+                        <span id="gold">0</span>
                     </div>
                     <input type="hidden" class="show_max_hp" id="<?= $user->id ?>" value="<?= !empty($myProp['hp']) ? $myProp['hp'] : 300  ?>">
                     <div class="progress w-100">
@@ -216,13 +216,19 @@ $this->title = $storyMatch->match_name;
                 <div class="match-qa-content-img" style="display: none;">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
-                <div class="match-qa-content-worry">
+                <div class="match-qa-content-worry hide">
                     <img src="../../static/img/match/worry.png">
                     <span>17</span>
                 </div>
-                <div class="match-qa-content-right">
+                <div class="match-qa-content-right hide">
                     <img src="../../static/img/match/right.png">
                     <span>17</span>
+                </div>
+                <div class="d-block text-center m-t-50" style="margin-top: 10px;">
+                    <div class="match-info" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        提示
+                    </div>
                 </div>
 
                 <div class="match-clock-bottom">
@@ -231,10 +237,10 @@ $this->title = $storyMatch->match_name;
                         <span class="text-1">1</span>/
                         <span class="text-2">30</span>
                     </div>
-                    <div class="match-clock-bottom-right hide">
+                    <div class="match-clock-bottom-right">
                         正确
-                        <span class="text-1">1</span>/错误
-                        <span class="text-2">30</span>
+                        <span class="text-1" id="right_ct">0</span>/错误
+                        <span class="text-2" id="wrong_ct">0</span>
                     </div>
 
                 </div>
@@ -303,12 +309,7 @@ $this->title = $storyMatch->match_name;
 <!--                    </label>-->
 <!--                </div>-->
             </div>
-            <div class="d-block text-center m-t-50">
-                <div class="match-info" data-toggle="modal" data-target="#challenge-info">
-                    <img src="../../static/img/match/Frame.png" class="img-coin">
-                    提示
-                </div>
-            </div>
+
 
         </div>
     </div>
@@ -691,14 +692,14 @@ $this->title = $storyMatch->match_name;
 <!--                    <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>-->
                     <div style="clear:both; margin: 10px; padding: 30px; border: 2px solid yellow; text-align: left; background-color: rgba(0,0,0, 0.5)">
 
-                        <input type="hidden" name="message_id" id="message-id">
-                        <input type="hidden" name="message_topic" id="message-topic">
+                        <input type="hidden" name="message_id" id="message-id1">
+                        <input type="hidden" name="message_topic" id="message-topic1">
                         <span style="float: left; width: 100px;">
                         <img src="../../static/img/match/sugg.png" style="width: 80px;" alt="" class="img-responsive  d-block m-auto"/>
                         </span>
                         <span class="fs-50 bold" style="color: #ffa227;">提&nbsp;示</span>
                         <div style="clear: both; border-top: 1px solid #ffa227; padding-top: 15px; ">
-                        <span class="answer-detail" id="message-content" style="line-height: 45px; color: yellow">
+                        <span class="answer-detail" id="message-content1" style="line-height: 45px; color: yellow">
 
                         </span>
                         </div>
@@ -717,7 +718,7 @@ $this->title = $storyMatch->match_name;
 
             </div>
 
-            <div class="row modal fade" id="answer-right-box" style="top: 100px;">
+            <div class="row modal fade" id="answer-right-box1" style="top: 100px;">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
 <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
                     <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>
@@ -748,7 +749,7 @@ $this->title = $storyMatch->match_name;
                 </div>
 
             </div>
-            <div class="row modal fade" id="answer-error-box" style="top: 220px;">
+            <div class="row modal fade" id="answer-error-box1" style="top: 220px;">
                 <div class="m-t-60 col-sm-12 col-md-12">
                     <div class="answer-detail " >
 <!--                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
@@ -772,6 +773,50 @@ $this->title = $storyMatch->match_name;
     </div>
 </div>
 
+<div class="row modal fade" id="answer-right-box" style="top: 100px;">
+    <div class="m-t-30 col-sm-12 col-md-12 p-40">
+        <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
+        <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>
+        <div style="clear:both; text-align: center;">
+                        <span>
+                            <!-- ../../static/img/qa/gold.gif -->
+                    <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
+                            </span>
+
+            <span class="answer-detail" id="gold_score" style="color: yellow">
+
+                        </span>
+        </div>
+        <br>
+        <!--                    <div class="answer-title m-t-40">-->
+        <!--                        恭喜您，挑战成功！-->
+        <!--                    </div>-->
+        <div class="btn-m-green m-t-30  m-l-30 confirm_btn">
+            继续
+        </div>
+
+        <!--                    <div class="btn-m-green m-t-30  m-l-30 msg-rtn-btn">-->
+        <!--                        继续-->
+        <!--                    </div>-->
+        <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
+        <!--                        --><?php //echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
+        <!--                    </div>-->
+    </div>
+
+</div>
+<div class="row modal fade" id="answer-error-box" style="top: 220px;">
+    <div class="m-t-60 col-sm-12 col-md-12">
+        <div class="answer-detail " >
+            <!--                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+            <img src="../../static/img/match/bc_lose.png" alt="" class="img-responsive  d-block m-auto"/>
+            <br>
+            <!--                        <span  class=" d-inline-block vertical-mid">很遗憾，挑战失败！</span>-->
+            <div class="btn-m-green m-t-30  m-l-30 retry_btn">
+                再试一次
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- 按钮：提示信息 -->
 <div class="modal fade" id="challenge-info" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -786,11 +831,13 @@ $this->title = $storyMatch->match_name;
                         <img src="../../static/img/bg-lottery-text1.png" class="img-250">
                     </div>
                     <div class="fs-36  text-FF  text-center bold lottery-error-title">
-                        提示信息标题
+                        提示
                     </div>
 
-                    <div class="fs-40 text-FF text-center bold m-t-50 lottery-content">
-                        提示信息信息内容XXXX
+                    <input type="hidden" id="message-topic">
+                    <input type="hidden" id="message-id">
+                    <div id="message-content" class="fs-40 text-FF text-center bold m-t-50 lottery-content">
+
                     </div>
                     <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
                         <label class="btn-green-m active ">知道了</label>
@@ -977,9 +1024,10 @@ $this->title = $storyMatch->match_name;
             // startRivalTimer($('#match_type').val());
         });
 
-        $('#suggestion').click(function() {
+        $('#match-info').click(function() {
             // $('#message-box').modal('show');
-            $('#message-box').modal('show');
+            // $('#message-box').modal('show');
+
             if ($('#message-topic').val() == $('#topic').html()) {
                 return;
             }
