@@ -207,7 +207,7 @@ $this->title = $storyMatch->match_name;
 
             </div>
 
-            <div class="match-qa-box worry">
+            <div class="match-qa-box right">
                 <!--文本问题-->
                 <div class="match-qa-content-text" id="topic">
 <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
@@ -216,11 +216,11 @@ $this->title = $storyMatch->match_name;
                 <div class="match-qa-content-img" style="display: none;">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
-                <div class="match-qa-content-worry hide">
+                <div class="match-qa-content-worry">
                     <img src="../../static/img/match/worry.png">
                     <span>17</span>
                 </div>
-                <div class="match-qa-content-right hide">
+                <div class="match-qa-content-right">
                     <img src="../../static/img/match/right.png">
                     <span>17</span>
                 </div>
