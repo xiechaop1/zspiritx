@@ -82,6 +82,12 @@ class Challenge extends Action
             ])
             ->one();
 
+        if (!empty($user['avatar'])) {
+            $user['avatar'] = Attachment::completeUrl($userInfo['avatar']);
+        } else {
+            $user['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+        }
+
         if (empty($user)) {
             return $this->renderErr('用户不存在！');
         }
@@ -187,7 +193,7 @@ class Challenge extends Action
             $level = !empty(UserExtends::$userGradeLevelMap[$grade]) ? UserExtends::$userGradeLevelMap[$grade] : 1;
         }
 
-        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
+//        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
 
         switch ($storyMatch->match_class) {
             case StoryMatch::MATCH_CLASS_MATH:
@@ -215,6 +221,8 @@ class Challenge extends Action
 //                }
 
                 for ($i=0; $i<1000; $i++) {
+                    // Todo: 测试用
+                    if ($level > 3) $level = 1;
                     $subjects[] = Yii::$app->qas->generateMath($level);
                     if ($i == 12) {
                         $level++;
@@ -311,6 +319,7 @@ class Challenge extends Action
             'ct'            => sizeof($subjects),
             'storyMatch'   => $storyMatch,
             'initTimer' => 60,
+            'user' => $user,
         ]);
     }
 

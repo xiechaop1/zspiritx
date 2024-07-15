@@ -879,6 +879,39 @@ input[type="radio"]:checked+label::before {
 .match-qa-header-left3 img{
     vertical-align: text-bottom;
 }
+
+.header-choice-1{
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    border: 2px solid #DAFC70;
+    margin: 8px 0 0 -4px;
+    position: absolute;
+    right: 0;
+}
+
+.match-qa-header-right-choice-1{
+    min-width: 415px;
+    height: 100px;
+    background: rgba(31,38,40,0.8);
+    border-radius: 100px;
+    border: 2px solid #DAFC70;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 28px;
+    color: #FED34C;
+    line-height: 62px;
+    text-align: right;
+    font-style: normal;
+    text-transform: none;
+    padding: 0 90px 0 20px;
+    right: 40px;
+    position: absolute;
+}
+.match-qa-header-right-choice-1 img{
+    vertical-align: text-bottom;
+}
+
 .match-qa-header-right{
     min-width: 250px;
     height: 66px;

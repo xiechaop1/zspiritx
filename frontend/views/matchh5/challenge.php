@@ -189,16 +189,17 @@ $this->title = $storyMatch->match_name;
     <div class="w-100 m-auto">
         <div class="p-20 bg-black">
             <div class="m-t-20">
-                <div class="match-qa-header-left3">
-                    <img src="../../static/img/example.png" class="header-l">
+                <div class="match-qa-header-left3" style="width: 415px; text-align: left;">
+                    <img src="<?= $user['avatar'] ?>" class="header-l">
                     <div class="progress-title">
-                        <span class="text-1 text-FF">灵境小宠物-文学</span>
+                        <span class="text-1 text-FF"><?= $user->user_name ?></span>
                         <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
                         <span>0</span>
                     </div>
+                    <input type="hidden" class="show_max_hp" id="<?= $user->id ?>" value="<?= !empty($myProp['hp']) ? $myProp['hp'] : 300  ?>">
                     <div class="progress w-100">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+                        <div id="my_hp" class="progress-bar" role="progressbar" aria-valuenow="<?= !empty($myProp['hp']) ? $myProp['hp'] : 300 ?>"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                             <span class="sr-only">40% 完成</span>
                         </div>
                     </div>
@@ -208,11 +209,11 @@ $this->title = $storyMatch->match_name;
 
             <div class="match-qa-box worry">
                 <!--文本问题-->
-                <div class="match-qa-content-text">
-                    ︎开并百花丛，独立疏篱趣未穷。
+                <div class="match-qa-content-text" id="topic">
+<!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
-                <div class="match-qa-content-img">
+                <div class="match-qa-content-img" style="display: none;">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
                 <div class="match-qa-content-worry hide">
@@ -238,31 +239,69 @@ $this->title = $storyMatch->match_name;
 
                 </div>
             </div>
-            <div class="m-t-100">
-                <div class="answer-border2 worry">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
-                        15
-                    </label>
+
+            <div class="m-t-20">
+                <?php
+                if (!empty($rivalPlayers)) {
+                foreach ($rivalPlayers as $rivalPlayer) {
+                    $prop = !empty($rivalPlayer['player']->m_user_model_prop) ? json_decode($rivalPlayer['player']->m_user_model_prop, true) : [];
+                    $rivalHp = !empty($prop['prop']['max_hp']) ? $prop['prop']['max_hp'] : 100;
+                ?>
+                <div class="match-qa-header-right-choice-1">
+                    <img src="<?= \common\helpers\Attachment::completeUrl($rivalPlayer['player']->storyModel->icon, true) ?>" class="header-choice-1">
+                    <div class="progress-title">
+                        <span class="text-1 text-FF"><?= $rivalPlayer['player']->storyModel->story_model_name ?></span>
+                    </div>
+                    <input type="hidden" class="show_speed" id="<?= $rivalPlayer['player']->id ?>" value="<?= $rivalPlayer['show_speed'] ?>">
+                    <input type="hidden" class="show_attack" id="<?= $rivalPlayer['player']->id ?>" min="<?= $rivalPlayer['show_attack']['min'] ?>" max="<?= $rivalPlayer['show_attack']['max'] ?>" value="10">
+                    <input type="hidden" class="show_max_hp" id="<?= $rivalPlayer['player']->id ?>" value="<?= $rivalHp ?>">
+                    <div class="progress w-100" style="margin-bottom: 5px;">
+                        <div class="progress-bar riv_hp" id="riv_hp_<?= $rivalPlayer['player']->id ?>" player_id="<?= $rivalPlayer['player']->id ?>" role="progressbar" aria-valuenow="<?= $rivalHp ?>"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <div class="progress w-100" style="margin-bottom: 5px;">
+                        <div id="riv_speed_<?= $rivalPlayer['player']->id ?>" class="progress-bar" role="progressbar" aria-valuenow="0"
+                             aria-valuemin="0" aria-valuemax="100" style="background-color: cornflowerblue ;width: 0%;">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+
+
                 </div>
-                <div class="answer-border2 right">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_2">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_2">
-                        15
-                    </label>
-                </div>
-                <div class="answer-border2">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_3">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_3">
-                        15
-                    </label>
-                </div>
-                <div class="answer-border2">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_4">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_4">
-                        15
-                    </label>
-                </div>
+                <?php
+                }
+                }
+                ?>
+
+            </div>
+
+            <div class="m-t-100" style="margin-top: 150px;" id="answer-box">
+<!--                <div class="answer-border2 worry">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="answer-border2 right">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_2">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_2">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="answer-border2">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_3">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_3">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="answer-border2">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_4">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_4">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
             </div>
             <div class="d-block text-center m-t-50">
                 <div class="match-info" data-toggle="modal" data-target="#challenge-info">
@@ -276,7 +315,7 @@ $this->title = $storyMatch->match_name;
 
 
     <!--原QA样式-->
-    <div class="p-20 bg-black">
+    <div class="p-20 bg-black" style="display: none;">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
@@ -291,7 +330,7 @@ $this->title = $storyMatch->match_name;
                     ?>
                         <div class="row" style="font-size: 24px;">
                         <div style="float: left;">HP: </div>
-                        <div class="my_hp" id="my_hp" style="float: left; height: 30px; margin-left: 20px; width:80%; border: 1px #eee solid;">
+                        <div class="my_hp1" id="my_hp1" style="float: left; height: 30px; margin-left: 20px; width:80%; border: 1px #eee solid;">
                             <div style="width: 100%; background-color: green; height: 30px;">&nbsp; </div>
                         </div>
                         </div>
@@ -340,8 +379,8 @@ $this->title = $storyMatch->match_name;
             ?>
             <div style="border-radius: 16px 16px 16px 16px;
     border: 2px solid #666;clear:both; width: 100%; font-size: 28px; color: #e0c46c; height: 120px; margin-top: 25px;">
-                <input type="hidden" class="show_speed" id="<?= $rivalPlayer['player']->id ?>" value="<?= $rivalPlayer['show_speed'] ?>">
-                <input type="hidden" class="show_attack" id="<?= $rivalPlayer['player']->id ?>" min="<?= $rivalPlayer['show_attack']['min'] ?>" max="<?= $rivalPlayer['show_attack']['max'] ?>" value="10">
+                <input type="hidden" class="show_speed1" id="<?= $rivalPlayer['player']->id ?>" value="<?= $rivalPlayer['show_speed'] ?>">
+                <input type="hidden" class="show_attack1" id="<?= $rivalPlayer['player']->id ?>" min="<?= $rivalPlayer['show_attack']['min'] ?>" max="<?= $rivalPlayer['show_attack']['max'] ?>" value="10">
                 <?php
                 if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CHALLENGE) {
                 ?>
@@ -353,10 +392,10 @@ $this->title = $storyMatch->match_name;
                 </div>
 <!--                <div style="float: left; width: 30%;">📝️ <span class="riv_subjct" id="riv_subjct_--><?php //= $rivalPlayer['player']->id ?><!--">0</span></div>-->
                 <div style="float: left; width: 360px; margin: 15px;">
-                    <div class="riv_hp" id="riv_hp_<?= $rivalPlayer['player']->id ?>" style="width:100%; border: 1px #eee solid;">
+                    <div class="riv_hp1" id="riv_hp1_<?= $rivalPlayer['player']->id ?>" style="width:100%; border: 1px #eee solid;">
                         <div style="width: 100%; background-color: green; height: 30px;">&nbsp; </div>
                     </div>
-                    <div class="riv_speed" id="riv_speed_<?= $rivalPlayer['player']->id ?>" style="width: 100%; background-color: cornflowerblue; height: 20px; margin-top: 20px;">
+                    <div class="riv_speed1" id="riv_speed1_<?= $rivalPlayer['player']->id ?>" style="width: 100%; background-color: cornflowerblue; height: 20px; margin-top: 20px;">
                         &nbsp; </div>
                 </div>
                     </div>
@@ -965,8 +1004,8 @@ $this->title = $storyMatch->match_name;
     }
 
     function startRivalTimer(match_type) {
-        return;
-        console.log(rivalTimerRunning);
+        // return;
+        // console.log(rivalTimerRunning);
         if (rivalTimerRunning) {
             return;
         }
@@ -1001,7 +1040,7 @@ $this->title = $storyMatch->match_name;
                 console.log(rivalSpeed);
 
                 var rivalObj = $('#riv_speed_' + rivalId);
-                rivalObj.css('width', '0px');
+                rivalObj.css('width', '0%');
 
                 var time_ct = 0;
                 rivalTimerObj = setInterval(function() {
@@ -1014,7 +1053,7 @@ $this->title = $storyMatch->match_name;
                         clearRivSpeed(rivalObj);
                         clearInterval(rivalTimerObj);
                     }
-                    if (rivalWidth >= 360) {
+                    if (rivalWidth >= 300) {
                         console.log(time_ct);
                         time_ct = 0;
                         var myHp = $('#my_hp');
@@ -1023,6 +1062,7 @@ $this->title = $storyMatch->match_name;
                         console.log(rivalHit);
                         computeHp(myHp, rivalHit);
                         clearRivSpeed(rivalObj);
+                        // stopRivalTimer();
 
                         if (checkMyHp() == 0) {
                             $('#answer-error-box').modal('show');
@@ -1038,12 +1078,14 @@ $this->title = $storyMatch->match_name;
                     }
 
                     // rivalWidth += rivalSpeed/200;
-                    var addRivalWidth = 54000/rivalSpeed * rivalSpeedRate;
+                    var addRivalWidth = 135000/rivalSpeed * rivalSpeedRate;
                     var showRivalWidth = rivalWidth + addRivalWidth;
                     // console.log(showRivalWidth);
+                    var showRivalWidthRate = parseInt(showRivalWidth/300*100);
                     rivalObj.css('width', showRivalWidth);
+                    rivalObj.attr('aria-valuenow', showRivalWidthRate);
 
-                }, 200);
+                }, 500);
             });
         }
         rivalTimerRunning = true;
@@ -1110,6 +1152,9 @@ $this->title = $storyMatch->match_name;
             idx = 0;
             var topic = obj[idx].topic;
         }
+        if (topic == undefined) {
+            return;
+        }
         if (speedrate == undefined
         || speedrate == NaN
         ) {
@@ -1137,11 +1182,18 @@ $this->title = $storyMatch->match_name;
             var optHtml = '';
             for (var j = 0; j < ansrange.length; j++) {
                 label = String.fromCharCode(j + 65);
-                optHtml += '<div class="m-t-30 col-sm-6 col-md-6"><div class="answer-border">';
-                optHtml += '<input class="form-check-input" type="radio" name="answer_c" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '" >';
-                optHtml += '<label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
-                optHtml += '    <span class="answer-tag">' + label + '</span>' + '<span class="answer-tag-word">' + ansrange[j] + '</span>';
-                optHtml += '</label> </div></div>';
+                optHtml += '<div class="answer-border2">';
+                optHtml += '     <input class="form-check-input" type="radio" name="challenge_answer" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '">';
+                optHtml += '        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
+                optHtml += ansrange[j];
+                optHtml += '        </label>';
+                optHtml += '</div>';
+                // label = String.fromCharCode(j + 65);
+                // optHtml += '<div class="m-t-30 col-sm-6 col-md-6"><div class="answer-border">';
+                // optHtml += '<input class="form-check-input" type="radio" name="answer_c" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '" >';
+                // optHtml += '<label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
+                // optHtml += '    <span class="answer-tag">' + label + '</span>' + '<span class="answer-tag-word">' + ansrange[j] + '</span>';
+                // optHtml += '</label> </div></div>';
             }
             optHtml += '<input type="hidden" id="add_gold" value="10">';
             optHtml += '<input type="hidden" id="add_right" value="1">';
@@ -1149,8 +1201,8 @@ $this->title = $storyMatch->match_name;
         }
         // console.log(optHtml);
         $('#answer-box').html(optHtml);
-        $('input[name=answer_c]').click(function() {
-            $('input[name=answer_c]').attr('disabled', true);
+        $('input[name=challenge_answer]').click(function() {
+            // $('input[name=challenge_answer]').attr('disabled', true);
             submitSubject(idx, $(this));
             // $('input[name=answer_c]').attr('disabled', false);
 
@@ -1171,7 +1223,7 @@ $this->title = $storyMatch->match_name;
         var match_type = $('#match_type').val();
         var qa_type=that.attr("data-type");
         if (qa_type == 1 || qa_type == 30 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
-            var v_select = $("input[name='answer_c']:checked").val();
+            var v_select = $("input[name='challenge_answer']:checked").val();
         } else if (qa_type == 7) {
             var v_select = $("input[name='answer_txt']").val();
         } else if (qa_type == 9) {
@@ -1191,6 +1243,7 @@ $this->title = $storyMatch->match_name;
 
         console.log(chosen);
         console.log(answer);
+
         if (chosen == answer) {
 
             showRetAnimate(chosenObj, 1);
@@ -1297,20 +1350,23 @@ $this->title = $storyMatch->match_name;
     }
 
     function computeRivHp() {
-        var rivals = $('.riv');
+        var rivals = $('.riv_hp');
         var result = 0;
         rivals.each(function() {
-            var rivHp = $(this).find('.riv_hp');
-            if (rivHp.find('div').width() <= 0) {
+            // var rivHp = $(this).find('.riv_hp');
+            var rivHp = $(this);
+            console.log(rivHp.width());
+            if (rivHp.width() <= 0) {
                 return;
             }
 
             hitMin = myPropObj.hit.min;
             hitMax = myPropObj.hit.max;
             var hit = Math.floor(Math.random() * (hitMax - hitMin + 1) + hitMin);
+            var rivId = rivHp.attr('player_id');
             computeHp(rivHp, hit);
             avatarAnimate($(this));
-            clearRivSpeed($(this).find('.riv_speed'));
+            clearRivSpeed($('#riv_speed_' + rivId));
 
             result = checkRivHp();
 
@@ -1320,13 +1376,13 @@ $this->title = $storyMatch->match_name;
     }
 
     function clearRivSpeed(rivalObj) {
-        rivalObj.css('width', '0px');
+        rivalObj.css('width', '0%');
     }
 
     function addRivSpeed(rivalObj, speedBei = 10) {
         console.log(rivalObj);
         var rivalSpeedObj = $(rivalObj).find('.riv_speed');
-        var speed = (540000 / $(rivalObj).parent().find('.show_speed').val()) ;
+        var speed = (750000 / $(rivalObj).parent().find('.show_speed').val()) ;
         var addSpeed = speed * speedBei;
         var speedRate = $('#rival_speed_rate').val();
         addSpeed = addSpeed * speedRate;
@@ -1334,11 +1390,12 @@ $this->title = $storyMatch->match_name;
     }
 
     function checkRivHp() {
-        var rivals = $('.riv');
+        var rivals = $('.riv_hp');
         var result = 0;
         rivals.each(function() {
-            var rivHp = $(this).find('.riv_hp');
-            if (rivHp.find('div').width() <= 0) {
+            var rivId = $(this).attr('player_id');
+            var rivHp = $('#riv_hp_' + rivId);
+            if (rivHp.width() <= 0) {
                 return;
             }
 
@@ -1350,48 +1407,71 @@ $this->title = $storyMatch->match_name;
 
     function checkMyHp() {
         var myHp = $('#my_hp');
-        if (myHp.find('div').width() <= 0) {
+        if (myHp.width() <= 0) {
             return 0;
         }
         return 1;
     }
 
     function computeHp(rivHp, hit) {
-        var hpWidth = rivHp.find('div').width();
-        var hpMaxWidth = rivHp.width();
-        // var hit=300;
-        console.log(hit);
-        hpWidth -= hit;
-        rivHp.find('div').css('width', hpWidth);
-        if (hpWidth/hpMaxWidth > 0.3 && hpWidth/hpMaxWidth <= 0.6) {
-            rivHp.find('div').css('background-color', 'yellow');
-        } else if (hpWidth/hpMaxWidth <= 0.3) {
-            rivHp.find('div').css('background-color', 'red');
+        // var hpWidth = rivHp.find('div').width();
+        // var hpMaxWidth = rivHp.width();
+        // // var hit=300;
+        // console.log(hit);
+        // hpWidth -= hit;
+        // rivHp.find('div').css('width', hpWidth);
+        // if (hpWidth/hpMaxWidth > 0.3 && hpWidth/hpMaxWidth <= 0.6) {
+        //     rivHp.find('div').css('background-color', 'yellow');
+        // } else if (hpWidth/hpMaxWidth <= 0.3) {
+        //     rivHp.find('div').css('background-color', 'red');
+        // }
+
+        var hp = rivHp.attr('aria-valuenow');
+        var hpMax = rivHp.parent().parent().find('.show_max_hp').val();
+        var newHp = hp - hit;
+        console.log(newHp);
+        console.log(hpMax);
+        var newHpWidth = Math.floor(newHp / hpMax * 100);
+        var hpWidth = rivHp.width();
+        rivHp.attr('aria-valuenow', newHp);
+        rivHp.css('width', newHpWidth + '%');
+        if (newHpWidth > 30 && newHpWidth <= 60) {
+            rivHp.css('background-color', 'yellow');
+        } else if (newHpWidth <= 30) {
+            rivHp.css('background-color', 'red');
         }
+        console.log(newHp);
+        return;
     }
 
     function avatarAnimate(hitObj) {
-        var rivAvatar = $(hitObj).find('.riv_avatar');
-        var hitLeft = rivAvatar.position().left - 20;
-        var hitTop = rivAvatar.position().top;
+        var rivAvatar = $(hitObj).parent().parent().find('img');
+        var hitLeft = rivAvatar.position().left - 30;
+        var hitTop = rivAvatar.position().top - 20;
         var hitDiv = '<div class="riv_hit" style="position: absolute; z-index: 999999; left: ' + hitLeft + 'px; top: ' + hitTop + 'px;"><img width="120" src="../../static/img/match/hit.gif"></div>';
         $(hitObj).append(hitDiv);
         $(hitObj).find('.riv_hit').animate({
             opacity: 100
         }, 500, function() {
-            shake(rivAvatar.find('img'));
+            shake(rivAvatar);
             $(this).remove();
         });
     }
 
     function showRetAnimate(retObj, answer) {
-        if (answer == 1) {
-            var imgUrl = '../../static/img/qa/icon_正确@2x.png';
-        } else {
-            var imgUrl = '../../static/img/qa/icon_错误@2x.png';
+        // if (answer == 1) {
+        //     var imgUrl = '../../static/img/qa/icon_正确@2x.png';
+        // } else {
+        //     var imgUrl = '../../static/img/qa/icon_错误@2x.png';
+        // }
+        // var retDiv = '<div class="ret_hit" style="position: absolute; z-index: 999999; left: 0px; top: 0px;"><img width="75" src="' + imgUrl + '"></div>';
+        // $(retObj).parent().append(retDiv);
+        var retCss = 'right';
+        console.log(answer);
+        if (answer != 1) {
+            retCss = 'worry';
         }
-        var retDiv = '<div class="ret_hit" style="position: absolute; z-index: 999999; left: 0px; top: 0px;"><img width="75" src="' + imgUrl + '"></div>';
-        $(retObj).parent().append(retDiv);
+        $(retObj).parent().addClass(retCss);
         $(retObj).parent().find('.ret_hit').animate({
             opacity: 100
         }, 500, function() {
