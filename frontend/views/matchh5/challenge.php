@@ -1150,10 +1150,10 @@ $this->title = $storyMatch->match_name;
 
                     // rivalWidth += rivalSpeed/200;
                     var addRivalWidth = 135000/rivalSpeed * rivalSpeedRate;
-                    var showRivalWidth = rivalWidth + addRivalWidth;
+                    var showRivalWidth = Math.floor((rivalWidth + addRivalWidth)/3);
                     // console.log(showRivalWidth);
                     var showRivalWidthRate = parseInt(showRivalWidth/300*100);
-                    rivalObj.css('width', showRivalWidth);
+                    rivalObj.css('width', showRivalWidth+"%");
                     rivalObj.attr('aria-valuenow', showRivalWidthRate);
 
                 }, 500);
