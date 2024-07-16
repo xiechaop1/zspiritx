@@ -36,7 +36,7 @@ class Doubao extends Component
 
         if (!empty($userMessagePre)) {
             $msgTemplate = [
-                '适合' . $gradeName . '同学的题目，请出'. $ct . '道，题目随机一些，尽可能规避历史已经出过的',
+                '适合' . $gradeName . '同学的题目，请重新出'. $ct . '道，题目随机一些，尽可能规避历史已经出过的',
                 '#输出格式#' . '输出题目、题型、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
                 '#输出样例#' . json_encode([[
                     'SUBJECT' => 'SUBJECT1',
