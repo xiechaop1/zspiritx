@@ -1140,9 +1140,9 @@ $this->title = $storyMatch->match_name;
                             clearInterval(rivalTimerObj);
                         }
 
-                        $('#add_gold').val('0');
-                        $('#add_right').val('0');
-                        $('#add_wrong').val('1');
+                        // $('#add_gold').val('0');
+                        // $('#add_right').val('0');
+                        // $('#add_wrong').val('1');
 
                         return;
                         // clearInterval(rivalTimer);
