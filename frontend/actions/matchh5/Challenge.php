@@ -193,7 +193,7 @@ class Challenge extends Action
             $level = !empty(UserExtends::$userGradeLevelMap[$grade]) ? UserExtends::$userGradeLevelMap[$grade] : 1;
         }
 
-        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
+//        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
 
         switch ($storyMatch->match_class) {
             case StoryMatch::MATCH_CLASS_MATH:
