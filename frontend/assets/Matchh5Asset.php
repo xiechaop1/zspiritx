@@ -31,6 +31,7 @@ class Matchh5Asset extends AssetBundle
         self::HOST . 'css/animate.css',
         'html/h5/app.css',
         'html/h5/qa.css',
+        'html/h5/margin.css',
     ];
     public $js = [
         self::HOST . 'js/jquery/jQuery-2.1.3.min.js',
