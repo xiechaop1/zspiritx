@@ -1153,11 +1153,7 @@ $this->title = $storyMatch->match_name;
                     var showRivalWidth = rivalWidth + addRivalWidth;
                     // console.log(showRivalWidth);
                     var showRivalWidthRate = parseInt(showRivalWidth/300*100);
-                    console.log(rivalObj);
-                    // rivalObj.css('width', showRivalWidth);
-                    // rivalObj.progressbar({
-                    //     value: showRivalWidth
-                    // });
+                    rivalObj.css('width', showRivalWidthRate+"%");
                     rivalObj.attr('aria-valuenow', showRivalWidthRate);
 
                 }, 500);
