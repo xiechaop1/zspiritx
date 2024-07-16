@@ -225,7 +225,7 @@ $this->title = $storyMatch->match_name;
                     <span>17</span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
-                    <div class="match-info" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
+                    <div class="match-info" style="margin: 10px auto;">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
                     </div>
@@ -1036,6 +1036,7 @@ $this->title = $storyMatch->match_name;
             setTimeout(function () {
                 getSugg();
             }, 500);
+             $("#message-box").modal('show');
             stopRivalTimer();
 
         });
