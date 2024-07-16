@@ -208,6 +208,16 @@ $this->title = $storyMatch->match_name;
             </div>
 
             <div class="match-qa-box right">
+                <?php
+                if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CONTEST) {
+                ?>
+                <div class="match-clock">
+                    <img src="../../static/img/match/clock.png">
+                    <span class="text-1" id="timer"><?= $initTimer ?></span>秒
+                </div>
+                <?php
+                }
+                ?>
                 <!--文本问题-->
                 <div class="match-qa-content-text" id="topic">
 <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
@@ -232,10 +242,16 @@ $this->title = $storyMatch->match_name;
                 </div>
 
                 <div class="match-clock-bottom">
-                    <div class="match-clock-bottom-left hide">
+                    <div class="match-clock-bottom-left">
                         答题进度
-                        <span class="text-1">1</span>/
-                        <span class="text-2">30</span>
+                        <?php if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CONTEST) { ?>
+                            ：<span class="text-1" id="subjct">0</span>
+                        <?php } else {?>
+                        <span class="text-1" id="subjct">0</span>/
+                        <span class="text-2" > - </span>
+                        <?php
+                        }
+                        ?>
                     </div>
                     <div class="match-clock-bottom-right">
                         正确
@@ -259,6 +275,9 @@ $this->title = $storyMatch->match_name;
                         <span class="text-1 text-FF"><?= $rivalPlayer['player']->storyModel->story_model_name ?></span>
                     </div>
                     <input type="hidden" class="show_speed" id="<?= $rivalPlayer['player']->id ?>" value="<?= $rivalPlayer['show_speed'] ?>">
+                    <?php if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CONTEST) { ?>
+                        答题进度：<span class="riv_subjct" id="riv_subjct_<?= $rivalPlayer['player']->id ?>">0</span>
+                    <?php } else { ?>
                     <input type="hidden" class="show_attack" id="<?= $rivalPlayer['player']->id ?>" min="<?= $rivalPlayer['show_attack']['min'] ?>" max="<?= $rivalPlayer['show_attack']['max'] ?>" value="10">
                     <input type="hidden" class="show_max_hp" id="<?= $rivalPlayer['player']->id ?>" value="<?= $rivalHp ?>">
                     <div class="progress w-100" style="margin-bottom: 5px;">
@@ -273,6 +292,9 @@ $this->title = $storyMatch->match_name;
                             <span class="sr-only">40% 完成</span>
                         </div>
                     </div>
+                        <?php
+                    }
+                        ?>
 
 
                 </div>
@@ -341,7 +363,7 @@ $this->title = $storyMatch->match_name;
                         <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; text-align: right;">
                             <div style="float: left; width: 30%;">💰 <span id="gold">0</span></div>
                             <div style="float: left; width: 30%;">📝️ <span id="subjct">0</span></div>
-                            <div style="float: left; width: 30%;">🕒 <span id="timer"><?= $initTimer?></span>秒</div>
+                            <div style="float: left; width: 30%;">🕒 <span id="timer1"><?= $initTimer?></span>秒</div>
                             <div style="display:none;float: left; width: 35%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>
                         </div>
                         <?php
@@ -406,7 +428,7 @@ $this->title = $storyMatch->match_name;
                     <div style="float: left; width: 200px; margin: 15px;"><img src="<?= \common\helpers\Attachment::completeUrl($rivalPlayer['player']->storyModel->icon, true, 36) ?>">&nbsp; <?= $rivalPlayer['player']->storyModel->story_model_name ?></div>
                 <div style="float: left; width: 30%;">⏰ <span id="timer"><?= $initTimer?></span>秒</div>
                 <div style="float: left; width: 25%;">💰 <span id="gold">0</span></div>
-                <div style="float: left; width: 30%;">📝️ <span class="riv_subjct" id="riv_subjct_<?= $rivalPlayer['player']->id ?>">0</span></div>
+                <div style="float: left; width: 30%;">📝️ <span class="riv_subjct" id="riv_subjct1_<?= $rivalPlayer['player']->id ?>">0</span></div>
 <!--                    <div style="float: left; width: 30%;">✅ <span id="right_ct">0</span>/<span id="wrong_ct">0</span></div>-->
                     <?php
                 }
