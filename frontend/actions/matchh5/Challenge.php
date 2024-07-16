@@ -288,7 +288,10 @@ class Challenge extends Action
                 }
                 break;
             default:
-                return $this->renderErr('比赛类型不支持！');
+                if (empty($subjects)) {
+                    return $this->renderErr('比赛类型不支持！');
+                }
+                break;
 
         }
 
