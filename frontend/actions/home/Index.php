@@ -47,7 +47,8 @@ class Index extends Action
 
         $userId = Cookie::getCookie('user_id');
         if (empty($userId)) {
-            header('Location: /passport/web_login' . !empty($unityVersion) ? '?unity_version=' . $unityVersion : '');
+            $params = !empty($unityVersion) ? '?unity_version=' . $unityVersion : '';
+            header('Location: /passport/web_login' . $params);
         }
 
         try {
