@@ -14,7 +14,7 @@
  * @var \common\models\QA $qa
  */
 
-\frontend\assets\Qah5Asset::register($this);
+\frontend\assets\Matchh5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
@@ -182,27 +182,26 @@ $this->title = $storyMatch->match_name;
         <div class="p-20 bg-black">
             <div class="m-t-20 m-b-60">
                 <div class="match-qa-header-left2">
-                    <img src="../../static/img/example.png"  class="header-m">
+                    <img src="<?= $user['avatar'] ?>" class="header-m">
                     <img src="../../static/img/match/coin.png">
-                    <span>0</span>
+                    <span id="gold">0</span>
                 </div>
                 <div class="match-qa-header-right">
                     本场选手
-                    <span class="text-1">1</span>/
-                    <span class="text-2">30</span>
+                    <span class="text-1" id="players_ct">0</span> / <span class="text-2"><?= $storyMatch->max_players_ct ?></span>
                 </div>
             </div>
             <div class="match-qa-box m-t-50">
                 <div class="match-clock">
                     <img src="../../static/img/match/clock.png">
-                    <span class="text-1">177</span>秒
+                    <span class="text-1" id="timer"><?= $initTimer ?></span>秒
                 </div>
                 <!--文本问题-->
-                <div class="match-qa-content-text">
-                    ︎开并百花丛，独立疏篱趣未穷。
+                <div class="match-qa-content-text" id="topic">
+<!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
-                <div class="match-qa-content-img">
+                <div class="match-qa-content-img" style="display: none;">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
                 <div class="match-qa-content-worry hide">
@@ -216,35 +215,35 @@ $this->title = $storyMatch->match_name;
 
                 <div class="match-clock-bottom">
                     答题
-                    <span class="text-1">1</span>/
-                    <span class="text-2">30</span>
+                    <span class="text-1" id="subjct">0</span>/
+                    <span class="text-2" id="subjtotal"><?= $ct ?></span>
                 </div>
             </div>
-            <div class="m-t-100">
-                <div class="answer-border2 worry">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
-                        15
-                    </label>
-                </div>
-                <div class="answer-border2 right">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
-                        15
-                    </label>
-                </div>
-                <div class="answer-border2">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
-                        15
-                    </label>
-                </div>
-                <div class="answer-border2">
-                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">
-                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">
-                        15
-                    </label>
-                </div>
+            <div class="m-t-100" id="answer-box">
+<!--                <div class="answer-border2 worry">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="answer-border2 right">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="answer-border2">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="answer-border2">-->
+<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
+<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
+<!--                        15-->
+<!--                    </label>-->
+<!--                </div>-->
             </div>
 
         </div>
@@ -252,7 +251,7 @@ $this->title = $storyMatch->match_name;
 
 
     <!--原QA样式-->
-    <div class="p-20 bg-black">
+    <div class="p-20 bg-black hide">
         <div class="w-100 p-30  m-b-10">
             <div class="w-1-0 d-flex">
                 <div class="fs-30 bold w-100 text-FF title-box-border">
@@ -263,9 +262,9 @@ $this->title = $storyMatch->match_name;
                         X
                     </div>
                         <div class="row" style="font-size: 32px; color:#FFB94F; width: 100%; text-align: right;">
-                            <div style="float: left; width: 30%;">💰 <span id="gold">0</span></div>
-                            <div style="float: left; width: 30%;">📝️ <span id="subjct">0</span> / <span id="subjtotal"><?= $ct ?></span></div>
-                            <div style="float: left; width: 30%;">🕒 <span id="timer"><?= $initTimer?></span>秒</div>
+                            <div style="float: left; width: 30%;">💰 <span id="gold1">0</span></div>
+                            <div style="float: left; width: 30%;">📝️ <span id="subjct1">0</span> / <span id="subjtotal1"><?= $ct ?></span></div>
+                            <div style="float: left; width: 30%;">🕒 <span id="timer1"><?= $initTimer?></span>秒</div>
                         </div>
 
                     <div id="number-floater" style="position: absolute; color: #FFB94F; font-size: 48px; top: 36px; left: 180px; text-align: center; z-index: 9999999"></div>
@@ -285,7 +284,7 @@ $this->title = $storyMatch->match_name;
                     提交
                 </label>
             </div>
-            <div class="row" id="answer-box">
+            <div class="row" id="answer-box2">
                 <?php
                 $str = $qa['selected_json'];
                 //                $str = str_replace("[div]", '<div>', $str);
@@ -566,7 +565,7 @@ $this->title = $storyMatch->match_name;
                 ?>
                 在场选手：<span id="players_ct">0</span> / <span><?= $storyMatch->max_players_ct ?></span>
             </div>
-            <div class="row modal fade" id="answer-right-box" style="top: 100px;">
+            <div class="row modal fade" id="answer-right-box1" style="top: 100px;">
                 <div class="m-t-30 col-sm-12 col-md-12 p-40">
 <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
                     <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>
@@ -593,7 +592,7 @@ $this->title = $storyMatch->match_name;
                 </div>
 
             </div>
-            <div class="row modal fade" id="answer-error-box" style="top: 220px;">
+            <div class="row modal fade" id="answer-error-box1" style="top: 220px;">
                 <div class="m-t-60 col-sm-12 col-md-12">
                     <div class="answer-detail " >
 <!--                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
@@ -629,7 +628,56 @@ $this->title = $storyMatch->match_name;
 
 </div>
 
+<div class="row modal fade" id="answer-right-box" style="top: 100px;">
+    <div class="m-t-30 col-sm-12 col-md-12 p-40">
+        <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
+        <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>
+        <div style="clear:both; text-align: center;">
+                        <span>
+                            <!-- ../../static/img/qa/gold.gif -->
+                    <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
+                            </span>
 
+            <span class="answer-detail" id="gold_score" style="color: yellow">
+
+                        </span>
+        </div>
+        <br>
+        <!--                    <div class="answer-title m-t-40">-->
+        <!--                        恭喜您，挑战成功！-->
+        <!--                    </div>-->
+        <div class="btn-m-green m-t-30  m-l-30 confirm_btn">
+            继续
+        </div>
+        <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
+        <!--                        --><?php //echo ($qa['st_answer'] != 'True' && $qa['st_answer'] != $qa['st_selected']) ? $qa['st_answer'] : ''; ?>
+        <!--                    </div>-->
+    </div>
+
+</div>
+<div class="row modal fade" id="answer-error-box" style="top: 220px;">
+    <div class="m-t-60 col-sm-12 col-md-12">
+        <div class="answer-detail " >
+            <!--                        <img src="../../static/img/qa/icon_错误提示@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>-->
+            <img src="../../static/img/match/bc_lose.png" alt="" class="img-responsive  d-block m-auto"/>
+            <div style="clear:both; text-align: center;">
+                        <span>
+                            <!-- ../../static/img/qa/gold.gif -->
+                    <img src="../../static/img/qa/gold.png" alt="" style="width: 125px; height: 125px;" class=""/>
+                            </span>
+
+                <span class="answer-detail" id="gold_score1" style="color: yellow">
+
+                        </span>
+            </div>
+            <br>
+            <!--                        <span  class=" d-inline-block vertical-mid">很遗憾，挑战失败！</span>-->
+            <div class="btn-m-green m-t-30  m-l-30 confirm_btn">
+                返回
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- 按钮：用于打开模态框 -->
 <div class="modal fade" id="h5-null" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -812,11 +860,18 @@ $this->title = $storyMatch->match_name;
             var optHtml = '';
             for (var j = 0; j < ansrange.length; j++) {
                 label = String.fromCharCode(j + 65);
-                optHtml += '<div class="m-t-30 col-sm-6 col-md-6"><div class="answer-border">';
-                optHtml += '<input class="form-check-input" type="radio" name="answer_c" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '" >';
-                optHtml += '<label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
-                optHtml += '    <span class="answer-tag">' + label + '</span>' + ansrange[j];
-                optHtml += '</label> </div></div>';
+                optHtml += '<div class="answer-border2">';
+                optHtml += '     <input class="form-check-input" type="radio" name="challenge_answer" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '">';
+                optHtml += '        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
+                optHtml += ansrange[j];
+                optHtml += '        </label>';
+                optHtml += '</div>';
+                // label = String.fromCharCode(j + 65);
+                // optHtml += '<div class="m-t-30 col-sm-6 col-md-6"><div class="answer-border">';
+                // optHtml += '<input class="form-check-input" type="radio" name="answer_c" value="' + ansrange[j] + '" id="legal_person_yes_' + label + '" >';
+                // optHtml += '<label class="form-check-label fs-30 answer-btn" for="legal_person_yes_' + label + '">';
+                // optHtml += '    <span class="answer-tag">' + label + '</span>' + ansrange[j];
+                // optHtml += '</label> </div></div>';
             }
             optHtml += '<input type="hidden" id="add_gold" value="10">';
             optHtml += '<input type="hidden" id="add_right" value="1">';
@@ -824,8 +879,8 @@ $this->title = $storyMatch->match_name;
         }
         // console.log(optHtml);
         $('#answer-box').html(optHtml);
-        $('input[name=answer_c]').click(function() {
-            $('input[name=answer_c]').attr('disabled', true);
+        $('input[name=challenge_answer]').click(function() {
+            $('input[name=challenge_answer]').attr('disabled', true);
             submitSubject(idx, $(this));
             // $('input[name=answer_c]').attr('disabled', false);
 
@@ -846,7 +901,7 @@ $this->title = $storyMatch->match_name;
         var match_type = $('#match_type').val();
         var qa_type=that.attr("data-type");
         if (qa_type == 1 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
-            var v_select = $("input[name='answer_c']:checked").val();
+            var v_select = $("input[name='challenge_answer']:checked").val();
         } else if (qa_type == 7) {
             var v_select = $("input[name='answer_txt']").val();
         } else if (qa_type == 9) {
@@ -874,21 +929,32 @@ $this->title = $storyMatch->match_name;
                 addWrong();
                 addSubjCt();
                 idx = idx + 1;
-                if (idx >= maxSubjectsCt) {
+                var retCss = 'right';
+                $(chosenObj).parent().addClass(retCss);
+                setTimeout(function() {
 
-                    // clearInterval(timer);
-                    var subAnswer = 1;
-                    submitAnswer(subAnswer);
-                    // $('#answer-right-box').modal('show');
+                    if (idx >= maxSubjectsCt) {
 
-                } else {
+                        // clearInterval(timer);
+                        var subAnswer = 1;
+                        submitAnswer(subAnswer);
+                        // $('#answer-right-box').modal('show');
 
-                    showSubject(idx);
-                }
+                    } else {
+
+                        showSubject(idx);
+                    }
+                }, 300);
 
         } else {
             // 失败提交
+            var retCss = 'worry';
+            chosenObj.parent().addClass(retCss);
+            console.log(retCss);
+            console.log(chosenObj);
+            setTimeout(function() {
             submitAnswer(0);
+            }, 300);
         }
     }
 
@@ -1095,7 +1161,7 @@ $this->title = $storyMatch->match_name;
         var timer = $('#timer').html();
         timer--;
         $('#timer').html(timer);
-        if (timer == 0) {
+        if (timer == 0 && 1 != 1) {
             $('#answer-box').hide();
 
             answer = 0;

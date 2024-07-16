@@ -84,6 +84,12 @@ class Knockout extends Action
             ])
             ->one();
 
+        if (!empty($user['avatar'])) {
+            $user['avatar'] = Attachment::completeUrl($userInfo['avatar']);
+        } else {
+            $user['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+        }
+
         if (empty($user)) {
             return $this->renderErr('用户不存在！');
         }
@@ -150,6 +156,7 @@ class Knockout extends Action
             'ct'            => !empty($subjects['subjects']) ? sizeof($subjects['subjects']) : 0,
             'storyMatch'   => $storyMatch,
             'initTimer' => 180,
+            'user'          => $user,
         ]);
     }
 
