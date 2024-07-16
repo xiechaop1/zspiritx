@@ -708,7 +708,7 @@ $this->title = $storyMatch->match_name;
                     <!--                    <div class="answer-title m-t-40">-->
                     <!--                        恭喜您，挑战成功！-->
                     <!--                    </div>-->
-                    <div class="btn-m-green m-t-30  m-l-30 msg-rtn-btn">
+                    <div class="btn-m-green m-t-30  m-l-30" data-dismiss="modal">
                         继续
                     </div>
                     <!--                    <div class="answer-detail m-t-40" style="line-height: 40px;">-->
