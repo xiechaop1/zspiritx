@@ -189,7 +189,7 @@ class Challenge extends Action
         if (!empty($userExtends->level)) {
             $level = $userExtends->level;
         } else {
-            $grade = $userExtends->grade;
+            $grade = !empty($userExtends->grade) ? $userExtends->grade : 1;
             $level = !empty(UserExtends::$userGradeLevelMap[$grade]) ? UserExtends::$userGradeLevelMap[$grade] : 1;
         }
 
