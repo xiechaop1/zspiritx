@@ -1150,9 +1150,11 @@ $this->title = $storyMatch->match_name;
 
                     // rivalWidth += rivalSpeed/200;
                     var addRivalWidth = 135000/rivalSpeed * rivalSpeedRate;
-                    var showRivalWidth = rivalWidth + addRivalWidth;
+                    var nowRival = rivalObj.attr('aria-valuenow');
+                    var showRivalWidthRate = parseInt(nowRival) + (addRivalWidth / 3);
+                    // var showRivalWidth = rivalWidth + addRivalWidth;
                     // console.log(showRivalWidth);
-                    var showRivalWidthRate = parseInt(showRivalWidth/300*100);
+                    // var showRivalWidthRate = parseInt(showRivalWidth/300*100);
                     rivalObj.css('width', showRivalWidthRate+"%");
                     rivalObj.attr('aria-valuenow', showRivalWidthRate);
 
@@ -1448,6 +1450,7 @@ $this->title = $storyMatch->match_name;
 
     function clearRivSpeed(rivalObj) {
         rivalObj.css('width', '0%');
+        rivalObj.attr('aria-valuenow', 0);
     }
 
     function addRivSpeed(rivalObj, speedBei = 10) {

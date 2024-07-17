@@ -163,6 +163,7 @@ $this->title = $storyMatch->match_name;
 <input type="hidden" name="qa_type" id="qa_type" value="<?= $qa['qa_type'] ?>">
 <input type="hidden" name="match_type" id="match_type" value="<?= $storyMatch->match_type ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
+<input type="hidden" name="init_timer" id="init_timer" value="<?= $initTimer ?>">
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
         <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -931,7 +932,9 @@ $this->title = $storyMatch->match_name;
                 idx = idx + 1;
                 var retCss = 'right';
                 $(chosenObj).parent().addClass(retCss);
-                setTimeout(function() {
+            var initTimer = $('#init_timer').val();
+            $('#timer').html(initTimer);
+            setTimeout(function() {
 
                     if (idx >= maxSubjectsCt) {
 
@@ -1161,7 +1164,7 @@ $this->title = $storyMatch->match_name;
         var timer = $('#timer').html();
         timer--;
         $('#timer').html(timer);
-        if (timer == 0 && 1 != 1) {
+        if (timer == 0) {
             $('#answer-box').hide();
 
             answer = 0;

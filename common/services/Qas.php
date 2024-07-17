@@ -10,6 +10,7 @@ namespace common\services;
 
 
 use common\helpers\Attachment;
+use common\models\EnglishWords;
 use common\models\Poem;
 use common\models\Qa;
 use common\models\QaPackage;
@@ -202,6 +203,158 @@ class Qas extends Component
         }
 
         return $qaCollections;
+    }
+
+    public function generateWordWithEng($ct = 10, $level = 1, $englishClass = '', $englishClass2 = '') {
+        $ret = [];
+
+        $eng = $this->getWordsByRand($ct, $level, $englishClass, $englishClass2);
+
+        if (!empty($eng)) {
+            $i = 0;
+            foreach ($eng as $idx => $e) {
+                $opts = $this->getOptionsFromWord($eng, 3, $idx, 'word');
+
+                $ret[] = [
+                    'formula' => $e->chinese,
+                    'topic' => $e->chinese,
+                    'size' => mb_strlen($e->chinese, 'utf-8') > 16 ? 40 : 60,
+                    'answer' => $e->word,
+                    'st_answer' => $e->word,
+                    'standFormula' => $e->chinese,
+                    'answerRange' => $opts,
+                    'selected' => json_encode($opts, JSON_UNESCAPED_UNICODE),
+                    'selected_json' => $opts,
+                    'level' => 1,
+                    'hitRange' => [5, 10],
+                    'gold' => 10,
+                ];
+
+                $i++;
+                if ($i >= $ct) {
+                    break;
+                }
+            }
+        }
+
+        return $ret;
+    }
+
+    public function generateWordWithChinese($ct = 10, $level = 1, $englishClass = '', $englishClass2 = '') {
+        $ret = [];
+
+        $eng = $this->getWordsByRand($ct, $level, $englishClass, $englishClass2);
+
+        if (!empty($eng)) {
+            $i = 0;
+            foreach ($eng as $idx => $e) {
+                $opts = $this->getOptionsFromWord($eng, 3, $idx, 'chinese');
+
+                $ret[] = [
+                    'formula' => $e->word,
+                    'topic' => $e->word,
+                    'answer' => $this->_cutEnglishChineseStr($e->chinese, 16),
+                    'st_answer' => $this->_cutEnglishChineseStr($e->chinese, 16),
+                    'standFormula' => $e->word,
+                    'answerRange' => $opts,
+                    'selected' => json_encode($opts, JSON_UNESCAPED_UNICODE),
+                    'selected_json' => $opts,
+                    'level' => 1,
+                    'hitRange' => [5, 10],
+                    'gold' => 10,
+                ];
+
+                $i++;
+                if ($i >= $ct) {
+                    break;
+                }
+            }
+        }
+
+        return $ret;
+    }
+
+    public function getWordsByRand($ct = 1, $level = 0, $englishClass, $englishClass2 = '') {
+//        $ret = [];
+
+        $eng = EnglishWords::find();
+        if (!empty($englishClass)) {
+            $eng = $eng->andFilterWhere([
+                    'word_class1' => $englishClass,
+                ]);
+        }
+        if (!empty($englishClass2)) {
+            $eng = $eng->andFilterWhere([
+                'word_class2' => $englishClass2,
+            ]);
+        }
+        if (!empty($level)) {
+            $eng = $eng->andFilterWhere([
+                'level' => $level,
+            ]);
+        }
+        $limitCt = $ct * 4;
+        $eng = $eng->orderBy('rand()')
+            ->limit($limitCt)
+//        var_dump($eng->createCommand()->getRawSql());exit;
+        ->all();
+
+        return $eng;
+
+    }
+
+    private function _cutEnglishChineseStr($str, $maxLen = 18) {
+        $ret = $str;
+        if (mb_strlen($str, 'utf-8') > $maxLen) {
+            $strs = explode('，', $str);
+            $tmpRet = [];
+            $tmpLen = 0;
+            foreach ($strs as $tmp) {
+                $tmpLen += mb_strlen($tmp, 'utf-8') + 1;
+                if ($tmpLen < $maxLen) {
+                    $tmpRet[] = $tmp;
+                } else {
+                    break;
+                }
+            }
+            $ret = implode('，', $tmpRet);
+        }
+
+        return $ret;
+    }
+
+    public function getOptionsFromWord($englishWords, $optCt = 3, $idx = 0, $col = 'word') {
+        $getCt = $optCt + 1;
+
+        if (count($englishWords) < $getCt) {
+            return $englishWords;
+        }
+
+        $ret = [];
+        $randIdx = array_rand($englishWords, $getCt);
+        $ct = 0;
+        foreach ($randIdx as $rIdx) {
+            if ($idx == $rIdx) {
+                continue;
+            }
+            if ($col == 'chinese') {
+                $ret[] = $this->_cutEnglishChineseStr($englishWords[$rIdx]->$col, 16);
+            } else {
+                $ret[] = $englishWords[$rIdx]->$col;
+            }
+            $ct++;
+            if ($ct >= $optCt) {
+                break;
+            }
+        }
+        if ($col == 'chinese') {
+            $ret[] = $this->_cutEnglishChineseStr($englishWords[$idx]->$col, 16);
+        } else {
+            $ret[] = $englishWords[$idx]->$col;
+        }
+        shuffle($ret);
+//        var_dump($ret);exit;
+        return $ret;
     }
 
     public function generatePoem($level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {

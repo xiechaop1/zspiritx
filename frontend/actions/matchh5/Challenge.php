@@ -279,13 +279,13 @@ class Challenge extends Action
                 break;
             case StoryMatch::MATCH_CLASS_ENGLISH:
 //                $subjects = [];
-                for ($i=0; $i<100; $i++) {
-                    $subjects[] = Yii::$app->doubao->generateSubjectWithMode($level, $storyMatch->match_class, 2);
-                    var_dump($subjects);exit;
-                    if ($i == 10) {
-                        $level++;
-                    }
-                }
+//                for ($i=0; $i<100; $i++) {
+                    $subjects = Yii::$app->qas->generateWordWithEng(50, 0, '英语四级单词表');
+//                    var_dump($subjects);exit;
+//                    if ($i == 10) {
+//                        $level++;
+//                    }
+//                }
                 break;
             default:
                 if (empty($subjects)) {
