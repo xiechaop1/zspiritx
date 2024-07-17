@@ -101,7 +101,7 @@ class SpiderController extends Controller
                 ])->one();
                 if (empty($eng)) {
                     $eng = new EnglishWords();
-                    $eng->word = htmlspecialchars_decode(strip_tags($word));;
+                    $eng->word = htmlspecialchars_decode(strip_tags(str_replace('&#039;', "'", $word)));
                     $eng->first_word = strtoupper(substr($wordMatch[2][$key], 0, 1));
                 }
                 $chinese = $wordMatch[3][$key];
