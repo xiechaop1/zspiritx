@@ -280,7 +280,7 @@ class Challenge extends Action
             case StoryMatch::MATCH_CLASS_ENGLISH:
 //                $subjects = [];
 //                for ($i=0; $i<100; $i++) {
-                    $subjects = Yii::$app->qas->generateWordWithEng(50, 0, '英语四级单词表');
+                    $subjects = Yii::$app->qas->generateWordWithChinese(50, 0, '英语四级单词表');
 //                    var_dump($subjects);exit;
 //                    if ($i == 10) {
 //                        $level++;
