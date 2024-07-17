@@ -198,6 +198,14 @@ class KnockoutPrepare extends Action
                         for ($level = 1; $level <= 4; $level++) {
                             $subjects = array_merge($subjects, $this->generateMathWithCt($ct, $level, $gold));
                         }
+                        break;
+                    case StoryMatch::MATCH_CLASS_ENGLISH:
+                        $ct = 2;
+                        for ($level = 1; $level <= 4; $level++) {
+                            $subjects = array_merge($subjects, $this->generateEnglishWithCt($ct, $level));
+                        }
+                        break;
+
                 }
                 $storyMatchProp['subjects'] = $subjects;
 
@@ -272,6 +280,15 @@ class KnockoutPrepare extends Action
                 'topic' => Yii::$app->qas->generateMath($level, $gold),
                 'max_time' => 180,
             ];
+        }
+        return $subjects;
+    }
+
+    public function  generateEnglishWithCt($ct, $level = 1, $gold = 0) {
+        $subjects = Yii::$app->qas->generateWordWithChinese($ct, $level);
+        foreach ($subjects as &$sub) {
+            $sub['max_time'] = 180;
+            $sub['level'] = $level;
         }
         return $subjects;
     }

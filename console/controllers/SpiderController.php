@@ -38,6 +38,8 @@ class SpiderController extends Controller
     public $urlList = [];
     public $urlConf = [];
 
+    public $saveList = [];
+
     public function actionEnglish() {
         $url = 'http://www.danciku.cn/words/';
 //        $url = 'http://www.danciku.cn/words/xiaoxueyingyu/';
@@ -48,13 +50,18 @@ class SpiderController extends Controller
         while (!empty($this->urlList)) {
             var_dump($this->urlList);
             $url = array_shift($this->urlList);
+            $this->saveList[] = $url;
 
             $html = $this->_getHtml($url);
 
             $wordRet = $this->_spiderWordWithUrl($html, $url);
 
             if ($wordRet === false) {
-                $this->_spiderMenuWithUrl($html);
+                $currClass = [];
+                if (!empty($this->urlConf[$url]['class'])) {
+                    $currClass = $this->urlConf[$url]['class'];
+                }
+                $this->_spiderMenuWithUrl($html, $currClass);
             }
         }
         return true;
@@ -75,6 +82,7 @@ class SpiderController extends Controller
             }
             $wordHtml = file_get_contents($getUrl);
         }
+
         preg_match_all('/<a href="\/w\/(.*?)" title="(.*?)">.*?<\/a>.*?<span>(.*?)<\/span>/s', $wordHtml, $wordMatch);
         if (!empty($wordMatch[1])) {
 //            var_dump($wordMatch);exit;
@@ -82,13 +90,18 @@ class SpiderController extends Controller
             $this->urlConf[$url]['is_word'] = true;
 
             $class = !empty($this->urlConf[$url]['class']) ? $this->urlConf[$url]['class'] : [];
+
             foreach ($wordMatch[1] as $key => $value) {
                 $word = htmlspecialchars_decode($wordMatch[2][$key]);
                 echo 'Insert Word ' . $word . ' Into DB ... ' . "\n";
-                $eng = EnglishWords::find()->where(['word' => $wordMatch[2][$key]])->one();
+                $eng = EnglishWords::find()->where([
+                    'word' => $wordMatch[2][$key],
+                    'word_class1' => !empty($class[0]) ? $class[0] : '',
+                    'word_class2' => !empty($class[1]) ? $class[1] : '',
+                ])->one();
                 if (empty($eng)) {
                     $eng = new EnglishWords();
-                    $eng->word = $word;
+                    $eng->word = htmlspecialchars_decode(strip_tags($word));;
                     $eng->first_word = strtoupper(substr($wordMatch[2][$key], 0, 1));
                 }
                 $chinese = $wordMatch[3][$key];
@@ -134,11 +147,13 @@ class SpiderController extends Controller
                 $tmpClass = $class;
                 $tmpClass[] = $menuMatch[2][$key];
                 $menuUrl = 'http://www.danciku.cn/words/' . $value;
-                $this->urlList[] = $menuUrl;
-                $this->urlConf[$menuUrl] = [
+                if (!in_array($menuUrl, $this->urlList) && !in_array($menuUrl, $this->saveList)) {
+                    $this->urlList[] = $menuUrl;
+                    $this->urlConf[$menuUrl] = [
 //                    'url' => $menuUrl,
-                    'class' => $tmpClass,
-                ];
+                        'class' => $tmpClass,
+                    ];
+                }
             }
         }
 //        var_dump($this->urlList);
