@@ -172,6 +172,54 @@ class Qas extends Component
         return $ret;
     }
 
+    public function generateSubjectWithDoubao($level, $matchClass, $ct, $prompt = '', $extends = []) {
+
+        if (empty($prompt)) {
+            switch ($matchClass) {
+                case StoryMatch::MATCH_CLASS_MATH:
+                    if ($level >= 1 && $level < 7) {
+                        $prompt = '生成' . $ct . '道数学计算题目';
+                    } else if ($level >= 7 && $level < 13) {
+                        $prompt = '生成' . $ct . '道数学计算或者方程类题目';
+                    } else if ($level >= 13 && $level < 19) {
+                        $prompt = '生成' . $ct . '道数学方程类题目';
+                    } else if ($level >= 19 && $level < 25) {
+                        $prompt = '生成' . $ct . '道数学代数类题目';
+                    } else {
+                        $prompt = '生成' . $ct . '道数学题目';
+                    }
+                    break;
+                case StoryMatch::MATCH_CLASS_ENGLISH:
+                    $prompt = '生成' . $ct . '道英语单词、短句题目';
+                    break;
+                case StoryMatch::MATCH_CLASS_POEM:
+                    $prompt = '生成' . $ct . '道诗词题目';
+                    break;
+                case StoryMatch::MATCH_CLASS_POEM_IDIOM:
+                    $prompt = '生成' . $ct . '道诗词成语题目';
+                    break;
+                case StoryMatch::MATCH_CLASS_CHINESE:
+                    $prompt = '生成' . $ct . '道语文题目';
+                    break;
+
+            }
+        }
+        
+        $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct, $extends);
+
+        $ret = [];
+        if (!empty($subjects)) {
+            foreach ($subjects as $subj) {
+                $tmpSubj = \common\helpers\Qa::formatSubjectFromGPT($subj);
+                $tmpSubj = \common\helpers\Qa::generateChallengePropByLevel($level, $tmpSubj);
+                $tmpSubj = \common\helpers\Qa::formatChallengeProp($tmpSubj);
+                $ret[] = $tmpSubj;
+            }
+        }
+
+        return $ret;
+    }
+
     public function getQaByPackageIds($qaPackageIds, $packageClass = []) {
         $qaPackages = QaPackage::find()
             ->where([
@@ -478,7 +526,24 @@ class Qas extends Component
         return $subjects;
     }
 
-    public function generateMath($level = 1, $gold = 0) {
+    public function generateMath($level, $ct = 100) {
+        $subjects = [];
+        if ($level <= 3) {
+            for ($i = 0; $i < $ct; $i++) {
+                // Todo: 测试用
+//            if ($level > 3) $level = 1;
+                $subjects[] = $this->generateMath($level);
+                if ($i == 12) {
+                    $level++;
+//                        $subjects[] = $this->generateMath($level);
+                }
+            }
+        } else {
+            $subjects = $this->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct);
+        }
+        return $subjects;
+    }
+    public function generateOneMath($level = 1, $gold = 0) {
         $subjects = [];
         switch ($level) {
             case 1:

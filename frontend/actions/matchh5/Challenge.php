@@ -220,15 +220,17 @@ class Challenge extends Action
 //                    }
 //                }
 
-                for ($i=0; $i<1000; $i++) {
-                    // Todo: 测试用
-                    if ($level > 3) $level = 1;
-                    $subjects[] = Yii::$app->qas->generateMath($level);
-                    if ($i == 12) {
-                        $level++;
-//                        $subjects[] = $this->generateMath($level);
-                    }
-                }
+//                for ($i=0; $i<1000; $i++) {
+//                    // Todo: 测试用
+//                    if ($level > 3) $level = 1;
+//                    $subjects[] = Yii::$app->qas->generateMath($level);
+//                    if ($i == 12) {
+//                        $level++;
+////                        $subjects[] = $this->generateMath($level);
+//                    }
+//                }
+
+                $subjects = Yii::$app->qas->generateMath($level, $ct = 1000);
                 break;
             case StoryMatch::MATCH_CLASS_POEM:
                 // 生成1000道诗词题
