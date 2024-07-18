@@ -205,15 +205,38 @@ class Qas extends Component
         return $qaCollections;
     }
 
+    public function getEnglishClassByLevel($level) {
+        if (empty($level)) {
+            $level = 1;
+        }
+
+        $classes = ['', ''];
+        foreach (EnglishWords::$level2WordClass1 as $lev => $classes) {
+            if ($lev >= $level) {
+                return $classes;
+            }
+        }
+        return $classes;
+
+    }
+
     public function generateWordWithEng($ct = 10, $level = 1, $englishClass = '', $englishClass2 = '') {
         $ret = [];
 
+        if ($englishClass == 'auto'
+            || $englishClass2 == 'auto'
+        ) {
+            $classTemp = $this->getEnglishClassByLevel($level);
+            list($englishClass, $englishClass2) = $classTemp;
+        }
+
         $eng = $this->getWordsByRand($ct, $level, $englishClass, $englishClass2);
+        $engWithClass = $this->formatEnglishWithClass($eng);
 
         if (!empty($eng)) {
             $i = 0;
             foreach ($eng as $idx => $e) {
-                $opts = $this->getOptionsFromWord($eng, 3, $idx, 'word');
+                $opts = $this->getOptionsFromWord($e, 3, 'word', $engWithClass, $eng);
 
                 $ret[] = [
                     'formula' => $e->chinese,
@@ -243,12 +266,21 @@ class Qas extends Component
     public function generateWordWithChinese($ct = 10, $level = 1, $englishClass = '', $englishClass2 = '') {
         $ret = [];
 
+
+        if ($englishClass == 'auto'
+            || $englishClass2 == 'auto'
+        ) {
+            $classTemp = $this->getEnglishClassByLevel($level);
+            list($englishClass, $englishClass2) = $classTemp;
+        }
         $eng = $this->getWordsByRand($ct, $level, $englishClass, $englishClass2);
+        $engWithClass = $this->formatEnglishWithClass($eng);
+
 
         if (!empty($eng)) {
             $i = 0;
             foreach ($eng as $idx => $e) {
-                $opts = $this->getOptionsFromWord($eng, 3, $idx, 'chinese');
+                $opts = $this->getOptionsFromWord($e, 3, 'chinese', $engWithClass, $eng);
 
                 $ret[] = [
                     'formula' => $e->word,
@@ -274,9 +306,42 @@ class Qas extends Component
         return $ret;
     }
 
+    public function formatEnglishWithClass($engModel) {
+        $ret = [];
+        if (!empty($engModel)) {
+            foreach ($engModel as $eModel) {
+                $wordClass1 = '';
+                if (!empty($eModel->word_class1)) {
+                    $wordClass1 = $eModel->word_class1;
+                }
+                $wordClass2 = '';
+                if (!empty($eModel->word_class2)) {
+                    $wordClass2 = $eModel->word_class2;
+                }
+//                if (!empty($englishClass)
+//                    && !empty($wordClass1)
+//                    && $englishClass != $wordClass1) {
+//                    continue;
+//                }
+//                if (!empty($englishClass2)
+//                    && !empty($wordClass2)
+//                    && $englishClass2 != $wordClass2) {
+//                    continue;
+//                }
+                if (!empty($wordClass2)) {
+                    $ret[$wordClass1][$wordClass2][] = $eModel;
+                } else {
+                    $ret[$wordClass1][] = $eModel;
+                }
+            }
+        }
+        return $ret;
+    }
+
     public function getWordsByRand($ct = 1, $level = 0, $englishClass, $englishClass2 = '') {
 //        $ret = [];
 
+        $limitCt = $ct * 4;
         $eng = EnglishWords::find();
         if (!empty($englishClass)) {
             $eng = $eng->andFilterWhere([
@@ -289,12 +354,14 @@ class Qas extends Component
             ]);
         }
         if (!empty($level)) {
-            $eng = $eng->andFilterWhere([
+            $eng = $eng->orFilterWhere([
                 'level' => $level,
             ]);
         }
-        $limitCt = $ct * 4;
-        $eng = $eng->orderBy('rand()')
+        $eng = $eng->andFilterWhere([
+                '<>', 'chinese', '',
+            ])
+            ->orderBy('rand()')
             ->limit($limitCt)
 //        var_dump($eng->createCommand()->getRawSql());exit;
         ->all();
@@ -311,7 +378,7 @@ class Qas extends Component
             $tmpLen = 0;
             foreach ($strs as $tmp) {
                 $tmpLen += mb_strlen($tmp, 'utf-8') + 1;
-                if ($tmpLen < $maxLen) {
+                if ($tmpLen <= $maxLen) {
                     $tmpRet[] = $tmp;
                 } else {
                     break;
@@ -323,18 +390,37 @@ class Qas extends Component
         return $ret;
     }
 
-    public function getOptionsFromWord($englishWords, $optCt = 3, $idx = 0, $col = 'word') {
+    public function getOptionsFromWord($englishWord, $optCt = 3, $col = 'word', $englishClass = [], $allWords = []) {
         $getCt = $optCt + 1;
+//        var_dump($englishWord);
+        $wordClass1 = '';
+        if (!empty($englishWord->word_class1)) {
+            $wordClass1 = $englishWord->word_class1;
+        }
+        $wordClass2 = '';
+        if (!empty($englishWord->word_class2)) {
+            $wordClass2 = $englishWord->word_class2;
+        }
+
+        $englishWords = [];
+        if (!empty($wordClass1) && !empty($wordClass2)) {
+            if (!empty($englishClass[$wordClass1][$wordClass2])) {
+                $englishWords = $englishClass[$wordClass1][$wordClass2];
+            }
+        } else if (!empty($wordClass1) && !empty($englishClass[$wordClass1])) {
+            $englishWords = $englishClass[$wordClass1];
+        }
 
         if (count($englishWords) < $getCt) {
-            return $englishWords;
+            $englishWords = $allWords;
         }
 
         $ret = [];
+
         $randIdx = array_rand($englishWords, $getCt);
         $ct = 0;
         foreach ($randIdx as $rIdx) {
-            if ($idx == $rIdx) {
+            if ($englishWord->$col == $englishWords[$rIdx]->$col) {
                 continue;
             }
             if ($col == 'chinese') {
@@ -348,12 +434,12 @@ class Qas extends Component
             }
         }
         if ($col == 'chinese') {
-            $ret[] = $this->_cutEnglishChineseStr($englishWords[$idx]->$col, 16);
+            $ret[] = $this->_cutEnglishChineseStr($englishWord->$col, 16);
         } else {
-            $ret[] = $englishWords[$idx]->$col;
+            $ret[] = $englishWord->$col;
         }
         shuffle($ret);
-//        var_dump($ret);exit;
+
         return $ret;
     }
 
