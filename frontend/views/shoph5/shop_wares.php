@@ -125,8 +125,8 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                     $txt = $label;
 
                 ?>
-                <div class="m-t-100 col-sm-12 col-md-12" style="padding: 5px; " id="baggage_area">
-                    <div class="answer-border2">
+                <div class="m-t-100 col-sm-12 col-md-12" style="margin-top: 0px; padding: 5px; " id="baggage_area">
+                    <div class="answer-border2" style="height: 100%;">
 <!--                        <input class="form-check-input" type="radio" name="item" value="--><?php //= $item->id ?><!--" id="legal_person_yes_--><?php //= $item->id ?><!--" >-->
                         <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_<?= $item->id ?>" style="padding-top: 20px;">
 <!--                            <span class="answer-tag2">--><?php //= $item->store_ct ?><!--</span>-->
@@ -139,12 +139,16 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                             }
                             ?>
                             </div>
-                            <div class="col-sm-6" style="float: left; width: 350px; text-align: left;">
+                            <div class="col-sm-6" style="float: left; width: 350px; text-align: left; line-height: 125%;">
                                 <?= $txt ?>
                                 <br>
                                 <span class="fs-20" style="color: #999">
                                 <?= $desc ?>
                                 </span>
+                                <?php
+                                if ($shopWareType == \common\models\ShopWares::SHOP_WARE_TYPE_PACKAGE) {
+                                    ?>
+
                                 <br>
                                 <span class="fs-20" style="color: #999">
                                 有效期：<?php
@@ -155,6 +159,9 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                                     }
                                     ?>
                                 </span>
+                                    <?php
+                                }
+                                ?>
                             </div>
                             <div class="col-sm-4" style="float: left;">
                                 <?php
