@@ -539,6 +539,8 @@ class Qas extends Component
                 }
             }
         } else {
+            // Todo：临时强制保护
+            $ct = 20;
             $subjects = $this->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct);
         }
         return $subjects;

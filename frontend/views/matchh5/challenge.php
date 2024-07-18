@@ -219,7 +219,7 @@ $this->title = $storyMatch->match_name;
                 }
                 ?>
                 <!--文本问题-->
-                <div class="match-qa-content-text" id="topic">
+                <div class="match-qa-content-text" style="line-height: 125%;" id="topic">
 <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
