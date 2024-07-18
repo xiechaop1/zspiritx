@@ -264,7 +264,14 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
             <div class="fs-30 bold w-100 text-FF" style="float: left; position: relative; right: 0px;">
                 <div style="position: absolute; top: -50px;right: 50px; ">
                     <img src="../../static/img/qa/gold.png" width="50">
-                    <span id="user_score_ret"><?= \common\helpers\Common::formatNumberToStr($userScore->score, true) ?></span>
+                    <?php
+                    if (!empty($userScore->score)) {
+                        $score = $userScore->score;
+                    } else {
+                        $score = 0;
+                    }
+                    ?>
+                    <span id="user_score_ret"><?= \common\helpers\Common::formatNumberToStr($score, true) ?></span>
                 </div>
 
             </div>
