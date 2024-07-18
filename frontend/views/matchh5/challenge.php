@@ -247,11 +247,13 @@ $this->title = $storyMatch->match_name;
                         <?php if ($storyMatch->match_type == \common\models\StoryMatch::MATCH_TYPE_CONTEST) { ?>
                             ：<span class="text-1" id="subjct">0</span>
                         <?php } else {?>
-                        <span class="text-1" id="subjct">0</span>/
-                        <span class="text-2" > - </span>
+                        <span class="text-1" id="subjct">0</span>
+<!--                            /<span class="text-2" > - </span>-->
                         <?php
                         }
                         ?>
+                        &nbsp; 难度
+                        <span class="text-2" ><?= $level ?></span>
                     </div>
                     <div class="match-clock-bottom-right">
                         正确
