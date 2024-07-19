@@ -102,6 +102,11 @@ echo \dmstr\widgets\Alert::widget();
                         'attribute' => 'item_id',
                         'format'    => 'raw',
                         'value' => function ($model) {
+                            switch ($model->item_type) {
+                                case \common\models\Order::ITEM_TYPE_PACKAGE:
+                                    $itemData = \common\models\ShopWares::findOne($model->item_id);
+                                    return $itemData['ware_name'];
+                            }
                             return $model->item_id;
                         },
                         'filter'    => Html::activeInput('text', $searchModel, 'item_id', ['value' => !empty($params['Order']['item_id']) ? $params['Order']['item_id'] : '']),

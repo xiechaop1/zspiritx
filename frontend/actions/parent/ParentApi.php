@@ -202,7 +202,7 @@ class ParentApi extends ApiAction
                             $order['story'] = Story::findOne($order['item_id']);
                             break;
                         case Order::ITEM_TYPE_PACKAGE:
-                            $order['qa_package'] = QaPackage::findOne($order['item_id']);
+                            $order['shop_ware'] = ShopWares::findOne($order['item_id']);
                             break;
                     }
                 }
