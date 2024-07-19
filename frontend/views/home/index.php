@@ -223,7 +223,7 @@ $this->title = 'AR剧本杀';
                   echo '进入游戏';
                 }
               } else {
-                if ($story->extend->curr_price == 0 && !empty($unityVersion)) {
+                if (!empty($story->extend) && $story->extend->curr_price == 0 && !empty($unityVersion)) {
                   echo '限免';
                 } else {
                   if (!empty($unityVersion)) {
