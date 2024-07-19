@@ -80,6 +80,7 @@ class Index extends Action
         $orders = Order::find()
             ->where([
                 'user_id'   => $userId,
+                'item_type' => Order::ITEM_TYPE_STORY,
             ])
             ->all();
 

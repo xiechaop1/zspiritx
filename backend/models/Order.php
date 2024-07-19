@@ -23,7 +23,7 @@ class Order extends \common\models\Order
     public function rules()
     {
         return [
-            [['user_id', 'story_id', 'pay_method', 'order_status', 'status', 'expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'story_id', 'pay_method', 'item_type', 'item_id', 'order_status', 'status', 'expire_time', 'created_at', 'updated_at'], 'integer'],
             [['story_price', 'amount', 'refund_amount'], 'number'],
             [['order_no', 'transaction_id', 'refund_no', 'ver_code', 'ver_platform', ], 'string'],
 //            [['attach', ], 'string'],
@@ -73,6 +73,12 @@ class Order extends \common\models\Order
         if (!empty($params['Order']['user_id'])) {
             $query->andFilterWhere([
                 'o_order.user_id' => $params['Order']['user_id']
+            ]);
+        }
+
+        if (!empty($params['Order']['item_type'])) {
+            $query->andFilterWhere([
+                'o_order.item_type' => $params['Order']['item_type']
             ]);
         }
 

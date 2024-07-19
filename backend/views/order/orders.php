@@ -89,6 +89,24 @@ echo \dmstr\widgets\Alert::widget();
                         'filter'    => Html::activeInput('text', $searchModel, 'story_id', ['value' => !empty($params['Order']['story_id']) ? $params['Order']['story_id'] : '']),
                     ],
                     [
+                        'label' => '类型',
+                        'attribute' => 'item_type',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\Order::$itemType2Name[$model->item_type]) ? \common\models\Order::$itemType2Name[$model->item_type] : '未知';
+                        },
+                        'filter'    => Html::activeInput('text', $searchModel, 'item_type', ['value' => !empty($params['Order']['item_type']) ? $params['Order']['item_type'] : '']),
+                    ],
+                    [
+                        'label' => '商品',
+                        'attribute' => 'item_id',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return $model->item_id;
+                        },
+                        'filter'    => Html::activeInput('text', $searchModel, 'item_id', ['value' => !empty($params['Order']['item_id']) ? $params['Order']['item_id'] : '']),
+                    ],
+                    [
                         'label' => '手机号',
                         'attribute' => 'user_id',
                         'format'    => 'raw',
