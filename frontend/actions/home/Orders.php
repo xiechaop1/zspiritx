@@ -32,9 +32,16 @@ class Orders extends Action
     public function run()
     {
 
+        $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
+
         $userId = Cookie::getCookie('user_id');
         if (empty($userId)) {
-            header('Location: /passport/web_login');
+            if (!empty($unityVersion)) {
+                $params = '?unity_version=' . $unityVersion;
+            } else {
+                $params = '';
+            }
+            header('Location: /passport/web_login/' . $params);
         }
 
         $itemType = !empty(Yii::$app->request->get('item_type')) ? Yii::$app->request->get('item_type') : Order::ITEM_TYPE_STORY;
@@ -69,6 +76,7 @@ class Orders extends Action
         return $this->controller->render('orders', [
             'userId'    => $userId,
             'orderList'  => $orders,
+            'unityVersion' => $unityVersion,
         ]);
     }
 }
