@@ -81,12 +81,14 @@ $this->title = '灵镜新世界-我的';
                             <span style="color: <?= $order->order_status == \common\models\Order::ORDER_STATUS_COMPLETED
                             || $order->order_status == \common\models\Order::ORDER_STATUS_PAIED ? 'green' : '#a83800' ?>">
                                 <?php
-                                if (!empty($order->order_status)
-                                && ($order->order_status == \common\models\Order::ORDER_STATUS_COMPLETED
-                                    || $order->order_status == \common\models\Order::ORDER_STATUS_PAIED)
-                                ) {
-                                    $filePath = '/' . $order->story->id . '.txt';
-                                    echo '<a href="' . $filePath . '">下载</a>';
+                                if (empty($unityVersion)) {
+                                    if (!empty($order->order_status)
+                                        && ($order->order_status == \common\models\Order::ORDER_STATUS_COMPLETED
+                                            || $order->order_status == \common\models\Order::ORDER_STATUS_PAIED)
+                                    ) {
+                                        $filePath = '/' . $order->story->id . '.txt';
+                                        echo '<a href="' . $filePath . '">下载</a>';
+                                    }
                                 }
                                 ?>
                             </span>
@@ -109,7 +111,7 @@ $this->title = '灵镜新世界-我的';
                         <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                         <label class="form-check-label fs-30 answer-btn">
                             <!--                  <span class="answer-tag"></span>-->
-                            <span ><a href="/home/index">返回</a></span>
+                            <span ><a href="/home/index<?= !empty($unityVersion) ? '?unity_version=' . $unityVersion : '' ?>">返回</a></span>
                         </label>
                     </div>
                 </div>
