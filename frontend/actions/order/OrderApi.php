@@ -99,7 +99,7 @@ class OrderApi extends ApiAction
         }
 
         $itemId = !empty($this->_get['item_id']) ? $this->_get['item_id'] : 0;
-        $itemType = !empty($this->_get['item_type']) ? $this->_get['item_type'] : 0;
+        $itemType = !empty($this->_get['item_type']) ? $this->_get['item_type'] : Order::ITEM_TYPE_STORY;
 
         switch ($itemType) {
             case Order::ITEM_TYPE_PACKAGE:
