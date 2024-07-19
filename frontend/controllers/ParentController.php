@@ -29,6 +29,10 @@ class ParentController extends Controller
                 'class' => 'frontend\actions\parent\ParentApi',
                 'action' => 'get_shop_wares',
             ],
+            'get_one_shop_ware' => [
+                'class' => 'frontend\actions\parent\ParentApi',
+                'action' => 'get_one_shop_ware',
+            ],
             'get_orders' => [
                 'class' => 'frontend\actions\parent\ParentApi',
                 'action' => 'get_orders',

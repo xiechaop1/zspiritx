@@ -70,6 +70,9 @@ class ParentApi extends ApiAction
                 case 'get_shop_wares':
                     $ret = $this->getShopWares();
                     break;
+                case 'get_one_shop_ware':
+                    $ret = $this->getOneShopWare();
+                    break;
                 case 'get_data':
                     $ret = $this->getData();
                     break;
@@ -112,6 +115,28 @@ class ParentApi extends ApiAction
         return $ret;
     }
 
+    public function getOneShopWare() {
+        $shopWareId = !empty($_GET['shop_ware_id']) ? $_GET['shop_ware_id'] : 0;
+
+        $model = ShopWares::findOne($shopWareId);
+
+        if (!empty($model)) {
+            switch ($model->link_type) {
+                case ShopWares::LINK_TYPE_QA_PACKAGE:
+                    $model->qa_package = QaPackage::findOne($model->link_id);
+                    break;
+                case ShopWares::LINK_TYPE_STORY_MODEL:
+                default:
+                    $model->story = StoryModels::findOne($model->link_id);
+                    break;
+            }
+
+            $model->icon = Attachment::completeUrl($model->icon, true);
+        }
+
+        return $model;
+    }
+    
     public function getShopWares() {
 
         $shopWareType = !empty($_GET['shop_ware_type']) ? $_GET['shop_ware_type'] : ShopWares::SHOP_WARE_TYPE_GAME_ITEM;
