@@ -180,7 +180,7 @@ class Doubao extends Component
 //        Yii::info('chatGPT data: ' . json_encode($data));
 
         $response = $this->_call('/v3/chat/completions', $data, 'POST');
-//        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 //        var_dump($response);
 //        exit;
 

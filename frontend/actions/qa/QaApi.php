@@ -161,6 +161,9 @@ class QaApi extends ApiAction
 
         $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
 
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
+        $linkQaId = !empty($this->_get['link_qa_id']) ? $this->_get['link_qa_id'] : 0;
+
         $qaMode = !empty($this->_get['qa_mode']) ? $this->_get['qa_mode'] : Qa::QA_MODE_NORMAL;
 
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
@@ -203,6 +206,10 @@ class QaApi extends ApiAction
                 $qa->selected = $selected;
                 $qa->st_selected = $stSelected;
                 $qa->score = $score;
+
+                $qa->link_qa_id = $linkQaId;
+                $qa->level = $level;
+
                 $qa->prop = $prop;
                 $qa->save();
                 $qaId = $qa->id = Yii::$app->db->getLastInsertID();
@@ -213,16 +220,16 @@ class QaApi extends ApiAction
 
         }
 
-        $isRight = 0;
+        $isRight = UserQa::ANSWER_WRONG;
         if (!empty($stAnswer) && $stAnswer == $answer) {
-            $isRight = 1;
+            $isRight = UserQa::ANSWER_RIGHT;
         } elseif (!empty($stAnswer) && $stAnswer != $answer) {
-            $isRight = 0;
+            $isRight = UserQa::ANSWER_WRONG;
         } elseif (empty($stAnswer)) {
             if ($qa['st_selected'] == $answer) {
-                $isRight = 1;
+                $isRight = UserQa::ANSWER_RIGHT;
             } else {
-                $isRight = 0;
+                $isRight = UserQa::ANSWER_WRONG;
             }
         }
 
@@ -265,8 +272,6 @@ class QaApi extends ApiAction
 
         try {
             $transaction = Yii::$app->db->beginTransaction();
-
-
 
             if (!empty($sessionId)) {
                 $sessionQa = SessionQa::find()->where(['session_id' => $sessionId, 'qa_id' => $qaId])->one();

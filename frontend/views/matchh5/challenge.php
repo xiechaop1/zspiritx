@@ -1373,6 +1373,8 @@ $this->title = $storyMatch->match_name;
         var selected = subjectObj.selected;
         var st_selected = selected;
         var score = subjectObj.gold;
+        var level = subjectObj.level;
+        var link_qa_id = subjectObj.link_qa_id;
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -1394,6 +1396,8 @@ $this->title = $storyMatch->match_name;
                 qa_type:qa_type,
                 match_class:match_class,
                 st_selected:st_selected,
+                level:level,
+                link_qa_id:link_qa_id,
             },
             onload: function (data) {
                 $('#answer-border-response').html('处理中……');

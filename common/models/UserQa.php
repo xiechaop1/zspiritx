@@ -13,7 +13,7 @@ class UserQa extends \common\models\gii\UserQa
 {
 
     const ANSWER_RIGHT = 1;
-    const ANSWER_WRONG = 0;
+    const ANSWER_WRONG = 2;
 
 
     public function behaviors()

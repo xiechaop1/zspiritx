@@ -158,6 +158,9 @@ class Qas extends Component
                                 $tmpSubj = \common\helpers\Qa::formatSubjectFromGPT($subj);
                                 $tmpSubj = \common\helpers\Qa::generateChallengePropByLevel($level, $tmpSubj);
                                 $tmpSubj = \common\helpers\Qa::formatChallengeProp($tmpSubj);
+                                $tmpSubj['link_qa_id'] = !empty($qaModel->id) ? $qaModel->id : 0;
+                                $tmpSubj['level'] = $level;
+
                                 $ret[] = $tmpSubj;
                             }
                         }
