@@ -136,7 +136,7 @@ class ParentApi extends ApiAction
 
         return $model;
     }
-    
+
     public function getShopWares() {
 
         $shopWareType = !empty($_GET['shop_ware_type']) ? $_GET['shop_ware_type'] : ShopWares::SHOP_WARE_TYPE_GAME_ITEM;

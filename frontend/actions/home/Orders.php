@@ -37,18 +37,29 @@ class Orders extends Action
             header('Location: /passport/web_login');
         }
 
+        $itemType = !empty(Yii::$app->request->get('item_type')) ? Yii::$app->request->get('item_type') : Order::ITEM_TYPE_STORY;
+
         $orders = [];
         try {
 
             $orders = Order::find()
-                ->where(['user_id' => $userId])
+                ->where([
+                    'user_id' => $userId,
+                    'item_type' => $itemType,
+                ])
                 ->orderBy('id desc')
                 ->all();
 
             foreach ($orders as &$order) {
-                if (!empty($order->story)) {
-                    $order->story->cover_image = Attachment::completeUrl($order->story->cover_image, true);
+                switch ($order->item_type) {
+                    case Order::ITEM_TYPE_STORY:
+                    default:
+                        if (!empty($order->story)) {
+                            $order->story->cover_image = Attachment::completeUrl($order->story->cover_image, true);
+                        }
+                        break;
                 }
+
             }
 
         } catch (\Exception $e) {
