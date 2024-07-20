@@ -118,11 +118,15 @@ class ParentApi extends ApiAction
     public function getOneShopWare() {
         $shopWareId = !empty($_GET['shop_ware_id']) ? $_GET['shop_ware_id'] : 0;
 
+        $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
+
         $model = ShopWares::find()->where(['id' => $shopWareId])->one();
         $model = $model->toArray();
 
 //        var_dump($model);exit;
 
+        $hasBought = false;
+        $boughtOrder = null;
         if (!empty($model)) {
             switch ($model['link_type']) {
                 case ShopWares::LINK_TYPE_QA_PACKAGE:
@@ -135,7 +139,34 @@ class ParentApi extends ApiAction
             }
 
             $model['icon'] = Attachment::completeUrl($model['icon'], true);
+
+            $order = Order::find()
+                ->where([
+                    'user_id' => $userId,
+                    'item_id' => $shopWareId,
+                    'item_type' => Order::ITEM_TYPE_PACKAGE,
+                ])
+                ->orderBy(['id' => SORT_DESC])
+                ->one();
+
+            if (!empty($order)) {
+                $orderCreatedAt = $order->created_at;
+
+                $period = $model->period;
+
+                if ($period > 0) {
+                    $expireTime = $orderCreatedAt + $period * 24 * 3600;
+                    if (time() < $expireTime) {
+                        $hasBought = true;
+                        $boughtOrder = $order;
+                    }
+                }
+            }
+
         }
+
+        $model['has_bought'] = $hasBought;
+        $model['bought_order'] = $boughtOrder;
 
         return $model;
     }
