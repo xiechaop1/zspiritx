@@ -152,7 +152,7 @@ class ParentApi extends ApiAction
             if (!empty($order)) {
                 $orderCreatedAt = $order->created_at;
 
-                $period = $model->period;
+                $period = $model['period'];
 
                 if ($period > 0) {
                     $expireTime = $orderCreatedAt + $period * 24 * 3600;
