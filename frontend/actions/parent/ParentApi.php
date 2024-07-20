@@ -118,20 +118,23 @@ class ParentApi extends ApiAction
     public function getOneShopWare() {
         $shopWareId = !empty($_GET['shop_ware_id']) ? $_GET['shop_ware_id'] : 0;
 
-        $model = ShopWares::findOne($shopWareId);
+        $model = ShopWares::find()->where(['id' => $shopWareId])->one();
+        $model = $model->toArray();
+
+//        var_dump($model);exit;
 
         if (!empty($model)) {
-            switch ($model->link_type) {
+            switch ($model['link_type']) {
                 case ShopWares::LINK_TYPE_QA_PACKAGE:
-                    $model->qa_package = QaPackage::findOne($model->link_id);
+                    $model['qa_package'] = QaPackage::findOne($model['link_id']);
                     break;
                 case ShopWares::LINK_TYPE_STORY_MODEL:
                 default:
-                    $model->story = StoryModels::findOne($model->link_id);
+                    $model['story'] = StoryModels::findOne($model['link_id']);
                     break;
             }
 
-            $model->icon = Attachment::completeUrl($model->icon, true);
+            $model['icon'] = Attachment::completeUrl($model['icon'], true);
         }
 
         return $model;
