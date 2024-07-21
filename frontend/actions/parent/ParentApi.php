@@ -177,6 +177,9 @@ class ParentApi extends ApiAction
 
         $storyModelClass = !empty($_GET['story_model_class']) ? $_GET['story_model_class'] : '';
 
+        $page = !empty($_GET['page']) ? $_GET['page'] : 1;
+        $limit = 10;
+
         $model = ShopWares::find()
             ->where([
                 'ware_type' => $shopWareType,
@@ -186,6 +189,8 @@ class ParentApi extends ApiAction
                 $model = $model->andFilterWhere(['o_story_model.story_model_class' => $storyModelClass]);
             }
             $model = $model->orderBy(['id' => SORT_DESC])
+            ->limit($limit)
+            ->offset(($page - 1) * $limit)
             ->asArray()
             ->all();
 
