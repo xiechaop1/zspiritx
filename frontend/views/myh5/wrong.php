@@ -156,7 +156,7 @@ $this->title = '错题本';
     }
 </style>
 <audio autoplay loop>
-    <source src="<?= $qa['voice'] ?>" type="audio/mpeg">
+    <source src="" type="audio/mpeg">
     您的浏览器不支持 audio 元素。
 </audio>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
