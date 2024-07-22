@@ -30,6 +30,53 @@ class Qa
         return $t;
     }
 
+    public static function formatSubjectFromUserQa($userQa) {
+        $ret = [];
+
+        if (!empty($userQa)) {
+            $qa = !empty($userQa->qa) ? $userQa->qa : [];
+            $qa = $qa->toArray();
+            if (empty($qa)) {
+                return [];
+            }
+            $answerIdx = $qa['st_answer'];
+            if (!empty($qa['selected'])) {
+                $qa['selected_json'] = json_decode($qa['selected'], true);
+            }
+            if (in_array($answerIdx, ['A', 'B', 'C', 'D'])) {
+                $answer = !empty($qa['selected_json'][$answerIdx]) ? $qa['selected_json'][$answerIdx] : $answer;
+            } else {
+                $answer = $answerIdx;
+            }
+
+            $options = $qa['selected_json'];
+
+            if (mb_strlen($qa['topic']) > 10) {
+                $size = 40;
+            } else {
+                $size = 60;
+            }
+
+            $ret = [
+                'formula' => $qa['topic'],
+                'topic' => $qa['topic'],
+                'standFormula' => $qa['topic'],
+                'subject_type' => $qa['qa_type'],
+                'answerRange' => $options,
+                'selected_json' => $qa['selected_json'],
+                'selected' => $qa['selected'],
+                'answer' => $answer,
+                'st_answer' => $answer,
+                'size'  => $size,
+                'qa_type' => $qa['qa_type'],
+
+            ];
+
+        }
+
+        return $ret;
+    }
+
     public static function formatSubjectFromGPT($gpt) {
 //        $ret = [];
 

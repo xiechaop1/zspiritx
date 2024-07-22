@@ -27,6 +27,9 @@ class Myh5Controller extends Controller
             'settings' => [
                 'class' => 'frontend\actions\myh5\Settings',
             ],
+            'wrong' => [
+                'class' => 'frontend\actions\myh5\Wrong',
+            ],
 
         ];
     }

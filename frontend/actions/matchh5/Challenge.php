@@ -83,7 +83,7 @@ class Challenge extends Action
             ->one();
 
         if (!empty($user['avatar'])) {
-            $user['avatar'] = Attachment::completeUrl($userInfo['avatar']);
+            $user['avatar'] = Attachment::completeUrl($user['avatar']);
         } else {
             $user['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
         }

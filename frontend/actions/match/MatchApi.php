@@ -89,6 +89,7 @@ class MatchApi extends ApiAction
 
         $ret = [
             'suggestion' => $suggestion,
+            'size' => mb_strlen($suggestion) > 20 ? 35 : 40,
         ];
 //        var_dump($ret);exit;
 

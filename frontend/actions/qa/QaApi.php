@@ -201,9 +201,9 @@ class QaApi extends ApiAction
                 $qa->qa_type = $qaType;
                 $qa->qa_class = $qaClass;
                 $qa->qa_mode = $qaMode;
-                $qa->st_answer = $stAnswer;
                 $qa->story_id = $storyId;
                 $qa->selected = $selected;
+                $qa->st_answer = $stAnswer;
                 $qa->st_selected = $stSelected;
                 $qa->score = $score;
 
