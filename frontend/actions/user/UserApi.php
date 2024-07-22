@@ -349,6 +349,7 @@ class UserApi extends ApiAction
 
             // 如果用户不存在，创建用户
             $openId = $ret['openid'];
+            $unionId = !empty($ret['unionid']) ? $ret['unionid'] : '';
             $user = User::findOne(['wx_openid' => $openId]);
 
             if (empty($user)) {
