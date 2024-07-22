@@ -29,9 +29,9 @@ class UserController extends Controller
                 'class' => 'frontend\actions\user\UserApi',
                 'action' => 'get_token',
             ],
-            'get_session' => [
+            'get_wx_session' => [
                 'class' => 'frontend\actions\user\UserApi',
-                'action' => 'get_session',
+                'action' => 'get_wx_session',
             ],
             'get_mobile' => [
                 'class' => 'frontend\actions\user\UserApi',
