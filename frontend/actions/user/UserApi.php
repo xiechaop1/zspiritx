@@ -343,21 +343,74 @@ class UserApi extends ApiAction
         try {
             $ret = Yii::$app->wechat->getSession($code);
 
-            $openId = $ret['openid'];
-            $user = User::findOne(['wx_openid' => $openId, 'is_delete' => Common::STATUS_NORMAL]);
-            if (!empty($user)
-                && $user->user_status == User::USER_STATUS_FORBIDDEN
-            ) {
-                throw new \Exception('用户已被禁用', -1001);
+            if (!empty($ret['errcode']) && $ret['errcode'] != 0) {
+                throw new \Exception($ret['errmsg'], $ret['errcode']);
             }
-            if (!empty($user['id'])) {
-                $this->_get['user_id'] = $user['id'];
-                $tokenRet = $this->getToken();
-                $user['wx_token'] = $tokenRet['token'];
-                $user['wx_token_expire_time'] = $tokenRet['expire_time'];
 
-//                Yii::$app->oplog->write(\common\models\Log::OP_CODE_LOGIN, 1, $user['id'], 0, '用户登录');
+            // 如果用户不存在，创建用户
+            $openId = $ret['openid'];
+            $user = User::findOne(['wx_openid' => $openId]);
+
+            if (empty($user)) {
+
+                // 获取手机号
+                $mobile = $this->getMobile($code);
+
+                $user = User::findOne(['mobile' => $mobile]);
+
+                // 判断用户状态
+                if (!empty($user)
+                    && $user->user_status == User::USER_STATUS_FORBIDDEN
+                ) {
+                    throw new \Exception('用户不存在或已被禁用', -1001);
+                } else if (!empty($user)) {
+                    $user->wx_openid = $openId;
+                    $user->wx_unionid = $ret['unionid'];
+                    $user->user_status = User::USER_STATUS_NORMAL;
+
+                } else if (empty($user)) {
+                    $user = new User();
+                    $user->wx_openid = $openId;
+                    $user->wx_unionid = $ret['unionid'];
+                    $user->mobile = $mobile;
+                    $user->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4) . rand(1000,9999);
+                    $user->user_pass = Yii::$app->security->generatePasswordHash($mobile);
+                    $user->user_status = User::USER_STATUS_NORMAL;
+                    $user->last_login_time = time();
+                    $user->last_login_device = Client::getAgent();
+                    $user->user_type = User::USER_TYPE_NORMAL;
+                    $user->save();
+                    $user->id = Yii::$app->db->getLastInsertID();
+                }
+
+                // 创建新用户
+//                $user = new User();
+//                $user->open_id = $openId;
+//                $user->union_id = $ret['unionid'];
+//                $user->mobile = $mobile;
+//                $user->save();
+//                $user->id = Yii::$app->db->getLastInsertID();
             }
+            $this->_token = $this->getToken();
+            $user->wx_token = $this->_token;
+            $user->save();
+
+
+//            $openId = $ret['openid'];
+//            $user = User::findOne(['wx_openid' => $openId, 'is_delete' => Common::STATUS_NORMAL]);
+//            if (!empty($user)
+//                && $user->user_status == User::USER_STATUS_FORBIDDEN
+//            ) {
+//                throw new \Exception('用户已被禁用', -1001);
+//            }
+//            if (!empty($user['id'])) {
+//                $this->_get['user_id'] = $user['id'];
+//                $tokenRet = $this->getToken();
+//                $user['wx_token'] = $tokenRet['token'];
+//                $user['wx_token_expire_time'] = $tokenRet['expire_time'];
+//
+////                Yii::$app->oplog->write(\common\models\Log::OP_CODE_LOGIN, 1, $user['id'], 0, '用户登录');
+//            }
             $ret['user'] = $user;
 
             return $ret;

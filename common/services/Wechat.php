@@ -34,19 +34,20 @@ class Wechat extends Component
     private $_token;
 
     public function login($code) {
-        $uri = '/sns/jscode2session';
-
-        $params = [
-            'appid'     => $this->appId,
-            'secret'    => $this->appSecret,
-            'js_code'   => $code,
-            'grant_type'=> 'authorization_code',
-        ];
-
-        $uri = $this->_createUri($uri, self::WECHAT_HOST, $params);
+//        $uri = '/sns/jscode2session';
+//
+//        $params = [
+//            'appid'     => $this->appId,
+//            'secret'    => $this->appSecret,
+//            'js_code'   => $code,
+//            'grant_type'=> 'authorization_code',
+//        ];
+//
+//        $uri = $this->_createUri($uri, self::WECHAT_HOST, $params);
 
         try {
-            $ret = $this->_getApi($uri);
+//            $ret = $this->_getApi($uri);
+            $ret = $this->getSession($code);
 //            var_dump($ret);exit;
             if (!empty($ret['errcode']) && $ret['errcode'] != 0) {
                 throw new \Exception($ret['errmsg'], $ret['errcode']);
@@ -150,8 +151,8 @@ class Wechat extends Component
         }
 
         $params = [
-            'appid' => $this->appId,
-            'secret' => $this->appSecret,
+            'appid' => $appId,
+            'secret' => $appSecret,
             'js_code' => $code,
             'grant_type' => 'authorization_code',
         ];
