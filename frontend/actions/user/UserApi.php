@@ -398,7 +398,7 @@ class UserApi extends ApiAction
 
 
             $openId = $ret['openid'];
-            $user = User::findOne(['wx_openid' => $openId, 'is_delete' => Common::STATUS_NORMAL]);
+            $user = User::findOne(['wx_openid' => $openId]);
             if (empty($user)) {
                 return [
                     'session' => $ret,
@@ -441,7 +441,7 @@ class UserApi extends ApiAction
             $mobile = Yii::$app->wechat->getMobile($code);
             $user = null;
             if (!empty($mobile)) {
-                $user = User::findOne(['mobile' => $mobile, 'is_delete' => Common::STATUS_NORMAL]);
+                $user = User::findOne(['mobile' => $mobile]);
 
                 // 判断用户状态（是不是在白名单里，也就是状态是"被邀请"）
                 if (!empty($user)
