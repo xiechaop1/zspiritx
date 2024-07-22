@@ -161,6 +161,7 @@ class Wechat extends Component
 
         try {
             $ret = $this->_getApi($uri);
+            Yii::info('getSession: ' . json_encode($ret, JSON_UNESCAPED_UNICODE));
         } catch (\Exception $e) {
             throw new \Exception('获取Session失败：' . $e->getMessage(), $e->getCode());
         }

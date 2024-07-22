@@ -420,10 +420,12 @@ class UserApi extends ApiAction
         }
     }
 
-    public function getMobile() {
-        $code = $this->_get['code'];
-        $openId = $this->_get['open_id'];
-        $unionId = !empty($this->_get['union_id']) ? $this->_get['union_id'] : '';
+    public function getMobile($code = '') {
+        if (empty($code)) {
+            $code = $this->_get['code'];
+            $openId = $this->_get['open_id'];
+            $unionId = !empty($this->_get['union_id']) ? $this->_get['union_id'] : '';
+        }
         try {
             $mobile = Yii::$app->wechat->getMobile($code);
             $user = null;
