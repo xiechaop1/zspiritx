@@ -161,6 +161,7 @@ $this->title = '错题本';
 </audio>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="begin_ts" value="<?= time() ?>">
+<input type="hidden" name="subj_idx" id="subj_idx" value="0">
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
         <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -215,20 +216,23 @@ $this->title = '错题本';
                     <span>17</span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
-                    <div class="match-info" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
+                    <div class="match-info sugg_btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
+                    </div>
+                    <div class="match-info" id="prev" style="margin: 10px auto;">
+                        上一题
+                    </div>
+                    <div class="match-info" id="next" style="margin: 10px auto;">
+                        下一题
                     </div>
                 </div>
 
                 <div class="match-clock-bottom">
                     <div class="match-clock-bottom-left">
-                        答题进度
+                        进度
 
-                        <span class="text-1" id="subjct">0</span>
-                            /<span class="text-2" > - </span>
-                        &nbsp; 难度
-                        <span class="text-2" ><?= $level ?></span>
+                        <span class="text-1" id="subjct">0</span> / <span class="text-2" ><?= $ct ?></span>
                     </div>
 
 
@@ -405,7 +409,7 @@ $this->title = '错题本';
 
 <script>
     var obj;
-    var max = 0;
+    var max = <?= $ct ?>;
     var myPropObj;
     var rivalTimerObj;
     var rivalTimerRunning;
@@ -442,7 +446,7 @@ $this->title = '错题本';
             // startRivalTimer($('#match_type').val());
         });
 
-        $('.match-info').click(function() {
+        $('.sugg_btn').click(function() {
             // $('#message-box').modal('show');
             // $('#message-box').modal('show');
 
@@ -456,6 +460,26 @@ $this->title = '错题本';
             }, 500);
              $("#message-box").modal('show');
 
+        });
+
+        $('#prev').click(function() {
+            var idx = $('#subj_idx').val();
+            console.log(idx);
+            idx = parseInt(idx);
+            if (idx > 0) {
+                idx--;
+                showSubject(idx);
+            }
+        });
+
+        $('#next').click(function() {
+            var idx = $('#subj_idx').val();
+            console.log(idx);
+            idx = parseInt(idx);
+            if (idx < max - 1) {
+                idx++;
+                showSubject(idx);
+            }
         });
 
     };
@@ -500,7 +524,7 @@ $this->title = '错题本';
                     var suggestion = obj.data.suggestion;
                     var size = obj.data.size;
                     $('#message-content').html(suggestion);
-                    if (css != undefined) {
+                    if (size != undefined) {
                         $('#message-content').css('font-size', size);
                     }
                     $('#message-topic').val(topic);
@@ -516,6 +540,7 @@ $this->title = '错题本';
     }
 
     function showSubject(idx) {
+        $('#subjct').html(idx+1);
         console.log(obj[idx]);
         var qa = obj[idx].qa;
         var user_qa = obj[idx].user_qa;

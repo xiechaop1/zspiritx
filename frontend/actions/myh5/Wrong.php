@@ -76,6 +76,12 @@ class Wrong extends Action
             ->limit($limit)
             ->all();
 
+        $allCt = UserQa::find()
+            ->where([
+                'o_user_qa.user_id'   => $userId,
+                'is_right'  => UserQa::ANSWER_WRONG,
+            ])->count();
+
         if (!empty($userQa)) {
             foreach ($userQa as &$uqa) {
                 $qa = $uqa->qa;
@@ -131,8 +137,9 @@ class Wrong extends Action
             'qa'            => $qa,
             'rtnAnswerType' => 2,
             'subjectsJson' => json_encode($subjects, JSON_UNESCAPED_UNICODE),
-            'ct'            => sizeof($subjects),
+            'ct'            => $allCt,
             'user' => $user,
+
         ]);
     }
 
