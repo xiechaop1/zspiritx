@@ -285,7 +285,7 @@ class WechatPay extends Component
 //        var_dump($this->getCertificates($channel));exit;
 
         $storyTitle = !empty($story->title) ? $story->title : '未知故事';
-        $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method);
+        $outTradeNo = !empty($order->order_no) ? $order->order_no : \common\helpers\Order::generateOutTradeNo($userInfo, $story->id, $order->pay_method, 'ZJ');
         $outTradeNo = substr($outTradeNo, 0, 32);
         $amount = !empty($order->amount) ? $order->amount : 0;
 
@@ -293,6 +293,21 @@ class WechatPay extends Component
         $merchantId = $mch['merchantId'];
         $merchantSerialNumber = $mch['merchantSerialNumber'];
         $prefix = $mch['prefix'];
+
+        if (empty($desc)) {
+            switch ($order->item_type) {
+                case \common\models\Order::ITEM_TYPE_STORY:
+                    $desc = '购买故事：' . $storyTitle;
+                    break;
+                case \common\models\Order::ITEM_TYPE_PACKAGE:
+                    $desc = '购买题包：' . $order->shopWare->ware_name;
+                    break;
+                default:
+                    $desc = '购买商品';
+                    break;
+
+            }
+        }
 
         $params = [
             // JSON请求体
@@ -304,7 +319,7 @@ class WechatPay extends Component
                     "currency" => "CNY",
                 ],
                 "mchid" => $merchantId,
-                "description" => $storyTitle,
+                "description" => $desc,
                 "notify_url" => "https://www.zspiritx.com.cn/wechatpay/notify",
                 "payer" => [
                     "openid" => $openId,
