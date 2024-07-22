@@ -38,6 +38,7 @@ use common\models\StoryRank;
 use common\models\StoryRole;
 use common\models\StoryStages;
 use common\models\User;
+use common\models\UserExtends;
 use common\models\UserKnowledge;
 use common\models\UserModelLoc;
 use common\models\UserModelsUsed;
@@ -108,10 +109,40 @@ class ParentApi extends ApiAction
             ])
             ->one();
 
-        $ret = [
-            'user' => $user,
-            'user_score' => $userScore,
+        $userExtends = UserExtends::find()
+            ->where([
+                'user_id' => $userId,
+            ])
+            ->one();
+
+//        if (!empty($user)) {
+            $userInfo['username'] = !empty($user->user_name) ? $user->user_name : $user->mobile;
+            $userInfo['avatar'] = !empty($user->avatar) ? Attachment::completeUrl($user->avatar, true) : ' - ';
+            $userInfo['nickname'] = !empty($user->nick_name) ? $user->nick_name : '';
+            $userInfo['mobile'] = !empty($user->mobile) ? $user->mobile : ' - ';
+            $userInfo['last_login_time'] = Date('Y-m-d H:i', $user->last_login_time);
+//        }
+        $userInfo['score'] = !empty($userScore->score) ? $userScore->score : 0;
+
+        $userInfo['level'] = !empty($userExtends->level) ? $userExtends->level : 0;
+        $userInfo['grade'] = !empty($userExtends->grade) ? $userExtends->grade : 0;
+        $userInfo['grade_name'] = !empty(UserExtends::$userGrade2Name[$userInfo['grade']]) ? UserExtends::$userGrade2Name[$userInfo['grade']] : '';
+
+        $data = [
+            '总做题数'     => rand(1000,2000),
+            '今日做题总数'     => rand(10,20),
+            '正确数'     => rand(1,10),
+            '错误数'     => rand(1,10),
+            '正确率'       => rand(50,100) . '%',
+            '总耗时(小时)' => rand(1,3),
+            '平均每道题时长(秒)'  => rand(8,20),
         ];
+
+        $ret = [
+            'user' => $userInfo,
+            'data' => $data,
+        ];
+
         return $ret;
     }
 
