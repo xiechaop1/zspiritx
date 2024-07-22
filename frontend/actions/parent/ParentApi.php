@@ -129,13 +129,34 @@ class ParentApi extends ApiAction
         $userInfo['grade_name'] = !empty(UserExtends::$userGrade2Name[$userInfo['grade']]) ? UserExtends::$userGrade2Name[$userInfo['grade']] : '';
 
         $data = [
-            '总做题数'     => rand(1000,2000),
-            '今日做题总数'     => rand(10,20),
-            '正确数'     => rand(1,10),
-            '错误数'     => rand(1,10),
-            '正确率'       => rand(50,100) . '%',
-            '总耗时(小时)' => rand(1,3),
-            '平均每道题时长(秒)'  => rand(8,20),
+            [
+                'title' => '总做题数',
+                'content' => rand(1000,2000),
+            ],
+            [
+                'title' => '今日做题总数',
+                'content' => rand(10,20),
+            ],
+            [
+                'title' => '正确数',
+                'content' => rand(1,10),
+            ],
+            [
+                'title' => '错误数',
+                'content' => rand(1,10),
+            ],
+            [
+                'title' => '正确率',
+                'content' => rand(50,100) . '%',
+            ],
+            [
+                'title' => '总耗时(小时)',
+                'content'=> rand(1,3),
+            ],
+            [
+                'title' => '平均每道题时长(秒)',
+                'content' => rand(8,20),
+            ],
         ];
 
         $ret = [
