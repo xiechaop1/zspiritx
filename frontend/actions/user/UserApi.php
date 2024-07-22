@@ -354,7 +354,7 @@ class UserApi extends ApiAction
             if (empty($user)) {
 
                 // 获取手机号
-                $mobile = $this->getMobile($code);
+                $mobile = $this->getMobile($code, $openId, $unionId);
 
                 $user = User::findOne(['mobile' => $mobile]);
 
@@ -420,7 +420,7 @@ class UserApi extends ApiAction
         }
     }
 
-    public function getMobile($code = '') {
+    public function getMobile($code = '', $openId = '', $unionId = '') {
         if (empty($code)) {
             $code = $this->_get['code'];
             $openId = $this->_get['open_id'];
