@@ -356,7 +356,7 @@ class UserApi extends ApiAction
                 $user['wx_token'] = $tokenRet['token'];
                 $user['wx_token_expire_time'] = $tokenRet['expire_time'];
 
-                Yii::$app->oplog->write(\common\models\Log::OP_CODE_LOGIN, 1, $user['id'], 0, '用户登录');
+//                Yii::$app->oplog->write(\common\models\Log::OP_CODE_LOGIN, 1, $user['id'], 0, '用户登录');
             }
             $ret['user'] = $user;
 

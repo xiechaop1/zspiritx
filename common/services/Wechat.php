@@ -9,6 +9,7 @@
 namespace common\services;
 
 
+use common\helpers\Client;
 use common\services\Curl;
 use common\models\User;
 use yii\base\Component;
@@ -63,15 +64,28 @@ class Wechat extends Component
                 $user = User::findOne(['mobile' => $mobile]);
 
                 // 判断用户状态（是不是在白名单里，也就是状态是"被邀请"）
-                if (empty($user)
-                    || $user->user_status == User::USER_STATUS_FORBIDDEN
+                if (!empty($user)
+                    && $user->user_status == User::USER_STATUS_FORBIDDEN
                 ) {
                     throw new \Exception('用户不存在或已被禁用', -1001);
-                } else {
+                } else if (!empty($user)) {
                     $user->wx_openid = $openId;
                     $user->wx_unionid = $ret['unionid'];
                     $user->user_status = User::USER_STATUS_NORMAL;
 
+                } else if (empty($user)) {
+                    $user = new User();
+                    $user->wx_openid = $openId;
+                    $user->wx_unionid = $ret['unionid'];
+                    $user->mobile = $mobile;
+                    $user->user_name = '玩家' . substr($mobile, strlen($mobile) - 4, 4) . rand(1000,9999);
+                    $user->user_pass = Yii::$app->security->generatePasswordHash($mobile);
+                    $user->user_status = User::USER_STATUS_NORMAL;
+                    $user->last_login_time = time();
+                    $user->last_login_device = Client::getAgent();
+                    $user->user_type = User::USER_TYPE_NORMAL;
+                    $user->save();
+                    $user->id = Yii::$app->db->getLastInsertID();
                 }
 
                 // 创建新用户
