@@ -181,6 +181,7 @@ class Doubao extends Component
 
         $response = $this->_call('/v3/chat/completions', $data, 'POST');
         Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+        file_put_contents('/tmp/doubao.tmp', json_encode($response, JSON_UNESCAPED_UNICODE));
 //        var_dump($response);
 //        exit;
 

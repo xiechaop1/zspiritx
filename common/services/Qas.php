@@ -133,6 +133,7 @@ class Qas extends Component
 
     public function getSubjectWithQa($qaModel, $matchClass = 0, $level = 1, $ct = 1, $extends = []) {
         $ret = [];
+
         switch ($qaModel->qa_type) {
             case Qa::QA_TYPE_CHATGPT:
             default:
@@ -162,6 +163,12 @@ class Qas extends Component
                                 $tmpSubj['level'] = $level;
 
                                 $ret[] = $tmpSubj;
+
+                                if (empty($extends)) {
+                                    $this->saveQaByDoubao($tmpSubj, $qaModel->id);
+                                } else {
+                                    $this->saveQaByDoubao($tmpSubj, 0);
+                                }
                             }
                         }
 
@@ -173,6 +180,124 @@ class Qas extends Component
         }
 
         return $ret;
+    }
+
+    public function generateTotalSubjects($level = 1, $matchClass = 0, $ct = 20, $userId = 0){
+        $ret = [];
+        $maxWareLimit = 2;      // 暂时就支持2个商品同时运行
+        $userWare = UserWare::find()
+            ->where([
+                'user_id' => $userId,
+                'status' => UserWare::USER_WARE_STATUS_NORMAL,
+            ])
+            ->andFilterWhere([
+                '>', 'expire_time', time(),
+            ])
+            ->orderBy(['updated_at' => SORT_DESC])
+            ->limit($maxWareLimit)
+            ->all();
+
+        if (!empty($userWare) && 1 != 1) {
+            foreach ($userWare as $ware) {
+                switch ($ware->link_type) {
+                    case ShopWares::LINK_TYPE_QA_PACKAGE:
+                    default:
+                        $packageClass = [];
+                        if (!empty($matchClass)) {
+                            $packageClass = StoryMatch::$matchClass2PackageClass[$matchClass];
+                        }
+                        $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
+
+                        $ret = $this->generateSubjectsWithQaCollection($qaCollections, $level, $matchClass, $ct, $userId);
+                        break;
+                }
+//                $ret[] = $this->getSubjectWithWare($ware, $matchClass, $level, $ct);
+            }
+        }
+        $totalCt = count($ret);
+
+        if ($totalCt < $ct) {
+            $restCt = $ct - $totalCt;
+            $ret = array_merge($ret, $this->generateSubjectWithDoubao($level, $matchClass, $restCt));
+        }
+
+        return $ret;
+    }
+
+    public function generateSubjectsWithQaCollection($qaCollections, $level = 1, $matchClass = 0, $ct = 10, $userId = 0) {
+        if (!empty($qaCollections)) {
+            foreach ($qaCollections as $qaPackageId => $qaCollection) {
+                foreach ($qaCollection as $qaModel) {
+                    $extends = [];
+                    $genSub = true;
+                    if (!empty($qaModel->prop)) {
+                        // Todo: 准备读取qaProp，判断题目模式，引入相似题（增加例题字段）
+                        $qaProp = json_decode($qaModel->prop, true);
+//                                        if (!empty($qaProp['example_qa_ids'])) {$ct = $qaProp['ct'];
+//                                        }
+                        if (!empty($qaProp['user_qa'])) {
+                            $userQaTmp = UserQa::find()
+                                ->where([
+                                    'user_id' => $userId,
+                                    'is_right' => UserQa::ANSWER_WRONG,
+                                ])
+                                ->andFilterWhere([
+                                    '>', 'updated_at', time() - 3600 * 24 * 3,
+                                ])
+                                ->orderBy(['updated_at' => SORT_DESC])
+                                ->limit(20)
+                                ->all();
+
+                            $qaIds = [];
+
+                            if (!empty($userQaTmp)) {
+                                foreach ($userQaTmp as $uq) {
+                                    $qaIds[] = $uq->qa_id;
+                                }
+
+                                $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : 0;
+                                $qaTmp = Qa::find()
+                                    ->where([
+                                        'id' => $qaIds,
+                                        'qa_class' => $qaClass
+                                    ])
+                                    ->orderBy(['updated_at' => SORT_DESC])
+                                    ->limit(5)
+                                    ->all();
+
+                                $exampleTopics = [];
+                                if (!empty($qaTmp)) {
+                                    foreach ($qaTmp as $q) {
+                                        $exampleTopics[] = [
+                                            'topic' => $q->topic
+                                        ];
+                                    }
+                                    $extends['exampleTopics'] = $exampleTopics;
+                                } else {
+                                    $genSub = false;
+                                }
+                            } else {
+                                $genSub = false;
+                            }
+                        }
+                    } else {
+                        $qaProp = [];
+                    }
+                    if ($genSub) {
+                        $tmp = $this->getSubjectWithQa($qaModel, $matchClass, $level, $ct, $extends);
+
+                        if (!empty($tmp)) {
+                            foreach ($tmp as $t) {
+                                $ret[] = $t;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $ret;
+
     }
 
     public function generateSubjectWithDoubao($level, $matchClass, $ct, $prompt = '', $extends = []) {
@@ -207,20 +332,77 @@ class Qas extends Component
 
             }
         }
-        
+
         $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct, $extends);
+
+        $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : 0;
 
         $ret = [];
         if (!empty($subjects)) {
-            foreach ($subjects as $subj) {
+            if (key($subjects) == '0') {
+                foreach ($subjects as $subj) {
+                    $tmpSubj = \common\helpers\Qa::formatSubjectFromGPT($subj);
+                    $tmpSubj = \common\helpers\Qa::generateChallengePropByLevel($level, $tmpSubj, $qaClass);
+                    $tmpSubj = \common\helpers\Qa::formatChallengeProp($tmpSubj);
+                    $ret[] = $tmpSubj;
+
+                    $this->saveQaByDoubao($tmpSubj, 0);
+                }
+            } else {
+                $subj = $subjects;
                 $tmpSubj = \common\helpers\Qa::formatSubjectFromGPT($subj);
-                $tmpSubj = \common\helpers\Qa::generateChallengePropByLevel($level, $tmpSubj);
+                $tmpSubj = \common\helpers\Qa::generateChallengePropByLevel($level, $tmpSubj, $qaClass);
                 $tmpSubj = \common\helpers\Qa::formatChallengeProp($tmpSubj);
                 $ret[] = $tmpSubj;
+
+                $this->saveQaByDoubao($tmpSubj, 0);
             }
         }
 
         return $ret;
+    }
+
+    public function saveQaByDoubao($doubaoSubject, $linkQaId = 0) {
+        $topic = !empty($doubaoSubject['formula']) ? $doubaoSubject['formula'] : '';
+        $level = !empty($doubaoSubject['level']) ? $doubaoSubject['level'] : 1;
+        $qaClass = !empty($doubaoSubject['qa_class']) ? $doubaoSubject['qa_class'] : 0;
+
+        $qa = Qa::find()
+            ->where([
+                'topic' => $topic,
+                'level' => $level,
+            ]);
+        if (!empty($qaClass)) {
+            $qa = $qa->andFilterWhere([
+                'qa_class' => $qaClass,
+            ]);
+        }
+        if (!empty($linkQaId)) {
+            $qa = $qa->andFilterWhere([
+                'link_qa_id' => $linkQaId,
+            ]);
+        }
+        $qa = $qa->one();
+
+        if (empty($qa)) {
+            $qa = new Qa();
+            $qa->topic = $topic;
+            $qa->qa_class = $qaClass;
+            $qa->link_qa_id = $linkQaId;
+            $qa->level = $level;
+        }
+
+
+        $qa->qa_type = Qa::QA_TYPE_SINGLE;
+        $qa->qa_mode = Qa::QA_MODE_MATCH;
+        $qa->story_id = 5;          // 写死
+        $qa->selected = !empty($doubaoSubject['selected']) ? $doubaoSubject['selected'] : '';
+        $qa->st_answer = !empty($doubaoSubject['st_answer']) ? $doubaoSubject['st_answer'] : '';
+        $qa->st_selected = !empty($doubaoSubject['st_answer']) ? $doubaoSubject['st_answer'] : '';
+        $qa->score = !empty($doubaoSubject['gold']) ? $doubaoSubject['gold'] : 0;
+
+        $qa->prop = '';
+        $qa->save();
     }
 
     public function getQaByPackageIds($qaPackageIds, $packageClass = []) {
@@ -237,6 +419,7 @@ class Qas extends Component
             ]);
         }
         $qaPackages = $qaPackages->all();
+        
 
         $qaCollections = [];
         if (!empty($qaPackages)) {
@@ -529,13 +712,13 @@ class Qas extends Component
         return $subjects;
     }
 
-    public function generateMath($level, $ct = 100) {
+    public function generateMath($level, $ct = 100, $gold = 0) {
         $subjects = [];
         if ($level <= 3) {
             for ($i = 0; $i < $ct; $i++) {
                 // Todo: 测试用
 //            if ($level > 3) $level = 1;
-                $subjects[] = $this->generateMath($level);
+                $subjects[] = $this->generateOneMath($level, $gold);
                 if ($i == 12) {
                     $level++;
 //                        $subjects[] = $this->generateMath($level);
@@ -544,10 +727,59 @@ class Qas extends Component
         } else {
             // Todo：临时强制保护
             $ct = 20;
-            $subjects = $this->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct);
+//            $subjects = $this->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct);
+            $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_MATH);
+            if (count($subjects) < 10
+             && 1 != 1
+            ) {
+                $gptSubjects = $this->generateMathWithDoubao($level, 10 - count($subjects));
+                foreach ($gptSubjects as $gptSub) {
+                    $subjects[] = $gptSub;
+                }
+            }
         }
         return $subjects;
     }
+
+    public function generateSubjectWithQa($level = 0, $ct = 100, $qaClass = 0, $linkQaId = 0) {
+        $qa = Qa::find();
+        if (!empty($qaClass)) {
+            $qa = $qa->andFilterWhere([
+                'qa_class' => $qaClass,
+            ]);
+        }
+//        if (!empty($linkQaId)) {
+            $qa = $qa->andFilterWhere([
+                'link_qa_id' => $linkQaId,
+            ]);
+//        }
+        if (!empty($level)) {
+            $qa = $qa->andFilterWhere([
+                'level' => $level,
+            ]);
+        }
+        $qa = $qa->orderBy('rand()')
+            ->limit($ct)
+            ->all();
+
+
+        $ret = [];
+        if (!empty($qa)) {
+            foreach ($qa as $q) {
+                $tmp = \common\helpers\Qa::formatSubjectFromQa($q);
+
+                $ret[] = $tmp;
+
+            }
+        }
+
+        return $ret;
+    }
+
+    public function generateMathWithDoubao($level, $ct = 100) {
+        return $this->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct);
+    }
+
     public function generateOneMath($level = 1, $gold = 0) {
         $subjects = [];
         switch ($level) {

@@ -1039,6 +1039,7 @@ $this->title = $storyMatch->match_name;
         //     });
         // }
 
+
         startRivalTimer(match_type);
 
         showSubject(0);
@@ -1064,9 +1065,67 @@ $this->title = $storyMatch->match_name;
             stopRivalTimer();
 
         });
+        generateSubjects();
 
     };
 
+    function generateSubjects() {
+        var topic = $('#topic').html();
+        var level = $('input[name=level]').val();
+        var match_class = $('input[name=match_class]').val();
+        var user_id = $('input[name=user_id]').val();
+        var story_id = $('input[name=story_id]').val();
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_subjects',
+            data:{
+                story_id:story_id,
+                user_id:user_id,
+                // topic:topic,
+                level:level,
+                match_class:match_class,
+                ct:5,
+            },
+            onload: function (data) {
+                // $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+                //新消息获取成功
+                var subjidx = $('#subj_idx').val();
+                console.log(subjidx);
+                if(ajaxObj["code"]==200){
+                    var tmpObj = [];
+                    for (var i = 0; i <= subjidx; i++) {
+                        tmpObj.push(obj[i]);
+                    }
+                    for (var i = 0; i < ajaxObj.data.length; i++) {
+                        tmpObj.push(ajaxObj.data[i]);
+                    }
+                    for (var i = subjidx + 1; i < obj.length; i++) {
+                        tmpObj.push(obj[i]);
+                    }
+                    obj = tmpObj;
+                    console.log(obj);
+                }
+                //新消息获取失败
+                else{
+                    $.alert(ajaxObj.msg)
+                }
+
+            }
+        });
+    }
     
     function stopRivalTimer() {
         if (!rivalTimerRunning) {
@@ -1197,20 +1256,20 @@ $this->title = $storyMatch->match_name;
             success: function (data, status){
                 var dataContent=data;
                 var dataCon=$.toJSON(dataContent);
-                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //console.log("ajax请求成功:"+data.toString())
 
                 //新消息获取成功
-                if(obj["code"]==200){
-                    console.log(obj);
-                    var suggestion = obj.data.suggestion;
+                if(ajaxObj["code"]==200){
+                    console.log(ajaxObj);
+                    var suggestion = ajaxObj.data.suggestion;
                     $('#message-content').html(suggestion);
                     $('#message-topic').val(topic);
                     // $('#message-box').modal('show');
                 }
                 //新消息获取失败
                 else{
-                    $.alert(obj.msg)
+                    $.alert(ajaxObj.msg)
                 }
 
             }
@@ -1341,6 +1400,7 @@ $this->title = $storyMatch->match_name;
                     }
                 }
 
+                recordQa(obj[idx], chosen);
                 showSubject(idx+1);
                 $('input[name=answer_c]').attr('disabled', false);
             },500);
@@ -1409,18 +1469,18 @@ $this->title = $storyMatch->match_name;
             success: function (data, status){
                 var dataContent=data;
                 var dataCon=$.toJSON(dataContent);
-                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //console.log("ajax请求成功:"+data.toString())
 
 
                 //新消息获取成功
-                if(obj["code"]==200){
+                if(ajaxObj["code"]==200){
 
                 }
                 //新消息获取失败
                 else{
                     // $.alert(obj.msg)
-                    console.log(obj.msg);
+                    console.log(ajaxObj.msg);
                 }
 
             }
@@ -1675,7 +1735,7 @@ $this->title = $storyMatch->match_name;
             success: function (data, status){
                 var dataContent=data;
                 var dataCon=$.toJSON(dataContent);
-                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //console.log("ajax请求成功:"+data.toString())
 
                 //audio 素材
@@ -1683,17 +1743,17 @@ $this->title = $storyMatch->match_name;
                 var audio_wrong=$("#audio_wrong")[0];
 
                 //新消息获取成功
-                if(obj["code"]==200){
+                if(ajaxObj["code"]==200){
 
                     if(answer == 1){
                         $("#answer-box").hide();
                         $("#answer-right-box").modal('show');
                         audio_right.play();
 
-                        if (obj.data.score.score != undefined) {
-                            var score_text = "+" + obj.data.score.score + "枚";
-                            if (obj.data.score.addition > 0) {
-                                score_text = score_text + "（奖：" + obj.data.score.addition + "枚）";
+                        if (ajaxObj.data.score.score != undefined) {
+                            var score_text = "+" + ajaxObj.data.score.score + "枚";
+                            if (ajaxObj.data.score.addition > 0) {
+                                score_text = score_text + "（奖：" + ajaxObj.data.score.addition + "枚）";
                             }
                             $("#gold_score").html(score_text);
                         }
@@ -1731,7 +1791,7 @@ $this->title = $storyMatch->match_name;
                 }
                 //新消息获取失败
                 else{
-                    $.alert(obj.msg)
+                    $.alert(ajaxObj.msg)
                 }
 
             }

@@ -186,7 +186,7 @@ class QaApi extends ApiAction
 
                 $selected = !empty($this->_get['selected']) ? $this->_get['selected'] : '';
                 // 如果没有指定TYPE，默认按照GPT TYPE
-                $qaType = !empty($this->_get['qa_type']) ? $this->_get['qa_type'] : Qa::QA_TYPE_GPT_SUBJECT;
+                $qaType = !empty($this->_get['qa_type']) ? $this->_get['qa_type'] : Qa::QA_TYPE_SINGLE;
 //                $qaClass = !empty($this->_get['qa_class']) ? $this->_get['qa_class'] : Qa::QA_CLASS_MATH;
                 $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : StoryMatch::MATCH_CLASS_MATH;
                 // 默认10金币

@@ -80,6 +80,8 @@ class KnockoutPrepare extends Action
             ->where(['user_id' => $userId])
             ->one();
 
+        $userLevel = !empty($userExtends->level) ? $userExtends->level : 1;
+
         if (empty($matchId) && empty($matchName)) {
             $matchName = date('Y-m-d H:i:s') . ' ' . $userInfo->user_name . '发起淘汰赛';
         }
@@ -192,16 +194,17 @@ class KnockoutPrepare extends Action
 
                 // 出题
                 $subjects = [];
+                $maxLevel = $userLevel + 4 > 20 ? 20 : $userLevel + 4;
                 switch ($matchClass) {
                     case StoryMatch::MATCH_CLASS_MATH:
                         $ct = 2;
-                        for ($level = 1; $level <= 4; $level++) {
+                        for ($level = $userLevel; $level <= $maxLevel; $level++) {
                             $subjects = array_merge($subjects, $this->generateMathWithCt($ct, $level, $gold));
                         }
                         break;
                     case StoryMatch::MATCH_CLASS_ENGLISH:
                         $ct = 2;
-                        for ($level = 1; $level <= 4; $level++) {
+                        for ($level = $userLevel; $maxLevel; $level++) {
                             $subjects = array_merge($subjects, $this->generateEnglishWithCt($ct, $level));
                         }
                         break;
@@ -274,13 +277,22 @@ class KnockoutPrepare extends Action
 
     public function  generateMathWithCt($ct, $level = 1, $gold = 0) {
         $subjects = [];
-        for ($i=0; $i<$ct; $i++) {
+//        $subjs = Yii::$app->qas->generateMath($level, $ct, $gold);
+        $subjs = Yii::$app->doubao->generateSubject('奥数竞赛题目或者是竞赛题目，复杂度要高一些', $level, StoryMatch::MATCH_CLASS_MATH, $ct, []);
+        foreach ($subjs as $subj) {
             $subjects[] = [
                 'level' => $level,
-                'topic' => Yii::$app->qas->generateMath($level, $gold),
+                'topic' => $subj,
                 'max_time' => 180,
             ];
         }
+//        for ($i=0; $i<$ct; $i++) {
+//            $subjects[] = [
+//                'level' => $level,
+//                'topic' => Yii::$app->qas->generateMath($level, $ct, $gold),
+//                'max_time' => 180,
+//            ];
+//        }
         return $subjects;
     }
 

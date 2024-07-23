@@ -68,16 +68,28 @@ class MatchApi extends ApiAction
                 case 'get_suggestion_from_subject':
                     $ret = $this->getSuggestionFromSubject();
                     break;
+                case 'get_subjects':
+                    $ret = $this->getSubjects();
+                    break;
                 default:
                     $ret = [];
                     break;
 
             }
         } catch (\Exception $e) {
+            var_dump($e);exit;
             return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 
         return $this->success($ret);
+    }
+
+    public function getSubjects() {
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
+        $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
+        $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        return Yii::$app->qas->generateTotalSubjects($level, $matchClass, $ct, $userId);
     }
 
     public function getSuggestionFromSubject() {

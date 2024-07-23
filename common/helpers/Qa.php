@@ -77,6 +77,46 @@ class Qa
         return $ret;
     }
 
+    public static function formatSubjectFromQa($qa) {
+        if (is_object($qa)) {
+            $qa = $qa->toArray();
+        }
+        $answerIdx = $qa['st_answer'];
+        if (!empty($qa['selected'])) {
+            $qa['selected_json'] = json_decode($qa['selected'], true);
+        }
+        if (in_array($answerIdx, ['A', 'B', 'C', 'D'])) {
+            $answer = !empty($qa['selected_json'][$answerIdx]) ? $qa['selected_json'][$answerIdx] : $answer;
+        } else {
+            $answer = $answerIdx;
+        }
+
+        $options = $qa['selected_json'];
+
+        if (mb_strlen($qa['topic']) > 10) {
+            $size = 40;
+        } else {
+            $size = 60;
+        }
+
+        $ret = [
+            'formula' => $qa['topic'],
+            'topic' => $qa['topic'],
+            'standFormula' => $qa['topic'],
+            'subject_type' => $qa['qa_type'],
+            'answerRange' => $options,
+            'selected_json' => $qa['selected_json'],
+            'selected' => $qa['selected'],
+            'answer' => $answer,
+            'st_answer' => $answer,
+            'size'  => $size,
+            'qa_type' => $qa['qa_type'],
+
+        ];
+
+        return $ret;
+    }
+
     public static function formatSubjectFromGPT($gpt) {
 //        $ret = [];
 
@@ -114,7 +154,7 @@ class Qa
         return $ret;
     }
 
-    public static function generateChallengePropByLevel($level, $prop) {
+    public static function generateChallengePropByLevel($level, $prop, $qaClass = 0) {
         $hitRange = [
             5 * (1 + ($level - 1) / 5),
             10 * (1 + ($level - 1) / 5),
@@ -124,6 +164,7 @@ class Qa
         $prop['level'] = $level;
         $prop['hitRange'] = $hitRange;
         $prop['gold'] = $gold;
+        $prop['qa_class'] = $qaClass;
 
         return $prop;
     }

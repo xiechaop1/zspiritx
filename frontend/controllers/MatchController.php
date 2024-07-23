@@ -41,6 +41,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_suggestion_from_subject',
             ],
+            'get_subjects' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_subjects',
+            ],
 
         ];
     }

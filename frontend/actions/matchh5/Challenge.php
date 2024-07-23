@@ -193,6 +193,7 @@ class Challenge extends Action
             $level = !empty(UserExtends::$userGradeLevelMap[$grade]) ? UserExtends::$userGradeLevelMap[$grade] : 1;
         }
 
+        $subjects = [];
 //        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
 
         switch ($storyMatch->match_class) {
@@ -230,7 +231,12 @@ class Challenge extends Action
 //                    }
 //                }
 
-                $subjects = Yii::$app->qas->generateMath($level, 1000);
+                $subjectsTmp = Yii::$app->qas->generateMath($level, 1000);
+                if (!empty($subjectsTmp)) {
+                    foreach ($subjectsTmp as $t) {
+                        $subjects[] = $t;
+                    }
+                }
                 break;
             case StoryMatch::MATCH_CLASS_POEM:
                 // 生成1000道诗词题
