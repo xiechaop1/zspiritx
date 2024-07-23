@@ -30,7 +30,9 @@ class Myh5Controller extends Controller
             'wrong' => [
                 'class' => 'frontend\actions\myh5\Wrong',
             ],
-
+            'orders' => [
+                'class' => 'frontend\actions\myh5\Orders',
+            ],
         ];
     }
 }
