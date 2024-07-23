@@ -53,7 +53,7 @@ $this->title = '我的订单';
                     case \common\models\Order::ITEM_TYPE_PACKAGE:
                         $itemName = !empty($order->shopWare->ware_name) ? $order->shopWare->ware_name : '';
                         $coverImage = !empty($order->shopWare->icon) ? \common\helpers\Attachment::completeUrl($order->shopWare->icon, true) : '';
-                        $itemDesc = !empty($order->shopWare->desc) ? mb_substr($order->shopWare->desc, 30) : '';
+                        $itemDesc = !empty($order->shopWare->intro) ? mb_substr($order->shopWare->intro, 30) : '';
                         break;
                     case \common\models\Order::ITEM_TYPE_STORY:
                     default:
