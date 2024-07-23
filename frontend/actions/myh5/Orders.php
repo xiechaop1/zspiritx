@@ -37,7 +37,7 @@ class Orders extends Action
         $itemType = !empty(Yii::$app->request->get('item_type')) ? Yii::$app->request->get('item_type') : Order::ITEM_TYPE_STORY;
 
         $page = !empty(Yii::$app->request->get('page')) ? Yii::$app->request->get('page') : 1;
-        $limit = 10;
+        $limit = 6;
 
         $orders = [];
         try {
