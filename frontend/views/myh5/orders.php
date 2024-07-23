@@ -98,7 +98,24 @@ $this->title = '我的订单';
 
         </div>
       </div>
-
+        <?php
+        if ($page > 1) {
+        ?>
+        <div class="btn-m-green m-t-30  m-l-30 prev">
+            <a href="?user_id=<?= $params['user_id']?>&item_type=<?= $itemType ?>&page=<?= $page - 1?>">上一页</a>
+        </div>
+        <?php
+        }
+        ?>
+        <?php
+        if ($next) {
+        ?>
+        <div class="btn-m-green m-t-30  m-l-30 next">
+            <a href="?user_id=<?= $params['user_id']?>&item_type=<?= $itemType ?>&page=<?= $page + 1?>">下一页</a>
+        </div>
+        <?php
+        }
+        ?>
     </div>
   </div>
 

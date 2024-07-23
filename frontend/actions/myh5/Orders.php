@@ -36,6 +36,9 @@ class Orders extends Action
 
         $itemType = !empty(Yii::$app->request->get('item_type')) ? Yii::$app->request->get('item_type') : Order::ITEM_TYPE_STORY;
 
+        $page = !empty(Yii::$app->request->get('page')) ? Yii::$app->request->get('page') : 1;
+        $limit = 10;
+
         $orders = [];
         try {
 
@@ -45,7 +48,18 @@ class Orders extends Action
                     'item_type' => $itemType,
                 ])
                 ->orderBy('id desc')
+                ->limit($limit + 1)
+                ->offset(($page - 1) * $limit)
                 ->all();
+
+            if (count($orders) > $limit) {
+                $next = true;
+            } else {
+                $next = false;
+            }
+
+            array_pop($orders);
+
 
 //            foreach ($orders as &$order) {
 //                switch ($order->item_type) {
@@ -66,6 +80,10 @@ class Orders extends Action
         return $this->controller->render('orders', [
             'userId'    => $userId,
             'orderList'  => $orders,
+            'itemType'  => $itemType,
+            'page'      => $page,
+            'next'      => $next,
+            'params'    => $_GET,
         ]);
     }
 }
