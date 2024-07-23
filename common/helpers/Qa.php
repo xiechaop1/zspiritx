@@ -111,7 +111,7 @@ class Qa
             'st_answer' => $answer,
             'size'  => $size,
             'qa_type' => $qa['qa_type'],
-
+            'qa_id' => $qa['id'],
         ];
 
         return $ret;

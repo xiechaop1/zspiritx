@@ -195,6 +195,7 @@ class Challenge extends Action
 
         $subjects = [];
 //        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
+        $subjects = Yii::$app->qas->getQaSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
 
         switch ($storyMatch->match_class) {
             case StoryMatch::MATCH_CLASS_MATH:

@@ -77,7 +77,7 @@ class MatchApi extends ApiAction
 
             }
         } catch (\Exception $e) {
-            var_dump($e);exit;
+//            var_dump($e);exit;
             return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 

@@ -130,6 +130,73 @@ class Qas extends Component
         return $ret;
     }
 
+    public function getQaSubjectsWithUserWare($userId, $matchClass = 0, $level = 1, $ct = 10) {
+        $ret = [];
+        $maxWareLimit = 2;      // 暂时就支持2个商品同时运行
+        $userWare = UserWare::find()
+            ->where([
+                'user_id' => $userId,
+                'status' => UserWare::USER_WARE_STATUS_NORMAL,
+            ])
+            ->andFilterWhere([
+                '>', 'expire_time', time(),
+            ])
+            ->orderBy(['updated_at' => SORT_DESC])
+            ->limit($maxWareLimit)
+            ->all();
+
+
+        if (!empty($userWare)) {
+            foreach ($userWare as $ware) {
+                switch ($ware->link_type) {
+                    case ShopWares::LINK_TYPE_QA_PACKAGE:
+                    default:
+                        $linkQaIds = [];
+                        $packageClass = [];
+                        if (!empty($matchClass)) {
+                            $packageClass = StoryMatch::$matchClass2PackageClass[$matchClass];
+                        }
+                        $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
+
+                        if (!empty($qaCollections)) {
+                            foreach ($qaCollections as $qaPackageId => $qaCollection) {
+                                foreach ($qaCollection as $qaModel) {
+                                    $extends = [];
+                                    $genSub = true;
+                                    if (!empty($qaModel->prop)) {
+                                        $linkQaIds[] = $qaModel->id;
+                                    }
+                                }
+                            }
+                        }
+//                        var_dump($linkQaIds);exit;
+                        if (!empty($linkQaIds)) {
+                            $qas = Qa::find()
+                                ->where([
+                                    'link_qa_id' => $linkQaIds
+                                ])
+                                ->all();
+//                                ->createCommand()
+//                                ->getRawSql();
+
+                            if (!empty($qas)) {
+                                foreach ($qas as $qa) {
+                                    $tmp = \common\helpers\Qa::formatSubjectFromQa($qa);
+
+                                   $ret[] = $tmp;
+                                }
+
+                            }
+                        }
+                        break;
+                }
+//                $ret[] = $this->getSubjectWithWare($ware, $matchClass, $level, $ct);
+            }
+        }
+
+        return $ret;
+    }
+
 
     public function getSubjectWithQa($qaModel, $matchClass = 0, $level = 1, $ct = 1, $extends = []) {
         $ret = [];
@@ -162,13 +229,15 @@ class Qas extends Component
                                 $tmpSubj['link_qa_id'] = !empty($qaModel->id) ? $qaModel->id : 0;
                                 $tmpSubj['level'] = $level;
 
-                                $ret[] = $tmpSubj;
 
                                 if (empty($extends)) {
-                                    $this->saveQaByDoubao($tmpSubj, $qaModel->id);
+                                    $saveQa = $this->saveQaByDoubao($tmpSubj, $qaModel->id);
                                 } else {
-                                    $this->saveQaByDoubao($tmpSubj, 0);
+                                    $saveQa = $this->saveQaByDoubao($tmpSubj, 0);
                                 }
+                                $tmpSubj['qa_id'] = !empty($saveQa->id) ? $saveQa->id : 0;
+                                $ret[] = $tmpSubj;
+
                             }
                         }
 
@@ -197,7 +266,7 @@ class Qas extends Component
             ->limit($maxWareLimit)
             ->all();
 
-        if (!empty($userWare) && 1 != 1) {
+        if (!empty($userWare)) {
             foreach ($userWare as $ware) {
                 switch ($ware->link_type) {
                     case ShopWares::LINK_TYPE_QA_PACKAGE:
@@ -363,6 +432,7 @@ class Qas extends Component
     }
 
     public function saveQaByDoubao($doubaoSubject, $linkQaId = 0) {
+
         $topic = !empty($doubaoSubject['formula']) ? $doubaoSubject['formula'] : '';
         $level = !empty($doubaoSubject['level']) ? $doubaoSubject['level'] : 1;
         $qaClass = !empty($doubaoSubject['qa_class']) ? $doubaoSubject['qa_class'] : 0;
@@ -370,7 +440,7 @@ class Qas extends Component
         $qa = Qa::find()
             ->where([
                 'topic' => $topic,
-                'level' => $level,
+                'level' => (int)$level,
             ]);
         if (!empty($qaClass)) {
             $qa = $qa->andFilterWhere([
@@ -383,6 +453,8 @@ class Qas extends Component
             ]);
         }
         $qa = $qa->one();
+//        echo $qa->createCommand()->getRawSql();
+//        echo "<br>";
 
         if (empty($qa)) {
             $qa = new Qa();
@@ -390,6 +462,7 @@ class Qas extends Component
             $qa->qa_class = $qaClass;
             $qa->link_qa_id = $linkQaId;
             $qa->level = $level;
+//            var_dump($qa);
         }
 
 
@@ -403,6 +476,8 @@ class Qas extends Component
 
         $qa->prop = '';
         $qa->save();
+
+        return $qa;
     }
 
     public function getQaByPackageIds($qaPackageIds, $packageClass = []) {
