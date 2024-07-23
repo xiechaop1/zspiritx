@@ -58,7 +58,9 @@ class Orders extends Action
                 $next = false;
             }
 
-            array_pop($orders);
+            if ($next) {
+                array_pop($orders);
+            }
 
 
 //            foreach ($orders as &$order) {
