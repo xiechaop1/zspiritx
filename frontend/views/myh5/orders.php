@@ -53,11 +53,13 @@ $this->title = '我的订单';
                     case \common\models\Order::ITEM_TYPE_PACKAGE:
                         $itemName = !empty($order->shopWare->ware_name) ? $order->shopWare->ware_name : '';
                         $coverImage = !empty($order->shopWare->icon) ? \common\helpers\Attachment::completeUrl($order->shopWare->icon, true) : '';
+                        $itemDesc = !empty($order->shopWare->desc) ? mb_substr($order->shopWare->desc, 30) : '';
                         break;
                     case \common\models\Order::ITEM_TYPE_STORY:
                     default:
                         $itemName = !empty($order->story->title) ? $order->story->title : '';
                         $coverImage = !empty($order->story->cover_image) ? \common\helpers\Attachment::completeUrl($order->story->cover_image, true) : '';
+                        $itemDesc = !empty($order->story->desc) ? mb_substr($order->story->desc, 30) : '';
                         break;
                 }
             ?>
@@ -69,7 +71,10 @@ $this->title = '我的订单';
                   </div>
                   <div style="clear: both; margin: 3px;">
                       <div style="float: left; width: 100px; margin: 5px;"><img src="<?= $coverImage ?>" style="width: 100px; height: 100px; float: left; margin-right: 10px;"></div>
-                      <div style="float: left; font-size: 24px; margin: 5px;"><?= $itemName ?></div>
+                      <div style="float: left; font-size: 24px; margin: 5px;">
+                          <div><?= $itemName ?></div>
+                          <div style="color: #6c6c6c"><?= $itemDesc ?></div>
+                      </div>
                   </div>
                     <div style="clear: both; margin: 3px;">
                         <div align="right" style="font-size: 18px; color: #e0c46c;">时间：<?= Date('Y-m-d H:i:s', $order->created_at) ?>&nbsp;
