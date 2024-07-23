@@ -53,13 +53,13 @@ $this->title = '我的订单';
                     case \common\models\Order::ITEM_TYPE_PACKAGE:
                         $itemName = !empty($order->shopWare->ware_name) ? $order->shopWare->ware_name : '';
                         $coverImage = !empty($order->shopWare->icon) ? \common\helpers\Attachment::completeUrl($order->shopWare->icon, true) : '';
-                        $itemDesc = !empty($order->shopWare->intro) ? mb_substr($order->shopWare->intro, 30, 'UTF-8') : '';
+                        $itemDesc = !empty($order->shopWare->intro) ? mb_substr($order->shopWare->intro, 0, 30, 'UTF-8') : '';
                         break;
                     case \common\models\Order::ITEM_TYPE_STORY:
                     default:
                         $itemName = !empty($order->story->title) ? $order->story->title : '';
                         $coverImage = !empty($order->story->cover_image) ? \common\helpers\Attachment::completeUrl($order->story->cover_image, true) : '';
-                        $itemDesc = !empty($order->story->desc) ? mb_substr($order->story->desc, 30, 'UTF-8') : '';
+                        $itemDesc = !empty($order->story->desc) ? mb_substr($order->story->desc, 0, 30, 'UTF-8') : '';
                         break;
                 }
             ?>
