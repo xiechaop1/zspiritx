@@ -31,9 +31,6 @@ $this->title = '我的订单';
     text-decoration: line-through;
     color: yellow;
   }
-  a {
-    font-size: 20px;
-  }
 </style>
 
 
