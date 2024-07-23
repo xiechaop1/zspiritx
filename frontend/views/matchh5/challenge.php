@@ -1065,6 +1065,7 @@ $this->title = $storyMatch->match_name;
             stopRivalTimer();
 
         });
+        console.log(obj);
         generateSubjects();
 
     };
@@ -1104,15 +1105,25 @@ $this->title = $storyMatch->match_name;
                 //新消息获取成功
                 var subjidx = $('#subj_idx').val();
                 console.log(subjidx);
+                console.log(ajaxObj.data);
                 if(ajaxObj["code"]==200){
                     var tmpObj = [];
+                    console.log(subjidx);
                     for (var i = 0; i <= subjidx; i++) {
+                        console.log(i);
+                        console.log(obj[i]);
                         tmpObj.push(obj[i]);
                     }
                     for (var i = 0; i < ajaxObj.data.length; i++) {
+                        console.log(i);
+                        console.log(ajaxObj.data[i]);
                         tmpObj.push(ajaxObj.data[i]);
                     }
-                    for (var i = subjidx + 1; i < obj.length; i++) {
+                    console.log(subjidx);
+                    console.log(obj.length);
+                    for (var i = parseInt(subjidx) + 1; i < obj.length; i++) {
+                        console.log(i);
+                        console.log(obj[i]);
                         tmpObj.push(obj[i]);
                     }
                     obj = tmpObj;
