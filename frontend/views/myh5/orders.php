@@ -49,6 +49,17 @@ $this->title = '我的订单';
 
             <?php
             foreach ($orderList as $order) {
+                switch ($order->item_type) {
+                    case \common\models\Order::ITEM_TYPE_PACKAGE:
+                        $itemName = !empty($order->shopWare->ware_name) ? $order->shopWare->ware_name : '';
+                        $coverImage = !empty($order->shopWare->icon) ? \common\helpers\Attachment::completeUrl($order->shopWare->icon, true) : '';
+                        break;
+                    case \common\models\Order::ITEM_TYPE_STORY:
+                    default:
+                        $itemName = !empty($order->story->title) ? $order->story->title : '';
+                        $coverImage = !empty($order->story->cover_image) ? \common\helpers\Attachment::completeUrl($order->story->cover_image, true) : '';
+                        break;
+                }
             ?>
           <div class="row" id="answer-box">
             <div class="m-t-30 col-sm-12 col-md-12">
@@ -57,8 +68,8 @@ $this->title = '我的订单';
                     <div align="left" style="font-size: 18px; color: #e0c46c;">订单号：<?= $order->order_no ?></div>
                   </div>
                   <div style="clear: both; margin: 3px;">
-                      <div style="float: left; width: 100px; margin: 5px;"><img src="<?= $order->story->cover_image ?>" style="width: 100px; height: 100px; float: left; margin-right: 10px;"></div>
-                      <div style="float: left; font-size: 24px; margin: 5px;"><?= $order->story->title ?></div>
+                      <div style="float: left; width: 100px; margin: 5px;"><img src="<?= $coverImage ?>" style="width: 100px; height: 100px; float: left; margin-right: 10px;"></div>
+                      <div style="float: left; font-size: 24px; margin: 5px;"><?= $itemName ?></div>
                   </div>
                     <div style="clear: both; margin: 3px;">
                         <div align="right" style="font-size: 18px; color: #e0c46c;">时间：<?= Date('Y-m-d H:i:s', $order->created_at) ?>&nbsp;

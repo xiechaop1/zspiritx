@@ -47,17 +47,17 @@ class Orders extends Action
                 ->orderBy('id desc')
                 ->all();
 
-            foreach ($orders as &$order) {
-                switch ($order->item_type) {
-                    case Order::ITEM_TYPE_STORY:
-                    default:
-                        if (!empty($order->story)) {
-                            $order->story->cover_image = Attachment::completeUrl($order->story->cover_image, true);
-                        }
-                        break;
-                }
-
-            }
+//            foreach ($orders as &$order) {
+//                switch ($order->item_type) {
+//                    case Order::ITEM_TYPE_STORY:
+//                    default:
+//                        if (!empty($order->story)) {
+//                            $order->story->cover_image = Attachment::completeUrl($order->story->cover_image, true);
+//                        }
+//                        break;
+//                }
+//
+//            }
 
         } catch (\Exception $e) {
             //Yii::error($e->getMessage());
