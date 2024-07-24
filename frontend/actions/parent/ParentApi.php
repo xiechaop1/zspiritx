@@ -128,35 +128,68 @@ class ParentApi extends ApiAction
         $userInfo['grade'] = !empty($userExtends->grade) ? $userExtends->grade : 0;
         $userInfo['grade_name'] = !empty(UserExtends::$userGrade2Name[$userInfo['grade']]) ? UserExtends::$userGrade2Name[$userInfo['grade']] : '';
 
+        $todayQas = UserQa::find()
+            ->where([
+                'user_id' => $userId,
+            ])
+            ->andFilterWhere([
+                'BETWEEN', 'created_at', strtotime(date('Y-m-d 00:00:00')), strtotime(date('Y-m-d 23:59:59'))
+            ])
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        $todayRight = 0;
+        $todayWrong = 0;
+        $todayTotal = 0;
+        $todayRate = 0;
+        $todayTime = 0;
+        if (!empty($todayQas)) {
+            foreach ($todayQas as $qa) {
+                $todayTotal++;
+                if ($qa->is_right == UserQa::ANSWER_RIGHT) {
+                    $todayRight++;
+                } else {
+                    $todayWrong++;
+                }
+            }
+            $todayRate = round($todayRight / $todayTotal * 100, 2);
+        }
+
+        $total = UserQa::find()
+            ->where([
+                'user_id' => $userId,
+            ])
+            ->count();
+
         $data = [
             [
                 'title' => '总做题数',
-                'content' => rand(1000,2000),
+                'content' => $total,
             ],
             [
                 'title' => '今日做题总数',
-                'content' => rand(10,20),
+                'content' => $todayTotal,
             ],
             [
                 'title' => '正确数',
-                'content' => rand(1,10),
+                'content' => $todayRight,
             ],
             [
                 'title' => '错误数',
-                'content' => rand(1,10),
+                'content' => $todayWrong,
             ],
             [
                 'title' => '正确率',
-                'content' => rand(50,100) . '%',
+                'content' => $todayRate . '%',
             ],
-            [
-                'title' => '总耗时(小时)',
-                'content'=> rand(1,3),
-            ],
-            [
-                'title' => '平均每道题时长(秒)',
-                'content' => rand(8,20),
-            ],
+//            [
+//                'title' => '总耗时(小时)',
+//                'content'=> rand(1,3),
+//            ],
+//            [
+//                'title' => '平均每道题时长(秒)',
+//                'content' => rand(8,20),
+//            ],
         ];
 
         $ret = [
