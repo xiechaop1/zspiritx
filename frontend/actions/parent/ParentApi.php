@@ -165,22 +165,27 @@ class ParentApi extends ApiAction
             [
                 'title' => '总做题数',
                 'content' => $total,
+                'desc' => '',
             ],
             [
                 'title' => '今日做题总数',
                 'content' => $todayTotal,
+                'desc' => '',
             ],
             [
                 'title' => '正确数',
                 'content' => $todayRight,
+                'desc' => '',
             ],
             [
                 'title' => '错误数',
                 'content' => $todayWrong,
+                'desc' => '',
             ],
             [
                 'title' => '正确率',
                 'content' => $todayRate . '%',
+                'desc' => '',
             ],
 //            [
 //                'title' => '总耗时(小时)',
