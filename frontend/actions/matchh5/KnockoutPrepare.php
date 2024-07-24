@@ -278,7 +278,7 @@ class KnockoutPrepare extends Action
     public function  generateMathWithCt($ct, $level = 1, $gold = 0) {
         $subjects = [];
 //        $subjs = Yii::$app->qas->generateMath($level, $ct, $gold);
-        $subjs = Yii::$app->doubao->generateSubject('奥数竞赛题目或者是竞赛题目，复杂度要高一些', $level, StoryMatch::MATCH_CLASS_MATH, $ct, []);
+        $subjs = Yii::$app->qas->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct, '奥数竞赛题目或者是竞赛题目，复杂度要高一些', [], false);
         foreach ($subjs as $subj) {
             $subjects[] = [
                 'level' => $level,

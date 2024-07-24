@@ -198,7 +198,7 @@ $this->title = $storyMatch->match_name;
                     <span class="text-1" id="timer"><?= $initTimer ?></span>秒
                 </div>
                 <!--文本问题-->
-                <div class="match-qa-content-text" id="topic">
+                <div class="match-qa-content-text" style="font-size: 36px; line-height: 125%;" id="topic">
 <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
@@ -836,6 +836,7 @@ $this->title = $storyMatch->match_name;
     }
 
     function showSubject(idx) {
+        // console.log(obj.subjects[idx]);
         var tobj = obj.subjects[idx].topic;
         var topic = tobj.formula;
         console.log(topic);
@@ -843,6 +844,7 @@ $this->title = $storyMatch->match_name;
             idx = 0;
             var topic = tobj.formula;
         }
+        console.log(topic);
         if (topic.indexOf('http') >= 0) {
             $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
             topic = '';

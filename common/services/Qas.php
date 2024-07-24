@@ -369,7 +369,7 @@ class Qas extends Component
 
     }
 
-    public function generateSubjectWithDoubao($level, $matchClass, $ct, $prompt = '', $extends = []) {
+    public function generateSubjectWithDoubao($level, $matchClass, $ct, $prompt = '', $extends = [], $needSave = true) {
 
         if (empty($prompt)) {
             switch ($matchClass) {
@@ -415,7 +415,9 @@ class Qas extends Component
                     $tmpSubj = \common\helpers\Qa::formatChallengeProp($tmpSubj);
                     $ret[] = $tmpSubj;
 
-                    $this->saveQaByDoubao($tmpSubj, 0);
+                    if ($needSave) {
+                        $qa = $this->saveQaByDoubao($tmpSubj, 0);
+                    }
                 }
             } else {
                 $subj = $subjects;
@@ -424,7 +426,9 @@ class Qas extends Component
                 $tmpSubj = \common\helpers\Qa::formatChallengeProp($tmpSubj);
                 $ret[] = $tmpSubj;
 
-                $this->saveQaByDoubao($tmpSubj, 0);
+                if ($needSave) {
+                    $qa = $this->saveQaByDoubao($tmpSubj, 0);
+                }
             }
         }
 
