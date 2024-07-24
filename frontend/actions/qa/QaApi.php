@@ -17,6 +17,7 @@ use common\models\Qa;
 use common\models\SessionQa;
 use common\models\StoryMatch;
 use common\models\StoryStages;
+use common\models\UserData;
 use common\models\UserQa;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
@@ -350,11 +351,30 @@ class QaApi extends ApiAction
                 $userQaId = Yii::$app->db->getLastInsertID();
                 $userQa->id = $userQaId;
 
+                // Todo: 临时处理，强制5剧本记录用户数据
+                if ($qa['story_id'] == 5) {
+                    // 记录用户数据
+                    Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        UserData::DATA_TYPE_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
+                    if ($isRight == 1) {
+                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                            UserData::DATA_TYPE_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
+                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                            UserData::DATA_TYPE_TODAY_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                    } else {
+                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                            UserData::DATA_TYPE_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
+                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                            UserData::DATA_TYPE_TODAY_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                    }
+                }
+
             } else {
                 $userQa->answer = $answer;
                 $userQa->is_right = $isRight;
                 $saveRet = $userQa->save();
             }
+
 
             $propJson = json_decode($qa['prop'], true);
 

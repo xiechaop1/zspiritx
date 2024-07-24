@@ -105,4 +105,6 @@ class ErrorCode extends Api
     const SHOP_BUY_NOT_ENOUGH_SCORE = -130001; // 商店购买失败，金币不足
     const SHOP_WARE_NOT_EXIST = -130002; // 商店商品不存在
 
+    const USER_DATA_UPDATE_FAILED = -140001; // 用户数据更新失败
+
 }

@@ -14,6 +14,7 @@ use common\models\Actions;
 use common\models\ItemKnowledge;
 use common\models\Qa;
 use common\models\Session;
+use common\models\UserData;
 use common\models\UserKnowledge;
 use common\models\UserQa;
 use common\models\UserScore;
@@ -22,6 +23,16 @@ use yii;
 
 class User extends Component
 {
+
+    const USER_DATA_TYPE_ADD = 1;
+    const USER_DATA_TYPE_UPDATE = 2;
+
+    const USER_DATA_TIME_TYPE_DAY = 1;
+    const USER_DATA_TIME_TYPE_WEEK = 2;
+    const USER_DATA_TIME_TYPE_MONTH = 3;
+    const USER_DATA_TIME_TYPE_YEAR = 4;
+    const USER_DATA_TIME_TYPE_TOTAL = 99;
+
     public function updateUserLevel($userId, $addLevel = 1, $mode = 1) {
         // $mode
         // 1 - 增加等级； 2 - 设置等级
@@ -56,6 +67,52 @@ class User extends Component
 //        return $userExtends;
     }
 
+    public function updateUserData($userId, $storyId, $dataType, $value, $addType = self::USER_DATA_TYPE_ADD, $timeType = self::USER_DATA_TIME_TYPE_DAY) {
+
+        switch ($timeType) {
+            case self::USER_DATA_TIME_TYPE_DAY:
+            default:
+                $beginTs = strtotime(Date('Y-m-d 00:00:00'));
+                $endTs = strtotime(Date('Y-m-d 23:59:59'));
+                break;
+        }
+
+        $userData = UserData::find()
+            ->where([
+                'user_id' => $userId,
+                'story_id' => $storyId,
+                'data_type' => $dataType,
+            ]);
+        if ($timeType != self::USER_DATA_TIME_TYPE_TOTAL) {
+            $userData->andFilterWhere(['between', 'created_at', $beginTs, $endTs]);
+        }
+        $userData = $userData->one();
+
+        if (empty($userData)) {
+            $userData = new UserData();
+            $userData->user_id = $userId;
+            $userData->story_id = $storyId;
+            $userData->data_type = (string)$dataType;
+            $userData->data_value = (string)$value;
+            $userData->data_date = Date('Y-m-d');
+            $userData->time_type = (string)$timeType;
+        } else {
+            if ($addType == self::USER_DATA_TYPE_ADD) {
+                $tmpValue = $userData->data_value;
+                $tmpValue += $value;
+                $userData->data_value = (string)$tmpValue;
+            } else {
+                $userData->data_value = (string)$value;
+            }
+        }
+        $ret = $userData->save();
+        if ($ret !== false) {
+            return $userData;
+        } else {
+            var_dump($userData->getErrors());
+            throw new \Exception('更新用户数据失败', ErrorCode::USER_DATA_UPDATE_FAILED);
+        }
+    }
 
 
 }
