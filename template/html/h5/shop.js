@@ -90,7 +90,7 @@ $(function () {
                 story_id:story_id,
                 session_id:session_id,
                 item_id:shop_ware_id,
-                item_type:2,
+                item_type:4,
                 exec_method:2,
                 is_test:1
             },

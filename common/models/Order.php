@@ -49,7 +49,7 @@ class Order extends \common\models\gii\Order
     ];
 
     const ITEM_TYPE_STORY       = 1; // 剧本
-    const ITEM_TYPE_PACKAGE     = 2; // 题包
+    const ITEM_TYPE_PACKAGE     = 4; // 题包
 
     public static $itemType2Name = [
         self::ITEM_TYPE_STORY   => '剧本',
