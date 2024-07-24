@@ -16,6 +16,7 @@ use common\models\ShopWares;
 use common\models\Story;
 use common\models\StoryExtend;
 use common\models\User;
+use common\models\UserScore;
 use common\models\UserWare;
 use frontend\actions\ApiAction;
 use Yii;
@@ -339,30 +340,37 @@ class OrderApi extends ApiAction
         $story = $order->story;
 
         try {
-            $code = !empty($this->_get['code']) ? $this->_get['code'] : '';
 
-//            $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
-            $channel = !empty($this->_get['channel']) ? $this->_get['channel'] : '';
-            if ($exeMethod == 1) {
-                // 小程序支付走Jsapi接口
-                $res = Yii::$app->wechatPay->createJsapiOrder($code, $story, $order, $this->_userInfo, $channel);
-            } else {
-                // exeMethod == 2走H5支付
-//                $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
-                if ($order->item_type == Order::ITEM_TYPE_PACKAGE) {
-                    $res = Yii::$app->wechatPay->createH5Order($order, $this->_userInfo);
-                } else {
-                    $res = Yii::$app->wechatPay->createH5OrderWithStory($story, $order, $this->_userInfo);
-                }
+            switch ($order->pay_method) {
+                case Order::PAY_METHOD_WECHAT:
+                default:
+                    $code = !empty($this->_get['code']) ? $this->_get['code'] : '';
+
+    //            $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
+                    $channel = !empty($this->_get['channel']) ? $this->_get['channel'] : '';
+                    if ($exeMethod == 1) {
+                        // 小程序支付走Jsapi接口
+                        $res = Yii::$app->wechatPay->createJsapiOrder($code, $story, $order, $this->_userInfo, $channel);
+                    } else {
+                        // exeMethod == 2走H5支付
+    //                $res = Yii::$app->wechatPay->createH5Order($story, $order, $this->_userInfo);
+                        if ($order->item_type == Order::ITEM_TYPE_PACKAGE) {
+                            $res = Yii::$app->wechatPay->createH5Order($order, $this->_userInfo);
+                        } else {
+                            $res = Yii::$app->wechatPay->createH5OrderWithStory($story, $order, $this->_userInfo);
+                        }
+                    }
+                    $order->order_status = Order::ORDER_STATUS_PAYING;
+    //            $ret = $order->save();
+
+                    $ret = [
+                        'pay_res' => $res,
+                        'order' => $order,
+                    ];
+                    break;
             }
 
-            $order->order_status = Order::ORDER_STATUS_PAYING;
-//            $ret = $order->save();
 
-            $ret = [
-                'pay_res' => $res,
-                'order' => $order,
-            ];
 
             $transaction->commit();
         } catch (\Exception $e) {

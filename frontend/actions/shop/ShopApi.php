@@ -224,6 +224,14 @@ class ShopApi extends ApiAction
 
             $storyModelDetailId = !empty($storyModel->story_model_detail_id) ? $storyModel->story_model_detail_id : 0;
 
+            if (empty($sessionId)) {
+                $tmpUserModel = UserModels::find()
+                    ->where(['user_id' => $userId])
+                    ->one();
+
+                $sessionId = !empty($tmpUserModel->session_id) ? $tmpUserModel->session_id : 0;
+            }
+
             $userModelBaggage = UserModels::find()
                 ->where([
                     'user_id'           => (int)$userId,

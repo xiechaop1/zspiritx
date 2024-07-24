@@ -41,11 +41,13 @@ class Order extends \common\models\gii\Order
     const PAY_METHOD_WECHAT = 1; // 微信支付
     const PAY_METHOD_ALIPAY = 2; // 支付宝支付
     const PAY_METHOD_THIRD_DOUYIN  = 21; // 抖音支付
+    const PAY_METHOD_SCORE = 91;
 
     public static $payMethod2Name = [
         self::PAY_METHOD_WECHAT => '微信支付',
         self::PAY_METHOD_ALIPAY => '支付宝支付',
         self::PAY_METHOD_THIRD_DOUYIN => '抖音支付',
+        self::PAY_METHOD_SCORE => '积分支付',
     ];
 
     const ITEM_TYPE_STORY       = 1; // 剧本
