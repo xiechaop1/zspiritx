@@ -235,7 +235,10 @@ class ParentApi extends ApiAction
                 ->one();
 
             if (!empty($order)) {
-                $orderCreatedAt = $order->created_at;
+                $order = $order->toArray();
+                $orderCreatedAt = $order['created_at'];
+                $order['order_status_name'] = !empty(Order::$orderStatus[$order['order_status']])
+                    ? Order::$orderStatus[$order['order_status']] : '';
 
                 $period = $model['period'];
 
