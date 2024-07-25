@@ -62,6 +62,24 @@ class ShopWare extends Action
                     }
                     Yii::$app->session->setFlash('success', '操作成功');
                     break;
+                case 'copy':
+                    if ($shopWares) {
+                        $newShopWares = new \common\models\ShopWares();
+                        $blackKeyList = ['id', 'status', 'created_at', 'updated_at'];
+                        foreach ($shopWares as $key => $value) {
+                            if (in_array($key, $blackKeyList)) {
+                                continue;
+                            }
+                            $newShopWares->$key = $value;
+                        }
+                        $newShopWares->ware_name = $newShopWares->ware_name . '_copy';
+                        if ($newShopWares->save()) {
+                            Yii::$app->session->setFlash('success', '操作成功');
+                        } else {
+                            Yii::$app->session->setFlash('danger', '操作失败');
+                        }
+                    }
+                    break;
                 default:
                     Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
                     $model->load(Yii::$app->request->post());
