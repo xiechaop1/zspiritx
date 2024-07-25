@@ -308,7 +308,7 @@ class Qas extends Component
                 foreach ($qaCollection as $qaModel) {
                     $extends = [];
                     $genSub = true;
-                    if ($qaModel->qa_class != $matchClass) {
+                    if ($qaModel->qa_class != Subject::SUBJECT_CLASS_ANY && $qaModel->qa_class != $matchClass) {
                         continue;
                     }
                     if (!empty($qaModel->prop)) {
