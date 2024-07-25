@@ -9,6 +9,7 @@
 namespace common\services;
 
 
+use common\definitions\Subject;
 use common\helpers\Attachment;
 use common\models\EnglishWords;
 use common\models\Poem;
@@ -253,7 +254,7 @@ class Qas extends Component
 
     public function generateTotalSubjects($level = 1, $matchClass = 0, $ct = 20, $userId = 0){
         $ret = [];
-        $maxWareLimit = 2;      // 暂时就支持2个商品同时运行
+        $maxWareLimit = 5;      // 暂时就支持2个商品同时运行
         $userWare = UserWare::find()
             ->where([
                 'user_id' => $userId,
@@ -266,6 +267,7 @@ class Qas extends Component
             ->limit($maxWareLimit)
             ->all();
 
+        $wareCt = 0;
         if (!empty($userWare)) {
             foreach ($userWare as $ware) {
                 switch ($ware->link_type) {
@@ -278,6 +280,12 @@ class Qas extends Component
                         $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
 
                         $ret = $this->generateSubjectsWithQaCollection($qaCollections, $level, $matchClass, $ct, $userId);
+                        if (!empty($ret)) {
+                            $wareCt++;
+                            if ($wareCt >= 2) {
+                                break;
+                            }
+                        }
                         break;
                 }
 //                $ret[] = $this->getSubjectWithWare($ware, $matchClass, $level, $ct);
@@ -294,11 +302,15 @@ class Qas extends Component
     }
 
     public function generateSubjectsWithQaCollection($qaCollections, $level = 1, $matchClass = 0, $ct = 10, $userId = 0) {
+        $ret = [];
         if (!empty($qaCollections)) {
             foreach ($qaCollections as $qaPackageId => $qaCollection) {
                 foreach ($qaCollection as $qaModel) {
                     $extends = [];
                     $genSub = true;
+                    if ($qaModel->qa_class != $matchClass) {
+                        continue;
+                    }
                     if (!empty($qaModel->prop)) {
                         // Todo: 准备读取qaProp，判断题目模式，引入相似题（增加例题字段）
                         $qaProp = json_decode($qaModel->prop, true);
@@ -373,7 +385,7 @@ class Qas extends Component
 
         if (empty($prompt)) {
             switch ($matchClass) {
-                case StoryMatch::MATCH_CLASS_MATH:
+                case Subject::SUBJECT_CLASS_MATH:
                     if ($level >= 1 && $level < 7) {
                         $prompt = '生成' . $ct . '道数学计算题目';
                     } else if ($level >= 7 && $level < 13) {
@@ -386,16 +398,16 @@ class Qas extends Component
                         $prompt = '生成' . $ct . '道数学题目';
                     }
                     break;
-                case StoryMatch::MATCH_CLASS_ENGLISH:
+                case Subject::SUBJECT_CLASS_ENGLISH:
                     $prompt = '生成' . $ct . '道英语单词、短句题目';
                     break;
-                case StoryMatch::MATCH_CLASS_POEM:
+                case Subject::SUBJECT_CLASS_POEM:
                     $prompt = '生成' . $ct . '道诗词题目';
                     break;
-                case StoryMatch::MATCH_CLASS_POEM_IDIOM:
+                case Subject::SUBJECT_CLASS_POEM_IDIOM:
                     $prompt = '生成' . $ct . '道诗词成语题目';
                     break;
-                case StoryMatch::MATCH_CLASS_CHINESE:
+                case Subject::SUBJECT_CLASS_CHINESE:
                     $prompt = '生成' . $ct . '道语文题目';
                     break;
 
@@ -806,7 +818,7 @@ class Qas extends Component
         } else {
             // Todo：临时强制保护
             $ct = 20;
-//            $subjects = $this->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct);
+//            $subjects = $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
             $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_MATH);
             if (count($subjects) < 10
              && 1 != 1
@@ -856,7 +868,7 @@ class Qas extends Component
     }
 
     public function generateMathWithDoubao($level, $ct = 100) {
-        return $this->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct);
+        return $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
     }
 
     public function generateOneMath($level = 1, $gold = 0) {

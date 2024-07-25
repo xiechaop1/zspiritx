@@ -9,6 +9,8 @@
 namespace common\services;
 
 
+use common\definitions\Subject;
+use common\models\Qa;
 use common\models\StoryMatch;
 use common\models\UserExtends;
 use common\services\Curl;
@@ -36,7 +38,7 @@ class Doubao extends Component
 
         if (!empty($userMessagePre)) {
             $msgTemplate = [
-                '适合' . $gradeName . '同学的题目，请重新出'. $ct . '道，题目随机一些，尽可能规避历史已经出过的',
+                '适合' . $gradeName . '同学的题目，科目是：' . $matchClassName . '，请出'. $ct . '道，题目随机一些，尽可能规避历史已经出过的',
                 '#输出格式#' . '输出题目、题型、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
                 '#输出样例#' . json_encode([[
                     'SUBJECT' => 'SUBJECT1',
@@ -50,7 +52,7 @@ class Doubao extends Component
                     'TYPE'  => '题型',
                 ]], JSON_UNESCAPED_UNICODE),
             ];
-
+//$level = 8;
             if (!empty($extends['exampleTopics'])) {
                 $tmpTopics = [];
                 foreach ($extends['exampleTopics'] as $exampleTopic) {
@@ -58,10 +60,44 @@ class Doubao extends Component
                 }
                 $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
                 $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
+            } else {
+                if (empty($extends['oldTopics'])) {
+                    $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : Subject::SUBJECT_CLASS_NORMAL;
+                    $oldQa = Qa::find()
+                        ->where([
+                            'level' => $level,
+                            'qa_class' => $qaClass,
+                        ])
+                        ->orderBy('rand()')
+                        ->limit(10)
+//                        ->createCommand()
+//                        ->getRawSql();
+//                    var_dump($oldQa);exit;
+                        ->all();
+//var_dump($oldQa);exit;
+                    if (!empty($oldQa)) {
+                        $tmpTopics = [];
+                        foreach ($oldQa as $oQa) {
+                            $tmpTopics[] = $oQa->topic;
+                        }
+                        $tmpTopicStr = implode("\n#历史题目#", $tmpTopics);
+                        $msgTemplate[] = "#历史题目#" . $tmpTopicStr;
+                    }
+                }
+            }
+
+
+            if (!empty($extends['oldTopics'])) {
+                $tmpTopics = [];
+                foreach ($extends['oldTopics'] as $oldTopic) {
+                    $tmpTopics[] = $oldTopic['topic'];
+                }
+                $tmpTopicStr = implode("\n#历史题目#", $tmpTopics);
+                $msgTemplate[] = "#历史题目#" . $tmpTopicStr;
             }
 
 //            $userMessageTmp = $userMesssagePre . "\n" . implode("\n", $msgTemplate);
-
+//            var_dump($msgTemplate);
 
             $response = $this->chatWithDoubao($userMessagePre, [], $msgTemplate, self::ROLE_GENERATE_SUBJECT);
             $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
@@ -89,7 +125,7 @@ class Doubao extends Component
         $oldMessages = [];
         $roleTxt = self::ROLE_GENERATE_SUBJECT;
         switch ($matchClass) {
-            case StoryMatch::MATCH_CLASS_ENGLISH:
+            case Subject::SUBJECT_CLASS_ENGLISH:
                 $userMessage = '请出' . $ct . '道英语题目，题目是一个英文短句，答案是这个英文单词对应的中文。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';
                 $userMessage .= '#输出格式#' . '输出题目、题型、选项和答案。输出格式为JSON';
                 $userMessage .= '#输出样例#' . json_encode([[
@@ -124,14 +160,14 @@ class Doubao extends Component
         }
 
         switch ($matchClass) {
-            case StoryMatch::MATCH_CLASS_POEM:
+            case Subject::SUBJECT_CLASS_POEM:
                 $userMessage = '这是一首诗的一句，题目内容是：' . $topic . '，问号(?)是原诗缺少的字。请说出这首诗的出处，作者和当时背景故事';
 //                是语文老师，不说答案，通过这首诗的出处，作者，故事，引导学生作答
                 break;
-            case StoryMatch::MATCH_CLASS_POEM_IDIOM:
+            case Subject::SUBJECT_CLASS_POEM_IDIOM:
                 $userMessage = '这是一个成语，题目内容是：' . $topic . '，问号(?)是原成语缺少的字。请描述这个成语表达的含义，但是不要说出答案';
                 break;
-            case StoryMatch::MATCH_CLASS_MATH:
+            case Subject::SUBJECT_CLASS_MATH:
             default:
             $userMessage = '这是一道' . $matchCLassName . '题目，题目内容是：' . $topic . '，问号(?)是要填写的答案。现在你扮演一名教育专家，不要给出答案，引导一名' . $gradeName . '的学生，请给出提示，200字之内';
         }
