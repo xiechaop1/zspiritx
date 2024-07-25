@@ -84,11 +84,11 @@ class Edit extends Action
                     $model->selected = json_encode(eval("return {$model->selected}"));
                 } else {
                     if (!\common\helpers\Common::isJson($model->selected)) {
-                        $model->selected = json_encode($model->selected);
+                        $model->selected = json_encode($model->selected, JSON_UNESCAPED_UNICODE);
                     }
                 }
 
-                $model->prop = json_encode(eval("return {$model->prop};"));
+                $model->prop = json_encode(eval("return {$model->prop};"), JSON_UNESCAPED_UNICODE);
                 
                 if ($model->save()) {
 

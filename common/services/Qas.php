@@ -218,6 +218,26 @@ class Qas extends Component
                             $level = $qaProp['level'];
                         }
 
+                        if (empty($extends['exampleTopics'])
+                            && empty($extends['oldTopics'])
+                        ) {
+                            $oldQas = Qa::find()
+                                ->where([
+                                    'link_qa_id' => $qaModel->id
+                                ])
+                                ->orderBy('rand()')
+                                ->limit(5)
+                                ->all();
+
+                            if (!empty($oldQas)) {
+                                foreach ($oldQas as $oldQa) {
+                                    $extends['oldTopics'][] = [
+                                        'topic' => $oldQa->topic
+                                    ];
+                                }
+                            }
+                        }
+
                         $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct, $extends);
 
 //                        var_dump($subjects);exit;
@@ -269,6 +289,7 @@ class Qas extends Component
 
         $wareCt = 0;
         if (!empty($userWare)) {
+
             foreach ($userWare as $ware) {
                 switch ($ware->link_type) {
                     case ShopWares::LINK_TYPE_QA_PACKAGE:
@@ -510,7 +531,6 @@ class Qas extends Component
             ]);
         }
         $qaPackages = $qaPackages->all();
-        
 
         $qaCollections = [];
         if (!empty($qaPackages)) {
@@ -820,9 +840,7 @@ class Qas extends Component
             $ct = 20;
 //            $subjects = $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
             $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_MATH);
-            if (count($subjects) < 10
-             && 1 != 1
-            ) {
+            if (count($subjects) < 10) {
                 $gptSubjects = $this->generateMathWithDoubao($level, 10 - count($subjects));
                 foreach ($gptSubjects as $gptSub) {
                     $subjects[] = $gptSub;
