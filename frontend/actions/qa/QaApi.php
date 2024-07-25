@@ -356,6 +356,9 @@ class QaApi extends ApiAction
                     // 记录用户数据
                     Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                         UserData::DATA_TYPE_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
+                    Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        UserData::DATA_TYPE_TODAY_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+
                     if ($isRight == 1) {
                         Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);

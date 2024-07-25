@@ -23,6 +23,11 @@ class UserData extends \common\models\gii\UserData
     const DATA_TYPE_TODAY_WRONG = 22;
     const DATA_TYPE_TODAY_RATE = 23;
 
+    const USER_DATA_TIME_TYPE_DAY = 1;
+    const USER_DATA_TIME_TYPE_WEEK = 2;
+    const USER_DATA_TIME_TYPE_MONTH = 3;
+    const USER_DATA_TIME_TYPE_YEAR = 4;
+    const USER_DATA_TIME_TYPE_TOTAL = 99;
     public static $dataType2Name = [
         self::DATA_TYPE_TOTAL => '总答题数',
         self::DATA_TYPE_RIGHT => '总正确数',

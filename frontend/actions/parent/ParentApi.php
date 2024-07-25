@@ -38,6 +38,7 @@ use common\models\StoryRank;
 use common\models\StoryRole;
 use common\models\StoryStages;
 use common\models\User;
+use common\models\UserData;
 use common\models\UserExtends;
 use common\models\UserKnowledge;
 use common\models\UserModelLoc;
@@ -89,7 +90,7 @@ class ParentApi extends ApiAction
 
             }
         } catch (\Exception $e) {
-//            var_dump($e);
+            var_dump($e);
             return $this->fail($e->getMessage(), $e->getCode());
         }
 
@@ -128,65 +129,161 @@ class ParentApi extends ApiAction
         $userInfo['grade'] = !empty($userExtends->grade) ? $userExtends->grade : 0;
         $userInfo['grade_name'] = !empty(UserExtends::$userGrade2Name[$userInfo['grade']]) ? UserExtends::$userGrade2Name[$userInfo['grade']] : '';
 
-        $todayQas = UserQa::find()
+//        $todayQas = UserQa::find()
+//            ->where([
+//                'user_id' => $userId,
+//            ])
+//            ->andFilterWhere([
+//                'BETWEEN', 'created_at', strtotime(date('Y-m-d 00:00:00')), strtotime(date('Y-m-d 23:59:59'))
+//            ])
+//            ->orderBy(['id' => SORT_DESC])
+//            ->all();
+//
+//        $todayRight = 0;
+//        $todayWrong = 0;
+//        $todayTotal = 0;
+//        $todayRate = 0;
+//        $todayTime = 0;
+//        if (!empty($todayQas)) {
+//            foreach ($todayQas as $qa) {
+//                $todayTotal++;
+//                if ($qa->is_right == UserQa::ANSWER_RIGHT) {
+//                    $todayRight++;
+//                } else {
+//                    $todayWrong++;
+//                }
+//            }
+//            $todayRate = round($todayRight / $todayTotal * 100, 2);
+//        }
+
+//        $total = UserQa::find()
+//            ->where([
+//                'user_id' => $userId,
+//            ])
+//            ->count();
+
+        $totalCount = UserData::find()
             ->where([
-                'user_id' => $userId,
+                'story_id'  => 5,
+                'data_type' => UserData::DATA_TYPE_TOTAL,
+            ])
+            ->count();
+
+        $todayCount = UserData::find()
+            ->where([
+                'story_id'  => 5,
+                'data_type' => UserData::DATA_TYPE_TOTAL,
             ])
             ->andFilterWhere([
                 'BETWEEN', 'created_at', strtotime(date('Y-m-d 00:00:00')), strtotime(date('Y-m-d 23:59:59'))
             ])
-            ->orderBy(['id' => SORT_DESC])
-            ->all();
-
-        $todayRight = 0;
-        $todayWrong = 0;
-        $todayTotal = 0;
-        $todayRate = 0;
-        $todayTime = 0;
-        if (!empty($todayQas)) {
-            foreach ($todayQas as $qa) {
-                $todayTotal++;
-                if ($qa->is_right == UserQa::ANSWER_RIGHT) {
-                    $todayRight++;
-                } else {
-                    $todayWrong++;
-                }
-            }
-            $todayRate = round($todayRight / $todayTotal * 100, 2);
-        }
-
-        $total = UserQa::find()
-            ->where([
-                'user_id' => $userId,
-            ])
             ->count();
 
-        $data = [
-            [
-                'title' => '总做题数',
-                'content' => $total,
-                'desc' => '',
-            ],
-            [
-                'title' => '今日做题总数',
-                'content' => $todayTotal,
-                'desc' => '',
-            ],
-            [
-                'title' => '正确数',
-                'content' => $todayRight,
-                'desc' => '',
-            ],
-            [
-                'title' => '错误数',
-                'content' => $todayWrong,
-                'desc' => '',
-            ],
-            [
-                'title' => '正确率',
-                'content' => $todayRate . '%',
-                'desc' => '',
-            ],
+        $userDatas = UserData::find()
+            ->where([
+                'user_id'   => $userId,
+                'story_id'  => 5,
+            ])
+            ->andFilterWhere([
+                'or',
+                ['time_type' => UserData::USER_DATA_TIME_TYPE_TOTAL],
+                [
+                    'AND',
+                    ['time_type' => UserData::USER_DATA_TIME_TYPE_DAY],
+                    ['BETWEEN', 'created_at', strtotime(date('Y-m-d 00:00:00')), strtotime(date('Y-m-d 23:59:59'))]
+                ],
+            ])
+            ->all();
+
+        $datas = [];
+        if (!empty($userDatas)) {
+            foreach ($userDatas as $userData) {
+                $datas[$userData->data_type] = $userData->data_value;
+                switch ($userData->time_type) {
+                    case UserData::USER_DATA_TIME_TYPE_TOTAL:
+                        $rankCount = UserData::find()
+                            ->where([
+                                'story_id' => 5,
+                                'data_type' => UserData::DATA_TYPE_TOTAL,
+                                'time_type' => UserData::USER_DATA_TIME_TYPE_TOTAL,
+                            ])
+                            ->andWhere(['>', 'data_value', $userData->data_value])
+                            ->count();
+                        if ($rankCount == 0 && $totalCount > 0) {
+                            $rankRate = 100;
+                        } else {
+                            $rankRate = intval($rankCount / $totalCount);
+                        }
+                        break;
+                    case UserData::USER_DATA_TIME_TYPE_DAY:
+                    default:
+                        $tag = '>';
+                        switch ($userData->data_type) {
+                            case UserData::DATA_TYPE_TODAY_WRONG:
+                                $tag = '<';
+                                break;
+                            default:
+                                $tag = '>';
+                                break;
+                        }
+                        $rankCount = UserData::find()
+                            ->where([
+                                'story_id' => 5,
+                                'data_type' => UserData::DATA_TYPE_TODAY_TOTAL,
+                                'time_type' => UserData::USER_DATA_TIME_TYPE_DAY,
+                            ])
+                            ->andFilterWhere([
+                                'BETWEEN', 'created_at', strtotime(date('Y-m-d 00:00:00')), strtotime(date('Y-m-d 23:59:59'))
+                            ])
+                            ->andFilterWhere([$tag, 'data_value', (int)$userData->data_value])
+//                            ->createCommand()
+//                            ->getRawSql();
+//                        var_dump($rankCount);exit;
+                            ->count();
+                        if ($rankCount == 0 && $todayCount > 0) {
+                            $rankRate = 100;
+                        } else {
+                            $rankRate = intval($rankCount / $todayCount * 100);
+                        }
+                        break;
+                }
+                $descs[$userData->data_type] = '超越了' . $rankRate . '%同级学子';
+            }
+        }
+
+        if (!empty($datas[UserData::DATA_TYPE_TODAY_TOTAL]) && !empty($datas[UserData::DATA_TYPE_TODAY_RIGHT])) {
+            $datas[UserData::DATA_TYPE_TODAY_RATE] = round($datas[UserData::DATA_TYPE_TODAY_RIGHT] / $datas[UserData::DATA_TYPE_TODAY_TOTAL] * 100, 2) . '%';
+        } else {
+            $datas[UserData::DATA_TYPE_TODAY_RATE] = '0%';
+        }
+
+        $cols = [
+            'total' => UserData::DATA_TYPE_TOTAL,
+            'today_total' => UserData::DATA_TYPE_TODAY_TOTAL,
+            'today_right' => UserData::DATA_TYPE_TODAY_RIGHT,
+            'today_wrong' => UserData::DATA_TYPE_TODAY_WRONG,
+            'today_rate' => UserData::DATA_TYPE_TODAY_RATE,
+        ];
+
+        $data = [];
+
+        foreach ($cols as $col) {
+            if (!empty($datas[$col])) {
+                $data[] = [
+                    'title' => UserData::$dataType2Name[$col],
+                    'content' => $datas[$col],
+                    'desc' => !empty($descs[$col]) ? $descs[$col] : '',
+                ];
+            } else {
+                $data[] = [
+                    'title' => UserData::$dataType2Name[$col],
+                    'content' => 0,
+                    'desc' => '',
+                ];
+            }
+        }
+
+
 //            [
 //                'title' => '总耗时(小时)',
 //                'content'=> rand(1,3),
@@ -195,7 +292,7 @@ class ParentApi extends ApiAction
 //                'title' => '平均每道题时长(秒)',
 //                'content' => rand(8,20),
 //            ],
-        ];
+
 
         $ret = [
             'user' => $userInfo,
