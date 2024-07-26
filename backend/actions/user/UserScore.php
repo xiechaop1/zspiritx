@@ -68,7 +68,7 @@ class UserScore extends Action
         $searchModel = new \backend\models\UserScore();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
-        $stories = ArrayHelper::map(\common\models\Story::find()->orderBy('id desc')->all(), 'id', 'title');
+        $stories = [0 => '无'] + ArrayHelper::map(\common\models\Story::find()->orderBy('id desc')->all(), 'id', 'title');
 
         return $this->controller->render('user_score', [
             'dataProvider'  => $dataProvider,

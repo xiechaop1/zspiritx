@@ -166,7 +166,8 @@ $form = ActiveForm::begin([
     ],
 ]);
 echo $form->field($userScoreModel, 'user_id')->label('用户');
-echo $form->field($userScoreModel, 'story_id')->label('剧本');
+//echo $form->field($userScoreModel, 'story_id')->label('剧本');
+echo $form->field($userScoreModel, 'story_id')->dropDownList($stories)->label('剧本');
 //echo $form->field($userScoreModel, 'story_id')->widget('\kartik\select2\Select2', [
 //    'data' => $stories,
 //    'options' => [
