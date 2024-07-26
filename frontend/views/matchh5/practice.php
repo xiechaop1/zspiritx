@@ -195,6 +195,9 @@ $this->title = '练习赛';
                         <span id="gold">0</span>
                     </div>
                 </div>
+                <div class="btn-m-green confirm_btn" style="margin-left: 100px;">
+                    返回
+                </div>
 
             </div>
 
