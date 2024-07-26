@@ -232,6 +232,26 @@
                         ]
                     ],
                     [
+                        'label' => '用户管理',
+                        'icon' => 'folder-open',
+                        'items' => [
+                            [
+                                'label' => '用户列表',
+                                'icon' => 'users',
+                                'url' => ['/user/users'],
+                                'active' => in_array($this->context->route, ['user/users', 'user/edit', ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                            [
+                                'label' => '用户积分',
+                                'icon' => 'users',
+                                'url' => ['/user/user_score'],
+                                'active' => in_array($this->context->route, ['user/user_score', ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                        ],
+                    ],
+                    [
                         'label' => '分类管理',
                         'icon' => 'cubes',
                         'url' => ['/base/categories'],
@@ -250,13 +270,6 @@
                         'icon' => 'shopping-cart',
                         'url' => ['/order/orders'],
                         'active' => in_array($this->context->route, ['order/orders', 'order/edit', ]),
-                        'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
-                    ],
-                    [
-                        'label' => '用户列表',
-                        'icon' => 'users',
-                        'url' => ['/user/users'],
-                        'active' => in_array($this->context->route, ['user/users', 'user/edit', ]),
                         'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
                     ],
                     [

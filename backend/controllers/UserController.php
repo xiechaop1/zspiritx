@@ -22,7 +22,7 @@ class UserController extends ViewController
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
                     [
-                        'actions' => ['users', 'edit', 'usermusiclist'],
+                        'actions' => ['users', 'edit', 'user_score'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -37,8 +37,8 @@ class UserController extends ViewController
             'users' => [
                 'class' => 'backend\actions\user\Users',
             ],
-            'usermusiclist' => [
-                'class' => 'backend\actions\user\UserMusicList',
+            'user_score' => [
+                'class' => 'backend\actions\user\UserScore',
             ],
             'edit' => [
                 'class' => 'backend\actions\user\Edit',

@@ -37,6 +37,10 @@ class UserScore extends \common\models\gii\UserScore
         return $this->hasOne('common\models\Team',  ['id' => 'team_id']);
     }
 
+    public function getUser(){
+        return $this->hasOne('common\models\User',  ['id' => 'user_id']);
+    }
+
     public function getSession(){
         return $this->hasOne('common\models\Session',  ['id' => 'session_id']);
     }
