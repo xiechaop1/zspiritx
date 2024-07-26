@@ -36,7 +36,7 @@ class User extends Component
 
     public function updateUserLevelWithRight($userId, $subjCt = 0, $rightCt = 0) {
         $ret = [];
-        if ($subjCt > 0 && ($subjCt % 5) == 0) {
+        if ($subjCt > 0) {
             if (($rightCt / $subjCt) > 0.8) {
                 $addLevel = 1;
                 $ret = $this->updateUserLevel($userId, $addLevel);

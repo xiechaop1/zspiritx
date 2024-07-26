@@ -384,7 +384,9 @@ class QaApi extends ApiAction
             }
 
             if (!empty($subjCt) && !empty($rightCt)) {
-                $userExtends = Yii::$app->userService->updateUserLevelWithRight($userId, $subjCt, $rightCt);
+                if ( $subjCt % 5 == 0 ) {
+                    $userExtends = Yii::$app->userService->updateUserLevelWithRight($userId, $subjCt, $rightCt);
+                }
             }
 
             $propJson = json_decode($qa['prop'], true);
