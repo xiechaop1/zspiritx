@@ -33,6 +33,20 @@ class User extends Component
     const USER_DATA_TIME_TYPE_YEAR = 4;
     const USER_DATA_TIME_TYPE_TOTAL = 99;
 
+
+    public function updateUserLevelWithRight($userId, $subjCt = 0, $rightCt = 0) {
+        $ret = [];
+        if ($subjCt > 0 && ($subjCt % 5) == 0) {
+            if (($rightCt / $subjCt) > 0.8) {
+                $addLevel = 1;
+                $ret = $this->updateUserLevel($userId, $addLevel);
+            } elseif (($rightCt / $subjCt) < 0.4) {
+                $addLevel = -1;
+                $ret = $this->updateUserLevel($userId, $addLevel);
+            }
+        }
+        return $ret;
+    }
     public function updateUserLevel($userId, $addLevel = 1, $mode = 1) {
         // $mode
         // 1 - 增加等级； 2 - 设置等级
@@ -40,6 +54,7 @@ class User extends Component
             ->where(['user_id' => $userId])
             ->one();
 
+//        var_dump($userExtends);
 
         $initLevel = 0;
         if (!empty($userExtends->level)) {

@@ -48,6 +48,9 @@ class Matchh5Controller extends Controller
             'knockout' => [
                 'class' => 'frontend\actions\matchh5\Knockout',
             ],
+            'practice' => [
+                'class' => 'frontend\actions\matchh5\Practice',
+            ],
         ];
     }
 }

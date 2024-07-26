@@ -165,6 +165,11 @@ class QaApi extends ApiAction
         $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
         $linkQaId = !empty($this->_get['link_qa_id']) ? $this->_get['link_qa_id'] : 0;
 
+        $subjCt = !empty($this->_get['subj_ct']) ? $this->_get['subj_ct'] : 0;
+        $rightCt = !empty($this->_get['right_ct']) ? $this->_get['right_ct'] : 0;
+        $wrongCt = !empty($this->_get['wrong_ct']) ? $this->_get['wrong_ct'] : 0;
+
+
         $qaMode = !empty($this->_get['qa_mode']) ? $this->_get['qa_mode'] : Qa::QA_MODE_NORMAL;
 
         $qa = Qa::find()->where(['id' => $qaId])->asArray()->one();
@@ -378,6 +383,9 @@ class QaApi extends ApiAction
                 $saveRet = $userQa->save();
             }
 
+            if (!empty($subjCt) && !empty($rightCt)) {
+                $userExtends = Yii::$app->userService->updateUserLevelWithRight($userId, $subjCt, $rightCt);
+            }
 
             $propJson = json_decode($qa['prop'], true);
 

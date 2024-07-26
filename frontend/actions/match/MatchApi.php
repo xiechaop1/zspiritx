@@ -295,15 +295,16 @@ class MatchApi extends ApiAction
             Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
 
             if ($storyMatch->match_type != StoryMatch::MATCH_TYPE_KNOCKOUT) {
-                if ($subjectCt > 0) {
-                    if (($rightCt / $subjectCt) > 0.8) {
-                        $addLevel = 1;
-                        Yii::$app->userService->updateUserLevel($userId, $addLevel);
-                    } elseif (($rightCt / $subjectCt) < 0.4) {
-                        $addLevel = -1;
-                        Yii::$app->userService->updateUserLevel($userId, $addLevel);
-                    }
-                }
+                $userExtends = Yii::$app->userService->updateUserLevelWithRight($userId, $subjectCt, $rightCt);
+//                if ($subjectCt > 0) {
+//                    if (($rightCt / $subjectCt) > 0.8) {
+//                        $addLevel = 1;
+//                        Yii::$app->userService->updateUserLevel($userId, $addLevel);
+//                    } elseif (($rightCt / $subjectCt) < 0.4) {
+//                        $addLevel = -1;
+//                        Yii::$app->userService->updateUserLevel($userId, $addLevel);
+//                    }
+//                }
             }
 
 

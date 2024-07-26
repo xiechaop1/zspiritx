@@ -176,6 +176,8 @@ class Qas extends Component
                                 ->where([
                                     'link_qa_id' => $linkQaIds
                                 ])
+                                ->limit($ct)
+                                ->orderBy('rand()')
                                 ->all();
 //                                ->createCommand()
 //                                ->getRawSql();

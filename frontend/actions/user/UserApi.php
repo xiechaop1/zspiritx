@@ -989,18 +989,24 @@ class UserApi extends ApiAction
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $teamId = !empty($this->_get['team_id']) ? $this->_get['team_id'] : 0;
         $score = !empty($this->_get['score']) ? $this->_get['score'] : 0;
+        // 模式 add增加，update更新
+        $mode = !empty($this->_get['mode']) ? $this->_get['mode'] : 'add';
 
         try {
             $userScore = UserScore::find()
                 ->where([
                     'user_id' => $userId,
                     'story_id' => $storyId,
-                    'session_id' => $sessionId,
+//                    'session_id' => $sessionId,
                 ]);
+            if (!empty($sessionId)) {
+                $userScore = $userScore->andFilterWhere(['session_id' => $sessionId]);
+            }
 
             if (!empty($teamId)) {
                 $userScore = $userScore->andFilterWhere(['team_id' => $teamId]);
             }
+            $userScore->orderBy('id desc');
 
             $userScore = $userScore->one();
 
@@ -1012,7 +1018,11 @@ class UserApi extends ApiAction
                 $userScore->team_id = $teamId;
                 $userScore->score = $score;
             } else {
-                $userScore->score = $userScore + $score;
+                if ($mode == 'add') {
+                    $userScore->score = $userScore->score + $score;
+                } else if ($mode == 'update') {
+                    $userScore->score = $score;
+                }
             }
             $ret = $userScore->save();
         } catch (\Exception $e) {
@@ -1032,8 +1042,12 @@ class UserApi extends ApiAction
             ->where([
                 'user_id' => $userId,
                 'story_id' => $storyId,
-                'session_id' => $sessionId,
+//                'session_id' => $sessionId,
             ]);
+
+        if (!empty($sessionId)) {
+            $ret = $ret->andFilterWhere(['session_id' => $sessionId]);
+        }
 
         if (!empty($teamId)) {
             $ret = $ret->andFilterWhere(['team_id' => $teamId]);
