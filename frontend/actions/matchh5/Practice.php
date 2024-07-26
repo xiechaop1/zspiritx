@@ -92,6 +92,16 @@ class Practice extends Action
 
         $matchClass = !empty($_GET['match_class']) ? $_GET['match_class'] : 0;
 
+        if (empty($matchClass)) {
+            $matchClassId = array_rand(StoryMatch::$matchClassRandList);
+            $matchClass = StoryMatch::$matchClassRandList[$matchClassId];
+        } else {
+            if (strpos($matchClass, ',') !== false) {
+                $matchClassArray = explode(',', $matchClass);
+                $matchClassId = array_rand($matchClassArray);
+                $matchClass = $matchClassArray[$matchClassId];
+            }
+        }
         $subjects = [];
 //        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $matchClass, $level);
         $subjects = Yii::$app->qas->getQaSubjectsWithUserWare($userId, $matchClass, $level);
