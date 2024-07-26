@@ -82,7 +82,9 @@ echo \dmstr\widgets\Alert::widget();
                             $userName = !empty($model->user->user_name) ?
                                 $model->user->user_name : '未知';
                             $userName .= ' [' . $model->user_id . ']';
-                            $userName .= ' [' . $model->user->mobile . ']';
+                            $userName .= ' [';
+                            $userName .= !empty($model->user->mobile) ? $model->user->mobile : ' - ';
+                            $userName .= ']';
                             return $userName;
                         },
                     ],
@@ -164,6 +166,13 @@ $form = ActiveForm::begin([
     ],
 ]);
 echo $form->field($userScoreModel, 'user_id')->label('用户');
+echo $form->field($userScoreModel, 'story_id')->label('剧本');
+//echo $form->field($userScoreModel, 'story_id')->widget('\kartik\select2\Select2', [
+//    'data' => $stories,
+//    'options' => [
+//        'multiple' => false
+//    ],
+//])->label('剧本');
 echo $form->field($userScoreModel, 'score')->label('积分');
 ?>
     <div class="form-group">
