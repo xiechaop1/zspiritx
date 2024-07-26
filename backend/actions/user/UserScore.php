@@ -38,7 +38,7 @@ class UserScore extends Action
             switch (Net::post('action')) {
                 case 'delete':
                     if ($userScore) {
-                        if ($userScore->deleve()) {
+                        if ($userScore->delete()) {
 
                         }
                     }
@@ -46,25 +46,6 @@ class UserScore extends Action
                     break;
                 default:
                     Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
-                    if ($isNew) {
-                        $count = UserScore::find()
-                            ->where(['mobile' => $model->mobile])
-                            ->andFilterWhere(['is_delete' => Common::STATUS_NORMAL])
-                            ->count();
-                        if ($count > 0) {
-                            Yii::$app->session->setFlash('danger', '手机号已存在');
-                            return $this->controller->responseAjax(1, '');
-                        }
-
-//                        $count = UserScore::find()
-//                            ->where(['user_name' => $model->user_name])
-//                            ->andFilterWhere(['is_delete' => Common::STATUS_NORMAL])
-//                            ->count();
-//                        if ($count > 0) {
-//                            Yii::$app->session->setFlash('danger', '用户已存在');
-//                            return $this->controller->responseAjax(1, '');
-//                        }
-                    }
                     $model->load(Yii::$app->request->post());
                     return ActiveForm::validate($model);
             }
