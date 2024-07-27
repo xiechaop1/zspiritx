@@ -242,8 +242,10 @@ class ParentApi extends ApiAction
                             ->count();
                         if ($rankCount == 0 && $todayCount > 0) {
                             $rankRate = 100;
-                        } else {
+                        } else if ($todayCount > 0) {
                             $rankRate = intval($rankCount / $todayCount * 100);
+                        } else {
+                            $rankRate = 0;
                         }
                         break;
                 }

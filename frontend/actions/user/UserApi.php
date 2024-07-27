@@ -993,38 +993,51 @@ class UserApi extends ApiAction
         $mode = !empty($this->_get['mode']) ? $this->_get['mode'] : 'add';
 
         try {
-            $userScore = UserScore::find()
-                ->where([
-                    'user_id' => $userId,
-                    'story_id' => $storyId,
-//                    'session_id' => $sessionId,
-                ]);
-            if (!empty($sessionId)) {
-                $userScore = $userScore->andFilterWhere(['session_id' => $sessionId]);
+
+            switch ($mode) {
+                case 'add':
+                    $ret = Yii::$app->score->add($userId, $storyId, $sessionId, $teamId, $score);
+                    break;
+                case 'update':
+                    $ret = Yii::$app->score->update($userId, $storyId, $sessionId, 0, $score);
+                    break;
+                default:
+                    $ret = Yii::$app->score->add($userId, $storyId, $sessionId, $teamId, $score);
+                    break;
             }
 
-            if (!empty($teamId)) {
-                $userScore = $userScore->andFilterWhere(['team_id' => $teamId]);
-            }
-            $userScore->orderBy('id desc');
-
-            $userScore = $userScore->one();
-
-            if (empty($userScore)) {
-                $userScore = new UserScore();
-                $userScore->user_id = $userId;
-                $userScore->story_id = $storyId;
-                $userScore->session_id = $sessionId;
-                $userScore->team_id = $teamId;
-                $userScore->score = $score;
-            } else {
-                if ($mode == 'add') {
-                    $userScore->score = $userScore->score + $score;
-                } else if ($mode == 'update') {
-                    $userScore->score = $score;
-                }
-            }
-            $ret = $userScore->save();
+//            $userScore = UserScore::find()
+//                ->where([
+//                    'user_id' => $userId,
+//                    'story_id' => $storyId,
+////                    'session_id' => $sessionId,
+//                ]);
+//            if (!empty($sessionId)) {
+//                $userScore = $userScore->andFilterWhere(['session_id' => $sessionId]);
+//            }
+//
+//            if (!empty($teamId)) {
+//                $userScore = $userScore->andFilterWhere(['team_id' => $teamId]);
+//            }
+//            $userScore->orderBy('id desc');
+//
+//            $userScore = $userScore->one();
+//
+//            if (empty($userScore)) {
+//                $userScore = new UserScore();
+//                $userScore->user_id = $userId;
+//                $userScore->story_id = $storyId;
+//                $userScore->session_id = $sessionId;
+//                $userScore->team_id = $teamId;
+//                $userScore->score = $score;
+//            } else {
+//                if ($mode == 'add') {
+//                    $userScore->score = $userScore->score + $score;
+//                } else if ($mode == 'update') {
+//                    $userScore->score = $score;
+//                }
+//            }
+//            $ret = $userScore->save();
         } catch (\Exception $e) {
             throw $e;
         }

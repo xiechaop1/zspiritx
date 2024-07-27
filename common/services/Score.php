@@ -27,8 +27,16 @@ class Score extends Component
             ->where([
                 'user_id' => $userId,
                 'story_id' => $storyId,
-                'session_id' => $sessionId,
-            ])->one();
+//                    'session_id' => $sessionId,
+            ]);
+        if (!empty($sessionId)) {
+            $userScore = $userScore->andFilterWhere(['session_id' => $sessionId]);
+        }
+
+
+        $userScore->orderBy('id desc');
+
+        $userScore = $userScore->one();
 
         return $userScore;
     }
@@ -37,9 +45,12 @@ class Score extends Component
         $userScores = UserScore::find()
             ->where([
                 'story_id'  => $storyId,
-                'session_id' => $sessionId,
-            ])
-            ->orderBy(['score' => SORT_DESC])
+//                'session_id' => $sessionId,
+            ]);
+        if (!empty($sessionId)) {
+            $userScores = $userScores->andFilterWhere(['session_id' => $sessionId]);
+        }
+        $userScores = $userScores->orderBy(['score' => SORT_DESC])
             ->all();
 
         return $userScores;
@@ -116,27 +127,36 @@ class Score extends Component
 
     public function add($userId, $storyId, $sessionId, $sessionStageId, $score = 0, $teamId = 0) {
 
-        if (empty($sessionId)) {
-            throw new \Exception('没有找到场次', ErrorCode::SESSION_NOT_FOUND);
-        }
-
-        $sessionInfo = Session::findOne($sessionId);
-
-        if (empty($sessionInfo)
-            || ($sessionInfo->session_status == Session::SESSION_STATUS_CANCEL
-                or $sessionInfo->session_status == Session::SESSION_STATUS_FINISH
-            )
-        ) {
-            throw new \Exception('场次不存在', ErrorCode::SESSION_NOT_FOUND);
-        }
+//        if (empty($sessionId)) {
+//            throw new \Exception('没有找到场次', ErrorCode::SESSION_NOT_FOUND);
+//        }
+//
+//        $sessionInfo = Session::findOne($sessionId);
+//
+//        if (empty($sessionInfo)
+//            || ($sessionInfo->session_status == Session::SESSION_STATUS_CANCEL
+//                or $sessionInfo->session_status == Session::SESSION_STATUS_FINISH
+//            )
+//        ) {
+//            throw new \Exception('场次不存在', ErrorCode::SESSION_NOT_FOUND);
+//        }
 
         $userScore = UserScore::find()
             ->where([
                 'user_id' => $userId,
                 'story_id' => $storyId,
-                'session_id' => $sessionId,
-                'team_id'   => $teamId,
-            ])->one();
+//                    'session_id' => $sessionId,
+            ]);
+        if (!empty($sessionId)) {
+            $userScore = $userScore->andFilterWhere(['session_id' => $sessionId]);
+        }
+
+        if (!empty($teamId)) {
+            $userScore = $userScore->andFilterWhere(['team_id' => $teamId]);
+        }
+        $userScore->orderBy('id desc');
+
+        $userScore = $userScore->one();
 
         $userTotalScore = UserScore::find()
             ->where([
@@ -179,6 +199,53 @@ class Score extends Component
             $scoreAbs = abs($score);
 
 //            Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, $act . $scoreAbs . '金币！', Actions::ACTION_TYPE_MSG);
+
+        } catch (\Exception $e) {
+            throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
+        }
+
+
+        return $userScore;
+    }
+
+    public function update($userId, $storyId, $sessionId, $sessionStageId, $score = 0, $teamId = 0) {
+
+        $userScore = UserScore::find()
+            ->where([
+                'user_id' => $userId,
+                'story_id' => $storyId,
+//                    'session_id' => $sessionId,
+            ]);
+        if (!empty($sessionId)) {
+            $userScore = $userScore->andFilterWhere(['session_id' => $sessionId]);
+        }
+
+        if (!empty($teamId)) {
+            $userScore = $userScore->andFilterWhere(['team_id' => $teamId]);
+        }
+        $userScore->orderBy('id desc');
+
+        $userScore = $userScore->one();
+
+        $userTotalScore = UserScore::find()
+            ->where([
+                'user_id' => $userId,
+                'story_id' => 0,
+            ])->one();
+
+        try {
+
+            if (!empty($userScore)) {
+                $userScore->score = $score;
+            } else {
+                $userScore = new UserScore();
+                $userScore->user_id = $userId;
+                $userScore->story_id = $storyId;
+                $userScore->session_id = $sessionId;
+                $userScore->team_id = $teamId;
+                $userScore->score = $score;
+            }
+            $userScore->save();
 
         } catch (\Exception $e) {
             throw new \Exception('完成进程失败', ErrorCode::USER_KNOWLEDGE_OPERATE_FAILED);
