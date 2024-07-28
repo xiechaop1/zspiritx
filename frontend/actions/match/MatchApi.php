@@ -19,6 +19,7 @@ use common\models\SessionQa;
 use common\models\StoryMatch;
 use common\models\StoryMatchPlayer;
 use common\models\StoryStages;
+use common\models\UserExtends;
 use common\models\UserQa;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
@@ -55,6 +56,9 @@ class MatchApi extends ApiAction
 
                 case 'update_match':
                     $ret = $this->updateMatch();
+                    break;
+                case 'add_knock_player':
+                    $ret = $this->addKnockPlayer();
                     break;
                 case 'update_knock_players':
                     $ret = $this->updateKnockPlayers();
@@ -108,6 +112,74 @@ class MatchApi extends ApiAction
         return $ret;
     }
 
+    public function addKnockPlayer() {
+        $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $userExtends = UserExtends::find()
+            ->where([
+                'user_id' => $userId,
+            ])
+            ->one();
+
+        $storyMatch = StoryMatch::find()
+            ->where([
+                'id' => $matchId,
+                'story_match_status' => [
+                    StoryMatch::STORY_MATCH_STATUS_MATCHING,
+                    StoryMatch::STORY_MATCH_STATUS_PLAYING,
+                ]
+            ])
+            ->one();
+
+        $fee = 2000;
+        if (!empty($storyMatch->match_detail)) {
+            $matchDetail = json_decode($storyMatch->match_detail, true);
+            $fee = !empty($matchDetail['fee']) ? $matchDetail['fee'] : $fee;
+        }
+
+        $userScore = Yii::$app->score->get($userId, $storyId, 0);
+        if ($userScore->score < $fee) {
+            throw new \Exception('金币不足，不能报名', ErrorCode::STORY_MATCH_JOIN_FAILED);
+        } else {
+            $userScore = Yii::$app->score->add($userId, $storyId, 0, 0, -$fee);
+        }
+
+        $bonusJson = $storyMatch->bonus;
+        $bonus = !empty($bonusJson) ? json_decode($bonusJson, true) : [];
+        $bonus['score'] = !empty($bonus['score']) ? $bonus['score'] + $fee : $fee;
+        $storyMatch->bonus = json_encode($bonus, JSON_UNESCAPED_UNICODE);
+        $storyMatch->save();
+
+        $storyMatchPlayer = StoryMatchPlayer::find()
+            ->where([
+                'match_id' => $matchId,
+                'user_id' => $userId,
+                'match_player_status' => [
+                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
+                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+                    StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+                ]
+            ])
+            ->one();
+
+        if (empty($storyMatchPlayer)) {
+            $playerProp = [
+                'grade' => !empty($userExtends->grade) ? $userExtends->grade : 1,
+                'level' => !empty($userExtends->level) ? $userExtends->level : 1,
+            ];
+            $storyMatchPlayer = new StoryMatchPlayer();
+            $storyMatchPlayer->user_id = $userId;
+            $storyMatchPlayer->team_id = 1;
+            $storyMatchPlayer->match_id = $matchId;
+            $storyMatchPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING;
+            $storyMatchPlayer->m_user_model_prop = json_encode($playerProp, JSON_UNESCAPED_UNICODE);
+            $storyMatchPlayer->save();
+        }
+
+        return $storyMatchPlayer;
+    }
+
     public function updateKnockPlayers() {
         $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
@@ -157,6 +229,7 @@ class MatchApi extends ApiAction
         $status = 'matching';
         $matchId = !empty($this->_get['match_id']) ? $this->_get['match_id'] : 0;
         $matchType = !empty($this->_get['match_type']) ? $this->_get['match_type'] : StoryMatch::MATCH_TYPE_KNOCKOUT;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
 
         $storyMatch = StoryMatch::find()
             ->where([
@@ -165,6 +238,7 @@ class MatchApi extends ApiAction
                 'story_match_status' => [
                     StoryMatch::STORY_MATCH_STATUS_MATCHING,
                     StoryMatch::STORY_MATCH_STATUS_PLAYING,
+                    StoryMatch::STORY_MATCH_STATUS_END
                 ],
             ])
             ->one();
@@ -176,7 +250,7 @@ class MatchApi extends ApiAction
         if (!empty($storyMatch)) {
             if ($storyMatch->story_match_status == StoryMatch::STORY_MATCH_STATUS_PLAYING) {
                 $status = 'playing';
-            } else {
+            } elseif ($storyMatch->story_match_status == StoryMatch::STORY_MATCH_STATUS_MATCHING) {
 
                 if ($storyMatch->join_expire_time <= time()
 //                    && 1 != 1
@@ -231,6 +305,9 @@ class MatchApi extends ApiAction
                     }
                 }
 
+            } else {
+                // 已经结束了
+                $status = 'end';
             }
         }
 
@@ -246,8 +323,12 @@ class MatchApi extends ApiAction
             ->all();
 
         $players = [];
+        $myPlayer = [];
         if (!empty($playersData)) {
             foreach ($playersData as $player) {
+                if ($player->user_id == $userId) {
+                    $myPlayer = $player->toArray();
+                }
                 $tmp = $player->toArray();
                 if (!empty($player->user)) {
                     $tmp['user'] = $player->user->toArray();
@@ -266,6 +347,7 @@ class MatchApi extends ApiAction
         return [
             'status' => $status,
             'match' => $storyMatch,
+            'my_player' => $myPlayer,
             'players' => $players,
             'players_ct' => sizeof($players),
         ];
@@ -334,6 +416,53 @@ class MatchApi extends ApiAction
                     $myPlayer->save();
 //                    echo '2';
                 }
+
+                $players = StoryMatchPlayer::find()
+                    ->where([
+                        'match_id' => $matchId,
+                        'match_player_status' => [
+//                            StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+                            StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+                            StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END,
+                        ],
+                    ])
+                    ->all();
+                $playingPlayersCt = 0;
+                $endPlayersCt = 0;
+                $endPlayers = [];
+                if (!empty($players)) {
+                    foreach ($players as $pla) {
+                        if ($pla->match_player_status == StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING
+                        ) {
+                            $playingPlayersCt++;
+                        } elseif ($pla->match_player_status == StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END) {
+                            $endPlayersCt++;
+                            $endPlayers[] = $pla;
+                        }
+                    }
+                }
+                if ($playingPlayersCt == 0) {
+//                    $storyMatch->match_detail = json_encode($matchDetail, true);
+                    $storyMatch->score = $score;
+                    $storyMatch->score2 = $subjectCt;
+                    $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_END;
+                    $storyMatch->save();
+
+                    $bonusJson = $storyMatch->bonus;
+                    $bonus = json_decode($bonusJson, true);
+                    $score = !empty($bonus['score']) ? $bonus['score'] : 0;
+
+                    if ($endPlayersCt > 0) {
+                        $eachScore = intval($score / $endPlayersCt);
+                    }
+
+                    if (!empty($endPlayers)) {
+                        foreach ($endPlayers as $endPlayer) {
+                            Yii::$app->score->add($endPlayer->user_id, $storyId, 0, 0, $eachScore);
+                        }
+                    }
+                }
+
             } else {
                 if ($answer == 1) {
                     if (!empty($storyMatch->players)) {

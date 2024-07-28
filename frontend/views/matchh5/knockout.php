@@ -164,6 +164,7 @@ $this->title = $storyMatch->match_name;
 <input type="hidden" name="match_type" id="match_type" value="<?= $storyMatch->match_type ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
 <input type="hidden" name="init_timer" id="init_timer" value="<?= $initTimer ?>">
+<input type="hidden" name="init_add_gold" id="init_add_gold" value="<?= $addGold ?>">
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
         <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -185,7 +186,7 @@ $this->title = $storyMatch->match_name;
                 <div class="match-qa-header-left2">
                     <img src="<?= $user['avatar'] ?>" class="header-m">
                     <img src="../../static/img/match/coin.png">
-                    <span id="gold">0</span>
+                    <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
                 </div>
                 <div class="match-qa-header-right">
                     本场选手
@@ -281,7 +282,7 @@ $this->title = $storyMatch->match_name;
 
 
                 <label id="answer-info" class="h5-btn-green-big answer-btn hide"  data-value="<?php echo $qa['st_selected']; ?>
-" data-qa="<?php echo $qa['id']; ?>" data-match="<?php echo $matchId ?>" data-type="<?php echo $qa['qa_type']; ?>" data-story="<?php echo $qa['story_id']; ?>" data-user="">
+" data-qa="<?php echo $qa['id']; ?>" data-match="<?php echo $matchId ?>" data-type="<?php echo $qa['qa_type']; ?>" data-story="<?php echo $storyId; ?>" data-user="">
                     提交
                 </label>
             </div>
@@ -839,6 +840,7 @@ $this->title = $storyMatch->match_name;
         // console.log(obj.subjects[idx]);
         var tobj = obj.subjects[idx].topic;
         var topic = tobj.formula;
+        var add_gold = $('#init_add_gold').val();
         console.log(topic);
         if (topic == undefined) {
             idx = 0;
@@ -876,7 +878,7 @@ $this->title = $storyMatch->match_name;
                 // optHtml += '    <span class="answer-tag">' + label + '</span>' + ansrange[j];
                 // optHtml += '</label> </div></div>';
             }
-            optHtml += '<input type="hidden" id="add_gold" value="10">';
+            optHtml += '<input type="hidden" id="add_gold" value="' + add_gold + '">';
             optHtml += '<input type="hidden" id="add_right" value="1">';
             optHtml += '<input type="hidden" id="add_wrong" value="0">';
         }
@@ -963,24 +965,51 @@ $this->title = $storyMatch->match_name;
         }
     }
 
-
-    function avatarAnimate(hitObj) {
-        var rivAvatar = $(hitObj).find('.riv_avatar');
-        var hitLeft = rivAvatar.position().left - 20;
-        var hitTop = rivAvatar.position().top;
-        var hitDiv = '<div class="riv_hit" style="position: absolute; z-index: 999999; left: ' + hitLeft + 'px; top: ' + hitTop + 'px;"><img width="120" src="../../static/img/match/hit.gif"></div>';
-        $(hitObj).append(hitDiv);
-        $(hitObj).find('.riv_hit').animate({
-            opacity: 100
-        }, 500, function() {
-            shake(rivAvatar.find('img'));
-            $(this).remove();
-        });
-    }
-
     function addGold() {
         var gold = $('#gold').html();
         var addGold = $('#add_gold').val();
+        var user_id = $('input[name=user_id]').val();
+        var story_id = $('input[name=story_id]').val();
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/user/add_user_score',
+            data:{
+                user_id:user_id,
+                story_id:story_id,
+                // session_id:session_id,
+                // session_stage_id:session_stage_id,
+                score:addGold,
+            },
+            onload: function (data) {
+                // $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+
+                //新消息获取成功
+                if(ajaxObj["code"]==200){
+
+                }
+                //新消息获取失败
+                else{
+                    // $.alert(obj.msg)
+                    console.log(ajaxObj.msg);
+                }
+
+            }
+        });
+
         if (addGold > 0) {
             floNumber(addGold);
             gold = parseInt(gold) + parseInt(addGold);
@@ -1026,7 +1055,7 @@ $this->title = $storyMatch->match_name;
         var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
         var qa_type=that.attr("data-type");
-        var story_id=that.attr("data-story");
+        var story_id=$("input[name='story_id']").val();
         var user_id=$("input[name='user_id']").val();
         var session_id=$("input[name='session_id']").val();
         var session_stage_id=$("input[name='session_stage_id']").val();
@@ -1039,13 +1068,6 @@ $this->title = $storyMatch->match_name;
         var subjct=$('#subjct').html();
         var right_ct=$('#right_ct').html();
         var wrong_ct=0;
-        var max_riv_subjct = 0;
-        var riv_subjct = $('.riv_subjct').each(function(){
-            var riv_subjct = $(this).html();
-            if (riv_subjct > max_riv_subjct) {
-                max_riv_subjct = riv_subjct;
-            }
-        });
 
         // var answer;
         // console.log(subjct);
@@ -1164,7 +1186,7 @@ $this->title = $storyMatch->match_name;
 
     function compTimer(matchTimer) {
         var timer = $('#timer').html();
-        timer--;
+        // timer--;
         $('#timer').html(timer);
         if (timer == 0) {
             $('#answer-box').hide();

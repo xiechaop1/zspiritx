@@ -249,7 +249,11 @@ class ParentApi extends ApiAction
                         }
                         break;
                 }
-                $descs[$userData->data_type] = '超越了' . $rankRate . '%同级学子';
+                if ($rankRate > 0) {
+                    $descs[$userData->data_type] = '超越了' . $rankRate . '%同级学子';
+                } else {
+                    $descs[$userData->data_type] = '期待您的训练';
+                }
             }
         }
 

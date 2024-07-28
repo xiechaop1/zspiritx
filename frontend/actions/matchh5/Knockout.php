@@ -84,8 +84,10 @@ class Knockout extends Action
             ])
             ->one();
 
+        $userScore = Yii::$app->score->get($userId, $storyId, 0);
+
         if (!empty($user['avatar'])) {
-            $user['avatar'] = Attachment::completeUrl($userInfo['avatar']);
+            $user['avatar'] = Attachment::completeUrl($user['avatar']);
         } else {
             $user['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
         }
@@ -134,6 +136,11 @@ class Knockout extends Action
         $subjectsJson = $storyMatch->story_match_prop;
         $subjects = json_decode($subjectsJson, true);
 
+        $matchDetailJson = $storyMatch->match_detail;
+        $matchDetail = json_decode($matchDetailJson, true);
+        $fee = !empty($matchDetail['fee']) ? $matchDetail['fee'] : 2000;
+        $addGold = $fee / 5;
+
 //        var_dump($subjects);exit;
 //        // 保存比赛状态
 //        $storyMatch->match_detail = json_encode($matchDetail, true);
@@ -157,6 +164,8 @@ class Knockout extends Action
             'storyMatch'   => $storyMatch,
             'initTimer' => 180,
             'user'          => $user,
+            'userScore'     => $userScore,
+            'addGold'       => $addGold,
         ]);
     }
 

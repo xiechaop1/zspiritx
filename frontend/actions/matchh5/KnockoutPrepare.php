@@ -55,7 +55,7 @@ class KnockoutPrepare extends Action
         $matchClass = !empty($_GET['match_class']) ? $_GET['match_class'] : 0;
 
         $maxPlayersCt = !empty($_GET['max_players_ct']) ? $_GET['max_players_ct'] : 30;
-        $joinExpireTime = !empty($_GET['join_expire_time']) ? $_GET['join_expire_time'] : 180; // (s)
+        $joinExpireTime = !empty($_GET['join_expire_time']) ? $_GET['join_expire_time'] : 1800; // (s)
 
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
 
@@ -80,6 +80,8 @@ class KnockoutPrepare extends Action
             ->where(['user_id' => $userId])
             ->one();
 
+        $userScore = Yii::$app->score->get($userId, $storyId, 0);
+
         $userLevel = !empty($userExtends->level) ? $userExtends->level : 1;
 
         if (empty($matchId) && empty($matchName)) {
@@ -87,6 +89,7 @@ class KnockoutPrepare extends Action
         }
 
         if (empty($matchId)) {
+            // 查找当前用户正在匹配或者参加的比赛
             $storyMatchPlayers = StoryMatchPlayer::find()
                 ->where([
                     'user_id' => $userId,
@@ -109,6 +112,7 @@ class KnockoutPrepare extends Action
         }
 
         if (!empty($matchIds)) {
+            // 如果存在正在进行的比赛，那么找到这条数据
             $storyMatch = StoryMatch::find()
                 ->where([
                     'id' => $matchIds,
@@ -122,6 +126,13 @@ class KnockoutPrepare extends Action
                         StoryMatch::STORY_MATCH_STATUS_PLAYING,
                     ],
                 ])
+                ->andFilterWhere([
+                    'level' => [
+                        $userLevel, $userLevel+1
+                    ]
+                ])
+                ->orderBy(['level' => SORT_ASC])
+//                ->andFilterWhere(['<=', 'join_expire_time', time()])
                 ->one();
             if (!empty($storyMatch)) {
                 $matchId = $storyMatch->id;
@@ -134,7 +145,7 @@ class KnockoutPrepare extends Action
         }
 
         if (empty($matchId)) {
-
+            // 查找当前正在匹配期的比赛
             $storyMatch = StoryMatch::find()
                 ->where([
                     'match_type' => $matchType,
@@ -147,11 +158,18 @@ class KnockoutPrepare extends Action
 //                            StoryMatch::STORY_MATCH_STATUS_PLAYING,
                     ],
                 ])
-                ->orderBy('id desc')
+                ->andFilterWhere(['>=', 'join_expire_time', time()])
+                ->andFilterWhere([
+                    'level' => [
+                        $userLevel, $userLevel+1
+                    ]
+                ])
+                ->orderBy(['level' => SORT_ASC, 'id' => SORT_DESC])
+
+
                 ->one();
             $matchId = !empty($storyMatch->id) ? $storyMatch->id : 0;
         }
-
 
             // 如果比赛开始，但是玩家已经结束，那么重新建立比赛
 //            if (!empty($matchId)) {
@@ -175,7 +193,8 @@ class KnockoutPrepare extends Action
 //
 //            }
 
-            if (empty($matchId)) {
+        if (empty($matchId)) {
+                // 如果都没有，创建比赛
                 if (empty($matchClass)) {
                     $matchClassId = array_rand(StoryMatch::$matchClassRandList);
                     $matchClass = StoryMatch::$matchClassRandList[$matchClassId];
@@ -212,13 +231,18 @@ class KnockoutPrepare extends Action
                 }
                 $storyMatchProp['subjects'] = $subjects;
 
+                $fee = 2000;
+                $matchDetail = json_encode(['fee' => $fee], JSON_UNESCAPED_UNICODE);
+
                 $storyMatch = new StoryMatch();
                 $storyMatch->story_id = $storyId;
                 $storyMatch->user_id = $userId;
                 $storyMatch->session_id = $sessionId;
+                $storyMatch->level = $userLevel;
                 $storyMatch->match_name = $matchName;
                 $storyMatch->match_type = $matchType;
                 $storyMatch->match_class = $matchClass;
+                $storyMatch->match_detail = $matchDetail;
                 $storyMatch->story_match_prop = json_encode($storyMatchProp, JSON_UNESCAPED_UNICODE);
                 $storyMatch->max_players_ct = $maxPlayersCt;
                 $storyMatch->join_expire_time = time() + $joinExpireTime;
@@ -239,25 +263,31 @@ class KnockoutPrepare extends Action
                 ]
             ])
             ->one();
-
-        if (empty($storyMatchPlayer)) {
-            $playerProp = [
-                'grade' => !empty($userExtends->grade) ? $userExtends->grade : 1,
-                'level' => !empty($userExtends->level) ? $userExtends->level : 1,
-            ];
-            $storyMatchPlayer = new StoryMatchPlayer();
-            $storyMatchPlayer->user_id = $userId;
-            $storyMatchPlayer->team_id = 1;
-            $storyMatchPlayer->match_id = $matchId;
-            $storyMatchPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING;
-            $storyMatchPlayer->m_user_model_prop = json_encode($playerProp, JSON_UNESCAPED_UNICODE);
-            $storyMatchPlayer->save();
-        }
+//
+//        if (empty($storyMatchPlayer)) {
+//            $playerProp = [
+//                'grade' => !empty($userExtends->grade) ? $userExtends->grade : 1,
+//                'level' => !empty($userExtends->level) ? $userExtends->level : 1,
+//            ];
+//            $storyMatchPlayer = new StoryMatchPlayer();
+//            $storyMatchPlayer->user_id = $userId;
+//            $storyMatchPlayer->team_id = 1;
+//            $storyMatchPlayer->match_id = $matchId;
+//            $storyMatchPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING;
+//            $storyMatchPlayer->m_user_model_prop = json_encode($playerProp, JSON_UNESCAPED_UNICODE);
+//            $storyMatchPlayer->save();
+//        }
 
         if (!empty($userInfo['avatar'])) {
             $userInfo['avatar'] = Attachment::completeUrl($userInfo['avatar']);
         } else {
             $userInfo['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+        }
+
+        $fee = 2000;
+        if (!empty($storyMatch->match_detail)) {
+            $matchDetail = json_decode($storyMatch->match_detail, true);
+            $fee = !empty($matchDetail['fee']) ? $matchDetail['fee'] : $fee;
         }
 
         return $this->controller->render('knockout_prepare', [
@@ -268,10 +298,9 @@ class KnockoutPrepare extends Action
             'storyMatch'   => $storyMatch,
             'qaId'          => $qaId,
             'matchId'      => $matchId,
+            'fee'           => $fee,
             'userInfo'         => $userInfo,
-//            'answerType'    => 2,
-//            'msg' => $msg,
-//            'btnName' => '开始挑战',
+            'userScore'     => $userScore,
         ]);
     }
 
