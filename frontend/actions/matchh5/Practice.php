@@ -88,6 +88,8 @@ class Practice extends Action
             ])
             ->one();
 
+        $userScore = Yii::$app->score->get($userId, $storyId, 0);
+
         $level = !empty($userExtends['level']) ? $userExtends['level'] : 1;
 
         $matchClass = !empty($_GET['match_class']) ? $_GET['match_class'] : 0;
@@ -235,6 +237,7 @@ class Practice extends Action
             'ct'            => sizeof($subjects),
             'initTimer' => 60,
             'user' => $user,
+            'userScore' => $userScore,
         ]);
     }
 

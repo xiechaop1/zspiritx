@@ -192,7 +192,7 @@ $this->title = '练习赛';
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
                         <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
-                        <span id="gold">0</span>
+                        <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
                     </div>
                 </div>
                 <div class="btn-m-green confirm_btn" style="margin-left: 100px;">
@@ -852,6 +852,18 @@ $this->title = '练习赛';
         });
 
         if (addGold > 0) {
+
+            var goldSpan = $('#gold');
+            var goldDiv = '<div id="showGold" style="z-index: 999999; position: absolute; top: 100px; left: ' + goldSpan.position().left + 'px; font-size: 70px; color: #e0a800; font-weight: bold; width: 300px;">+ ' + addGold + '</div>';
+            $('#gold').parent().append(goldDiv);
+            console.log(goldDiv);
+            $('#showGold').animate({
+                top: goldSpan.position().top - 10 + 'px',
+                opacity: '0'
+            }, 1200, function() {
+                $('#showGold').remove();
+            });
+
             floNumber(addGold);
             gold = parseInt(gold) + parseInt(addGold);
             $('#gold').html(gold);

@@ -1645,6 +1645,18 @@ $this->title = $storyMatch->match_name;
     }
 
     function addGold() {
+        var goldSpan = $('#gold');
+        var goldDiv = '<div id="showGold" style="z-index: 999999; position: absolute; top: 100px; left: ' + goldSpan.position().left + 'px; font-size: 70px; color: #e0a800; font-weight: bold; width: 300px;">+ ' + addGold + '</div>';
+        $('#gold').parent().append(goldDiv);
+        console.log(goldDiv);
+        $('#showGold').animate({
+            top: goldSpan.position().top - 10 + 'px',
+            opacity: '0'
+        }, 1200, function() {
+            $('#showGold').remove();
+        });
+
+
         var gold = $('#gold').html();
         var addGold = $('#add_gold').val();
         if (addGold > 0) {
