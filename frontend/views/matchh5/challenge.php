@@ -860,11 +860,13 @@ $this->title = $storyMatch->match_name;
 
                     <input type="hidden" id="message-topic">
                     <input type="hidden" id="message-id">
-                    <div id="message-content" class="fs-40 text-FF text-center bold m-t-50 lottery-content">
-
+                    <div id="message-content" class="fs-40 text-FF text-center bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                        <div id="message-content-ai" class="bold fs-28 message-content-ai" style="font-size: 28px; width: 80%;"></div>
                     </div>
-                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
-                        <label class="btn-green-m active ">知道了</label>
+                    <div id="message-question" style="height: 200px; overflow: auto;">
+<!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+<!--                        <label class="btn-green-m active ">知道了</label>-->
+<!--                    </div>-->
                     </div>
                 </div>
             </div>
@@ -1059,7 +1061,7 @@ $this->title = $storyMatch->match_name;
             $('#message-content').html('正在思考……');
 
             setTimeout(function () {
-                getSugg();
+                getSugg('');
             }, 500);
              $("#message-box").modal('show');
             stopRivalTimer();
@@ -1236,24 +1238,49 @@ $this->title = $storyMatch->match_name;
         rivalTimerRunning = true;
     }
 
-    function getSugg() {
+    function getSugg(ques) {
         // $('#suggestion_content').toggle();
         var topic = $('#topic').html();
         var level = $('input[name=level]').val();
         var match_class = $('input[name=match_class]').val();
         var user_id = $('input[name=user_id]').val();
         var story_id = $('input[name=story_id]').val();
+        var old_messages = '';
 
+        if (ques != '') {
+            var oldMsgs = [];
+            var tmpMessages = $('#message-content').find('div');
+            tmpMessages.each(function () {
+                console.log($(this));
+                var msg = $(this).html();
+                console.log(msg);
+                var msg_type = $(this).attr('msg_type');
+                var msgObj = {
+                    msg: msg,
+                    msg_type: msg_type,
+                };
+                console.log(msgObj);
+                oldMsgs.push(msgObj);
+            });
+            console.log(oldMsgs);
+            old_messages = JSON.stringify(oldMsgs);
+        } else {
+            $('#message-content').html('');
+        }
+        console.log(ques);
+        $('#message-question').html('');
 
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
-            async: false,
+            async: true,
             url: '/match/get_suggestion_from_subject',
             data:{
                 story_id:story_id,
                 user_id:user_id,
                 topic:topic,
+                ques:ques,
+                old_messages:old_messages,
                 level:level,
                 match_class:match_class,
             },
@@ -1274,9 +1301,37 @@ $this->title = $storyMatch->match_name;
                 if(ajaxObj["code"]==200){
                     console.log(ajaxObj);
                     var suggestion = ajaxObj.data.suggestion;
-                    $('#message-content').html(suggestion);
-                    $('#message-topic').val(topic);
+                    // $('#message-content').html(suggestion);
+                    // $('#message-topic').val(topic);
                     // $('#message-box').modal('show');
+
+                    if ($('#message-content').html() == '正在思考……')  {
+                        $('#message-content').html('');
+                    }
+                    var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">' + suggestion + '</div>';
+                    // $('#message-content').html(suggestion);
+                    $('#message-content').append(sugdiv);
+                    $('#message-topic').val(topic);
+                    console.log(ajaxObj.data.questions);
+                    for (var qu in ajaxObj.data.questions) {
+                        var qutitle = ajaxObj.data.questions[qu];
+                        var size = 28;
+                        if (qutitle.length > 20) {
+                            size = 20;
+                        }
+                        var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20 next-ques" style="margin-top: 25px;">';
+                        ques += '<label class="btn-green-m-choice active " style="font-size: ' + size + 'px;">' + ajaxObj.data.questions[qu]  + '</label>';
+                        ques += '</div>';
+                        console.log(ques);
+                        $('#message-question').append(ques);
+                    }
+                    $('.next-ques').click(function() {
+                        var next_ques = $(this).find('label').html();
+                        // console.log(next_ques);
+                        var msgdiv = '<div class="fs-24 btn-green-m-msg-ai-choice my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + next_ques + '</div>';
+                        $('#message-content').append(msgdiv);
+                        getSugg(next_ques);
+                    });
                 }
                 //新消息获取失败
                 else{

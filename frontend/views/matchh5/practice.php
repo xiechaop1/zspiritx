@@ -577,11 +577,11 @@ $this->title = '练习赛';
             $('#message-content').html('');
         }
         console.log(ques);
-
+        $('#message-question').html('');
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
-            async: false,
+            async: true,
             url: '/match/get_suggestion_from_subject',
             data:{
                 story_id:story_id,
