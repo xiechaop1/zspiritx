@@ -207,7 +207,8 @@ class Doubao extends Component
 
         $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
-            'model' => 'ep-20240628070258-6m88j',
+//            'model' => 'ep-20240628070258-6m88j',
+            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
             'temperature' => 0.1,
 //            'stream' => false,

@@ -85,8 +85,10 @@ class Wrong extends Action
         if (!empty($userQa)) {
             foreach ($userQa as &$uqa) {
                 $qa = $uqa->qa;
-                $qa = $qa->toArray();
-                $qa['selected_json'] = \common\helpers\Common::isJson($qa['selected']) ? json_decode($qa['selected'], true) : $qa['selected'];
+                if (!empty($qa)) {
+                    $qa = $qa->toArray();
+                    $qa['selected_json'] = \common\helpers\Common::isJson($qa['selected']) ? json_decode($qa['selected'], true) : $qa['selected'];
+                }
             }
         }
 
