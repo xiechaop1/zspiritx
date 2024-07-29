@@ -35,8 +35,9 @@ class Qa
 
         if (!empty($userQa)) {
             $qa = !empty($userQa->qa) ? $userQa->qa : [];
-            $qa = $qa->toArray();
-            if (empty($qa)) {
+            if (!empty($qa)) {
+                $qa = $qa->toArray();
+            } else {
                 return [];
             }
             $answerIdx = $qa['st_answer'];
