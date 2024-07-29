@@ -806,6 +806,47 @@ input[type="radio"]:checked+label::before {
 .match-text-box{
     min-height:100px ;
 }
+.btn-green-m-choice{
+    width: 480px;
+    height: 66px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 44px;
+
+    font-weight: 600;
+    font-size: 28px;
+    color: rgba(255,255,255,0.3);
+    line-height: 66px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+}
+.btn-green-m-choice.active{
+    background: #DAFC70;
+    color: #1F2628;
+}
+.btn-green-m-msg-ai-choice{
+    width: 80%;
+    height: auto;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.3);
+    line-height: 40px;
+    text-align: left;
+    font-style: normal;
+    text-transform: none;
+    padding: 20px;
+    font-weight: normal;
+    margin: 10px;
+}
+.btn-green-m-msg-ai-choice.active{
+    background: #DAFC70;
+    color: #1F2628;
+}
+.btn-green-m-msg-ai-choice.my{
+    background: #87CEEB;
+    color: #1F2628;
+}
+
 .btn-green-m{
     width: 480px;
     height: 88px;

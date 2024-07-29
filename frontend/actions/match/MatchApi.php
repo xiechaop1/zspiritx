@@ -85,6 +85,9 @@ class MatchApi extends ApiAction
             return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 
+        $ret['ts'] = time();
+        $ret['tsf'] = Date('Y-m-d H:i:s', time());
+
         return $this->success($ret);
     }
 
@@ -97,14 +100,55 @@ class MatchApi extends ApiAction
     }
 
     public function getSuggestionFromSubject() {
+
         $topic = !empty($this->_get['topic']) ? $this->_get['topic'] : '';
         $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
+
+        $ques = !empty($this->_get['ques']) ? $this->_get['ques'] : '';
+
+//        if (empty($ques)) {
+//
+//            $js = '{
+//        "suggestion": "我们可以先假设全是鸡或全是兔，然后根据脚的数量差异来计算。假设全是鸡，应该有 60 只脚，实际 88 只脚，多出来的就是兔子多的脚。",
+//        "questions": [
+//            "能否用方程求解",
+//            "鸡兔数量有上限吗",
+//            "脚数计算会出错吗",
+//            "还有其他类似题目吗"
+//        ],
+//        "size": 35,
+//        "ts": 1722240449,
+//        "tsf": "2024-07-29 16:07:29"
+//    }';
+//            return json_decode($js, true);
+//        }
+
+        $oldMessageJson = !empty($this->_get['old_messages']) ? $this->_get['old_messages'] : '';
+        $oldMsgs = json_decode($oldMessageJson, true);
+        $oldMessages = [];
+        if (!empty($oldMsgs)) {
+            foreach ($oldMsgs as $oldMsg) {
+                $oldMessages[] = [
+                    'role' => !empty($oldMsg['msg_type']) ? $oldMsg['msg_type'] : 'user',
+                    'content' => $oldMsg['msg'],
+                ];
+            }
+        }
+//        if (!empty($oldMessageJson)) {
+//            var_dump($oldMessageJson);
+//            var_dump($oldMessages);exit;
+//        }
+
         $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
 
-        $suggestion = Yii::$app->doubao->generateSuggestionFromSubject($topic, $level, $matchClass);
+        $suggestions = Yii::$app->doubao->generateSuggestionFromSubject($topic, $level, $matchClass, $ques, $oldMessages);
+
+        $suggestion = !empty($suggestions['SUGGEST']) ? $suggestions['SUGGEST'] : '';
+        $questions = !empty($suggestions['QUESTIONS']) ? $suggestions['QUESTIONS'] : [];
 
         $ret = [
             'suggestion' => $suggestion,
+            'questions' => $questions,
             'size' => mb_strlen($suggestion) > 20 ? 35 : 40,
         ];
 //        var_dump($ret);exit;
