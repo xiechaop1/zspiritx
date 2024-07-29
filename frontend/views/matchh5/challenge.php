@@ -1269,6 +1269,8 @@ $this->title = $storyMatch->match_name;
         }
         console.log(ques);
         $('#message-question').html('');
+        var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">正在思考……</div>';
+        $('#message-content').append(sugdiv);
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -1308,9 +1310,10 @@ $this->title = $storyMatch->match_name;
                     if ($('#message-content').html() == '正在思考……')  {
                         $('#message-content').html('');
                     }
-                    var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">' + suggestion + '</div>';
+                    // var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">' + suggestion + '</div>';
+                    // $('#message-content').append(sugdiv);
                     // $('#message-content').html(suggestion);
-                    $('#message-content').append(sugdiv);
+                    $('.message-content-ai').last().html(suggestion);
                     $('#message-topic').val(topic);
                     console.log(ajaxObj.data.questions);
                     for (var qu in ajaxObj.data.questions) {
