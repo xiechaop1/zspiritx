@@ -486,7 +486,7 @@ $this->title = '练习赛';
     };
 
     function generateSubjects() {
-        return true;
+        // return true;
         var topic = $('#topic').html();
         var level = $('input[name=level]').val();
         var match_class = $('input[name=match_class]').val();
