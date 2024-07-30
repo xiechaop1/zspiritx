@@ -49,6 +49,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_subjects',
             ],
+            'play_voice' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'play_voice',
+            ],
 
         ];
     }

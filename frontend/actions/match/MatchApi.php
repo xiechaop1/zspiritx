@@ -75,6 +75,9 @@ class MatchApi extends ApiAction
                 case 'get_subjects':
                     $ret = $this->getSubjects();
                     break;
+                case 'play_voice':
+                    $ret = $this->playVoice();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -396,6 +399,19 @@ class MatchApi extends ApiAction
             'players_ct' => sizeof($players),
         ];
 
+    }
+
+    public function playVoice() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $messages = !empty($this->_get['messages']) ? $this->_get['messages'] : '';
+
+        $ret = Yii::$app->doubaoTTS->ttsWithDoubao($messages, $userId);
+
+        if (!empty($ret['file'])) {
+            $ret['file']['url'] = Attachment::completeUrl($ret['file']['file'], false);
+        }
+
+        return $ret;
     }
 
     public function updateMatch() {
