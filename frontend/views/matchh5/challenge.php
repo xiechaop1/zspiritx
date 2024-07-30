@@ -156,7 +156,7 @@ $this->title = $storyMatch->match_name;
     }
 </style>
 <audio autoplay loop>
-    <source src="<?= $qa['voice'] ?>" type="audio/mpeg">
+    <source src="" type="audio/mpeg">
     您的浏览器不支持 audio 元素。
 </audio>
 <input type="hidden" name="user_id" value="<?= $userId ?>">
@@ -1247,6 +1247,8 @@ $this->title = $storyMatch->match_name;
         var story_id = $('input[name=story_id]').val();
         var old_messages = '';
 
+        var audio_list = [];
+
         if (ques != '') {
             var oldMsgs = [];
             var tmpMessages = $('#message-content').find('div');
@@ -1271,6 +1273,8 @@ $this->title = $storyMatch->match_name;
         $('#message-question').html('');
         var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">正在思考……</div>';
         $('#message-content').append(sugdiv);
+
+        var audioVoice = $('#audio_voice')[0];
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -1314,11 +1318,14 @@ $this->title = $storyMatch->match_name;
                     // $('#message-content').append(sugdiv);
                     // $('#message-content').html(suggestion);
                     $('.message-content-ai').last().html(suggestion);
+                    $('#message-content').append('<div style="float: left; line-height: 200%;"><img class="play_voice" src="../../static/img/match/play.png" width="50"></div>');
+
                     $('#message-topic').val(topic);
                     var msbox = document.querySelector('#message-content');
                     msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
 
                     console.log(ajaxObj.data.questions);
+                    $('#message-question').html('');
                     for (var qu in ajaxObj.data.questions) {
                         var qutitle = ajaxObj.data.questions[qu];
                         var size = 28;
@@ -1339,6 +1346,55 @@ $this->title = $storyMatch->match_name;
                         var msbox = document.querySelector('#message-content');
                         msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
                         getSugg(next_ques);
+                    });
+
+                    $('.play_voice').click(function() {
+
+                        for (var ai in audio_list) {
+                            if (audio_list[ai].msg == $(this).parent().prev().html()) {
+                                audioVoice.src = audio_list[ai].voice;
+                                audioVoice.play();
+                                return;
+                            }
+                        }
+
+                        var msg = $(this).parent().prev().html();
+                        var userId = $('input[name=user_id]').val();
+                        console.log(msg);
+
+                        $.ajax({
+                            type: "GET", //用POST方式传输
+                            dataType: "json", //数据格式:JSON
+                            async: true,
+                            url: '/match/play_voice',
+                            data: {
+                                story_id: story_id,
+                                user_id: user_id,
+                                messages: msg,
+                            },
+                            onload: function (data) {
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                                $.alert("网络异常，请检查网络情况");
+                            },
+                            success: function (data, status) {
+                                var dataContent = data;
+                                var dataCon = $.toJSON(dataContent);
+                                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                                console.log(voiceObj);
+                                audioVoice.src = voiceObj.data.file.file;
+
+                                audio_list.push({
+                                    msg: msg,
+                                    voice: voiceObj.data.file.file,
+                                });
+
+                                audioVoice.play();
+
+                            }
+                        });
                     });
                 }
                 //新消息获取失败

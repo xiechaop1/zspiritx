@@ -180,7 +180,7 @@ $this->title = '练习赛';
     </audio>
 
     <audio controls id="audio_voice" class="hide">
-        <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
+        <source src="" type="audio/mpeg">
         您的浏览器不支持 audio 元素。
     </audio>
 
@@ -557,6 +557,8 @@ $this->title = '练习赛';
         // var ques = '';
         var old_messages = '';
 
+        var audio_list = [];
+
         if (ques != '') {
             var oldMsgs = [];
             var tmpMessages = $('#message-content').find('div');
@@ -581,6 +583,9 @@ $this->title = '练习赛';
         $('#message-question').html('');
         var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="float: left; clear:both; font-size: 24px; width: 80%;">正在思考……</div>';
         $('#message-content').append(sugdiv);
+
+        var audioVoice = $('#audio_voice')[0];
+
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -651,6 +656,15 @@ $this->title = '练习赛';
                     });
 
                     $('.play_voice').click(function() {
+
+                        for (var ai in audio_list) {
+                            if (audio_list[ai].msg == $(this).parent().prev().html()) {
+                                audioVoice.src = audio_list[ai].voice;
+                                audioVoice.play();
+                                return;
+                            }
+                        }
+
                         var msg = $(this).parent().prev().html();
                         var userId = $('input[name=user_id]').val();
                         console.log(msg);
@@ -677,8 +691,13 @@ $this->title = '练习赛';
                                 var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
 
                                 console.log(voiceObj);
-                                var audioVoice = $('#audio_voice')[0];
                                 audioVoice.src = voiceObj.data.file.file;
+
+                                audio_list.push({
+                                    msg: msg,
+                                    voice: voiceObj.data.file.file,
+                                });
+
                                 audioVoice.play();
 
                             }
