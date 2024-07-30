@@ -1315,6 +1315,9 @@ $this->title = $storyMatch->match_name;
                     // $('#message-content').html(suggestion);
                     $('.message-content-ai').last().html(suggestion);
                     $('#message-topic').val(topic);
+                    var msbox = document.querySelector('#message-content');
+                    msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
+
                     console.log(ajaxObj.data.questions);
                     for (var qu in ajaxObj.data.questions) {
                         var qutitle = ajaxObj.data.questions[qu];
@@ -1333,6 +1336,8 @@ $this->title = $storyMatch->match_name;
                         // console.log(next_ques);
                         var msgdiv = '<div class="fs-24 btn-green-m-msg-ai-choice my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + next_ques + '</div>';
                         $('#message-content').append(msgdiv);
+                        var msbox = document.querySelector('#message-content');
+                        msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
                         getSugg(next_ques);
                     });
                 }
