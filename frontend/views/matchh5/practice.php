@@ -834,10 +834,14 @@ $this->title = '练习赛';
 
     function showRet(retObj, answer) {
         var retCss = 'right';
+        var answerVoice = $('#audio_right')[0];
         console.log(answer);
         if (answer != 1) {
             retCss = 'worry';
+            answerVoice = $('#audio_wrong')[0];
         }
+        answerVoice.play();
+
         $(retObj).parent().addClass(retCss);
     }
 
