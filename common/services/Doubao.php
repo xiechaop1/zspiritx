@@ -266,7 +266,7 @@ class Doubao extends Component
 //            'model' => 'ep-20240628070258-6m88j',
             'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
-            'temperature' => 0.1,
+            'temperature' => 0.7,
 //            'stream' => false,
         );
 
