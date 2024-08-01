@@ -37,6 +37,10 @@ $this->title = '练习赛';
         display: flex;
     }
 
+    .play_voice_btn_disable {
+        filter: grayscale(100%);
+    }
+
     .code-input input {
         width: 55px;
         height: 75px;
@@ -656,7 +660,11 @@ $this->title = '练习赛';
                     });
 
                     $('.play_voice').click(function() {
-
+                        var thisObj = $(this);
+                        if (thisObj.hasClass('play_voice_btn_disable')) {
+                            return;
+                        }
+                        thisObj.addClass('play_voice_btn_disable');
                         for (var ai in audio_list) {
                             if (audio_list[ai].msg == $(this).parent().prev().html()) {
                                 audioVoice.src = audio_list[ai].voice;
@@ -682,6 +690,7 @@ $this->title = '练习赛';
                             onload: function (data) {
                             },
                             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                thisObj.removeClass('play_voice_btn_disable');
                                 console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
                                 $.alert("网络异常，请检查网络情况");
                             },
@@ -699,6 +708,7 @@ $this->title = '练习赛';
                                 });
 
                                 audioVoice.play();
+                                thisObj.removeClass('play_voice_btn_disable');
 
                             }
                         });
