@@ -118,7 +118,7 @@ class UserModels extends Component
                                 $userModelProp = [];
                             }
 
-                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET) {
+                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET_OUTSIDE) {
                                 $activeClass = UserModelLoc::ACTIVE_CLASS_CATCH;
                             } elseif ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
                                 $activeClass = UserModelLoc::ACTIVE_CLASS_BATTLE;
