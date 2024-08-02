@@ -41,14 +41,24 @@ class Baggage extends Action
 
         $storyModelClass = !empty($_GET['story_model_class']) ? $_GET['story_model_class'] : '';
 
-        $model = UserModels::find()
+        if ($storyId != 5) {
+            $model = UserModels::find()
 //            ->joinWith('model', 'storyModel', 'sessionModel')
-            ->joinWith('storyModel')
-            ->where([
-                'user_id'       => $userId,
-                'session_id'    => $sessionId,
-                'is_delete'     => Common::STATUS_NORMAL,
-            ]);
+                ->joinWith('storyModel')
+                ->where([
+                    'user_id' => $userId,
+                    'session_id' => $sessionId,
+                    'is_delete' => Common::STATUS_NORMAL,
+                ]);
+        } else {
+            $model = UserModels::find()
+                ->joinWith('storyModel')
+                ->where([
+                    'user_id' => $userId,
+                    'story_id' => $storyId,
+                    'is_delete' => Common::STATUS_NORMAL,
+                ]);
+        }
         if (!empty($storyModelClass)) {
 //            $model = $model->join()
             $model = $model->andFilterWhere(['o_story_model.story_model_class' => $storyModelClass]);
@@ -56,14 +66,29 @@ class Baggage extends Action
         $model = $model->orderBy(['id' => SORT_DESC])
             ->all();
 
-        $userScore = UserScore::find()
-            ->where([
-                'user_id'       => $userId,
-                'session_id'    => $sessionId,
-                'story_id'      => $storyId
-            ])
-            ->one();
+//        if ($storyId != 5) {
+//            $userScore = UserScore::find()
+//                ->where([
+//                    'user_id' => $userId,
+//                    'session_id' => $sessionId,
+//                    'story_id' => $storyId
+//                ])
+//                ->one();
+//        } else {
+//            $userScore = UserScore::find()
+//                ->where([
+//                    'user_id' => $userId,
+//                    'story_id' => $storyId,
+//                ])
+//                ->one();
+//        }
+        $scoreSessionId = $sessionId;
+        if ($storyId == 5) {
+            $scoreSessionId = 0;
+        }
 
+        $userScore = Yii::$app->score->get($userId, $storyId, $scoreSessionId);
+        
         $template = 'baggage';
 
         $allParams = $_GET;
