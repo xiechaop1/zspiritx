@@ -55,7 +55,7 @@ class Baggage extends Action
                 ->joinWith('storyModel')
                 ->where([
                     'user_id' => $userId,
-                    'story_id' => $storyId,
+                    'o_user_model.story_id' => $storyId,
                     'is_delete' => Common::STATUS_NORMAL,
                 ]);
         }
