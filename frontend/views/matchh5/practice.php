@@ -191,7 +191,7 @@ $this->title = '练习赛';
     <div class="w-100 m-auto">
         <div class="p-20 bg-black">
             <div class="m-t-20">
-                <div class="match-qa-header-left3" style="width: 415px; text-align: left;">
+                <div class="match-qa-header-left3" style="width: 435px; text-align: left;">
                     <img src="<?= $user['avatar'] ?>" class="header-l">
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
@@ -199,7 +199,7 @@ $this->title = '练习赛';
                         <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
                     </div>
                 </div>
-                <div class="btn-m-green confirm_btn" style="margin-left: 100px;">
+                <div class="btn-m-green confirm_btn" style="margin-left: 80px;">
                     返回
                 </div>
 

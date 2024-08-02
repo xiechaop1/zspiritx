@@ -33,6 +33,10 @@ $this->title = $storyMatch->match_name;
         position: relative;
         margin-left: 80px;
     }
+    .play_voice_btn_disable {
+        filter: grayscale(100%);
+    }
+    
     .code-input {
         display: flex;
     }
@@ -189,7 +193,7 @@ $this->title = $storyMatch->match_name;
     <div class="w-100 m-auto">
         <div class="p-20 bg-black">
             <div class="m-t-20">
-                <div class="match-qa-header-left3" style="width: 415px; text-align: left;">
+                <div class="match-qa-header-left3" style="width: 435px; text-align: left;">
                     <img src="<?= $user['avatar'] ?>" class="header-l">
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
@@ -1349,7 +1353,11 @@ $this->title = $storyMatch->match_name;
                     });
 
                     $('.play_voice').click(function() {
-
+                        var thisObj = $(this);
+                        if (thisObj.hasClass('play_voice_btn_disable')) {
+                            return;
+                        }
+                        thisObj.addClass('play_voice_btn_disable');
                         for (var ai in audio_list) {
                             if (audio_list[ai].msg == $(this).parent().prev().html()) {
                                 audioVoice.src = audio_list[ai].voice;
@@ -1375,6 +1383,7 @@ $this->title = $storyMatch->match_name;
                             onload: function (data) {
                             },
                             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                thisObj.removeClass('play_voice_btn_disable');
                                 console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
                                 $.alert("网络异常，请检查网络情况");
                             },
@@ -1392,6 +1401,7 @@ $this->title = $storyMatch->match_name;
                                 });
 
                                 audioVoice.play();
+                                thisObj.removeClass('play_voice_btn_disable');
 
                             }
                         });
