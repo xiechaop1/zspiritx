@@ -88,7 +88,7 @@ class Baggage extends Action
         }
 
         $userScore = Yii::$app->score->get($userId, $storyId, $scoreSessionId);
-        
+
         $template = 'baggage';
 
         $allParams = $_GET;
