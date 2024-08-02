@@ -36,7 +36,7 @@ $this->title = $storyMatch->match_name;
     .play_voice_btn_disable {
         filter: grayscale(100%);
     }
-    
+
     .code-input {
         display: flex;
     }
