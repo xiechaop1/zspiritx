@@ -32,6 +32,7 @@ class Qas extends Component
             ->where([
                 'user_id' => $userId,
                 'status' => UserWare::USER_WARE_STATUS_NORMAL,
+                'ware_type' => ShopWares::SHOP_WARE_TYPE_PACKAGE,
             ])
             ->andFilterWhere([
                 '>', 'expire_time', time(),
@@ -138,6 +139,7 @@ class Qas extends Component
             ->where([
                 'user_id' => $userId,
                 'status' => UserWare::USER_WARE_STATUS_NORMAL,
+                'ware_type' => ShopWares::SHOP_WARE_TYPE_PACKAGE,
             ])
             ->andFilterWhere([
                 '>', 'expire_time', time(),
@@ -281,6 +283,7 @@ class Qas extends Component
             ->where([
                 'user_id' => $userId,
                 'status' => UserWare::USER_WARE_STATUS_NORMAL,
+                'ware_type' => ShopWares::SHOP_WARE_TYPE_PACKAGE,
             ])
             ->andFilterWhere([
                 '>', 'expire_time', time(),
