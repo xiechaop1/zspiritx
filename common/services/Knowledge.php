@@ -300,6 +300,7 @@ class Knowledge extends Component
                 'story_stage_id' => $storyStageId,
                 'knowledge_class' => \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION,
                 'story_id'  => $storyId,
+                'knowledge_mode' => \common\models\Knowledge::KNOWLDEGE_MODE_NORMAL,
             ])
             ->asArray()
             ->all();

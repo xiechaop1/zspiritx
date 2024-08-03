@@ -481,7 +481,7 @@ class DoApi extends ApiAction
 
             if (!empty($missions)) {
                 foreach ($missions as $mission) {
-                    Yii::$app->knowledge->set($mission->id, $this->_sessionId, 0, $this->_userId, $this->_storyId, 'process');
+                    Yii::$app->knowledge->set((int)$mission->id, (int)$this->_sessionId, 0, (int)$this->_userId, (int)$this->_storyId, 'process');
                 }
             }
         }
