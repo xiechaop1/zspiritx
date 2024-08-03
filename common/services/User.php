@@ -15,6 +15,7 @@ use common\models\ItemKnowledge;
 use common\models\Qa;
 use common\models\Session;
 use common\models\UserData;
+use common\models\UserExtends;
 use common\models\UserKnowledge;
 use common\models\UserQa;
 use common\models\UserScore;
@@ -129,5 +130,77 @@ class User extends Component
         }
     }
 
+    public function getUserExtendsModel($userId) {
+        $userExtends = \common\models\UserExtends::find()
+            ->where(['user_id' => $userId])
+            ->one();
+        if (empty($userExtends)) {
+            $userExtends = new \common\models\UserExtends();
+            $userExtends->user_id = $userId;
+        }
+        return $userExtends;
+    }
+
+    /**
+     * @param $userId
+     * @param $qa
+     * @param $ct
+     * @param $ctType ( 1 - 加分（正确）； 2 - 减分（错误）)
+     * @return array|\common\models\UserExtends|false|yii\db\ActiveRecord|null
+     * @throws \Exception
+     */
+    public function updateUserExtendsWithQaProp($userId, $qa, $ct, $ctType = 1) {
+
+        $points = [];
+        if (!empty($qa->prop)) {
+            $qaProp = json_decode($qa->prop, true);
+            if (!empty($qaProp['point'])) {
+                $points = $qaProp['point'];
+            }
+        }
+        if (empty($points)) {
+            return false;
+        }
+
+        $userExtends = $this->getUserExtendsModel($userId);
+
+        $userProp = !empty($userExtends->prop) ? json_decode($userExtends->prop, true) : [];
+        if (empty($userProp)) {
+            $userProp = [];
+        }
+        $allUserProps = UserExtends::$allUserProps;
+
+        foreach ($allUserProps as $pointId) {
+            if (in_array($pointId, $points)) {
+
+                if (!isset($userProp[$pointId])) {
+                    $userProp[$pointId] = 50;
+                }
+                if ($ctType == 1) {
+                    $userProp[$pointId] += $ct;
+                    if ($userProp[$pointId] > 100) {
+                        $userProp[$pointId] = 100;
+                    }
+                } else {
+                    $userProp[$pointId] -= $ct;
+                    if ($userProp[$pointId] < 0) {
+                        $userProp[$pointId] = 0;
+                    }
+                }
+            } else {
+                if (!isset($userProp[$pointId])) {
+                    $userProp[$pointId] = 50;
+                }
+            }
+        }
+        $userExtends->prop = json_encode($userProp, JSON_UNESCAPED_UNICODE);
+
+        $ret = $userExtends->save();
+        if ($ret !== false) {
+            return $userExtends;
+        } else {
+            throw new \Exception('更新用户数据失败', ErrorCode::USER_DATA_UPDATE_FAILED);
+        }
+    }
 
 }

@@ -169,6 +169,9 @@ class QaApi extends ApiAction
         $rightCt = !empty($this->_get['right_ct']) ? $this->_get['right_ct'] : 0;
         $wrongCt = !empty($this->_get['wrong_ct']) ? $this->_get['wrong_ct'] : 0;
 
+        $addRight = !empty($this->_get['add_right']) ? $this->_get['add_right'] : 0;
+        $addWrong = !empty($this->_get['add_wrong']) ? $this->_get['add_wrong'] : 0;
+
 
         $qaMode = !empty($this->_get['qa_mode']) ? $this->_get['qa_mode'] : Qa::QA_MODE_NORMAL;
 
@@ -199,6 +202,13 @@ class QaApi extends ApiAction
                 $score = !empty($this->_get['score']) ? $this->_get['score'] : 10;
                 $stSelected = !empty($this->_get['st_selected']) ? $this->_get['st_selected'] : '';
                 $prop = !empty($this->_get['prop']) ? $this->_get['prop'] : '';
+                $propJson = !empty($this->_get['prop_json']) ? $this->_get['prop_json'] : '';
+                if (!empty($propJson)) {
+//                    $prop = json_decode($propJson, true);
+                    $prop = $propJson;
+                } else {
+//                    $prop = [];
+                }
 
                 $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : Qa::QA_CLASS_MATH;
 
@@ -357,24 +367,30 @@ class QaApi extends ApiAction
                 $userQa->id = $userQaId;
 
                 // Todo: 临时处理，强制5剧本记录用户数据
+                $userData = [];
                 if ($qa['story_id'] == 5) {
                     // 记录用户数据
-                    Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                    $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                         UserData::DATA_TYPE_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
-                    Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                    $userTodayData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                         UserData::DATA_TYPE_TODAY_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
 
-                    if ($isRight == 1) {
-                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                    if (!empty($userTodayData)) {
+                        $subjCt = $userTodayData->data_value;
+                    }
+
+                    if ($addRight == 1) {
+                        $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
-                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        $userTodayRightData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_TODAY_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
                     } else {
-                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
-                        Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        $userTodayWrongData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_TODAY_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
                     }
+
                 }
 
             } else {
@@ -383,9 +399,25 @@ class QaApi extends ApiAction
                 $saveRet = $userQa->save();
             }
 
-            if (!empty($subjCt) && !empty($rightCt)) {
+            if (!empty($subjCt)
+//                && !empty($rightCt)
+            ) {
                 if ( $subjCt % 5 == 0 ) {
                     $userExtends = Yii::$app->userService->updateUserLevelWithRight($userId, $subjCt, $rightCt);
+                }
+            }
+            if (empty($userExtends)) {
+                $ct = 0;
+                if ($addRight > 0) {
+                    $ct = 1;
+                    $ctType = 1;
+                } elseif ($isRight == 1) {
+                    $ct = 1;
+                    $ctType = 2;
+                }
+                if ($ct > 0) {
+                    $userExtends = Yii::$app->userService->updateUserExtendsWithQaProp($userId, $qa, $ct, $ctType);
+                    $ret['user_extends'] = $userExtends;
                 }
             }
 

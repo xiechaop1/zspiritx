@@ -105,6 +105,24 @@ class UserExtends extends \common\models\gii\UserExtends
         self::USER_GRADE_OTHER => 1,
     ];
 
+    const USER_PROP_COMPUTE = 'COMPUTE'; // 计算
+    const USER_PROP_LOGIC = 'LOGIC'; // 逻辑
+    const USER_PROP_IMAGINATION = 'IMAGINATION'; // 想象
+    const USER_PROP_CREATIVE = 'CREATIVE'; // 创造
+    const USER_PROP_REMEMBER = 'REMEMBER'; // 记忆
+    const USER_PROP_ANALYSIS = 'ANALYSIS'; // 分析
+    const USER_PROP_READ = 'READ';
+
+    public static $allUserProps = [
+        self::USER_PROP_COMPUTE,
+        self::USER_PROP_LOGIC,
+        self::USER_PROP_IMAGINATION,
+        self::USER_PROP_CREATIVE,
+        self::USER_PROP_REMEMBER,
+        self::USER_PROP_ANALYSIS,
+        self::USER_PROP_READ,
+    ];
+
 
     public function behaviors()
     {

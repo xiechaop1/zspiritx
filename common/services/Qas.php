@@ -476,6 +476,8 @@ class Qas extends Component
         $level = !empty($doubaoSubject['level']) ? $doubaoSubject['level'] : 1;
         $qaClass = !empty($doubaoSubject['qa_class']) ? $doubaoSubject['qa_class'] : 0;
 
+        $prop = !empty($doubaoSubject['prop']) ? $doubaoSubject['prop'] : [];
+
         $qa = Qa::find()
             ->where([
                 'topic' => $topic,
@@ -504,6 +506,16 @@ class Qas extends Component
 //            var_dump($qa);
         }
 
+        $oldProp = [];
+        if (!empty($qa->prop)) {
+            $oldProp = json_decode($qa->prop, true);
+        }
+        if (!empty($prop['point'])) {
+            $oldProp['point'] = $prop['point'];
+        }
+
+        $qa->prop = json_encode($oldProp, JSON_UNESCAPED_UNICODE);
+
 
         $qa->qa_type = Qa::QA_TYPE_SINGLE;
         $qa->qa_mode = Qa::QA_MODE_MATCH;
@@ -513,7 +525,7 @@ class Qas extends Component
         $qa->st_selected = !empty($doubaoSubject['st_answer']) ? $doubaoSubject['st_answer'] : '';
         $qa->score = !empty($doubaoSubject['gold']) ? $doubaoSubject['gold'] : 0;
 
-        $qa->prop = '';
+//        $qa->prop = '';
         $qa->save();
 
         return $qa;
@@ -598,6 +610,8 @@ class Qas extends Component
                     'level' => 1,
                     'hitRange' => [5, 10],
                     'gold' => 10,
+                    'prop' => ['point' => 'REMEMBER'],
+                    'propJson' => json_encode(['point' => 'REMEMBER'], JSON_UNESCAPED_UNICODE),
                 ];
 
                 $i++;
@@ -641,6 +655,8 @@ class Qas extends Component
                     'level' => 1,
                     'hitRange' => [5, 10],
                     'gold' => 10,
+                    'prop' => ['point' => ['REMEMBER']],
+                    'propJson' => json_encode(['point' => ['REMEMBER']], JSON_UNESCAPED_UNICODE),
                 ];
 
                 $i++;
@@ -1196,6 +1212,8 @@ class Qas extends Component
             'selections' => $finalCollections,
             'selected_json' => $finalCollections,
             'selected' => json_encode($finalCollections, JSON_UNESCAPED_UNICODE),
+            'prop' => ['point' => ['REMEMBER']],
+            'propJson' => json_encode(['point' => ['REMEMBER']], JSON_UNESCAPED_UNICODE),
         ];
 
         return $ret;
@@ -1249,6 +1267,8 @@ class Qas extends Component
             'selections' => $finalCollections,
             'selected_json' => $finalCollections,
             'selected' => json_encode($finalCollections, JSON_UNESCAPED_UNICODE),
+            'prop' => ['point' => ['REMEMBER']],
+            'propJson' => json_encode(['point' => ['REMEMBER']], JSON_UNESCAPED_UNICODE),
         ];
 
         return $ret;
@@ -1341,6 +1361,8 @@ class Qas extends Component
             'selections' => $finalCollection,
             'selected_json' => $finalCollection,
             'selected' => json_encode($finalCollection, JSON_UNESCAPED_UNICODE),
+            'prop' => ['point' => ['REMEMBER']],
+            'propJson' => json_encode(['point' => ['REMEMBER']], JSON_UNESCAPED_UNICODE),
         ];
 
         return $ret;
@@ -1506,6 +1528,8 @@ class Qas extends Component
             'gold'  => $gold,
             'size' => 60,
             'speed_rate' => 1,
+            'prop' => ['point' => ['COMPUTE']],
+            'propJson' => json_encode(['point' => ['COMPUTE']], JSON_UNESCAPED_UNICODE),
         ];
 
     }

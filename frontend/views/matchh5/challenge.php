@@ -1575,6 +1575,13 @@ $this->title = $storyMatch->match_name;
         var score = subjectObj.gold;
         var level = subjectObj.level;
         var link_qa_id = subjectObj.link_qa_id;
+        var prop_json = subjectObj.propJson;
+
+        var subjct=$('#subjct').html();
+        var right_ct=$('#right_ct').html();
+        var wrong_ct=$('#wrong_ct').html();
+        var add_right = $('#add_right').val();
+        var add_wrong = $('#add_wrong').val();
 
         $.ajax({
             type: "GET", //用POST方式传输
@@ -1598,6 +1605,12 @@ $this->title = $storyMatch->match_name;
                 st_selected:st_answer,
                 level:level,
                 link_qa_id:link_qa_id,
+                subj_ct:subjct,
+                right_ct:right_ct,
+                wrong_ct:wrong_ct,
+                add_right:add_right,
+                add_wrong:add_wrong,
+                prop_json:prop_json,
             },
             onload: function (data) {
                 $('#answer-border-response').html('处理中……');

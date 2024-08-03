@@ -52,6 +52,8 @@ class Qa
 
             $options = $qa['selected_json'];
 
+            $prop = !empty($qa['prop']) ? json_decode($qa['prop'], true) : [];
+
             if (mb_strlen($qa['topic']) > 10) {
                 $size = 40;
             } else {
@@ -70,7 +72,8 @@ class Qa
                 'st_answer' => $answer,
                 'size'  => $size,
                 'qa_type' => $qa['qa_type'],
-
+                'prop' => $prop,
+                'qa_id' => $qa['id'],
             ];
 
         }
@@ -94,6 +97,8 @@ class Qa
 
         $options = $qa['selected_json'];
 
+        $prop = !empty($qa['prop']) ? json_decode($qa['prop'], true) : [];
+
         if (mb_strlen($qa['topic']) > 10) {
             $size = 40;
         } else {
@@ -113,6 +118,8 @@ class Qa
             'size'  => $size,
             'qa_type' => $qa['qa_type'],
             'qa_id' => $qa['id'],
+            'prop' => $prop,
+            'propJson' => json_encode($prop, JSON_UNESCAPED_UNICODE),
         ];
 
         return $ret;
@@ -137,6 +144,10 @@ class Qa
                     $opts[] = $opt;
                 }
 
+                $point = !empty($gpt['POINT']) ? $gpt['POINT'] : [];
+//                $prop = json_encode(array('point' => $point), JSON_UNESCAPED_UNICODE);
+                $prop = array('point' => $point);
+
                 $ret = [
                     'formula' => $gpt['SUBJECT'],
                     'topic' => $gpt['SUBJECT'],
@@ -147,6 +158,8 @@ class Qa
                     'selected' => json_encode($opts, JSON_UNESCAPED_UNICODE),
                     'answer' => $answer,
                     'st_answer' => $answer,
+                    'prop' => $prop,
+                    'propJson' => json_encode($prop, JSON_UNESCAPED_UNICODE),
                 ];
 
 //            }

@@ -42,16 +42,19 @@ class Doubao extends Component
                 'OPTIONS' => ['A' => '8个', 'B' => '7个', 'C' => '6个', 'D' => '5个'],
                 'ANSWER' => 'A',
                 'TYPE'  => '应用题',
+                'POINT' => ['COMPUTE', 'READ'],
             ],[
                 'SUBJECT' => 'SUBJECT2',
                 'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                 'ANSWER' => 'A',
                 'TYPE'  => '题型',
+                'POINT' => ['LOGIC', 'REMEMBER'],
             ]], JSON_UNESCAPED_UNICODE);
             $msgTemplate = [
                 '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析，根据下面规则出题',
                 '#任务描述和要求',
                 '针对' . $gradeName  . $matchClassName . '，生成不同的题目，' . $ct . '道，每次生成的题目都不能相同。',
+                '给出题目考察的知识点，从计算能力(COMPUTE)，逻辑能力(LOGIC)，想象力(IMAGINATION)，创造力(CREATIVE)，记忆力(REMEMBER)，分析能力(ANALYSIS)，阅读能力(READ)，中选择1-3个最考察的点。',
                 '题目类型为选择题。',
                 '将生成的题目以 JSON 格式呈现，例如：' . $jsonExample,
                 //[{"SUBJECT":"小明有 5 个苹果，小红比小明多 3 个，那么小红有几个苹果？", "OPTIONS": "A.8 个 B.7 个 C.6 个 D. 5 个","answer":"A"}]',
@@ -121,7 +124,16 @@ class Doubao extends Component
         return $ret;
     }
 
+    /**
+     * 生成题目
+     * @param int $level
+     * @param int $matchClass
+     * @param int $ct
+     * @return array
+     * 暂时作废
+     */
     public function generateSubjectWithMode($level = 0, $matchClass = 0, $ct = 10, $templateContents = array()) {
+        return true;
 //        foreach (UserExtends::$userGradeLevelMap as $grade => $gradeLevel) {
 //            if ($level >= $gradeLevel) {
 //                $gradeName = UserExtends::$userGrade2Name[$grade];
