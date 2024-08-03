@@ -90,18 +90,20 @@ class Knowledge extends Component
             throw new \Exception('知识点不存在', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
         }
 
-        if (empty($sessionId) && $storyId != 5) {
+        if (empty($sessionId) && $storyId != 5 && (!YII_DEBUG)) {
             throw new \Exception('没有找到场次', ErrorCode::SESSION_NOT_FOUND);
         }
 
         $sessionInfo = Session::findOne($sessionId);
 
-        if (empty($sessionInfo)
-            || ($sessionInfo->session_status == Session::SESSION_STATUS_CANCEL
-                or $sessionInfo->session_status == Session::SESSION_STATUS_FINISH
-            )
-        ) {
-            throw new \Exception('场次不存在', ErrorCode::SESSION_NOT_FOUND);
+        if ($storyId != 5 && !YII_DEBUG) {
+            if (empty($sessionInfo)
+                || ($sessionInfo->session_status == Session::SESSION_STATUS_CANCEL
+                    or $sessionInfo->session_status == Session::SESSION_STATUS_FINISH
+                )
+            ) {
+                throw new \Exception('场次不存在', ErrorCode::SESSION_NOT_FOUND);
+            }
         }
 
         $ret = [];
@@ -117,7 +119,7 @@ class Knowledge extends Component
                         break;
                 }
 
-                if ($knowledge->knowledge_mode == \common\models\Knowledge::KNOWLDEGE_MODE_EACH_DAY) {
+                if ($knowledge->knowledge_mode == \common\models\Knowledge::KNOWLDEGE_MODE_DAILY) {
                     $userKnowledge = UserKnowledge::find()
                         ->where([
                             'user_id' => $userId,

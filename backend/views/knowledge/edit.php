@@ -86,6 +86,10 @@ echo \dmstr\widgets\Alert::widget();
             ])->label('执行策略');
             echo $form->field($knowledgeModel, 'sort_by')->textInput(['value' => $knowledgeModel->sort_by])->label('排序');
             echo $form->field($knowledgeModel, 'rep_ct')->textInput(['value' => $knowledgeModel->rep_ct])->label('重复次数(0为不限制)');
+            if (!empty($knowledgeModel->condition)) {
+                $condition = var_export(\common\helpers\Model::decodeDialog($knowledgeModel->condition), true);
+            }
+            echo $form->field($knowledgeModel, 'condition')->textarea(['value' => !empty($knowledgeModel->condition) ? $condition: '', 'rows' => 20])->label('条件（公式）');
             if (!empty($knowledgeModel->comp_action)) {
                 $compAction = var_export(\common\helpers\Model::decodeDialog($knowledgeModel->comp_action), true);
             }

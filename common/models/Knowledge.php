@@ -20,11 +20,11 @@ class Knowledge extends \common\models\gii\Knowledge
     const KNOWLEDGE_TYPE_VIDEO = 4;     // 视频
 
     const KNOWLDEGE_MODE_NORMAL = 1;    // 普通
-    const KNOWLDEGE_MODE_EACH_DAY = 2;  // 每日
+    const KNOWLDEGE_MODE_DAILY = 2;  // 每日
 
     public static $knowledgeMode2Name = [
         self::KNOWLDEGE_MODE_NORMAL => '普通',
-        self::KNOWLDEGE_MODE_EACH_DAY => '每日',
+        self::KNOWLDEGE_MODE_DAILY => '每日',
     ];
 
     public static $knowledgeClass2Name = [

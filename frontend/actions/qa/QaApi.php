@@ -13,11 +13,13 @@ use common\definitions\Common;
 use common\definitions\ErrorCode;
 use common\models\Actions;
 use common\models\ItemKnowledge;
+use common\models\Knowledge;
 use common\models\Qa;
 use common\models\SessionQa;
 use common\models\StoryMatch;
 use common\models\StoryStages;
 use common\models\UserData;
+use common\models\UserKnowledge;
 use common\models\UserQa;
 use common\models\User;
 //use liyifei\base\actions\ApiAction;
@@ -368,15 +370,16 @@ class QaApi extends ApiAction
 
                 // Todo: 临时处理，强制5剧本记录用户数据
                 $userData = [];
-                if ($qa['story_id'] == 5) {
+                if ($qa['story_id'] == 5 || (YII_DEBUG && $qa['story_id'] == 1)) {
                     // 记录用户数据
                     $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                         UserData::DATA_TYPE_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
                     $userTodayData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                         UserData::DATA_TYPE_TODAY_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
 
+                    $todaySubjCt = 0;
                     if (!empty($userTodayData)) {
-                        $subjCt = $userTodayData->data_value;
+                        $todaySubjCt = $userTodayData->data_value;
                     }
 
                     if ($addRight == 1) {
@@ -389,6 +392,33 @@ class QaApi extends ApiAction
                             UserData::DATA_TYPE_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
                         $userTodayWrongData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_TODAY_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                    }
+
+                    $userMissions = UserKnowledge::find()
+                        ->where([
+                            'user_id' => $userId,
+                            'story_id' => $qa['story_id'],
+                        ])
+                        ->andFilterWhere([
+                            'knowledge_status' => UserKnowledge::KNOWLDEGE_STATUS_PROCESS,
+                        ])
+                        ->all();
+
+                    if (!empty($userMissions)) {
+                        foreach ($userMissions as $userMission) {
+                            if (!empty($userMission->knowledge)) {
+                                $knowledgeMission = $userMission->knowledge;
+                                if (!empty($knowledgeMission->condition)) {
+                                    $conditionArray = json_decode($knowledgeMission->condition, true);
+                                    $condition = !empty($conditionArray['formula']) ? $conditionArray['formula'] : $conditionArray;
+                                    $ret = eval('return ' . $condition . ';');
+                                    if ($ret) {
+                                        Yii::$app->knowledge->set($knowledgeMission->id, $sessionId, 0, $userId, $qa['story_id'], 'complete');
+                                    }
+                                }
+                            }
+                        }
+
                     }
 
                 }

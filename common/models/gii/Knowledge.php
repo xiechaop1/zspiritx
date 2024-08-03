@@ -38,7 +38,8 @@ class Knowledge extends \yii\db\ActiveRecord
             [[ 'story_id', 'sort_by', 'is_delete', 'story_stage_id', 'knowledge_class',
                 'knowledge_type', 'pre_knowledge_id', 'rep_ct', 'knowledge_mode',
                 'created_at', 'updated_at'], 'integer'],
-            [['title', 'content', 'suggestion', 'voice', 'linkurl', 'image', 'comp_action', 'comp_prize', ], 'string'],
+            [['title', 'content', 'suggestion', 'voice', 'linkurl', 'condition',
+                'image', 'comp_action', 'comp_prize', ], 'string'],
         ];
     }
 

@@ -469,6 +469,23 @@ class DoApi extends ApiAction
             $lastSessionStageUId = '';
         }
 
+        if ($this->_storyId == 5 || (YII_DEBUG && $this->_storyId == 1)) {
+            // 下发每日任务
+            $missions = Knowledge::find()
+                ->where([
+                    'story_id' => (int)$this->_storyId,
+                    'knowledge_class' => Knowledge::KNOWLEDGE_CLASS_MISSSION,
+                    'knowledge_mode' => Knowledge::KNOWLDEGE_MODE_DAILY
+                ])
+                ->all();
+
+            if (!empty($missions)) {
+                foreach ($missions as $mission) {
+                    Yii::$app->knowledge->set($mission->id, $this->_sessionId, 0, $this->_userId, $this->_storyId, 'process');
+                }
+            }
+        }
+
 //        if (empty($lastSessionStageUId)) {
             if (empty($lastSessionStageId)
                 || empty($lastStoryStageId)
