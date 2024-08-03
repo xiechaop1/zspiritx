@@ -46,9 +46,13 @@ class Knowledge extends Action
         $userKnowledges = UserKnowledge::find()
             ->where([
                 'user_id'       => $userId,
-                'session_id'    => $sessionId,
-            ])
-            ->all();
+            ]);
+        if ($storyId != 5) {
+            $userKnowledges = $userKnowledges->andFilterWhere(['session_id' => $sessionId]);
+        } else {
+            $userKnowledges = $userKnowledges->andFilterWhere(['story_id' => $storyId]);
+        }
+        $userKnowledges = $userKnowledges->all();
 
         $userKnowledgeMap = ArrayHelper::map($userKnowledges, 'knowledge_id', 'knowledge_status');
 
