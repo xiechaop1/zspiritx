@@ -1611,6 +1611,7 @@ $this->title = $storyMatch->match_name;
                 add_right:add_right,
                 add_wrong:add_wrong,
                 prop_json:prop_json,
+                source:'challenge',
             },
             onload: function (data) {
                 $('#answer-border-response').html('处理中……');

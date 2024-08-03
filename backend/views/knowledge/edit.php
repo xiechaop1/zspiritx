@@ -78,12 +78,22 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('分类');
+            echo $form->field($knowledgeModel, 'knowledge_mode')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Knowledge::$knowledgeMode2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('执行策略');
             echo $form->field($knowledgeModel, 'sort_by')->textInput(['value' => $knowledgeModel->sort_by])->label('排序');
             echo $form->field($knowledgeModel, 'rep_ct')->textInput(['value' => $knowledgeModel->rep_ct])->label('重复次数(0为不限制)');
             if (!empty($knowledgeModel->comp_action)) {
                 $compAction = var_export(\common\helpers\Model::decodeDialog($knowledgeModel->comp_action), true);
             }
             echo $form->field($knowledgeModel, 'comp_action')->textarea(['value' => !empty($knowledgeModel->comp_action) ? $compAction: '', 'rows' => 20])->label('完成时动作');
+            if (!empty($knowledgeModel->comp_prize)) {
+                $compPrize = var_export(\common\helpers\Model::decodeDialog($knowledgeModel->comp_prize), true);
+            }
+            echo $form->field($knowledgeModel, 'comp_prize')->textarea(['value' => !empty($knowledgeModel->comp_prize) ? $compPrize: '', 'rows' => 20])->label('完成时奖励');
             echo $form->field($knowledgeModel, 'pre_knowledge_id')->textInput(['value' => $knowledgeModel->pre_knowledge_id])->label('上一ID');
 
 //            echo $form->field($knowledgeModel, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [

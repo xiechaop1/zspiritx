@@ -29,6 +29,7 @@ class UserExtends extends \yii\db\ActiveRecord
         return [
             [['grade','level', 'user_id', 'story_id', 'created_at', 'updated_at'], 'integer'],
             [['home_lng', 'home_lat', ], 'number'],
+            [['prop'], 'string'],
         ];
     }
 

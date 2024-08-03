@@ -81,6 +81,11 @@ class Edit extends Action
                     $model->comp_action = json_encode($ca);
                 }
 
+                if (!empty($model->comp_prize)) {
+                    eval('$cp = ' . $model->comp_prize . ';');
+                    $model->comp_prize = json_encode($cp);
+                }
+
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');

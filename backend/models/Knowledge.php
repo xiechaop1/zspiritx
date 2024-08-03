@@ -22,10 +22,10 @@ class Knowledge extends \common\models\Knowledge
     public function rules()
     {
         return [
-            [[ 'story_id', 'pre_knowledge_id', 'sort_by', 'is_delete',
+            [[ 'story_id', 'pre_knowledge_id', 'sort_by', 'is_delete', 'knowledge_mode',
                 'story_stage_id', 'knowledge_class', 'knowledge_type', 'rep_ct',
                 'created_at', 'updated_at'], 'integer'],
-            [['title', 'content', 'suggestion', 'voice', 'linkurl', 'image', 'comp_action', ], 'string'],
+            [['title', 'content', 'suggestion', 'voice', 'linkurl', 'image', 'comp_action', 'comp_prize', ], 'string'],
         ];
     }
 

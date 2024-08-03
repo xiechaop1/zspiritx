@@ -90,7 +90,7 @@ class Knowledge extends Component
             throw new \Exception('知识点不存在', ErrorCode::USER_KNOWLEDGE_NOT_FOUND);
         }
 
-        if (empty($sessionId)) {
+        if (empty($sessionId) && $storyId != 5) {
             throw new \Exception('没有找到场次', ErrorCode::SESSION_NOT_FOUND);
         }
 
@@ -106,13 +106,6 @@ class Knowledge extends Component
 
         $ret = [];
 
-        $userKnowledge = UserKnowledge::find()
-            ->where([
-                'user_id' => $userId,
-                'knowledge_id' => $knowledgeId,
-                'session_id' => $sessionId,
-            ])->one();
-
             try {
                 switch ($act) {
                     case 'process':
@@ -123,16 +116,53 @@ class Knowledge extends Component
                         $userKnowledgeStatus = UserKnowledge::KNOWLDEGE_STATUS_COMPLETE;
                         break;
                 }
-                if (!empty($userKnowledge)) {
+
+                if ($knowledge->knowledge_mode == \common\models\Knowledge::KNOWLDEGE_MODE_EACH_DAY) {
+                    $userKnowledge = UserKnowledge::find()
+                        ->where([
+                            'user_id' => $userId,
+                            'story_id' => $storyId,
+                            'knowledge_id' => $knowledgeId,
+//                            'session_id' => $sessionId,
+                        ])
+                        ->andFilterWhere([
+                            'BETWEEN', 'created_at', \common\helpers\Common::getDayStartInt(), \common\helpers\Common::getDayEndInt()
+                        ])
+                        ->one();
+
+                    if (!empty($userKnowledge)) {
+                        if ($userKnowledge->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE) {
+                            return false;
+                        }
+                    } else {
+                        $userKnowledge = new UserKnowledge();
+                        $userKnowledge->user_id = $userId;
+                        $userKnowledge->knowledge_id = $knowledgeId;
+                        $userKnowledge->story_id = $storyId;
+                        $userKnowledge->session_id = $sessionId;
+                    }
                     $userKnowledge->knowledge_status = $userKnowledgeStatus;
+                    $userKnowledge->save();
+
                 } else {
-                    $userKnowledge = new UserKnowledge();
-                    $userKnowledge->user_id = $userId;
-                    $userKnowledge->knowledge_id = $knowledgeId;
-                    $userKnowledge->session_id = $sessionId;
-                    $userKnowledge->knowledge_status = $userKnowledgeStatus;
+                    $userKnowledge = UserKnowledge::find()
+                        ->where([
+                            'user_id' => $userId,
+                            'knowledge_id' => $knowledgeId,
+                            'session_id' => $sessionId,
+                        ])->one();
+
+                    if (!empty($userKnowledge)) {
+                        $userKnowledge->knowledge_status = $userKnowledgeStatus;
+                    } else {
+                        $userKnowledge = new UserKnowledge();
+                        $userKnowledge->user_id = $userId;
+                        $userKnowledge->knowledge_id = $knowledgeId;
+                        $userKnowledge->session_id = $sessionId;
+                        $userKnowledge->knowledge_status = $userKnowledgeStatus;
+                    }
+                    $userKnowledge->save();
                 }
-                $userKnowledge->save();
 
                 if ($act == 'complete') {
                     if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
@@ -149,6 +179,22 @@ class Knowledge extends Component
 
                     } else {
                         Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您获得了知识：' . $knowledge->title, Actions::ACTION_TYPE_MSG);
+                    }
+
+                    if (!empty($knowledge->comp_prize)) {
+                        $prizeArray = $this->getCompPrize($knowledge->comp_prize);
+                        $scoreSessionId = 0;
+                        if ($storyId != 5) {
+                            $scoreSessionId = $sessionId;
+                        }
+                        if (!empty($prizeArray)) {
+                            foreach ($prizeArray as $prize) {
+                                if (!empty($prize['score'])) {
+                                    Yii::$app->score->add($userId, $storyId, $scoreSessionId, 0, $prize['score'], 0);
+                                    Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '您完成任务，获得金币：' . $prize['score'], Actions::ACTION_TYPE_MSG);
+                                }
+                            }
+                        }
                     }
                 } elseif ($act == 'process') {
                     if ($knowledge->knowledge_class == \common\models\Knowledge::KNOWLEDGE_CLASS_MISSSION) {
@@ -216,6 +262,14 @@ class Knowledge extends Component
 
 //        return $userKnowledge;
         return $ret;
+    }
+
+    public function getCompPrize($compPrizeJson) {
+        $compPrize = [];
+        if (!empty($compPrizeJson)) {
+            $compPrize = json_decode($compPrizeJson, true);
+        }
+        return $compPrize;
     }
 
     public function setByItem($itemId, $itemType, $sessionId, $sessionStageId, $userId, $storyId) {

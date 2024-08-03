@@ -927,6 +927,7 @@ $this->title = '练习赛';
                 add_right:add_right,
                 add_wrong:add_wrong,
                 prop_json:prop_json,
+                source:'practice',
             },
             onload: function (data) {
                 $('#answer-border-response').html('处理中……');

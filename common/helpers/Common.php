@@ -145,6 +145,14 @@ class Common
         return $ret;
     }
 
+    public static function getDayStartInt($dt = '') {
+        return strtotime(date('Y-m-d 00:00:00', empty($dt) ? time() : $dt));
+    }
+
+    public static function getDayEndInt($dt = '') {
+        return strtotime(date('Y-m-d 23:59:59', empty($dt) ? time() : $dt));
+    }
+
     public static function encodeJson($str) {
         $ret = $str;
         if (!empty($str)) {
