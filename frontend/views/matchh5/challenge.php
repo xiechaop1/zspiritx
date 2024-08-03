@@ -1788,6 +1788,7 @@ $this->title = $storyMatch->match_name;
     }
 
     function addGold() {
+        var addGold = $('#add_gold').val();
         var goldSpan = $('#gold');
         var goldDiv = '<div id="showGold" style="z-index: 999999; position: absolute; top: 100px; left: ' + goldSpan.position().left + 'px; font-size: 70px; color: #e0a800; font-weight: bold; width: 300px;">+ ' + addGold + '</div>';
         $('#gold').parent().append(goldDiv);
