@@ -174,6 +174,7 @@ class QaApi extends ApiAction
         $addRight = !empty($this->_get['add_right']) ? $this->_get['add_right'] : 0;
         $addWrong = !empty($this->_get['add_wrong']) ? $this->_get['add_wrong'] : 0;
 
+        $source = !empty($this->_get['source']) ? $this->_get['source'] : '';
 
         $qaMode = !empty($this->_get['qa_mode']) ? $this->_get['qa_mode'] : Qa::QA_MODE_NORMAL;
 
