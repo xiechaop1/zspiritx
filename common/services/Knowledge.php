@@ -133,9 +133,9 @@ class Knowledge extends Component
                         ->one();
 
                     if (!empty($userKnowledge)) {
-                        if ($userKnowledge->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE) {
+//                        if ($userKnowledge->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE) {
                             return false;
-                        }
+//                        }
                     } else {
                         $userKnowledge = new UserKnowledge();
                         $userKnowledge->user_id = $userId;
