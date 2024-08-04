@@ -308,9 +308,9 @@ class Qas extends Component
                         $ret = $this->generateSubjectsWithQaCollection($qaCollections, $level, $matchClass, $ct, $userId);
                         if (!empty($ret)) {
                             $wareCt++;
-                            $totalCt = count($ret);
+//                            $totalCt = count($ret);
                             if ($wareCt >= 2
-                                || $totalCt >= $ct
+//                                || $totalCt >= $ct
                             ) {
                                 break;
                             }
