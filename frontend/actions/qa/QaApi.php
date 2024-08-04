@@ -369,47 +369,54 @@ class QaApi extends ApiAction
                 $userQaId = Yii::$app->db->getLastInsertID();
                 $userQa->id = $userQaId;
 
-                // Todo: 临时处理，强制5剧本记录用户数据
-                $userData = [];
-                if ($qa['story_id'] == 5 || (YII_DEBUG && $qa['story_id'] == 1)) {
-                    // 记录用户数据
+
+            } else {
+                $userQa->answer = $answer;
+                $userQa->is_right = $isRight;
+                $saveRet = $userQa->save();
+            }
+
+            // Todo: 临时处理，强制5剧本记录用户数据
+            $userData = [];
+            if ($qa['story_id'] == 5 || (YII_DEBUG && $qa['story_id'] == 1)) {
+                // 记录用户数据
+                $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                    UserData::DATA_TYPE_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
+                $userTodayData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                    UserData::DATA_TYPE_TODAY_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+
+                $todaySubjCt = 0;
+                if (!empty($userTodayData)) {
+                    $todaySubjCt = $userTodayData->data_value;
+                }
+
+                $userTodayRightDataValue = 0;
+                $userTodayWrongDataValue = 0;
+                if ($addRight == 1) {
                     $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
-                        UserData::DATA_TYPE_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
-                    $userTodayData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
-                        UserData::DATA_TYPE_TODAY_TOTAL, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                        UserData::DATA_TYPE_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
+                    $userTodayRightData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        UserData::DATA_TYPE_TODAY_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                    $userTodayRightDataValue = $userTodayData->data_value;
+                } else {
+                    $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        UserData::DATA_TYPE_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
+                    $userTodayWrongData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
+                        UserData::DATA_TYPE_TODAY_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                    $userTodayWrongDataValue = $userTodayWrongData->data_value;
+                }
 
-                    $todaySubjCt = 0;
-                    if (!empty($userTodayData)) {
-                        $todaySubjCt = $userTodayData->data_value;
-                    }
+                $setData = [
+                    'subj_ct' => $subjCt,
+                    'right_ct' => $rightCt,
+                    'wrong_ct' => $wrongCt,
+                    'today_subj_ct' => $todaySubjCt,
+                    'today_right_ct' => $userTodayRightDataValue,
+                    'today_wrong_ct' => $userTodayWrongDataValue,
+                    'source' => $source,
+                ];
 
-                    $userTodayRightDataValue = 0;
-                    $userTodayWrongDataValue = 0;
-                    if ($addRight == 1) {
-                        $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
-                            UserData::DATA_TYPE_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
-                        $userTodayRightData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
-                            UserData::DATA_TYPE_TODAY_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
-                        $userTodayRightDataValue = $userTodayData->data_value;
-                    } else {
-                        $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
-                            UserData::DATA_TYPE_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
-                        $userTodayWrongData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
-                            UserData::DATA_TYPE_TODAY_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
-                        $userTodayWrongDataValue = $userTodayWrongData->data_value;
-                    }
-
-                    $setData = [
-                        'subj_ct' => $subjCt,
-                        'right_ct' => $rightCt,
-                        'wrong_ct' => $wrongCt,
-                        'today_subj_ct' => $todaySubjCt,
-                        'today_right_ct' => $userTodayRightDataValue,
-                        'today_wrong_ct' => $userTodayWrongDataValue,
-                        'source' => $source,
-                    ];
-
-                    Yii::$app->knowledge->setDailyMissions($userId, $qa['story_id'], $sessionId, $setData);
+                Yii::$app->knowledge->setDailyMissions($userId, $qa['story_id'], $sessionId, $setData);
 
 //                    $userMissions = UserKnowledge::find()
 //                        ->where([
@@ -438,12 +445,6 @@ class QaApi extends ApiAction
 //
 //                    }
 
-                }
-
-            } else {
-                $userQa->answer = $answer;
-                $userQa->is_right = $isRight;
-                $saveRet = $userQa->save();
             }
 
             if (!empty($subjCt)
