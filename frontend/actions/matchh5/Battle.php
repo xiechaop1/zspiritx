@@ -379,6 +379,11 @@ class Battle extends Action
 
 //        $matchFlow['flow'] = $matchDetail;
 
+        $setData = [
+            'source' => 'battle',
+        ];
+        Yii::$app->knowledge->setDailyMissions($userId, $storyId, $sessionId, $setData);
+
         return $this->controller->render('battle', [
             'params'        => $_GET,
             'userId'        => $userId,
