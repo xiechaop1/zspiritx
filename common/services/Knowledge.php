@@ -291,6 +291,35 @@ class Knowledge extends Component
         }
     }
 
+    public function setDailyMissions($userId, $storyId, $sessionId, $data = []) {
+        $userMissions = UserKnowledge::find()
+            ->where([
+                'user_id' => $userId,
+                'story_id' => $storyId,
+            ])
+            ->andFilterWhere([
+                'knowledge_status' => UserKnowledge::KNOWLDEGE_STATUS_PROCESS,
+            ])
+            ->all();
+
+        if (!empty($userMissions)) {
+            foreach ($userMissions as $userMission) {
+                if (!empty($userMission->knowledge)) {
+                    $knowledgeMission = $userMission->knowledge;
+                    if (!empty($knowledgeMission->condition)) {
+                        $conditionArray = json_decode($knowledgeMission->condition, true);
+                        $condition = !empty($conditionArray['formula']) ? $conditionArray['formula'] : $conditionArray;
+                        $ret = eval('return ' . $condition . ';');
+                        if ($ret) {
+                            $this->set($knowledgeMission->id, $sessionId, 0, $userId, $storyId, 'complete');
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
     public function removeByStage($storyStageId, $sessionId, $userId, $storyId) {
         if (empty($storyStageId)) {
             return false;

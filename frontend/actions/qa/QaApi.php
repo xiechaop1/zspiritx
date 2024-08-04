@@ -383,44 +383,60 @@ class QaApi extends ApiAction
                         $todaySubjCt = $userTodayData->data_value;
                     }
 
+                    $userTodayRightDataValue = 0;
+                    $userTodayWrongDataValue = 0;
                     if ($addRight == 1) {
                         $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
                         $userTodayRightData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_TODAY_RIGHT, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                        $userTodayRightDataValue = $userTodayData->data_value;
                     } else {
                         $userData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_TOTAL);
                         $userTodayWrongData = Yii::$app->userService->updateUserData($userId, $qa['story_id'],
                             UserData::DATA_TYPE_TODAY_WRONG, 1, \common\services\User::USER_DATA_TYPE_ADD, \common\services\User::USER_DATA_TIME_TYPE_DAY);
+                        $userTodayWrongDataValue = $userTodayWrongData->data_value;
                     }
 
-                    $userMissions = UserKnowledge::find()
-                        ->where([
-                            'user_id' => $userId,
-                            'story_id' => $qa['story_id'],
-                        ])
-                        ->andFilterWhere([
-                            'knowledge_status' => UserKnowledge::KNOWLDEGE_STATUS_PROCESS,
-                        ])
-                        ->all();
+                    $setData = [
+                        'subj_ct' => $subjCt,
+                        'right_ct' => $rightCt,
+                        'wrong_ct' => $wrongCt,
+                        'today_subj_ct' => $todaySubjCt,
+                        'today_right_ct' => $userTodayRightDataValue,
+                        'today_wrong_ct' => $userTodayWrongDataValue,
+                        'source' => $source,
+                    ];
 
-                    if (!empty($userMissions)) {
-                        foreach ($userMissions as $userMission) {
-                            if (!empty($userMission->knowledge)) {
-                                $knowledgeMission = $userMission->knowledge;
-                                if (!empty($knowledgeMission->condition)) {
-                                    $conditionArray = json_decode($knowledgeMission->condition, true);
-                                    $condition = !empty($conditionArray['formula']) ? $conditionArray['formula'] : $conditionArray;
-                                    $ret = eval('return ' . $condition . ';');
-                                    if ($ret) {
-                                        Yii::$app->knowledge->set($knowledgeMission->id, $sessionId, 0, $userId, $qa['story_id'], 'complete');
-                                    }
-                                }
-                            }
-                        }
+                    Yii::$app->knowledge->setDailyMissions($userId, $qa['story_id'], $sessionId, $setData);
 
-                    }
+//                    $userMissions = UserKnowledge::find()
+//                        ->where([
+//                            'user_id' => $userId,
+//                            'story_id' => $qa['story_id'],
+//                        ])
+//                        ->andFilterWhere([
+//                            'knowledge_status' => UserKnowledge::KNOWLDEGE_STATUS_PROCESS,
+//                        ])
+//                        ->all();
+//
+//                    if (!empty($userMissions)) {
+//                        foreach ($userMissions as $userMission) {
+//                            if (!empty($userMission->knowledge)) {
+//                                $knowledgeMission = $userMission->knowledge;
+//                                if (!empty($knowledgeMission->condition)) {
+//                                    $conditionArray = json_decode($knowledgeMission->condition, true);
+//                                    $condition = !empty($conditionArray['formula']) ? $conditionArray['formula'] : $conditionArray;
+//                                    $ret = eval('return ' . $condition . ';');
+//                                    if ($ret) {
+//                                        Yii::$app->knowledge->set($knowledgeMission->id, $sessionId, 0, $userId, $qa['story_id'], 'complete');
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                    }
 
                 }
 
