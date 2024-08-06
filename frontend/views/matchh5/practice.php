@@ -497,8 +497,8 @@ $this->title = '练习赛';
 
     function generateSubjects() {
         console.log(userWareIds);
-        for (var i=0; i<userWareIds.length; i++) {
-            generateSubjectByUserWareId(userWareIds[i]);
+        for (var uwIdx=0; uwIdx<userWareIds.length; uwIdx++) {
+            generateSubjectByUserWareId(userWareIds[uwIdx]);
         }
         generateSubject();
     }
@@ -545,13 +545,16 @@ $this->title = '练习赛';
                     for (var i = 0; i <= subjidx; i++) {
                         tmpObj.push(obj[i]);
                     }
+                    console.log(ajaxObj.data.length);
                     for (var i = 0; i < ajaxObj.data.length; i++) {
+                        console.log(ajaxObj.data[i]);
                         tmpObj.push(ajaxObj.data[i]);
                     }
                     console.log(obj.length);
                     for (var i = parseInt(subjidx) + 1; i < obj.length; i++) {
                         tmpObj.push(obj[i]);
                     }
+                    console.log(tmpObj);
                     obj = tmpObj;
                     console.log(obj);
                 }
@@ -950,7 +953,7 @@ $this->title = '练习赛';
     }
 
     function recordQa(subjectObj, chosen) {
-        console.log(subjectObj);
+        // console.log(subjectObj);
         var user_id = $('input[name=user_id]').val();
         var story_id = $('input[name=story_id]').val();
         var session_id=$("input[name='session_id']").val();

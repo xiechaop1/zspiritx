@@ -52,6 +52,7 @@ class MatchApi extends ApiAction
                 throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
             }
 
+            $needTs = true;
             switch ($this->action) {
 
                 case 'update_match':
@@ -70,12 +71,15 @@ class MatchApi extends ApiAction
                     $ret = $this->getKnockoutPlayersInMatch();
                     break;
                 case 'get_suggestion_from_subject':
+                    $needTs = false;
                     $ret = $this->getSuggestionFromSubject();
                     break;
                 case 'get_subjects':
+                    $needTs = false;
                     $ret = $this->getSubjects();
                     break;
                 case 'get_subject_by_user_ware_id':
+                    $needTs = false;
                     $ret = $this->getSubjectByUserWareId();
                     break;
                 case 'play_voice':
@@ -91,8 +95,10 @@ class MatchApi extends ApiAction
             return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 
-        $ret['ts'] = time();
-        $ret['tsf'] = Date('Y-m-d H:i:s', time());
+        if ($needTs) {
+            $ret['ts'] = time();
+            $ret['tsf'] = Date('Y-m-d H:i:s', time());
+        }
 
         return $this->success($ret);
     }
