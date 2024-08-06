@@ -469,7 +469,12 @@ class DoApi extends ApiAction
             $lastSessionStageUId = '';
         }
 
-        if ($this->_storyId == 5 || (YII_DEBUG && $this->_storyId == 1)) {
+        if ( (
+                $this->_storyId == 5
+                && (!empty($lastStoryStageId) && $lastStoryStageId == 67 )
+            )
+                || (YII_DEBUG && $this->_storyId == 1)
+        ) {
             // 下发每日任务
             $missions = Knowledge::find()
                 ->where([
