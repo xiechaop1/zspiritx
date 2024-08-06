@@ -134,6 +134,11 @@ class Knowledge extends Component
 
                     if (!empty($userKnowledge)) {
                         if ($userKnowledge->knowledge_status == UserKnowledge::KNOWLDEGE_STATUS_COMPLETE) {
+                            // 如果任务已经结束，就不再更新了
+                            return false;
+                        }
+                        if ($act == 'process') {
+                            // 如果已经下发过，就不重复下发了
                             return false;
                         }
                     } else {

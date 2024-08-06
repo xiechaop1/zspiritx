@@ -276,6 +276,43 @@ class Qas extends Component
         return $ret;
     }
 
+    private function _generateSubjectWithUserWare($ware, $level = 1, $matchClass = 0, $ct = 20, $userId = 0) {
+        $ret = [];
+        switch ($ware->link_type) {
+            case ShopWares::LINK_TYPE_QA_PACKAGE:
+            default:
+                $packageClass = [];
+                if (!empty($matchClass)) {
+                    $packageClass = StoryMatch::$matchClass2PackageClass[$matchClass];
+                }
+                $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
+
+                $ret = $this->generateSubjectsWithQaCollection($qaCollections, $level, $matchClass, $ct, $userId);
+
+                break;
+        }
+
+        return $ret;
+    }
+
+    public function generateSubjectByUserWareId($wareId, $level = 1, $matchClass = 0, $ct = 20, $userId = 0) {
+        $ret = [];
+        $userWare = UserWare::find()
+            ->where([
+                'id' => $wareId,
+            ])
+            ->andFilterWhere([
+                '>', 'expire_time', time(),
+            ])
+            ->one();
+
+        if (!empty($userWare)) {
+            $ret = $this->_generateSubjectWithUserWare($userWare, $level, $matchClass, $ct, $userId);
+        }
+
+        return $ret;
+    }
+
     public function generateTotalSubjects($level = 1, $matchClass = 0, $ct = 20, $userId = 0){
         $ret = [];
         $maxWareLimit = 5;      // 暂时就支持2个商品同时运行
@@ -296,27 +333,37 @@ class Qas extends Component
         if (!empty($userWare)) {
 
             foreach ($userWare as $ware) {
-                switch ($ware->link_type) {
-                    case ShopWares::LINK_TYPE_QA_PACKAGE:
-                    default:
-                        $packageClass = [];
-                        if (!empty($matchClass)) {
-                            $packageClass = StoryMatch::$matchClass2PackageClass[$matchClass];
-                        }
-                        $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
-
-                        $ret = $this->generateSubjectsWithQaCollection($qaCollections, $level, $matchClass, $ct, $userId);
-                        if (!empty($ret)) {
-                            $wareCt++;
+                $ret = array_merge($ret, $this->_generateSubjectWithUserWare($ware, $level, $matchClass, $ct, $userId));
+                if (!empty($ret)) {
+                    $wareCt++;
 //                            $totalCt = count($ret);
-                            if ($wareCt >= 2
+                    if ($wareCt >= 2
 //                                || $totalCt >= $ct
-                            ) {
-                                break;
-                            }
-                        }
+                    ) {
                         break;
+                    }
                 }
+//                switch ($ware->link_type) {
+//                    case ShopWares::LINK_TYPE_QA_PACKAGE:
+//                    default:
+//                        $packageClass = [];
+//                        if (!empty($matchClass)) {
+//                            $packageClass = StoryMatch::$matchClass2PackageClass[$matchClass];
+//                        }
+//                        $qaCollections = $this->getQaByPackageIds([$ware->link_id], $packageClass);
+//
+//                        $ret = array_merge($ret, $this->generateSubjectsWithQaCollection($qaCollections, $level, $matchClass, $ct, $userId));
+//                        if (!empty($ret)) {
+//                            $wareCt++;
+////                            $totalCt = count($ret);
+//                            if ($wareCt >= 2
+////                                || $totalCt >= $ct
+//                            ) {
+//                                break;
+//                            }
+//                        }
+//                        break;
+//                }
 //                $ret[] = $this->getSubjectWithWare($ware, $matchClass, $level, $ct);
             }
         }

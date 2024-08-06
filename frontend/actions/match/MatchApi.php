@@ -99,6 +99,7 @@ class MatchApi extends ApiAction
         $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
         $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $userWareId = !empty($this->_get['user_ware_id']) ? $this->_get['user_ware_id'] : 0;
         return Yii::$app->qas->generateTotalSubjects($level, $matchClass, $ct, $userId);
     }
 
