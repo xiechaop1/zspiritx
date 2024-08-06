@@ -75,6 +75,9 @@ class MatchApi extends ApiAction
                 case 'get_subjects':
                     $ret = $this->getSubjects();
                     break;
+                case 'get_subject_by_user_ware_id':
+                    $ret = $this->getSubjectByUserWareId();
+                    break;
                 case 'play_voice':
                     $ret = $this->playVoice();
                     break;
@@ -98,9 +101,26 @@ class MatchApi extends ApiAction
         $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
         $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
         $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
+//        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+//        $userWareId = !empty($this->_get['user_ware_id']) ? $this->_get['user_ware_id'] : 0;
+        return Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct);
+    }
+
+    public function getTotalSubjects() {
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
+        $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
+        $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        return Yii::$app->qas->generateTotalSubjects($level, $matchClass, $ct, $userId);
+    }
+
+    public function getSubjectByUserWareId() {
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
+        $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
+        $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $userWareId = !empty($this->_get['user_ware_id']) ? $this->_get['user_ware_id'] : 0;
-        return Yii::$app->qas->generateTotalSubjects($level, $matchClass, $ct, $userId);
+        return Yii::$app->qas->generateSubjectByUserWareId($userWareId, $level, $matchClass, $ct, $userId);
     }
 
     public function getSuggestionFromSubject() {

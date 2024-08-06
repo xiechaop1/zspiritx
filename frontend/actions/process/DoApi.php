@@ -1378,7 +1378,8 @@ class DoApi extends ApiAction
             || !empty($userLng) || !empty($userLat)
         ) {
             if (empty($disRange)) {
-                $disRange = 100;
+                // 默认为1公里的范围内的POI
+                $disRange = 1000;
             }
             $sql = 'SELECT *, st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_story_model WHERE story_id = ' . $storyId;
             $sql .= ' AND st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;

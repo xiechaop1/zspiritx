@@ -18,6 +18,7 @@ use common\helpers\Model;
 use common\models\LotteryPrize;
 use common\models\Order;
 use common\models\Poem;
+use common\models\ShopWares;
 use common\models\Story;
 use common\models\StoryMatch;
 use common\models\StoryMatchPlayer;
@@ -29,6 +30,7 @@ use common\models\UserModelLoc;
 use common\models\UserModels;
 use common\models\UserPrize;
 use common\models\UserScore;
+use common\models\UserWare;
 use yii\base\Action;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
@@ -89,6 +91,27 @@ class Practice extends Action
             ->one();
 
         $userScore = Yii::$app->score->get($userId, $storyId, 0);
+
+        $maxWareLimit = 2;      // 暂时就支持同时2个商品的使用，主要保护AI调用
+        $userWares = UserWare::find()
+            ->where([
+                'user_id' => $userId,
+                'status' => UserWare::USER_WARE_STATUS_NORMAL,
+                'ware_type' => ShopWares::SHOP_WARE_TYPE_PACKAGE,
+            ])
+            ->andFilterWhere([
+                '>', 'expire_time', time(),
+            ])
+            ->orderBy(['updated_at' => SORT_DESC])
+            ->limit($maxWareLimit)
+            ->all();
+
+        $userWareIds = [];
+        if ( !empty($userWares) ) {
+            foreach ($userWares as $userWare) {
+                $userWareIds[] = $userWare->id;
+            }
+        }
 
         $level = !empty($userExtends['level']) ? $userExtends['level'] : 1;
 
@@ -238,6 +261,7 @@ class Practice extends Action
             'initTimer' => 60,
             'user' => $user,
             'userScore' => $userScore,
+            'userWareIdsJson' => json_encode($userWareIds, JSON_UNESCAPED_UNICODE),
         ]);
     }
 
