@@ -76,6 +76,7 @@ echo \dmstr\widgets\Alert::widget();
                 ],
             ])->label('知识点');
             echo $form->field($qaModel, 'story_stage_id')->textInput(['value' => $qaModel->story_stage_id])->label('场景');
+            echo $form->field($qaModel, 'level')->textInput(['value' => $qaModel->level])->label('等级');
 
             echo $form->field($qaModel, 'qa_type')->widget('\kartik\select2\Select2', [
                 'data' => $qaTypes,

@@ -130,6 +130,32 @@ echo \dmstr\widgets\Alert::widget();
 //                            return \common\helpers\Common::isJson($model->st_selected) ? json_decode($model->st_selected, true) : $model->st_selected;
                         }
                     ],
+                    [
+                        'attribute' => 'level',
+                        'label' => '等级',
+                    ],
+                    [
+                        'label' => '分类',
+                        'value' => function ($model) {
+                            return !empty(\common\models\Qa::$qaClass2Name[$model->qa_class])
+                                ? \common\models\Qa::$qaClass2Name[$model->qa_class] : '未知';
+
+                        },
+                    ],
+                    [
+                        'label' => '模式',
+                        'value' => function ($model) {
+                            return !empty(\common\models\Qa::$qaMode2Name[$model->qa_mode])
+                                ? \common\models\Qa::$qaMode2Name[$model->qa_mode] : '未知';
+                        },
+                    ],
+                    [
+                        'label' => '类型',
+                        'value' => function ($model) {
+                            return !empty(\common\models\Qa::$qaType2Name[$model->qa_type])
+                                ? \common\models\Qa::$qaType2Name[$model->qa_type] : '未知';
+                        },
+                    ],
 
 //                    [
 //                        'label' => '封面图片',
