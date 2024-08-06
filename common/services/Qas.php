@@ -492,7 +492,7 @@ class Qas extends Component
 
         $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct, $extends);
 
-        $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : 0;
+        $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : $matchClass;
 
         $ret = [];
         if (!empty($subjects)) {
