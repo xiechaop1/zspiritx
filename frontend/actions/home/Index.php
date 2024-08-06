@@ -32,7 +32,7 @@ class Index extends Action
     public function run()
     {
 //var_dump($_SESSION);
-
+        $beginTs = time();
         $image = 'img/home/index_image.jpg';
         $image = Attachment::completeUrl($image, false);
         $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
@@ -101,6 +101,8 @@ class Index extends Action
             'image' => $image,
             'bgSound' => $bgm,
             'unityVersion' => $unityVersion,
+            'beginTs' => $beginTs,
+
 //            'banner' => $banner,
         ]);
     }

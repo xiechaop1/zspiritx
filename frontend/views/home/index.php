@@ -121,7 +121,6 @@ $this->title = 'AR剧本杀';
     ?>
     <div class="item">
       <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
-
       <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
         <a href="/home/my?unity_version=<?= $unityVersion ?>">我的</a>
       </div>
@@ -135,7 +134,13 @@ $this->title = 'AR剧本杀';
             测试剧本
           </div>
           <div class="fs-24  w-100 text-FF m-t-30">
-            这是用于测试的剧本
+            这是用于测试的剧本<br>
+            <?php
+            $endTs = time();
+            echo '开始时间：' . date('Y-m-d H:i:s', $beginTs) . '<br>';
+            echo '结束时间：' . date('Y-m-d H:i:s', $endTs) . '<br>';
+            echo '耗时：' . ($endTs - $beginTs) . '秒<br>';
+            ?>
           </div>
           IS DEBUG:<input type="text" name="isDebug" value="1" style="color: yellow; padding: 10px; font-size: 50px;">
           SID: <input type="text" name="storyId" value="5" style="color: white; padding: 10px; font-size: 50px;">
