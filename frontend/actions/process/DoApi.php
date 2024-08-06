@@ -940,6 +940,9 @@ class DoApi extends ApiAction
 //                                    $storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET
 //                                    ||
                                     $storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET_ITEM
+                                    // 这个是让宠物在家的位置才能出现的
+                                    // 暂时封禁掉这个，因为宠物已经用召唤模式了，那么就可以随时召唤就好了
+                                    && 1 != 1
                                 ) {
                                     $storyModel->lng = $user->home_lng;
                                     $storyModel->lat = $user->home_lat;
@@ -1371,7 +1374,12 @@ class DoApi extends ApiAction
         $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
         $disRange = !empty($this->_get['dis_range']) ? $this->_get['dis_range'] : 0;
 
-        if ($disRange > 0) {
+        if ($disRange > 0
+            || !empty($userLng) || !empty($userLat)
+        ) {
+            if (empty($disRange)) {
+                $disRange = 100;
+            }
             $sql = 'SELECT *, st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 as dist FROM o_story_model WHERE story_id = ' . $storyId;
             $sql .= ' AND st_distance(point(o_story_model.lng, o_story_model.lat), point(' . $userLng . ', ' . $userLat . ')) * 111195 < ' . $disRange;
             if (!empty($storyStageId)) {
