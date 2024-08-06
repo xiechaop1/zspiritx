@@ -1077,6 +1077,15 @@ $this->title = $storyMatch->match_name;
     };
 
     function generateSubjects() {
+        console.log(userWareIds);
+        for (var uwIdx=0; uwIdx<userWareIds.length; uwIdx++) {
+            generateSubjectByUserWareId(userWareIds[uwIdx]);
+        }
+        generateSubject();
+    }
+
+    function generateSubject() {
+        // return true;
         var topic = $('#topic').html();
         var level = $('input[name=level]').val();
         var match_class = $('input[name=match_class]').val();
@@ -1114,22 +1123,79 @@ $this->title = $storyMatch->match_name;
                 console.log(ajaxObj.data);
                 if(ajaxObj["code"]==200){
                     var tmpObj = [];
-                    console.log(subjidx);
                     for (var i = 0; i <= subjidx; i++) {
-                        console.log(i);
-                        console.log(obj[i]);
                         tmpObj.push(obj[i]);
                     }
+                    console.log(ajaxObj.data.length);
                     for (var i = 0; i < ajaxObj.data.length; i++) {
-                        console.log(i);
                         console.log(ajaxObj.data[i]);
                         tmpObj.push(ajaxObj.data[i]);
                     }
-                    console.log(subjidx);
                     console.log(obj.length);
                     for (var i = parseInt(subjidx) + 1; i < obj.length; i++) {
-                        console.log(i);
-                        console.log(obj[i]);
+                        tmpObj.push(obj[i]);
+                    }
+                    console.log(tmpObj);
+                    obj = tmpObj;
+                    console.log(obj);
+                }
+                //新消息获取失败
+                else{
+                    $.alert(ajaxObj.msg)
+                }
+
+            }
+        });
+    }
+
+    function generateSubjectByUserWareId(userWareId) {
+        // return true;
+        var topic = $('#topic').html();
+        var level = $('input[name=level]').val();
+        var match_class = $('input[name=match_class]').val();
+        var user_id = $('input[name=user_id]').val();
+        var story_id = $('input[name=story_id]').val();
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_subject_by_user_ware_id',
+            data:{
+                user_ware_id:userWareId,
+                story_id:story_id,
+                user_id:user_id,
+                // topic:topic,
+                level:level,
+                match_class:match_class,
+                ct:5,
+            },
+            onload: function (data) {
+                // $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+                //新消息获取成功
+                var subjidx = $('#subj_idx').val();
+                console.log(subjidx);
+                console.log(ajaxObj.data);
+                if(ajaxObj["code"]==200){
+                    var tmpObj = [];
+                    for (var i = 0; i <= subjidx; i++) {
+                        tmpObj.push(obj[i]);
+                    }
+                    for (var i = 0; i < ajaxObj.data.length; i++) {
+                        tmpObj.push(ajaxObj.data[i]);
+                    }
+                    console.log(obj.length);
+                    for (var i = parseInt(subjidx) + 1; i < obj.length; i++) {
                         tmpObj.push(obj[i]);
                     }
                     obj = tmpObj;
@@ -1143,6 +1209,74 @@ $this->title = $storyMatch->match_name;
             }
         });
     }
+
+    // function generateSubjects() {
+    //     var topic = $('#topic').html();
+    //     var level = $('input[name=level]').val();
+    //     var match_class = $('input[name=match_class]').val();
+    //     var user_id = $('input[name=user_id]').val();
+    //     var story_id = $('input[name=story_id]').val();
+    //
+    //     $.ajax({
+    //         type: "GET", //用POST方式传输
+    //         dataType: "json", //数据格式:JSON
+    //         async: true,
+    //         url: '/match/get_subjects',
+    //         data:{
+    //             story_id:story_id,
+    //             user_id:user_id,
+    //             // topic:topic,
+    //             level:level,
+    //             match_class:match_class,
+    //             ct:5,
+    //         },
+    //         onload: function (data) {
+    //             // $('#answer-border-response').html('处理中……');
+    //         },
+    //         error: function (XMLHttpRequest, textStatus, errorThrown) {
+    //             console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+    //             $.alert("网络异常，请检查网络情况");
+    //         },
+    //         success: function (data, status){
+    //             var dataContent=data;
+    //             var dataCon=$.toJSON(dataContent);
+    //             var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+    //             //console.log("ajax请求成功:"+data.toString())
+    //             //新消息获取成功
+    //             var subjidx = $('#subj_idx').val();
+    //             console.log(subjidx);
+    //             console.log(ajaxObj.data);
+    //             if(ajaxObj["code"]==200){
+    //                 var tmpObj = [];
+    //                 console.log(subjidx);
+    //                 for (var i = 0; i <= subjidx; i++) {
+    //                     console.log(i);
+    //                     console.log(obj[i]);
+    //                     tmpObj.push(obj[i]);
+    //                 }
+    //                 for (var i = 0; i < ajaxObj.data.length; i++) {
+    //                     console.log(i);
+    //                     console.log(ajaxObj.data[i]);
+    //                     tmpObj.push(ajaxObj.data[i]);
+    //                 }
+    //                 console.log(subjidx);
+    //                 console.log(obj.length);
+    //                 for (var i = parseInt(subjidx) + 1; i < obj.length; i++) {
+    //                     console.log(i);
+    //                     console.log(obj[i]);
+    //                     tmpObj.push(obj[i]);
+    //                 }
+    //                 obj = tmpObj;
+    //                 console.log(obj);
+    //             }
+    //             //新消息获取失败
+    //             else{
+    //                 $.alert(ajaxObj.msg)
+    //             }
+    //
+    //         }
+    //     });
+    // }
     
     function stopRivalTimer() {
         if (!rivalTimerRunning) {
@@ -1762,9 +1896,13 @@ $this->title = $storyMatch->match_name;
         // $(retObj).parent().append(retDiv);
         var retCss = 'right';
         console.log(answer);
+        var answerVoice = $('#audio_right')[0];
         if (answer != 1) {
             retCss = 'worry';
+            answerVoice = $('#audio_wrong')[0];
         }
+        answerVoice.play();
+        
         $(retObj).parent().addClass(retCss);
         $(retObj).parent().find('.ret_hit').animate({
             opacity: 100
