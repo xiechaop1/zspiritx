@@ -184,7 +184,10 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
         <div class="w-1-0 d-flex">
             <div class="fs-30 bold w-100 text-FF" style="float: left;">
                 <?php
-                if ( !empty($params['story_model_class']) && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET ) {
+                if ( !empty($params['story_model_class'])
+                    && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET
+                    && (empty($action) || $action == 'battle')
+                ) {
                     ?>
                     <div class="btn-m-green m-t-30  m-l-30 fight_btn" style="position: absolute; left: 5px; top: -50px;" id="fight_btn" act="1">
                         出战
@@ -195,10 +198,14 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                     <div class="btn-m-green m-t-30  m-l-30 use_btn" style="position: absolute; left: 5px; top: -50px;" id="use_btn" act="1">
                         使用
                     </div>
+                    <?php
+                    if (empty($action)) {
+                    ?>
                     <div class="btn-m-green m-t-30  m-l-30 use_btn" act="2" style="position: absolute; left: 155px; top: -50px;" id="combine_btn">
                         组合
                     </div>
                     <?php
+                    }
                 }
                 ?>
             </div>
