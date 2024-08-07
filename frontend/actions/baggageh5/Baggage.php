@@ -41,6 +41,8 @@ class Baggage extends Action
 
         $storyModelClass = !empty($_GET['story_model_class']) ? $_GET['story_model_class'] : '';
 
+        $action = !empty($_GET['action']) ? $_GET['action'] : '';
+
         if ($storyId != 5) {
             $model = UserModels::find()
 //            ->joinWith('model', 'storyModel', 'sessionModel')
@@ -124,6 +126,7 @@ class Baggage extends Action
             'userScore'     => $userScore,
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
+            'action'        => $action,
             'targetStoryModelId' => $targetStoryModelId,
             'targetStoryModelDetailId' => $targetStoryModelDetailId,
             'targetModelId' => $targetModelId,

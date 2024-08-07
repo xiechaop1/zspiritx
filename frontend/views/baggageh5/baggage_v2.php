@@ -99,7 +99,10 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
 //                        $txt .= '： ' . $desc;
 //                    }
 
-                    if (!empty($params['story_model_class']) && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET) {
+                    if (!empty($params['story_model_class'])
+                        && $params['story_model_class'] == \common\models\StoryModels::STORY_MODEL_CLASS_PET
+                        && (empty($action) || $action == 'battle')
+                    ) {
                         $baggageName = 'baggage_pet';
                     } else {
                         if (!empty($item->storyModel)
