@@ -11,6 +11,7 @@ namespace frontend\actions\matchh5;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\definitions\Subject;
 use common\helpers\Attachment;
 use common\helpers\Client;
 use common\helpers\Cookie;
@@ -230,6 +231,7 @@ class KnockoutPrepare extends Action
 
                 }
                 $storyMatchProp['subjects'] = $subjects;
+                $storyMatchProp['subj_source'] = 'db';
 
                 $fee = 2000;
                 $matchDetail = json_encode(['fee' => $fee], JSON_UNESCAPED_UNICODE);
@@ -307,7 +309,8 @@ class KnockoutPrepare extends Action
     public function  generateMathWithCt($ct, $level = 1, $gold = 0) {
         $subjects = [];
 //        $subjs = Yii::$app->qas->generateMath($level, $ct, $gold);
-        $subjs = Yii::$app->qas->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct, '奥数竞赛题目或者是竞赛题目，复杂度要高一些', [], false);
+//        $subjs = Yii::$app->qas->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct, '奥数竞赛题目或者是竞赛题目，复杂度要高一些', [], false);
+        $subjs = Yii::$app->qas->getSubjectsFromDbByLevel($level, Subject::SUBJECT_CLASS_MATH, $ct);
         foreach ($subjs as $subj) {
             $subjects[] = [
                 'level' => $level,

@@ -49,6 +49,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_subject_by_user_ware_id',
             ],
+            'generate_subjects_to_knockout' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'generate_subjects_to_knockout',
+            ],
             'get_subjects' => [
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_subjects',

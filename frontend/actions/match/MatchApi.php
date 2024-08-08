@@ -11,6 +11,7 @@ namespace frontend\actions\match;
 
 use common\definitions\Common;
 use common\definitions\ErrorCode;
+use common\definitions\Subject;
 use common\helpers\Attachment;
 use common\models\Actions;
 use common\models\ItemKnowledge;
@@ -78,6 +79,10 @@ class MatchApi extends ApiAction
                     $needTs = false;
                     $ret = $this->getSubjects();
                     break;
+                case 'generate_subjects_to_knockout':
+                    $needTs = false;
+                    $ret = $this->generateSubjectsToKnockout();
+                    break;
                 case 'get_subject_by_user_ware_id':
                     $needTs = false;
                     $ret = $this->getSubjectByUserWareId();
@@ -107,9 +112,77 @@ class MatchApi extends ApiAction
         $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
         $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
         $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
+        $prompt = !empty($this->_get['prompt']) ? $this->_get['prompt'] : '';
+        $needSave = !empty($this->_get['need_save']) ? $this->_get['need_save'] : true;
+        $extends = !empty($this->_get['extends']) ? $this->_get['extends'] : [];
 //        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
 //        $userWareId = !empty($this->_get['user_ware_id']) ? $this->_get['user_ware_id'] : 0;
-        return Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct);
+        return Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct, $prompt, $extends, $needSave);
+    }
+
+    public function generateSubjectsToKnockout() {
+        $storyMatchId = !empty($this->_get['story_match_id']) ? $this->_get['story_match_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+//        $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
+
+        $storyMatch = StoryMatch::find()
+            ->where([
+                'id' => $storyMatchId,
+            ])
+            ->one();
+
+        if ($userId != $storyMatch->user_id) {
+            return false;
+        }
+
+        if (!empty($storyMatch)) {
+            $storyMatchProp = json_decode($storyMatch->story_match_prop, true);
+            if (!empty($storyMatchProp['subj_source'])
+                 && $storyMatchProp['subj_source'] == 'db'
+            ) {
+                $userLevel = !empty($storyMatchProp['level']) ? $storyMatchProp['level'] : 1;
+                $matchClass = !empty($storyMatchProp['match_class']) ? $storyMatchProp['match_class'] : Subject::SUBJECT_CLASS_MATH;
+                $subjects = [];
+                $maxLevel = $userLevel + 4 > 20 ? 20 : $userLevel + 4;
+                switch ($matchClass) {
+                    case StoryMatch::MATCH_CLASS_MATH:
+                        $ct = 2;
+                        for ($level = $userLevel; $level <= $maxLevel; $level++) {
+                            $subjects = array_merge($subjects, $this->generateSubjectWithCt($ct, $level, $matchClass));
+                        }
+                        break;
+                    case StoryMatch::MATCH_CLASS_ENGLISH:
+                        $ct = 2;
+                        for ($level = $userLevel; $maxLevel; $level++) {
+                            $subjects = array_merge($subjects, $this->generateSubjectWithCt($ct, $level, $matchClass));
+                        }
+                        break;
+
+                }
+                $saveStoryMatchProp['subjects'] = $subjects;
+                $saveStoryMatchProp['subj_source'] = 'doubao';
+                $storyMatch->story_match_prop = json_encode($saveStoryMatchProp, JSON_UNESCAPED_UNICODE);
+                $storyMatch->save();
+
+                return $storyMatch;
+            }
+            return false;
+        }
+        return false;
+
+    }
+
+    public function generateSubjectWithCt($ct, $level, $matchClass) {
+        $subjects = [];
+        $subjs = Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct, '奥数竞赛题目或者是竞赛题目，复杂度要高一些', [], false);
+        foreach ($subjs as $subj) {
+            $subjects[] = [
+                'level' => $level,
+                'topic' => $subj,
+                'max_time' => 180,
+            ];
+        }
+        return $subjects;
     }
 
     public function getTotalSubjects() {

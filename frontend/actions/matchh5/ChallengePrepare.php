@@ -459,6 +459,7 @@ class ChallengePrepare extends Action
             'story_match'   => $storyMatch,
             'qaId'          => $qaId,
             'matchId'      => $matchId,
+            'matchType'     => $matchType,
             'showStoryModel' => $showStoryModel,
             'showRivalStoryModel' => $showRivalStoryModel,
             'answerType'    => 2,

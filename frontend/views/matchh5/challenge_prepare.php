@@ -44,9 +44,26 @@ $this->title = '消息';
                 </div>
             </div>
         </div>
-        <div class="match-text-box m-t-80">
+        <div class="match-text-box m-t-50">
             <div class="match-title1 start-race">
                 匹配成功
+            </div>
+
+            <div class="match-title1" style="color:#4DAF51; margin-left: 50px; margin-right: 50px; text-align: left; margin-top: 15px; line-height: 120%;font-size:24px;">
+                规则：<br><?php
+                if ($matchType == \common\models\StoryMatch::MATCH_TYPE_CHALLENGE) {
+                ?>
+                你和对手同时做题，谁先回答正确，会对对方造成伤害。<br>
+                最先血量为0的一方，输掉比赛。<br>
+                获胜方有金币奖励。
+                <?php
+                } else if ($matchType == \common\models\StoryMatch::MATCH_TYPE_CONTEST) {
+                ?>
+                你和对手在规定时间内，谁完成的题目数越多，谁获胜。<br>
+                获胜方有金币奖励。
+                <?php
+                }
+                ?>
             </div>
 
             <div class="match-title1  start-race-disable hide">
@@ -57,7 +74,7 @@ $this->title = '消息';
             </div>
         </div>
 
-        <div class="text-center m-t-200 m-b-20">
+        <div class="text-center m-t-80 m-b-20">
             <label class="btn-green-m start-race-disable hide" >开始比赛</label>
             <span id="start_btn" href="/matchh5/challenge?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>&match_id=<?= $matchId ?>&qa_id=<?= $qaId ?>">
                 <label class="btn-green-m active  start-race">开始比赛</label>

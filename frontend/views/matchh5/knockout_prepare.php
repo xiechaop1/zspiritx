@@ -66,13 +66,20 @@ $this->title = '消息';
                 </div>
             </div>
         </div>
-        <div class="match-text-box m-t-80" style="margin-top: 50px;">
+        <div class="match-text-box m-t-80" style="margin-top: 20px;">
             <div class="match-title1 start-race hide">
                 匹配成功
             </div>
 
             <div class="match-title1 race-prepare">
-                准备匹配<br>报名费：<?= $fee ?>
+                准备匹配
+            </div>
+
+            <div class="match-title1" style="color:#4DAF51; margin-left: 50px; margin-right: 50px; text-align: left; margin-top: 15px; line-height: 120%;font-size:24px;">
+                规则：<br>
+                每场报名费：💰<?= $fee ?><br>
+                每做对一道题，会有金币奖励。 做错即被淘汰。<br>
+                做对所有题选手，除金币奖励外，平分所有报名费。
             </div>
 
             <div class="match-title1 race-already hide">
@@ -87,7 +94,7 @@ $this->title = '消息';
             </div>
         </div>
 
-        <div class="text-center m-t-200 m-b-20" style="margin-top: 80px;">
+        <div class="text-center m-t-200 m-b-20" style="margin-top: 30px;">
             <label class="btn-green-m active hide matching-race">开始匹配</label>
             <label class="btn-green-m start-race-disable start-btn" >开始比赛</label>
             <a href="javascript:location.href=location.href;">
@@ -149,6 +156,8 @@ $this->title = '消息';
         $('.matching-race').click(function(){
             comMatch();
         });
+
+        genSubjects();
     };
 
     function comMatch() {
@@ -189,6 +198,46 @@ $this->title = '消息';
 
                 }
             });
+    }
+
+    function genSubjects() {
+        var match_id = $('input[name="match_id"]').val();
+        var story_id = $('input[name="story_id"]').val();
+        var user_id = $('input[name="user_id"]').val();
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/match/generate_subjects_to_knockout',
+            data:{
+                story_id:story_id,
+                story_match_id:match_id,
+                user_id:user_id,
+                // session_id:session_id,
+            },
+            onload: function (data) {
+                $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var obj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                //新消息获取成功
+                if(obj["code"] == 200){
+
+                } else{
+                    // $.alert(obj.msg)
+                }
+
+            }
+        });
     }
 
     function computeTimer(intervalObjs) {
@@ -292,6 +341,7 @@ $this->title = '消息';
                             $('.start-race-already').removeClass('hide');
                             $('.race-already').removeClass('hide');
                             $('.start-race-disable').hide();
+                            $('.matching-race').addClass('hide');
                         }
                     } else if (obj.data.status == 'end') {
                         $('.race-prepare').addClass('hide');

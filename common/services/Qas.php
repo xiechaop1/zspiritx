@@ -960,6 +960,7 @@ class Qas extends Component
         return $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
     }
 
+
     public function generateOneMath($level = 1, $gold = 0) {
         $subjects = [];
         switch ($level) {
@@ -998,8 +999,40 @@ class Qas extends Component
                 }
                 $subjects = $this->randMathFormula($randNumCt, $numMax, $computeTag, $level, $mode, $gold);
                 break;
+            default:
+                $subjects = $this->getSubjectsFromDbByLevel($level, Subject::SUBJECT_CLASS_MATH, 1);
+                break;
         }
         return $subjects;
+    }
+
+    public function getSubjectsFromDbByLevel($level = 1, $qaClass = 0, $ct = 10) {
+        $qa = Qa::find();
+        if (!empty($level)) {
+            $qa = $qa->where([
+                'level' => $level,
+            ]);
+        }
+        if (!empty($qaClass)) {
+            $qa = $qa->andFilterWhere([
+                'qa_class' => $qaClass,
+            ]);
+        }
+        $qa = $qa->orderBy('rand()')
+            ->limit($ct)
+            ->all();
+
+        $ret = [];
+        if (!empty($qa)) {
+            foreach ($qa as $q) {
+                $tmp = \common\helpers\Qa::formatSubjectFromQa($q);
+
+                $ret[] = $tmp;
+
+            }
+        }
+
+        return $ret;
     }
 
     public function getPoemById($poemId, $qaProp = [], $answerType = 0, $poemType, $ts = 0, $qaType = Qa::QA_TYPE_VERIFYCODE, $qaSelected = []) {
