@@ -279,12 +279,14 @@ class ParentApi extends ApiAction
                     'title' => UserData::$dataType2Name[$col],
                     'content' => $datas[$col],
                     'desc' => !empty($descs[$col]) ? $descs[$col] : '',
+                    'share' => '我家小宝贝' . UserData::$dataType2Name[$col] . '已经达到' . $datas[$col] . '，超越了' . $rankRate . '%同级学子！',
                 ];
             } else {
                 $data[] = [
                     'title' => UserData::$dataType2Name[$col],
                     'content' => 0,
                     'desc' => '',
+                    'share' => '',
                 ];
             }
         }
