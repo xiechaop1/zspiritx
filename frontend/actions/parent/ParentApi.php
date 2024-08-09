@@ -275,6 +275,7 @@ class ParentApi extends ApiAction
 
         foreach ($cols as $col) {
             if (!empty($datas[$col])) {
+                $rankRate = !empty($rankRate) ? $rankRate : 0;
                 $data[] = [
                     'title' => UserData::$dataType2Name[$col],
                     'content' => $datas[$col],
