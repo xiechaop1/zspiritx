@@ -184,10 +184,12 @@ class Doubao extends Component
         $simple = json_encode([
             'SUGGEST' => '问题的引导过程或者答案',
             'QUESTIONS' => [
+                '当前引导的答案',
+//                '可能还有的问题1',
                 '可能还有的问题1',
                 '可能还有的问题2',
                 '可能还有的问题3',
-                '可能还有的问题4',
+//                '可能还有的问题4',
             ],
         ]);
         $roleMessages[] = '#角色' . "\n" . '你是一个教育方面的老师';
@@ -196,14 +198,18 @@ class Doubao extends Component
         }
         $roleMessages[] = '#任务描述和要求';
         if (empty($ques)) {
-            $roleMessages[] = '你根据题目内容，提供明确的引导信息，学生可以在思考下完成解题';
+            $roleMessages[] = '你根据题目内容，提供解题的思路引导，在2个步骤下可以解出题目，并且提示出第1个步骤，并且在QUESTIONS中第一条给出这个步骤的答案，学生可以在思考下完成解题';
             $roleMessages[] = '利用引导式教学，引导学生思考，不要直接给出答案';
         } else {
-            $roleMessages[] = '给出明确的答案或者提示';
+            $roleMessages[] = '根据题目内容和之前的引导，给出接下来的解题步骤，并且在QUESTIONS中的第一条给出这个步骤的答案';
         }
         $roleMessagesFormat = [
             '内容不超过200字',
-            '并且给出，当前如果继续解题，可能还存在的4个方面问题，每个问题不超过18个字，并用指定格式返回',
+//            '然后再给出4条继续对答的建议，其中第1条是当下这个引导步骤的的答案，如：引导的是2个9相加等于几？返回：18，',
+            '再给出3条这个引导下可能还存在的问题。均不超过18个字，并且按照指定的格式给出',
+//            '给出4条回答建议，第1条是给出的引导的答案，后3条是，如果继续解题可能还存在的问题。每个问题不超过18个字，并用指定格式返回',
+//            '给出4个解题引导的可能得答案。每个问题不超过18个字，并用指定格式返回',
+//            '给出4条回答建议，前2条是根据当前给出的引导，可能得答案；后2条是，如果继续解题可能还存在的问题。每个问题不超过18个字，并用指定格式返回',
             '用JSON的形式返回',
             '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
         ];
@@ -224,12 +230,13 @@ class Doubao extends Component
                 break;
         }
         if (!empty($ques)) {
-            $userMessage .= "\n" . '，学生现在问题是：' . $ques;
+            $userMessage .= "\n" . '，学生现在问题是：' . $ques . '，接下来呢？请给出引导';
         }
 //        $userMessage .= '#输出格式#' . '输出提示方法';
 
         $response = $this->chatWithDoubao($userMessage, $oldMessages, [], $roleMessages);
 
+        file_put_contents('/tmp/test_doubao.log', var_export($roleMessages, true) . "\n\n\n" . var_export($response, true));
 //        var_dump($response);exit;
         $messages = $response['choices'][0]['message']['content'];
 
@@ -266,6 +273,7 @@ class Doubao extends Component
         }
         $messages = array_merge($templateMessages, $messages);
         Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
+        file_put_contents('/tmp/test_doubao_i.log', var_export($messages, true));
 //        if (!empty($oldMessages)) {
 //            var_dump($messages);exit;
 //        }
