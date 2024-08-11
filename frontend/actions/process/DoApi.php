@@ -194,6 +194,7 @@ class DoApi extends ApiAction
 
         $praticle = Models::find()
             ->where([
+//                'story_id' => (int)$this->_storyId,
                 'model_type' => Models::MODEL_TYPE_PARTICLE,
             ])
             ->asArray()
