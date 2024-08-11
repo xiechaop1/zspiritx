@@ -71,6 +71,15 @@ echo \dmstr\widgets\Alert::widget();
                         'label' => 'Model UnityID',
                     ],
                     [
+                        'attribute' => 'model_type',
+                        'label' => '模型类型',
+                        'format'    => 'raw',
+                        'value' => function ($model) {
+                            return !empty(\common\models\Models::$modelType2Name[$model->model_type]) ?
+                                \common\models\Models::$modelType2Name[$model->model_type] : '未知';
+                        },
+                    ],
+                    [
                         'attribute' => 'is_active',
                         'label' => '是否是动画',
                         'format'    => 'raw',

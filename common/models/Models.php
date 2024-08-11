@@ -19,6 +19,14 @@ class Models extends \common\models\gii\Models
         self::IS_ACTIVE_NO => '不是动画',
     ];
 
+    const MODEL_TYPE_NORMAL = 1;    // 普通
+    const MODEL_TYPE_PARTICLE = 2;  // 粒子
+
+    public static $modelType2Name = [
+        self::MODEL_TYPE_NORMAL => '普通',
+        self::MODEL_TYPE_PARTICLE => '粒子',
+    ];
+
     public function behaviors()
     {
         return [

@@ -33,6 +33,12 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($models, 'model_name')->textInput(['value' => $models->model_name])->label('模型名称');
             echo $form->field($models, 'model_u_id')->textInput(['value' => $models->model_u_id])->label('Model UnityID');
             echo $form->field($models, 'model_uri')->textInput(['value' => $models->model_uri])->label('Model Uri');
+            echo $form->field($models, 'model_type')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Models::$modelType2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('模型类型');
             echo $form->field($models, 'length')->textInput(['value' => $models->length])->label('长');
             echo $form->field($models, 'width')->textInput(['value' => $models->width])->label('宽');
             echo $form->field($models, 'height')->textInput(['value' => $models->height])->label('高');

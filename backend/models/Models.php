@@ -20,7 +20,9 @@ class Models extends \common\models\Models
     public function rules()
     {
         return [
-            [['is_active', 'width', 'height', 'length', 'is_delete', 'created_at', 'updated_at'], 'integer'],
+            [['is_active', 'width', 'height', 'length',
+                'model_type',
+                'is_delete', 'created_at', 'updated_at'], 'integer'],
             [['model_name'], 'string', 'max' => 32],
             [['model_uri', 'model_desc', 'model_u_id'], 'string'],
         ];
