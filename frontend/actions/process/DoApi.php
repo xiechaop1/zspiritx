@@ -21,6 +21,7 @@ use common\models\Actions;
 use common\models\ItemKnowledge;
 use common\models\Knowledge;
 use common\models\Log;
+use common\models\Models;
 use common\models\Order;
 use common\models\Qa;
 use common\models\Session;
@@ -187,7 +188,20 @@ class DoApi extends ApiAction
 
         $this->_storyInfo['resources'] = Model::formatResources($this->_storyInfo['resources']);
 
-        return $this->_storyInfo;
+        $ret = $this->_storyInfo->toArray();
+
+        $ret['models']['particle'] = [];
+
+        $praticle = Models::find()
+            ->where([
+                'model_type' => Models::MODEL_TYPE_PARTICLE,
+            ])
+            ->asArray()
+            ->all();
+
+        $ret['models']['particle'] = $praticle;
+
+        return $ret;
     }
 
     /**
