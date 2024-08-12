@@ -24,6 +24,7 @@ class ModelController extends ViewController
                     [
                         'actions' => ['story_stage_link', 'story_model_link', 'story_model_link_edit',
                             'story_model', 'story_model_edit',
+                            'story_model_special_eff', 'story_model_special_eff_edit',
                             'user_model', 'user_model_edit',
                             'user_model_loc', 'user_model_loc_edit',
                             'story_model_detail', 'story_model_detail_edit',
@@ -44,6 +45,12 @@ class ModelController extends ViewController
             ],
             'story_model_edit' => [
                 'class' => 'backend\actions\model\StoryModelEdit',
+            ],
+            'story_model_special_eff' => [
+                'class' => 'backend\actions\model\StoryModelSpecialEff',
+            ],
+            'story_model_special_eff_edit' => [
+                'class' => 'backend\actions\model\StoryModelSpecialEffEdit',
             ],
             'user_model' => [
                 'class' => 'backend\actions\model\UserModel',
