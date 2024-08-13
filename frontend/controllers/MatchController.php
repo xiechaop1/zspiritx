@@ -61,6 +61,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'play_voice',
             ],
+            'battle_for_u3d' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'battle_for_u3d',
+            ],
 
         ];
     }

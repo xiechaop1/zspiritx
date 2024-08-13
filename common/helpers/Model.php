@@ -337,6 +337,13 @@ class Model
         return '';
     }
 
+    public static function getPropColWithPropJson($propJson, $col) {
+        if (isset($propJson[$col])) {
+            return $propJson[$col];
+        }
+        return '';
+    }
+
     public static function getUserModelPropColWithPropJson($userModelProp, $col) {
         if (isset($userModelProp['prop'][$col])) {
             return $userModelProp['prop'][$col];

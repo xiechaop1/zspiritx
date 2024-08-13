@@ -359,6 +359,16 @@ class BattlePrepare extends Action
 //                if (empty($showStoryModel)) {
                     $showStoryModel[] = $userModel->storyModel;
 //                }
+                if (empty($tmpStoryModel)) {
+                    $tmpStoryModel = $userModel->storyModel;
+                    if (!empty($tmpStoryModel->icon)) {
+                        $avatar = Attachment::completeUrl($tmpStoryModel->icon);
+                    } else {
+                        $avatar = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+                    }
+                }
+
+
 
                 if ($matchPlayerStatus == StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE) {
                     $ct++;
@@ -407,6 +417,7 @@ class BattlePrepare extends Action
             'answerType'    => 2,
             'msg' => $msg,
             'btnName' => '开始战斗',
+            'avatar' => $avatar,
         ]);
     }
 
