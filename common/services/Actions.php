@@ -106,6 +106,13 @@ class Actions extends Component
         return $model;
     }
 
+    public function addWithoutTag($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0)
+    {
+
+        return $this->_exec($sessionId, $sessionStageId, $storyId, $toUser,
+            $actDetail, $actType, $expirationInterval, $senderId);
+    }
+
     public function _exec($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0) {
 
         if ($expirationInterval > 0) {
