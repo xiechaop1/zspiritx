@@ -876,11 +876,15 @@ class Qas extends Component
         $answer = $poem['stAnswer'];
         $formula = $poem['poem'];
         $answerRange = $poem['selections'];
+        $size = !empty($poem['size']) ? $poem['size'] : 60;
+        $image = !empty($poem['image']) ? $poem['image'] : '';
 
         $subjects = [
             'formula' => $showFormula,
             'topic' => $showFormula,
             'answer' => $answer,
+            'image' => $image,
+            'size' => $size,
             'st_answer' => $answer,
             'standFormula' => $formula,
             'answerRange' => $answerRange,
@@ -1245,6 +1249,7 @@ class Qas extends Component
         $content = $poem->content;
         $content = preg_replace('/([。？]+)/u', '${1}<br>', $content);
         $image = '';
+        $retSize = '60';
         switch ($answerType) {
             case Poem::POEM_ANSWER_TYPE_AUTHOR:
                 // 2. 猜作者
@@ -1262,6 +1267,7 @@ class Qas extends Component
                 ];
                 $stAnswer = $poem->title;
                 $retTemp = '看图片猜名字';
+                $retSize = '40';
                 $image = Attachment::completeUrl($poem->image, true);
                 break;
             case Poem::POEM_ANSWER_TYPE_TITLE_FROM_STORY:
@@ -1291,6 +1297,7 @@ class Qas extends Component
 
         $ret = [
             'formula' => $retTemp,
+            'size' => $retSize,
             'topic' => $retTemp,
             'image' => $image,
             'answer' => $answer,

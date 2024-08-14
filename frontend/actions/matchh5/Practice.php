@@ -201,6 +201,9 @@ class Practice extends Action
                 break;
             case StoryMatch::MATCH_CLASS_POEM_IDIOM:
 //                $subjects = [];
+                if ($level > 2) {
+                    $level = 2;
+                }
                 for ($i=0; $i<100; $i++) {
                     switch ($level) {
                         case 2:
