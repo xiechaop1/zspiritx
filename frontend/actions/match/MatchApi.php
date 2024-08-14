@@ -377,6 +377,7 @@ class MatchApi extends ApiAction
             if (count($liveTeams) == 1) {
                 break;
             }
+            $detail = '';
             foreach ($currentPlayers as $currentPlayer) {
 
                 $currentTeam = $playerTeam[$currentPlayer->id];
