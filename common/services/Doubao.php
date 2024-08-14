@@ -38,84 +38,101 @@ class Doubao extends Component
 
         if (!empty($userMessagePre)) {
             $jsonExample = json_encode([[
-                'SUBJECT' => '小明有 5 个苹果，小红比小明多 3 个，那么小红有几个苹果？',
-                'OPTIONS' => ['A' => '8个', 'B' => '7个', 'C' => '6个', 'D' => '5个'],
+                'SUBJECT' => '题目（无选项）',
+                'OPTIONS' => ['A' => '答案A', 'B' => '答案B', 'C' => '答案C', 'D' => '答案D'],
                 'ANSWER' => 'A',
-                'TYPE'  => '应用题',
+                'TYPE'  => '数学应用题',
                 'POINT' => ['COMPUTE', 'READ'],
             ],[
-                'SUBJECT' => 'SUBJECT2',
+                'SUBJECT' => 'SUBJECT2(NO OPTIONS)',
                 'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                 'ANSWER' => 'A',
-                'TYPE'  => '题型',
+                'TYPE'  => '题目分类',
                 'POINT' => ['LOGIC', 'REMEMBER'],
             ]], JSON_UNESCAPED_UNICODE);
             $msgTemplate = [
-                '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析，根据下面规则出题',
-                '#任务描述和要求',
-                '针对' . $gradeName  . $matchClassName . '，生成不同的题目，' . $ct . '道，每次生成的题目都不能相同。',
+                '#角色#' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析，根据下面规则出题',
+                '#任务描述和要求#',
+                '针对' . $gradeName  . $matchClassName . '生成不同的题目' . $ct . '道，每次生成的题目都不能相同。',
+                '参考例题中的题型，但是更换内容',
                 '给出题目考察的知识点，从计算能力(COMPUTE)，逻辑能力(LOGIC)，想象力(IMAGINATION)，创造力(CREATIVE)，记忆力(REMEMBER)，分析能力(ANALYSIS)，阅读能力(READ)，中选择1-3个最考察的点。',
-                '题目类型为选择题。',
-                '将生成的题目以 JSON 格式呈现，例如：' . $jsonExample,
+                '题目类型为单选题，题干没有选项，选项放到OPTIONS中',
+                '将生成的题目以 JSON 格式呈现',
+//                ，例如：' . $jsonExample,
                 //[{"SUBJECT":"小明有 5 个苹果，小红比小明多 3 个，那么小红有几个苹果？", "OPTIONS": "A.8 个 B.7 个 C.6 个 D. 5 个","answer":"A"}]',
-                '确保题目内容符合' . $gradeName . '学生的知识水平和理解能力。',
+//                '确保题目内容符合' . $gradeName . '学生的知识水平和理解能力。',
 //                '适合' . $gradeName . '同学的题目，科目是：' . $matchClassName . '，请出'. $ct . '道，题目随机一些，尽可能规避历史已经出过的',
                 '#输出格式#' . '输出题目、题型、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
                 '#输出样例#' . $jsonExample,
             ];
+//            $userMessagePre = '你是一个教育方面的老师，负责出题、解答和解析，
+//            针对三年级数学生成不同的题目5道，每次生成的题目要保持不同。
+//            题目类型为选择题，返回的结果用JSON格式。请确保题目符合三年级的知识水平和理解能力。输出题目、题型、标准答案和近似的三个选项';
+
 //$level = 8;
-            if (!empty($extends['exampleTopics'])) {
-                $tmpTopics = [];
-                foreach ($extends['exampleTopics'] as $exampleTopic) {
-                    $tmpTopics[] = $exampleTopic['topic'];
-                }
-                $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
-                $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
-            } else {
-                if (empty($extends['oldTopics'])) {
-                    $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : Subject::SUBJECT_CLASS_NORMAL;
-                    $oldQa = Qa::find()
-                        ->where([
-                            'level' => $level,
-                            'qa_class' => $qaClass,
-                        ])
-//                        ->orderBy('rand()')
-                        ->orderBy('id desc')
-                        ->limit(10)
+            if (1 == 1) {
+                if (!empty($extends['exampleTopics'])) {
+                    $tmpTopics = [];
+                    foreach ($extends['exampleTopics'] as $exampleTopic) {
+                        $tmpTopics[] = $exampleTopic['topic'];
+                    }
+                    $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
+                    $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
+                } else {
+                    if (empty($extends['oldTopics'])) {
+                        $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : Subject::SUBJECT_CLASS_NORMAL;
+                        $oldQa = Qa::find()
+                            ->where([
+                                'level' => $level,
+                                'qa_class' => $qaClass,
+                            ])
+                        ->orderBy('rand()')
+//                            ->orderBy('id desc')
+                            ->limit(50)
 //                        ->createCommand()
 //                        ->getRawSql();
 //                    var_dump($oldQa);exit;
-                        ->all();
+                            ->all();
 //var_dump($oldQa);exit;
-                    if (!empty($oldQa)) {
-                        $tmpTopics = [];
-                        foreach ($oldQa as $oQa) {
-                            $tmpTopics[] = $oQa->topic;
+                        if (!empty($oldQa)) {
+                            $tmpTopics = [];
+                            foreach ($oldQa as $oQa) {
+                                $tmpTopics[] = $oQa->topic;
+                            }
+                            $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
+                            $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
                         }
-                        $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
-                        $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
                     }
+                }
+
+                if (!empty($extends['oldTopics'])) {
+                    $tmpTopics = [];
+                    foreach ($extends['oldTopics'] as $oldTopic) {
+                        $tmpTopics[] = $oldTopic['topic'];
+                    }
+                    $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
+                    $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
                 }
             }
 
-            if (!empty($extends['oldTopics'])) {
-                $tmpTopics = [];
-                foreach ($extends['oldTopics'] as $oldTopic) {
-                    $tmpTopics[] = $oldTopic['topic'];
-                }
-                $tmpTopicStr = implode("\n#参考例题#", $tmpTopics);
-                $msgTemplate[] = "#参考例题#" . $tmpTopicStr;
-            }
 
 //            $userMessageTmp = $userMesssagePre . "\n" . implode("\n", $msgTemplate);
 //            var_dump($msgTemplate);
 
+//            $userMessagePre = '你是一个教育方面的老师，负责出题、解答和解析，针对五年级数学生成不同的题目5道，符合五年级学习的知识体系，每次生成的题目要保持不同。题目类型为选择题，返回的结果用JSON格式。请确保题目符合五年级的知识水平和理解能力。输出题目、题型、标准答案和近似的三个选项';
+//            $userMessagePre = '你是教育方面老师，针对5年级学生的历史知识体系，包含：中国古代史，夏商到战国时期为主。返回结果用JSON格式。题目随机。';
+//            $userMessagePre .= "\n出5道题目，每次生成的题目都不能相同。";
+//            $msgTemplate = [];
             $response = $this->chatWithDoubao($userMessagePre, [], [], $msgTemplate);
+//            var_dump($response);
+//            exit;
             $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
 
             if (!empty($messages)) {
                 $ret = json_decode($messages, true);
             }
+
+            file_put_contents('/tmp/test_doubao_sub.log', var_export($userMessagePre, true) . "\n\n\n" . var_export($ret, true));
 
         } else {
 
@@ -255,10 +272,14 @@ class Doubao extends Component
                 $templateMessages[] = array('role' => 'system', 'content' => $roleTxt);
             }
         }
-        $messages = array(
+
+        $messages = [];
+        if (!empty($userMessage)) {
+            $messages = array(
 //            array('role' => 'system', 'content' => $roleTxt),
-            array('role' => 'user', 'content' => $userMessage)
-        );
+                array('role' => 'user', 'content' => $userMessage)
+            );
+        }
 
 //        $templateMessages = array();
         if (!empty($templateContents)) {
@@ -278,15 +299,16 @@ class Doubao extends Component
 //            var_dump($messages);exit;
 //        }
 //        var_dump($messages);
+//        exit;
 //        print_r($messages);
 //        exit;
 
         $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
-//            'model' => 'ep-20240628070258-6m88j',
-            'model' => 'ep-20240729104951-snm9z',
+            'model' => 'ep-20240628070258-6m88j',
+//            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
-            'temperature' => 0.7,
+            'temperature' => 0.8,
 //            'stream' => false,
         );
 

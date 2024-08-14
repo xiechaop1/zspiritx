@@ -473,23 +473,39 @@ class Qas extends Component
                     } else {
                         $prompt = '生成' . $ct . '道数学题目';
                     }
+                    $prompt .= "\n" . '题目中的数字和题目内容要随机生成，不能固定，不能重复';
+                    $prompt .= "\n" . '题目中的计算方式和数字换一换，很随机';
                     break;
                 case Subject::SUBJECT_CLASS_ENGLISH:
                     $prompt = '生成' . $ct . '道英语单词、短句题目';
+                    if ($level > 7) {
+                        $prompt = '生成' . $ct . '英语小短文的阅读理解';
+                    }
                     break;
                 case Subject::SUBJECT_CLASS_POEM:
                     $prompt = '生成' . $ct . '道诗词题目';
+                    if ($level > 7) {
+                        $prompt = '生成' . $ct . '道诗词理解题目';
+                    }
                     break;
                 case Subject::SUBJECT_CLASS_POEM_IDIOM:
-                    $prompt = '生成' . $ct . '道诗词成语题目';
+                    $prompt = '生成' . $ct . '道成语题目';
+                    if ($level > 7) {
+                        $prompt = '生成' . $ct . '道成语理解题目';
+                    }
                     break;
                 case Subject::SUBJECT_CLASS_CHINESE:
                     $prompt = '生成' . $ct . '道语文题目';
                     break;
-
+                case Subject::SUBJECT_CLASS_HISTORY:
+                    $prompt = '生成' . $ct . '道历史题目';
+                    $prompt .= "\n" . "包括：中国古代史，中国近代史，世界史等";
+                    break;
             }
         }
+//        $prompt = '';
 
+//        $needSave = false;
         $subjects = Yii::$app->doubao->generateSubject($prompt, $level, $matchClass, $ct, $extends);
 
         $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : $matchClass;
