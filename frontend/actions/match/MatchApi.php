@@ -507,8 +507,8 @@ class MatchApi extends ApiAction
                     'restHp' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp'),
                     'maxHp' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'max_hp'),
                     'direction' => $direction,
-                    'type' => $battleType,
-                    'txt' => $detail,
+                    'type' => !empty($battleType) ? $battleType : 0,
+                    'txt' => !empty($detail) ? $detail : '',
                     'hint' => $hint,
                 ];
 
