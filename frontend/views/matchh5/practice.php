@@ -211,7 +211,7 @@ $this->title = '练习赛';
 <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
-                <div class="match-qa-content-img" style="display: none;">
+                <div class="match-qa-content-img" style="display: none;" id="image">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
                 <div class="match-qa-content-worry hide">
@@ -813,11 +813,18 @@ $this->title = '练习赛';
         if (topic == undefined) {
             return;
         }
-        if (topic.indexOf('http') >= 0) {
-            $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
-            topic = '';
+        // if (topic.indexOf('http') >= 0) {
+        //     $('#image').html('<img src="' + topic + '" alt="" class=" img-w-100"/>');
+        //     topic = '';
+        // } else {
+        //     $('#image').html('');
+        // }
+        if (obj[idx].image != undefined) {
+            $('#image').html('<img src="' + obj[idx].image + '" alt="" class=" img-w-100"/>');
+            $('#image').show();
         } else {
             $('#image').html('');
+            $('#image').hide();
         }
         $('#topic').html(topic);
 

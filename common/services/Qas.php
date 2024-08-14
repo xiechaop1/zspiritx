@@ -1244,6 +1244,7 @@ class Qas extends Component
         // 1. 猜标题
         $content = $poem->content;
         $content = preg_replace('/([。？]+)/u', '${1}<br>', $content);
+        $image = '';
         switch ($answerType) {
             case Poem::POEM_ANSWER_TYPE_AUTHOR:
                 // 2. 猜作者
@@ -1260,7 +1261,8 @@ class Qas extends Component
                     'title' => $poem->title,
                 ];
                 $stAnswer = $poem->title;
-                $retTemp = Attachment::completeUrl($poem->image, true);
+                $retTemp = '看图片猜名字';
+                $image = Attachment::completeUrl($poem->image, true);
                 break;
             case Poem::POEM_ANSWER_TYPE_TITLE_FROM_STORY:
                 // 4. 看故事猜名字
@@ -1290,6 +1292,7 @@ class Qas extends Component
         $ret = [
             'formula' => $retTemp,
             'topic' => $retTemp,
+            'image' => $image,
             'answer' => $answer,
             'st_answer' => $stAnswer,
             'stAnswer' => $stAnswer,
