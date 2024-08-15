@@ -434,12 +434,13 @@ class MatchApi extends ApiAction
                     $specEffs = $specEffs->orderBy([
                             'own_story_model_id' => SORT_DESC,
                         ])
-                        ->asArray()
+//                        ->asArray()
                         ->all();
 
                     if (!empty($specEffs)) {
                         foreach ($specEffs as $specEff) {
                             $modelUId = !empty($specEff->model->model_u_id) ? $specEff->model->model_u_id : '';
+                            $specEff = $specEff->toArray();
                             $specEffProp = json_decode($specEff['prop'], true);
                             $specialEffs[$currentPlayer->id][] = [
                                 'model_u_id' => $modelUId,
@@ -455,6 +456,12 @@ class MatchApi extends ApiAction
                     $specialEffs[$currentPlayer->id][] = [
                         'attack' => 0,
                     ];
+                }
+
+                if (!empty($specialEffs[$currentPlayer->id])) {
+                    $eff = $specialEffs[$currentPlayer->id][array_rand($specialEffs[$currentPlayer->id])];
+                } else {
+                    $eff = [];
                 }
 
                 $attackRand = rand($currentPlayerAttack * 0.8, $currentPlayerAttack * 1.2);
