@@ -738,7 +738,7 @@ class MatchApi extends ApiAction
         Yii::$app->knowledge->setDailyMissions($userId, $storyId, $sessionId, $setData);
 //var_dump($scenario);exit;
         $expirationInterval = 600;
-        Yii::$app->act->addWithoutTag($sessionId, 0, $storyId, $userId, json_encode($scenario), Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval);
+        Yii::$app->act->addWithoutTag($sessionId, 0, $storyId, $userId, $scenario, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval, 0, 'performList');
 
         return [
             'params'        => $_GET,

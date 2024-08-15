@@ -106,6 +106,23 @@ class Actions extends Component
         return $model;
     }
 
+    public function addWithTag($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0, $tag = '') {
+
+        if (!is_array($actDetail)
+            && \common\helpers\Common::isJson($actDetail)
+        ) {
+            $actDetail = json_decode($actDetail, true);
+        }
+        $actDetail = [
+            $tag => $actDetail
+        ];
+        $actDetail = json_encode($actDetail, JSON_UNESCAPED_UNICODE);
+
+        $model = $this->addWithoutTag($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType, $expirationInterval, $senderId);
+
+        return $model;
+    }
+
     public function addWithoutTag($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0)
     {
 
