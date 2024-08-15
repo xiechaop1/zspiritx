@@ -550,6 +550,7 @@ class MatchApi extends ApiAction
                     $attScenario = [];
                     $rivScenario = [];
                     $playerScenario = [];
+                    $hitPlayerScenario = [];
                     if (empty($eff['eff_mode'])) {
                         // 普通攻击
                         $playerScenario[] = [
@@ -563,7 +564,7 @@ class MatchApi extends ApiAction
                             'animationName' => 'Slide',
                             'moveZ' => -0.3,
                         ];
-                        $playerScenario[] = [
+                        $hitPlayerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
                             'moveZ' => -0.7,
@@ -591,14 +592,14 @@ class MatchApi extends ApiAction
                             'animationName' => 'Slide',
                             'moveZ' => -0.3,
                         ];
-                        $playerScenario[] = [
+                        $hitPlayerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
                             'moveZ' => -0.2,
                             'slideSpeed' => 5,
                         ];
                     }
-                    $playerScenario[] = [
+                    $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'Slide',
                         'moveZ' => 0.3,
@@ -620,6 +621,10 @@ class MatchApi extends ApiAction
                     $scenario[] = [
                         'timeSinceLast' => $tsl,
                         'lstPerforms' => $playerScenario,
+                    ];
+                    $scenario[] = [
+                        'timeSinceLast' => 1,
+                        'lstPerforms' => $hitPlayerScenario,
                     ];
 
 //                    $matchDetail[] = '(HP：' . Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp') . ')';
