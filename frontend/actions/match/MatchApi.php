@@ -572,6 +572,12 @@ class MatchApi extends ApiAction
                     } else {
                         // 魔法攻击
                         $playerScenario[] = [
+                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'animationName' => 'Slide',
+                            'moveZ' => 0.2,
+                            'slideSpeed' => 5,
+                        ];
+                        $playerScenario[] = [
 //                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'performerId' => 'WorldRoot',
                             'animationName' => 'Effect',
@@ -584,6 +590,12 @@ class MatchApi extends ApiAction
                             'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                             'animationName' => 'Slide',
                             'moveZ' => -0.3,
+                        ];
+                        $playerScenario[] = [
+                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'animationName' => 'Slide',
+                            'moveZ' => -0.2,
+                            'slideSpeed' => 5,
                         ];
                     }
                     $playerScenario[] = [
@@ -626,6 +638,28 @@ class MatchApi extends ApiAction
                         $scenario[] = [
                             'timeSinceLast' => 1,
                             'lstPerforms' => $loseScenario,
+                        ];
+
+                        $winScenario = [];
+                        $winScenario[] = [
+                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'animationName' => 'Play',
+                        ];
+
+                        $scenario[] = [
+                            'timeSinceLast' => 1,
+                            'lstPerforms' => $winScenario,
+                        ];
+
+                        $winScenario = [];
+                        $winScenario[] = [
+                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'animationName' => 'Delete',
+                        ];
+
+                        $scenario[] = [
+                            'timeSinceLast' => 5,
+                            'lstPerforms' => $winScenario,
                         ];
 
                         // 如果是我的宠物，加经验和金币
