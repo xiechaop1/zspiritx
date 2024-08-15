@@ -234,7 +234,7 @@ class Practice extends Action
 //                }
                 break;
             case StoryMatch::MATCH_CLASS_CHINESE:
-                $subjects = Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, 5);
+                $subjects = Yii::$app->qas->generateChinese($level, 50);
                 break;
             default:
                 if (empty($subjects)) {

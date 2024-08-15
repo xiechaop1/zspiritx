@@ -296,6 +296,9 @@ class Challenge extends Action
 //                    }
 //                }
                 break;
+            case StoryMatch::MATCH_CLASS_CHINESE:
+                $subjects = Yii::$app->qas->generateChinese($level, 50);
+                break;
             default:
                 if (empty($subjects)) {
                     return $this->renderErr('比赛类型不支持！');

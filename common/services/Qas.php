@@ -945,6 +945,21 @@ class Qas extends Component
         return $subjects;
     }
 
+    public function generateChinese($level, $ct = 100, $gold = 0) {
+            // Todo：临时强制保护
+//            $ct = 20;
+//            $subjects = $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
+            $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_CHINESE);
+            if (count($subjects) < 10) {
+                $gptSubjects = $this->generateSubjectWithDoubao($level, Qa::QA_CLASS_CHINESE, 10 - count($subjects));
+                foreach ($gptSubjects as $gptSub) {
+                    $subjects[] = $gptSub;
+                }
+            }
+
+        return $subjects;
+    }
+
     public function generateSubjectWithQa($level = 0, $ct = 100, $qaClass = 0, $linkQaId = 0) {
         $qa = Qa::find();
         if (!empty($qaClass)) {
@@ -980,7 +995,7 @@ class Qas extends Component
         return $ret;
     }
 
-    public function generateMathWithDoubao($level, $ct = 100) {
+    public function generateMathWithDoubao($level, $ct = 5) {
         return $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
     }
 
