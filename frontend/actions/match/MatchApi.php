@@ -553,6 +553,7 @@ class MatchApi extends ApiAction
                     $hitPlayerScenario = [];
                     if (empty($eff['eff_mode'])) {
                         // 普通攻击
+                        $duration = 1;
                         $playerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
@@ -572,6 +573,7 @@ class MatchApi extends ApiAction
                         ];
                     } else {
                         // 魔法攻击
+                        $duration = !empty($eff['during_ti']) ? $eff['during_ti'] : 5;
                         $playerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
@@ -584,7 +586,7 @@ class MatchApi extends ApiAction
                             'animationName' => 'Effect',
                             'animationArgs' => [
                                 'animName' => $eff['model_u_id'],
-                                'endTime' => $eff['during_ti'],
+                                'endTime' => $duration,
                             ],
                         ];
                         $playerScenario[] = [
@@ -612,6 +614,7 @@ class MatchApi extends ApiAction
                             [
                                 'key' => 'hp',
                                 'value' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp'),
+                                'max' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'max_hp'),
                             ]
                         ],
                     ];
@@ -623,7 +626,7 @@ class MatchApi extends ApiAction
                         'lstPerforms' => $playerScenario,
                     ];
                     $scenario[] = [
-                        'timeSinceLast' => 1,
+                        'timeSinceLast' => $duration,
                         'lstPerforms' => $hitPlayerScenario,
                     ];
 
