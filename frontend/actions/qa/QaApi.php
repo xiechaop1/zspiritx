@@ -184,6 +184,7 @@ class QaApi extends ApiAction
             throw new \Exception('问答不存在', ErrorCode::QA_NOT_EXIST);
         } else if (empty($qa)) {
             $topic = !empty($this->_get['topic']) ? $this->_get['topic'] : '';
+            $extend = !empty($this->_get['extend']) ? $this->_get['extend'] : '';
             if (empty($topic)) {
                 throw new \Exception('您提供的问答参数不完整', ErrorCode::QA_PARAMETERS_INVALID);
             }
@@ -212,6 +213,10 @@ class QaApi extends ApiAction
                 } else {
 //                    $prop = [];
                 }
+
+                $propArray = json_decode($prop, true);
+                $propArray['extend'] = $extend;
+                $prop = json_encode($propArray, JSON_UNESCAPED_UNICODE);
 
                 $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : Qa::QA_CLASS_MATH;
 

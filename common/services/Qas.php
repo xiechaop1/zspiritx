@@ -586,6 +586,9 @@ class Qas extends Component
         if (!empty($prop['point'])) {
             $oldProp['point'] = $prop['point'];
         }
+        if (!empty($doubaoSubject['extend'])) {
+            $oldProp['extend'] = $doubaoSubject['extend'];
+        }
 
         $qa->prop = json_encode($oldProp, JSON_UNESCAPED_UNICODE);
 

@@ -111,6 +111,7 @@ class Qa
             'standFormula' => $qa['topic'],
             'subject_type' => $qa['qa_type'],
             'answerRange' => $options,
+            'extend' => !empty($prop['extend']) ? $prop['extend'] : '',
             'selected_json' => $qa['selected_json'],
             'selected' => $qa['selected'],
             'answer' => $answer,

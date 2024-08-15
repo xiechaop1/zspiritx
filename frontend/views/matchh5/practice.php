@@ -227,7 +227,7 @@ $this->title = '练习赛';
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         详情
                     </div>
-                    <div class="match-info" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
+                    <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
                     </div>
@@ -510,7 +510,7 @@ $this->title = '练习赛';
             // startRivalTimer($('#match_type').val());
         });
 
-        $('.match-info').click(function() {
+        $('.sugg-btn').click(function() {
             // $('#message-box').modal('show');
             // $('#message-box').modal('show');
 
@@ -862,6 +862,7 @@ $this->title = '练习赛';
             $('#image').html('');
             $('#image').hide();
         }
+        console.log(obj[idx].extend);
         if (obj[idx].extend != undefined) {
             $('#extend-content').html(obj[idx].extend);
         } else {
@@ -1016,6 +1017,7 @@ $this->title = '练习赛';
         var st_selected = selected;
         var score = subjectObj.gold;
         var level = subjectObj.level;
+        var extend = subjectObj.extend;
         var link_qa_id = subjectObj.link_qa_id;
         var prop_json = subjectObj.propJson;
 
@@ -1039,6 +1041,7 @@ $this->title = '练习赛';
                 begin_ts:begin_ts,
                 st_answer:st_answer,
                 topic:topic,
+                extend:extend,
                 selected:st_selected,
                 score:score,
                 qa_mode:qa_mode,

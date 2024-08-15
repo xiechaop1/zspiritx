@@ -1746,6 +1746,7 @@ $this->title = $storyMatch->match_name;
         var match_class = $('input[name=match_class]').val();
         var st_answer = subjectObj.st_answer;
         var topic = subjectObj.topic;
+        var extend = subjectObj.extend;
         var selected = subjectObj.selected;
         var st_selected = selected;
         var score = subjectObj.gold;
@@ -1773,6 +1774,7 @@ $this->title = $storyMatch->match_name;
                 begin_ts:begin_ts,
                 st_answer:st_answer,
                 topic:topic,
+                extend:extend,
                 selected:st_selected,
                 score:score,
                 qa_mode:qa_mode,
