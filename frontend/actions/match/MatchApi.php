@@ -308,6 +308,18 @@ class MatchApi extends ApiAction
 
         $tmpScenario = [];
         $createPlayerScenario = [];
+        $posMap = [
+            'my' => [
+                [
+                    'z' => 0.5,
+                ],
+            ],
+            'rival' => [
+                [
+                    'z' => -0.5,
+                ],
+            ],
+        ];
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
             foreach ($storyMatchPlayers as $player) {
@@ -320,6 +332,9 @@ class MatchApi extends ApiAction
 
                 if ($player->user_id == $userId) {
                     $myTeam[$player->team_id][] = $player->id;
+                    $curPos = current($posMap['my']);
+                } else {
+                    $curPos = current($posMap['rival']);
                 }
 
                 $playerProp = Model::getUserModelProp($player, 'm_user_model_prop');
@@ -344,7 +359,9 @@ class MatchApi extends ApiAction
                         'prefab' => $modelUId,
                         'name' => $userName,
                     ],
-                    'moveZ' => 0.5,
+                    'moveX' => !empty($curPos['x']) ? $curPos['x'] : 0,
+                    'moveY' => !empty($curPos['y']) ? $curPos['y'] : 0,
+                    'moveZ' => !empty($curPos['z']) ? $curPos['z'] : 0,
                     'propBase' => [
                         [
                             'key' => 'hp',
