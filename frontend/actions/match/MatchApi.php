@@ -329,7 +329,7 @@ class MatchApi extends ApiAction
 
                 $teamPlayers[$player->team_id][$player->id] = $player;
                 $allPlayers[]   = $player;
-                $livePlayers[$playerAttSpeed][]  = $player;
+                $livePlayers[intval($playerAttSpeed)][]  = $player;
                 $playerTeam[$player->id] = $player->team_id;
                 $liveTeams[$player->team_id] = $player->user;
 
@@ -364,14 +364,20 @@ class MatchApi extends ApiAction
 
         $specialEffs = [];
 
+        $oldPlayerAttSpeed = 0;
+        $setPlayerAttSpeed = 0;
+
         while (count($liveTeams) > 1
             && $round < 100
         ) {
 //            var_dump(count($liveTeams));
 //            ob_flush();
             ksort($livePlayers);
+            $oldPlayerAttSpeed = $setPlayerAttSpeed;
             $setPlayerAttSpeed = key($livePlayers);
-            $currentPlayers = array_shift($livePlayers);
+//            $currentPlayers = array_shift($livePlayers);
+            $currentPlayers = current($livePlayers);
+            unset($livePlayers[$setPlayerAttSpeed]);
 
             //            $setPlayerAttSpeed = key($currentPlayers);
             if (count($liveTeams) == 1) {
@@ -413,10 +419,11 @@ class MatchApi extends ApiAction
 
                 // 随机物理攻击/魔法攻击
                 if (empty($specialEffs[$currentPlayer->id])) {
+                    $storyModelId = $currentPlayer->m_story_model_id;
                     $specEffs = StoryModelSpecialEff::find()
                         ->where([
                             'or',
-                            ['own_story_model_id' => $storyId],
+                            ['own_story_model_id' => $storyModelId],
                             ['own_story_model_id' => 0],
                         ]);
                     if (!empty($level)) {
@@ -525,6 +532,18 @@ class MatchApi extends ApiAction
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
                             'moveZ' => 0.7,
+                            'slideSpeed' => 5,
+                        ];
+                        $playerScenario[] = [
+                            'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
+                            'animationName' => 'Slide',
+                            'moveZ' => -0.3,
+                        ];
+                        $playerScenario[] = [
+                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'animationName' => 'Slide',
+                            'moveZ' => -0.7,
+                            'slideSpeed' => 2,
                         ];
                     } else {
                         // 魔法攻击
@@ -537,12 +556,18 @@ class MatchApi extends ApiAction
                                 'endTime' => $eff['during_ti'],
                             ],
                         ];
+                        $playerScenario[] = [
+                            'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
+                            'animationName' => 'Slide',
+                            'moveZ' => -0.3,
+                        ];
                     }
                     $playerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'Slide',
-                        'moveZ' => -0.3,
+                        'moveZ' => 0.3,
                     ];
+
                     $playerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'UpdateInfo',
@@ -554,8 +579,10 @@ class MatchApi extends ApiAction
                         ],
                     ];
 
+                    $tsl = $setPlayerAttSpeed - $oldPlayerAttSpeed;
+                    $tsl = intval($tsl/7);
                     $scenario[] = [
-                        'timeSinceLast' => 1,
+                        'timeSinceLast' => $tsl,
                         'lstPerforms' => $playerScenario,
                     ];
 
@@ -654,7 +681,7 @@ class MatchApi extends ApiAction
                     }
                 }
 
-                $livePlayers[$setPlayerAttSpeed+$currentPlayerAttSpeed][] = $currentPlayer;
+                $livePlayers[(int)$setPlayerAttSpeed + (int)$currentPlayerAttSpeed][] = $currentPlayer;
             }
             $round++;
 
