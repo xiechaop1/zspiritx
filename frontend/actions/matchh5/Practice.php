@@ -233,6 +233,9 @@ class Practice extends Action
 //                    }
 //                }
                 break;
+            case StoryMatch::MATCH_CLASS_CHINESE:
+                $subjects = Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, 5);
+                break;
             default:
                 if (empty($subjects)) {
                     return $this->renderErr('比赛类型不支持！');

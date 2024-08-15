@@ -43,15 +43,17 @@ class Doubao extends Component
                 'ANSWER' => 'A',
                 'TYPE'  => '数学应用题',
                 'POINT' => ['COMPUTE', 'READ'],
+                'EXTEND' => '扩展信息',
             ],[
                 'SUBJECT' => 'SUBJECT2(NO OPTIONS)',
                 'OPTIONS' => ['A' => 'AAA', 'B' => 'BBB', 'C' => 'CCC', 'D' => 'DDD'],
                 'ANSWER' => 'A',
                 'TYPE'  => '题目分类',
                 'POINT' => ['LOGIC', 'REMEMBER'],
+                'EXTEND' => 'EXTEND',
             ]], JSON_UNESCAPED_UNICODE);
             $msgTemplate = [
-                '#角色#' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析，根据下面规则出题',
+                '#角色#' . "\n" . '你是一个教育专家',
                 '#任务描述和要求#',
                 '针对' . $gradeName  . $matchClassName . '生成不同的题目' . $ct . '道，每次生成的题目都不能相同。',
                 '参考例题中的题型，但是更换内容',
@@ -62,7 +64,7 @@ class Doubao extends Component
                 //[{"SUBJECT":"小明有 5 个苹果，小红比小明多 3 个，那么小红有几个苹果？", "OPTIONS": "A.8 个 B.7 个 C.6 个 D. 5 个","answer":"A"}]',
 //                '确保题目内容符合' . $gradeName . '学生的知识水平和理解能力。',
 //                '适合' . $gradeName . '同学的题目，科目是：' . $matchClassName . '，请出'. $ct . '道，题目随机一些，尽可能规避历史已经出过的',
-                '#输出格式#' . '输出题目、题型、标准答案和近似的三个选项答案，用ABCD表示。输出格式为JSON',
+                '#输出格式#' . '输出题目、题型、标准答案和近似的三个选项答案，用ABCD表示。如果有扩展信息（如：图片描述，短文等）放入EXTEND字段。输出格式为JSON',
                 '#输出样例#' . $jsonExample,
             ];
 //            $userMessagePre = '你是一个教育方面的老师，负责出题、解答和解析，

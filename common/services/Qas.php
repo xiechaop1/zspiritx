@@ -496,6 +496,10 @@ class Qas extends Component
                     break;
                 case Subject::SUBJECT_CLASS_CHINESE:
                     $prompt = '生成' . $ct . '道语文题目';
+                    if ($level > 7) {
+                        $prompt .= "\n" . '包括：短文理解题目，即生成或摘取一段短文，然后提问';
+                        $prompt .= "\n" . '题干中不包括短文内容，放入EXTEND字段';
+                    }
                     break;
                 case Subject::SUBJECT_CLASS_HISTORY:
                     $prompt = '生成' . $ct . '道历史题目';

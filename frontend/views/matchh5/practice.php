@@ -223,6 +223,10 @@ $this->title = '练习赛';
                     <span>17</span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
+                    <div class="match-info" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        详情
+                    </div>
                     <div class="match-info" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
@@ -367,6 +371,38 @@ $this->title = '练习赛';
 <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
 <!--                        <label class="btn-green-m active ">知道了</label>-->
 <!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="extend-info" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-lottery-bg">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
+                <img src="../../static/img/icon-close.png" class="img-40">
+            </span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="m-t-50">
+                    <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
+                        <img src="../../static/img/bg-lottery-text1.png" class="img-250">
+                    </div>
+                    <div class="fs-36  text-FF  text-center bold lottery-error-title">
+                        详情
+                    </div>
+
+                    <div id="extend-content" class="fs-32 text-FF bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                    </div>
+                                        <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
+                                            <label class="btn-green-m active ">知道了</label>
+                                        </div>
+                    <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+                    <!--                        <label class="btn-green-m active ">知道了</label>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+                    <!--                        <label class="btn-green-m active ">知道了</label>-->
+                    <!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -825,6 +861,11 @@ $this->title = '练习赛';
         } else {
             $('#image').html('');
             $('#image').hide();
+        }
+        if (obj[idx].extend != undefined) {
+            $('#extend-content').html(obj[idx].extend);
+        } else {
+            $('#extend-content').html('');
         }
         $('#topic').html(topic);
 
