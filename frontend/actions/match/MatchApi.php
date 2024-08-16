@@ -710,6 +710,8 @@ class MatchApi extends ApiAction
                                     $rivalUserModelLoc->user_model_id = $currentPlayer->user_model_id;
                                     $rivalUserModelLoc->location_id = $rivalPlayer->userModelLoc->location_id;
                                     $rivalUserModelLoc->story_model_id = $currentPlayer->m_story_model_id;
+                                    $rivalUserModelLoc->active_class = $rivalPlayer->userModelLoc->active_class;
+                                    $rivalUserModelLoc->amap_poi_id = $rivalPlayer->userModelLoc->amap_poi_id;
 //                                    $rivalUserModelLoc->story_id = $currentPlayer->story_id;
 //                                    $rivalUserModelLoc->session_id = $currentPlayer->session_id;
 //                                    $rivalUserModelLoc->amap_poi_id = $currentPlayer->userModelLoc->amap_poi_id;
