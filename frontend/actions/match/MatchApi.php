@@ -477,7 +477,9 @@ class MatchApi extends ApiAction
 
                 if (!empty($specialEffs[$currentPlayer->id])) {
                     $eff = $specialEffs[$currentPlayer->id][array_rand($specialEffs[$currentPlayer->id])];
-                    $currentPlayerAttack = $eff['attack'] * pow(1.04, $currentPlayerLevel);
+                    if (!empty($eff['attack'])) {
+                        $currentPlayerAttack = $eff['attack'] * pow(1.04, $currentPlayerLevel);
+                    }
                 } else {
                     $eff = [];
                 }
