@@ -645,7 +645,7 @@ class MatchApi extends ApiAction
                             'animationName' => 'Slide',
 //                            'moveZ' => -0.2,
                             'moveY' => -0.5,
-                            'slideSpeed' => 1,
+                            'slideSpeed' => 5,
                         ];
                     }
                     $hitPlayerScenario[] = [
