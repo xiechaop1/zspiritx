@@ -324,6 +324,7 @@ class MatchApi extends ApiAction
                 ],
             ],
         ];
+        $playerPos = [];
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
             foreach ($storyMatchPlayers as $player) {
@@ -336,9 +337,9 @@ class MatchApi extends ApiAction
 
                 if ($player->user_id == $userId) {
                     $myTeam[$player->team_id][] = $player->id;
-                    $curPos = current($posMap['my']);
+                    $playerPos[$player->id] = current($posMap['my']);
                 } else {
-                    $curPos = current($posMap['rival']);
+                    $playerPos[$player->id] = current($posMap['rival']);
                 }
 
                 $playerProp = Model::getUserModelProp($player, 'm_user_model_prop');
@@ -363,9 +364,9 @@ class MatchApi extends ApiAction
                         'prefab' => $modelUId,
                         'name' => $userName,
                     ],
-                    'moveX' => !empty($curPos['x']) ? $curPos['x'] : 0,
-                    'moveY' => !empty($curPos['y']) ? $curPos['y'] : 0,
-                    'moveZ' => !empty($curPos['z']) ? $curPos['z'] : 0,
+                    'moveX' => !empty($playerPos[$player->id]['x']) ? $playerPos[$player->id]['x'] : 0,
+                    'moveY' => !empty($playerPos[$player->id]['y']) ? $playerPos[$player->id]['y'] : 0,
+                    'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 0,
                     'propBase' => [
                         [
                             'key' => 'hp',
@@ -581,16 +582,36 @@ class MatchApi extends ApiAction
                     } else {
                         // 魔法攻击
                         $duration = !empty($eff['during_ti']) ? $eff['during_ti'] : 4.5;
+
+                        $effPosZ = 0;
+                        if (!empty($eff['eff_mode'])) {
+                            switch ($eff['eff_mode']) {
+                                case StoryModelSpecialEff::EFF_MODE_OWNER:
+                                    $effPosZ = !empty($playerPos[$currentPlayer->id]['z'])
+                                        ? $playerPos[$currentPlayer->id]['z'] : 0;
+                                    break;
+                                case StoryModelSpecialEff::EFF_MODE_RIVAL:
+                                    $effPosZ = !empty($playerPos[$rivalPlayer->id]['z'])
+                                        ? $playerPos[$rivalPlayer->id]['z'] : 0;
+                                    break;
+                                default:
+                                    $effPosZ = 0;
+                                    break;
+                            }
+                        }
+
                         $playerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
                             'moveZ' => 0.2,
+                            'moveY' => 0.2,
                             'slideSpeed' => 5,
                         ];
                         $playerScenario[] = [
 //                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'performerId' => 'WorldRoot',
                             'animationName' => 'Effect',
+                            'moveZ' => $effPosZ,
                             'animationArgs' => [
                                 'animName' => $eff['model_u_id'],
                                 'endTime' => $duration,
