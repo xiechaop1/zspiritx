@@ -558,10 +558,14 @@ class MatchApi extends ApiAction
                     $attScenario = [];
                     $rivScenario = [];
                     $playerScenario = [];
+                    $prePlayerScenario = [];
                     $hitPlayerScenario = [];
                     if (empty($eff['eff_mode'])) {
                         // 普通攻击
                         $duration = 1;
+                        $prePlayerScenario[] = [
+
+                        ];
                         $playerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
@@ -600,7 +604,7 @@ class MatchApi extends ApiAction
                             }
                         }
 
-                        $playerScenario[] = [
+                        $prePlayerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
 //                            'moveZ' => 0.2,
@@ -652,6 +656,10 @@ class MatchApi extends ApiAction
                     $tsl = $tsl/10;
                     $scenario[] = [
                         'timeSinceLast' => $tsl,
+                        'lstPerforms' => $prePlayerScenario,
+                    ];
+                    $scenario[] = [
+                        'timeSinceLast' => 0.5,
                         'lstPerforms' => $playerScenario,
                     ];
                     $scenario[] = [
