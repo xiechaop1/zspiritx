@@ -325,8 +325,10 @@ class MatchApi extends ApiAction
             ],
         ];
         $playerPos = [];
+        $totalSec = 0;
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
+            $totalSec += 1;
             foreach ($storyMatchPlayers as $player) {
                 if ($player->match_player_status != StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE) {
                     continue;
@@ -373,6 +375,18 @@ class MatchApi extends ApiAction
                             'value' => Model::getUserModelPropColWithPropJson($playerProp, 'hp'),
                             'max' => Model::getUserModelPropColWithPropJson($playerProp, 'max_hp'),
                         ],
+                    ],
+                ];
+                $createPlayerScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                    'performerId' => 'WorldRoot',
+                    'animationName' => 'Effect',
+                    'moveX' => !empty($playerPos[$player->id]['x']) ? $playerPos[$player->id]['x'] : 0,
+                    'moveY' => !empty($playerPos[$player->id]['y']) ? $playerPos[$player->id]['y'] : 0,
+                    'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 0,
+                    'animationArgs' => [
+                        'animName' => 'EmergeAnimation',
+                        'endTime' => 1,
                     ],
                 ];
             }
@@ -667,6 +681,8 @@ class MatchApi extends ApiAction
                         'lstPerforms' => $hitPlayerScenario,
                     ];
 
+                    $totalSec += $tsl + 0.5 + $duration;
+
 //                    $matchDetail[] = '(HP：' . Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp') . ')';
 
                     if (Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp') <= 0) {
@@ -679,6 +695,18 @@ class MatchApi extends ApiAction
                             'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                             'animationName' => 'Delete',
                         ];
+                        $loseScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'performerId' => 'WorldRoot',
+                            'animationName' => 'Effect',
+                            'moveX' => !empty($playerPos[$rivalPlayer->id]['x']) ? $playerPos[$rivalPlayer->id]['x'] : 0,
+                            'moveY' => !empty($playerPos[$rivalPlayer->id]['y']) ? $playerPos[$rivalPlayer->id]['y'] : 0,
+                            'moveZ' => !empty($playerPos[$rivalPlayer->id]['z']) ? $playerPos[$rivalPlayer->id]['z'] : 0,
+                            'animationArgs' => [
+                                'animName' => 'EmergeAnimation',
+                                'endTime' => 1,
+                            ],
+                        ];
 
                         $scenario[] = [
                             'timeSinceLast' => 1,
@@ -688,7 +716,11 @@ class MatchApi extends ApiAction
                         $winScenario = [];
                         $winScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
-                            'animationName' => 'Play',
+                            'animationName' => 'Animation',
+                            'animationArgs' => [
+                                'animName' => 'Play',
+                                'endTime' => 2,
+                            ],
                         ];
 
                         $scenario[] = [
@@ -701,11 +733,25 @@ class MatchApi extends ApiAction
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Delete',
                         ];
+                        $winScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'performerId' => 'WorldRoot',
+                            'animationName' => 'Effect',
+                            'moveX' => !empty($playerPos[$currentPlayer->id]['x']) ? $playerPos[$currentPlayer->id]['x'] : 0,
+                            'moveY' => !empty($playerPos[$currentPlayer->id]['y']) ? $playerPos[$currentPlayer->id]['y'] : 0,
+                            'moveZ' => !empty($playerPos[$currentPlayer->id]['z']) ? $playerPos[$currentPlayer->id]['z'] : 0,
+                            'animationArgs' => [
+                                'animName' => 'EmergeAnimation',
+                                'endTime' => 1,
+                            ],
+                        ];
 
                         $scenario[] = [
                             'timeSinceLast' => 5,
                             'lstPerforms' => $winScenario,
                         ];
+
+                        $totalSec += 7;
 
                         // 如果是我的宠物，加经验和金币
                         if ($currentPlayer->user_id == $userId) {
@@ -792,6 +838,8 @@ class MatchApi extends ApiAction
 
         }
 
+
+
         if (!empty($allPlayers)) {
             foreach ($allPlayers as $player) {
                 $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
@@ -850,6 +898,15 @@ class MatchApi extends ApiAction
             }
         }
 
+        // 发送Action结束游戏
+        $expirationInterval = 600;
+        $endScenario = json_encode([
+            'timeDelayAction' => $totalSec,
+            'showModels' => ['LJ-WORLD-SPIRIT-BATTLE1'],
+            'hideModels' => ['LJ-WORLD-SPIRIT-BATTLE']
+        ], JSON_UNESCAPED_UNICODE);
+        Yii::$app->act->addWithoutTag($sessionId, 0, $storyId, $userId, $endScenario, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval, 0);
+//        LJ-WORLD-SPIRIT-BATTLE1
 
 
         $matchDetail = [
