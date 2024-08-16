@@ -51,6 +51,9 @@ class Matchh5Controller extends Controller
             'practice' => [
                 'class' => 'frontend\actions\matchh5\Practice',
             ],
+            'show_match' => [
+                'class' => 'frontend\actions\matchh5\ShowMatch',
+            ],
         ];
     }
 }

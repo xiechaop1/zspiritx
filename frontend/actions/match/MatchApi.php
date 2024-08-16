@@ -276,6 +276,10 @@ class MatchApi extends ApiAction
 
 //        $userModelId = !empty($_GET['user_model_id']) ? $_GET['user_model_id'] : 0;
 
+        // 切换到战斗场景
+        $expirationInterval = 60;        // 消息超时时间
+        $stageUId = 'LJ-WORLD-BATTLE';
+        Yii::$app->act->add((int)$sessionId, 0, (int)$storyId, (int)$userId, $stageUId, Actions::ACTION_TYPE_CHANGE_STAGE, $expirationInterval);
 
         $storyMatch = StoryMatch::find()
             ->where([
