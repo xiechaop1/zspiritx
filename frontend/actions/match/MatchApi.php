@@ -443,9 +443,9 @@ class MatchApi extends ApiAction
                             ['own_story_model_id' => $storyModelId],
                             ['own_story_model_id' => 0],
                         ]);
-                    if (!empty($level)) {
+                    if (!empty($currentPlayerLevel)) {
                         $specEffs = $specEffs->andFilterWhere([
-                           '>=', 'level', $level,
+                           '>=', 'level', $currentPlayerLevel,
                         ]);
                     }
                     $specEffs = $specEffs->orderBy([
@@ -477,6 +477,7 @@ class MatchApi extends ApiAction
 
                 if (!empty($specialEffs[$currentPlayer->id])) {
                     $eff = $specialEffs[$currentPlayer->id][array_rand($specialEffs[$currentPlayer->id])];
+                    $currentPlayerAttack = $eff['attack'] * pow(1.04, $currentPlayerLevel);
                 } else {
                     $eff = [];
                 }
@@ -573,7 +574,7 @@ class MatchApi extends ApiAction
                         ];
                     } else {
                         // 魔法攻击
-                        $duration = !empty($eff['during_ti']) ? $eff['during_ti'] : 5;
+                        $duration = !empty($eff['during_ti']) ? $eff['during_ti'] : 4.5;
                         $playerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
@@ -620,7 +621,7 @@ class MatchApi extends ApiAction
                     ];
 
                     $tsl = $setPlayerAttSpeed - $oldPlayerAttSpeed;
-                    $tsl = intval($tsl/7);
+                    $tsl = $tsl/10;
                     $scenario[] = [
                         'timeSinceLast' => $tsl,
                         'lstPerforms' => $playerScenario,
