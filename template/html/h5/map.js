@@ -330,7 +330,8 @@ $(function () {
                                 url:e.userModelLoc[0].link_url,
                                 btn_text:e.userModelLoc[0].link_text,
                                 loc_color:e.userModelLoc[0].loc_color,
-                                amap_prop:e.location.amap_prop
+                                amap_prop:e.location.amap_prop,
+                                own_user_id:e.userModelLoc[0].user_id
                             };
                             markersModal.push(marker);
                             userModelLocIds.push(e.userModelLoc[0].id);
@@ -465,7 +466,7 @@ $(function () {
     function drawUserModals(markers){
         markers.forEach(function(marker) {
             var markerContent= '<span style="left:20%;top:80%;"  class="user_marker_modal user_marker_modal'+marker.active_class+'"  onclick="showPoiDetail(this)" data-type="'+marker.active_class+'" data-id="'+marker.id+'"  data-name="'+marker.name+'" ' +
-                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'" data-loc-id="'+marker.location_id+'" data-loc-name="'+marker.location_name+'">' +
+                ' data-lat="'+marker.latitude+'"   data-lng="'+marker.longitude+'" data-own="'+marker.own_user_id+'"  data-url="'+marker.url+'"  data-btn="'+marker.btn_text+'" data-loc-id="'+marker.location_id+'" data-loc-name="'+marker.location_name+'">' +
                 '<img src="'+marker.img+'">'+'</span>';
             var marker= new AMap.Marker({
                 content: markerContent,
@@ -682,22 +683,25 @@ function showPoiDetail(e) {
     var btn=me.attr("data-btn");
     var target_lat=me.attr("data-lat");
     var target_lng=me.attr("data-lng");
+    var own_user_id=me.attr("data-own");
     console.log(name,type,id,btn)
     // window.location.href="/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng
-    if(type==2){
-        $("#modal-detail .map-text-context").empty().html(location_name + "<br>" + name);
-        $("#modal-detail .btn-battle").attr("data-url",url);
-        $("#modal-detail .btn-battle").attr("data-loc-id",location_id);
-        $("#modal-detail .btn-battle").empty().text(btn);
-        $("#modal-detail").modal('show');
-    } else {
-        var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + location_id;
-        url = "/compassh5/compass?user_id="+user_id+"&target_lat="+target_lat+"&target_lng="+target_lng;
-        $("#modal-detail .map-text-context").empty().text(location_name);
-        $("#modal-detail .btn-battle").attr("data-url",url);
-        $("#modal-detail .btn-battle").attr("data-loc-id",location_id);
-        $("#modal-detail .btn-battle").empty().text(btn);
-        $("#modal-detail").modal('show');
+    if (own_user_id != user_id) {
+        if (type == 2) {
+            $("#modal-detail .map-text-context").empty().html(location_name + "<br>" + name);
+            $("#modal-detail .btn-battle").attr("data-url", url);
+            $("#modal-detail .btn-battle").attr("data-loc-id", location_id);
+            $("#modal-detail .btn-battle").empty().text(btn);
+            $("#modal-detail").modal('show');
+        } else {
+            var target_stage_u_id = 'LJ-WORLD-OUTSIDE-' + location_id;
+            url = "/compassh5/compass?user_id=" + user_id + "&target_lat=" + target_lat + "&target_lng=" + target_lng;
+            $("#modal-detail .map-text-context").empty().text(location_name);
+            $("#modal-detail .btn-battle").attr("data-url", url);
+            $("#modal-detail .btn-battle").attr("data-loc-id", location_id);
+            $("#modal-detail .btn-battle").empty().text(btn);
+            $("#modal-detail").modal('show');
+        }
     }
     // else{
     //     var params = {
