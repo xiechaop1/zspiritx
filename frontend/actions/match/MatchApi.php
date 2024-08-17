@@ -464,7 +464,7 @@ class MatchApi extends ApiAction
                         ]);
                     if (!empty($currentPlayerLevel)) {
                         $specEffs = $specEffs->andFilterWhere([
-                           '>=', 'level', $currentPlayerLevel,
+                           '<=', 'level', $currentPlayerLevel,
                         ]);
                     }
                     $specEffs = $specEffs->orderBy([
