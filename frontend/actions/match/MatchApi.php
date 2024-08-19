@@ -780,7 +780,7 @@ class MatchApi extends ApiAction
                             'animationName' => 'Delete',
                         ];
                         $winScenario[] = [
-                            'performerId' => 'SCIENE_0',
+                            'performerId' => 'SCIENCE_0',
                             'animationName' => 'Delete',
                         ];
                         $winScenario[] = [
