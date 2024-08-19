@@ -392,8 +392,13 @@ $this->title = '练习赛';
                         详情
                     </div>
 
-                    <div id="extend-content" class="fs-32 text-FF bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                    <div id="extend-content-container" class="fs-32 text-FF bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                        <div id="extend-content"></div>
+                        <div style="float: left; line-height: 200%;">
+                            <img class="play_voice_extend" src="../../static/img/match/play.png" width="50">
+                        </div>
                     </div>
+
                                         <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
                                             <label class="btn-green-m active ">知道了</label>
                                         </div>
@@ -526,8 +531,69 @@ $this->title = '练习赛';
 
         });
 
+        var audio_list = [];
+        $('.play_voice_extend').click(function() {
+            var thisObj = $(this);
+            if (thisObj.hasClass('play_voice_btn_disable')) {
+                return;
+            }
+
+            var user_id = $('input[name=user_id]').val();
+            var story_id = $('input[name=story_id]').val();
+            var audioVoice = $('#audio_voice')[0];
+
+            thisObj.addClass('play_voice_btn_disable');
+            for (var ai in audio_list) {
+                if (audio_list[ai].msg == $(this).parent().prev().html()) {
+                    audioVoice.src = audio_list[ai].voice;
+                    audioVoice.play();
+                    return;
+                }
+            }
+
+            var msg = $(this).parent().prev().html();
+            var userId = $('input[name=user_id]').val();
+            console.log(msg);
+
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: true,
+                url: '/match/play_voice',
+                data: {
+                    story_id: story_id,
+                    user_id: user_id,
+                    messages: msg,
+                },
+                onload: function (data) {
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    thisObj.removeClass('play_voice_btn_disable');
+                    console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status) {
+                    var dataContent = data;
+                    var dataCon = $.toJSON(dataContent);
+                    var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                    console.log(voiceObj);
+                    audioVoice.src = voiceObj.data.file.file;
+
+                    audio_list.push({
+                        msg: msg,
+                        voice: voiceObj.data.file.file,
+                    });
+
+                    audioVoice.play();
+                    thisObj.removeClass('play_voice_btn_disable');
+
+                }
+            });
+        });
+
         console.log(obj);
-        generateSubjects();
+        // generateSubjects();
 
     };
 
@@ -862,11 +928,14 @@ $this->title = '练习赛';
             $('#image').html('');
             $('#image').hide();
         }
+        console.log('extend');
         console.log(obj[idx].extend);
-        if (obj[idx].extend != undefined) {
+        if (obj[idx].extend != undefined && obj[idx].extend != '') {
             $('#extend-content').html(obj[idx].extend);
+            $('.play_voice_extend').show();
         } else {
             $('#extend-content').html('');
+            $('.play_voice_extend').hide();
         }
         $('#topic').html(topic);
 
