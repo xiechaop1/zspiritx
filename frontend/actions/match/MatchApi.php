@@ -663,7 +663,7 @@ class MatchApi extends ApiAction
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'PopText',
-                        'animationArgs' => $hint,
+                        'animationArgs' => '<size=28><color=yellow>' . $hint . '</color></size>',
                     ];
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
@@ -708,7 +708,7 @@ class MatchApi extends ApiAction
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'PopText',
-                        'animationArgs' => !empty($battleType) && $battleType == 1 ? 'MISS' : '格挡',
+                        'animationArgs' => !empty($battleType) && $battleType == 1 ? '<size=36><color=white>MISS</color></size>' : '<size=36><color=red>格挡</color></size>',
                     ];
                 }
 
