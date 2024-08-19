@@ -326,6 +326,17 @@ class MatchApi extends ApiAction
         ];
         $playerPos = [];
         $totalSec = 0;
+        $createPlayerScenario[] = [
+            'performerId' => 'SCIENCE_0',
+            'animationName' => 'Create',
+            'animationArgs' => [
+                'prefab' => 'Grassfield',
+                'name' => 'system',
+            ],
+            'moveX' => 0,
+            'moveY' => 0,
+            'moveZ' => 0,
+        ];
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
             $totalSec += 1;
@@ -390,8 +401,9 @@ class MatchApi extends ApiAction
                     ],
                 ];
             }
-            $tmpScenario['lstPerforms'] = $createPlayerScenario;
         }
+        $tmpScenario['lstPerforms'] = $createPlayerScenario;
+
         $scenario[] = $tmpScenario;
 
         $matchDetail = [];
@@ -565,15 +577,15 @@ class MatchApi extends ApiAction
                     'hint' => $hint,
                 ];
 
+                $hitPlayerScenario = [];
+                $playerScenario = [];
+                $prePlayerScenario = [];
                 if ($hint > 0) {
                     $rivalPlayerProp = Model::addUserModelPropColWithPropJson($rivalPlayerProp, 'hp', -$hint);
                     $allPlayerProps[$rivalPlayer->id] = $rivalPlayerProp;
 
                     $attScenario = [];
                     $rivScenario = [];
-                    $playerScenario = [];
-                    $prePlayerScenario = [];
-                    $hitPlayerScenario = [];
                     if (empty($eff['eff_mode'])) {
                         // 普通攻击
                         $duration = 1;
@@ -650,6 +662,11 @@ class MatchApi extends ApiAction
                     }
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
+                        'animationName' => 'PopText',
+                        'animationArgs' => $hint,
+                    ];
+                    $hitPlayerScenario[] = [
+                        'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'Slide',
                         'moveZ' => 0.3,
                     ];
@@ -665,6 +682,35 @@ class MatchApi extends ApiAction
                             ]
                         ],
                     ];
+                } else {
+                    $playerScenario[] = [
+                        'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                        'animationName' => 'Slide',
+                        'moveZ' => 0.7,
+                        'slideSpeed' => 5,
+                    ];
+                    $playerScenario[] = [
+                        'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
+                        'animationName' => 'Slide',
+                        'moveZ' => -0.3,
+                    ];
+                    $hitPlayerScenario[] = [
+                        'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                        'animationName' => 'Slide',
+                        'moveZ' => -0.7,
+                        'slideSpeed' => 2,
+                    ];
+                    $hitPlayerScenario[] = [
+                        'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
+                        'animationName' => 'Slide',
+                        'moveZ' => 0.3,
+                    ];
+                    $hitPlayerScenario[] = [
+                        'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
+                        'animationName' => 'PopText',
+                        'animationArgs' => !empty($battleType) && $battleType == 1 ? 'MISS' : '格挡',
+                    ];
+                }
 
                     $tsl = $setPlayerAttSpeed - $oldPlayerAttSpeed;
                     $tsl = $tsl/10;
@@ -830,7 +876,7 @@ class MatchApi extends ApiAction
 
 //                        var_dump($liveTeams);
                     }
-                }
+//                }
 
                 $livePlayers[(int)$setPlayerAttSpeed + (int)$currentPlayerAttSpeed][] = $currentPlayer;
             }
