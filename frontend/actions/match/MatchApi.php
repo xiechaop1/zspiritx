@@ -334,7 +334,7 @@ class MatchApi extends ApiAction
                 'name' => 'system',
             ],
             'moveX' => 0,
-            'moveY' => 0,
+            'moveY' => -1,
             'moveZ' => 0,
         ];
         if (!empty($storyMatchPlayers)) {
@@ -777,6 +777,10 @@ class MatchApi extends ApiAction
                         $winScenario = [];
                         $winScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'animationName' => 'Delete',
+                        ];
+                        $winScenario[] = [
+                            'performerId' => 'SCIENE_0',
                             'animationName' => 'Delete',
                         ];
                         $winScenario[] = [
