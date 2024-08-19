@@ -334,7 +334,7 @@ class MatchApi extends ApiAction
                 'name' => 'system',
             ],
             'moveX' => 0,
-            'moveY' => -1,
+            'moveY' => -0.5,
             'moveZ' => 0,
         ];
         if (!empty($storyMatchPlayers)) {
