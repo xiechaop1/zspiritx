@@ -227,7 +227,7 @@ $this->title = $storyMatch->match_name;
 <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
-                <div class="match-qa-content-img" style="display: none;">
+                <div class="match-qa-content-img" style="display: none;" id="image">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
                 <div class="match-qa-content-worry hide">
@@ -382,9 +382,6 @@ $this->title = $storyMatch->match_name;
                     <div id="number-floater" style="position: absolute; color: #FFB94F; font-size: 48px; top: 36px; left: 180px; text-align: center; z-index: 9999999"></div>
                     <input type="hidden" id="subj_idx" value="0">
                     <div id="topic" style="font-size: 60px; text-align: center;"></div>
-                    <div id="image">
-<!--                        <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
-                    </div>
                     <!--<div class="hpa-ctr">
                         <img src="../../static/img/qa/btn_播放_nor@2x.png" alt="" class="img-48  d-inline-block m-r-10 vertical-mid"/>
                         播放语音
@@ -1687,7 +1684,7 @@ $this->title = $storyMatch->match_name;
             $('#extend-content').html('');
             $('.play_voice_extend').hide();
         }
-        
+
         $('#topic').html(topic);
         console.log(size);
         if (size != undefined) {

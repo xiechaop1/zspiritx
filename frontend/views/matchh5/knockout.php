@@ -203,7 +203,7 @@ $this->title = $storyMatch->match_name;
 <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
-                <div class="match-qa-content-img" style="display: none;">
+                <div class="match-qa-content-img" style="display: none;" id="image">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
                 <div class="match-qa-content-worry hide">
@@ -272,9 +272,6 @@ $this->title = $storyMatch->match_name;
                     <div id="number-floater" style="position: absolute; color: #FFB94F; font-size: 48px; top: 36px; left: 180px; text-align: center; z-index: 9999999"></div>
                     <input type="hidden" id="subj_idx" value="0">
                     <div id="topic" style="font-size: 60px; text-align: center;"></div>
-                    <div id="image">
-<!--                        <img src=" --><?php //= $qa['attachment'] ?><!--" alt="" class="img-responsive d-block"/>-->
-                    </div>
 
                 </div>
             </div>
@@ -630,6 +627,44 @@ $this->title = $storyMatch->match_name;
 
 </div>
 
+<div class="modal fade" id="extend-info" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-lottery-bg">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
+                <img src="../../static/img/icon-close.png" class="img-40">
+            </span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="m-t-50">
+                    <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
+                        <img src="../../static/img/bg-lottery-text1.png" class="img-250">
+                    </div>
+                    <div class="fs-36  text-FF  text-center bold lottery-error-title">
+                        详情
+                    </div>
+
+                    <!--                    <div id="extend-content" class="fs-32 text-FF bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">-->
+                    <!--                    </div>-->
+                    <div id="extend-content-container" class="fs-32 text-FF bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                        <div id="extend-content"></div>
+                        <div style="float: left; line-height: 200%;">
+                            <img class="play_voice_extend" src="../../static/img/match/play.png" width="50">
+                        </div>
+                    </div>
+                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
+                        <label class="btn-green-m active ">知道了</label>
+                    </div>
+                    <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+                    <!--                        <label class="btn-green-m active ">知道了</label>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+                    <!--                        <label class="btn-green-m active ">知道了</label>-->
+                    <!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row modal fade" id="answer-right-box" style="top: 100px;">
     <div class="m-t-30 col-sm-12 col-md-12 p-40">
         <!--                    <img src="../../static/img/qa/Frame@2x.png" alt="" class="img-responsive  d-block m-auto"/>-->
@@ -847,12 +882,28 @@ $this->title = $storyMatch->match_name;
             var topic = tobj.formula;
         }
         console.log(topic);
-        if (topic.indexOf('http') >= 0) {
-            $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
-            topic = '';
+        // if (topic.indexOf('http') >= 0) {
+        //     $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
+        //     topic = '';
+        // } else {
+        //     $('#image').html('');
+        // }
+
+        if (obj[idx].image != undefined) {
+            $('#image').html('<img src="' + obj[idx].image + '" alt="" class=" img-w-100"/>');
+            $('#image').show();
         } else {
             $('#image').html('');
+            $('#image').hide();
         }
+        if (obj[idx].extend != undefined && obj[idx].extend != '') {
+            $('#extend-content').html(obj[idx].extend);
+            $('.play_voice_extend').show();
+        } else {
+            $('#extend-content').html('');
+            $('.play_voice_extend').hide();
+        }
+
         $('#topic').html(topic);
 
         $('#subj_idx').val(idx);
