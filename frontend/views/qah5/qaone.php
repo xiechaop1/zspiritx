@@ -266,7 +266,7 @@ $this->title = $qa['topic'];
                     $optstr .= '<div class="m-t-30 col-sm-12 col-md-6">
                     <div class="answer-border">
                     <input class="form-check-label fs-30 text_input" type=text ' . (!empty($str['keyboard']) ? 'readonly' : '') . '  name="answer_txt" class="form-control" placeholder="请输入答案" style="width: 80%; color: yellow;">
-                   <input type="button" name="answer1" value="提交" class="fs-30" style="color: yellow;">
+                   <input type="button" name="answer" value="提交" class="fs-30" style="color: yellow;">
                     </div>
                     ';
                     $optstr .= \common\helpers\Qa::setKeyboard($str, $keyStoryModels);
