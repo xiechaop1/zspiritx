@@ -1000,6 +1000,10 @@ $(function () {
             var j=0;
             // 定义一个数组
             var list = new Array();
+            if (input_obj.length == 1) {
+                $(input_obj[0]).val($(input_obj[0]).val() + val);
+                return true;
+            }
             for (i=0; i<input_obj.length; i++) {
                 if ($(input_obj[i]).val() =="" ) {
                     $(input_obj[i]).val(val);
@@ -1016,9 +1020,23 @@ $(function () {
                 } else {
                     j = 0;
                     list = [];
+
+                    // list.push(i);
+                    // j++;
+                    // if (j == val.length) {
+                    //     console.log(list);
+                    //     for (k=0; k<list.length; k++) {
+                    //         $(input_obj[list[k]]).val(val[k]);
+                    //     }
+                    //     return true;
+                    // }
                 }
             }
         } else {
+            if (input_obj.length == 1) {
+                $(input_obj[0]).val($(input_obj[0]).val().substring(0, $(input_obj[0]).val().length - 1));
+                return true;
+            }
             for (i=input_obj.length - 1; i>=0; i--) {
                 if ($(input_obj[i]).val() !="" ) {
                     $(input_obj[i]).val('');
