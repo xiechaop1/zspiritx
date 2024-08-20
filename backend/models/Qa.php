@@ -43,9 +43,11 @@ class Qa extends \common\models\Qa
 
         $this->load($params);
 
-        $query->andFilterWhere([
-            'id' => $this->id,
-        ]);
+        if (!empty($_REQUEST['Qa'])) {
+            $query->andFilterWhere([
+                'id' => (int)$_REQUEST['Qa']['id'],
+            ]);
+        }
 
         $query->andFilterWhere([
             'like', 'topic', $this->topic
