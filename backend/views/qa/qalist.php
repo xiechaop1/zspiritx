@@ -60,7 +60,7 @@ echo \dmstr\widgets\Alert::widget();
                 'columns' => [
                     [
                         'attribute' => 'id',
-//                        'filter'    => Html::activeInput('text', $searchModel, 'id'),
+                        'filter'    => Html::activeInput('text', $searchModel, 'id'),
                     ],
                     [
                         'label' => '剧本',
