@@ -43,7 +43,7 @@ class Qa extends \common\models\Qa
 
         $this->load($params);
 
-        if (!empty($_REQUEST['Qa'])) {
+        if (!empty($_REQUEST['Qa']['id'])) {
             $query->andFilterWhere([
                 'id' => (int)$_REQUEST['Qa']['id'],
             ]);
