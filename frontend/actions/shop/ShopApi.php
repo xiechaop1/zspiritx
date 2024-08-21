@@ -200,8 +200,8 @@ class ShopApi extends ApiAction
                     if ($userScore->score < $priceScore) {
                         throw new \yii\base\Exception('金币不足', ErrorCode::SHOP_BUY_NOT_ENOUGH_SCORE);
                     }
-//                $userScore->score = $userScore->score - $priceScore;
-//                $userScore->save();
+                $userScore->score = $userScore->score - $priceScore;
+                $userScore->save();
             } else {
                 throw new \yii\base\Exception('金币不足', ErrorCode::SHOP_BUY_NOT_ENOUGH_SCORE);
             }
