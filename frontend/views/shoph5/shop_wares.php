@@ -197,17 +197,17 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                                     echo $buyIcon;
                                     echo '</div>';
 
-                                    echo '<div style="float: left; line-height: 150%; text-align: right; ">';
                                     if (!empty($item->discount)) {
-                                    echo '<span class="fs-32 bold">' . $discount . '</span><br>';
-                                    echo '<span class="fs-24 bold" style="color: #666666; text-decoration: line-through; ">' . $price . '</span>';
-                                    echo '</div>';
-                                }
-                                else {
-                                    echo '<div style="float: left; line-height: 150%;">';
-                                    echo '<span class="fs-32 bold">' . $price . '</span>';
-                                    echo '</div>';
-                                }
+                                        echo '<div style="float: left; line-height: 150%; text-align: right; ">';
+                                        echo '<span class="fs-32 bold">' . $discount . '</span><br>';
+                                        echo '<span class="fs-24 bold" style="color: #666666; text-decoration: line-through; ">' . $price . '</span>';
+                                        echo '</div>';
+                                    }
+                                    else {
+                                        echo '<div style="float: left; line-height: 150%;">';
+                                        echo '<span class="fs-32 bold">' . $price . '</span>';
+                                        echo '</div>';
+                                    }
 
                                 ?>
                                 </div>
