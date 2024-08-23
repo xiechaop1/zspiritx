@@ -320,7 +320,7 @@ class MatchApi extends ApiAction
             ],
             'rival' => [
                 [
-                    'z' => 0.5,
+                    'z' => 1.5,
                 ],
             ],
         ];
