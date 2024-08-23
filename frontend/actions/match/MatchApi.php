@@ -315,12 +315,12 @@ class MatchApi extends ApiAction
         $posMap = [
             'my' => [
                 [
-                    'z' => 2.5,
+                    'z' => 0.5,
                 ],
             ],
             'rival' => [
                 [
-                    'z' => 1.5,
+                    'z' => -0.5,
                 ],
             ],
         ];
@@ -335,7 +335,7 @@ class MatchApi extends ApiAction
             ],
             'moveX' => 0,
             'moveY' => 0,
-            'moveZ' => 2,
+            'moveZ' => 0,
         ];
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
