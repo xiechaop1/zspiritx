@@ -194,16 +194,34 @@ class Challenge extends Action
         }
 
         $subjects = [];
-//        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
-        $subjects = Yii::$app->qas->getQaSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
 
-        switch ($storyMatch->match_class) {
-            case StoryMatch::MATCH_CLASS_MATH:
-                // 数学
-                // 生成1000道数学题
+        // 判断一下会员
+        $userPrivilege = Yii::$app->userService->getUserMemberPrivilege($userId);
+        if (empty($userPrivilege['userMember']['memberStatus'])
+             || $userPrivilege['userMember']['memberStatus'] != \common\services\User::MEMBER_LEVEL_NORMAL
+            || YII_DEBUG
+        ) {
+
+            $userQaCt = Yii::$app->qas->getUserQaCt($userId);
+
+            if (!empty($userPrivilege['privilege']['max_qa_ct'])
+                && $userQaCt >= $userPrivilege['privilege']['max_qa_ct']
+            ) {
+                $subjects = Yii::$app->qas->generateSubjectWithUserQa($userId, $level, $userPrivilege['privilege']['max_qa_ct'], $storyMatch->match_class);
+            }
+        }
+
+        if (empty($subjects)) {
+//        $subjects = Yii::$app->qas->getSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
+            $subjects = Yii::$app->qas->getQaSubjectsWithUserWare($userId, $storyMatch->match_class, $level);
+
+            switch ($storyMatch->match_class) {
+                case StoryMatch::MATCH_CLASS_MATH:
+                    // 数学
+                    // 生成1000道数学题
 //                $subjects = [];
 
-                // Todo： 测试用的，上线的话，从订单里找到qaPackage，取出qaIds，然后生成题目
+                    // Todo： 测试用的，上线的话，从订单里找到qaPackage，取出qaIds，然后生成题目
 //                $qa = Qa::find()
 //                    ->where(['id' => $qaId])
 //                    ->one();
@@ -232,79 +250,83 @@ class Challenge extends Action
 //                    }
 //                }
 
-                $subjectsTmp = Yii::$app->qas->generateMath($level, 1000);
-                if (!empty($subjectsTmp)) {
-                    foreach ($subjectsTmp as $t) {
-                        $subjects[] = $t;
+                    $subjectsTmp = Yii::$app->qas->generateMath($userId, $level, 1000);
+                    if (!empty($subjectsTmp)) {
+                        foreach ($subjectsTmp as $t) {
+                            $subjects[] = $t;
+                        }
                     }
-                }
-                break;
-            case StoryMatch::MATCH_CLASS_POEM:
-                // 生成1000道诗词题
+                    break;
+                case StoryMatch::MATCH_CLASS_POEM:
+                    // 生成1000道诗词题
 //                $subjects = [];
 
-                for ($i=0; $i<100; $i++) {
-                    switch ($level) {
-                        case 2:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
-                                [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
-                                0, 0, Poem::POEM_ANSWER_TYPE_SENTENCE);
-                            break;
-                        case 1:
-                        default:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
-                                [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
-                                0, 0, Poem::POEM_ANSWER_TYPE_WORD);
-                            break;
-                    }
-                    if ($i == 10) {
-                        $level++;
-//                        $subjects[] = $this->generatePoem($level,
+                    for ($i = 0; $i < 100; $i++) {
+                        switch ($level) {
+                            case 2:
+                                $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
+                                    [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+                                    0, 0, Poem::POEM_ANSWER_TYPE_SENTENCE);
+                                break;
+                            case 1:
+                            default:
+                                $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
+                                    [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
+                                    0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                                break;
+                        }
+                        if ($i == 10) {
+                            $level++;
+//                        $subjects[] = $this->generatePoem($userId, $level,
 //                            [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
 //                            0, 0,Poem::POEM_ANSWER_TYPE_SENTENCE);
+                        }
                     }
-                }
-                break;
-            case StoryMatch::MATCH_CLASS_POEM_IDIOM:
+                    break;
+                case StoryMatch::MATCH_CLASS_POEM_IDIOM:
 //                $subjects = [];
-                for ($i=0; $i<100; $i++) {
-                    switch ($level) {
-                        case 2:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
-                                Poem::POEM_TYPE_IDIOM,
-                                0, 0, Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
-                            break;
-                        case 1:
-                        default:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
-                                Poem::POEM_TYPE_IDIOM,
-                                0, 0,Poem::POEM_ANSWER_TYPE_WORD);
-                            break;
+                    for ($i = 0; $i < 100; $i++) {
+                        switch ($level) {
+                            case 2:
+                                $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
+                                    Poem::POEM_TYPE_IDIOM,
+                                    0, 0, Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
+                                break;
+                            case 1:
+                            default:
+                                $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
+                                    Poem::POEM_TYPE_IDIOM,
+                                    0, 0, Poem::POEM_ANSWER_TYPE_WORD);
+                                break;
+                        }
+                        if ($i == 10) {
+                            $level++;
+                        }
                     }
-                    if ($i == 10) {
-                        $level++;
-                    }
-                }
-                break;
-            case StoryMatch::MATCH_CLASS_ENGLISH:
+                    break;
+                case StoryMatch::MATCH_CLASS_ENGLISH:
 //                $subjects = [];
 //                for ($i=0; $i<100; $i++) {
-                    $subjects = Yii::$app->qas->generateWordWithChinese(50, $level, 'auto', 'auto');
+                    $subjects = Yii::$app->qas->generateWordWithChinese($userId, $level, 50, 'auto', 'auto');
 //                    var_dump($subjects);exit;
 //                    if ($i == 10) {
 //                        $level++;
 //                    }
 //                }
-                break;
-            case StoryMatch::MATCH_CLASS_CHINESE:
-                $subjects = Yii::$app->qas->generateChinese($level, 50);
-                break;
-            default:
-                if (empty($subjects)) {
-                    return $this->renderErr('比赛类型不支持！');
-                }
-                break;
+                    break;
+                case StoryMatch::MATCH_CLASS_CHINESE:
+                    $subjects = Yii::$app->qas->generateChinese($level, 50);
+                    break;
+                default:
+                    if (empty($subjects)) {
+                        return $this->renderErr('比赛类型不支持！');
+                    }
+                    break;
 
+            }
+        }
+        if (empty($subjects)) {
+            return $this->renderErr('比赛类型不支持！');
         }
 
 //        var_dump($subjects);exit;

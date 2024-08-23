@@ -166,7 +166,7 @@ class Practice extends Action
 //                    }
 //                }
 
-                $subjectsTmp = Yii::$app->qas->generateMath($level, 1000);
+                $subjectsTmp = Yii::$app->qas->generateMath($userId, $level, 1000);
                 if (!empty($subjectsTmp)) {
                     foreach ($subjectsTmp as $t) {
                         $subjects[] = $t;
@@ -180,20 +180,20 @@ class Practice extends Action
                 for ($i=0; $i<100; $i++) {
                     switch ($level) {
                         case 2:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
+                            $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
                                 [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
                                 0, 0, Poem::POEM_ANSWER_TYPE_SENTENCE);
                             break;
                         case 1:
                         default:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
+                            $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
                                 [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
                                 0, 0, Poem::POEM_ANSWER_TYPE_WORD);
                             break;
                     }
                     if ($i == 10) {
                         $level++;
-//                        $subjects[] = $this->generatePoem($level,
+//                        $subjects[] = $this->generatePoem($userId, $level,
 //                            [Poem::POEM_TYPE_POEM, Poem::POEM_TYPE_POETRY],
 //                            0, 0,Poem::POEM_ANSWER_TYPE_SENTENCE);
                     }
@@ -207,13 +207,13 @@ class Practice extends Action
                 for ($i=0; $i<100; $i++) {
                     switch ($level) {
                         case 2:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
+                            $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
                                 Poem::POEM_TYPE_IDIOM,
                                 0, 0, Poem::POEM_ANSWER_TYPE_TITLE_FROM_IMAGE);
                             break;
                         case 1:
                         default:
-                            $subjects[] = Yii::$app->qas->generatePoem($level,
+                            $subjects[] = Yii::$app->qas->generatePoem($userId, $level,
                                 Poem::POEM_TYPE_IDIOM,
                                 0, 0,Poem::POEM_ANSWER_TYPE_WORD);
                             break;
@@ -271,7 +271,7 @@ class Practice extends Action
         ]);
     }
 
-//    public function generatePoem($level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
+//    public function generatePoem($userId = 0, $level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
 //        $prop = [
 //            'poem_class' => $poemClass,
 //            'poem_class2' => $poemClass2,

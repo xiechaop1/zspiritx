@@ -114,4 +114,8 @@ class Qa extends \common\models\gii\Qa
         return $this->hasOne('common\models\Knowledge',  ['id' => 'knowledge_id']);
     }
 
+    public function getUserQas() {
+        return $this->hasMany('common\models\UserQa', ['qa_id' => 'id']);
+    }
+
 }

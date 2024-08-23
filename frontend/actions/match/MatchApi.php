@@ -121,9 +121,9 @@ class MatchApi extends ApiAction
         $prompt = !empty($this->_get['prompt']) ? $this->_get['prompt'] : '';
         $needSave = !empty($this->_get['need_save']) ? $this->_get['need_save'] : true;
         $extends = !empty($this->_get['extends']) ? $this->_get['extends'] : [];
-//        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
 //        $userWareId = !empty($this->_get['user_ware_id']) ? $this->_get['user_ware_id'] : 0;
-        return Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct, $prompt, $extends, $needSave);
+        return Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct, $userId, $prompt, $extends, $needSave);
     }
 
     public function generateSubjectsToKnockout() {
@@ -178,9 +178,9 @@ class MatchApi extends ApiAction
 
     }
 
-    public function generateSubjectWithCt($ct, $level, $matchClass) {
+    public function generateSubjectWithCt($ct, $level, $matchClass, $userId = 0) {
         $subjects = [];
-        $subjs = Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct, '奥数竞赛题目或者是竞赛题目，复杂度要高一些', [], false);
+        $subjs = Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct, '奥数竞赛题目或者是竞赛题目，复杂度要高一些', [], false, $userId);
         foreach ($subjs as $subj) {
             $subjects[] = [
                 'level' => $level,
@@ -334,8 +334,8 @@ class MatchApi extends ApiAction
                 'name' => 'system',
             ],
             'moveX' => 0,
-            'moveY' => -0.5,
-            'moveZ' => 0,
+            'moveY' => 0,
+            'moveZ' => 2,
         ];
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
@@ -379,7 +379,7 @@ class MatchApi extends ApiAction
                     ],
                     'moveX' => !empty($playerPos[$player->id]['x']) ? $playerPos[$player->id]['x'] : 0,
                     'moveY' => !empty($playerPos[$player->id]['y']) ? $playerPos[$player->id]['y'] : 0,
-                    'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 0,
+                    'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 2,
                     'propBase' => [
                         [
                             'key' => 'hp',
@@ -394,7 +394,7 @@ class MatchApi extends ApiAction
                     'animationName' => 'Effect',
                     'moveX' => !empty($playerPos[$player->id]['x']) ? $playerPos[$player->id]['x'] : 0,
                     'moveY' => !empty($playerPos[$player->id]['y']) ? $playerPos[$player->id]['y'] : 0,
-                    'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 0,
+                    'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 2,
                     'animationArgs' => [
                         'animName' => 'EmergeAnimation',
                         'endTime' => 1,
@@ -611,7 +611,7 @@ class MatchApi extends ApiAction
                         ];
                     } else {
                         // 魔法攻击
-                        $duration = !empty($eff['during_ti']) ? $eff['during_ti'] : 4.5;
+                        $duration = !empty($eff['during_ti']) ? $eff['during_ti'] : 3.5;
 
                         $effPosZ = 0;
                         if (!empty($eff['eff_mode'])) {

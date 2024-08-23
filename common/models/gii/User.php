@@ -42,7 +42,7 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_status','user_type', 'is_new', 'status', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
+            [['user_status','user_type', 'member_level', 'member_expire_at', 'is_new', 'status', 'last_login_time', 'wx_token_expire_time', 'created_at', 'updated_at'], 'integer'],
             [['user_name', 'user_pass', 'nick_name', 'user_pass', 'wx_openid', 'wx_unionid', 'wx_token', 'mobile', 'avatar', 'last_login_device', ], 'string'],
             [['last_login_geo_lat', 'last_login_geo_lng', 'home_lng', 'home_lat', ], 'number'],
         ];

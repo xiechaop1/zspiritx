@@ -35,6 +35,96 @@ class User extends Component
     const USER_DATA_TIME_TYPE_TOTAL = 99;
 
 
+    const MEMBER_LEVEL_NONE = 2;
+    const MEMBER_LEVEL_NORMAL = 1;
+    const MEMBER_LEVEL_TIMEOUT = 10;
+
+    private $_user = null;
+
+    public static $privilegeName = [
+        '1' => '普通用户',
+        '2' => 'VIP',
+        '3' => 'SVIP',
+    ];
+
+    public static $privilege = [
+        '-1' => [
+            'max_qa_each' => -1,
+            'max_qa' => -1,
+        ],
+        '0' => [
+            'max_qa_each' => 30,
+            'max_qa' => 120,
+        ],
+    ];
+
+    public function getUserMemberPrivilege($userId) {
+        $userMember = $this->getUserMemberLevel($userId);
+
+        $ret = [];
+
+        if (!empty($userMember['memberStatus'])) {
+            if ($userMember['memberStatus'] == self::MEMBER_LEVEL_NONE
+                || $userMember['memberStatus'] == self::MEMBER_LEVEL_TIMEOUT
+            ) {
+                $privilege = self::$privilege[0];
+            }
+
+        }
+
+        // 无限制
+        $privilege = self::$privilege[-1];
+
+        $ret = [
+            'userMember' => $userMember,
+            'privilege' => $privilege,
+        ];
+
+        return $ret;
+    }
+
+    public function getUserMemberLevel($userId) {
+
+        if (empty($userId)) {
+            return false;
+        }
+
+        if (empty($this->_user)) {
+            $user = \common\models\User::find()
+                ->where(['id' => $userId])
+                ->one();
+            $this->_user = $user;
+        } else {
+            $user = $this->_user;
+        }
+
+
+        $memberStatus = self::MEMBER_LEVEL_NONE;
+        if (!empty($user)) {
+            if (!empty($user->member_expire_at) && $user->member_expire_at < time()) {
+                $memberStatus = self::MEMBER_LEVEL_TIMEOUT;
+            } else if (empty($user->member_expire_at)) {
+                $memberStatus = self::MEMBER_LEVEL_NONE;
+            } else {
+                $memberStatus = self::MEMBER_LEVEL_NORMAL;
+            }
+
+            if ($memberStatus == self::MEMBER_LEVEL_NORMAL) {
+                if (empty($user->member_level)) {
+                    $memberStatus = self::MEMBER_LEVEL_NONE;
+                }
+            }
+        }
+
+        $ret = [
+            'memberStatus' => $memberStatus,
+            'memberLevel' => $user->member_level,
+            'memberExpireAt' => $user->member_expire_at,
+        ];
+
+        return $ret;
+    }
+
     public function updateUserLevelWithRight($userId, $subjCt = 0, $rightCt = 0) {
         $ret = [];
         if ($subjCt > 0) {
@@ -48,6 +138,7 @@ class User extends Component
         }
         return $ret;
     }
+
     public function updateUserLevel($userId, $addLevel = 1, $mode = 1) {
         // $mode
         // 1 - 增加等级； 2 - 设置等级

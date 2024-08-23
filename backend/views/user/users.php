@@ -126,6 +126,20 @@ echo \dmstr\widgets\Alert::widget();
                             \common\models\User::$userTypeNameMap, ["class" => "form-control ", 'value' => !empty($params['User']['user_type']) ? $params['User']['user_type'] : ''])
                     ],
                     [
+                        'attribute' => 'member_level',
+                        'label' => '会员等级',
+                        'value' => function($model) {
+                            return !empty($model->member_level) ? $model->member_level : '非会员';
+                        },
+                    ],
+                    [
+                        'attribute' => 'member_expire_at',
+                        'label' => '会员到期时间',
+                        'value' => function($model) {
+                            return !empty($model->member_expire_at) ? date('Y-m-d H:i:s', $model->member_expire_at) : '-';
+                        },
+                    ],
+                    [
                         'attribute' => 'user_status',
                         'label' => '用户状态',
                         'value' => function($model) {

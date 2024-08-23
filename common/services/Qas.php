@@ -457,7 +457,7 @@ class Qas extends Component
 
     }
 
-    public function generateSubjectWithDoubao($level, $matchClass, $ct, $prompt = '', $extends = [], $needSave = true) {
+    public function generateSubjectWithDoubao($level, $matchClass, $ct, $userId = 0, $prompt = '', $extends = [], $needSave = true) {
 
         if (empty($prompt)) {
             switch ($matchClass) {
@@ -700,7 +700,7 @@ class Qas extends Component
         return $ret;
     }
 
-    public function generateWordWithChinese($ct = 10, $level = 1, $englishClass = '', $englishClass2 = '') {
+    public function generateWordWithChinese($userId = 0, $level = 1, $ct = 10, $englishClass = '', $englishClass2 = '') {
         $ret = [];
 
 
@@ -882,7 +882,7 @@ class Qas extends Component
         return $ret;
     }
 
-    public function generatePoem($level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
+    public function generatePoem($userId = 0, $level = 1, $poemType = 0, $poemClass = 0, $poemClass2 = 0, $answerType = Poem::POEM_ANSWER_TYPE_WORD) {
         $prop = [
             'poem_class' => $poemClass,
             'poem_class2' => $poemClass2,
@@ -921,46 +921,132 @@ class Qas extends Component
         return $subjects;
     }
 
-    public function generateMath($level, $ct = 100, $gold = 0) {
+    public function generateMath($userId = 0, $level, $ct = 100, $gold = 0) {
         $subjects = [];
-        if ($level <= 3) {
-            for ($i = 0; $i < $ct; $i++) {
-                // Todo: 测试用
+
+//        $userPrivileges = Yii::$app->userService->getUserMemberPrivilege($userId);
+//        if (!empty($userPrivileges['privilege']['max_qa_each'])) {
+//            $userQaCt = $this->getUserQaCt($userId, Subject::SUBJECT_CLASS_MATH);
+//            if ($userQaCt >= $userPrivileges['privilege']['max_qa_each']) {
+//                $subjects = $this->generateSubjectWithUserQa($userId, $level, $ct, Subject::SUBJECT_CLASS_MATH);
+//            }
+//        } else {
+
+            if ($level <= 3) {
+                for ($i = 0; $i < $ct; $i++) {
+                    // Todo: 测试用
 //            if ($level > 3) $level = 1;
-                $subjects[] = $this->generateOneMath($level, $gold);
-                if ($i == 12) {
-                    $level++;
+                    $subjects[] = $this->generateOneMath($level, $gold);
+                    if ($i == 12) {
+                        $level++;
 //                        $subjects[] = $this->generateMath($level);
+                    }
                 }
-            }
-        } else {
-            // Todo：临时强制保护
-            $ct = 20;
+            } else {
+                // Todo：临时强制保护
+                $ct = 20;
 //            $subjects = $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
-            $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_MATH);
-            if (count($subjects) < 10) {
-                $gptSubjects = $this->generateMathWithDoubao($level, 10 - count($subjects));
-                foreach ($gptSubjects as $gptSub) {
-                    $subjects[] = $gptSub;
+                $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_MATH);
+                if (count($subjects) < 10) {
+                    $gptSubjects = $this->generateMathWithDoubao($level, 10 - count($subjects), $userId);
+                    foreach ($gptSubjects as $gptSub) {
+                        $subjects[] = $gptSub;
+                    }
                 }
             }
-        }
+//        }
         return $subjects;
     }
 
-    public function generateChinese($level, $ct = 100, $gold = 0) {
+    public function generateChinese($userId, $level, $ct = 100, $gold = 0) {
             // Todo：临时强制保护
 //            $ct = 20;
 //            $subjects = $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
             $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_CHINESE);
             if (count($subjects) < 10) {
-                $gptSubjects = $this->generateSubjectWithDoubao($level, Qa::QA_CLASS_CHINESE, 10 - count($subjects));
+                $gptSubjects = $this->generateSubjectWithDoubao($level, Qa::QA_CLASS_CHINESE, 10 - count($subjects), $userId);
                 foreach ($gptSubjects as $gptSub) {
                     $subjects[] = $gptSub;
                 }
             }
 
         return $subjects;
+    }
+
+    public function getUserQaCt($userId, $matchClass = 0, $mode = 1) {
+        $userQaCt = 0;
+        $userQa = UserQa::find()
+            ->where([
+                'user_id' => $userId,
+            ]);
+
+        if (!empty($matchClass)) {
+            $qaClass = StoryMatch::$matchClass2QaClass[$matchClass];
+            $userQa = $userQa->andFilterWhere([
+                'qa_class' => $qaClass,
+            ]);
+        }
+        if ($mode == 1) {
+            // 今天的题目
+            $timeBeginStr = strtotime(date('Y-m-d 00:00:00'));
+            $timeEndStr = strtotime(date('Y-m-d 23:59:59'));
+            $userQa = $userQa->andFilterWhere([
+                'BETWEEN', 'updated_at', $timeBeginStr, $timeEndStr
+            ]);
+        }
+        $userQaCt = $userQa->count();
+
+        return $userQaCt;
+    }
+
+    public function generateSubjectWithUserQa($userId, $level = 1, $ct = 30, $qaClass = 0, $mode = 1, $linkQaId = 0) {
+        $qa = Qa::find()
+            ->where([
+                'user_id' => $userId,
+            ]);
+        if (!empty($userId)) {
+            if ($mode == 1) {
+                // 今天的题目
+                $timeBeginStr = strtotime(date('Y-m-d 00:00:00'));
+                $timeEndStr = strtotime(date('Y-m-d 23:59:59'));
+            }
+
+            $qa = $qa->joinWith('userQa')
+                ->andFilterWhere([
+                    'user_qa.user_id' => $userId,
+                ])
+                ->andFilterWhere([
+                    '>', 'user_qa.updated_at', $timeBeginStr,
+                ])
+                ->andFilterWhere([
+                    '<', 'user_qa.updated_at', $timeEndStr,
+                ]);
+        }
+        if (!empty($level)) {
+            $qa = $qa->andFilterWhere([
+                'level' => $level,
+            ]);
+        }
+        if (!empty($qaClass)) {
+            $qa = $qa->andFilterWhere([
+                'qa_class' => $qaClass,
+            ]);
+        }
+        $qa = $qa->orderBy('rand()')
+            ->limit($ct)
+            ->all();
+
+        $ret = [];
+        if (!empty($qa)) {
+            foreach ($qa as $q) {
+                $tmp = \common\helpers\Qa::formatSubjectFromQa($q);
+
+                $ret[] = $tmp;
+
+            }
+        }
+
+        return $ret;
     }
 
     public function generateSubjectWithQa($level = 0, $ct = 100, $qaClass = 0, $linkQaId = 0) {
@@ -998,8 +1084,8 @@ class Qas extends Component
         return $ret;
     }
 
-    public function generateMathWithDoubao($level, $ct = 5) {
-        return $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
+    public function generateMathWithDoubao($level, $ct = 5, $userId = 0) {
+        return $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct, $userId);
     }
 
 
