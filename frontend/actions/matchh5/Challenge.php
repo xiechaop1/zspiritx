@@ -315,7 +315,7 @@ class Challenge extends Action
 //                }
                     break;
                 case StoryMatch::MATCH_CLASS_CHINESE:
-                    $subjects = Yii::$app->qas->generateChinese($level, 50);
+                    $subjects = Yii::$app->qas->generateChinese($userId, $level, 50);
                     break;
                 default:
                     if (empty($subjects)) {

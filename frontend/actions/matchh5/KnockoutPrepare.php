@@ -225,7 +225,7 @@ class KnockoutPrepare extends Action
                     case StoryMatch::MATCH_CLASS_ENGLISH:
                         $ct = 2;
                         for ($level = $userLevel; $maxLevel; $level++) {
-                            $subjects = array_merge($subjects, $this->generateEnglishWithCt($ct, $level));
+                            $subjects = array_merge($subjects, $this->generateEnglishWithCt($ct, $level,0 , $userId));
                         }
                         break;
 
@@ -328,8 +328,8 @@ class KnockoutPrepare extends Action
         return $subjects;
     }
 
-    public function  generateEnglishWithCt($ct, $level = 1, $gold = 0) {
-        $subjects = Yii::$app->qas->generateWordWithChinese($ct, $level);
+    public function  generateEnglishWithCt($ct, $level = 1, $gold = 0, $userId) {
+        $subjects = Yii::$app->qas->generateWordWithChinese($userId, $level, $ct);
         foreach ($subjects as &$sub) {
             $sub['max_time'] = 180;
             $sub['level'] = $level;

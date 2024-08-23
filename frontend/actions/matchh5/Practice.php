@@ -226,7 +226,7 @@ class Practice extends Action
             case StoryMatch::MATCH_CLASS_ENGLISH:
 //                $subjects = [];
 //                for ($i=0; $i<100; $i++) {
-                    $subjects = Yii::$app->qas->generateWordWithChinese(50, $level, 'auto', 'auto');
+                    $subjects = Yii::$app->qas->generateWordWithChinese($userId, $level, 50, 'auto', 'auto');
 //                    var_dump($subjects);exit;
 //                    if ($i == 10) {
 //                        $level++;
@@ -234,7 +234,7 @@ class Practice extends Action
 //                }
                 break;
             case StoryMatch::MATCH_CLASS_CHINESE:
-                $subjects = Yii::$app->qas->generateChinese($level, 50);
+                $subjects = Yii::$app->qas->generateChinese($userId, $level, 50);
                 break;
             default:
                 if (empty($subjects)) {
