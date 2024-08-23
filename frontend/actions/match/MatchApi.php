@@ -498,6 +498,7 @@ class MatchApi extends ApiAction
                                 'cd' => $specEff['cd'],
                                 'prop' => $specEffProp,
                                 'attack' => Model::getUserModelPropColWithPropJson($specEffProp, 'attack'),
+                                'env_eff' => $specEff['env_eff'],
                             ];
                         }
                     }
@@ -647,6 +648,13 @@ class MatchApi extends ApiAction
                                 'endTime' => $duration,
                             ],
                         ];
+                        if (!empty($eff['env_eff'])) {
+                            $playerScenario[] = [
+                                'performerId' => 'WorldRoot',
+                                'animationName' => $eff['env_eff'],
+                                'scale: ' => $duration,
+                            ];
+                        }
                         $playerScenario[] = [
                             'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                             'animationName' => 'Slide',
@@ -662,7 +670,7 @@ class MatchApi extends ApiAction
                     }
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
-                        'animationName' => 'PopText',
+                        'animationName' => 'HitText',
                         'animationArgs' => '<size=28><color=yellow>' . $hint . '</color></size>',
                     ];
                     $hitPlayerScenario[] = [
@@ -707,13 +715,13 @@ class MatchApi extends ApiAction
                     ];
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
-                        'animationName' => 'PopText',
+                        'animationName' => 'HitText',
                         'animationArgs' => !empty($battleType) && $battleType == 1 ? '<size=36><color=white>MISS</color></size>' : '<size=36><color=red>格挡</color></size>',
                     ];
                 }
 
                     $tsl = $setPlayerAttSpeed - $oldPlayerAttSpeed;
-                    $tsl = $tsl/12;
+                    $tsl = $tsl/14;
                     $scenario[] = [
                         'timeSinceLast' => $tsl,
                         'lstPerforms' => $prePlayerScenario,

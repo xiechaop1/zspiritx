@@ -62,6 +62,21 @@ class ShowMatch extends Action
                     ->one();
             }
 
+            // 清空战斗场景
+            $clearScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                'performerId' => 'WorldRoot',
+                'animationName' => 'Clear',
+            ];
+
+            $scenario[] = [
+                'timeSinceLast' => 0,
+                'lstPerforms' => $clearScenario,
+            ];
+
+            $expirationInterval = 600;
+            Yii::$app->act->addWithTag($sessionId, 0, $storyId, $userId, $scenario, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval, 0, 'performList');
+
 
             // 切换回大地图场景
             $expirationInterval = 60;        // 消息超时时间

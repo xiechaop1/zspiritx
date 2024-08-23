@@ -92,7 +92,8 @@ echo \dmstr\widgets\Alert::widget();
             } else {
                 $dialogTxt = '';
             }
-            echo $form->field($storyModelSpecialEff, 'prop')->textarea(['value' => !empty($storyModelSpecialEff->prop) ? $dialogTxt: '', 'rows' => 20])->label('对话');
+            echo $form->field($storyModelSpecialEff, 'prop')->textarea(['value' => !empty($storyModelSpecialEff->prop) ? $dialogTxt: '', 'rows' => 20])->label('效果');
+            echo $form->field($storyModelSpecialEff, 'env_eff')->textInput(['value' => $storyModelSpecialEff->env_eff])->label('环境效果');
 
 
 //            echo $form->field($storyModelSpecialEff, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [

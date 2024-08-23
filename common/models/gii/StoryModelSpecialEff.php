@@ -27,7 +27,7 @@ class StoryModelSpecialEff extends \yii\db\ActiveRecord
         return [
             [['story_id', 'model_id', 'level', 'eff_class', 'during_ti', 'cd', 'eff_mode', 'link_story_model_id', 'own_story_model_id', 'status'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
-            [['special_eff_name', 'special_eff_desc', 'icon', 'model_inst_u_id', 'prop', ], 'string'],
+            [['special_eff_name', 'special_eff_desc', 'icon', 'model_inst_u_id', 'prop', 'env_eff', ], 'string'],
         ];
     }
 
