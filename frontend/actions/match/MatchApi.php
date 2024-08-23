@@ -315,12 +315,12 @@ class MatchApi extends ApiAction
         $posMap = [
             'my' => [
                 [
-                    'z' => 0.5,
+                    'z' => 2.5,
                 ],
             ],
             'rival' => [
                 [
-                    'z' => -0.5,
+                    'z' => 0.5,
                 ],
             ],
         ];
