@@ -696,7 +696,7 @@ class MatchApi extends ApiAction
                         'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                         'animationName' => 'Slide',
                         'moveZ' => 0.7,
-                        'slideSpeed' => 5,
+                        'slideSpeed' => 8,
                     ];
                     $playerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
