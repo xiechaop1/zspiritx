@@ -810,7 +810,7 @@ class MatchApi extends ApiAction
                             'lstPerforms' => $winScenario,
                         ];
 
-                        $totalSec += 7;
+                        $totalSec += 7000;
 
                         // 如果是我的宠物，加经验和金币
                         if ($currentPlayer->user_id == $userId) {
