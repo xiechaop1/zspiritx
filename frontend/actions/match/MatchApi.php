@@ -613,6 +613,7 @@ class MatchApi extends ApiAction
                     } else {
                         // 魔法攻击
                         $duration = !empty($eff['during_ti']) ? $eff['during_ti'] : 3.5;
+                        $duration *= 1000;
 
                         $effPosZ = 0;
                         if (!empty($eff['eff_mode'])) {
@@ -727,7 +728,7 @@ class MatchApi extends ApiAction
                         'lstPerforms' => $prePlayerScenario,
                     ];
                     $scenario[] = [
-                        'timeSinceLast' => 0.5,
+                        'timeSinceLast' => 500,
                         'lstPerforms' => $playerScenario,
                     ];
                     $scenario[] = [
@@ -735,7 +736,7 @@ class MatchApi extends ApiAction
                         'lstPerforms' => $hitPlayerScenario,
                     ];
 
-                    $totalSec += $tsl + 0.5 + $duration;
+                    $totalSec += $tsl + 500 + $duration;
 
 //                    $matchDetail[] = '(HP：' . Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp') . ')';
 
@@ -763,7 +764,7 @@ class MatchApi extends ApiAction
                         ];
 
                         $scenario[] = [
-                            'timeSinceLast' => 1,
+                            'timeSinceLast' => 1000,
                             'lstPerforms' => $loseScenario,
                         ];
 
@@ -778,7 +779,7 @@ class MatchApi extends ApiAction
                         ];
 
                         $scenario[] = [
-                            'timeSinceLast' => 1,
+                            'timeSinceLast' => 1000,
                             'lstPerforms' => $winScenario,
                         ];
 
@@ -805,7 +806,7 @@ class MatchApi extends ApiAction
                         ];
 
                         $scenario[] = [
-                            'timeSinceLast' => 5,
+                            'timeSinceLast' => 5000,
                             'lstPerforms' => $winScenario,
                         ];
 
