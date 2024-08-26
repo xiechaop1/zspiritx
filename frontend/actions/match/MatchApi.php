@@ -671,7 +671,7 @@ class MatchApi extends ApiAction
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'HitText',
-                        'animationArgs' => '<size=28><color=yellow>' . $hint . '</color></size>',
+                        'animationArgs' => '' . $hint . '',
                     ];
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
