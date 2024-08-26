@@ -722,7 +722,7 @@ class MatchApi extends ApiAction
                 }
 
                     $tsl = $setPlayerAttSpeed - $oldPlayerAttSpeed;
-                    $tsl = $tsl/8*1000;
+                    $tsl = $tsl/12*1000;
                     $scenario[] = [
                         'timeSinceLast' => $tsl,
                         'lstPerforms' => $prePlayerScenario,
