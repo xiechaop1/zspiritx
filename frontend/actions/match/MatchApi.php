@@ -589,7 +589,7 @@ class MatchApi extends ApiAction
                     $rivScenario = [];
                     if (empty($eff['eff_mode'])) {
                         // 普通攻击
-                        $duration = 1;
+                        $duration = 500;
                         $prePlayerScenario[] = [
 
                         ];
@@ -653,7 +653,7 @@ class MatchApi extends ApiAction
                             $playerScenario[] = [
                                 'performerId' => 'WorldRoot',
                                 'animationName' => $eff['env_eff'],
-                                'scale: ' => $duration,
+                                'scale' => $duration,
                             ];
                         }
                         $playerScenario[] = [
