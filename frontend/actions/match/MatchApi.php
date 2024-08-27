@@ -635,9 +635,9 @@ class MatchApi extends ApiAction
                         $prePlayerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
-//                            'moveZ' => 0.2,
-                            'moveY' => 0.5,
-                            'slideSpeed' => 1,
+                            'moveZ' => 0.2,
+//                            'moveY' => 0.5,
+                            'slideSpeed' => 5,
                         ];
                         $playerScenario[] = [
 //                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
@@ -664,8 +664,8 @@ class MatchApi extends ApiAction
                         $hitPlayerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
-//                            'moveZ' => -0.2,
-                            'moveY' => -0.5,
+                            'moveZ' => -0.2,
+//                            'moveY' => -0.5,
                             'slideSpeed' => 5,
                         ];
                     }
