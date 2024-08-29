@@ -564,8 +564,14 @@ class UserApi extends ApiAction
 
         if (!empty($storyStage)) {
             $stageName = $storyStage->stage_name;
+            $stagePropJson = $storyStage->prop;
+
         } else {
             $stageName = '未知之地';
+            $stageProp = '';
+        }
+        if (!empty($stagePropJson)) {
+            $stageProp = json_decode($stagePropJson, true);
         }
 
         $userStory = UserStory::find()
@@ -662,6 +668,35 @@ class UserApi extends ApiAction
                 }
 
                 Yii::$app->act->add($sessionId, $sessionStageId, $storyId, $userId, '进入新场景：' . $stageName, Actions::ACTION_TYPE_MSG);
+
+                if (!empty($stageProp['screenText'])) {
+                    $screenText = $stageProp['screenText'];
+                    $visualText = !empty($screenText['visualText']) ? $screenText['visualText'] : '';
+                    $beforeTime = !empty($screenText['beforeTime']) ? $screenText['beforeTime'] : 5;
+                    $inTime = !empty($screenText['inTime']) ? $screenText['inTime'] : 2;
+                    $outTime = !empty($screenText['outTime']) ? $screenText['outTime'] : 2;
+                    $holdTime = !empty($screenText['holdTime']) ? $screenText['holdTime'] : 5;
+                    $moveX = !empty($screenText['moveX']) ? $screenText['moveX'] : 0;
+                    $moveY = !empty($screenText['moveY']) ? $screenText['moveY'] : 0;
+                    if (!empty($visualText)) {
+                        $showMsg = [
+                            'screenText' => [
+                                'visualText' => $visualText,
+                                'beforeTime' => $beforeTime,
+                                'inTime' => $inTime,
+                                'outTime' => $outTime,
+                                'holdTime' => $holdTime,
+                                'moveX' => $moveX,
+                                'moveY' => $moveY,
+                            ],
+                        ];
+
+                        $expirationInterval = 600;
+                        Yii::$app->act->addWithoutTag($sessionId, 0, $storyId, $userId, $showMsg, Actions::ACTION_TYPE_MODEL_DISPLAY, $expirationInterval, 0);
+
+                    }
+                }
+
                 if ($allComp == 0) {
 
                     // 删除当前场景下的用户待使用模型
