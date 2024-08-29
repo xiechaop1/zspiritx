@@ -66,7 +66,7 @@ class StoryStageEdit extends Action
             $model->load(Yii::$app->request->post());
 
             if ($model->validate()) {
-
+                $model->prop = \common\helpers\Common::encodeJson($model->prop);
                 if ($model->save()) {
 
                     Yii::$app->session->setFlash('success', '操作成功');

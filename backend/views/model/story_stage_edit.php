@@ -56,6 +56,10 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyStage, 'lat')->textInput(['value' => $storyStage->lat])->label('经度');
             echo $form->field($storyStage, 'lng')->textInput(['value' => $storyStage->lng])->label('纬度');
             echo $form->field($storyStage, 'rate')->textInput(['value' => $storyStage->rate])->label('出现概率');
+            echo $form->field($storyStage, 'prop')->textarea([
+                'value' => !empty($storyStage->prop) ? var_export(json_decode($storyStage->prop, true), true) : '',
+                'rows' => 20,
+            ])->label('属性');
             echo $form->field($storyStage, 'timebegin')->textInput(['value' => $storyStage->timebegin])->label('开始时间');
             echo $form->field($storyStage, 'timeend')->textInput(['value' => $storyStage->timeend])->label('结束时间');
             echo $form->field($storyStage, 'show_x')->textInput(['value' => $storyStage->show_x])->label('坐标X');
