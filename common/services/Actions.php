@@ -125,7 +125,9 @@ class Actions extends Component
 
     public function addWithoutTag($sessionId, $sessionStageId, $storyId, $toUser, $actDetail, $actType = \common\models\Actions::ACTION_TYPE_MSG, $expirationInterval = -1, $senderId = 0)
     {
-
+        if (is_array($actDetail)) {
+            $actDetail = json_encode($actDetail, JSON_UNESCAPED_UNICODE);
+        }
         return $this->_exec($sessionId, $sessionStageId, $storyId, $toUser,
             $actDetail, $actType, $expirationInterval, $senderId);
     }
