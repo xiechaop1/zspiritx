@@ -614,7 +614,7 @@ class UserApi extends ApiAction
                                 $targetStoryModelUId = str_replace('{$locationId}', $locationId, $storyModel->model_inst_u_id);
 
                                 // 如果是0号剧本，且扩展场景（室外场景），进入场景以后，加入导航机制
-                                Yii::$app->act->naviModel($sessionId, $storyId, $targetStoryModelUId);
+//                                Yii::$app->act->naviModel($sessionId, $storyId, $targetStoryModelUId);
                             }
 
                         }
