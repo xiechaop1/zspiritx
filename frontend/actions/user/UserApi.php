@@ -672,10 +672,10 @@ class UserApi extends ApiAction
                 if (!empty($stageProp['screenText'])) {
                     $screenText = $stageProp['screenText'];
                     $visualText = !empty($screenText['visualText']) ? $screenText['visualText'] : '';
-                    $beforeTime = !empty($screenText['beforeTime']) ? $screenText['beforeTime'] : 5;
-                    $inTime = !empty($screenText['inTime']) ? $screenText['inTime'] : 2;
-                    $outTime = !empty($screenText['outTime']) ? $screenText['outTime'] : 2;
-                    $holdTime = !empty($screenText['holdTime']) ? $screenText['holdTime'] : 5;
+                    $beforeTime = !empty($screenText['beforeTime']) ? $screenText['beforeTime'] : 3;
+                    $inTime = !empty($screenText['inTime']) ? $screenText['inTime'] : 1;
+                    $outTime = !empty($screenText['outTime']) ? $screenText['outTime'] : 1;
+                    $holdTime = !empty($screenText['holdTime']) ? $screenText['holdTime'] : 4;
                     $moveX = !empty($screenText['moveX']) ? $screenText['moveX'] : 0;
                     $moveY = !empty($screenText['moveY']) ? $screenText['moveY'] : 0;
                     if (!empty($visualText)) {
