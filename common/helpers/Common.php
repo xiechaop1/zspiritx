@@ -156,7 +156,7 @@ class Common
     public static function encodeJson($str) {
         $ret = $str;
         if (!empty($str)) {
-            eval('$tmp = ' . $str);
+            eval('$tmp = ' . $str . ';');
             $ret = json_encode($tmp, true);
         }
         return $ret;
