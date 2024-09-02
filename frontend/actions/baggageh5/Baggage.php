@@ -91,7 +91,7 @@ class Baggage extends Action
 
         $userScore = Yii::$app->score->get($userId, $storyId, $scoreSessionId);
 
-        $template = 'baggage';
+//        $template = 'baggage';
 
         $allParams = $_GET;
         unset($allParams['story_model_class']);
@@ -110,6 +110,7 @@ class Baggage extends Action
             }
         }
 
+        $template = 'baggage_v2';
         $bagVersion = !empty($_GET['bag_version']) ? $_GET['bag_version'] : 0;
         if (!empty($bagVersion)
             || in_array($storyId,[5,7,10,11,12,15])

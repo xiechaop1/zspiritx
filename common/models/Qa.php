@@ -78,11 +78,13 @@ class Qa extends \common\models\gii\Qa
     const QA_MODE_NORMAL = 1; // 普通模式
     const QA_MODE_RANDOM = 2; // 随机模式
     const QA_MODE_MATCH  = 3; // 竞赛模式
+    const QA_MODE_ONCE  = 4; // 一次性
 
     public static $qaMode2Name = [
         self::QA_MODE_NORMAL => '普通模式',
         self::QA_MODE_RANDOM => '随机模式',
         self::QA_MODE_MATCH => '竞赛模式',
+        self::QA_MODE_ONCE => '一次性',
     ];
 
     public static $qaTypeIsJson = [

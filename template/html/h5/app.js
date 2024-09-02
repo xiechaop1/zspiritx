@@ -93,6 +93,7 @@ $(function () {
         var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
         var qa_type=that.attr("data-type");
+        var qa_mode=that.attr("data-mode");
         var story_id=that.attr("data-story");
         var user_id=$("input[name='user_id']").val();
         var session_id=$("input[name='session_id']").val();
@@ -205,14 +206,17 @@ $(function () {
                             // $("#h5-worry").modal('show');
                             audio_wrong.play();
                             setTimeout(function (){
-                                // Unity.call('WebViewOff&FalseAnswer');
-                                // var params = {
-                                //     'WebViewOff':1,
-                                //     'AnswerType':2
-                                // }
-                                // var data=$.toJSON(params);
-                                // Unity.call(data);
-                                location.reload();
+                                if (qa_mode == 4) {
+                                    Unity.call('WebViewOff&FalseAnswer');
+                                    var params = {
+                                        'WebViewOff':1,
+                                        'AnswerType':2
+                                    }
+                                    var data=$.toJSON(params);
+                                    Unity.call(data);
+                                } else {
+                                    location.reload();
+                                }
                             },2000);
                         }
                     }
