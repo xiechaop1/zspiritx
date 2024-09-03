@@ -604,6 +604,13 @@ class MatchApi extends ApiAction
                             'animationName' => 'Slide',
                             'moveZ' => -0.3,
                         ];
+                        $playerScenario[] = [
+                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'animationName' => 'Animation',
+                            'animationArgs' => [
+                                'animName' => 'Attack',
+                            ],
+                        ];
                         $hitPlayerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Slide',
@@ -632,12 +639,19 @@ class MatchApi extends ApiAction
                             }
                         }
 
+//                        $prePlayerScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+//                            'animationName' => 'Slide',
+//                            'moveZ' => 0.2,
+////                            'moveY' => 0.5,
+//                            'slideSpeed' => 5,
+//                        ];
                         $prePlayerScenario[] = [
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
-                            'animationName' => 'Slide',
-                            'moveZ' => 0.2,
-//                            'moveY' => 0.5,
-                            'slideSpeed' => 5,
+                            'animationName' => 'Animation',
+                            'animationArgs' => [
+                                'animName' => 'Cast',
+                            ],
                         ];
                         $playerScenario[] = [
 //                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
@@ -661,13 +675,13 @@ class MatchApi extends ApiAction
                             'animationName' => 'Slide',
                             'moveZ' => -0.3,
                         ];
-                        $hitPlayerScenario[] = [
-                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
-                            'animationName' => 'Slide',
-                            'moveZ' => -0.2,
-//                            'moveY' => -0.5,
-                            'slideSpeed' => 5,
-                        ];
+//                        $hitPlayerScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+//                            'animationName' => 'Slide',
+//                            'moveZ' => -0.2,
+////                            'moveY' => -0.5,
+//                            'slideSpeed' => 5,
+//                        ];
                     }
                     $hitPlayerScenario[] = [
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
@@ -678,6 +692,13 @@ class MatchApi extends ApiAction
                         'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
                         'animationName' => 'Slide',
                         'moveZ' => 0.3,
+                    ];
+                    $hitPlayerScenario[] = [
+                        'performerId' => 'PLAYER_' . $rivalPlayer->id . '_' . $rivalPlayer->user_model_id . '_' . $rivalPlayer->m_story_model_id,
+                        'animationName' => 'Animation',
+                        'animationArgs' => [
+                            'animName' => 'Hit',
+                        ],
                     ];
 
                     $playerScenario[] = [
@@ -773,7 +794,7 @@ class MatchApi extends ApiAction
                             'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'animationName' => 'Animation',
                             'animationArgs' => [
-                                'animName' => 'Play',
+                                'animName' => 'Win',
                                 'endTime' => 2,
                             ],
                         ];
