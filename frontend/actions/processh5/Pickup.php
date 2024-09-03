@@ -122,6 +122,27 @@ class Pickup extends Action
 
             $storyModelDetailId = !empty($storyModel->story_model_detail_id) ? $storyModel->story_model_detail_id : 0;
 
+            $storyModelProp = json_decode($storyModel->story_model_prop, true);
+            $saveStoryModels = [];
+            if (!empty($storyModelProp['mirror_story_model']['story_model_id'])
+            ) {
+                $mirrorStoryModel = StoryModels::find()
+                    ->where(['id' => $storyModelProp['mirror_story_model']['story_model_id']])
+                    ->one();
+                $saveStoryModels[] = [
+                    'story_id' => !empty($storyModelProp['mirror_story_model']['story_id'])
+                                ? $storyModelProp['mirror_story_model']['story_id'] : $mirrorStoryModel->story_id,
+                    'model_id' => !empty($storyModelProp['mirror_story_model']['model_id'])
+                                ? $storyModelProp['mirror_story_model']['model_id'] : $mirrorStoryModel->model_id,
+                    'story_model_id' => $storyModelProp['mirror_story_model']['story_model_id'],
+                    'story_model_detail_id' => !empty($storyModelProp['mirror_story_model']['story_model_detail_id'])
+                                ? $storyModelProp['mirror_story_model']['story_model_detail_id'] : $mirrorStoryModel->story_model_detail_id,
+                    'session_id' => 0,
+                    'session_model_id' => 0,
+                    'story_model' => $mirrorStoryModel,
+                ];
+            }
+
             $userModelBaggage = UserModels::find()
                 ->where([
                     'user_id'           => (int)$userId,
@@ -155,6 +176,7 @@ class Pickup extends Action
                 $userModelBaggage->use_ct = 1;
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
+
             } else {
 //                $userModelBaggage->use_ct = $userModelBaggage->use_ct + 1;
                 if (empty($lockCt)
@@ -165,6 +187,51 @@ class Pickup extends Action
                 $userModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
                 $ret = $userModelBaggage->save();
             }
+
+            if (!empty($saveStoryModels)) {
+                foreach ($saveStoryModels as $saveStoryModel) {
+
+                    $mUserModelBaggage = UserModels::find()
+                        ->where([
+                            'user_id'           => (int)$userId,
+                            'story_id'          => (int)$saveStoryModel['story_id'],
+                            'story_model_id'    => (int)$saveStoryModel['story_model_id'],
+                        ])
+                        ->one();
+
+                    if (empty($mUserModelBaggage)) {
+
+                        if (empty($initPropData)) {
+                            $tmpPropData = Yii::$app->models->computeUserModelPropWithStoryModel($saveStoryModel['story_model']);
+                            $initPropData = [];
+                            if (!empty($tmpPropData)) {
+                                $initPropData['prop'] = $tmpPropData;
+                            }
+                        }
+                        $mUserModelBaggage = new UserModels();
+                        $mUserModelBaggage->user_id = $userId;
+                        $mUserModelBaggage->session_id = $saveStoryModel['session_id'];
+                        $mUserModelBaggage->story_id = $saveStoryModel['story_id'];
+                        $mUserModelBaggage->model_id = $saveStoryModel['model_id'];
+                        $mUserModelBaggage->story_model_id = $saveStoryModel['story_model_id'];
+                        $mUserModelBaggage->story_model_detail_id = $saveStoryModel['story_model_detail_id'];
+                        $mUserModelBaggage->session_model_id = $saveStoryModel['session_model_id'];
+                        $mUserModelBaggage->user_model_prop = !empty($initPropData) ? json_encode($initPropData, true) : '';
+                        $mUserModelBaggage->use_ct = 1;
+                        $mUserModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
+                        $mRet = $mUserModelBaggage->save();
+                    } else {
+                        if (empty($lockCt)
+                            || $mUserModelBaggage->use_ct < $lockCt
+                        ) {
+                            $mUserModelBaggage->use_ct = $mUserModelBaggage->use_ct + 1;
+                        }
+                        $mUserModelBaggage->is_delete = \common\definitions\Common::STATUS_NORMAL;
+                        $mRet = $mUserModelBaggage->save();
+                    }
+                }
+            }
+
             $transaction->commit();
 
 //            $this->_get['pre_story_model_id'] = $storyModelId;
