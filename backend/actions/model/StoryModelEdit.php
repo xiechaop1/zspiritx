@@ -76,6 +76,13 @@ class StoryModelEdit extends Action
             $model->dialog = Model::encodeDialog($model->dialog, $model);
             $model->dialog2 = Model::encodeDialog($model->dialog2, $model);
 
+            if (!empty($model->scan_image_path)){
+                $scanImagePathInfo = pathinfo($model->scan_image_path);
+                if (!empty($scanImagePathInfo['filename'])) {
+                    $model->scan_image_id = $scanImagePathInfo['filename'];
+                }
+            }
+
             $model->story_model_html = \common\helpers\Common::encodeJson($model->story_model_html);
 
             $model->story_model_prop = \common\helpers\Common::encodeJson($model->story_model_prop);

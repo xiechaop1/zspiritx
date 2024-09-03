@@ -62,6 +62,15 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($storyModel, 'model_inst_u_id')->textInput(['value' => $storyModel->model_inst_u_id])->label('Model Inst UID');
             echo $form->field($storyModel, 'target_model_u_id')->textInput(['value' => $storyModel->target_model_u_id])->label('目标模型UnityID');
             echo $form->field($storyModel, 'scan_image_id')->textInput(['value' => $storyModel->scan_image_id])->label('Scan Image ID');
+            echo $form->field($storyModel, 'scan_image_path')->widget('\liyifei\uploadOSS\FileUploadOSS', [
+                'multiple' => false,
+                'isImage' => true,
+                'ossHost' => Yii::$app->params['oss.host'],
+                'signatureAction' => ['/site/oss-signature?dir=resourcepackage/image/imglib/' . Date('Y/m/')],
+                'clientOptions' => ['autoUpload' => true],
+                'options' => ['value' => $storyModel->scan_image_path],
+//                'directory' => 'cover/' . Date('Y/m/')
+            ])->label('识别图片文件');
             echo $form->field($storyModel, 'scan_type')->widget('\kartik\select2\Select2', [
                 'data' => $scanImageTypes,
                 'options' => [

@@ -27,7 +27,7 @@ class StoryModels extends \common\models\StoryModels
                 'rate', 'scan_type', 'set_type', 'pre_story_model_id', 'model_id',
                 'active_type', 'direction', 'sort_by', 'status'], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
-            [['active_model_inst_u_id', 'target_model_u_id', 'scan_image_id', 'model_inst_u_id',
+            [['active_model_inst_u_id', 'target_model_u_id', 'scan_image_id', 'scan_image_path', 'model_inst_u_id',
                 'active_next', 'story_model_name', 'story_model_desc', 'dialog', 'dialog2', 'story_model_prop',
                 'model_group', 'use_group_name', 'story_model_image', 'icon', 'story_model_html',
 //                'story_model_config',
