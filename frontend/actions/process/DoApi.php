@@ -210,13 +210,13 @@ class DoApi extends ApiAction
                     $scanImageResources[] = $tStoryModel['scan_image_path'];
                 }
             }
-            if (!empty($storyInfo['resources']['easyar'])) {
-                $storyInfo['resources']['easyar'] = json_decode($storyInfo['resources']['easyar'], true);
-                $storyInfo['resources']['easyar'] = array_merge($storyInfo['resources']['easyar'], $scanImageResources);
+            if (!empty($storyInfo['resources']['image']['easyar'])) {
+                $storyInfo['resources']['image']['easyar'] = json_decode($storyInfo['resources']['image']['easyar'], true);
+                $storyInfo['resources']['image']['easyar'] = array_merge($storyInfo['resources']['image']['easyar'], $scanImageResources);
             } else {
-                $storyInfo['resources']['easyar'] = $scanImageResources;
+                $storyInfo['resources']['image']['easyar'] = $scanImageResources;
             }
-            $storyInfo['resources']['easyar'] = json_encode($storyInfo['resources']['easyar'], JSON_UNESCAPED_UNICODE);
+            $storyInfo['resources']['image']['easyar'] = json_encode($storyInfo['resources']['image']['easyar'], JSON_UNESCAPED_UNICODE);
         }
 
         $storyInfo['resources'] = Model::formatResources($storyInfo['resources']);
