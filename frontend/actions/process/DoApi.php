@@ -199,12 +199,15 @@ class DoApi extends ApiAction
             ->andFilterWhere([
                 '<>', 'scan_image_path', ''
             ])
+            ->asArray()
             ->all();
 
         $scanImageResources = [];
         if (!empty($tmpStoryModel)) {
             foreach ($tmpStoryModel as $tStoryModel) {
-                $scanImageResources[] = $tStoryModel['scan_image_path'];
+                if (!empty($tStoryModel['scan_image_path'])) {
+                    $scanImageResources[] = $tStoryModel['scan_image_path'];
+                }
             }
             if (!empty($this->_storyInfo['resources']['easyar'])) {
                 $this->_storyInfo['resources']['easyar'] = json_decode($this->_storyInfo['resources']['easyar'], true);
