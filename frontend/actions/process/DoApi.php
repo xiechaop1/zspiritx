@@ -207,10 +207,12 @@ class DoApi extends ApiAction
                 $scanImageResources[] = $tStoryModel['scan_image_path'];
             }
             if (!empty($this->_storyInfo['resources']['easyar'])) {
+                $this->_storyInfo['resources']['easyar'] = json_decode($this->_storyInfo['resources']['easyar'], true);
                 $this->_storyInfo['resources']['easyar'] = array_merge($this->_storyInfo['resources']['easyar'], $scanImageResources);
             } else {
                 $this->_storyInfo['resources']['easyar'] = $scanImageResources;
             }
+            $this->_storyInfo['resources']['easyar'] = json_encode($this->_storyInfo['resources']['easyar'], JSON_UNESCAPED_UNICODE);
         }
 
         $this->_storyInfo['resources'] = Model::formatResources($this->_storyInfo['resources']);
