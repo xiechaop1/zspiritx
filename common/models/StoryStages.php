@@ -22,10 +22,12 @@ class StoryStages extends \common\models\gii\StoryStages
 
     const STAGE_CLASS_NORMAL    = 1; // 普通
     const STAGE_CLASS_EXTEND    = 2; // 扩展
+    const STAGE_CLASS_TEMP     = 3; // 临时
 
     public static $stageClass2Name = [
         self::STAGE_CLASS_NORMAL => '普通',
         self::STAGE_CLASS_EXTEND => '扩展',
+        self::STAGE_CLASS_TEMP => '临时',
     ];
 
     public function behaviors()

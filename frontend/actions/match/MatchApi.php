@@ -393,7 +393,7 @@ class MatchApi extends ApiAction
                     'performerId' => 'WorldRoot',
                     'animationName' => 'Effect',
                     'moveX' => !empty($playerPos[$player->id]['x']) ? $playerPos[$player->id]['x'] : 0,
-                    'moveY' => !empty($playerPos[$player->id]['y']) ? $playerPos[$player->id]['y'] : 0,
+                    'moveY' => !empty($playerPos[$player->id]['y']) - 0.2 ? $playerPos[$player->id]['y'] - 0.2 : -0.2,
                     'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 2,
                     'animationArgs' => [
                         'animName' => 'EmergeAnimation',

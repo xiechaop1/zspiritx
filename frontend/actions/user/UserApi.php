@@ -802,6 +802,8 @@ class UserApi extends ApiAction
             && !empty($storyId)
             && !empty($storyStageId)
             && !empty($sessionStageId)
+            // Todo: 临时处理，不判断战斗场景
+            && $storyStageId != 69
         ) {
 //            $storyStageSql = 'SELECT *, st_distance(point(lng, lat), point(' . $lng . ', ' . $lat . ')) * 111195 as dist FROM o_story_stage'
 //                . ' WHERE story_id = ' . $storyId
