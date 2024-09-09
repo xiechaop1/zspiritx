@@ -169,7 +169,7 @@ class Model
             return $resources;
         }
 
-        if (Common::isJson($resources)) {
+        if (!is_array($resources) && Common::isJson($resources)) {
             $resourcesArr = json_decode($resources, true);
         } else {
             $resourcesArr = $resources;
