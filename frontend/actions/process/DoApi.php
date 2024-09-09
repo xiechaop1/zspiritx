@@ -186,6 +186,33 @@ class DoApi extends ApiAction
      */
     public function getStory() {
 
+        // 读取所有模型的上传图像的资源作为图像识别
+        $tmpStoryModel = StoryModels::find()
+            ->where([
+                'story_id' => (int)$this->_storyId,
+                'scan_type' => [
+                    StoryModels::SCAN_IMAGE_TYPE_RANDOM_PLANE_AFTER_SCAN,
+                    StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_AFTER_SCAN,
+                    StoryModels::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_AFTER_SCAN,
+                ],
+            ])
+            ->andFilterWhere([
+                '<>', 'scan_image_path', ''
+            ])
+            ->all();
+
+        $scanImageResources = [];
+        if (!empty($tmpStoryModel)) {
+            foreach ($tmpStoryModel as $tStoryModel) {
+                $scanImageResources[] = $tStoryModel['scan_image_path'];
+            }
+            if (!empty($this->_storyInfo['resources']['easyar'])) {
+                $this->_storyInfo['resources']['easyar'] = array_merge($this->_storyInfo['resources']['easyar'], $scanImageResources);
+            } else {
+                $this->_storyInfo['resources']['easyar'] = $scanImageResources;
+            }
+        }
+
         $this->_storyInfo['resources'] = Model::formatResources($this->_storyInfo['resources']);
 
         $ret = $this->_storyInfo->toArray();
