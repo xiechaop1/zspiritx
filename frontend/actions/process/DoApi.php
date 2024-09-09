@@ -204,10 +204,12 @@ class DoApi extends ApiAction
 
         $scanImageResources = [];
         $storyInfo = $this->_storyInfo->toArray();
+        $storyInfo['resources'] = Model::formatResources($storyInfo['resources']);
+
         if (!empty($tmpStoryModel)) {
             foreach ($tmpStoryModel as $tStoryModel) {
                 if (!empty($tStoryModel['scan_image_path'])) {
-                    $scanImageResources[] = $tStoryModel['scan_image_path'];
+                    $scanImageResources[] = Attachment::completeUrl($tStoryModel['scan_image_path'], false);
                 }
             }
             if (!empty($storyInfo['resources']['image']['easyar'])) {
@@ -219,7 +221,7 @@ class DoApi extends ApiAction
             $storyInfo['resources']['image']['easyar'] = json_encode($storyInfo['resources']['image']['easyar'], JSON_UNESCAPED_UNICODE);
         }
 
-        $storyInfo['resources'] = Model::formatResources($storyInfo['resources']);
+
 
 //        $ret = $this->_storyInfo->toArray();
         $ret = $storyInfo;
