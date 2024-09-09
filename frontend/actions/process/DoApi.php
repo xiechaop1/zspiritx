@@ -213,12 +213,12 @@ class DoApi extends ApiAction
                 }
             }
             if (!empty($storyInfo['resources']['image']['easyar'])) {
-                $storyInfo['resources']['image']['easyar'] = json_decode($storyInfo['resources']['image']['easyar'], true);
+//                $storyInfo['resources']['image']['easyar'] = json_decode($storyInfo['resources']['image']['easyar'], true);
                 $storyInfo['resources']['image']['easyar'] = array_merge($storyInfo['resources']['image']['easyar'], $scanImageResources);
             } else {
                 $storyInfo['resources']['image']['easyar'] = $scanImageResources;
             }
-            $storyInfo['resources']['image']['easyar'] = json_encode($storyInfo['resources']['image']['easyar'], JSON_UNESCAPED_UNICODE);
+//            $storyInfo['resources']['image']['easyar'] = json_encode($storyInfo['resources']['image']['easyar'], JSON_UNESCAPED_UNICODE);
         }
 
 
