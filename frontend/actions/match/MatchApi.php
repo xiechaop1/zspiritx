@@ -334,9 +334,10 @@ class MatchApi extends ApiAction
                 'name' => 'system',
             ],
             'moveX' => 0,
-            'moveY' => 0,
+            'moveY' => -0.2,
             'moveZ' => 0,
         ];
+        $showPlayerScenario = [];
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
             $totalSec += 1;
@@ -393,16 +394,29 @@ class MatchApi extends ApiAction
                     'performerId' => 'WorldRoot',
                     'animationName' => 'Effect',
                     'moveX' => !empty($playerPos[$player->id]['x']) ? $playerPos[$player->id]['x'] : 0,
-                    'moveY' => !empty($playerPos[$player->id]['y']) ? $playerPos[$player->id]['y'] - 0.2 : -0.2,
+                    'moveY' => !empty($playerPos[$player->id]['y']) ? $playerPos[$player->id]['y'] : 0,
                     'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 2,
                     'animationArgs' => [
                         'animName' => 'EmergeAnimation',
                         'endTime' => 1,
                     ],
                 ];
+                $showPlayerScenario[] =  [
+                    'performerId' => 'PLAYER_' . $player->id . '_' . $player->user_model_id . '_' . $player->m_story_model_id,
+                    'animationName' => 'Show',
+                ];
             }
         }
         $tmpScenario['lstPerforms'] = $createPlayerScenario;
+
+        $scenario[] = $tmpScenario;
+
+        if (!empty($showPlayerScenario)) {
+            $tmpScenario = [
+                'timeSinceLast' => 1000,
+                'lstPerforms' => $showPlayerScenario,
+            ];
+        }
 
         $scenario[] = $tmpScenario;
 
@@ -414,6 +428,13 @@ class MatchApi extends ApiAction
 
         $oldPlayerAttSpeed = 0;
         $setPlayerAttSpeed = 0;
+
+        $roundSpecialEff = [
+            'VFxAuraCast',
+            'VFxAuraCircle',
+            'VFxAuraGreen',
+            'VFxAuraLight',
+        ];
 
         while (count($liveTeams) > 1
             && $round < 100
@@ -553,7 +574,7 @@ class MatchApi extends ApiAction
                         $detail = $currentPlayerPetName . '的宠物对' . $rivalPlayerPetName . '发起了进攻，但是被格挡了！';
                     }
                 }
-                $detail .= '(HP：' . Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp') . ')';
+                $detail .= '(' . Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp') . ')';
 //                $detail .= count($liveTeams) . '！';
 
                 if (isset($myTeam[$currentPlayer->team_id])) {
@@ -660,6 +681,16 @@ class MatchApi extends ApiAction
                             'moveZ' => $effPosZ,
                             'animationArgs' => [
                                 'animName' => $eff['model_u_id'],
+                                'endTime' => $duration,
+                            ],
+                        ];
+                        $playerScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'performerId' => 'WorldRoot',
+                            'animationName' => 'Effect',
+                            'moveZ' => $effPosZ,
+                            'animationArgs' => [
+                                'animName' => $roundSpecialEff[array_rand($roundSpecialEff)],
                                 'endTime' => $duration,
                             ],
                         ];
