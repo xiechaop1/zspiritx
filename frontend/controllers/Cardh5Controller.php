@@ -22,7 +22,7 @@ class Cardh5Controller extends Controller
 
         return [
             'card' => [
-                'class' => 'frontend\actions\cardh5\card',
+                'class' => 'frontend\actions\cardh5\Card',
             ],
 
         ];
