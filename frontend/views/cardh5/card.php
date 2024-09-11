@@ -64,8 +64,8 @@ $this->title = '抽奖';
         width: 100vw;
         " >
         <div style="background-color: rgba(255,255,255,0.5);
-        position: absolute; right: 50px; bottom: 70px;
-        font-size: 28px; width: 400px; height: 600px; border: 1px solid #333333;
+        position: absolute; right: 30px; bottom: 70px;
+        font-size: 28px; width: 300px; height: 400px; border: 1px solid #333333;
         padding: 0px;
 ">
             <div style="color: #c6ff00; background-color: #333333; padding: 12px; font-weight: bold; text-align: center; font-size: 36px;">
