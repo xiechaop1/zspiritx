@@ -383,7 +383,7 @@ class MatchApi extends ApiAction
                     'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 2,
                     'propBase' => [
                         [
-                            'key' => 'hp',
+                            'key' => '',
                             'value' => Model::getUserModelPropColWithPropJson($playerProp, 'hp'),
                             'max' => Model::getUserModelPropColWithPropJson($playerProp, 'max_hp'),
                         ],
