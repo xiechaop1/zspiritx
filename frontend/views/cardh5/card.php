@@ -65,13 +65,13 @@ $this->title = '抽奖';
         " >
         <div style="background-color: rgba(255,255,255,0.5);
         position: absolute; right: 30px; bottom: 70px;
-        font-size: 28px; width: 300px; height: 400px; border: 1px solid #333333;
+        font-size: 24px; width: 300px; height: 400px; border: 1px solid #333333;
         padding: 0px;
 ">
-            <div style="color: #c6ff00; background-color: #333333; padding: 12px; font-weight: bold; text-align: center; font-size: 36px;">
+            <div style="color: #c6ff00; background-color: #333333; padding: 12px; font-weight: bold; text-align: center; font-size: 24px;">
                 <?= $storyModel['story_model_name'] ?>
             </div>
-            <div style="overflow: auto; height: 500px; padding: 12px;">
+            <div style="overflow: auto; height: 300px; padding: 12px;">
                 <?php
                 if (!empty($storyModel['dialog2'])) {
                     $dialog2 = json_decode($storyModel['dialog2'], true);
