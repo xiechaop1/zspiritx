@@ -644,18 +644,24 @@ class MatchApi extends ApiAction
                         $duration *= 1000;
 
                         $effPosZ = 0;
+                        $othEffPosZ = 0;
                         if (!empty($eff['eff_mode'])) {
                             switch ($eff['eff_mode']) {
                                 case StoryModelSpecialEff::EFF_MODE_OWNER:
                                     $effPosZ = !empty($playerPos[$currentPlayer->id]['z'])
                                         ? $playerPos[$currentPlayer->id]['z'] : 0;
+                                    $othEffPosZ = !empty($playerPos[$rivalPlayer->id]['z'])
+                                        ? $playerPos[$rivalPlayer->id]['z'] : 0;
                                     break;
                                 case StoryModelSpecialEff::EFF_MODE_RIVAL:
                                     $effPosZ = !empty($playerPos[$rivalPlayer->id]['z'])
                                         ? $playerPos[$rivalPlayer->id]['z'] : 0;
+                                    $othEffPosZ = !empty($playerPos[$currentPlayer->id]['z'])
+                                        ? $playerPos[$currentPlayer->id]['z'] : 0;
                                     break;
                                 default:
                                     $effPosZ = 0;
+                                    $othEffPosZ = 0;
                                     break;
                             }
                         }
@@ -674,6 +680,17 @@ class MatchApi extends ApiAction
                                 'animName' => 'Cast',
                             ],
                         ];
+                        $prePlayerScenario[] = [
+//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+                            'performerId' => 'WorldRoot',
+                            'animationName' => 'Effect',
+                            'moveZ' => $othEffPosZ,
+                            'animationArgs' => [
+                                'animName' => $roundSpecialEff[array_rand($roundSpecialEff)],
+                                'endTime' => $duration,
+                            ],
+                        ];
+
                         $playerScenario[] = [
 //                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
                             'performerId' => 'WorldRoot',
@@ -684,15 +701,7 @@ class MatchApi extends ApiAction
                                 'endTime' => $duration,
                             ],
                         ];
-                        $prePlayerScenario[] = [
-                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
-//                            'performerId' => 'WorldRoot',
-                            'animationName' => 'Effect',
-                            'animationArgs' => [
-                                'animName' => $roundSpecialEff[array_rand($roundSpecialEff)],
-                                'endTime' => $duration,
-                            ],
-                        ];
+
                         if (!empty($eff['env_eff'])) {
                             $playerScenario[] = [
                                 'performerId' => 'WorldRoot',
