@@ -431,9 +431,9 @@ class MatchApi extends ApiAction
 
         $roundSpecialEff = [
             'VFxAuraCast',
-            'VFxAuraCircle',
-            'VFxAuraGreen',
-            'VFxAuraLight',
+//            'VFxAuraCircle',
+//            'VFxAuraGreen',
+//            'VFxAuraLight',
         ];
 
         while (count($liveTeams) > 1
@@ -684,11 +684,10 @@ class MatchApi extends ApiAction
                                 'endTime' => $duration,
                             ],
                         ];
-                        $playerScenario[] = [
-//                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
-                            'performerId' => 'WorldRoot',
+                        $prePlayerScenario[] = [
+                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
+//                            'performerId' => 'WorldRoot',
                             'animationName' => 'Effect',
-                            'moveZ' => $effPosZ,
                             'animationArgs' => [
                                 'animName' => $roundSpecialEff[array_rand($roundSpecialEff)],
                                 'endTime' => $duration,
