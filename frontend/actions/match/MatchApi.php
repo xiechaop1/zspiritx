@@ -403,7 +403,10 @@ class MatchApi extends ApiAction
                 ];
                 $showPlayerScenario[] =  [
                     'performerId' => 'PLAYER_' . $player->id . '_' . $player->user_model_id . '_' . $player->m_story_model_id,
-                    'animationName' => 'Show',
+                    'animationName' => 'Animation',
+                    'animationArgs' => [
+                        'animName' => 'Show',
+                    ],
                 ];
             }
         }
