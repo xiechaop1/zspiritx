@@ -337,6 +337,11 @@ class MatchApi extends ApiAction
             'moveY' => -0.2,
             'moveZ' => 0,
         ];
+        $createPlayerScenario[] = [
+            'performerId' => 'WorldRoot',
+            'animationName' => 'Dark',
+//            'scale' => $duration,
+        ];
         $showPlayerScenario = [];
         if (!empty($storyMatchPlayers)) {
             $tmpScenario = ['timeSinceLast' => 1];
