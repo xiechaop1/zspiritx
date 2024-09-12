@@ -383,7 +383,7 @@ class MatchApi extends ApiAction
                     'moveZ' => !empty($playerPos[$player->id]['z']) ? $playerPos[$player->id]['z'] : 2,
                     'propBase' => [
                         [
-                            'key' => '',
+                            'key' => 'HP',
                             'value' => Model::getUserModelPropColWithPropJson($playerProp, 'hp'),
                             'max' => Model::getUserModelPropColWithPropJson($playerProp, 'max_hp'),
                         ],
@@ -748,7 +748,7 @@ class MatchApi extends ApiAction
                         'animationName' => 'UpdateInfo',
                         'propBase' => [
                             [
-                                'key' => 'hp',
+                                'key' => 'HP',
                                 'value' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'hp'),
                                 'max' => Model::getUserModelPropColWithPropJson($rivalPlayerProp, 'max_hp'),
                             ]
@@ -1023,7 +1023,7 @@ class MatchApi extends ApiAction
         // 发送Action结束游戏
         $expirationInterval = 600;
         $endScenario = json_encode([
-            'timeDelayAction' => $totalSec,
+            'timeDelayAction' => intval($totalSec / 1000),
             'showModels' => ['LJ-WORLD-SPIRIT-BATTLE1'],
             'hideModels' => ['LJ-WORLD-SPIRIT-BATTLE']
         ], JSON_UNESCAPED_UNICODE);
