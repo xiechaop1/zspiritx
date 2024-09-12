@@ -340,7 +340,7 @@ class MatchApi extends ApiAction
         $createPlayerScenario[] = [
             'performerId' => 'WorldRoot',
             'animationName' => 'Dark',
-//            'scale' => $duration,
+            'scale' => 100000,
         ];
         $showPlayerScenario = [];
         if (!empty($storyMatchPlayers)) {
@@ -1028,7 +1028,7 @@ class MatchApi extends ApiAction
         // 发送Action结束游戏
         $expirationInterval = 600;
         $endScenario = json_encode([
-            'timeDelayAction' => intval($totalSec / 1000),
+            'timeDelayAction' => round($totalSec / 1000),
             'showModels' => ['LJ-WORLD-SPIRIT-BATTLE1'],
             'hideModels' => ['LJ-WORLD-SPIRIT-BATTLE']
         ], JSON_UNESCAPED_UNICODE);
