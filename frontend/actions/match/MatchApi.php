@@ -665,7 +665,7 @@ class MatchApi extends ApiAction
                             'animationName' => 'Effect',
                             'moveZ' => -0.7,
                             'animationArgs' => [
-                                'animName' => $hitPlayerScenario[array_rand($hitPlayerScenario)],
+                                'animName' => $hitPlayerEff[array_rand($hitPlayerEff)],
                                 'endTime' => 2,
                             ],
                         ];
@@ -730,6 +730,15 @@ class MatchApi extends ApiAction
                             'animationArgs' => [
                                 'animName' => $eff['model_u_id'],
                                 'endTime' => $duration,
+                            ],
+                        ];
+                        $playerScenario[] = [
+                            'performerId' => 'WorldRoot',
+                            'animationName' => 'Effect',
+                            'moveZ' => $effPosZ,
+                            'animationArgs' => [
+                                'animName' => $hitPlayerEff[array_rand($hitPlayerEff)],
+                                'endTime' => 2,
                             ],
                         ];
 
