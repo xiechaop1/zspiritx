@@ -444,6 +444,20 @@ class MatchApi extends ApiAction
 //            'VFxAuraLight',
         ];
 
+        $hitPlayerEff = [
+            'VFxSpark1',
+            'VFxSpark2',
+            'VFxSpark3',
+            'VFxSpark4',
+            'VFxSpark5',
+            'VFxSpark6',
+            'VFxSpark7',
+            'VFxSpark8',
+            'VFxSpark9',
+            'VFxSpark10',
+            'VFxSpark11',
+        ];
+
         while (count($liveTeams) > 1
             && $round < 100
         ) {
@@ -645,6 +659,15 @@ class MatchApi extends ApiAction
                             'animationName' => 'Slide',
                             'moveZ' => -0.7,
                             'slideSpeed' => 2,
+                        ];
+                        $hitPlayerScenario[] = [
+                            'performerId' => 'WorldRoot',
+                            'animationName' => 'Effect',
+                            'moveZ' => -0.7,
+                            'animationArgs' => [
+                                'animName' => $hitPlayerScenario[array_rand($hitPlayerScenario)],
+                                'endTime' => 2,
+                            ],
                         ];
                     } else {
                         // 魔法攻击
