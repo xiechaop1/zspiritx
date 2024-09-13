@@ -48,6 +48,17 @@ class Card extends Action
             $storyModel['story_model_image'] = Attachment::completeUrl($storyModel['story_model_image'], true);
         }
 
+        if (!empty($storyModel['dialog2'])) {
+            $dialog2 = json_decode($storyModel['dialog2'], true);
+        } else {
+            $dialog2 = [];
+        }
+
+        $isCard = isset($_GET['is_card']) ? $_GET['is_card'] : 1;
+        if ($isCard != 1) {
+            $dialog2['div_css'] = empty($dialog2['div_css']) ? ' ' : $dialog2['div_css'];
+            $dialog2['desc_css'] = empty($dialog2['desc_css']) ? 'padding: 15px; font-size: 24px;' : $dialog2['desc_css'];
+        }
 
         return $this->controller->render('card', [
             'params'        => $_GET,
@@ -56,6 +67,7 @@ class Card extends Action
             'storyId'       => $storyId,
             'storyModel'    => $storyModel,
             'storyModelId'  => $storyModelId,
+            'dialog2'       => $dialog2,
         ]);
     }
 }

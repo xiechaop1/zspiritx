@@ -55,6 +55,14 @@ $this->title = '抽奖';
     <label class="close-btn">
         <img src="../../static/img/icon-close.png" class="img-40">
     </label>
+<!--    --><?php
+//    if (!empty($storyModel['dialog2'])) {
+//        $dialog2 = json_decode($storyModel['dialog2'], true);
+//    } else {
+//        $dialog2 = [];
+//    }
+//
+//    ?>
     <div class="show" style="display: block;
         background-image: url(<?= !empty($storyModel['story_model_image']) ? $storyModel['story_model_image'] : '' ?>);
         background-size: 100% 100%;
@@ -63,18 +71,17 @@ $this->title = '抽奖';
         height: 100vh;
         width: 100vw;
         " >
-        <div style="background-color: rgba(255,255,255,0.5);
+        <div style="<?= !empty($dialog2['div_css']) ? $dialog2['div_css'] : 'background-color: rgba(255,255,255,0.5);
         position: absolute; right: 30px; bottom: 70px;
         font-size: 24px; width: 300px; height: 400px; border: 1px solid #333333;
-        padding: 0px;
+        padding: 0px;' ?>
 ">
             <div style="color: #c6ff00; background-color: #333333; padding: 12px; font-weight: bold; text-align: center; font-size: 24px;">
                 <?= $storyModel['story_model_name'] ?>
             </div>
-            <div style="overflow: auto; height: 300px; padding: 12px;">
+            <div style="<?= !empty($dialog2['desc_css']) ? $dialog2['desc_css'] : 'overflow: auto; height: 300px; padding: 12px;' ?>">
                 <?php
-                if (!empty($storyModel['dialog2'])) {
-                    $dialog2 = json_decode($storyModel['dialog2'], true);
+                if (!empty($dialog2['desc'])) {
                     echo $dialog2['desc'];
                 } ?>
             </div>
