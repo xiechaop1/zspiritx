@@ -57,7 +57,7 @@ class Card extends Action
         $isCard = isset($_GET['is_card']) ? $_GET['is_card'] : 1;
         if ($isCard != 1) {
             $dialog2['div_css'] = empty($dialog2['div_css']) ? ' ' : $dialog2['div_css'];
-            $dialog2['desc_css'] = empty($dialog2['desc_css']) ? 'padding: 15px; font-size: 24px;' : $dialog2['desc_css'];
+            $dialog2['desc_css'] = empty($dialog2['desc_css']) ? 'line-height: 125%; padding: 15px; font-size: 24px;' : $dialog2['desc_css'];
         }
 
         return $this->controller->render('card', [
