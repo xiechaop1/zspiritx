@@ -280,13 +280,13 @@ class Battle extends Action
                             $currentPlayer->m_user_model_prop = json_encode($currentPlayerProp, true);
 
                             // Todo: 暂时去掉保存，为了调试，最后统一打开
-//                            $currentPlayer->save();
+                            $currentPlayer->save();
 
                             if (!empty($currentPlayer->userModel)) {
                                 $currentPlayer->userModel->user_model_prop = Model::addUserModelPropCol($currentPlayer->userModel, 'exp', $exp);
 
                                 // Todo: 暂时去掉保存，为了调试，最后统一打开
-//                                $currentPlayer->userModel->save();
+                                $currentPlayer->userModel->save();
                             }
 
                         }
