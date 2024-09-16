@@ -751,12 +751,14 @@ $this->title = '练习赛';
                 var msg = $(this).html();
                 console.log(msg);
                 var msg_type = $(this).attr('msg_type');
-                var msgObj = {
-                    msg: msg,
-                    msg_type: msg_type,
-                };
-                console.log(msgObj);
-                oldMsgs.push(msgObj);
+                if (msg_type != "btn") {
+                    var msgObj = {
+                        msg: msg,
+                        msg_type: msg_type,
+                    };
+                    console.log(msgObj);
+                    oldMsgs.push(msgObj);
+                }
             });
             console.log(oldMsgs);
             old_messages = JSON.stringify(oldMsgs);
@@ -808,7 +810,7 @@ $this->title = '练习赛';
                     // $('#message-content').append(sugdiv);
                     // $('#message-content').html(suggestion);
                     $('.message-content-ai').last().html(suggestion);
-                    $('#message-content').append('<div style="float: left; line-height: 200%;"><img class="play_voice" src="../../static/img/match/play.png" width="50"></div>');
+                    $('#message-content').append('<div style="float: left; line-height: 200%;" msg_type="btn"><img class="play_voice" src="../../static/img/match/play.png" width="50"></div>');
                     // var audioVoice = $('#audio_voice')[0];
                     // audioVoice.src = ajaxObj.data.voice;
                     // audioVoice.play();
@@ -832,7 +834,7 @@ $this->title = '练习赛';
                     $('.next-ques').click(function() {
                         var next_ques = $(this).find('label').html();
                         // console.log(next_ques);
-                        var msgdiv = '<div class="fs-24 btn-green-m-msg-ai-choice my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + next_ques + '</div>';
+                        var msgdiv = '<div class="fs-24 btn-green-m-msg-ai-choice old-msg-content my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + next_ques + '</div>';
                         $('#message-content').append(msgdiv);
                         var msbox = document.querySelector('#message-content');
                         msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);

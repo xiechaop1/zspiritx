@@ -302,7 +302,8 @@ class Doubao extends Component
             array_unshift($oldMessages, ['role' => 'system', 'content' => '#历史消息']);
             $messages = array_merge($messages, $oldMessages);
         }
-        $messages = array_merge($templateMessages, $messages);
+//        $messages = array_merge($templateMessages, $messages);
+        $messages = array_merge($messages, $templateMessages);
         Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
         file_put_contents('/tmp/test_doubao_i.log', var_export($messages, true));
 //        if (!empty($oldMessages)) {
@@ -342,7 +343,7 @@ class Doubao extends Component
 //            print_r($response);
 //        }
         Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
-//        file_put_contents('/tmp/doubao.tmp', json_encode($response, JSON_UNESCAPED_UNICODE));
+        file_put_contents('/tmp/doubao.log', json_encode($response, JSON_UNESCAPED_UNICODE));
 //        var_dump($response);
 //        exit;
 
@@ -352,7 +353,12 @@ class Doubao extends Component
             if (!empty($msg)) {
                 $msg = str_replace('```json', '', $msg);
                 $msg = str_replace('```', '', $msg);
-                $ret = json_decode($msg, true);
+                if (\common\helpers\Common::isJson($msg)) {
+                    $ret = json_decode($msg, true);
+                } else {
+                    $ret = $msg;
+                }
+//                $ret = json_decode($msg, true);
             }
         } else {
             $ret = [];
