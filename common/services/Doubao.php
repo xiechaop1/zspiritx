@@ -129,13 +129,15 @@ class Doubao extends Component
 //            $userMessagePre .= "\n出5道题目，每次生成的题目都不能相同。";
 //            $msgTemplate = [];
             $response = $this->chatWithDoubao($userMessagePre, [], [], $msgTemplate);
-//            var_dump($response);
-//            exit;
             $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
 
             if (!empty($messages)) {
+                file_put_contents('/tmp/test_doubao_msg.log', $messages);
+                $messages = str_replace('```json', '', $messages);
+                $messages = str_replace('```', '', $messages);
                 $ret = json_decode($messages, true);
             }
+//            var_dump($ret);exit;
 
             file_put_contents('/tmp/test_doubao_sub.log', var_export($userMessagePre, true) . "\n\n\n" . var_export($ret, true));
 
