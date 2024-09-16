@@ -22,7 +22,10 @@ class Doubao extends Component
 {
 
 //    const CHATGPT_HOST = 'https://api.openai.com/v1';
-    const CHATGPT_HOST = 'https://ark.cn-beijing.volces.com/api';
+
+    // Todo: 替换掉Doubao接口
+//    const CHATGPT_HOST = 'https://ark.cn-beijing.volces.com/api';
+    const CHATGPT_HOST = 'https://api.deepseek.com/';
 
     public $apiKey;
 
@@ -305,18 +308,29 @@ class Doubao extends Component
 //        print_r($messages);
 //        exit;
 
+        // Todo: 替换掉Doubao接口
+//        $data = array(
+////            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
+//            'model' => 'ep-20240628070258-6m88j',
+////            'model' => 'ep-20240729104951-snm9z',
+//            'messages' => $messages,
+//            'temperature' => 0.8,
+////            'stream' => false,
+//        );
         $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
-            'model' => 'ep-20240628070258-6m88j',
+            'model' => 'deepseek-chat',
 //            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
-            'temperature' => 0.8,
+            'temperature' => 1.2,
 //            'stream' => false,
         );
 
 //        Yii::info('chatGPT data: ' . json_encode($data));
 
-        $response = $this->_call('/v3/chat/completions', $data, 'POST');
+        // Todo: 替换掉Doubao接口
+//        $response = $this->_call('/v3/chat/completions', $data, 'POST');
+        $response = $this->_call('/v1/chat/completions', $data, 'POST');
 //        if (!empty($oldMessages)) {
 //            print_r($oldMessages);
 //            print_r($messages);
