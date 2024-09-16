@@ -217,15 +217,16 @@ class Doubao extends Component
             ],
         ]);
         $roleMessages[] = '#角色' . "\n" . '你是一个教育方面的老师';
-        if (!empty($ques)) {
-            $roleMessages[] = '#特点' . "\n" . '你直来直往，会直接给出问题答案';
-        }
-        $roleMessages[] = '#任务描述和要求';
+//        if (!empty($ques)) {
+//            $roleMessages[] = '#特点' . "\n" . '你直来直往，会直接给出问题答案';
+//        }
+        $extMessages = [];
+        $extMessages[] = '#任务描述和要求';
         if (empty($ques)) {
-            $roleMessages[] = '你根据题目内容，提供解题的思路引导，在2个步骤下可以解出题目，并且提示出第1个步骤，并且在QUESTIONS中第一条给出这个步骤的答案，学生可以在思考下完成解题';
-            $roleMessages[] = '利用引导式教学，引导学生思考，不要直接给出答案';
+            $extMessages[] = '你根据题目内容，提供解题的思路引导，在2个步骤下可以解出题目，并且提示出第1个步骤，并且在QUESTIONS中第一条给出这个步骤的答案，学生可以在思考下完成解题';
+            $extMessages[] = '利用引导式教学，引导学生思考，不要直接给出答案';
         } else {
-            $roleMessages[] = '根据题目内容和之前的引导，给出接下来的解题步骤，并且在QUESTIONS中的第一条给出这个步骤的答案';
+            $extMessages[] = '根据题目内容和之前的引导，给出接下来的解题步骤，并且在QUESTIONS中的第一条给出这个步骤的答案';
         }
         $roleMessagesFormat = [
             '内容不超过200字',
@@ -237,7 +238,7 @@ class Doubao extends Component
             '用JSON的形式返回',
             '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
         ];
-        $roleMessages = array_merge($roleMessages, $roleMessagesFormat);
+        $extMessages = array_merge($extMessages, $roleMessagesFormat);
 //        var_dump($roleMessages);exit;
         switch ($matchClass) {
             case Subject::SUBJECT_CLASS_POEM:
@@ -258,7 +259,7 @@ class Doubao extends Component
         }
 //        $userMessage .= '#输出格式#' . '输出提示方法';
 
-        $ret = $response = $this->chatWithDoubao($userMessage, $oldMessages, [], $roleMessages);
+        $ret = $response = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, $roleMessages);
 
         file_put_contents('/tmp/test_doubao.log', var_export($roleMessages, true) . "\n\n\n" . var_export($response, true));
 //        var_dump($response);exit;
