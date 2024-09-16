@@ -128,15 +128,15 @@ class Doubao extends Component
 //            $userMessagePre = '你是教育方面老师，针对5年级学生的历史知识体系，包含：中国古代史，夏商到战国时期为主。返回结果用JSON格式。题目随机。';
 //            $userMessagePre .= "\n出5道题目，每次生成的题目都不能相同。";
 //            $msgTemplate = [];
-            $response = $this->chatWithDoubao($userMessagePre, [], [], $msgTemplate);
-            $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
-
-            if (!empty($messages)) {
-                file_put_contents('/tmp/test_doubao_msg.log', $messages);
-                $messages = str_replace('```json', '', $messages);
-                $messages = str_replace('```', '', $messages);
-                $ret = json_decode($messages, true);
-            }
+            $ret = $response = $this->chatWithDoubao($userMessagePre, [], [], $msgTemplate);
+//            $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
+//
+//            if (!empty($messages)) {
+//                file_put_contents('/tmp/test_doubao_msg.log', $messages);
+//                $messages = str_replace('```json', '', $messages);
+//                $messages = str_replace('```', '', $messages);
+//                $ret = json_decode($messages, true);
+//            }
 //            var_dump($ret);exit;
 
             file_put_contents('/tmp/test_doubao_sub.log', var_export($userMessagePre, true) . "\n\n\n" . var_export($ret, true));
@@ -188,9 +188,9 @@ class Doubao extends Component
                 $userMessage = '请出' . $ct . '到题目，题目可以是数学，英语，语文，历史，生物，物理，或者冷门知识。分为ABCD四个选项，其中随机一个选项是正确的，其他三个是近似但错误的。难度是适合' . $gradeName . '。';
                 break;
         }
-        $response = $this->chatWithDoubao($userMessage, $oldMessages, $templateContents, $roleTxt);
+        $messages = $response = $this->chatWithDoubao($userMessage, $oldMessages, $templateContents, $roleTxt);
 
-        $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
+//        $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
 
         return $messages;
     }
@@ -258,13 +258,15 @@ class Doubao extends Component
         }
 //        $userMessage .= '#输出格式#' . '输出提示方法';
 
-        $response = $this->chatWithDoubao($userMessage, $oldMessages, [], $roleMessages);
+        $ret = $response = $this->chatWithDoubao($userMessage, $oldMessages, [], $roleMessages);
 
         file_put_contents('/tmp/test_doubao.log', var_export($roleMessages, true) . "\n\n\n" . var_export($response, true));
 //        var_dump($response);exit;
-        $messages = $response['choices'][0]['message']['content'];
+//        $messages = $response['choices'][0]['message']['content'];
 
-        $ret = json_decode($messages, true);
+//        $messages = str_replace('```json', '', $messages);
+//        $messages = str_replace('```', '', $messages);
+//        $ret = json_decode($messages, true);
 
         return $ret;
     }
@@ -343,7 +345,19 @@ class Doubao extends Component
 //        var_dump($response);
 //        exit;
 
-        return json_decode($response, true);
+        $tmpRet =  json_decode($response, true);
+        if (!empty($tmpRet['choices'][0]['message']['content'])) {
+            $msg = $tmpRet['choices'][0]['message']['content'];
+            if (!empty($msg)) {
+                $msg = str_replace('```json', '', $msg);
+                $msg = str_replace('```', '', $msg);
+                $ret = json_decode($msg, true);
+            }
+        } else {
+            $ret = [];
+        }
+
+        return $ret;
     }
 
     public function callOpenAIChatGPT($userMessage, $templateContents = array()) {
