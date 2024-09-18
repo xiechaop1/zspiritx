@@ -37,6 +37,12 @@ echo \dmstr\widgets\Alert::widget();
                     'multiple' => false
                 ],
             ])->label('剧本');
+            echo $form->field($orderModel, 'item_type')->widget('\kartik\select2\Select2', [
+                'data' => \common\models\Order::$itemType2Name,
+                'options' => [
+                    'multiple' => false
+                ],
+            ])->label('类型');
             echo $form->field($orderModel, 'user_id')->textInput(['value' => $orderModel->user_id])->label('用户名');
             echo $form->field($orderModel, 'mobile')->textInput(['value' => $orderModel->mobile])->label('手机号');
             echo $form->field($orderModel, 'amount')->textInput(['value' => $orderModel->amount])->label('价格');

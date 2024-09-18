@@ -33,6 +33,63 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
+    public function generateStory($userMessage, $level = 0, $storyTitle = '', $storyContent = '', $oldMessages = []) {
+
+        $gradeName = $this->_getGradeNameFromLevel($level);
+
+        if (empty($storyTitle) || empty($storyContent)) {
+            $roleTxt = '#角色' . "\n" . '你扮演一个童话故事，历史典故，四大名著的资深学者，擅长讲故事';
+            $extMessages = [
+                '#任务描述和要求',
+//                '你需要取出一段故事，并且翻译成白话文，故事要足够随机',
+//                '故事范围《三国演义》《红楼梦》《水浒传》《西游记》《安徒生童话》《格林童话》《一千零一夜》《罗宾汉》《神奇校车》《哈利波特》《小王子》《白雪公主》《灰姑娘》《青蛙王子》《小红帽》《绿野仙踪》《狮子王》《美女与野兽》《海底两万里》《阿拉丁神灯》《拇指姑娘》',
+//                '故事范围《三国演义》，从120回中抽取一段',
+//                '你需要编写一个故事，可以是四大名著，世界名著，中国名著中的某个故事或者某个段落，也可以是你自己编写的故事，一定要随机选题，不要重复',
+                '符合' . $gradeName . '小朋友认知的',
+                '把故事讲述成白话文，并且中间人物要有对话，描写人物内心活动',
+                '给出故事大纲，故事的题目，故事的内容，内容跌宕起伏，精彩纷呈，有人物、有对话、有剧情',
+//                '但不要给出结局，而是写到一个悬念处',
+                '并且再给出1个针对后来的问题，和2个基于当前的故事发展可能未来发展的走向或者问题，以及1个续写故事的话可能的剧情，每个不超过20字',
+                '用JSON的形式返回',
+                '#输出格式#' . json_encode([
+                    'TITLE' => '故事标题',
+                    'CONTENT' => '故事内容',
+                    'FRAME' => '故事大纲',
+                    'QUES' => [
+                        '后来呢？',
+                        '故事可能得走向或者问题2',
+                        '故事可能得走向或者问题3',
+                        '如果续写故事可能的剧情',
+                    ],
+                ], JSON_UNESCAPED_UNICODE),
+            ];
+        } else {
+            $roleTxt = '#角色' . "\n" . '你是一个故事编写者，负责编写故事';
+            $extMessages = [
+                '#任务描述和要求',
+                '你需要续写一个故事，故事的题目是：' . $storyTitle,
+                '故事大纲是：' . $storyContent,
+                '符合' . $gradeName . '小朋友认知的',
+                '续写的故事请满足原故事人物特性和整体剧情发展，不要给出结局，而是写到一个悬念处',
+                '并且再给出1个针对后来的问题，和3个基于当前的故事发展可能未来发展的走向或者问题，每个不超过20字',
+                '用JSON的形式返回',
+                '#输出格式#' . json_encode([
+                    'TITLE' => '故事标题',
+                    'CONTENT' => '故事内容',
+                    'FRAME' => '故事大纲',
+                    'QUES' => [
+                        '后来呢？',
+                        '故事可能得走向或者问题1',
+                        '故事可能得走向或者问题2',
+                        '故事可能得走向或者问题3',
+                    ],
+                ], JSON_UNESCAPED_UNICODE),
+            ];
+        }
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+        return $ret;
+    }
+
     public function generateSubject($userMessagePre = '', $level = 0, $matchClass = 0, $ct = 10, $extends = array()) {
         $ret = [];
         $gradeName = $this->_getGradeNameFromLevel($level);
@@ -208,7 +265,7 @@ class Doubao extends Component
         $simple = json_encode([
             'SUGGEST' => '问题的引导过程或者答案',
             'QUESTIONS' => [
-                '当前引导的答案',
+                '当前这一条引导信息的答案',
 //                '可能还有的问题1',
                 '可能还有的问题1',
                 '可能还有的问题2',
@@ -294,12 +351,14 @@ class Doubao extends Component
 //        $templateMessages = array();
         if (!empty($templateContents)) {
             foreach ($templateContents as $templateContent) {
-                $templateMessages[] = array('role' => 'assistant', 'content' => $templateContent);
+//                $templateMessages[] = array('role' => 'assistant', 'content' => $templateContent);
+                $templateMessages[] = array('role' => 'system', 'content' => $templateContent);
             }
         }
 
         if (!empty($oldMessages)) {
-            array_unshift($oldMessages, ['role' => 'system', 'content' => '#历史消息']);
+            array_unshift($oldMessages, ['role' => 'assistant', 'content' => '#历史消息']);
+//            array_unshift($oldMessages, ['role' => 'system', 'content' => '#历史消息']);
             $messages = array_merge($messages, $oldMessages);
         }
 //        $messages = array_merge($templateMessages, $messages);
@@ -328,7 +387,7 @@ class Doubao extends Component
             'model' => 'deepseek-chat',
 //            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
-            'temperature' => 1.2,
+            'temperature' => 1.6,
 //            'stream' => false,
         );
 
