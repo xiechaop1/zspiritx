@@ -71,10 +71,18 @@ class VoiceApi extends ApiAction
 
     public function input()
     {
+        $wavData = $_POST['data'];
+
+        $tmpFile = '/tmp/' . md5(time()) . '.wav';
+        $tmpFileHanlder = fopen($tmpFile, 'w');
+        fwrite($tmpFileHanlder, $wavData);
+        fclose($tmpFileHanlder);
+
         return $this->_upload($this->dirPrefix);
     }
 
     public function _upload($dirPrefix){
+
 
         $config['accessKeyId'] = Yii::$app->params['oss.accesskeyid'];
         $config['accessKeySecret'] = Yii::$app->params['oss.accesskeysecret'];
