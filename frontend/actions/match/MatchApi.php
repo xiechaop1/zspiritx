@@ -61,12 +61,15 @@ class MatchApi extends ApiAction
 
                 case 'update_match':
                     $ret = $this->updateMatch();
+                    $needTs = false;
                     break;
                 case 'add_knock_player':
                     $ret = $this->addKnockPlayer();
+                    $needTs = false;
                     break;
                 case 'update_knock_players':
                     $ret = $this->updateKnockPlayers();
+                    $needTs = false;
                     break;
                 case 'get_knockout_status':
                     $ret = $this->getKnockoutStatus();
