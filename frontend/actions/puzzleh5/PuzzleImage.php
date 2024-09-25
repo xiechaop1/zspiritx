@@ -152,6 +152,8 @@ class PuzzleImage extends Action
                     }
                 }
             }
+        } else {
+
         }
 
 

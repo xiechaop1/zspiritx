@@ -195,7 +195,11 @@ if ( !empty($params['story_model_class']) && $params['story_model_class'] == \co
                     <?php
                 } else {
                     ?>
-                    <div class="btn-m-green m-t-30  m-l-30 use_btn" style="position: absolute; left: 5px; top: -50px;" id="use_btn" act="1">
+                    <div class="btn-m-green m-t-30  m-l-30 use_btn" style="position: absolute; left: 5px; top: -50px;" id="use_btn" act="1"<?php
+                    if (!empty($setActiveType)) {
+                        echo ' set_active_type="' . $setActiveType . '"';
+                    }
+                    ?>>
                         使用
                     </div>
                     <?php

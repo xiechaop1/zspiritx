@@ -331,6 +331,7 @@ $(function () {
         }
 
         var act = $(this).attr('act');
+        var setActiveType = $(this).attr('set_active_type');
 
         if(v_select!=null){
             $.ajax({
@@ -349,6 +350,7 @@ $(function () {
                     target_user_model_loc_id:target_user_model_loc_id,
                     is_test:1,
                     act:act,
+                    set_active_type:setActiveType
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);

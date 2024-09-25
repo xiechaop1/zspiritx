@@ -118,6 +118,8 @@ class Baggage extends Action
             $template = 'baggage_v2';
         }
 
+        $setActiveType = !empty($_GET['set_active_type']) ? $_GET['set_active_type'] : 0;
+
         return $this->controller->render($template, [
             'title'         => $title,
             'title2'        => $title2,
@@ -132,6 +134,7 @@ class Baggage extends Action
             'targetStoryModelDetailId' => $targetStoryModelDetailId,
             'targetModelId' => $targetModelId,
             'targetUserModelLocId' => $targetUserModelLocId,
+            'setActiveType' => $setActiveType,
         ]);
     }
 }

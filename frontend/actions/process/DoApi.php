@@ -1702,6 +1702,7 @@ class DoApi extends ApiAction
         $act = !empty($this->_get['act']) ? $this->_get['act'] : 1;     // 1 - 使用；2 - 组合；3 - 丢弃
 
         $userModelId = !empty($this->_get['user_model_id']) ? $this->_get['user_model_id'] : 0;
+        $setActiveType = !empty($this->_get['set_active_type']) ? $this->_get['set_active_type'] : 0;
 
         if ($act == 2) {
             $umIds = explode(',', $userModelId);
@@ -1758,6 +1759,14 @@ class DoApi extends ApiAction
             if ($act == 2 && $storyModel->active_type != StoryModels::ACTIVE_TYPE_COMBINE) {
                 throw new \yii\base\Exception('您的使用没有任何效果', ErrorCode::USER_MODEL_NO_EFFECT);
             }
+            $activeType = $storyModel->active_type;
+
+//            if ($act == 3) {
+            if (!empty($setActiveType)) {
+                // Todo：临时做"召唤"的处理
+                $activeType = $setActiveType;
+            }
+//            }
 
 //            $activeArray = \common\helpers\Model::decodeActive($storyModel->activeNext);
 
@@ -1767,7 +1776,8 @@ class DoApi extends ApiAction
             // 然后再进行效果验证
             // 因为开发时间太少，先写死
             $minCt = 1;      // 允许使用以后被减少的个数
-            switch ($storyModel->active_type)
+
+            switch ($activeType)
             {
                 case StoryModels::ACTIVE_TYPE_BUFF:
                     $userStory = UserStory::findOne([
