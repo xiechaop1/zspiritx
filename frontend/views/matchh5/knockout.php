@@ -889,14 +889,14 @@ $this->title = $storyMatch->match_name;
         //     $('#image').html('');
         // }
 
-        if (obj[idx].image != undefined) {
+        if (obj[idx].hasOwnProperty('image') && obj[idx].image != undefined) {
             $('#image').html('<img src="' + obj[idx].image + '" alt="" class=" img-w-100"/>');
             $('#image').show();
         } else {
             $('#image').html('');
             $('#image').hide();
         }
-        if (obj[idx].extend != undefined && obj[idx].extend != '') {
+        if (obj[idx].hasOwnProperty('extend') && obj[idx].extend != undefined && obj[idx].extend != '') {
             $('#extend-content').html(obj[idx].extend);
             $('.play_voice_extend').show();
         } else {
