@@ -74,6 +74,7 @@ class PuzzleImage extends Action
         $keyStoryModels = [];
         $iList = [];
         if (!empty($qaOne['selected_json'])
+            && !empty($qaOne['selected_json']['keyboard'])
             && $qaOne['selected_json']['keyboard'] == 'bagitems'
         ) {
             $keyboardConfig = $qaOne['selected_json'];
