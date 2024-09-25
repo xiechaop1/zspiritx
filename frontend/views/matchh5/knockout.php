@@ -882,6 +882,7 @@ $this->title = $storyMatch->match_name;
             var topic = tobj.formula;
         }
         console.log(topic);
+        var mobj = obj.subjects[idx];
         // if (topic.indexOf('http') >= 0) {
         //     $('#image').html('<img src="' + topic + '" alt="" class="img-responsive d-block"/>');
         //     topic = '';
@@ -889,15 +890,15 @@ $this->title = $storyMatch->match_name;
         //     $('#image').html('');
         // }
 
-        if (obj[idx].hasOwnProperty('image') && obj[idx].image != undefined) {
-            $('#image').html('<img src="' + obj[idx].image + '" alt="" class=" img-w-100"/>');
+        if (mobj.hasOwnProperty('image') && mobj.image != undefined) {
+            $('#image').html('<img src="' + mobj.image + '" alt="" class=" img-w-100"/>');
             $('#image').show();
         } else {
             $('#image').html('');
             $('#image').hide();
         }
-        if (obj[idx].hasOwnProperty('extend') && obj[idx].extend != undefined && obj[idx].extend != '') {
-            $('#extend-content').html(obj[idx].extend);
+        if (mobj.hasOwnProperty('extend') && mobj.extend != undefined && mobj.extend != '') {
+            $('#extend-content').html(mobj.extend);
             $('.play_voice_extend').show();
         } else {
             $('#extend-content').html('');
