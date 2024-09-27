@@ -298,8 +298,6 @@ $this->title = '故事汇';
                     <input type="hidden" id="message-topic">
                     <input type="hidden" id="message-id">
                     <div id="message-content" class="fs-40 text-FF text-center bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
-                        <div id="message-content-ai" class="bold fs-28 message-content-ai" style="font-size: 28px; width: 80%;"></div>
-                        <div style="float: left;"><img src="/template/img/qa/btn_播放_nor@2x.png"></div>
                     </div>
                     <div id="message-question" style="height: 200px; overflow: auto;">
 <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" data-dismiss="modal" style="margin-top: 25px;">-->
@@ -440,14 +438,14 @@ $this->title = '故事汇';
             // $('#message-box').modal('show');
             // $('#message-box').modal('show');
 
-            if ($('#message-topic').val() == $('#topic').html()) {
-                return;
-            }
-            $('#message-content').html('正在思考……');
+            // if ($('#message-topic').val() == $('#topic').html()) {
+            //     return;
+            // }
+            // $('#message-content').html('正在思考……');
 
-            setTimeout(function () {
-                getSugg('');
-            }, 500);
+            // setTimeout(function () {
+            //     getSugg('');
+            // }, 500);
              $("#message-box").modal('show');
 
         });
@@ -547,6 +545,58 @@ $this->title = '故事汇';
 
     };
 
+    function getDocPart(userTxt = '') {
+        var story_id = $('input[name=story_id]').val();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
+        var title = $('input[name=mtitle]').val();
+        var desc = $('input[name=mdesc]').val();
+
+        $.ajax({
+            type: "POST", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_doc',
+            data: {
+                story_id: story_id,
+                user_id: user_id,
+                // messages: msg,
+                title: title,
+                desc: desc,
+                old: '',
+                user_txt: userTxt,
+            },
+            onload: function (data) {
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                thisObj.removeClass('play_voice_btn_disable');
+                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status) {
+                var dataContent = data;
+                var dataCon = $.toJSON(dataContent);
+                var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                console.log(ajaxObj);
+
+                $('#subdoc_content').html(ajaxObj.data.doc.CONTENT);
+
+                // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';
+                // $('#topic').append(cont)
+                //
+                // $('#score').html(ajaxObj.data.doc.SCORE);
+                // $('#size').html($('#topic').html().length);
+                // if (ajaxObj.data.doc.TITLE != undefined) {
+                //     $('#ctitle').html(ajaxObj.data.doc.TITLE);
+                //     $('#ctitle1').html(ajaxObj.data.doc.TITLE);
+                //     $('#mtitle').val(ajaxObj.data.doc.TITLE);
+                //     $('#mdesc').val(ajaxObj.data.doc.DESC);
+                // }
+            }
+        });
+    }
+
     function getDoc() {
         var story_id = $('input[name=story_id]').val();
         var level = $('input[name=level]').val();
@@ -610,6 +660,20 @@ $this->title = '故事汇';
                     $('#mtitle').val(ajaxObj.data.doc.TITLE);
                     $('#mdesc').val(ajaxObj.data.doc.DESC);
                 }
+
+                for (var i in ajaxObj.data.doc.QUES) {
+                    var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20 next-ques" style="margin-top: 25px;">';
+                    ques += '<label class="btn-green-m-choice active next-ques-btn " style="font-size: ' + size + 'px;">' + ajaxObj.data.doc.QUES[i]  + '</label>';
+                    ques += '</div>';
+                    console.log(ques);
+                    $('#message-content').append(ques);
+                };
+
+                $('.next-ques').click(function() {
+                    var thisObj = $(this).find('LABEL');
+
+                    getDocPart(thisObj.html());
+                });
             }
         });
     }

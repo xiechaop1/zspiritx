@@ -58,7 +58,8 @@ class Doubao extends Component
         return $ret;
 
     }
-    public function generateDoc($userMessage, $level = 0, $docTitle = '', $docDesc = '', $oldMessages = []) {
+
+    public function generateDoc($userMessage, $level = 0, $docTitle = '', $docDesc = '', $oldMessages = [], $userMsgExtend = '') {
         $gradeName = $this->_getGradeNameFromLevel($level);
 
         $roleTxt = '#角色' . "\n" . '你是一个语文方面精英教师，可以出作文题目，续写作文，给作文判分，标准按照小学毕业要求';
@@ -92,7 +93,7 @@ class Doubao extends Component
                 ],
             ], JSON_UNESCAPED_UNICODE);
 
-        $userMessage = implode("\n", $userMsgs) . "\n" . $userMessage . "\n" . '请继续接着完成作文，不超过50字。';
+        $userMessage = implode("\n", $userMsgs) . "\n" . $userMessage . "\n" . $userMsgExtend;
 
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
         return $ret;
@@ -468,9 +469,9 @@ class Doubao extends Component
             'temperature' => 1.6,
 //'prompt' => implode("\n", $templateContents),
 //            'stream' => false,
-//            "response_format" => [
-//                'type' => 'json_object',
-//            ],
+            "response_format" => [
+                'type' => 'json_object',
+            ],
         );
 //var_dump($data);exit;
 //        Yii::info('chatGPT data: ' . json_encode($data));

@@ -1545,9 +1545,11 @@ class MatchApi extends ApiAction
         $desc = !empty($this->_post['desc']) ? $this->_post['desc'] : '';
         $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
 
+        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不超过50字。';
+
         $old = json_decode($oldJson, true);
 
-        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old);
+        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
 
 
         return ['doc' => $genStory];
