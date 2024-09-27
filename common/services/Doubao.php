@@ -33,6 +33,71 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
+    public function generateDocTitles($level = 0, $desc = '', $ct = 4) {
+        $gradeName = $this->_getGradeNameFromLevel($level);
+
+        $roleTxt = '#角色' . "\n" . '你是一个语文方面精英教师，可以出作文题目，续写作文，给作文判分，标准按照小学毕业要求';
+
+        $extMessages = [];
+        $extMessages[] = '#任务描述和要求';
+        $extMessages[] = '你需要出' . $ct . '个作文题目，每个题目不超过20字，符合' . $gradeName . '的学生的认知水平';
+        $extMessages[] = '同时每个作文有对应的要求，不超过50字';
+        $extMessages[] = '用JSON的形式返回';
+        $extMessages[] = '#输出格式#' . json_encode([
+                'TITLE' => '作文标题',
+                'DESC' => '作文要求',
+            ], JSON_UNESCAPED_UNICODE);
+
+        if (!empty($desc)) {
+            $userMessage = '要求符合' . $desc . '的作文题目';
+        } else {
+            $userMessage = '';
+        }
+
+        $ret = $this->chatWithDoubao($userMessage, [], $extMessages, [$roleTxt]);
+        return $ret;
+
+    }
+    public function generateDoc($userMessage, $level = 0, $docTitle = '', $docDesc = '', $oldMessages = []) {
+        $gradeName = $this->_getGradeNameFromLevel($level);
+
+        $roleTxt = '#角色' . "\n" . '你是一个语文方面精英教师，可以出作文题目，续写作文，给作文判分，标准按照小学毕业要求';
+        $extMessages = [];
+        $extMessages[] = '#任务描述和要求';
+        $userMsgs = [];
+        if (!empty($docTitle)) {
+//            $extMessages[] = ['role' => 'assistant', 'content' => '作文题目：' . $docTitle];
+            $userMsgs[] = '作文题目：' . $docTitle;
+        }
+        if (!empty($docDesc)) {
+            $userMsgs[] = '作文要求：' . $docDesc;
+//            $extMessages[] = ['role' => 'assistant', 'content' => '作文要求：' . $docDesc];
+        }
+        $extMessages[] = '作文符合' . $gradeName . '的学生的认知水平';
+        $extMessages[] = '你根据作文题目和要求，续写作文，留出关键问题等待学生继续完成';
+        $extMessages[] = '然后你再根据现在的作文，给出4条可以续写的建议，每个不超过20字';
+        $extMessages[] = '然后你针对当前这篇作文的现状，进行评分，评分标准参考小学生毕业要求';
+        $extMessages[] = '所有数据以JSON返回';
+//        $extMessages[] = '作文题目和要求，作文内容，作文续写建议，作文评分结果，用JSON的形式返回';
+        $extMessages[] = '#输出格式#' . json_encode([
+                'TITLE' => '作文标题',
+                'DESC' => '作文要求',
+                'CONTENT' => '继续续写的作文内容',
+                'SCORE' => '当前作文评分',
+                'QUES' => [
+                    '作文续写建议1',
+                    '作文续写建议2',
+                    '作文续写建议3',
+                    '作文续写建议4',
+                ],
+            ], JSON_UNESCAPED_UNICODE);
+
+        $userMessage = implode("\n", $userMsgs) . "\n" . $userMessage . "\n" . '请继续接着完成作文，不超过50字。';
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+        return $ret;
+    }
+
     public function generateStory($userMessage, $level = 0, $storyTitle = '', $storyContent = '', $oldMessages = []) {
 
         $gradeName = $this->_getGradeNameFromLevel($level);
@@ -342,10 +407,13 @@ class Doubao extends Component
 
         $messages = [];
         if (!empty($userMessage)) {
-            $messages = array(
+            $userMsg = array(
 //            array('role' => 'system', 'content' => $roleTxt),
-                array('role' => 'user', 'content' => $userMessage)
+                array('role' => 'user', 'content' => $userMessage),
+//                array('role' => 'user', 'content' => '请继续续写作文'),
             );
+        } else {
+            $userMsg = [];
         }
 
 //        $templateMessages = array();
@@ -357,12 +425,22 @@ class Doubao extends Component
         }
 
         if (!empty($oldMessages)) {
-            array_unshift($oldMessages, ['role' => 'assistant', 'content' => '#历史消息']);
+//            array_unshift($oldMessages, ['role' => 'assistant', 'content' => '#历史消息']);
 //            array_unshift($oldMessages, ['role' => 'system', 'content' => '#历史消息']);
+//            foreach ($oldMessages as $oldMessage) {
+//                $oldMessageArray[] = [
+//                    'role' => 'assistant',
+//                    'content' => $oldMessage,
+//                    'prefix' => True,
+//                ];
+//            }
             $messages = array_merge($messages, $oldMessages);
+//            $messages += $oldMessageArray;
         }
-//        $messages = array_merge($templateMessages, $messages);
-        $messages = array_merge($messages, $templateMessages);
+        $messages = array_merge($templateMessages, $messages);
+//        $messages = array_merge($messages, $templateMessages);
+        $messages = array_merge($messages, $userMsg);
+//        var_dump($messages);exit;
         Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
         file_put_contents('/tmp/test_doubao_i.log', var_export($messages, true));
 //        if (!empty($oldMessages)) {
@@ -388,14 +466,21 @@ class Doubao extends Component
 //            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
             'temperature' => 1.6,
+//'prompt' => implode("\n", $templateContents),
 //            'stream' => false,
+//            "response_format" => [
+//                'type' => 'json_object',
+//            ],
         );
-
+//var_dump($data);exit;
 //        Yii::info('chatGPT data: ' . json_encode($data));
 
         // Todo: 替换掉Doubao接口
 //        $response = $this->_call('/v3/chat/completions', $data, 'POST');
         $response = $this->_call('/v1/chat/completions', $data, 'POST');
+//        var_dump($data);exit;
+//        $response = $this->_call('/beta/chat/completions', $data, 'POST');
+//        var_dump($response);exit;
 //        if (!empty($oldMessages)) {
 //            print_r($oldMessages);
 //            print_r($messages);
@@ -407,8 +492,12 @@ class Doubao extends Component
 //        exit;
 
         $tmpRet =  json_decode($response, true);
-        if (!empty($tmpRet['choices'][0]['message']['content'])) {
-            $msg = $tmpRet['choices'][0]['message']['content'];
+        $msg = !empty($tmpRet['choices'][0]['message']['content']) ? $tmpRet['choices'][0]['message']['content'] : '';
+        if (empty($msg)) {
+            $msg = !empty($tmpRet['choices'][0]['text']) ? $tmpRet['choices'][0]['text'] : '';
+        }
+        if ($msg) {
+//            $msg = $tmpRet['choices'][0]['message']['content'];
             if (!empty($msg)) {
                 $msg = str_replace('```json', '', $msg);
                 $msg = str_replace('```', '', $msg);
@@ -519,6 +608,9 @@ class Doubao extends Component
             'Authorization: Bearer ' . $this->apiKey
         );
 
+//        var_dump($params);
+//        exit;
+//        var_dump($url);
         if ($method == 'POST') {
             $response = Curl::curlPost($url, $params, $headers, true);
         } else {

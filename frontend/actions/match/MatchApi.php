@@ -45,13 +45,16 @@ class MatchApi extends ApiAction
 
     private $_get;
 
+    private $_post;
+
     public function run()
     {
         $this->_get = Yii::$app->request->get();
 
+        $this->_post = Yii::$app->request->post();
 
         try {
-            $this->_storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+            $this->_storyId = !empty($_REQUEST['story_id']) ? $_REQUEST['story_id'] : 0;
             if (empty($this->_storyId)) {
                 throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
             }
@@ -98,6 +101,14 @@ class MatchApi extends ApiAction
                     break;
                 case 'battle_for_u3d':
                     $ret = $this->battleForU3d();
+                    break;
+                case 'get_doc_subj':
+                    $needTs = false;
+                    $ret = $this->getDocSubj();
+                    break;
+                case 'get_doc':
+                    $needTs = false;
+                    $ret = $this->getDoc();
                     break;
                 default:
                     $ret = [];
@@ -1507,6 +1518,39 @@ class MatchApi extends ApiAction
         $ret['score'] = $scoreRet;
 
         return $ret;
+    }
+
+    public function getDocSubj() {
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 1;
+
+        $desc = !empty($this->_get['desc']) ? $this->_get['desc'] : '';
+
+        $title = Yii::$app->doubao->generateDocTitles($level, $desc, 4);
+
+        if (sizeof($title) < 4
+            && isset($title['TITLE'])
+        ) {
+            $title = [$title];
+        }
+
+        return [
+            'title' => $title,
+        ];
+    }
+
+    public function getDoc() {
+        $userTxt = !empty($this->_post['user_txt']) ? $this->_post['user_txt'] : '';
+        $level = !empty($this->_post['level']) ? $this->_post['level'] : 1;
+        $title = !empty($this->_post['title']) ? $this->_post['title'] : '';
+        $desc = !empty($this->_post['desc']) ? $this->_post['desc'] : '';
+        $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
+
+        $old = json_decode($oldJson, true);
+
+        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old);
+
+
+        return ['doc' => $genStory];
     }
 
 }

@@ -41,7 +41,7 @@ use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-class Stories extends Action
+class Docs extends Action
 {
 
     
@@ -123,21 +123,21 @@ class Stories extends Action
         $old = [];
 
         $userTxt = '但是我依然很喜欢春天！因为春天我就可以出门和小朋友一起玩耍了，我们跑上跑下，玩的不亦乐乎。';
-        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, '春来到', '春天来了，万物复苏，你眼中的春天是什么样的？请写一篇记叙文',
-            $old);
+//        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, '春来到', '春天来了，万物复苏，你眼中的春天是什么样的？请写一篇记叙文',
+//            $old);
 //        var_dump($genStory);exit;
-var_dump(date('Y-m-d H:i:s', time()));
-var_dump($old);
-echo "<br>";
-echo !empty($genStory['CONTENT']) ? $genStory['CONTENT'] : '';
-if (!is_array($genStory)) {
-    echo $genStory;
-} else {
-    var_dump($genStory);
-}
-        exit;
+//var_dump(date('Y-m-d H:i:s', time()));
+//var_dump($old);
+//echo "<br>";
+//echo !empty($genStory['CONTENT']) ? $genStory['CONTENT'] : '';
+//if (!is_array($genStory)) {
+//    echo $genStory;
+//} else {
+//    var_dump($genStory);
+//}
+//        exit;
 
-        return $this->controller->render('stories', [
+        return $this->controller->render('docs', [
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,
@@ -147,6 +147,7 @@ if (!is_array($genStory)) {
             'initTimer' => 60,
             'user' => $user,
             'userScore' => $userScore,
+            'level' => $level,
         ]);
     }
 
