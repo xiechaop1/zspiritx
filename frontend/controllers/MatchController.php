@@ -80,6 +80,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_doc',
             ],
+            'get_doc_score' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_doc_score',
+            ],
 
         ];
     }

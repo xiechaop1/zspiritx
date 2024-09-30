@@ -172,6 +172,10 @@ $this->title = '故事汇';
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
                     </div>
+                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        解析
+                    </div>
                 </div>
 
                 <div class="match-clock-bottom">
@@ -274,6 +278,29 @@ $this->title = '故事汇';
             <!--                        <span  class=" d-inline-block vertical-mid">很遗憾，挑战失败！</span>-->
             <div class="btn-m-green m-t-30  m-l-30 retry_btn">
                 再试一次
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="anaylze-info" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-lottery-bg">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
+                <img src="../../static/img/icon-close.png" class="img-40">
+            </span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="m-t-50">
+                    <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
+                        <img src="../../static/img/bg-lottery-text1.png" class="img-250">
+                    </div>
+                    <div class="fs-36  text-FF  text-center bold lottery-error-title">
+                        解析
+                    </div>
+
+                    <div id="message-anaylze" class="fs-40 text-FF text-center bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -456,6 +483,8 @@ $this->title = '故事汇';
                 return;
             }
 
+            $('#message-anaylze').val('');
+
             var cont = '<div class="doc_content doc_content_user" role="user">' + content + '</div>';
             $('#topic').append(cont)
             getDoc();
@@ -476,6 +505,22 @@ $this->title = '故事汇';
                 getSubj('');
             // }, 500);
             $("#extend-info").modal('show');
+
+        });
+
+        $('.anaylze-btn').click(function() {
+            // $('#message-box').modal('show');
+            // $('#message-box').modal('show');
+
+            if ($('#message-anaylze').val() != '') {
+                return;
+            }
+            // $('#extend-content').html('正在思考……');
+
+            // setTimeout(function () {
+            getDocScore();
+            // }, 500);
+            $("#anaylze-info").modal('show');
 
         });
 
@@ -552,6 +597,22 @@ $this->title = '故事汇';
         var title = $('input[name=mtitle]').val();
         var desc = $('input[name=mdesc]').val();
 
+        var oldsDiv = $('#topic').find('div');
+        var olds = [];
+        oldsDiv.each(function() {
+            var oldRole = $(this).attr('role');
+            var oldContent = $(this).html();
+
+            olds.push({
+                role: oldRole,
+                content: oldContent,
+            });
+            console.log(olds);
+        });
+
+        var old = $.toJSON(olds);
+        console.log(old);
+
         $.ajax({
             type: "POST", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -563,7 +624,7 @@ $this->title = '故事汇';
                 // messages: msg,
                 title: title,
                 desc: desc,
-                old: '',
+                old: old,
                 user_txt: userTxt,
             },
             onload: function (data) {
@@ -580,7 +641,7 @@ $this->title = '故事汇';
 
                 console.log(ajaxObj);
 
-                $('#subdoc_content').html(ajaxObj.data.doc.CONTENT);
+                $('#subdoc_content').val(ajaxObj.data.doc.CONTENT);
 
                 // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';
                 // $('#topic').append(cont)
@@ -595,6 +656,74 @@ $this->title = '故事汇';
                 // }
             }
         });
+    }
+
+    function getDocScore() {
+        var story_id = $('input[name=story_id]').val();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
+        var title = $('input[name=mtitle]').val();
+        var desc = $('input[name=mdesc]').val();
+
+        var oldsDiv = $('#topic').find('div');
+        var olds = [];
+
+        oldsDiv.each(function() {
+            var oldRole = $(this).attr('role');
+            var oldContent = $(this).html();
+
+            olds.push({
+                role: oldRole,
+                content: oldContent,
+            });
+            console.log(olds);
+        });
+
+        var old = $.toJSON(olds);
+        console.log(old);
+
+        $.ajax({
+            type: "POST", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_doc_score',
+            data: {
+                story_id: story_id,
+                user_id: user_id,
+                // messages: msg,
+                title: title,
+                desc: desc,
+                old: old,
+                user_txt: '',
+            },
+            onload: function (data) {
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                thisObj.removeClass('play_voice_btn_disable');
+                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status) {
+                var dataContent = data;
+                var dataCon = $.toJSON(dataContent);
+                var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                console.log(ajaxObj);
+
+                $('#message-anaylze').html(ajaxObj.data.ret);
+            }
+        });
+    }
+
+    function getDocSize() {
+        var topicObjs = $('#topic').find('div');
+        var size = 0;
+
+        topicObjs.each(function() {
+            size += $(this).html().length;
+        });
+
+        $('#size').html(size);
     }
 
     function getDoc() {
@@ -653,14 +782,20 @@ $this->title = '故事汇';
                 $('#topic').append(cont)
 
                 $('#score').html(ajaxObj.data.doc.SCORE);
-                $('#size').html($('#topic').html().length);
+                // $('#size').html($('#topic').html().length);
+                getDocSize();
+
+                console.log(ajaxObj.data.doc.TITLE);
                 if (ajaxObj.data.doc.TITLE != undefined) {
                     $('#ctitle').html(ajaxObj.data.doc.TITLE);
                     $('#ctitle1').html(ajaxObj.data.doc.TITLE);
-                    $('#mtitle').val(ajaxObj.data.doc.TITLE);
-                    $('#mdesc').val(ajaxObj.data.doc.DESC);
+                    $('input[name=mtitle]').val(ajaxObj.data.doc.TITLE);
+                    $('input[name=mdesc]').val(ajaxObj.data.doc.DESC);
                 }
+                console.log($('input[name=mtitle]').val());
+                console.log($('input[name=mdesc]').val());
 
+                $('#message-content').html('');
                 for (var i in ajaxObj.data.doc.QUES) {
                     var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20 next-ques" style="margin-top: 25px;">';
                     ques += '<label class="btn-green-m-choice active next-ques-btn " style="font-size: ' + size + 'px;">' + ajaxObj.data.doc.QUES[i]  + '</label>';
@@ -672,6 +807,8 @@ $this->title = '故事汇';
                 $('.next-ques').click(function() {
                     var thisObj = $(this).find('LABEL');
 
+                    $('#challenge-info').modal('hide');
+                    $('#subdoc_content').val('正在思考……');
                     getDocPart(thisObj.html());
                 });
             }

@@ -33,6 +33,46 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
+    public function generateDocScore($userMessage, $level = 0, $docTitle = '', $docDesc = '', $oldMessages = []) {
+        $gradeName = $this->_getGradeNameFromLevel($level);
+
+        $roleTxt = '#角色' . "\n" . '你是一个语文方面精英教师，可以出作文题目，续写作文，给作文判分，标准按照小学毕业要求';
+        $extMessages = [];
+        $extMessages[] = '#任务描述和要求';
+        $userMsgs = [];
+        if (!empty($docTitle)) {
+//            $extMessages[] = ['role' => 'assistant', 'content' => '作文题目：' . $docTitle];
+            $userMsgs[] = '作文题目：' . $docTitle;
+        }
+        if (!empty($docDesc)) {
+            $userMsgs[] = '作文要求：' . $docDesc;
+//            $extMessages[] = ['role' => 'assistant', 'content' => '作文要求：' . $docDesc];
+        }
+        $extMessages[] = '请参照' . $gradeName . '的学生的平均水平';
+        $extMessages[] = '针对作文打分';
+        $extMessages[] = '并且根据作文题目和要求，指正出作文的优点和不足，分别3个';
+        $extMessages[] = '所有数据以JSON返回';
+//        $extMessages[] = '作文题目和要求，作文内容，作文续写建议，作文评分结果，用JSON的形式返回';
+        $extMessages[] = '#输出格式#' . json_encode([
+                'TITLE' => '作文标题',
+                'DESC' => '作文要求',
+                'SCORE' => '当前作文评分',
+                'GOOD' => [
+                    '作文优点1',
+                    '作文优点2',
+                    '作文优点3',
+                ],
+                'BAD' => [
+                    '作文不足1',
+                    '作文不足2',
+                    '作文不足3',
+                ],
+            ], JSON_UNESCAPED_UNICODE);
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+
+        return $ret;
+    }
     public function generateDocTitles($level = 0, $desc = '', $ct = 4) {
         $gradeName = $this->_getGradeNameFromLevel($level);
 
@@ -96,6 +136,7 @@ class Doubao extends Component
         $userMessage = implode("\n", $userMsgs) . "\n" . $userMessage . "\n" . $userMsgExtend;
 
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+
         return $ret;
     }
 

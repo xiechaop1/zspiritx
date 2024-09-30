@@ -43,7 +43,17 @@ echo \dmstr\widgets\Alert::widget();
             echo $form->field($models, 'width')->textInput(['value' => $models->width])->label('宽');
             echo $form->field($models, 'height')->textInput(['value' => $models->height])->label('高');
             echo $form->field($models, 'is_active')->inline(true)->radioList(\common\models\Models::$isActive2Name, ['value' => $models->is_active])->label('是否动画');
-            echo $form->field($models, 'model_desc')->textarea(['value' => $models->model_desc])->label('描述');
+
+            if (!empty($models->model_desc)) {
+                $modelDesc = \common\helpers\Common::decodeJsonToVarexport($models->model_desc, false);
+                // 去掉数组中下标
+                // 让数组内容在textarea中文本显示
+                $modelDesc = preg_replace('/\s*\d+\s*=>\s*/', "\n", $modelDesc);
+            } else {
+                $modelDesc = '';
+            }
+
+            echo $form->field($models, 'model_desc')->textarea(['value' => $modelDesc])->label('描述');
 
 
 //            echo $form->field($models, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [

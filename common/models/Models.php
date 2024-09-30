@@ -21,10 +21,12 @@ class Models extends \common\models\gii\Models
 
     const MODEL_TYPE_NORMAL = 1;    // 普通
     const MODEL_TYPE_PARTICLE = 2;  // 粒子
+    const MODEL_TYPE_SOUND = 3;     // 音效
 
     public static $modelType2Name = [
         self::MODEL_TYPE_NORMAL => '普通',
         self::MODEL_TYPE_PARTICLE => '粒子',
+        self::MODEL_TYPE_SOUND => '音效',
     ];
 
     public function behaviors()

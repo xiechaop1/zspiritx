@@ -110,6 +110,10 @@ class MatchApi extends ApiAction
                     $needTs = false;
                     $ret = $this->getDoc();
                     break;
+                case 'get_doc_score':
+                    $needTs = false;
+                    $ret = $this->getDocScore();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -1520,6 +1524,48 @@ class MatchApi extends ApiAction
         return $ret;
     }
 
+    public function getDocScore() {
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 1;
+        $desc = !empty($this->_get['desc']) ? $this->_get['desc'] : '';
+        $title = !empty($this->_get['title']) ? $this->_get['title'] : '';
+
+        $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
+
+        $olds = json_decode($oldJson, true);
+
+        $doc = '';
+        if (!empty($olds)) {
+            foreach ($olds as $old) {
+                $doc .= $old['content'] . "\n";
+            }
+        }
+
+
+        $scoreData = Yii::$app->doubao->generateDocScore($doc, $level, $title, $desc);
+
+        $ret = '';
+        if (!empty($scoreData) && is_array($scoreData)) {
+            $ret = '优点';
+            if (!empty($scoreData['GOOD'])) {
+                foreach ($scoreData['GOOD'] as $good) {
+                    $ret .= "<br>" . $good;
+                }
+            }
+            $ret .= '<br><br>';
+            $ret .= '问题';
+            if (!empty($scoreData['BAD'])) {
+                foreach ($scoreData['BAD'] as $bad) {
+                    $ret .= "<br>" . $bad;
+                }
+            }
+        }
+
+        return [
+            'score' => $scoreData,
+            'ret' => $ret,
+        ];
+    }
+
     public function getDocSubj() {
         $level = !empty($this->_get['level']) ? $this->_get['level'] : 1;
 
@@ -1545,12 +1591,22 @@ class MatchApi extends ApiAction
         $desc = !empty($this->_post['desc']) ? $this->_post['desc'] : '';
         $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
 
-        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不超过50字。';
+        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不用重复之前的内容，不超过50字。';
 
         $old = json_decode($oldJson, true);
 
         $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
-
+//var_dump($genStory);
+        if (!empty($genStory['CONTENT'])) {
+            if (!empty($old)) {
+                foreach ($old as $o) {
+                    $oldContent = $o['content'];
+//                    var_dump($oldContent);
+                    $genStory['CONTENT'] = str_replace($oldContent, '', $genStory['CONTENT']);
+                }
+            }
+        }
+//var_dump($genStory);
 
         return ['doc' => $genStory];
     }

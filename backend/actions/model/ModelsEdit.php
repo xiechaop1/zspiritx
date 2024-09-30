@@ -61,7 +61,12 @@ class ModelsEdit extends Action
 
             $model->load(Yii::$app->request->post());
 
+            if (!empty($model->model_desc)) {
+                $model->model_desc = \common\helpers\Common::encodeJson($model->model_desc);
+            }
+
             if ($model->validate()) {
+
 
                 if ($model->save()) {
 
