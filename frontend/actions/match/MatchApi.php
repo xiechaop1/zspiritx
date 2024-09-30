@@ -1545,17 +1545,17 @@ class MatchApi extends ApiAction
 
         $ret = '';
         if (!empty($scoreData) && is_array($scoreData)) {
-            $ret = '优点';
+            $ret = '<div class="score_good_title">优点</div>';
             if (!empty($scoreData['GOOD'])) {
                 foreach ($scoreData['GOOD'] as $good) {
-                    $ret .= "<br>" . $good;
+                    $ret .= "<li>" . $good . "</li>";
                 }
             }
             $ret .= '<br><br>';
-            $ret .= '问题';
+            $ret .= '<div class="score_good_title">问题</div>';
             if (!empty($scoreData['BAD'])) {
                 foreach ($scoreData['BAD'] as $bad) {
-                    $ret .= "<br>" . $bad;
+                    $ret .= "<li>" . $bad . "</li>";
                 }
             }
         }

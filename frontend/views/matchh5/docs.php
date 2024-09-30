@@ -93,6 +93,19 @@ $this->title = '故事汇';
         margin: 0px;
         padding: 0px;
     }
+
+    .score_good_title {
+        font-size: 28px;
+        color: #FFD700;
+        font-weight: bold;
+    }
+
+    .score_bad_title {
+        font-size: 28px;
+        color: #FFD700;
+        font-weight: bold;
+    }
+
 </style>
 <audio autoplay loop>
     <source src="" type="audio/mpeg">
@@ -298,7 +311,7 @@ $this->title = '故事汇';
                         解析
                     </div>
 
-                    <div id="message-anaylze" class="fs-40 text-FF text-center bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                    <div id="message-anaylze" class="fs-24 text-FF text-left bold m-t-50 lottery-content" style="height: 600px; line-height: 125%; overflow: auto;">
                     </div>
                 </div>
             </div>
@@ -483,7 +496,7 @@ $this->title = '故事汇';
                 return;
             }
 
-            $('#message-anaylze').val('');
+            $('#message-anaylze').html('');
 
             var cont = '<div class="doc_content doc_content_user" role="user">' + content + '</div>';
             $('#topic').append(cont)
@@ -512,7 +525,7 @@ $this->title = '故事汇';
             // $('#message-box').modal('show');
             // $('#message-box').modal('show');
 
-            if ($('#message-anaylze').val() != '') {
+            if ($('#message-anaylze').html() != '') {
                 return;
             }
             // $('#extend-content').html('正在思考……');
