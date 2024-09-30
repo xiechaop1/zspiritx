@@ -46,14 +46,11 @@ echo \dmstr\widgets\Alert::widget();
 
             if (!empty($models->model_desc)) {
                 $modelDesc = \common\helpers\Common::decodeJsonToVarexport($models->model_desc, false);
-                // 去掉数组中下标
-                // 让数组内容在textarea中文本显示
-                $modelDesc = preg_replace('/\s*\d+\s*=>\s*/', "\n", $modelDesc);
             } else {
                 $modelDesc = '';
             }
 
-            echo $form->field($models, 'model_desc')->textarea(['value' => $modelDesc])->label('描述');
+            echo $form->field($models, 'model_desc')->textarea(['value' => $modelDesc, 'rows' => 20])->label('描述');
 
 
 //            echo $form->field($models, 'chorus_url')->widget('\liyifei\uploadOSS\FileUploadOSS', [
