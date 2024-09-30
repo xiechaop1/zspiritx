@@ -192,9 +192,9 @@ $this->title = '故事汇';
                 </div>
 
                 <div class="match-clock-bottom">
-                    <div class="match-clock-bottom-left">
-                        标题：<span class="text-1" id="ctitle1"></span>
-                    </div>
+<!--                    <div class="match-clock-bottom-left">-->
+<!--                        标题：<span class="text-1" id="ctitle1"></span>-->
+<!--                    </div>-->
                     <div class="match-clock-bottom-right">
                         分数
                         <span class="text-1" id="score">0</span>/字数
@@ -801,7 +801,7 @@ $this->title = '故事汇';
                 console.log(ajaxObj.data.doc.TITLE);
                 if (ajaxObj.data.doc.TITLE != undefined) {
                     $('#ctitle').html(ajaxObj.data.doc.TITLE);
-                    $('#ctitle1').html(ajaxObj.data.doc.TITLE);
+                    // $('#ctitle1').html(ajaxObj.data.doc.TITLE);
                     $('input[name=mtitle]').val(ajaxObj.data.doc.TITLE);
                     $('input[name=mdesc]').val(ajaxObj.data.doc.DESC);
                 }
@@ -885,7 +885,7 @@ $this->title = '故事汇';
                         $('input[name=mtitle]').val(mtitle);
                         $('input[name=mdesc]').val(mdesc);
                         $('#ctitle').html(mtitle);
-                        $('#ctitle1').html(mtitle);
+                        // $('#ctitle1').html(mtitle);
 
                         getDoc();
                         $("#extend-info").modal('hide');
