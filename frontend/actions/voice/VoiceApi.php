@@ -29,6 +29,7 @@ use common\models\UserList;
 use common\models\UserScore;
 use common\models\UserStory;
 use frontend\actions\ApiAction;
+use OSS\Core\OssException;
 use yii;
 
 class VoiceApi extends ApiAction
@@ -91,7 +92,11 @@ class VoiceApi extends ApiAction
         $config['endpoint'] = Yii::$app->params['oss.endpoint'];
         $config['bucket'] = Yii::$app->params['oss.bucket'];
 
-        $up = new Uploader('file', $config);
+        try {
+            $up = new Uploader('file', $config);
+        } catch (OssException $e) {
+            return $this->fail($e->getMessage());
+        }
 
         var_dump($up->getFileInfo());
         exit;
