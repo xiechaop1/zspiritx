@@ -71,14 +71,16 @@ class VoiceApi extends ApiAction
 
     public function input()
     {
-        $wavData = $_POST['data'];
+//        $wavData = $_POST['data'];
+//
+//        $tmpFile = '/tmp/' . md5(time()) . '.wav';
+//        $tmpFileHanlder = fopen($tmpFile, 'w');
+//        fwrite($tmpFileHanlder, $wavData);
+//        fclose($tmpFileHanlder);
 
-        $tmpFile = '/tmp/' . md5(time()) . '.wav';
-        $tmpFileHanlder = fopen($tmpFile, 'w');
-        fwrite($tmpFileHanlder, $wavData);
-        fclose($tmpFileHanlder);
+//        return $this->_upload($this->dirPrefix);
 
-        return $this->_upload($this->dirPrefix);
+        $this->_upload($this->dirPrefix);
     }
 
     public function _upload($dirPrefix){
