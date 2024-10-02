@@ -94,7 +94,7 @@ class VoiceApi extends ApiAction
 
         try {
             $up = new Uploader('file', $config);
-        } catch (OssException $e) {
+        } catch (\Exception $e) {
             return $this->fail($e->getMessage());
         }
 
