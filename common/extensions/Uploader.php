@@ -63,6 +63,7 @@ class Uploader
     public function __construct($fileField, $config, $type = "upload")
     {
         $this->_ossClient = new OssClient($config['accessKeyId'], $config['accessKeySecret'], $config['endpoint'], false);
+        var_dump($this->_ossClient);exit;
         $this->_bucket = $config['bucket'];
 
         $this->fileField = $fileField;
