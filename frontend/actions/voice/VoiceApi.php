@@ -92,6 +92,10 @@ class VoiceApi extends ApiAction
         $config['endpoint'] = Yii::$app->params['oss.endpoint'];
         $config['bucket'] = Yii::$app->params['oss.bucket'];
         $config['pathFormat'] = $dirPrefix . '/{yyyy}{mm}{dd}/{time}{rand:6}';
+        $config['pathRoot'] = '/';
+        $config['maxSize'] = 1024 * 1024 * 10;
+        $config['allowFiles'] = ['.wav', '.mp3', '.amr', '.m4a', '.aac', '.flac', '.ogg', '.wma', '.ape', '.aiff', '.au', '.m4r', '.m4b', '.m4p', '.m4v'];
+        $config['fieldName'] = 'fileUpload';
 
         try {
             $up = new Uploader('fileUpload', $config);
