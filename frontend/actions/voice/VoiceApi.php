@@ -91,6 +91,7 @@ class VoiceApi extends ApiAction
         $config['accessKeySecret'] = Yii::$app->params['oss.accesskeysecret'];
         $config['endpoint'] = Yii::$app->params['oss.endpoint'];
         $config['bucket'] = Yii::$app->params['oss.bucket'];
+        $config['pathFormat'] = $dirPrefix . '/{yyyy}{mm}{dd}/{time}{rand:6}';
 
         try {
             $up = new Uploader('fileUpload', $config);
