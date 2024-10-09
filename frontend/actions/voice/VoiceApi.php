@@ -93,7 +93,7 @@ class VoiceApi extends ApiAction
         $config['bucket'] = Yii::$app->params['oss.bucket'];
 
         try {
-            $up = new Uploader('file', $config);
+            $up = new Uploader('fileUpload', $config);
         } catch (\Exception $e) {
             return $this->fail($e->getMessage());
         }
