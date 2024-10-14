@@ -185,7 +185,11 @@ class Model
 
                             if (!empty($res) && is_array($res)) {
                                 foreach ($res as &$row) {
-                                    $row = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row, false);
+                                    if (!empty($row['ABUrl'])) {
+                                        $row['ABUrl'] = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row['ABUrl'], false);
+                                    } else {
+                                        $row = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row, false);
+                                    }
                                 }
                             }
                         }
