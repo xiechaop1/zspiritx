@@ -34,6 +34,7 @@ class Curl
 
         }
 
+
         $ch = curl_init ();
 
         curl_setopt ( $ch, CURLOPT_POST, 1 );
@@ -48,11 +49,20 @@ class Curl
 
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $postFields );
 
-        if (!empty($opts)) {
-            foreach ($opts as $key => $value) {
-                curl_setopt($ch, $key, $value);
-            }
+        if (!empty($opts['CURLOPT_CONNECTTIMEOUT'])) {
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $opts['CURLOPT_CONNECTTIMEOUT']);
         }
+
+        if (!empty($opts['CURLOPT_TIMEOUT'])) {
+            curl_setopt($ch, CURLOPT_TIMEOUT, $opts['CURLOPT_TIMEOUT']);
+        }
+
+
+//        if (!empty($opts)) {
+//            foreach ($opts as $key => $value) {
+//                curl_setopt($ch, $key, $value);
+//            }
+//        }
 
         $result = curl_exec ( $ch );
 

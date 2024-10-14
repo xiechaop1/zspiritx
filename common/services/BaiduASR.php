@@ -116,35 +116,35 @@ class BaiduASR extends Component
             "channel" => 1,
         );
 
-//        $response = $this->_getPostApi(self::ASR_URL, $params);
+        $response = $this->_getPostApi(self::ASR_URL, $params);
 
-        $json_array = json_encode($params);
-        $headers[] = "Content-Length: ".strlen($json_array);
-        $headers[] = 'Content-Type: application/json; charset=utf-8';
-
-        /** 拼接参数结束 **/
-
-        /** asr 请求开始 **/
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::ASR_URL);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60); // 识别时长不超过原始音频
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json_array);
-        curl_setopt($ch, CURLOPT_VERBOSE, self::DEMO_CURL_VERBOSE);
-        $res = curl_exec($ch);
-        if(curl_errno($ch))
-        {
-            echo curl_error($ch);
-            exit (2);
-        }
-        curl_close($ch);
-        /** asr 请求结束 **/
-
-        $response = json_decode($res, true);
+//        $json_array = json_encode($params);
+//        $headers[] = "Content-Length: ".strlen($json_array);
+//        $headers[] = 'Content-Type: application/json; charset=utf-8';
+//
+//        /** 拼接参数结束 **/
+//
+//        /** asr 请求开始 **/
+//
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, self::ASR_URL);
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//        curl_setopt($ch, CURLOPT_POST, true);
+//        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+//        curl_setopt($ch, CURLOPT_TIMEOUT, 60); // 识别时长不超过原始音频
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $json_array);
+//        curl_setopt($ch, CURLOPT_VERBOSE, self::DEMO_CURL_VERBOSE);
+//        $res = curl_exec($ch);
+//        if(curl_errno($ch))
+//        {
+//            echo curl_error($ch);
+//            exit (2);
+//        }
+//        curl_close($ch);
+//        /** asr 请求结束 **/
+//
+//        $response = json_decode($res, true);
         file_put_contents("/tmp/asr.log", json_encode($response, JSON_UNESCAPED_UNICODE));
 
         if (isset($response['err_no']) && $response['err_no'] == 0){
@@ -199,8 +199,8 @@ class BaiduASR extends Component
 
     private function _getPostApi($uri, $postParams = []) {
         $opts = [
-            CURLOPT_CONNECTTIMEOUT => 5,
-            CURLOPT_TIMEOUT => 60
+            'CURLOPT_CONNECTTIMEOUT' => 5,
+            'CURLOPT_TIMEOUT' => 60,
         ];
 
         $ret = Curl::curlPost($uri, $postParams, [], true, $opts);
