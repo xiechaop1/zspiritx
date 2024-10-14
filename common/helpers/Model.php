@@ -188,6 +188,13 @@ class Model
                             }
                         }
                     }
+                    if ($platform == 'assetBundles') {
+                        if (!empty($res['editor'])) {
+                            foreach ($res['editor'] as &$row) {
+                                $row['ABUrl'] = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row['ABUrl'], false);
+                            }
+                        }
+                    }
                     $ret[$type][$platform] = $res;
                 }
             }
