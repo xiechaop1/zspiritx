@@ -92,8 +92,8 @@ class VoiceApi extends ApiAction
             $time1 = time();
             $r = Yii::$app->baiduASR->asrByFile($file['tmp_name']);
             $time2 = time();
-            if (!empty($r['result'])) {
-                var_dump($r['result']);
+            if (!empty($r['result'][0])) {
+                var_dump($r['result'][0]);
                 var_dump($time2 - $time1);
             } else {
                 var_dump($r);
