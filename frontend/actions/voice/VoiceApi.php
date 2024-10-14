@@ -87,7 +87,7 @@ class VoiceApi extends ApiAction
 
     public function analysisVoice() {
 
-        $file = $this->file = $_FILES['fileUpload'];
+        $file = $_FILES['fileUpload'];
         $r = Yii::$app->baiduASR->asrByFile($file['tmp_name']);
         var_dump($r);
     }
