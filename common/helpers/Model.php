@@ -189,8 +189,8 @@ class Model
                                 }
                             }
                         }
-                        if ($type == 'assetBundles' && $platform == 'editor' && !empty($res['editor'])) {
-                            foreach ($res['editor'] as &$row) {
+                        if ($type == 'assetBundles' && $platform == 'editor' && !empty($res)) {
+                            foreach ($res as &$row) {
                                 $row['ABUrl'] = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row['ABUrl'], false);
                             }
                         }
