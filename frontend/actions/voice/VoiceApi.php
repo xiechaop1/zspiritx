@@ -90,7 +90,11 @@ class VoiceApi extends ApiAction
         $file = $_FILES['fileUpload'];
         try {
             $r = Yii::$app->baiduASR->asrByFile($file['tmp_name']);
-            var_dump($r);
+            if (!empty($r['result'])) {
+                var_dump($r['result']);
+            } else {
+                var_dump($r);
+            }
         } catch (\Exception $e) {
             return $this->fail($e->getMessage());
         }
