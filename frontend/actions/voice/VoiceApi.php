@@ -89,9 +89,12 @@ class VoiceApi extends ApiAction
 
         $file = $_FILES['fileUpload'];
         try {
+            $time1 = time();
             $r = Yii::$app->baiduASR->asrByFile($file['tmp_name']);
+            $time2 = time();
             if (!empty($r['result'])) {
                 var_dump($r['result']);
+                var_dump($time2 - $time1);
             } else {
                 var_dump($r);
             }
