@@ -180,12 +180,12 @@ class Model
             foreach ($resourcesArr as $type => $allPlatforms) {
 
                 foreach ($allPlatforms as $platform => $res) {
-                    if (!in_array($platform, ['ios','huawei'])) {
-                        continue;
-                    }
-                    if (!empty($res) && is_array($res)) {
-                        foreach ($res as &$row) {
-                            $row = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row, false);
+                    if (in_array($platform, ['ios','huawei'])) {
+
+                        if (!empty($res) && is_array($res)) {
+                            foreach ($res as &$row) {
+                                $row = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row, false);
+                            }
                         }
                     }
                     $ret[$type][$platform] = $res;
