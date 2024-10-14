@@ -49,8 +49,15 @@ class Matchh5Asset extends AssetBundle
         self::HOST . 'js/jquery.SuperSlide.2.1.3.js',
         'html/h5/app.js',
         'html/h5/match.js',
+//        'html/iat-js/example/crypto-js.js',
+//        'html/iat-js/dist/index.umd.js',
+//        'html/iat-js/example/iat/index.js',
+//        'html/iat-js/example/iat/input-file.js',
 //        'html/h5/jquery-hashtable.js',
         ];
-
+//<script src="/template/html/iat-js/example/crypto-js.js"></script>
+//<script src="/template/html/iat-js/dist/index.umd.js"></script>
+//<script src="/template/html/iat-js/example/iat/index.js"></script>
+//<script src="/template/html/iat-js/example/iat/input-file.js"></script>
 
 }

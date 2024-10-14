@@ -209,6 +209,7 @@ $this->title = '故事汇';
                     <span style="float: left;"><textarea style="border: 0px; width:500px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
                     <span style="float: left; margin-left: 20px;"><input id="subdoc" type="button" style="color: black;
                     font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="发布"></span>
+<!--                    <button id="btn_control">开始录音</button><div id="result"></div>-->
                 </div>
 
 <!--                <div class="answer-border2 worry">-->
@@ -1143,3 +1144,13 @@ $this->title = '故事汇';
 
 
 </script>
+
+<script>
+    var APPID = "086cfb85";
+    var API_SECRET = "NjkzYTZmMDM4MDM2ZWU5YzQ3YWU4ODcw";
+    var API_KEY = "ae2d2fbcef0f40638bc7f763c458cede";
+</script>
+<!--<script src="/template/html/iat-js/example/crypto-js.js"></script>-->
+<!--<script src="/template/html/iat-js/dist/index.umd.js"></script>-->
+<!--<script src="/template/html/iat-js/example/iat/index.js"></script>-->
+<!--<script src="/template/html/iat-js/example/iat/input-file.js"></script>-->
