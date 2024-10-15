@@ -181,7 +181,7 @@ class Model
 
                 if (is_array($allPlatforms)) {
                     foreach ($allPlatforms as $platform => $res) {
-                        if (in_array($platform, ['ios', 'huawei'])) {
+                        if (in_array($platform, ['ios', 'huawei', 'android'])) {
 
                             if (!empty($res) && is_array($res)) {
                                 foreach ($res as &$row) {
