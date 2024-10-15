@@ -43,7 +43,7 @@ class Xunfei extends Component
      */
     private function sign($api_key, $api_secret, $time)
     {
-        $signature_origin = 'host: ws-api.xfyun.cn' . "\n";
+        $signature_origin = 'host: iat-api.xfyun.cn' . "\n";
         $signature_origin .= 'date: ' . $time . "\n";
         $signature_origin .= 'GET /v2/iat HTTP/1.1';
         $signature_sha = hash_hmac('sha256', $signature_origin, $api_secret, true);
@@ -51,6 +51,7 @@ class Xunfei extends Component
         $authorization_origin = 'api_key="' . $api_key . '", algorithm="hmac-sha256", ';
         $authorization_origin .= 'headers="host date request-line", signature="' . $signature_sha . '"';
         $authorization = base64_encode($authorization_origin);
+        $authorization = urlencode($authorization);
         return $authorization;
     }
 
@@ -65,7 +66,7 @@ class Xunfei extends Component
         $url = 'wss://tts-api.xfyun.cn/v2/iat';
         $time = date('D, d M Y H:i:s', strtotime('-8 hour')) . ' GMT';
         $authorization = $this->sign($api_key, $api_secret, $time);
-        $url .= '?' . 'authorization=' . $authorization . '&date=' . urlencode($time) . '&host=ws-api.xfyun.cn';
+        $url .= '?' . 'authorization=' . $authorization . '&date=' . urlencode($time) . '&host=iat-api.xfyun.cn';
         return $url;
     }
 
