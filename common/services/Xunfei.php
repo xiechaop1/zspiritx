@@ -63,7 +63,7 @@ class Xunfei extends Component
      */
     private function createUrl($api_key, $api_secret)
     {
-        $url = 'wss://tts-api.xfyun.cn/v2/iat';
+        $url = 'wss://iat-api.xfyun.cn/v2/iat';
         $time = date('D, d M Y H:i:s', strtotime('-8 hour')) . ' GMT';
         $authorization = $this->sign($api_key, $api_secret, $time);
         $url .= '?' . 'authorization=' . $authorization . '&date=' . urlencode($time) . '&host=iat-api.xfyun.cn';
