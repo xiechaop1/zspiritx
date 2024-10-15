@@ -176,6 +176,7 @@ class ComposerStaticInit5328f6d896bc8c09e74445741cc3dc2a
         'W' => 
         array (
             'WechatPay\\GuzzleMiddleware\\' => 27,
+            'WebSocket\\' => 10,
         ),
         'S' => 
         array (
@@ -479,6 +480,10 @@ class ComposerStaticInit5328f6d896bc8c09e74445741cc3dc2a
         'WechatPay\\GuzzleMiddleware\\' => 
         array (
             0 => __DIR__ . '/..' . '/wechatpay/wechatpay-guzzle-middleware/src',
+        ),
+        'WebSocket\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/textalk/websocket/lib',
         ),
         'Symfony\\Polyfill\\Php72\\' => 
         array (

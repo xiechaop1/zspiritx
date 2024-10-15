@@ -9,27 +9,8 @@
 namespace frontend\actions\voice;
 
 
-use common\definitions\Common;
-use common\definitions\ErrorCode;
 use common\extensions\Uploader;
-use common\models\Actions;
-use common\models\ItemKnowledge;
-use common\models\LotteryPrize;
-use common\models\Qa;
-use common\models\SessionQa;
-use common\models\StoryStages;
-use common\models\UserKnowledge;
-use common\models\UserLottery;
-use common\models\UserModels;
-use common\models\UserPrize;
-use common\models\UserQa;
-use common\models\User;
-//use liyifei\base\actions\ApiAction;
-use common\models\UserList;
-use common\models\UserScore;
-use common\models\UserStory;
 use frontend\actions\ApiAction;
-use OSS\Core\OssException;
 use yii;
 
 class VoiceApi extends ApiAction
@@ -56,7 +37,13 @@ class VoiceApi extends ApiAction
 
             switch ($this->action) {
                 case 'input':
-                    $ret = $this->input();
+//                    $ret = $this->input();
+                    // Todo: 临时处理，测试用
+                    $ret = $this->ws();
+
+                    break;
+                case 'ws':
+                    $ret = $this->ws();
                     break;
                 default:
                     $ret = [];
@@ -70,6 +57,19 @@ class VoiceApi extends ApiAction
         return $this->success($ret);
     }
 
+    public function ws() {
+        $file = $_FILES['fileUpload'];
+        try {
+            $time1 = time();
+            $r = Yii::$app->xunfei->sendByFile($file['tmp_name']);
+            $time2 = time();
+            var_dump($time2 - $time1);
+            var_dump($r);
+        } catch (\Exception $e) {
+            return $this->fail($e->getMessage());
+        }
+    }
+
     public function input()
     {
 //        $wavData = $_POST['data'];
@@ -81,7 +81,26 @@ class VoiceApi extends ApiAction
 
 //        return $this->_upload($this->dirPrefix);
 
-        $this->_upload($this->dirPrefix);
+//        $this->_upload($this->dirPrefix);
+        $this->analysisVoice();
+    }
+
+    public function analysisVoice() {
+
+        $file = $_FILES['fileUpload'];
+        try {
+            $time1 = time();
+            $r = Yii::$app->baiduASR->asrByFile($file['tmp_name']);
+            $time2 = time();
+            if (!empty($r['result'][0])) {
+                var_dump($r['result'][0]);
+                var_dump($time2 - $time1);
+            } else {
+                var_dump($r);
+            }
+        } catch (\Exception $e) {
+            return $this->fail($e->getMessage());
+        }
     }
 
     public function _upload($dirPrefix){

@@ -62,6 +62,7 @@ return array(
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Zxing\\' => array($vendorDir . '/khanamiryan/qrcode-detector-decoder/lib'),
     'WechatPay\\GuzzleMiddleware\\' => array($vendorDir . '/wechatpay/wechatpay-guzzle-middleware/src'),
+    'WebSocket\\' => array($vendorDir . '/textalk/websocket/lib'),
     'Symfony\\Polyfill\\Php72\\' => array($vendorDir . '/symfony/polyfill-php72'),
     'Symfony\\Polyfill\\Php70\\' => array($vendorDir . '/symfony/polyfill-php70'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),

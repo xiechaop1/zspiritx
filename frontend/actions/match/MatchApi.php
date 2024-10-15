@@ -357,6 +357,14 @@ class MatchApi extends ApiAction
         ];
         $createPlayerScenario[] = [
             'performerId' => 'WorldRoot',
+            'animationName' => 'Move',
+            'animationArgs' => 'Camera',
+            'moveZ' => 2,
+            'moveY' => -1,
+            'directionY' => 90,
+        ];
+        $createPlayerScenario[] = [
+            'performerId' => 'WorldRoot',
             'animationName' => 'Dark',
             'scale' => 100000,
         ];
