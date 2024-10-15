@@ -116,7 +116,7 @@ class Xunfei extends Component
 
             $connector = $this->createConnection();
             $connector->setFragmentSize(1280);
-            $connector->send($params);
+            $connector->send(json_encode($params, true));
 
             usleep(50);
             $endTag = self::END_TAG;
