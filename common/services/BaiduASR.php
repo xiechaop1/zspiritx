@@ -42,9 +42,10 @@ class BaiduASR extends Component
     //const LM_ID = 1234 ;
 
     # 极速版需要打开以下信息 打开注释的话请填写自己申请的appkey appSecret ，并在网页中开通极速版（开通后可能会收费）
-    const ASR_URL = "http://vop.baidu.com/pro_api";
+    const ASR_URL = "http://vop.baidu.com/server_api";
     const DEV_PID = 80001;
-    const SCOPE = 'brain_enhanced_asr';  // 有此scope表示有极速版能力，没有请在网页里开通极速版
+//    const SCOPE = 'brain_enhanced_asr';  // 有此scope表示有极速版能力，没有请在网页里开通极速版
+    const SCOPE = 'audio_voice_assistant_get';
 
     //const SCOPE = false; // 部分历史应用没有加入scope，设为false忽略检查
 

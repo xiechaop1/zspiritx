@@ -9,27 +9,10 @@
 namespace frontend\actions\voice;
 
 
-use common\definitions\Common;
-use common\definitions\ErrorCode;
 use common\extensions\Uploader;
-use common\models\Actions;
-use common\models\ItemKnowledge;
-use common\models\LotteryPrize;
-use common\models\Qa;
-use common\models\SessionQa;
-use common\models\StoryStages;
-use common\models\UserKnowledge;
-use common\models\UserLottery;
-use common\models\UserModels;
-use common\models\UserPrize;
-use common\models\UserQa;
-use common\models\User;
-//use liyifei\base\actions\ApiAction;
-use common\models\UserList;
-use common\models\UserScore;
-use common\models\UserStory;
 use frontend\actions\ApiAction;
-use OSS\Core\OssException;
+use Ratchet\WebSocket\WsConnection;
+use React\EventLoop\Factory;
 use yii;
 
 class VoiceApi extends ApiAction
@@ -58,6 +41,9 @@ class VoiceApi extends ApiAction
                 case 'input':
                     $ret = $this->input();
                     break;
+//                case 'ws':
+//                    $ret = $this->ws();
+//                    break;
                 default:
                     $ret = [];
                     break;
@@ -69,6 +55,11 @@ class VoiceApi extends ApiAction
 
         return $this->success($ret);
     }
+
+//    public function ws() {
+//        $loop = Factory::create();
+//        $connector = new WsConnection('ws://');
+//    }
 
     public function input()
     {
