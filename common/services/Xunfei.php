@@ -9,12 +9,11 @@
 namespace common\services;
 
 
-use common\services\Curl;
-use common\models\User;
+use WebSocket\Client;
 use yii\base\Component;
 use yii;
 
-class BaiduASR extends Component
+class Xunfei extends Component
 {
 
     // define('DEMO_CURL_VERBOSE', false); // 打印curl debug信息
@@ -37,6 +36,8 @@ class BaiduASR extends Component
     const DEV_PID = 1537; //  1537 表示识别普通话，使用输入法模型。
     const SCOPE = 'audio_voice_assistant_get'; // 有此scope表示有语音识别普通版能力，没有请在网页里开通语音识别能力
 
+    const END_TAG = '{"end": true}';
+
     #测试自训练平台需要打开以下信息， 自训练平台模型上线后，您会看见 第二步：“”获取专属模型参数pid:8001，modelid:1234”，按照这个信息获取 dev_pid=8001，lm_id=1234
     //const DEV_PID = 8001 ;
     //const LM_ID = 1234 ;
@@ -48,58 +49,57 @@ class BaiduASR extends Component
 
     //const SCOPE = false; // 部分历史应用没有加入scope，设为false忽略检查
 
+    private $_conn;
 
-    public function getToken() {
-        /** 公共模块获取token开始 */
-
-        $auth_url = "http://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=".$this->appKey."&client_secret=".$this->appSecret;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $auth_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //信任任何证书
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // 检查证书中是否设置域名,0不验证
-        curl_setopt($ch, CURLOPT_VERBOSE, self::DEMO_CURL_VERBOSE);
-        $res = curl_exec($ch);
-        if(curl_errno($ch))
-        {
-            print curl_error($ch);
-        }
-        curl_close($ch);
-
-//        echo "Token URL response is " . $res . "\n";
-        $response = json_decode($res, true);
-
-        if (!isset($response['access_token'])){
-            throw new \Exception('ERROR TO OBTAIN TOKEN', 1);
-//            echo "ERROR TO OBTAIN TOKEN\n";
-//            exit(1);
-        }
-        if (!isset($response['scope'])){
-            throw new \Exception('ERROR TO OBTAIN scopes', 2);
-//            echo "ERROR TO OBTAIN scopes\n";
-//            exit(2);
-        }
-
-        if (self::SCOPE && !in_array(self::SCOPE, explode(" ", $response['scope']))){
-            throw new \Exception('CHECK SCOPE ERROR', 3);
-            //echo "CHECK SCOPE ERROR\n";
-            // 请至网页上应用内开通语音识别权限
-            //exit(3);
-        }
-
-//        $token = $response['access_token'];
-//        echo "token = $token ; expireInSeconds: ${response['expires_in']}\n\n";
-        return $response;
+    /**
+     * 拼接签名
+     * @param $api_key
+     * @param $api_secret
+     * @param $time
+     * @return string
+     */
+    private function sign($api_key, $api_secret, $time)
+    {
+        $signature_origin = 'host: ws-api.xfyun.cn' . "\n";
+        $signature_origin .= 'date: ' . $time . "\n";
+        $signature_origin .= 'GET /v2/iat HTTP/1.1';
+        $signature_sha = hash_hmac('sha256', $signature_origin, $api_secret, true);
+        $signature_sha = base64_encode($signature_sha);
+        $authorization_origin = 'api_key="' . $api_key . '", algorithm="hmac-sha256", ';
+        $authorization_origin .= 'headers="host date request-line", signature="' . $signature_sha . '"';
+        $authorization = base64_encode($authorization_origin);
+        return $authorization;
     }
 
+    /**
+     * 生成Url
+     * @param $api_key
+     * @param $api_secret
+     * @return string
+     */
+    private function createUrl($api_key, $api_secret)
+    {
+        $url = 'wss://tts-api.xfyun.cn/v2/iat';
+        $time = date('D, d M Y H:i:s', strtotime('-8 hour')) . ' GMT';
+        $authorization = $this->sign($api_key, $api_secret, $time);
+        $url .= '?' . 'authorization=' . $authorization . '&date=' . urlencode($time) . '&host=ws-api.xfyun.cn';
+        return $url;
+    }
 
-    public function asrByFile($audioFile, $format = 'wav') {
+    private function createConnection() {
+        if (empty($this->_conn)) {
+            $url = $this->createUrl($this->appKey, $this->appSecret);
+//            $loop = Factory::create();
+//            $this->_conn = new WsConnection($this->createUrl($this->appKey, $this->appSecret));
+            $this->_conn = new Client($url);
+        }
+        return $this->_conn;
+    }
+
+    public function sendByFile($audioFile, $format = 'wav') {
 
         $tokenRes = $this->getToken();
         $token = $tokenRes['access_token'];
-
-
 
         /** 拼接参数开始 **/
         $audio = file_get_contents($audioFile);
@@ -107,69 +107,28 @@ class BaiduASR extends Component
         // Todo: 增加一个过程，存一个临时文件，听听语音质量
         file_put_contents("/tmp/asr.wav", $audio);
 
-        $base_data = base64_encode($audio);
-        $params = array(
-            "dev_pid" => self::DEV_PID,
-            //"lm_id" => $LM_ID,    //测试自训练平台开启此项
-            "format" => $format,
-            "rate" => self::RATE,
-            "token" => $token,
-            "cuid"=> self::CUID,
-            "speech" => $base_data,
-            "len" => strlen($audio),
-            "channel" => 1,
-        );
+        try {
 
-        $response = $this->_getPostApi(self::ASR_URL, $params);
+            $connector = $this->createConnection();
+            $connector->send($audio);
 
-//        $json_array = json_encode($params);
-//        $headers[] = "Content-Length: ".strlen($json_array);
-//        $headers[] = 'Content-Type: application/json; charset=utf-8';
-//
-//        /** 拼接参数结束 **/
-//
-//        /** asr 请求开始 **/
-//
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, self::ASR_URL);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//        curl_setopt($ch, CURLOPT_POST, true);
-//        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-//        curl_setopt($ch, CURLOPT_TIMEOUT, 60); // 识别时长不超过原始音频
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $json_array);
-//        curl_setopt($ch, CURLOPT_VERBOSE, self::DEMO_CURL_VERBOSE);
-//        $res = curl_exec($ch);
-//        if(curl_errno($ch))
-//        {
-//            echo curl_error($ch);
-//            exit (2);
-//        }
-//        curl_close($ch);
-//        /** asr 请求结束 **/
-//
-//        $response = json_decode($res, true);
-        file_put_contents("/tmp/asr.log", json_encode($response, JSON_UNESCAPED_UNICODE));
+            usleep(50);
+            $endTag = self::END_TAG;
+            $connector->send($endTag);
 
-        if (isset($response['err_no']) && $response['err_no'] == 0){
-            return $response;
-//            echo "asr result is ". $response['result'][0] . "\n";
-        }else{
-            throw new \Exception('asr has error', $response['err_no']);
-//            echo "asr has error\n";
+            $rec = $connector->receive();
+            $response = json_decode($rec, true);
+        } catch (\Exception $e) {
+            $response = [
+                'errcode' => $e->getCode(),
+                'errmsg' => $e->getMessage(),
+            ];
+        } finally {
+            $connector->close();
         }
 
-
-//
-//        $token = $this->getToken();
-//        $audio = base64_encode($audio);
-//        $audio = urlencode($audio);
-//        $url = self::ASR_URL . "?cuid=" . self::CUID . "&token=" . $token['access_token'] . "&dev_pid=" . self::DEV_PID;
-//        $url .= "&rate=" . self::RATE . "&format=wav&channel=1&len=" . strlen($audio) . "&speech=" . $audio;
-//        $ret = $this->_getApi($url);
-//        return $ret;
+        return $response;
     }
-
 
     private function _createUri($uri, $host, $params = [], $needSign = false) {
         $uri = $host . $uri;

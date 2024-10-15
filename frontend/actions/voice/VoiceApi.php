@@ -11,8 +11,6 @@ namespace frontend\actions\voice;
 
 use common\extensions\Uploader;
 use frontend\actions\ApiAction;
-use Ratchet\WebSocket\WsConnection;
-use React\EventLoop\Factory;
 use yii;
 
 class VoiceApi extends ApiAction
@@ -39,11 +37,14 @@ class VoiceApi extends ApiAction
 
             switch ($this->action) {
                 case 'input':
-                    $ret = $this->input();
+//                    $ret = $this->input();
+                    // Todo: 临时处理，测试用
+                    $ret = $this->ws();
+
                     break;
-//                case 'ws':
-//                    $ret = $this->ws();
-//                    break;
+                case 'ws':
+                    $ret = $this->ws();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -56,10 +57,18 @@ class VoiceApi extends ApiAction
         return $this->success($ret);
     }
 
-//    public function ws() {
-//        $loop = Factory::create();
-//        $connector = new WsConnection('ws://');
-//    }
+    public function ws() {
+        $file = $_FILES['fileUpload'];
+        try {
+            $time1 = time();
+            $r = Yii::$app->xunfei->sendByFile($file['tmp_name']);
+            $time2 = time();
+            var_dump($time2 - $time1);
+            var_dump($r);
+        } catch (\Exception $e) {
+            return $this->fail($e->getMessage());
+        }
+    }
 
     public function input()
     {
