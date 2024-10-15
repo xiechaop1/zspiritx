@@ -45,7 +45,7 @@ class BaiduASR extends Component
 //    const ASR_URL = "http://vop.baidu.com/pro_api";
 //    const DEV_PID = 80001;
 //    const SCOPE = 'brain_enhanced_asr';  // 有此scope表示有极速版能力，没有请在网页里开通极速版
-    
+
     //const SCOPE = false; // 部分历史应用没有加入scope，设为false忽略检查
 
 
@@ -103,6 +103,10 @@ class BaiduASR extends Component
 
         /** 拼接参数开始 **/
         $audio = file_get_contents($audioFile);
+
+        // Todo: 增加一个过程，存一个临时文件，听听语音质量
+        file_put_contents("/tmp/asr.wav", $audio);
+
         $base_data = base64_encode($audio);
         $params = array(
             "dev_pid" => self::DEV_PID,
