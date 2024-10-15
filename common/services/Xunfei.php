@@ -108,7 +108,7 @@ class Xunfei extends Component
                 ],
                 'data' => [
                     'status' => 0,
-                    'format' => 16000,
+                    'format' => 'audio/L16;rate=16000',
                     'encoding' => 'raw',
                     'audio' => base64_encode($audio),
                 ],
@@ -122,8 +122,29 @@ class Xunfei extends Component
             $endTag = self::END_TAG;
             $connector->send($endTag);
 
-            $rec = $connector->receive();
-            $response = json_decode($rec, true);
+            $ret = '';
+            while (true) {
+                $rec = $connector->receive();
+                $response = json_decode($rec, true);
+
+                if (empty($response) || empty($response['data']['status'])) {
+                    break;
+                }
+
+                $ws = $response['data']['result']['ws'];
+                if (!empty($ws) && is_array($ws)) {
+                    foreach ($ws as $w) {
+                        $ret .= $w['cw'][0]['w'];
+                    }
+                }
+
+
+                if ($response['data']['status'] == 2) {
+                    break;
+                }
+            }
+
+
         } catch (\Exception $e) {
 //            $response = [
 //                'errcode' => $e->getCode(),
@@ -134,7 +155,7 @@ class Xunfei extends Component
             $connector->close();
         }
 
-        return $response;
+        return $ret;
     }
 
     private function _createUri($uri, $host, $params = [], $needSign = false) {
