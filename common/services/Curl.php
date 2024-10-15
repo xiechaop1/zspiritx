@@ -49,6 +49,7 @@ class Curl
 
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $postFields );
 
+
         if (!empty($opts['CURLOPT_CONNECTTIMEOUT'])) {
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $opts['CURLOPT_CONNECTTIMEOUT']);
         }
