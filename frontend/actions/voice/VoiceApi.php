@@ -66,7 +66,7 @@ class VoiceApi extends ApiAction
             var_dump($time2 - $time1);
             var_dump($r);
         } catch (\Exception $e) {
-            return $this->fail($e->getMessage());
+            throw $e;
         }
     }
 
