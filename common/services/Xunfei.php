@@ -25,6 +25,7 @@ class Xunfei extends Component
 
     public $appKey;
     public $appSecret;
+    public $appId;
 
     # 采样率
     const RATE = 16000;  // 固定值
@@ -90,9 +91,32 @@ class Xunfei extends Component
 
         try {
 
+            $params = [
+                'common' => [
+                    'app_id' => $this->appId,
+                ],
+                'business' => [
+                    'language' => 'zh_cn',
+                    'domain' => 'iat',
+                    'accent' => 'mandarin',
+                    'vad_eos' => 5000,
+                    'dwa' => 'wpgs',
+                    'nunum' => 1,
+                    'aue' => 'raw',
+//                    'result_level' => 'plain',
+//                    'sample_rate' => self::RATE,
+                ],
+                'data' => [
+                    'status' => 0,
+                    'format' => 16000,
+                    'encoding' => 'raw',
+                    'audio' => base64_encode($audio),
+                ],
+            ];
+
             $connector = $this->createConnection();
             $connector->setFragmentSize(1280);
-            $connector->send($audio);
+            $connector->send($params);
 
             usleep(50);
             $endTag = self::END_TAG;
