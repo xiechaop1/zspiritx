@@ -22,7 +22,7 @@ class Curl
 
      */
 
-    public static function curlPost($url,$postFields, $header = array(), $isJson = false){
+    public static function curlPost($url,$postFields, $header = array(), $isJson = false, $opts = []){
 
         if (!$isJson) {
             $postFields = http_build_query($postFields);
@@ -47,6 +47,12 @@ class Curl
         curl_setopt ( $ch, CURLOPT_HTTPHEADER, $header );
 
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $postFields );
+
+        if (!empty($opts)) {
+            foreach ($opts as $key => $value) {
+                curl_setopt($ch, $key, $value);
+            }
+        }
 
         $result = curl_exec ( $ch );
 
