@@ -31,7 +31,7 @@ class Xunfei extends Component
 
     const END_TAG = '{"end": true}';
 
-    
+
     private $_conn;
 
     /**
@@ -80,9 +80,6 @@ class Xunfei extends Component
     }
 
     public function sendByFile($audioFile, $format = 'wav') {
-
-        $tokenRes = $this->getToken();
-        $token = $tokenRes['access_token'];
 
         /** 拼接参数开始 **/
         $audio = file_get_contents($audioFile);
