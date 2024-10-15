@@ -90,6 +90,7 @@ class Xunfei extends Component
         try {
 
             $connector = $this->createConnection();
+            $connector->setFragmentSize(1280);
             $connector->send($audio);
 
             usleep(50);
@@ -99,10 +100,11 @@ class Xunfei extends Component
             $rec = $connector->receive();
             $response = json_decode($rec, true);
         } catch (\Exception $e) {
-            $response = [
-                'errcode' => $e->getCode(),
-                'errmsg' => $e->getMessage(),
-            ];
+//            $response = [
+//                'errcode' => $e->getCode(),
+//                'errmsg' => $e->getMessage(),
+//            ];
+            throw $e;
         } finally {
             $connector->close();
         }
