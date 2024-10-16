@@ -116,9 +116,11 @@ class Xunfei extends Component
 
         $ct = (int)(filesize($audioFile) / 1280) + 1;
         $connector = $this->createRealConnection();
+        file_put_contents('/tmp/xunfei_au.log', Date('Y-m-d H:i:s') . "\n");
         try {
             for ($i = 0; $i < $ct; $i++) {
                 $audio = fread($audioHandler, 1280);
+                file_put_contents('/tmp/xunfei_au.log', 'before:' . $i . ' ' . strlen($audio) . "\n", FILE_APPEND);
 
                 if ($audio === false) {
                     break;
@@ -127,6 +129,8 @@ class Xunfei extends Component
                 if (empty($audio)) {
                     break;
                 }
+
+                file_put_contents('/tmp/xunfei_au.log', 'after:' . $i . ' ' . strlen($audio) . "\n", FILE_APPEND);
 
                 $connector->setFragmentSize(1280);
                 $connector->send($audio);
@@ -150,6 +154,7 @@ class Xunfei extends Component
                 }
 
                 if ($response['action'] == 'error' || $response['code'] != 0) {
+                    file_put_contents('/tmp/xunfei_rec.log', print_r($response, true) . "\n");
                     throw new \Exception($response['desc'], $response['code']);
                 }
 
