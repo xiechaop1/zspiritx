@@ -54,6 +54,7 @@ class Xunfei extends Component
     private function realSign($api_key, $api_secret, $time)
     {
         $baseString = $api_key . $time;
+        $baseString = md5($baseString);
         $signature = base64_encode(hash_hmac('sha1', $baseString, $api_secret, true));
 
         return $signature;
@@ -142,8 +143,14 @@ class Xunfei extends Component
                 $rec = $connector->receive();
                 $response = json_decode($rec, true);
 
-                if (empty($response) || $response['code'] != 0) {
+                file_put_contents('/tmp/xunfei_real.log', print_r($response, true));
+
+                if (empty($response)) {
                     break;
+                }
+
+                if ($response['code'] != 0) {
+                    throw new \Exception($response['message'], $response['code']);
                 }
 
                 $dataJson = $response['data'];
