@@ -149,10 +149,10 @@ class Xunfei extends Component
                     break;
                 }
 
-                if ($response['code'] != 0) {
-                    throw new \Exception($response['message'], $response['code']);
+                if ($response['action'] == 'error' || $response['code'] != 0) {
+                    throw new \Exception($response['desc'], $response['code']);
                 }
-
+                
                 $dataJson = $response['data'];
                 $data = json_decode($dataJson, true);
                 $rt = $data['cn']['st']['rt'];
