@@ -16,12 +16,6 @@ use yii;
 class Xunfei extends Component
 {
 
-    // define('DEMO_CURL_VERBOSE', false); // 打印curl debug信息
-
-
-    const AMAP_HOST = 'https://restapi.amap.com';
-
-    const DEMO_CURL_VERBOSE = false;
 
     public $appKey;
     public $appSecret;
@@ -32,6 +26,7 @@ class Xunfei extends Component
 
     const END_TAG = '{"end": true}';
 
+    const REAL_WEBAPI = 'wss://rtasr.xfyun.cn/v1/ws';
 
     private $_conn;
 
@@ -56,6 +51,14 @@ class Xunfei extends Component
         return $authorization;
     }
 
+    private function realSign($api_key, $api_secret, $time)
+    {
+        $baseString = $api_key . $time;
+        $signature = base64_encode(hash_hmac('sha1', $baseString, $api_secret, true));
+
+        return $signature;
+    }
+
     /**
      * 生成Url
      * @param $api_key
@@ -71,6 +74,24 @@ class Xunfei extends Component
         return $url;
     }
 
+    private function createRealUrl($api_key, $api_secret)
+    {
+        $time = time();
+        $signature = $this->realSign($api_key, $api_secret, $time);
+
+        $parameters = [
+            'appid' => $this->appId,
+            'ts' => $time,
+            'singa' => $signature,
+            'punc' => 1,    // 不过滤标点
+        ];
+
+        $para = http_build_query($parameters);
+
+        $url = self::REAL_WEBAPI . '?' . $para;
+        return $url;
+    }
+
     private function createConnection() {
         if (empty($this->_conn)) {
             $url = $this->createUrl($this->appKey, $this->appSecret);
@@ -79,6 +100,51 @@ class Xunfei extends Component
             $this->_conn = new Client($url);
         }
         return $this->_conn;
+    }
+
+    private function createRealConnection() {
+        if (empty($this->_conn)) {
+            $url = $this->createRealUrl($this->appKey, $this->appSecret);
+            $this->_conn = new Client($url);
+        }
+        return $this->_conn;
+    }
+
+    public function sendRealByFile($audioFile) {
+        $audioHandler = fopen($audioFile, 'r');
+
+        $ct = (int)(filesize($audioFile) / 1280) + 1;
+        for ($i=0; $i<$ct; $i++) {
+            $audio = fread($audioHandler, 1280);
+
+            $connector = $this->createRealConnection();
+            $connector->send($audio);
+
+            usleep(40);
+        }
+
+        $endTag = self::END_TAG;
+        $connector->send($endTag);
+
+        $ret = '';
+        while (true) {
+            $rec = $connector->receive();
+            $response = json_decode($rec, true);
+
+            if (empty($response) || $response['code'] != 0) {
+                break;
+            }
+
+            $dataJson = $response['data'];
+            $data = json_decode($dataJson, true);
+            $rt = $response['cn']['st']['rt'];
+            if (!empty($rt) && is_array($rt)) {
+                foreach ($rt as $r) {
+                    $ret .= $r['ws']['cw'][0]['w'];
+                }
+            }
+        }
+        $connector->close();
     }
 
     public function sendByFile($audioFile, $format = 'wav') {

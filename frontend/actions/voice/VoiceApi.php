@@ -61,7 +61,8 @@ class VoiceApi extends ApiAction
         $file = $_FILES['fileUpload'];
         try {
             $time1 = time();
-            $r = Yii::$app->xunfei->sendByFile($file['tmp_name']);
+//            $r = Yii::$app->xunfei->sendByFile($file['tmp_name']);
+            $r = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
             $time2 = time();
             var_dump($time2 - $time1);
             var_dump($r);
