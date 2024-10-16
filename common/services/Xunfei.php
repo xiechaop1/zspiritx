@@ -28,6 +28,8 @@ class Xunfei extends Component
 
     const REAL_WEBAPI = 'wss://rtasr.xfyun.cn/v1/ws';
 
+    const FRAME_SIZE = 1280;
+
     private $_conn;
 
     /**
@@ -122,7 +124,9 @@ class Xunfei extends Component
         unlink('/tmp/xunfei1.wav');
 //        $connector->setFragmentSize(1280);
         try {
-            for ($i = 0; $i < $ct; $i++) {
+            $i =0;
+            while(!feof($audioHandler)) {
+                $i++;
                 $audio = fread($audioHandler, 1280);
                 file_put_contents('/tmp/xunfei_au.log', 'before:' . $i . ' ' . strlen($audio) . "\n", FILE_APPEND);
 
@@ -185,39 +189,65 @@ class Xunfei extends Component
     public function sendByFile($audioFile, $format = 'wav') {
 
         /** 拼接参数开始 **/
-        $audio = file_get_contents($audioFile);
+//        $audio = file_get_contents($audioFile);
+        $audioHandler = fopen($audioFile, 'r');
 
         // Todo: 增加一个过程，存一个临时文件，听听语音质量
-        file_put_contents("/tmp/asr.wav", $audio);
+        file_put_contents("/tmp/asr.wav", file_get_contents($audioFile));
 
         try {
+            $connector = $this->createConnection();
+            $status = 0;
+            while (!feof($audioHandler)) {
+                $audio = fread($audioHandler, self::FRAME_SIZE);
+                if (strlen($audio) < self::FRAME_SIZE) {
+                    $status = 2;
+                }
+                switch ($status) {
+                    case 0:
 
-            $params = [
-                'common' => [
-                    'app_id' => $this->appId,
-                ],
-                'business' => [
-                    'language' => 'zh_cn',
-                    'domain' => 'iat',
-                    'accent' => 'mandarin',
-                    'vad_eos' => 5000,
-                    'dwa' => 'wpgs',
-                    'nunum' => 1,
-                    'aue' => 'raw',
+                        $params = [
+                            'common' => [
+                                'app_id' => $this->appId,
+                            ],
+                            'business' => [
+                                'language' => 'zh_cn',
+                                'domain' => 'iat',
+                                'accent' => 'mandarin',
+                                'vad_eos' => 5000,
+                                'dwa' => 'wpgs',
+                                'nunum' => 1,
+                                'aue' => 'raw',
 //                    'result_level' => 'plain',
 //                    'sample_rate' => self::RATE,
-                ],
-                'data' => [
-                    'status' => 0,
-                    'format' => 'audio/L16;rate=16000',
-                    'encoding' => 'raw',
-                    'audio' => base64_encode($audio),
-                ],
-            ];
+                            ],
+                            'data' => [
+                                'status' => 0,
+                                'format' => 'audio/L16;rate=16000',
+                                'encoding' => 'raw',
+                                'audio' => base64_encode($audio),
+                            ],
+                        ];
+                        $status = 1;
+                        break;
+                    default:
+                        $params = [
+                            'data' => [
+                                'status' => $status,
+                                'format' => 'audio/L16;rate=16000',
+                                'encoding' => 'raw',
+                                'audio' => base64_encode($audio),
+                            ],
+                        ];
+                        break;
+                }
+                usleep(40);
 
-            $connector = $this->createConnection();
-            $connector->setFragmentSize(1280);
-            $connector->send(json_encode($params, true));
+
+
+//            $connector->setFragmentSize(1280);
+                $connector->send(json_encode($params, true));
+            }
 
             usleep(50);
             $endTag = self::END_TAG;
