@@ -248,9 +248,9 @@ class Xunfei extends Component
                 $connector->send(json_encode($params, true));
             }
 
-            usleep(50);
-            $endTag = self::END_TAG;
-            $connector->send($endTag);
+//            usleep(50);
+//            $endTag = self::END_TAG;
+//            $connector->send($endTag);
 
             $ret = '';
             while (true) {
