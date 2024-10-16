@@ -83,7 +83,7 @@ class Xunfei extends Component
         $parameters = [
             'appid' => $this->appId,
             'ts' => $time,
-            'singa' => $signature,
+            'signa' => $signature,
             'punc' => 1,    // 不过滤标点
         ];
 
@@ -152,7 +152,7 @@ class Xunfei extends Component
                 if ($response['action'] == 'error' || $response['code'] != 0) {
                     throw new \Exception($response['desc'], $response['code']);
                 }
-                
+
                 $dataJson = $response['data'];
                 $data = json_decode($dataJson, true);
                 $rt = $data['cn']['st']['rt'];
