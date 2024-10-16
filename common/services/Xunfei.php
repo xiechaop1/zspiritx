@@ -119,7 +119,8 @@ class Xunfei extends Component
 
         file_put_contents('/tmp/xunfei.wav', file_get_contents($audioFile));
         file_put_contents('/tmp/xunfei_au.log', Date('Y-m-d H:i:s') . "\n");
-        `exec rm /tmp/xunfei1.wav'`;
+        unlink('/tmp/xunfei1.wav');
+//        $connector->setFragmentSize(1280);
         try {
             for ($i = 0; $i < $ct; $i++) {
                 $audio = fread($audioHandler, 1280);
@@ -137,7 +138,6 @@ class Xunfei extends Component
 
                 file_put_contents('/tmp/xunfei_au.log', 'after:' . $i . ' ' . strlen($audio) . "\n", FILE_APPEND);
 
-                $connector->setFragmentSize(1280);
                 $connector->send($audio);
 
                 usleep(40);
