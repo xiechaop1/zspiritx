@@ -117,11 +117,17 @@ class Xunfei extends Component
         for ($i=0; $i<$ct; $i++) {
             $audio = fread($audioHandler, 1280);
 
+            if ($audio === false) {
+                break;
+            }
+
             $connector = $this->createRealConnection();
+            $connector->setFragmentSize(1280);
             $connector->send($audio);
 
             usleep(40);
         }
+        fclose($audioHandler);
 
         $endTag = self::END_TAG;
         $connector->send($endTag);
