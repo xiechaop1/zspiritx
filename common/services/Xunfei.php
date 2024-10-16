@@ -116,18 +116,17 @@ class Xunfei extends Component
     public function sendRealByFile($audioFile) {
         $audioHandler = fopen($audioFile, 'r');
 
-        $ct = (int)(filesize($audioFile) / 1280) + 1;
         $connector = $this->createRealConnection();
 
         file_put_contents('/tmp/xunfei.wav', file_get_contents($audioFile));
         file_put_contents('/tmp/xunfei_au.log', Date('Y-m-d H:i:s') . "\n");
         unlink('/tmp/xunfei1.wav');
-//        $connector->setFragmentSize(1280);
+        $connector->setFragmentSize(self::FRAME_SIZE);
         try {
             $i =0;
             while(!feof($audioHandler)) {
                 $i++;
-                $audio = fread($audioHandler, 1280);
+                $audio = fread($audioHandler, self::FRAME_SIZE);
                 file_put_contents('/tmp/xunfei_au.log', 'before:' . $i . ' ' . strlen($audio) . "\n", FILE_APPEND);
 
                 file_put_contents('/tmp/xunfei1.wav', $audio, FILE_APPEND);
@@ -197,6 +196,7 @@ class Xunfei extends Component
 
         try {
             $connector = $this->createConnection();
+            $connector->setFragmentSize(self::FRAME_SIZE);
             $status = 0;
             while (!feof($audioHandler)) {
                 $audio = fread($audioHandler, self::FRAME_SIZE);
@@ -245,7 +245,6 @@ class Xunfei extends Component
 
 
 
-//            $connector->setFragmentSize(1280);
                 $connector->send(json_encode($params, true));
             }
 
@@ -257,6 +256,8 @@ class Xunfei extends Component
             while (true) {
                 $rec = $connector->receive();
                 $response = json_decode($rec, true);
+
+                file_put_contents('/tmp/xunfei_f_ret.log', print_r($response, true));
 
                 if (empty($response) || empty($response['data']['status'])) {
                     break;
