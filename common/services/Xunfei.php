@@ -114,43 +114,55 @@ class Xunfei extends Component
         $audioHandler = fopen($audioFile, 'r');
 
         $ct = (int)(filesize($audioFile) / 1280) + 1;
-        for ($i=0; $i<$ct; $i++) {
-            $audio = fread($audioHandler, 1280);
+        $connector = $this->createRealConnection();
+        try {
+            for ($i = 0; $i < $ct; $i++) {
+                $audio = fread($audioHandler, 1280);
 
-            if ($audio === false) {
-                break;
+                if ($audio === false) {
+                    break;
+                }
+
+                if (empty($audio)) {
+                    break;
+                }
+
+                $connector->setFragmentSize(1280);
+                $connector->send($audio);
+
+                usleep(40);
             }
+            fclose($audioHandler);
 
-            $connector = $this->createRealConnection();
-            $connector->setFragmentSize(1280);
-            $connector->send($audio);
+            $endTag = self::END_TAG;
+            $connector->send($endTag);
 
-            usleep(40);
-        }
-        fclose($audioHandler);
+            $ret = '';
+            while (true) {
+                $rec = $connector->receive();
+                $response = json_decode($rec, true);
 
-        $endTag = self::END_TAG;
-        $connector->send($endTag);
+                if (empty($response) || $response['code'] != 0) {
+                    break;
+                }
 
-        $ret = '';
-        while (true) {
-            $rec = $connector->receive();
-            $response = json_decode($rec, true);
-
-            if (empty($response) || $response['code'] != 0) {
-                break;
-            }
-
-            $dataJson = $response['data'];
-            $data = json_decode($dataJson, true);
-            $rt = $response['cn']['st']['rt'];
-            if (!empty($rt) && is_array($rt)) {
-                foreach ($rt as $r) {
-                    $ret .= $r['ws']['cw'][0]['w'];
+                $dataJson = $response['data'];
+                $data = json_decode($dataJson, true);
+                $rt = $data['cn']['st']['rt'];
+                if (!empty($rt) && is_array($rt)) {
+                    foreach ($rt as $r) {
+                        $ret .= $r['ws']['cw'][0]['w'];
+                    }
                 }
             }
+        } catch (\Exception $e) {
+            throw $e;
+        } finally {
+            $connector->close();
         }
-        $connector->close();
+//        $connector->close();
+
+        return $ret;
     }
 
     public function sendByFile($audioFile, $format = 'wav') {
