@@ -259,7 +259,7 @@ class Xunfei extends Component
 
                 file_put_contents('/tmp/xunfei_f_ret.log', print_r($response, true));
 
-                if (empty($response) || empty($response['data']['status'])) {
+                if (empty($response) || !isset($response['data']['status'])) {
                     break;
                 }
 
