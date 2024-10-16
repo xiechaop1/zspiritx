@@ -257,7 +257,7 @@ class Xunfei extends Component
                 $rec = $connector->receive();
                 $response = json_decode($rec, true);
 
-                file_put_contents('/tmp/xunfei_f_ret.log', print_r($response, true));
+                file_put_contents('/tmp/xunfei_f_ret.log', print_r($response, true), FILE_APPEND);
 
                 if (empty($response) || !isset($response['data']['status'])) {
                     break;
