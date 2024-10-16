@@ -116,11 +116,16 @@ class Xunfei extends Component
 
         $ct = (int)(filesize($audioFile) / 1280) + 1;
         $connector = $this->createRealConnection();
+
+        file_put_contents('/tmp/xunfei.wav', file_get_contents($audioFile));
         file_put_contents('/tmp/xunfei_au.log', Date('Y-m-d H:i:s') . "\n");
+        `exec rm /tmp/xunfei1.wav'`;
         try {
             for ($i = 0; $i < $ct; $i++) {
                 $audio = fread($audioHandler, 1280);
                 file_put_contents('/tmp/xunfei_au.log', 'before:' . $i . ' ' . strlen($audio) . "\n", FILE_APPEND);
+
+                file_put_contents('/tmp/xunfei1.wav', $audio, FILE_APPEND);
 
                 if ($audio === false) {
                     break;
