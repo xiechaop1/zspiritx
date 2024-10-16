@@ -191,6 +191,9 @@ class Xunfei extends Component
 //        $audio = file_get_contents($audioFile);
         $audioHandler = fopen($audioFile, 'r');
 
+        move_uploaded_file($audioFile, '/tmp/asr1.wav');
+        $audioFile = '/tmp/asr1.wav';
+
         // Todo: 增加一个过程，存一个临时文件，听听语音质量
         file_put_contents("/tmp/asr.wav", file_get_contents($audioFile));
 
