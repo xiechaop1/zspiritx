@@ -78,7 +78,7 @@ class Xunfei extends Component
     private function createRealUrl($api_key, $api_secret)
     {
         $time = time();
-        $signature = $this->realSign($api_key, $api_secret, $time);
+        $signature = $this->realSign($this->appId, $api_key, $time);
 
         $parameters = [
             'appid' => $this->appId,
