@@ -181,7 +181,7 @@ class Model
 
                 if (is_array($allPlatforms)) {
                     foreach ($allPlatforms as $platform => $res) {
-                        if (in_array($platform, ['ios', 'huawei', 'android'])) {
+                        if (in_array($platform, ['ios', 'huawei', 'android',])) {
 
                             if (!empty($res) && is_array($res)) {
                                 foreach ($res as &$row) {
@@ -196,6 +196,11 @@ class Model
                         if ($type == 'assetBundles' && $platform == 'editor' && !empty($res)) {
                             foreach ($res as &$row) {
                                 $row['ABUrl'] = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row['ABUrl'], false);
+                            }
+                        }
+                        if ($type == 'image' && $platform == 'easyar' && !empty($res)) {
+                            foreach ($res as &$row) {
+                                $row = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row, false);
                             }
                         }
                         $ret[$type][$platform] = $res;
