@@ -204,7 +204,7 @@ class DoApi extends ApiAction
 
         $scanImageResources = [];
         $storyInfo = $this->_storyInfo->toArray();
-
+        $storyInfo['resources'] = json_decode($storyInfo['resources'], true);
         if (!empty($tmpStoryModel)) {
             foreach ($tmpStoryModel as $tStoryModel) {
                 if (!empty($tStoryModel['scan_image_path'])) {
