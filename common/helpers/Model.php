@@ -200,7 +200,7 @@ class Model
                         }
                         if ($type == 'image' && $platform == 'easyar' && !empty($res)) {
                             foreach ($res as &$row) {
-                                $row = Attachment::completeUrl('/resourcepackage/' . $type . '/' . $row, false);
+                                $row = Attachment::completeUrl($row, false);
                             }
                         }
                         $ret[$type][$platform] = $res;
