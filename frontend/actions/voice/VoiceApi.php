@@ -10,6 +10,7 @@ namespace frontend\actions\voice;
 
 
 use common\extensions\Uploader;
+use common\models\Actions;
 use frontend\actions\ApiAction;
 use yii;
 
@@ -73,11 +74,12 @@ class VoiceApi extends ApiAction
             var_dump($time2 - $time1);
             var_dump($word);
             $aiRet = Yii::$app->doubao->talk($word);
-            $dialogArr = [
-                'name' => '小灵语',
-                'sentence' => $aiRet,
-            ];
-            Yii::$app->act->addWithoutTag();
+//            $dialogArr = [
+//                'name' => '小灵语',
+//                'sentence' => $aiRet,
+//            ];
+//            Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_MODEL_DISPLAY);
+            return $aiRet;
         } catch (\Exception $e) {
             throw $e;
         }
