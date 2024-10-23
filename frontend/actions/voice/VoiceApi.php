@@ -74,7 +74,12 @@ class VoiceApi extends ApiAction
             var_dump($time2 - $time1);
             var_dump($word);
             $aiRet = Yii::$app->doubao->talk($word);
-            var_dump($aiRet);
+            if (!empty($aiRet['content'])) {
+                var_dump($aiRet['content']);
+            } else {
+                var_dump($aiRet);
+            
+            }
 //            $dialogArr = [
 //                'name' => '小灵语',
 //                'sentence' => $aiRet,

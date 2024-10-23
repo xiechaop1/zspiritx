@@ -36,7 +36,14 @@ class Doubao extends Component
     public function talk($userMessage, $oldMessages = []) {
 
         $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
-        $extMessages = [];
+        $simple = [
+            'content' => '回答问题',
+        ];
+        $extMessages = [
+            '内容不超过200字',
+            '用JSON的形式返回',
+            '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+        ];
 
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
         return $ret;
