@@ -25,7 +25,9 @@ class Doubao extends Component
 
     // Todo: 替换掉Doubao接口
 //    const CHATGPT_HOST = 'https://ark.cn-beijing.volces.com/api';
-    const CHATGPT_HOST = 'https://api.deepseek.com/';
+//    const CHATGPT_HOST = 'https://api.deepseek.com/';
+
+    const CHATGPT_HOST = 'https://api.siliconflow.cn/';
 
     public $apiKey;
 
@@ -520,7 +522,8 @@ class Doubao extends Component
 //        );
         $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
-            'model' => 'deepseek-chat',
+//            'model' => 'deepseek-chat',
+        'model' => 'deepseek-ai/DeepSeek-V2.5',
 //            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
             'temperature' => 1.6,

@@ -145,7 +145,10 @@ class DoApi extends ApiAction
                     $ret = $this->getUserModelLoc();
                     break;
                 case 'get_session_models_by_stage':
-                    $ret = $this->getSessionModelsByStage();
+                    $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+                    $stageUId = !empty($this->_get['stage_u_id']) ? $this->_get['stage_u_id'] : '';
+
+                    $ret = $this->getSessionModelsByStage($sessionStageId, $stageUId);
                     break;
                 case 'pickup':
                     $ret = $this->pickupModels();
@@ -773,9 +776,126 @@ class DoApi extends ApiAction
         return $ret;
     }
 
-    public function getSessionModelsByStage() {
-        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
-        $stageUId = !empty($this->_get['stage_u_id']) ? $this->_get['stage_u_id'] : '';
+    public function getSessionModelsInit($userId, $sessionId, $storyId) {
+        $user = User::find()->where(['id' => $userId])->one();
+        if ($storyId == 5) {
+            $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
+            $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
+
+//            $setResult = Yii::$app->userModels->setUserModelToLoc($this->_storyId, 0, $userLng, $userLat, StoryModels::STORY_MODEL_CLASS_RIVAL, 1000, 30);
+            $setResult = Yii::$app->userModels->setUserModelToLoc($storyId, 0, $userLng, $userLat, 0, 1000, 30);
+        }
+
+        $sessionStages = SessionStages::find()
+            ->where([
+                'session_id' => (int)$sessionId,
+//                'user_id'   => (int)$userId,
+                'story_id'  => (int)$storyId,
+            ])
+            ->with('stage')
+            ->orderBy([
+                'sort_by' => SORT_ASC,
+                'id' => SORT_ASC,
+            ])
+            ->all();
+
+        $sessionStagesRet = [];
+        $uniqueList = [];
+        if (!empty($sessionStages)) {
+            foreach ($sessionStages as $sessionStage) {
+                $hasLoc = 0;
+                $sessionStageArray = $sessionStage->toArray();
+                $stageArrayTmp = $sessionStage->stage->toArray();
+
+                if (!empty($stageArrayTmp['bgm'])) {
+                    $stageArrayTmp['bgm'] = Attachment::completeUrl($stageArrayTmp['bgm'], false);
+                }
+                if (!empty($setResult) && $stageArrayTmp['stage_class'] == StoryStages::STAGE_CLASS_EXTEND) {
+
+                    foreach ($setResult['result'] as $locId => $userModelLocCollections) {
+                        foreach ($userModelLocCollections as $userModelLocRets) {
+                            foreach ($userModelLocRets['userModelLoc'] as $userModelLocRet) {
+
+                                if (!empty($userModelLocRets['location'])) {
+                                    // 家周围100米之内不出现扩展stage
+                                    $dis = \common\helpers\Common::computeDistanceWithLatLng(
+                                        $userModelLocRets['location']['lng'], $userModelLocRets['location']['lat'],
+                                        $user->home_lng, $user->home_lat, 1, 0);
+                                    if ($dis <= 60) {
+                                        continue;
+                                    }
+                                }
+
+                                if ($userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                                    || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                                    || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_STORY
+                                ) {
+
+                                    $uniqueRet = Yii::$app->userModels->checkUniqueUserModelLocWithLngLat($userModelLocRets['location']['lng'], $userModelLocRets['location']['lat'], $uniqueList);
+                                    if (!empty($uniqueRet)) {
+                                        $uniqueList = $uniqueRet['uniqueList'];
+                                        $uniqueCheck = $uniqueRet['ret'];
+                                        if (!$uniqueCheck) {
+                                            continue;
+                                        }
+                                    }
+
+                                    $stageArray = $stageArrayTmp;
+                                    if ($userModelLocRet->story_stage_id == $sessionStage->story_stage_id) {
+                                        $hasLoc = 1;
+                                        $stageArray['lng'] = $userModelLocRets['location']['lng'];
+                                        $stageArray['lat'] = $userModelLocRets['location']['lat'];
+                                        $stageArray['scan_type'] = StoryStages::SCAN_TYPE_LATLNG;
+                                        if (empty($stageArray['misrange'])) {
+                                            $stageArray['misrange'] = 100;
+                                        }
+
+                                        $stageArray['stage_u_id'] = str_replace('{$location_id}', $userModelLocRets['location']['id'], $stageArray['stage_u_id']);
+                                        $sessionStageArray['stage'] = $stageArray;
+                                        $sessionStagesRet[] = [
+                                            'sessionStageArray' => $sessionStageArray,
+                                            'sessionStage' => $sessionStage,
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if ($hasLoc == 0) {
+
+//                var_dump($sessionStage->stage->bgm);exit;
+//                if (!empty($sessionStage->stage->bgm)) {
+//                    $sessionStage->stage->bgm = Attachment::completeUrl($sessionStage->stage->bgm, false);
+//                }
+                    if ($stageArrayTmp['stage_class'] != StoryStages::STAGE_CLASS_EXTEND) {
+                        $sessionStageArray['stage'] = $stageArrayTmp;
+                        $sessionStagesRet[] = [
+                            'sessionStageArray' => $sessionStageArray,
+                            'sessionStage' => $sessionStage,
+                        ];
+                    }
+                }
+            }
+        }
+
+        $ret = [];
+        if (!empty($sessionStagesRet)) {
+            foreach ($sessionStagesRet as $sessionStageRet) {
+
+            }
+        }
+
+        return $ret;
+    }
+
+    public function getSessionModelsByStage($sessionStageId = 0, $stageUId = '') {
+        if (empty($sessionStageId)) {
+            $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+        }
+        if (empty($stageUId)) {
+            $stageUId = !empty($this->_get['stage_u_id']) ? $this->_get['stage_u_id'] : '';
+        }
 
         $sessoinStages = SessionStages::find()
             ->where(['id' => $sessionStageId])
