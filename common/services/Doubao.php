@@ -35,7 +35,7 @@ class Doubao extends Component
 
     public function talk($userMessage, $oldMessages = []) {
 
-        $roleTxt = '#角色' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
+        $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
         $extMessages = [];
 
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
@@ -45,7 +45,7 @@ class Doubao extends Component
     public function generateDocScore($userMessage, $level = 0, $docTitle = '', $docDesc = '', $oldMessages = []) {
         $gradeName = $this->_getGradeNameFromLevel($level);
 
-        $roleTxt = '#角色' . "\n" . '你是一个语文方面精英教师，可以出作文题目，续写作文，给作文判分，标准按照小学毕业要求';
+        $roleTxt = '#角色#' . "\n" . '你是一个语文方面精英教师，可以出作文题目，续写作文，给作文判分，标准按照小学毕业要求';
         $extMessages = [];
         $extMessages[] = '#任务描述和要求';
         $userMsgs = [];
