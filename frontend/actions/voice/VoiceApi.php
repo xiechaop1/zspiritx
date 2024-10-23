@@ -75,16 +75,19 @@ class VoiceApi extends ApiAction
             $aiRet = Yii::$app->doubao->talk($word);
             $time2 = time();
             var_dump($time2 - $time1);
+            $aiContent = '';
             if (!empty($aiRet['content'])) {
+                $aiContent = $aiRet['content'];
                 var_dump($aiRet['content']);
             } else {
+                $aiContent = $aiRet;
                 var_dump($aiRet);
 
             }
 
             $dialogArr = [
                 'name' => '小灵语',
-                'sentence' => $aiRet,
+                'sentence' => $aiContent,
             ];
             Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_MODEL_DISPLAY);
             return $aiRet;
