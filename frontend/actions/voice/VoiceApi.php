@@ -59,13 +59,25 @@ class VoiceApi extends ApiAction
 
     public function ws() {
         $file = $_FILES['fileUpload'];
+
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+
         try {
             $time1 = time();
             $word = Yii::$app->xunfei->sendByFile($file['tmp_name']);
-//            $r = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
+//            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
             $time2 = time();
             var_dump($time2 - $time1);
-            var_dump($r);
+            var_dump($word);
+            $aiRet = Yii::$app->doubao->talk($word);
+            $dialogArr = [
+                'name' => '小灵语',
+                'sentence' => $aiRet,
+            ];
+            Yii::$app->act->addWithoutTag();
         } catch (\Exception $e) {
             throw $e;
         }

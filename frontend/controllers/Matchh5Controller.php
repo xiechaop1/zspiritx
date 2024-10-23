@@ -30,6 +30,12 @@ class Matchh5Controller extends Controller
             'rank_of_match' => [
                 'class' => 'frontend\actions\matchh5\Rankofmatch',
             ],
+            'race_prepare' => [
+                'class' => 'frontend\actions\matchh5\RacePrepare',
+            ],
+            'race' => [
+                'class' => 'frontend\actions\matchh5\Race',
+            ],
             'battle' => [
                 'class' => 'frontend\actions\matchh5\Battle',
             ],
@@ -60,6 +66,7 @@ class Matchh5Controller extends Controller
             'docs' => [
                 'class' => 'frontend\actions\matchh5\Docs',
             ],
+
         ];
     }
 }

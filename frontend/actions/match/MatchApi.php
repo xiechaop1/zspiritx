@@ -114,6 +114,14 @@ class MatchApi extends ApiAction
                     $needTs = false;
                     $ret = $this->getDocScore();
                     break;
+                case 'get_story_match':
+                    $needTs = false;
+                    $ret = $this->getStoryMatch();
+                    break;
+                case 'get_story_match_players_prop':
+                    $needTs = false;
+                    $ret = $this->getStoryMatchPlayersProp();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -147,7 +155,8 @@ class MatchApi extends ApiAction
     public function generateSubjectsToKnockout() {
         $storyMatchId = !empty($this->_get['story_match_id']) ? $this->_get['story_match_id'] : 0;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
-//        $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
+        $levelRange = !empty($this->_get['level_range']) ? $this->_get['level_range'] : 4;
+        $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 2;
 
         $storyMatch = StoryMatch::find()
             ->where([
@@ -167,26 +176,28 @@ class MatchApi extends ApiAction
                 $userLevel = !empty($storyMatchProp['level']) ? $storyMatchProp['level'] : 1;
                 $matchClass = !empty($storyMatchProp['match_class']) ? $storyMatchProp['match_class'] : Subject::SUBJECT_CLASS_MATH;
                 $subjects = [];
-                $maxLevel = $userLevel + 4 > 20 ? 20 : $userLevel + 4;
+                $maxLevel = $userLevel + 4 > 20 ? 20 : $userLevel + $levelRange;
                 switch ($matchClass) {
                     case StoryMatch::MATCH_CLASS_MATH:
-                        $ct = 2;
+//                        $ct = 2;
                         for ($level = $userLevel; $level <= $maxLevel; $level++) {
                             $subjects = array_merge($subjects, $this->generateSubjectWithCt($ct, $level, $matchClass));
                         }
                         break;
                     case StoryMatch::MATCH_CLASS_ENGLISH:
-                        $ct = 2;
+//                        $ct = 2;
                         for ($level = $userLevel; $maxLevel; $level++) {
                             $subjects = array_merge($subjects, $this->generateSubjectWithCt($ct, $level, $matchClass));
                         }
                         break;
 
                 }
-                $saveStoryMatchProp['subjects'] = $subjects;
-                $saveStoryMatchProp['subj_source'] = 'doubao';
-                $storyMatch->story_match_prop = json_encode($saveStoryMatchProp, JSON_UNESCAPED_UNICODE);
-                $storyMatch->save();
+                if (!empty($subjects)) {
+                    $saveStoryMatchProp['subjects'] = $subjects;
+                    $saveStoryMatchProp['subj_source'] = 'doubao';
+                    $storyMatch->story_match_prop = json_encode($saveStoryMatchProp, JSON_UNESCAPED_UNICODE);
+                    $storyMatch->save();
+                }
 
                 return $storyMatch;
             }
@@ -1383,6 +1394,38 @@ class MatchApi extends ApiAction
         return $ret;
     }
 
+    public function getStoryMatch() {
+        $matchId = !empty($this->_get['story_match_id']) ? $this->_get['story_match_id'] : 0;
+        $storyMatch = StoryMatch::find()
+            ->where([
+                'id' => $matchId,
+            ])
+            ->one()
+            ->toArray();
+
+        $storyMatch['story_match_prop_array'] = json_decode($storyMatch['story_match_prop'], true);
+
+        return ['story_match' => $storyMatch];
+    }
+    
+    public function getStoryMatchPlayersProp() {
+        $matchId = !empty($this->_get['story_match_id']) ? $this->_get['story_match_id'] : 0;
+        $storyMatchPlayers = StoryMatchPlayer::find()
+            ->where([
+                'match_id' => $matchId,
+            ])
+            ->all();
+        
+        $playersProp = [];
+        if (!empty($storyMatchPlayers)) {
+            foreach ($storyMatchPlayers as $player) {
+                $playersProp[$player->id] = json_decode($player->m_user_model_prop, true);
+            }
+        }
+        
+        return ['story_match_players_prop' => $playersProp];
+    }
+
     public function updateMatch() {
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
@@ -1428,7 +1471,57 @@ class MatchApi extends ApiAction
                 'score' => $score,
             ];
 
-            if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_KNOCKOUT) {
+            if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_RACE) {
+
+                $matchProp = json_decode($storyMatch->story_match_prop, true);
+                if (!empty($matchProp['subjects'])) {
+                    $maxSubjects = count($matchProp['subjects']);
+                } else {
+                    $maxSubjects = 0;
+                }
+                $myPlayer = StoryMatchPlayer::find()
+                    ->where([
+                        'match_id' => $matchId,
+                        'user_id' => $userId,
+                    ])
+                    ->one();
+
+                if ($answer == 1) {
+                    $playerProp = json_decode($myPlayer->m_user_model_prop, true);
+                    if (!empty($playerProp['subj_ct'])) {
+                        $playerProp['subj_ct'] = $playerProp['subj_ct'] + 1;
+                    } else {
+                        $playerProp['subj_ct'] = 1;
+                    }
+
+                    if (!empty($playerProp['right_ct'])) {
+                        $playerProp['right_ct'] = $playerProp['right_ct'] + 1;
+                    } else {
+                        $playerProp['right_ct'] = 1;
+                    }
+
+                    $myPlayer->m_user_model_prop = json_encode($playerProp, true);
+//                    $myPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
+                    if ($playerProp['subj_ct'] >= $maxSubjects) {
+                        $myPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
+
+                        if (empty($matchProp['winner'])) {
+                            $matchProp['winner'] = $userId;
+                            $storyMatch->story_match_prop = json_encode($matchProp, true);
+                            $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_END;
+                            $storyMatch->save();
+                        }
+
+                    }
+
+                    $myPlayer->save();
+                } else {
+//                    $myPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_LOST;
+//                    $myPlayer->save();
+                }
+
+
+            } else if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_KNOCKOUT) {
                 $myPlayer = StoryMatchPlayer::find()
                     ->where([
                         'match_id' => $matchId,

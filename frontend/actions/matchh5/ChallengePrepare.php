@@ -104,6 +104,8 @@ class ChallengePrepare extends Action
 //                    'story_id' => $storyId,
 //                    'm_story_model_id' => $rivalStoryModelIds,
 //                    'story_match_status' => StoryMatch::STORY_MATCH_STATUS_PREPARE,
+
+
             if (empty($matchClass)) {
                 $matchClassId = array_rand(StoryMatch::$matchClassRandList);
                 $matchClass = StoryMatch::$matchClassRandList[$matchClassId];

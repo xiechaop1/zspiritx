@@ -26,7 +26,6 @@ $this->registerMetaTag([
 //]);
 
 $this->title = '消息';
-
 ?>
 <div class="w-100 m-auto">
 

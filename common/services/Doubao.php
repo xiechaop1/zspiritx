@@ -33,6 +33,15 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
+    public function talk($userMessage, $oldMessages = []) {
+
+        $roleTxt = '#角色' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
+        $extMessages = [];
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+        return $ret;
+    }
+
     public function generateDocScore($userMessage, $level = 0, $docTitle = '', $docDesc = '', $oldMessages = []) {
         $gradeName = $this->_getGradeNameFromLevel($level);
 
