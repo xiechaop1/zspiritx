@@ -82,11 +82,11 @@ class VoiceApi extends ApiAction
 
             }
 
-//            $dialogArr = [
-//                'name' => '小灵语',
-//                'sentence' => $aiRet,
-//            ];
-//            Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_MODEL_DISPLAY);
+            $dialogArr = [
+                'name' => '小灵语',
+                'sentence' => $aiRet,
+            ];
+            Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_MODEL_DISPLAY);
             return $aiRet;
         } catch (\Exception $e) {
             throw $e;
