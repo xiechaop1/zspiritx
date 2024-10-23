@@ -70,16 +70,17 @@ class VoiceApi extends ApiAction
             $time1 = time();
             $word = Yii::$app->xunfei->sendByFile($file['tmp_name']);
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
-            $time2 = time();
-            var_dump($time2 - $time1);
             var_dump($word);
             $aiRet = Yii::$app->doubao->talk($word);
             if (!empty($aiRet['content'])) {
                 var_dump($aiRet['content']);
             } else {
                 var_dump($aiRet);
-            
+
             }
+            $time2 = time();
+            var_dump($time2 - $time1);
+
 //            $dialogArr = [
 //                'name' => '小灵语',
 //                'sentence' => $aiRet,
