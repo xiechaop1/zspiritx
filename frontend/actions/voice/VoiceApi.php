@@ -61,10 +61,11 @@ class VoiceApi extends ApiAction
     public function ws() {
         $file = $_FILES['fileUpload'];
 
-        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
-        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
-        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
-        $sessionStageId = !empty($this->_get['session_stage_id']) ? $this->_get['session_stage_id'] : 0;
+        $_request = $_REQUEST;
+        $sessionId = !empty($_request['session_id']) ? $_request['session_id'] : 0;
+        $storyId = !empty($_request['story_id']) ? $_request['story_id'] : 0;
+        $userId = !empty($_request['user_id']) ? $_request['user_id'] : 0;
+        $sessionStageId = !empty($_request['session_stage_id']) ? $_request['session_stage_id'] : 0;
 
         try {
             $time1 = time();
