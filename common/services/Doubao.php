@@ -33,6 +33,10 @@ class Doubao extends Component
 
     private $_token;
 
+    public $model = '';
+    public $temperature = '';
+    public $host = '';
+
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
     public function talk($userMessage, $oldMessages = []) {
@@ -523,10 +527,10 @@ class Doubao extends Component
         $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
 //            'model' => 'deepseek-chat',
-        'model' => 'deepseek-ai/DeepSeek-V2.5',
+            'model' => $this->model,
 //            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
-            'temperature' => 1.6,
+            'temperature' => $this->temperature,
 //'prompt' => implode("\n", $templateContents),
 //            'stream' => false,
             "response_format" => [
@@ -578,7 +582,7 @@ class Doubao extends Component
 
     public function callOpenAIChatGPT($userMessage, $templateContents = array()) {
 //        $apiKey = $this->apiKey;
-//        $url = self::CHATGPT_HOST . '/chat/completions';
+//        $url = $this->host . '/chat/completions';
 
         $messages = array(
             array('role' => 'system', 'content' => '你是一个灵镜新世界的小灵镜，专门解答各种问题'),
@@ -662,7 +666,7 @@ class Doubao extends Component
     }
 
     private function _call($interface, $params = array(), $method = 'POST') {
-        $url = self::CHATGPT_HOST . $interface;
+        $url = $this->host . $interface;
 
         $headers = array(
             'Content-Type: application/json',
