@@ -150,6 +150,12 @@ class DoApi extends ApiAction
 
                     $ret = $this->getSessionModelsByStage($sessionStageId, $stageUId);
                     break;
+                case 'get_session_models_init':
+                    $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+                    $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+                    $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+                    $ret = $this->getSessionModelsInit($userId, $sessionId, $storyId);
+                    break;
                 case 'pickup':
                     $ret = $this->pickupModels();
                     break;
@@ -778,7 +784,7 @@ class DoApi extends ApiAction
 
     public function getSessionModelsInit($userId, $sessionId, $storyId) {
         $user = User::find()->where(['id' => $userId])->one();
-        if ($storyId == 5) {
+        if ($storyId == 5 || 1 == 1) {
             $userLat = !empty($this->_get['user_lat']) ? $this->_get['user_lat'] : 0;
             $userLng = !empty($this->_get['user_lng']) ? $this->_get['user_lng'] : 0;
 
@@ -815,7 +821,6 @@ class DoApi extends ApiAction
                     foreach ($setResult['result'] as $locId => $userModelLocCollections) {
                         foreach ($userModelLocCollections as $userModelLocRets) {
                             foreach ($userModelLocRets['userModelLoc'] as $userModelLocRet) {
-
                                 if (!empty($userModelLocRets['location'])) {
                                     // 家周围100米之内不出现扩展stage
                                     $dis = \common\helpers\Common::computeDistanceWithLatLng(
@@ -825,7 +830,6 @@ class DoApi extends ApiAction
                                         continue;
                                     }
                                 }
-
                                 if ($userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
                                     || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
                                     || $userModelLocRet->active_class == UserModelLoc::ACTIVE_CLASS_STORY
@@ -882,7 +886,302 @@ class DoApi extends ApiAction
         $ret = [];
         if (!empty($sessionStagesRet)) {
             foreach ($sessionStagesRet as $sessionStageRet) {
+                $sessionStage = $sessionStageRet['sessionStage'];
+                $params = [
+                    'session_id' => $sessionId,
+                    'user_id' => $userId,
+                    'story_id' => $storyId,
+                    'session_stage_id'  => $sessionStage->id,
+                ];
 
+
+                $stageUIdTemplate = $sessionStage->stage->stage_u_id;
+                $sessionModels = $sessionStage->models;
+                $models = [];
+                if (!empty($sessionModels)) {
+//                $models = [];
+//                $tmpStoryModelsByStoryModelClass = [];
+//                foreach ($sessionModels as $sessionModel) {
+//                    $tmpStoryModel = $sessionModel->storymodel;
+//                    if (!empty($tmpStoryModel)) {
+//                        $tmpStoryModelsByStoryModelClass[$tmpStoryModel->story_model_class][] = $tmpStoryModel;
+//                    }
+//                }
+                    foreach ($sessionModels as $sessionModel) {
+                        $sessModel = $sessionModel;
+//                    $storyModel = json_decode($sessModel['snapshot'], true);
+                        $storyModel = $sessionModel->storymodel;
+
+                        if (!empty($storyModel)) {
+
+                            $storyModel = Model::combineStoryModelWithDetail($storyModel);
+
+                            // 判断放置方式，如果当天已经放过，就跳过
+                            if (!empty($storyModel->set_type)
+                                && $storyModel->set_type == StoryModels::SET_TYPE_ONE_TIME_PER_DAY
+                            ) {
+                                if (!empty($sessionModel->set_at)
+                                    && strtotime($sessionModel->set_at) > strtotime(date('Y-m-d 00:00:00'))
+                                ) {
+                                    continue;
+                                }
+                            }
+
+                            if (!empty($storyModel->set_type)
+                                && $storyModel->set_type == StoryModels::SET_TYPE_ONE_TIME
+                            ) {
+                                if (!empty($sessionModel->set_at)) {
+                                    continue;
+                                }
+                            }
+
+//                        $storyModelParams = [];
+//                        $params = [];
+                            $sModels = [];
+                            if ($storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_STAGE) {
+
+                                if (!empty($setResult)) {
+                                    foreach ($setResult['result'] as $locId => $userModelLocs) {
+                                        foreach ($userModelLocs as $tmpUserModelLocs) {
+                                            foreach ($tmpUserModelLocs['userModelLoc'] as $tmpUserModelLoc) {
+                                                if (!empty($tmpUserModelLoc->story_stage_id)) {
+                                                    foreach ($sessionStage->stage->nextstage as $nStage) {
+                                                        if ($tmpUserModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                                                            || $tmpUserModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                                                            || $tmpUserModelLoc->active_class == UserModelLoc::ACTIVE_CLASS_STORY
+                                                        ) {
+                                                            if ($nStage->story_stage_id == $tmpUserModelLoc->story_stage_id) {
+                                                                $stageStoryModel = clone $storyModel;
+                                                                $stageStoryModel->lng = $tmpUserModelLocs['location']['lng'];
+                                                                $stageStoryModel->lat = $tmpUserModelLocs['location']['lat'];
+                                                                $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+//                                                                $stageStoryModel->misrange = 50;
+//                                                                $stageStoryModel->trigger_misrange = 50;
+                                                                $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
+//                                                            $stageStoryModel->stage_id = $sessionStage->stage->id;
+
+                                                                $params1 = $params;
+                                                                $storyModelParams['location_id'] = $tmpUserModelLocs['location']['id'];
+                                                                $storyModelParams['stage_id'] = $nStage->story_stage_id;
+
+                                                                $sModels[] = [
+                                                                    'story_model' => $this->_setStoryModelToStage($stageStoryModel, $storyModelParams, $params1),
+                                                                    'user_model_loc' => [],
+                                                                    'location' => $tmpUserModelLocs['location'],
+                                                                ];
+                                                                //                                                        $models[] = $stageStoryModel;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                } else {
+                                    foreach ($sessionStage->stage->nextstage as $nStage) {
+                                        $stageStoryModel = clone $storyModel;
+                                        $stageStoryModel->lng = $nStage->lng;
+                                        $stageStoryModel->lat = $nStage->lat;
+                                        $stageStoryModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+                                        $stageStoryModel->misrange = 50;
+                                        $stageStoryModel->trigger_misrange = 50;
+                                        $stageStoryModel->is_visable = StoryModels::VISIBLE_SHOW;
+                                        $stageStoryModel->stage_id = $sessionStage->stage->id;
+
+                                        $params1 = $params;
+
+                                        $sModels[] = [
+                                            'story_model' => $this->_setStoryModelToStage($stageStoryModel, [], $params1),
+                                            'user_model_loc' => [],
+                                            'location' => [],
+                                        ];
+//                                                        $models[] = $stageStoryModel;
+                                    }
+                                }
+
+                            } else {
+//                            $tmpSessionStage = $sessionStage->stage->toArray();
+                                $tmpSessionStageCloned = clone $sessionStage->stage;
+                                $tmpSessionStage = $tmpSessionStageCloned->toArray();
+                                $hasLoc = 0;
+                                if (!empty($setResult)
+                                    && !empty($setResult['storyModelsResult'][$storyModel->id])
+                                ) {
+                                    foreach ($setResult['storyModelsResult'][$storyModel->id] as $userModelLocRet) {
+//                                foreach ($userModelLocRets as $userModelLocRet) {
+                                        $storyModelParams = [];
+                                        $params1 = $params;
+
+                                        $storyModel2 = clone $storyModel;
+                                        $location = [];
+                                        if (!empty($userModelLocRet['location'])
+                                            && $hasLoc == 0
+                                        ) {
+                                            $tmpSessionStageUId = $stageUIdTemplate;
+                                            $tmpStageUId = str_replace('{$location_id}', $userModelLocRet['location']['id'], $tmpSessionStageUId);
+                                            if ($tmpStageUId != $stageUId) {
+                                                continue;
+                                            }
+
+//                                        $storyModel2->lng = $userModelLocRet['location']['lng'];
+//                                        $storyModel2->lat = $userModelLocRet['location']['lat'];
+//                                        $storyModel2->scan_type = StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_LATLNG;
+//                                        $storyModel2->misrange = 2;
+//                                        $storyModel2->trigger_misrange = 10;
+//                                    $storyModelParams['lng'] = $userModelLocRet['location']['lng'];
+//                                    $storyModelParams['lat'] = $userModelLocRet['location']['lat'];
+
+                                            $storyModelParams['location_id'] = $userModelLocRet['location']['id'];
+                                            $params1['location_id'] = $userModelLocRet['location']['id'];
+
+                                            $sessionStage->stage->stage_u_id = $tmpStageUId;
+                                            $sessionStage->stage->lat = $userModelLocRet['location']['lat'];
+                                            $sessionStage->stage->lng = $userModelLocRet['location']['lng'];
+                                            $sessionStage->stage->misrange = 50;
+                                            $sessionStage->stage->scan_type = StoryStages::SCAN_TYPE_LATLNG;
+                                            $hasLoc = 1;
+
+                                            if ($storyModel2->story_model_class == StoryModels::STORY_MODEL_CLASS_RIVAL) {
+                                                $storyModel2->is_visable = StoryModels::VISIBLE_HIDE;
+                                            }
+
+                                            if (!empty($userModelLocRet['userModelLoc']->active_class)
+                                                &&
+                                                ($userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_CATCH
+                                                    || $userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_STORY
+                                                    || $userModelLocRet['userModelLoc']->active_class == UserModelLoc::ACTIVE_CLASS_OTHER
+                                                )
+                                            ) {
+                                                $sModels[] = [
+                                                    'story_model' => $this->_setStoryModelToStage($storyModel2, $storyModelParams, $params1),
+                                                    'user_model_loc' => $userModelLocRet['userModelLoc'],
+                                                    'location' => $location,
+                                                ];
+                                            }
+
+                                        }
+//                                }
+                                    }
+                                } else {
+                                    $storyModelParams = [];
+                                    if (
+//                                    $storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET
+//                                    ||
+                                        $storyModel->story_model_class == StoryModels::STORY_MODEL_CLASS_PET_ITEM
+                                        // 这个是让宠物在家的位置才能出现的
+                                        // 暂时封禁掉这个，因为宠物已经用召唤模式了，那么就可以随时召唤就好了
+                                        && 1 != 1
+                                    ) {
+                                        $storyModel->lng = $user->home_lng;
+                                        $storyModel->lat = $user->home_lat;
+                                        $storyModel->scan_type = StoryModels::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_LATLNG;
+                                        $storyModel->misrange = empty($storyModel->misrange) ? 10 : $storyModel->misrange;
+                                        $storyModel->trigger_misrange = empty($storyModel->trigger_misrange) ? 10 : $storyModel->trigger_misrange;
+                                    }
+                                    $sModels[] = [
+                                        'story_model' => $this->_setStoryModelToStage($storyModel, $storyModelParams, $params),
+                                        'user_model_loc' => [],
+                                        'location' => [],
+                                    ];
+
+                                }
+                            }
+
+                            if (!empty($sModels)) {
+                                foreach ($sModels as $sModelCols) {
+                                    $sModelItems = $sModelCols['story_model'];
+                                    $sModelLoc = $sModelCols['user_model_loc'];
+                                    foreach ($sModelItems as $sModel) {
+                                        $models[] = [
+                                            'session_model' => $sessionModel,
+                                            'story_model' => $sModel,
+                                            'user_model_loc' => $sModelLoc,
+                                            'model' => $storyModel->model,
+                                            'location' => $sModelCols['location'],
+                                        ];
+                                    }
+                                }
+                            }
+
+//                        $maxCount = 1;
+//                        if (!empty($storyModel->story_model_prop)) {
+//                            $storyModelProp = json_decode($storyModel->story_model_prop, true);
+//                            if (!empty($storyModelProp['repeat'])) {
+//                                $maxCount = $storyModelProp['repeat'];
+//                            }
+//                        }
+////                        $preStoryModel = $storyModel;
+////                        $oldParams = [
+////                            'story_model_name' => (string)$storyModel->story_model_name,
+////                            'dialog' => (string)$storyModel->dialog,
+////                            'model_inst_u_id' => (string)$storyModel->model_inst_u_id,
+////                        ];
+//                        for ($i=0; $i<$maxCount; $i++) {
+////                            $storyModel = $preStoryModel;
+//                            $storyModel1 = clone $storyModel;
+//                            // 判断概率
+//                            if (!empty($storyModel1->rate)) {
+//                                $seed = rand(1, 100);
+//                                if ($seed > $storyModel1->rate) {
+//                                    continue;
+//                                }
+//                            }
+//
+////                            foreach ($oldParams as $col => $val) {
+////                                $storyModel->$col = $val;
+////                            }
+//
+//                            $storyModelParams['i'] = $i;
+//                            $storyModel1 = Model::formatStoryModel($storyModel1, $storyModelParams);
+//
+//                            if (!empty($storyModel1->dialog)) {
+//                                $params['story_model_id'] = $storyModel1->id;
+//                                $params['model_id'] = $storyModel1->model_id;
+//                                $params['story_model_detail_id'] = $storyModel1->story_model_detail_id;
+//                                $params['model_inst_u_id'] = $storyModel1->model_inst_u_id;
+//                                $params['i'] = $i;
+//
+//                                // 个性化属性替换
+//                                if (!empty($userModelProps[$storyModel1->id])) {
+//                                    $params['show_name'] = !empty($userModelProps[$storyModel1->id]['user_model_prop']['show_name'])
+//                                        ? $userModelProps[$storyModel1->id]['user_model_prop']['show_name'] : $storyModel1->story_model_name;
+//                                }
+//
+//                                $storyModel1->dialog = Model::formatDialog($storyModel1, $params);
+//                            }
+//
+//
+//                            $models[] = [
+//                                'session_model' => $sessionModel,
+//                                'story_model' => $storyModel1,
+//                                'model' => $storyModel->model,
+//                            ];
+//                        }
+                        }
+                    }
+                }
+                $stage = $sessionStage->stage;
+                if (!empty($stage->bgm)) {
+                    $stage->bgm = Attachment::completeUrl($stage->bgm, false);
+                }
+
+                $nextStage = $sessionStage->stage->nextstage;
+                $nStage = [];
+                if (!empty($nextStage)) {
+                    foreach ($nextStage as $ns) {
+                        if (empty($ns->storystage)) {
+                            continue;
+                        }
+                        $nStage[] = $ns->storystage;
+                    }
+                }
+                $ret[] = [
+                    'session_stage' => $sessionStage,
+                    'stage' => $stage,
+                    'next_stage' => $nStage,
+                    'session_models' => $models,
+                ];
             }
         }
 
