@@ -54,7 +54,7 @@ class Doubao extends Component
             '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
         ];
 
-        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false);
 
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
@@ -471,7 +471,7 @@ class Doubao extends Component
         return $ret;
     }
 
-    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array()) {
+    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true) {
 
         if (empty($roleTxts)) {
             $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
@@ -551,6 +551,11 @@ class Doubao extends Component
 //                'type' => 'json_object',
 //            ],
         );
+        if ($isJson) {
+            $data['response_format'] = [
+                'type' => 'json_object',
+            ];
+        }
 //var_dump($data);exit;
 //        Yii::info('chatGPT data: ' . json_encode($data));
 
