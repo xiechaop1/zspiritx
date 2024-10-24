@@ -88,12 +88,12 @@ class VoiceApi extends ApiAction
                                 }
                             }
                         }
-                        if (!empty($lastContents['content'])) {
-                            if (Common::isJson($lastContents['content'])) {
-                                $contentObj = json_decode($lastContents['content'], true);
+                        if (!empty($lastContent['content'])) {
+                            if (Common::isJson($lastContent['content'])) {
+                                $contentObj = json_decode($lastContent['content'], true);
                                 $content = !empty($contentObj['content']) ? $contentObj['content'] : '';
                             } else {
-                                $content = $lastContents['content'];
+                                $content = $lastContent['content'];
                             }
                             $oldContents[] = [
                                 'role'  => 'assistant',
