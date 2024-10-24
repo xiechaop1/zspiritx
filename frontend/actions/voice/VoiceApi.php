@@ -10,6 +10,7 @@ namespace frontend\actions\voice;
 
 
 use common\extensions\Uploader;
+use common\helpers\Common;
 use common\models\Actions;
 use frontend\actions\ApiAction;
 use yii;
@@ -75,19 +76,30 @@ class VoiceApi extends ApiAction
 
             $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, strtotime('-5 minute'), 0, 1);
 
-            var_dump($lastContents);
-
             $oldContents = [];
             if (!empty($lastContents)) {
                 foreach ($lastContents as $lastContent) {
                     if (!empty($lastContent['prompt'])) {
-                        $oldWords = json_decode($lastContent['prompt'], true);
-                        if (!empty($oldWords)) {
-                            foreach ($oldWords as $oldWord) {
-                                if (!empty($oldWord['role']) && $oldWord['role'] != 'system') {
-                                    $oldContents[] = $oldWord;
+                        $oldPrompts = json_decode($lastContent['prompt'], true);
+                        if (!empty($oldPrompts)) {
+                            foreach ($oldPrompts as $oldPrompt) {
+                                if (!empty($oldPrompt['role']) && $oldPrompt['role'] != 'system') {
+                                    $oldContents[] = $oldPrompt;
                                 }
                             }
+                        }
+                        if (!empty($lastContents['content'])) {
+                            if (Common::isJson($lastContents['content'])) {
+                                $contentObj = json_decode($lastContents['content'], true);
+                                $content = !empty($contentObj['content']) ? $contentObj['content'] : '';
+                            } else {
+                                $content = $lastContents['content'];
+                            }
+                            $oldContents[] = [
+                                'role'  => 'assistant',
+                                'content' => $content,
+                            ];
+
                         }
                     }
                 }
