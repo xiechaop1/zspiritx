@@ -105,7 +105,7 @@ class VoiceApi extends ApiAction
                 }
             }
 
-            var_dump($oldContents);
+//            var_dump($oldContents);
 
             $params = [
                 'userId' => $userId,
@@ -119,14 +119,14 @@ class VoiceApi extends ApiAction
             $aiContent = '';
             if (!empty($aiRet['content'])) {
                 $aiContent = $aiRet['content'];
-                var_dump($aiRet['content']);
+//                var_dump($aiRet['content']);
             } else {
                 $aiContent = $aiRet;
-                var_dump($aiRet);
+//                var_dump($aiRet);
 
             }
 
-            $strMaxLength = 260;
+            $strMaxLength = 85;
             $dialogCt = intval(mb_strlen($aiContent, 'utf-8') / $strMaxLength) + 1;
 
             $dialogArr = [];
