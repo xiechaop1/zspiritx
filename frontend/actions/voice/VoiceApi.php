@@ -88,6 +88,8 @@ class VoiceApi extends ApiAction
             $dialogArr = [[
                 'name' => '小灵语',
                 'sentence' => $aiContent,
+                'to_user' => $userId,
+                'sender_id' => 0,
             ]];
             Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
             return $aiRet;
