@@ -670,7 +670,7 @@ class Doubao extends Component
             $model = new GptContent();
             $model->user_id = $userId;
             $model->to_user_id = $toUserId;
-            $model->content = $content;
+            $model->content = json_encode($content, JSON_UNESCAPED_UNICODE);
             $model->msg_type = $msgType;
             $model->gpt_model = $gptModel;
             $model->prompt = json_encode($prompt, JSON_UNESCAPED_UNICODE);
