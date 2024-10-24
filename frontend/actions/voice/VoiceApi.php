@@ -126,14 +126,14 @@ class VoiceApi extends ApiAction
 
             }
 
-            $strlength = 260;
-            $dialogCt = intval(mb_strlen($aiContent, 'utf-8') / $strlength) + 1;
+            $strMaxLength = 260;
+            $dialogCt = intval(mb_strlen($aiContent, 'utf-8') / $strMaxLength) + 1;
 
             $dialogArr = [];
             for ($i = 0; $i < $dialogCt; $i++) {
                 $dialogArr[] = [
                     'name' => '小灵语',
-                    'sentence' => mb_substr($aiContent, $i * $strlength, $strlength, 'utf-8'),
+                    'sentence' => mb_substr($aiContent, $i * $strMaxLength, $strMaxLength, 'utf-8'),
                     'to_user' => $userId,
                     'sender_id' => 0,
                 ];
