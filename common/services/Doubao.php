@@ -10,6 +10,7 @@ namespace common\services;
 
 
 use common\definitions\Subject;
+use common\models\GptContent;
 use common\models\Qa;
 use common\models\StoryMatch;
 use common\models\UserExtends;
@@ -37,9 +38,11 @@ class Doubao extends Component
     public $temperature = '';
     public $host = '';
 
+    private $_prompt = [];
+
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
-    public function talk($userMessage, $oldMessages = []) {
+    public function talk($userMessage, $oldMessages = [], $params = []) {
 
         $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
         $simple = [
@@ -52,6 +55,14 @@ class Doubao extends Component
         ];
 
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+
+        $userId = !empty($params['userId']) ? $params['userId'] : 0;
+        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+
+        $prompt = $this->_prompt;
+
+        $this->saveContentToDb($userId, $userId, $ret, $prompt, 0, $storyId, $this->model);
+
         return $ret;
     }
 
@@ -507,6 +518,7 @@ class Doubao extends Component
 //        var_dump($messages);exit;
         Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
         file_put_contents('/tmp/test_doubao_i.log', var_export($messages, true));
+        $this->_prompt = $messages;
 //        if (!empty($oldMessages)) {
 //            var_dump($messages);exit;
 //        }
@@ -651,6 +663,52 @@ class Doubao extends Component
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function saveContentToDb($userId, $toUserId, $content, $prompt = [], $senderId = 0, $storyId = 0, $gptModel = '', $msgType = GptContent::MSG_TYPE_TEXT) {
+        try {
+            $model = new GptContent();
+            $model->user_id = $userId;
+            $model->to_user_id = $toUserId;
+            $model->content = $content;
+            $model->msg_type = $msgType;
+            $model->gpt_model = $gptModel;
+            $model->prompt = json_encode($prompt, JSON_UNESCAPED_UNICODE);
+            $model->sender_id = $senderId;
+            $model->story_id = $storyId;
+            $model->save();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function getContentsFromDb($userId, $toUserId, $beginTime = 0, $endTime = 0, $limit = 20, $senderId = 0, $storyId = 0) {
+        $contentModel = GptContent::find()
+            ->where([
+                'user_id' => $userId,
+            ]);
+        if (!empty($toUserId)) {
+            $contentModel->andFilterWhere(['to_user_id' => $toUserId]);
+        }
+        if (!empty($senderId)) {
+            $contentModel->andFilterWhere(['sender_id' => $senderId]);
+        }
+        if (!empty($storyId)) {
+            $contentModel->andFilterWhere(['story_id' => $storyId]);
+        }
+        if (!empty($beginTime)) {
+            $contentModel->andFilterWhere(['>=', 'created_at', $beginTime]);
+        }
+        if (!empty($endTime)) {
+            $contentModel->andFilterWhere(['<=', 'created_at', $endTime]);
+        }
+        $contentModel->orderBy('id desc');
+        if ($limit > 0) {
+            $contentModel->limit($limit);
+        }
+        $contents = $contentModel->all();
+
+        return $contents;
     }
 
     private function _formatResponse($response) {

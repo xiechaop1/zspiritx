@@ -72,7 +72,30 @@ class VoiceApi extends ApiAction
             $word = Yii::$app->xunfei->sendByFile($file['tmp_name']);
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
             var_dump($word);
-            $aiRet = Yii::$app->doubao->talk($word);
+
+            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, strtotime('-5 minute'), 0, 1);
+
+            var_dump($lastContents);
+
+            $oldContents = [];
+            if (!empty($lastContents)) {
+                foreach ($lastContents as $lastContent) {
+                    if (!empty($lastContent['prompt'])) {
+                        $oldWords = json_decode($lastContent['prompt'], true);
+                        if (!empty($oldWords)) {
+                            foreach ($oldWords as $oldWord) {
+                                if (!empty($oldWord['role']) && $oldWord['role'] != 'system') {
+                                    $oldContents[] = $oldWord;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            var_dump($oldContents);
+
+            $aiRet = Yii::$app->doubao->talk($word, $oldContents);
             $time2 = time();
             var_dump($time2 - $time1);
             $aiContent = '';
