@@ -50,7 +50,10 @@ class Actions extends Component
             foreach ($actions as $act) {
                 $act->action_status = \common\models\Actions::ACTION_STATUS_READ;
                 $act->save();
-                $act->action_detail = json_decode($act->action_detail, true);
+
+                if ( \common\helpers\Common::isJson($act->action_detail) ) {
+                    $act->action_detail = json_decode($act->action_detail, true);
+                }
             }
         }
 
