@@ -547,9 +547,9 @@ class Doubao extends Component
             'temperature' => $this->temperature,
 //'prompt' => implode("\n", $templateContents),
 //            'stream' => false,
-            "response_format" => [
-                'type' => 'json_object',
-            ],
+//            "response_format" => [
+//                'type' => 'json_object',
+//            ],
         );
 //var_dump($data);exit;
 //        Yii::info('chatGPT data: ' . json_encode($data));
