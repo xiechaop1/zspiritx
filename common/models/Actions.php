@@ -18,6 +18,7 @@ class Actions extends \common\models\gii\Actions
     const ACTION_TYPE_MODEL_DISPLAY = 12; // 模型展示
 
     const ACTION_TYPE_WEBVIEW       = 13; // 打开全屏H5
+    const ACTION_TYPE_DIALOG        = 14; // 弹窗
 
     public static $actionType2Name = [
         self::ACTION_TYPE_ACTION => '动作',
@@ -25,6 +26,7 @@ class Actions extends \common\models\gii\Actions
         self::ACTION_TYPE_CHANGE_STAGE => '切换场景',
         self::ACTION_TYPE_MODEL_DISPLAY => '模型展示',
         self::ACTION_TYPE_WEBVIEW => '打开全屏H5',
+        self::ACTION_TYPE_DIALOG => '弹窗',
     ];
 
     const ACTION_STATUS_NORMAL = 0; // 正常
