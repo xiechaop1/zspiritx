@@ -58,10 +58,12 @@ class Doubao extends Component
 
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $toUserId = !empty($toUserId) ? $toUserId : $userId;
 
         $prompt = $this->_prompt;
 
-        $this->saveContentToDb($userId, $userId, $ret, $prompt, 0, $storyId, $this->model);
+        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, 0, $storyId, $this->model);
 
         return $ret;
     }
