@@ -191,15 +191,26 @@ $this->title = '练习赛';
     <div class="w-100 m-auto">
         <div class="p-20 bg-black">
             <div class="m-t-20">
-                <div class="match-qa-header-left3" style="width: 435px; text-align: left;">
+                <div class="match-qa-header-left3" style="width: 455px; text-align: left;">
                     <img src="<?= $user['avatar'] ?>" class="header-l">
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
                         <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
-                        <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
+                        <span id="gold_show"><?php
+                            if (!empty($userScore->score)) {
+                                if ($userScore->score > 10000) {
+                                    echo round($userScore->score / 10000, 2) . '万';
+                                } else {
+                                    echo $userScore->score;
+                                }
+                            } else {
+                                echo 0;
+                            }
+                            ?></span>
+                        <input type="hidden" id="gold" value="<?= !empty($userScore->score) ? $userScore->score : 0 ?>">
                     </div>
                 </div>
-                <div class="btn-m-green confirm_btn" style="margin-left: 80px;">
+                <div class="btn-m-green confirm_btn" style="margin-left: 60px;">
                     返回
                 </div>
 
@@ -1159,7 +1170,7 @@ $this->title = '练习赛';
     }
 
     function addGold() {
-        var gold = $('#gold').html();
+        var gold = $('#gold').val();
         var addGold = $('#add_gold').val();
         var user_id = $('input[name=user_id]').val();
         var story_id = $('input[name=story_id]').val();
@@ -1205,9 +1216,9 @@ $this->title = '练习赛';
 
         if (addGold > 0) {
 
-            var goldSpan = $('#gold');
+            var goldSpan = $('#gold_show');
             var goldDiv = '<div id="showGold" style="z-index: 999999; position: absolute; top: 100px; left: ' + goldSpan.position().left + 'px; font-size: 70px; color: #e0a800; font-weight: bold; width: 300px;">+ ' + addGold + '</div>';
-            $('#gold').parent().append(goldDiv);
+            $('#gold_show').parent().append(goldDiv);
             console.log(goldDiv);
             $('#showGold').animate({
                 top: goldSpan.position().top - 10 + 'px',
@@ -1218,10 +1229,17 @@ $this->title = '练习赛';
 
             floNumber(addGold);
             gold = parseInt(gold) + parseInt(addGold);
-            $('#gold').html(gold);
-            $('#gold').css('opacity', 0).animate({
+            $('#gold').val(gold);
+            $('#gold_show').html(formatGold(gold));
+            $('#gold_show').css('opacity', 0).animate({
                 opacity: 1
             }, 1000);
+        }
+    }
+
+    function formatGold(gold) {
+        if (gold >= 10000) {
+            return (gold / 10000).toFixed(2) + '万';
         }
     }
 
@@ -1264,7 +1282,7 @@ $this->title = '练习赛';
         var v_detail=that.attr("data-detail");
         var match_id=that.attr("data-match");
 
-        var score=$('#gold').html();
+        var score=$('#gold').val();
         var subjct=$('#subjct').html();
         var right_ct=$('#right_ct').html();
         var wrong_ct=$('#wrong_ct').html();
