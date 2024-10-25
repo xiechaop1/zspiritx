@@ -14,6 +14,12 @@ class GptContent extends \common\models\gii\GptContent
 
     const MSG_TYPE_TEXT = 1; // 文本
 
+    const MSG_CLASS_NORMAL = 1; // 普通
+    const MSG_CLASS_STORY_CREATOR = 2; // 故事创建者
+    const MSG_CLASS_PUZZLE = 3; // 谜题
+    const MSG_CLASS_GUESS_BY_DESCRIPTION = 4; // 描述猜
+    const MSG_CLASS_NISHUOWOCAI = 5; // 你说我猜
+
     public function behaviors()
     {
         return [

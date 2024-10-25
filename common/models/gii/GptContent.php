@@ -26,7 +26,7 @@ class GptContent extends \yii\db\ActiveRecord
     {
         return [
             [['gpt_model',  ], 'string'],
-            [['user_id', 'sender_id', 'to_user_id', 'story_id', 'msg_type',], 'integer'],
+            [['user_id', 'sender_id', 'to_user_id', 'story_id', 'msg_type', 'msg_class', ], 'integer'],
             [['content', 'prompt'], 'string'],
             [['status', 'is_delete', 'created_at', 'updated_at',], 'integer'],
         ];

@@ -60,10 +60,11 @@ class Doubao extends Component
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
         $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
+        $msgClass = GptContent::MSG_CLASS_NORMAL;
 
         $prompt = $this->_prompt;
 
-        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, 0, $storyId, $this->model);
+        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
 
         return $ret;
     }
@@ -672,13 +673,14 @@ class Doubao extends Component
         }
     }
 
-    public function saveContentToDb($userId, $toUserId, $content, $prompt = [], $senderId = 0, $storyId = 0, $gptModel = '', $msgType = GptContent::MSG_TYPE_TEXT) {
+    public function saveContentToDb($userId, $toUserId, $content, $prompt = [], $msgClass = GptContent::MSG_CLASS_NORMAL, $senderId = 0, $storyId = 0, $gptModel = '', $msgType = GptContent::MSG_TYPE_TEXT) {
         try {
             $model = new GptContent();
             $model->user_id = $userId;
             $model->to_user_id = $toUserId;
             $model->content = json_encode($content, JSON_UNESCAPED_UNICODE);
             $model->msg_type = $msgType;
+            $model->msg_class = $msgClass;
             $model->gpt_model = $gptModel;
             $model->prompt = json_encode($prompt, JSON_UNESCAPED_UNICODE);
             $model->sender_id = $senderId;
@@ -689,11 +691,14 @@ class Doubao extends Component
         }
     }
 
-    public function getContentsFromDb($userId, $toUserId, $beginTime = 0, $endTime = 0, $limit = 20, $senderId = 0, $storyId = 0) {
+    public function getContentsFromDb($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL, $beginTime = 0, $endTime = 0, $limit = 20, $msgType = GptContent::MSG_TYPE_TEXT, $senderId = 0, $storyId = 0) {
         $contentModel = GptContent::find()
             ->where([
                 'user_id' => $userId,
             ]);
+        if (!empty($msgClass)) {
+            $contentModel->andFilterWhere(['msg_class' => $msgClass]);
+        }
         if (!empty($toUserId)) {
             $contentModel->andFilterWhere(['to_user_id' => $toUserId]);
         }

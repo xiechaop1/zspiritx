@@ -12,6 +12,7 @@ namespace frontend\actions\voice;
 use common\extensions\Uploader;
 use common\helpers\Common;
 use common\models\Actions;
+use common\models\GptContent;
 use frontend\actions\ApiAction;
 use yii;
 
@@ -74,7 +75,7 @@ class VoiceApi extends ApiAction
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
             var_dump($word);
 
-            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, strtotime('-5 minute'), 0, 1);
+            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
 
             $oldContents = [];
             if (!empty($lastContents)) {

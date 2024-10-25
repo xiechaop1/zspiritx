@@ -228,6 +228,18 @@ class KnockoutPrepare extends Action
                             $subjects = array_merge($subjects, $this->generateEnglishWithCt($ct, $level,0 , $userId));
                         }
                         break;
+                    case StoryMatch::MATCH_CLASS_CHINESE:
+                        $ct = 2;
+                        for ($level = $userLevel; $maxLevel; $level++) {
+                            $subjects = array_merge($subjects, $this->generateChineseWithCt($ct, $level, $matchClass,0));
+                        }
+                        break;
+                    case StoryMatch::MATCH_CLASS_HISTORY:
+                        $ct = 2;
+                        for ($level = $userLevel; $maxLevel; $level++) {
+                            $subjects = array_merge($subjects, $this->generateHistoryWithCt($ct, $level,0 , $userId));
+                        }
+                        break;
 
                 }
                 $storyMatchProp['subjects'] = $subjects;
@@ -328,12 +340,54 @@ class KnockoutPrepare extends Action
         return $subjects;
     }
 
+    public function  generateChineseWithCt($ct, $level = 1, $matchClass = Subject::SUBJECT_CLASS_CHINESE, $gold = 0) {
+        $subjects = [];
+//        $subjs = Yii::$app->qas->generateMath($level, $ct, $gold);
+//        $subjs = Yii::$app->qas->generateSubjectWithDoubao($level, StoryMatch::MATCH_CLASS_MATH, $ct, '奥数竞赛题目或者是竞赛题目，复杂度要高一些', [], false);
+        $subjs = Yii::$app->qas->getSubjectsFromDbByLevel($level, $matchClass, $ct);
+        foreach ($subjs as $subj) {
+            $subjects[] = [
+                'level' => $level,
+                'topic' => $subj,
+                'max_time' => 180,
+            ];
+        }
+//        for ($i=0; $i<$ct; $i++) {
+//            $subjects[] = [
+//                'level' => $level,
+//                'topic' => Yii::$app->qas->generateMath($level, $ct, $gold),
+//                'max_time' => 180,
+//            ];
+//        }
+        return $subjects;
+    }
+
     public function  generateEnglishWithCt($ct, $level = 1, $gold = 0, $userId) {
         $subjects = Yii::$app->qas->generateWordWithChinese($userId, $level, $ct);
         foreach ($subjects as &$sub) {
             $sub['max_time'] = 180;
             $sub['level'] = $level;
         }
+        return $subjects;
+    }
+
+    public function  generateHistoryWithCt($ct, $level = 1, $gold = 0) {
+        $subjects = [];
+        $subjs = Yii::$app->qas->getSubjectsFromDbByLevel($level, Subject::SUBJECT_CLASS_HISTORY, $ct);
+        foreach ($subjs as $subj) {
+            $subjects[] = [
+                'level' => $level,
+                'topic' => $subj,
+                'max_time' => 180,
+            ];
+        }
+//        for ($i=0; $i<$ct; $i++) {
+//            $subjects[] = [
+//                'level' => $level,
+//                'topic' => Yii::$app->qas->generateMath($level, $ct, $gold),
+//                'max_time' => 180,
+//            ];
+//        }
         return $subjects;
     }
 
