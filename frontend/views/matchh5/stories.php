@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = '故事汇';
+$this->title = '练习赛';
 
 ?>
 <style>
@@ -170,7 +170,6 @@ $this->title = '故事汇';
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="match_class" value="<?= !empty($matchClass) ? $matchClass : 0 ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
-<input type="hidden" name="level" value="<?= $level ?>">
 
 <input type="hidden" name="subj_idx" id="subj_idx" value="0">
 <div class="w-100 m-auto">
@@ -191,15 +190,26 @@ $this->title = '故事汇';
     <div class="w-100 m-auto">
         <div class="p-20 bg-black">
             <div class="m-t-20">
-                <div class="match-qa-header-left3" style="width: 435px; text-align: left;">
+                <div class="match-qa-header-left3" style="width: 455px; text-align: left;">
                     <img src="<?= $user['avatar'] ?>" class="header-l">
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
                         <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
-                        <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
+                        <span id="gold_show"><?php
+                            if (!empty($userScore->score)) {
+                                if ($userScore->score > 10000) {
+                                    echo round($userScore->score / 10000, 2) . '万';
+                                } else {
+                                    echo $userScore->score;
+                                }
+                            } else {
+                                echo 0;
+                            }
+                            ?></span>
+                        <input type="hidden" id="gold" value="<?= !empty($userScore->score) ? $userScore->score : 0 ?>">
                     </div>
                 </div>
-                <div class="btn-m-green confirm_btn" style="margin-left: 80px;">
+                <div class="btn-m-green confirm_btn" style="margin-left: 60px;">
                     返回
                 </div>
 
@@ -208,7 +218,7 @@ $this->title = '故事汇';
             <div class="match-qa-box right">
                 <!--文本问题-->
                 <div class="match-qa-content-text" style="line-height: 125%;" id="topic">
-<!--                    ︎开并百花丛，独立疏篱趣未穷。-->
+                    <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
                 </div>
                 <!--图片问题-->
                 <div class="match-qa-content-img" style="display: none;" id="image">
@@ -236,9 +246,7 @@ $this->title = '故事汇';
                 <div class="match-clock-bottom">
                     <div class="match-clock-bottom-left">
                         答题进度
-                            ：<span class="text-1" id="subjct">0</span>
-                        &nbsp; 难度
-                        <span class="text-2" ><?= $level ?></span>
+                        ：<span class="text-1" id="subjct">0</span>
                     </div>
                     <div class="match-clock-bottom-right">
                         正确
@@ -250,30 +258,30 @@ $this->title = '故事汇';
             </div>
 
             <div class="m-t-100" style="margin-top: 75px;" id="answer-box">
-<!--                <div class="answer-border2 worry">-->
-<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
-<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
-<!--                        15-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div class="answer-border2 right">-->
-<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_2">-->
-<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_2">-->
-<!--                        15-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div class="answer-border2">-->
-<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_3">-->
-<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_3">-->
-<!--                        15-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div class="answer-border2">-->
-<!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_4">-->
-<!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_4">-->
-<!--                        15-->
-<!--                    </label>-->
-<!--                </div>-->
+                <!--                <div class="answer-border2 worry">-->
+                <!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
+                <!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
+                <!--                        15-->
+                <!--                    </label>-->
+                <!--                </div>-->
+                <!--                <div class="answer-border2 right">-->
+                <!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_2">-->
+                <!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_2">-->
+                <!--                        15-->
+                <!--                    </label>-->
+                <!--                </div>-->
+                <!--                <div class="answer-border2">-->
+                <!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_3">-->
+                <!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_3">-->
+                <!--                        15-->
+                <!--                    </label>-->
+                <!--                </div>-->
+                <!--                <div class="answer-border2">-->
+                <!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_4">-->
+                <!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_4">-->
+                <!--                        15-->
+                <!--                    </label>-->
+                <!--                </div>-->
             </div>
 
 
@@ -358,19 +366,19 @@ $this->title = '故事汇';
                         <div style="float: left;"><img src="/template/img/qa/btn_播放_nor@2x.png"></div>
                     </div>
                     <div id="message-question" style="height: 200px; overflow: auto;">
-<!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" data-dismiss="modal" style="margin-top: 25px;">-->
-<!--                        <label class="btn-green-m-choice active ">知道了</label>-->
-<!--                    </div>-->
+                        <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" data-dismiss="modal" style="margin-top: 25px;">-->
+                        <!--                        <label class="btn-green-m-choice active ">知道了</label>-->
+                        <!--                    </div>-->
                     </div>
-<!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
-<!--                        <label class="btn-green-m active ">知道了</label>-->
-<!--                    </div>-->
-<!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
-<!--                        <label class="btn-green-m active ">知道了</label>-->
-<!--                    </div>-->
-<!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
-<!--                        <label class="btn-green-m active ">知道了</label>-->
-<!--                    </div>-->
+                    <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+                    <!--                        <label class="btn-green-m active ">知道了</label>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+                    <!--                        <label class="btn-green-m active ">知道了</label>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
+                    <!--                        <label class="btn-green-m active ">知道了</label>-->
+                    <!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -399,9 +407,9 @@ $this->title = '故事汇';
                         </div>
                     </div>
 
-                                        <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
-                                            <label class="btn-green-m active ">知道了</label>
-                                        </div>
+                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
+                        <label class="btn-green-m active ">知道了</label>
+                    </div>
                     <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">-->
                     <!--                        <label class="btn-green-m active ">知道了</label>-->
                     <!--                    </div>-->
@@ -483,7 +491,23 @@ $this->title = '故事汇';
     var topicSuggestion;
     window.onload = function () {
         var i = 0;
+        //var max = <?php //= $ct ?>//;
+        // var match_type = $('#match_type').val();
 
+
+        // if (match_type == 3) {
+        //     var matchTimer = setInterval(function() {
+        //         // $('#msg_' + i).show();
+        //         // if ($('#msg_' + i).length > 0) {
+        //         //     $('#msg_' + i).get(0).scrollIntoView();
+        //         // }
+        //         compTimer(matchTimer);
+        //         // console.log(i);
+        //         i++;
+        //     }, 1000);
+        // }
+
+// showSubject(0, obj);
 
         $('.msg-rtn-btn').click(function() {
             $('#message-box').modal('hide');
@@ -502,7 +526,7 @@ $this->title = '故事汇';
             setTimeout(function () {
                 getSugg('');
             }, 500);
-             $("#message-box").modal('show');
+            $("#message-box").modal('show');
 
         });
 
@@ -573,59 +597,234 @@ $this->title = '故事汇';
     };
 
 
-    function getSugg(ques) {
-        // $('#suggestion_content').toggle();
-        var topic = $('#topic').html();
-        var level = $('input[name=level]').val();
+    function submitSubject(idx, chosenObj) {
+        var answer = obj[idx].st_answer;
+        var that=$("#answer-info");
+        // var match_type = $('#match_type').val();
+        var qa_type=that.attr("data-type");
+        // console.log(match_type);
+        // console.log(qa_type);
+        if (qa_type == 1 || qa_type == 30 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
+            var v_select = $("input[name='challenge_answer']:checked").val();
+        } else if (qa_type == 7) {
+            var v_select = $("input[name='answer_txt']").val();
+        } else if (qa_type == 9) {
+            var v_select1 = $("input[name='answer_txt']").val();
+            var v_select2 = '';
+            // var v_select2 = $("#answer-border-response").html();
+            var v_select = v_select2 + v_select1;
+        } else if (qa_type == 8) {
+            var v_selects = $("input[name='answer_txt']");
+            var v_select = '';
+            for (var i = 0; i < v_selects.length; i++) {
+                v_select += v_selects[i].value;
+            }
+        }
+        var chosen = v_select;
+        console.log(chosen);
+        // return false;
+        // var chosen = $(chosenObj).val();
+
+        if (chosen == answer) {
+
+            showRet(chosenObj, 1);
+            setTimeout(function (){
+
+                addGold();
+                addRight();
+                addWrong();
+                addSubjCt();
+                // if (match_type == 2) {
+                //
+                //     if (ret == 0) {
+                //         // clearInterval(timer);
+                //         var answer = 1;
+                //         submitAnswer(answer);
+                //         // $('#answer-right-box').modal('show');
+                //
+                //     }
+                // }
+
+                recordQa(obj[idx], chosen);
+                var nIdx = idx + 1;
+                if (nIdx > obj.length - 10) {
+                    generateSubjects();
+                }
+
+                showSubject(nIdx);
+                $('input[name=answer_c]').attr('disabled', false);
+            },500);
+
+        } else {
+            $('#add_gold').val('0');
+            $('#add_right').val('0');
+            $('#add_wrong').val('1');
+            showRet(chosenObj, 2);
+            recordQa(obj[idx], chosen);
+            setTimeout(function () {
+                $('input[name=answer_c]').attr('disabled', false);
+            }, 1000);
+        }
+    }
+
+    function showRet(retObj, answer) {
+        var retCss = 'right';
+        var answerVoice = $('#audio_right')[0];
+        console.log(answer);
+        if (answer != 1) {
+            retCss = 'worry';
+            answerVoice = $('#audio_wrong')[0];
+        }
+        answerVoice.play();
+
+        $(retObj).parent().addClass(retCss);
+    }
+
+    function addGold() {
+        var gold = $('#gold').val();
+        var addGold = $('#add_gold').val();
         var user_id = $('input[name=user_id]').val();
         var story_id = $('input[name=story_id]').val();
-        // var ques = '';
-        var old_messages = '';
-
-        var audio_list = [];
-
-        if (ques != '') {
-            var oldMsgs = [];
-            var tmpMessages = $('#message-content').find('div');
-            tmpMessages.each(function () {
-                console.log($(this));
-                var msg = $(this).html();
-                console.log(msg);
-                var msg_type = $(this).attr('msg_type');
-                if (msg_type != "btn") {
-                    var msgObj = {
-                        msg: msg,
-                        msg_type: msg_type,
-                    };
-                    console.log(msgObj);
-                    oldMsgs.push(msgObj);
-                }
-            });
-            console.log(oldMsgs);
-            old_messages = JSON.stringify(oldMsgs);
-        } else {
-            $('#message-content').html('');
-        }
-        console.log(ques);
-        $('#message-question').html('');
-        var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="float: left; clear:both; font-size: 24px; width: 80%;">正在思考……</div>';
-        $('#message-content').append(sugdiv);
-
-        var audioVoice = $('#audio_voice')[0];
 
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
-            async: true,
-            url: '/match/get_suggestion_from_subject',
+            async: false,
+            url: '/user/add_user_score',
             data:{
-                story_id:story_id,
                 user_id:user_id,
-                topic:topic,
-                ques:ques,
-                old_messages:old_messages,
-                level:level,
-                match_class:match_class,
+                story_id:story_id,
+                // session_id:session_id,
+                // session_stage_id:session_stage_id,
+                score:addGold,
+            },
+            onload: function (data) {
+                // $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+
+                //新消息获取成功
+                if(ajaxObj["code"]==200){
+
+                }
+                //新消息获取失败
+                else{
+                    // $.alert(obj.msg)
+                    console.log(ajaxObj.msg);
+                }
+
+            }
+        });
+
+        if (addGold > 0) {
+
+            var goldSpan = $('#gold_show');
+            var goldDiv = '<div id="showGold" style="z-index: 999999; position: absolute; top: 100px; left: ' + goldSpan.position().left + 'px; font-size: 70px; color: #e0a800; font-weight: bold; width: 300px;">+ ' + addGold + '</div>';
+            $('#gold_show').parent().append(goldDiv);
+            console.log(goldDiv);
+            $('#showGold').animate({
+                top: goldSpan.position().top - 10 + 'px',
+                opacity: '0'
+            }, 1200, function() {
+                $('#showGold').remove();
+            });
+
+            floNumber(addGold);
+            gold = parseInt(gold) + parseInt(addGold);
+            $('#gold').val(gold);
+            $('#gold_show').html(formatGold(gold));
+            $('#gold_show').css('opacity', 0).animate({
+                opacity: 1
+            }, 1000);
+        }
+    }
+
+    function formatGold(gold) {
+        if (gold >= 10000) {
+            return (gold / 10000).toFixed(2) + '万';
+        }
+    }
+
+    function addRight() {
+        var right = $('#right_ct').html();
+        var addRight = $('#add_right').val();
+        if (addRight > 0) {
+            floNumber(addRight);
+            right = parseInt(right) + parseInt(addRight);
+            $('#right_ct').html(right);
+            $('#right_ct').css('opacity', 0).animate({
+                opacity: 1
+            }, 1000);
+        }
+    }
+
+    function addWrong() {
+        var wrong = $('#wrong_ct').html();
+        var addWrong = $('#add_wrong').val();
+        if (addWrong > 0) {
+            floNumber(addWrong);
+            wrong = parseInt(wrong) + parseInt(addWrong);
+            $('#wrong_ct').html(wrong);
+            $('#wrong_ct').css('opacity', 0).animate({
+                opacity: 1
+            }, 1000);
+        }
+    }
+
+    function submitAnswer(answer) {
+        var that=$("#answer-info");
+        var qa_id=that.attr("data-qa");
+        var qa_type=that.attr("data-type");
+        var story_id=that.attr("data-story");
+        var user_id=$("input[name='user_id']").val();
+        var session_id=$("input[name='session_id']").val();
+        var session_stage_id=$("input[name='session_stage_id']").val();
+        var begin_ts=$("input[name='begin_ts']").val();
+        var v_ture=that.attr("data-value");
+        var v_detail=that.attr("data-detail");
+        var match_id=that.attr("data-match");
+
+        var score=$('#gold').val();
+        var subjct=$('#subjct').html();
+        var right_ct=$('#right_ct').html();
+        var wrong_ct=$('#wrong_ct').html();
+
+        // var answer;
+        // console.log(subjct);
+        // console.log(max_riv_subjct);
+        // if (subjct > max_riv_subjct) {
+        //     answer = 1;
+        // } else {
+        //     answer = 0;
+        // }
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/match/update_match',
+            data:{
+                user_id:user_id,
+                qa_id:qa_id,
+                story_id:story_id,
+                match_id:match_id,
+                session_id:session_id,
+                begin_ts:begin_ts,
+                score:score,
+                subjct:subjct,
+                right_ct:right_ct,
+                wrong_ct:wrong_ct,
+                answer:answer,
+                // riv_subjct:max_riv_subjct
             },
             onload: function (data) {
                 $('#answer-border-response').html('处理中……');
@@ -640,104 +839,56 @@ $this->title = '故事汇';
                 var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //console.log("ajax请求成功:"+data.toString())
 
+                //audio 素材
+                var audio_right=$("#audio_right")[0];
+                var audio_wrong=$("#audio_wrong")[0];
+
                 //新消息获取成功
                 if(ajaxObj["code"]==200){
-                    console.log(ajaxObj);
-                    var suggestion = ajaxObj.data.suggestion;
-                    if ($('#message-content').html() == '正在思考……')  {
-                        $('#message-content').html('');
-                    }
-                    // var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">' + suggestion + '</div>';
-                    // $('#message-content').append(sugdiv);
-                    // $('#message-content').html(suggestion);
-                    $('.message-content-ai').last().html(suggestion);
-                    $('#message-content').append('<div style="float: left; line-height: 200%;" msg_type="btn"><img class="play_voice" src="../../static/img/match/play.png" width="50"></div>');
-                    // var audioVoice = $('#audio_voice')[0];
-                    // audioVoice.src = ajaxObj.data.voice;
-                    // audioVoice.play();
-                    $('#message-topic').val(topic);
-                    var msbox = document.querySelector('#message-content');
-                    msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
-                    console.log(ajaxObj.data.questions);
-                    $('#message-question').html('');
-                    for (var qu in ajaxObj.data.questions) {
-                        var qutitle = ajaxObj.data.questions[qu];
-                        var size = 28;
-                        if (qutitle.length > 20) {
-                            size = 20;
-                        }
-                        var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20 next-ques" style="margin-top: 25px;">';
-                        ques += '<label class="btn-green-m-choice active " style="font-size: ' + size + 'px;">' + ajaxObj.data.questions[qu]  + '</label>';
-                        ques += '</div>';
-                        console.log(ques);
-                        $('#message-question').append(ques);
-                    }
-                    $('.next-ques').click(function() {
-                        var next_ques = $(this).find('label').html();
-                        // console.log(next_ques);
-                        var msgdiv = '<div class="fs-24 btn-green-m-msg-ai-choice old-msg-content my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + next_ques + '</div>';
-                        $('#message-content').append(msgdiv);
-                        var msbox = document.querySelector('#message-content');
-                        msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
-                        getSugg(next_ques);
-                    });
 
-                    $('.play_voice').click(function() {
-                        var thisObj = $(this);
-                        if (thisObj.hasClass('play_voice_btn_disable')) {
-                            return;
-                        }
-                        thisObj.addClass('play_voice_btn_disable');
-                        for (var ai in audio_list) {
-                            if (audio_list[ai].msg == $(this).parent().prev().html()) {
-                                audioVoice.src = audio_list[ai].voice;
-                                audioVoice.play();
-                                return;
+                    if(answer == 1){
+                        $("#answer-box").hide();
+                        $("#answer-right-box").modal('show');
+                        audio_right.play();
+
+                        if (ajaxObj.data.score.score != undefined) {
+                            var score_text = "+" + ajaxObj.data.score.score + "枚";
+                            if (ajaxObj.data.score.addition > 0) {
+                                score_text = score_text + "（奖：" + ajaxObj.data.score.addition + "枚）";
                             }
+                            $("#gold_score").html(score_text);
                         }
+                        $('#rtn_answer_type').val(1);   // 成功
 
-                        var msg = $(this).parent().prev().html();
-                        var userId = $('input[name=user_id]').val();
-                        console.log(msg);
-
-                        $.ajax({
-                            type: "GET", //用POST方式传输
-                            dataType: "json", //数据格式:JSON
-                            async: true,
-                            url: '/match/play_voice',
-                            data: {
-                                story_id: story_id,
-                                user_id: user_id,
-                                messages: msg,
-                            },
-                            onload: function (data) {
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                thisObj.removeClass('play_voice_btn_disable');
-                                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
-                                $.alert("网络异常，请检查网络情况");
-                            },
-                            success: function (data, status) {
-                                var dataContent = data;
-                                var dataCon = $.toJSON(dataContent);
-                                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
-
-                                console.log(voiceObj);
-                                audioVoice.src = voiceObj.data.file.file;
-
-                                audio_list.push({
-                                    msg: msg,
-                                    voice: voiceObj.data.file.file,
-                                });
-
-                                audioVoice.play();
-                                thisObj.removeClass('play_voice_btn_disable');
-
-                            }
-                        });
-                    });
-
-                    // $('#message-box').modal('show');
+                        // setTimeout(function (){
+                        //     // Unity.call('WebViewOff&TrueAnswer');
+                        //     var params = {
+                        //         'WebViewOff':1,
+                        //         'AnswerType':1
+                        //     }
+                        //     var data=$.toJSON(params);
+                        //     Unity.call(data);
+                        // },2000);
+                    }
+                    else{
+                        $("#answer-box").hide();
+                        // $("#answer-error-box").removeClass('hide');
+                        $("#answer-error-box").modal('show');
+                        $('#rtn_answer_type').val(2);   // 失败
+                        // $("#h5-worry").modal('show');
+                        audio_wrong.play();
+                        // $(".retry_btn").show();
+                        // setTimeout(function (){
+                        //     // Unity.call('WebViewOff&FalseAnswer');
+                        //     // var params = {
+                        //     //     'WebViewOff':1,
+                        //     //     'AnswerType':2
+                        //     // }
+                        //     // var data=$.toJSON(params);
+                        //     // Unity.call(data);
+                        //     location.reload();
+                        // },2000);
+                    }
                 }
                 //新消息获取失败
                 else{
@@ -746,7 +897,34 @@ $this->title = '故事汇';
 
             }
         });
+
+    };
+
+    function addSubjCt() {
+        var subjct = $('#subjct').html();
+        subjct++;
+        $('#subjct').html(subjct);
     }
 
+    function floNumber(num) {
+        var duration = 5;
+        var height = 0;
+        $('#number-floater').html(num);
+        $('#number-floater').css('opacity', 0) // 设置初始透明度为0
+            .animate({
+                top: '-=70',
+                // 'font-size': 70,
+                opacity: 1 // 渐显
+            }, 200)
+            .delay(duration) // 延迟随机时间
+            .animate({
+                top: '-=70',
+                opacity: 0, // 渐隐
+                'font-size': '-=15'
+            }, 150, function() {
+                $(this).css('top', height); // 动画完成后重置位置
+                $(this).css('font-size', 40);
+            });
+    }
 
 </script>

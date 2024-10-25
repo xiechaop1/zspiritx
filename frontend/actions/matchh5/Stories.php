@@ -74,14 +74,14 @@ class Stories extends Action
             ])
             ->one();
 
+        if (empty($user)) {
+            return $this->renderErr('用户不存在！');
+        }
+
         if (!empty($user['avatar'])) {
             $user['avatar'] = Attachment::completeUrl($user['avatar']);
         } else {
             $user['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
-        }
-
-        if (empty($user)) {
-            return $this->renderErr('用户不存在！');
         }
 
         $userExtends = UserExtends::find()
@@ -123,19 +123,19 @@ class Stories extends Action
         $old = [];
 
         $userTxt = '但是我依然很喜欢春天！因为春天我就可以出门和小朋友一起玩耍了，我们跑上跑下，玩的不亦乐乎。';
-        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, '春来到', '春天来了，万物复苏，你眼中的春天是什么样的？请写一篇记叙文',
-            $old);
-//        var_dump($genStory);exit;
-var_dump(date('Y-m-d H:i:s', time()));
-var_dump($old);
-echo "<br>";
-echo !empty($genStory['CONTENT']) ? $genStory['CONTENT'] : '';
-if (!is_array($genStory)) {
-    echo $genStory;
-} else {
-    var_dump($genStory);
-}
-        exit;
+//        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, '春来到', '春天来了，万物复苏，你眼中的春天是什么样的？请写一篇记叙文',
+//            $old);
+////        var_dump($genStory);exit;
+//var_dump(date('Y-m-d H:i:s', time()));
+//var_dump($old);
+//echo "<br>";
+//echo !empty($genStory['CONTENT']) ? $genStory['CONTENT'] : '';
+//if (!is_array($genStory)) {
+//    echo $genStory;
+//} else {
+//    var_dump($genStory);
+//}
+//        exit;
 
         return $this->controller->render('stories', [
             'params'        => $_GET,

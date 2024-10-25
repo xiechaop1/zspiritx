@@ -209,6 +209,8 @@ $this->title = '故事汇';
                     <span style="float: left;"><textarea style="border: 0px; width:500px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
                     <span style="float: left; margin-left: 20px;"><input id="subdoc" type="button" style="color: black;
                     font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="发布"></span>
+                    <span style="float: left; margin-left: 20px;"><input id="record" type="button" style="color: black;
+                    font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="Rec"></span>
 <!--                    <button id="btn_control">开始录音</button><div id="result"></div>-->
                 </div>
 
@@ -488,6 +490,26 @@ $this->title = '故事汇';
             //     getSugg('');
             // }, 500);
              $("#message-box").modal('show');
+
+        });
+
+        $('#record').mousedown(function() {
+            console.log('startMicRec');
+            var params = {
+                'gameFlag':"startMicRec",
+            }
+            var data=$.toJSON(params);
+            Unity.call(data);
+
+        }).mouseup(function() {
+            console.log('stopMicRec');
+            var params = {
+                'gameFlag':"stopMicRec",
+                'source':"doc",
+                'type':'asr'
+            }
+            var data=$.toJSON(params);
+            Unity.call(data);
 
         });
 
