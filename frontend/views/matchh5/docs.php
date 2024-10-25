@@ -493,24 +493,27 @@ $this->title = '故事汇';
 
         });
 
-        $('#record').mousedown(function() {
-            console.log('startMicRec');
-            var params = {
-                'gameFlag':"startMicRec",
+        var record_tag = 0;
+        $('#record').click(function() {
+            if (record_tag == 0) {
+                var params = {
+                    'gameFlag': "startMicRec",
+                }
+                var data = $.toJSON(params);
+                Unity.call(data);
+                record_tag = 1;
+                $(this).val('Stop');
+            } else {
+                var params = {
+                    'gameFlag': "stopMicRec",
+                    'source':"doc",
+                    'type':'asr',
+                }
+                var data = $.toJSON(params);
+                Unity.call(data);
+                record_tag = 0;
+                $(this).val('Record');
             }
-            var data=$.toJSON(params);
-            Unity.call(data);
-
-        }).mouseup(function() {
-            console.log('stopMicRec');
-            var params = {
-                'gameFlag':"stopMicRec",
-                'source':"doc",
-                'type':'asr'
-            }
-            var data=$.toJSON(params);
-            Unity.call(data);
-
         });
 
         $('#subdoc').click(function() {
