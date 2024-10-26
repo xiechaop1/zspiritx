@@ -93,6 +93,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_story_match_players_prop',
             ],
+            'get_puzzle' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_puzzle',
+            ],
 
         ];
     }

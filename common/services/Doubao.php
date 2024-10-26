@@ -69,6 +69,157 @@ class Doubao extends Component
         return $ret;
     }
 
+    public function getOldContents($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL) {
+        $beginTime = strtotime('-5 minute');
+        $limit = 3;
+        $lastContents = $this->getContentsFromDb($userId, $userId, $msgClass, $beginTime, 0, $limit);
+
+        $oldContents = [];
+        if (!empty($lastContents)) {
+            foreach ($lastContents as $lastContent) {
+                if (empty($lastContent['content'])
+                    || empty(trim($lastContent['content'])
+                    || $lastContent['content'] == '[]'
+                    )
+                ) {
+                    continue;
+                }
+                if (!empty($lastContent['prompt'])) {
+                    $oldPrompts = json_decode($lastContent['prompt'], true);
+                    if (!empty($oldPrompts)) {
+                        foreach ($oldPrompts as $oldPrompt) {
+                            if (!empty($oldPrompt['role']) && $oldPrompt['role'] != 'system') {
+                                $oldContents[] = $oldPrompt;
+                            }
+                        }
+                    }
+                }
+                if (!empty($lastContent['content'])) {
+                    if (\common\helpers\Common::isJson($lastContent['content'])) {
+                        $contentObj = json_decode($lastContent['content'], true);
+                        $content = !empty($contentObj['content']) ? $contentObj['content'] : '';
+                    } else {
+                        $content = $lastContent['content'];
+                    }
+                    $oldContents[] = [
+                        'role'  => 'assistant',
+                        'content' => $content,
+                    ];
+
+                }
+                break;
+            }
+        }
+        return $oldContents;
+    }
+
+    public function generateNswc($userMessage, $params, $aiRole = 'host') {
+        if ($aiRole == 'host') {
+            $roleTxt = '#角色#' . "\n" . '你是一个你说我猜游戏主持人，你负责出题，解答，引导游戏的进行';
+            $simple = [
+                'content' => '你的回答',
+                'answer' => '标准答案'
+            ];
+            $extMessages = [
+                '你想一个常见的物体、事物、人物、动物均可',
+                '玩家询问这个物体的特征，而你只回答是或者不是，如果你也无法判断，你就回答"我也不知道"',
+                '最后如果玩家猜对了，你就告诉玩家答对了，并且结束游戏',
+                '内容不超过200字',
+                '用JSON的形式返回',
+                '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+            ];
+            $msgClass = GptContent::MSG_CLASS_NISHUOWOCAI_HOST;
+        } else {
+            $roleTxt = '#角色#' . "\n" . '你是一个你说我猜游戏参与者，你负责出题，解答，引导游戏的进行';
+            $simple = [
+                'content' => '你的猜测',
+            ];
+            $extMessages = [
+                '玩家想了一个常见的物体、事物、人物或者动物，你来猜猜玩家想的是什么',
+                '你需要用封闭的问题，如：这个物体是黄色的吗？',
+                '玩家只负责回答是或者不是',
+                '如果玩家回答是，那么你继续缩小范围',
+                '如果玩家回答不是，那么你将换一个特征继续猜测',
+                '直到玩家最后明确回答出物体是什么？或者中止游戏',
+                '内容不超过200字',
+                '用JSON的形式返回',
+                '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+            ];
+            $msgClass = GptContent::MSG_CLASS_NISHUOWOCAI_PLAYER;
+        }
+
+        $userId = !empty($params['userId']) ? $params['userId'] : 0;
+        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $toUserId = !empty($toUserId) ? $toUserId : $userId;
+
+        $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
+
+
+        $ret = $this->chatWithDoubao($userMessage, $oldContents, $extMessages, [$roleTxt], false);
+
+        $prompt = $this->_prompt;
+        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+    }
+
+    public function generateGuessByDescGame($userMessage, $params = []
+//        , $oldMessages = []
+//        , $aiRole = 'host'
+    ) {
+//        if ($aiRole == 'host') {
+            $roleTxt = '#角色#' . "\n" . '你是一个描述猜物体的游戏主持人，你负责出题，解答，引导游戏的进行';
+            $simple = [
+                'content' => '你对你想的物体、事物、人物或者活动的描述',
+                'answer' => '你想的答案'
+            ];
+            $extMessages = [
+                '你想一个常见的物体、事物、人物或者活动，并且你描述一下它的特征',
+                '在你描述过程中不能出现这个目标物品的每一个字',
+                '并且最后你把答案一并返回',
+                '内容不超过50字',
+                '用JSON的形式返回',
+                '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+            ];
+//        } else {
+//            $roleTxt = '#角色#' . "\n" . '你是一个小灵镜，负责出题和解答';
+//            $simple = [
+//                'content' => '回答问题',
+//            ];
+//            $extMessages = [
+//                '内容不超过200字',
+//                '用JSON的形式返回',
+//                '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+//            ];
+//        }
+
+        $userId = !empty($params['userId']) ? $params['userId'] : 0;
+        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $toUserId = !empty($toUserId) ? $toUserId : $userId;
+        $msgClass = GptContent::MSG_CLASS_GUESS_BY_DESCRIPTION;
+
+//        $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
+
+//        $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
+
+        $ret = $this->chatWithDoubao($userMessage, [], $extMessages, [$roleTxt], false);
+
+        if (!empty($ret['answer'])
+            && mb_strpos($ret['answer'], '你想的答案是') !== false
+        ) {
+            preg_match('/你想的答案是(.*)[。]?/', $ret['answer'], $matches);
+            if (!empty($matches[1])) {
+                $ret['answer'] = $matches[1];
+            }
+        }
+
+        $prompt = $this->_prompt;
+        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+
+        return $ret;
+
+    }
+
     public function generateDocScore($userMessage, $level = 0, $docTitle = '', $docDesc = '', $oldMessages = []) {
         $gradeName = $this->_getGradeNameFromLevel($level);
 

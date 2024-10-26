@@ -66,6 +66,9 @@ class Matchh5Controller extends Controller
             'docs' => [
                 'class' => 'frontend\actions\matchh5\Docs',
             ],
+            'puzzle' => [
+                'class' => 'frontend\actions\matchh5\Puzzle',
+            ],
 
         ];
     }

@@ -17,8 +17,18 @@ class GptContent extends \common\models\gii\GptContent
     const MSG_CLASS_NORMAL = 1; // 普通
     const MSG_CLASS_STORY_CREATOR = 2; // 故事创建者
     const MSG_CLASS_PUZZLE = 3; // 谜题
-    const MSG_CLASS_GUESS_BY_DESCRIPTION = 4; // 描述猜
-    const MSG_CLASS_NISHUOWOCAI = 5; // 你说我猜
+    const MSG_CLASS_GUESS_BY_DESCRIPTION = 4; // 描述猜东西
+    const MSG_CLASS_NISHUOWOCAI_HOST = 51; // 你说我猜
+    const MSG_CLASS_NISHUOWOCAI_PLAYER = 52; // 你说我猜玩家
+
+    public static $msgClass2Name = [
+        self::MSG_CLASS_NORMAL => '普通',
+        self::MSG_CLASS_STORY_CREATOR => '故事创建者',
+        self::MSG_CLASS_PUZZLE => '猜谜语',
+        self::MSG_CLASS_GUESS_BY_DESCRIPTION => '描述猜东西',
+        self::MSG_CLASS_NISHUOWOCAI_HOST => '你说我猜主持人',
+        self::MSG_CLASS_NISHUOWOCAI_PLAYER => '你说我猜玩家',
+    ];
 
     public function behaviors()
     {

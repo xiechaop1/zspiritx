@@ -114,6 +114,10 @@ class MatchApi extends ApiAction
                     $needTs = false;
                     $ret = $this->getDocScore();
                     break;
+                case 'get_puzzle':
+                    $needTs = false;
+                    $ret = $this->getPuzzle();
+                    break;
                 case 'get_story_match':
                     $needTs = false;
                     $ret = $this->getStoryMatch();
@@ -1710,6 +1714,38 @@ class MatchApi extends ApiAction
 //var_dump($genStory);
 
         return ['doc' => $genStory];
+    }
+
+    public function getPuzzle() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
+        $type = !empty($this->_get['type']) ? $this->_get['type'] : 1;
+
+        $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
+
+        $olds = json_decode($oldJson, true);
+
+        $oldContent = '';
+        if (!empty($olds)) {
+            foreach ($olds as $old) {
+                $oldContent .= $old['content'] . "\n";
+            }
+        }
+
+        $ret = '';
+        if ($type == 1) {
+            $params = [
+                'userId' => $userId,
+                'storyId' => $storyId,
+                'toUserId' => $userId,
+            ];
+            $puzzle = Yii::$app->doubao->generateGuessByDescGame('描述猜物体', $params);
+        }
+
+        return [
+            'puzzle' => $puzzle,
+            'ret' => $ret,
+        ];
     }
 
 }

@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = '故事汇';
+$this->title = '猜猜猜';
 
 ?>
 <style>
@@ -163,7 +163,7 @@ $this->title = '故事汇';
                 <?php
 //                var_dump($genStory);exit;
                 ?>
-                <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 500px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
+                <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 400px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
                     <?= !empty($genStory['content']) ? $genStory['content'] : '' ?>
                 </div>
                 <input type="hidden" id="st_answer" name="st_answer" value="<?= !empty($genStory['answer']) ? $genStory['answer'] : '' ?>">
@@ -171,35 +171,29 @@ $this->title = '故事汇';
                 <div class="match-qa-content-img" style="display: none;" id="image">
                     <img src="../../static/img/example.png" class="img-w-100">
                 </div>
-                <div class="match-qa-content-worry hide">
+                <div class="match-qa-content-worry" style="display: none;" id="wrong_icon">
                     <img src="../../static/img/match/worry.png">
-                    <span>17</span>
+                    <span id="wrong_answer"></span>
                 </div>
-                <div class="match-qa-content-right hide">
+                <div class="match-qa-content-right" style="display: none;" id="right_icon">
                     <img src="../../static/img/match/right.png">
-                    <span>17</span>
+                    <span id="right_answer"><?= !empty($genStory['answer']) ? $genStory['answer'] : '' ?></span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
 <!--                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">-->
 <!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
 <!--                        题目-->
 <!--                    </div>-->
-<!--                    <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">-->
-<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
-<!--                        提示-->
-<!--                    </div>-->
+                    <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        提示
+                    </div>
 <!--                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">-->
 <!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
 <!--                        解析-->
 <!--                    </div>-->
                 </div>
 
-                <div style="position: absolute; right: 50px; bottom: 20px;">
-                    <img src="../../static/img/match/right.png">
-                </div>
-                <div style="position: absolute; right: 50px; bottom: 20px;">
-                    <img src="../../static/img/match/wrong.png">
-                </div>
                 <div class="match-clock-bottom">
 <!--                    <div class="match-clock-bottom-left">-->
 <!--                        标题：<span class="text-1" id="ctitle1"></span>-->
@@ -498,7 +492,7 @@ $this->title = '故事汇';
             // setTimeout(function () {
             //     getSugg('');
             // }, 500);
-             $("#message-box").modal('show');
+             $("#right_icon").show();
 
         });
 
@@ -531,15 +525,21 @@ $this->title = '故事汇';
                 return;
             }
 
+            $('#right_icon').hide();
+            $('#wrong_icon').hide();
             var st_answer = $("#st_answer").val();
             if (content == st_answer) {
                 // right
-                console.log($('#answer-right-box'));
-                $('#answer-right-box').fadeIn();
+                console.log($('#right_icon'));
+                $('#right_icon').show();
+                setTimeout(function() {
+                    getPuzzle();
+                }, 3000);
             } else {
                 // wrong
-                console.log($('#answer-error-box'));
-                $('#answer-error-box').fadeIn();
+                $('#wrong_answer').html(content);
+                console.log($('#wrong_icon'));
+                $('#wrong_icon').show();
             }
 
             // $('#message-anaylze').html('');
@@ -561,7 +561,7 @@ $this->title = '故事汇';
             $('#extend-content').html('正在思考……');
 
             // setTimeout(function () {
-                getSubj('');
+
             // }, 500);
             $("#extend-info").modal('show');
 
@@ -649,15 +649,17 @@ $this->title = '故事汇';
 
     };
 
-    function getDocPart(userTxt = '') {
+    function getPuzzle() {
         var story_id = $('input[name=story_id]').val();
-        var level = $('input[name=level]').val();
         var user_id = $('input[name=user_id]').val();
-        var title = $('input[name=mtitle]').val();
-        var desc = $('input[name=mdesc]').val();
+        var type = 1;
 
         var oldsDiv = $('#topic').find('div');
         var olds = [];
+
+        $('#right_icon').hide();
+        $('#wrong_icon').hide();
+
         oldsDiv.each(function() {
             var oldRole = $(this).attr('role');
             var oldContent = $(this).html();
@@ -672,19 +674,16 @@ $this->title = '故事汇';
         var old = $.toJSON(olds);
         console.log(old);
 
+
         $.ajax({
             type: "POST", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: true,
-            url: '/match/get_doc',
+            url: '/match/get_puzzle',
             data: {
                 story_id: story_id,
                 user_id: user_id,
-                // messages: msg,
-                title: title,
-                desc: desc,
-                old: old,
-                user_txt: userTxt,
+                type: type,
             },
             onload: function (data) {
             },
@@ -700,7 +699,9 @@ $this->title = '故事汇';
 
                 console.log(ajaxObj);
 
-                $('#subdoc_content').val(ajaxObj.data.doc.CONTENT);
+                $('#topic').html(ajaxObj.data.puzzle.content);
+                $('#st_answer').val(ajaxObj.data.puzzle.answer);
+                $('#right_answer').html(ajaxObj.data.puzzle.answer);
 
                 // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';
                 // $('#topic').append(cont)
