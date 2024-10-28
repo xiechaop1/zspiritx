@@ -496,6 +496,7 @@ $this->title = '猜猜猜';
 
         });
 
+
         var record_tag = 0;
         $('#record').click(function() {
             if (record_tag == 0) {
@@ -509,8 +510,8 @@ $this->title = '猜猜猜';
             } else {
                 var params = {
                     'gameFlag': "stopMicRec",
-                    'source':"doc",
-                    'type':'asr',
+                    'recArgs_source':"doc",
+                    'recArgs_type':'asr',
                 }
                 var data = $.toJSON(params);
                 Unity.call(data);
@@ -648,6 +649,14 @@ $this->title = '猜猜猜';
         // generateSubjects();
 
     };
+
+    function getTalk(data) {
+        var dataContent = data;
+        var dataCon = $.toJSON(dataContent);
+        var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+        $('#subdoc_content').val(voiceObj.data.text);
+    }
 
     function getPuzzle() {
         var story_id = $('input[name=story_id]').val();

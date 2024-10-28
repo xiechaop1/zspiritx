@@ -69,9 +69,19 @@ class VoiceApi extends ApiAction
         $userId = !empty($_request['user_id']) ? $_request['user_id'] : 0;
         $sessionStageId = !empty($_request['session_stage_id']) ? $_request['session_stage_id'] : 0;
 
+        $source = !empty($_request['source']) ? $_request['source'] : 0;
+        $type = !empty($_request['type']) ? $_request['type'] : 0;
+
         try {
             $time1 = time();
             $word = Yii::$app->xunfei->sendByFile($file['tmp_name']);
+
+            if ($type == 'asr') {
+                return [
+                    'text' => $word,
+                ];
+            }
+
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
             var_dump($word);
 
