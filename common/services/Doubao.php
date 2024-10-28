@@ -227,8 +227,8 @@ class Doubao extends Component
 //        if ($aiRole == 'host') {
         $roleTxt = '#角色#' . "\n" . '你是一个描述猜物体的游戏主持人，你有很强的逻辑思考，也很有耐心，说话方式很温柔';
         $simple = [
-            'content' => '思考过程',
-            'answer' => '答案',
+            'analyze' => '思考过程',
+            'content' => '答案',
         ];
         $extMessages = [
             '你根据输入的内容的理解，猜一个答案，可能是常见的物品、人物、文字、事物、活动等等',

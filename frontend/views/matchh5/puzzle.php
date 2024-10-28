@@ -752,7 +752,7 @@ $this->title = '猜猜猜';
                     $('#st_answer').val(ajaxObj.data.puzzle.answer);
                     $('#right_answer').html(ajaxObj.data.puzzle.answer);
                 } else if (type == 42) {
-                    $('#topic').html(ajaxObj.data.puzzle.answer);
+                    $('#topic').html(ajaxObj.data.puzzle.content);
                     $('#wrong_btn').show();
                     $('#right_btn').show();
                     $('#right_answer').html('');
