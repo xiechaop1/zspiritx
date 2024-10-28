@@ -72,7 +72,7 @@ class Doubao extends Component
     public function getOldContents($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL) {
         $beginTime = strtotime('-5 minute');
         $limit = 3;
-        $lastContents = $this->getContentsFromDb($userId, $userId, $msgClass, $beginTime, 0, $limit);
+        $lastContents = $this->getContentsFromDb($userId, $toUserId, $msgClass, $beginTime, 0, $limit);
 
         $oldContents = [];
         if (!empty($lastContents)) {
@@ -197,6 +197,62 @@ class Doubao extends Component
         $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_GUESS_BY_DESCRIPTION;
+
+//        $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
+
+//        $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
+
+        $ret = $this->chatWithDoubao($userMessage, [], $extMessages, [$roleTxt], false);
+
+        if (!empty($ret['answer'])
+            && mb_strpos($ret['answer'], '你想的答案是') !== false
+        ) {
+            preg_match('/你想的答案是(.*)[。]?/', $ret['answer'], $matches);
+            if (!empty($matches[1])) {
+                $ret['answer'] = $matches[1];
+            }
+        }
+
+//        $prompt = $this->_prompt;
+//        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+
+        return $ret;
+
+    }
+
+    public function generateGuessByGuestGame($userMessage, $params = []
+//        , $oldMessages = []
+//        , $aiRole = 'host'
+    ) {
+//        if ($aiRole == 'host') {
+        $roleTxt = '#角色#' . "\n" . '你是一个描述猜物体的游戏主持人，你有很强的逻辑思考，也很有耐心，说话方式很温柔';
+        $simple = [
+            'content' => '思考过程',
+            'answer' => '答案',
+        ];
+        $extMessages = [
+            '你根据输入的内容的理解，猜一个答案，可能是常见的物品、人物、文字、事物、活动等等',
+            '内容不超过50字',
+            '用JSON的形式返回',
+            '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+        ];
+//        } else {
+//            $roleTxt = '#角色#' . "\n" . '你是一个小灵镜，负责出题和解答';
+//            $simple = [
+//                'content' => '回答问题',
+//            ];
+//            $extMessages = [
+//                '内容不超过200字',
+//                '用JSON的形式返回',
+//                '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+//            ];
+//        }
+
+        $userId = !empty($params['userId']) ? $params['userId'] : 0;
+        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $toUserId = !empty($toUserId) ? $toUserId : $userId;
+        $msgClass = GptContent::MSG_CLASS_GUESS_BY_GUEST;
 
 //        $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
 

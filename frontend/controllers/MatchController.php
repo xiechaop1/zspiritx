@@ -98,6 +98,11 @@ class MatchController extends Controller
                 'action' => 'get_puzzle',
             ],
 
+            'get_history_talk' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_talk_history',
+            ],
+
         ];
     }
 }

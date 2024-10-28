@@ -15,6 +15,7 @@ use common\helpers\Attachment;
 use common\helpers\Client;
 use common\helpers\Cookie;
 use common\helpers\Model;
+use common\models\GptContent;
 use common\models\LotteryPrize;
 use common\models\Order;
 use common\models\Poem;
@@ -138,13 +139,29 @@ class Puzzle extends Action
 //}
 //        exit;
         $genStory = '';
-        if ($type == 1) {
-            $params = [
-                'userId' => $userId,
-                'storyId' => $storyId,
-                'toUserId' => $userId,
-            ];
-            $genStory = Yii::$app->doubao->generateGuessByDescGame('描述猜物体', $params);
+        switch ($type) {
+            case GptContent::MSG_CLASS_GUESS_BY_DESCRIPTION:
+                $params = [
+                    'userId' => $userId,
+                    'storyId' => $storyId,
+                    'toUserId' => $userId,
+                ];
+                $genStory = Yii::$app->doubao->generateGuessByDescGame('描述猜物体', $params);
+                break;
+            case GptContent::MSG_CLASS_GUESS_BY_GUEST:
+//                $params = [
+//                    'userId' => $userId,
+//                    'storyId' => $storyId,
+//                    'toUserId' => $userId,
+//                ];
+//                $genStory = Yii::$app->doubao->generateGuessByGuestGame('', $params);
+                $genStory = [
+                    'content' => '你来描述一个，我来猜！',
+                    'answer' => '',
+                ];
+                break;
+            default:
+                break;
         }
 //        var_dump($genStory);exit;
 
@@ -155,6 +172,7 @@ class Puzzle extends Action
             'storyId'       => $storyId,
             'qa'            => $qa,
             'rtnAnswerType' => 2,
+            'type' => $type,
             'initTimer' => 60,
             'user' => $user,
             'userScore' => $userScore,

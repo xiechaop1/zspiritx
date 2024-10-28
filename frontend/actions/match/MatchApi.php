@@ -15,6 +15,7 @@ use common\definitions\Subject;
 use common\helpers\Attachment;
 use common\helpers\Model;
 use common\models\Actions;
+use common\models\GptContent;
 use common\models\ItemKnowledge;
 use common\models\Qa;
 use common\models\SessionQa;
@@ -117,6 +118,10 @@ class MatchApi extends ApiAction
                 case 'get_puzzle':
                     $needTs = false;
                     $ret = $this->getPuzzle();
+                    break;
+                case 'get_talk_history':
+                    $needTs = false;
+                    $ret = $this->getTalkHistory();
                     break;
                 case 'get_story_match':
                     $needTs = false;
@@ -1716,12 +1721,28 @@ class MatchApi extends ApiAction
         return ['doc' => $genStory];
     }
 
-    public function getPuzzle() {
+    public function getTalkHistory() {
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
-        $type = !empty($this->_get['type']) ? $this->_get['type'] : 1;
+        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
+        $msgClass = !empty($this->_get['msg_class']) ? $this->_get['msg_class'] : GptContent::MSG_TYPE_TEXT;
+        $beginTime = strtotime('-5 min');
+        $limit = !empty($this->_get['limit']) ? $this->_get['limit'] : 20;
 
-        $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
+        $old = Yii::$app->doubao->getOldContents($userId, $userId, $msgClass);
+
+        return ['content' => $old];
+    }
+
+    public function getPuzzle() {
+        $req = $_REQUEST;
+        $userId = !empty($req['user_id']) ? $req['user_id'] : 0;
+        $storyId = !empty($req['story_id']) ? $req['story_id'] : 0;
+        $type = !empty($req['type']) ? $req['type'] : 0;
+
+        $content = !empty($req['content']) ? $req['content'] : '';
+
+        $oldJson = !empty($req['old']) ? $req['old'] : '';
 
         $olds = json_decode($oldJson, true);
 
@@ -1733,13 +1754,26 @@ class MatchApi extends ApiAction
         }
 
         $ret = '';
-        if ($type == 1) {
-            $params = [
-                'userId' => $userId,
-                'storyId' => $storyId,
-                'toUserId' => $userId,
-            ];
-            $puzzle = Yii::$app->doubao->generateGuessByDescGame('描述猜物体', $params);
+        $puzzle = [];
+        switch ($type) {
+            case GptContent::MSG_CLASS_GUESS_BY_DESCRIPTION:
+                $params = [
+                    'userId' => $userId,
+                    'storyId' => $storyId,
+                    'toUserId' => $userId,
+                ];
+                $puzzle = Yii::$app->doubao->generateGuessByDescGame('描述猜物体', $params);
+                break;
+            case GptContent::MSG_CLASS_GUESS_BY_GUEST:
+                $params = [
+                    'userId' => $userId,
+                    'storyId' => $storyId,
+                    'toUserId' => $userId,
+                ];
+                $puzzle = Yii::$app->doubao->generateGuessByGuestGame($content, $params);
+                break;
+            default:
+                break;
         }
 
         return [

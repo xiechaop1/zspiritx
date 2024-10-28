@@ -119,6 +119,7 @@ $this->title = '猜猜猜';
 <input type="hidden" name="match_class" value="<?= !empty($matchClass) ? $matchClass : 0 ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
 <input type="hidden" name="level" value="<?= $level ?>">
+<input type="hidden" name="type" value="<?= $type ?>">
 
 <input type="hidden" name="mtitle" value="">
 <input type="hidden" name="mdesc" value="">
@@ -179,11 +180,17 @@ $this->title = '猜猜猜';
                     <img src="../../static/img/match/right.png">
                     <span id="right_answer"><?= !empty($genStory['answer']) ? $genStory['answer'] : '' ?></span>
                 </div>
+                <div class="match-qa-content-worry" style="display: none; width: 300px; float: left;" id="wrong_btn">
+                    <img src="../../static/img/match/worry.png">
+                </div>
+                <div class="match-qa-content-right" style="display: none; width: 300px; float: left;" id="right_btn">
+                    <img src="../../static/img/match/right.png">
+                </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
-<!--                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">-->
-<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
-<!--                        题目-->
-<!--                    </div>-->
+                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        记录
+                    </div>
                     <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
@@ -377,7 +384,7 @@ $this->title = '猜猜猜';
                         <img src="../../static/img/bg-lottery-text1.png" class="img-250">
                     </div>
                     <div class="fs-36  text-FF  text-center bold lottery-error-title">
-                        题目
+                        记录
                     </div>
 
                     <input type="hidden" id="message-subj">
@@ -480,6 +487,10 @@ $this->title = '猜猜猜';
             // startRivalTimer($('#match_type').val());
         });
 
+        $('.subj-btn').click(function() {
+            getHisTalk();
+        });
+
         $('.sugg-btn').click(function() {
             // $('#message-box').modal('show');
             // $('#message-box').modal('show');
@@ -495,6 +506,7 @@ $this->title = '猜猜猜';
              $("#right_icon").show();
 
         });
+
 
 
         var record_tag = 0;
@@ -525,31 +537,56 @@ $this->title = '猜猜猜';
             if (content == '') {
                 return;
             }
+            var type = $('[name=type]').val();
 
-            $('#right_icon').hide();
-            $('#wrong_icon').hide();
-            var st_answer = $("#st_answer").val();
-            if (content == st_answer) {
-                // right
-                console.log($('#right_icon'));
-                $('#right_icon').show();
-                setTimeout(function() {
-                    getPuzzle();
-                }, 3000);
+            if (type == 41) {
+                $('#right_icon').hide();
+                $('#wrong_icon').hide();
+                var st_answer = $("#st_answer").val();
+                if (content == st_answer) {
+                    // right
+                    console.log($('#right_icon'));
+                    $('#right_icon').show();
+                    setTimeout(function () {
+                        getPuzzle();
+                    }, 3000);
+                } else {
+                    // wrong
+                    $('#wrong_answer').html(content);
+                    console.log($('#wrong_icon'));
+                    $('#wrong_icon').show();
+                }
+
+                // $('#message-anaylze').html('');
+
+                // var cont = '<div class="doc_content doc_content_user" role="user">' + content + '</div>';
+                // $('#topic').append(cont)
+                // getDoc();
+
+                $('#subdoc_content').val('');
             } else {
-                // wrong
-                $('#wrong_answer').html(content);
-                console.log($('#wrong_icon'));
-                $('#wrong_icon').show();
+                getPuzzle();
             }
+        });
 
-            // $('#message-anaylze').html('');
+        $('#right_btn').click(function() {
+            $('#right_btn').hide();
+            $('#wrong_btn').hide();
+            var type = $('input[name=type]').val();
+            if (type == 42) {
+                $('#topic').html('再来！你来描述，我来猜！');
+            }
+            // getPuzzle();
+        });
 
-            // var cont = '<div class="doc_content doc_content_user" role="user">' + content + '</div>';
-            // $('#topic').append(cont)
-            // getDoc();
-
-            $('#subdoc_content').val('');
+        $('#wrong_btn').click(function() {
+            $('#right_btn').hide();
+            $('#wrong_btn').hide();
+            var type = $('input[name=type]').val();
+            if (type == 42) {
+                $('#topic').html('啊！我猜错了！再来一次吧！');
+            }
+            // getPuzzle();
         });
 
         $('.subj-btn').click(function() {
@@ -661,7 +698,7 @@ $this->title = '猜猜猜';
     function getPuzzle() {
         var story_id = $('input[name=story_id]').val();
         var user_id = $('input[name=user_id]').val();
-        var type = 1;
+        var type = $('input[name=type]').val();
 
         var oldsDiv = $('#topic').find('div');
         var olds = [];
@@ -683,6 +720,7 @@ $this->title = '猜猜猜';
         var old = $.toJSON(olds);
         console.log(old);
 
+        var content = $('#subdoc_content').val();
 
         $.ajax({
             type: "POST", //用POST方式传输
@@ -692,6 +730,7 @@ $this->title = '猜猜猜';
             data: {
                 story_id: story_id,
                 user_id: user_id,
+                content: content,
                 type: type,
             },
             onload: function (data) {
@@ -708,9 +747,16 @@ $this->title = '猜猜猜';
 
                 console.log(ajaxObj);
 
-                $('#topic').html(ajaxObj.data.puzzle.content);
-                $('#st_answer').val(ajaxObj.data.puzzle.answer);
-                $('#right_answer').html(ajaxObj.data.puzzle.answer);
+                if (type == 41) {
+                    $('#topic').html(ajaxObj.data.puzzle.content);
+                    $('#st_answer').val(ajaxObj.data.puzzle.answer);
+                    $('#right_answer').html(ajaxObj.data.puzzle.answer);
+                } else if (type == 42) {
+                    $('#topic').html(ajaxObj.data.puzzle.answer);
+                    $('#wrong_btn').show();
+                    $('#right_btn').show();
+                    $('#right_answer').html('');
+                }
 
                 // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';
                 // $('#topic').append(cont)
@@ -726,6 +772,7 @@ $this->title = '猜猜猜';
             }
         });
     }
+
 
     function getDocScore() {
         var story_id = $('input[name=story_id]').val();
@@ -1197,6 +1244,165 @@ $this->title = '猜猜猜';
         });
     }
 
+    function getHisTalk() {
+        // $('#suggestion_content').toggle();
+        var topic = $('#topic').html();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
+        var story_id = $('input[name=story_id]').val();
+        var type = $('input[name=type]').val();
+        // var ques = '';
+        var old_messages = '';
+
+        var audio_list = [];
+
+        var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="float: left; clear:both; font-size: 24px; width: 80%;">正在思考……</div>';
+        $('#extend-content').append(sugdiv);
+
+        var audioVoice = $('#audio_voice')[0];
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_history_talk',
+            data:{
+                story_id:story_id,
+                user_id:user_id,
+                topic:topic,
+                msg_class:type
+            },
+            onload: function (data) {
+                $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                //新消息获取成功
+                if(ajaxObj["code"]==200){
+                    console.log(ajaxObj);
+                    var cont = ajaxObj.data.content;
+                    if ($('#extend-content').html() == '正在思考……')  {
+                        $('#extend-content').html('');
+                    }
+                    // var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">' + suggestion + '</div>';
+                    // $('#message-content').append(sugdiv);
+                    // $('#message-content').html(suggestion);
+                    for (var co in ajaxObj.data.content) {
+                        var role = ajaxObj.data.content[co].role;
+                        var thecont = ajaxObj.data.content[co].content;
+
+                        if (role == 'assistant') {
+                            msg = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">' + thecont + '</div>';
+                        } else {
+                            msg = '<div class="fs-24 btn-green-m-msg-ai-choice old-msg-content my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + thecont + '</div>';
+                        }
+                        $('#extend-content').append(msg);
+                    }
+                    // $('.message-content-ai').last().html(suggestion);
+                    // $('#message-content').append('<div style="float: left; line-height: 200%;" msg_type="btn"><img class="play_voice" src="../../static/img/match/play.png" width="50"></div>');
+                    // // var audioVoice = $('#audio_voice')[0];
+                    // // audioVoice.src = ajaxObj.data.voice;
+                    // // audioVoice.play();
+                    // $('#message-topic').val(topic);
+                    // var msbox = document.querySelector('#message-content');
+                    // msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
+                    // console.log(ajaxObj.data.questions);
+                    // $('#message-question').html('');
+                    // for (var qu in ajaxObj.data.questions) {
+                    //     var qutitle = ajaxObj.data.questions[qu];
+                    //     var size = 28;
+                    //     if (qutitle.length > 20) {
+                    //         size = 20;
+                    //     }
+                    //     var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20 next-ques" style="margin-top: 25px;">';
+                    //     ques += '<label class="btn-green-m-choice active " style="font-size: ' + size + 'px;">' + ajaxObj.data.questions[qu]  + '</label>';
+                    //     ques += '</div>';
+                    //     console.log(ques);
+                    //     $('#message-question').append(ques);
+                    // }
+                    // $('.next-ques').click(function() {
+                    //     var next_ques = $(this).find('label').html();
+                    //     // console.log(next_ques);
+                    //     var msgdiv = '<div class="fs-24 btn-green-m-msg-ai-choice old-msg-content my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + next_ques + '</div>';
+                    //     $('#message-content').append(msgdiv);
+                    //     var msbox = document.querySelector('#message-content');
+                    //     msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
+                    //     getSugg(next_ques);
+                    // });
+
+                    $('.play_voice').click(function() {
+                        var thisObj = $(this);
+                        if (thisObj.hasClass('play_voice_btn_disable')) {
+                            return;
+                        }
+                        thisObj.addClass('play_voice_btn_disable');
+                        for (var ai in audio_list) {
+                            if (audio_list[ai].msg == $(this).parent().prev().html()) {
+                                audioVoice.src = audio_list[ai].voice;
+                                audioVoice.play();
+                                return;
+                            }
+                        }
+
+                        var msg = $(this).parent().prev().html();
+                        var userId = $('input[name=user_id]').val();
+                        console.log(msg);
+
+                        $.ajax({
+                            type: "GET", //用POST方式传输
+                            dataType: "json", //数据格式:JSON
+                            async: true,
+                            url: '/match/play_voice',
+                            data: {
+                                story_id: story_id,
+                                user_id: user_id,
+                                messages: msg,
+                            },
+                            onload: function (data) {
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                thisObj.removeClass('play_voice_btn_disable');
+                                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                                $.alert("网络异常，请检查网络情况");
+                            },
+                            success: function (data, status) {
+                                var dataContent = data;
+                                var dataCon = $.toJSON(dataContent);
+                                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                                console.log(voiceObj);
+                                audioVoice.src = voiceObj.data.file.file;
+
+                                audio_list.push({
+                                    msg: msg,
+                                    voice: voiceObj.data.file.file,
+                                });
+
+                                audioVoice.play();
+                                thisObj.removeClass('play_voice_btn_disable');
+
+                            }
+                        });
+                    });
+
+                    // $('#message-box').modal('show');
+                }
+                //新消息获取失败
+                else{
+                    $.alert(ajaxObj.msg)
+                }
+
+            }
+        });
+    }
 
 </script>
 

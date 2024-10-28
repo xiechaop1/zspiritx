@@ -17,7 +17,8 @@ class GptContent extends \common\models\gii\GptContent
     const MSG_CLASS_NORMAL = 1; // 普通
     const MSG_CLASS_STORY_CREATOR = 2; // 故事创建者
     const MSG_CLASS_PUZZLE = 3; // 谜题
-    const MSG_CLASS_GUESS_BY_DESCRIPTION = 4; // 描述猜东西
+    const MSG_CLASS_GUESS_BY_DESCRIPTION = 41; // 描述猜东西
+    const MSG_CLASS_GUESS_BY_GUEST = 42; // 客人猜
     const MSG_CLASS_NISHUOWOCAI_HOST = 51; // 你说我猜
     const MSG_CLASS_NISHUOWOCAI_PLAYER = 52; // 你说我猜玩家
 
@@ -26,6 +27,7 @@ class GptContent extends \common\models\gii\GptContent
         self::MSG_CLASS_STORY_CREATOR => '故事创建者',
         self::MSG_CLASS_PUZZLE => '猜谜语',
         self::MSG_CLASS_GUESS_BY_DESCRIPTION => '描述猜东西',
+        self::MSG_CLASS_GUESS_BY_GUEST => '根据玩家描述猜',
         self::MSG_CLASS_NISHUOWOCAI_HOST => '你说我猜主持人',
         self::MSG_CLASS_NISHUOWOCAI_PLAYER => '你说我猜玩家',
     ];
