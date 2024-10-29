@@ -122,7 +122,7 @@ class Doubao extends Component
             if ($isFirst) {
                 $simple = [
                     'content' => '你打招呼的一句话',
-                    'answer' => '随机生成的物体、事物、人物或者动物',
+                    'answer' => '随机生成的答案',
 //                'final' => '最终的答案（人物、事物或者物品）',
                 ];
                 $example = [
@@ -145,7 +145,7 @@ class Doubao extends Component
                     'content' => '不是',
                 ];
                 $extMessages = [
-                    '你随机生成一个常见的物体、事物、人物、动物均可',
+                    '你随机生成一个常见的物体、事物、人物、动物均可，然后返回答案',
                     '玩家询问这个物体的特征，而你只回答是或者不是，如果你也无法判断，你就回答"我也不知道"',
                     '最后如果玩家猜对了，你就告诉玩家"猜对了"，并且结束游戏',
                     '内容不超过50字',
@@ -162,6 +162,9 @@ class Doubao extends Component
             $simple = [
                 'content' => '你的猜测',
             ];
+            $example = [
+                'content' => '这个物体是黄色的吗？',
+            ];
             $extMessages = [
                 '玩家想了一个常见的物体、事物、人物或者动物，你来猜猜玩家想的是什么',
                 '你需要用封闭的问题，如：这个物体是黄色的吗？',
@@ -172,6 +175,7 @@ class Doubao extends Component
                 '内容不超过200字',
                 '用JSON的形式返回',
                 '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+                '#示例#' . json_encode($example, JSON_UNESCAPED_UNICODE),
             ];
             $msgClass = GptContent::MSG_CLASS_NISHUOWOCAI_PLAYER;
         }

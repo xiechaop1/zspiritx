@@ -57,6 +57,12 @@ class Puzzle extends Action
         $qaId = !empty($_GET['qa_id']) ? $_GET['qa_id'] : 0;
         $type = !empty($_GET['type']) ? $_GET['type'] : 0;
 
+        if (strpos($type, ',') !== false) {
+            $types = explode(',', $type);
+            $type = $types[array_rand($types)];
+
+        }
+
 //        $userModelId = !empty($_GET['user_model_id']) ? $_GET['user_model_id'] : 0;
 
         $qa = Qa::find()
@@ -175,7 +181,7 @@ class Puzzle extends Action
                     'storyId' => $storyId,
                     'toUserId' => $userId,
                 ];
-                $genStory = Yii::$app->doubao->generateNswc('让玩家出题吧', $params, 'player', true);
+                $genStory = Yii::$app->doubao->generateNswc('玩家想好了，你开始猜吧', $params, 'player', true);
                 break;
             default:
                 break;
