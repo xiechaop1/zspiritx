@@ -1772,6 +1772,22 @@ class MatchApi extends ApiAction
                 ];
                 $puzzle = Yii::$app->doubao->generateGuessByGuestGame($content, $params);
                 break;
+            case GptContent::MSG_CLASS_NISHUOWOCAI_HOST:
+                $params = [
+                    'userId' => $userId,
+                    'storyId' => $storyId,
+                    'toUserId' => $userId,
+                ];
+                $puzzle = Yii::$app->doubao->generateNswc($content, $params, 'host', false);
+                break;
+            case GptContent::MSG_CLASS_NISHUOWOCAI_PLAYER:
+                $params = [
+                    'userId' => $userId,
+                    'storyId' => $storyId,
+                    'toUserId' => $userId,
+                ];
+                $puzzle = Yii::$app->doubao->generateNswc($content, $params, 'player', false);
+                break;
             default:
                 break;
         }

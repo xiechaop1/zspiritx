@@ -32,6 +32,16 @@ class GptContent extends \common\models\gii\GptContent
         self::MSG_CLASS_NISHUOWOCAI_PLAYER => '你说我猜玩家',
     ];
 
+    const IS_FIRST_YES = 1; // 是第一次
+    const IS_FIRST_NO = 2; // 不是第一次
+    const IS_FIRST_UNKNOWN = 3; // 未知
+
+    public static $isFirst2Name = [
+        self::IS_FIRST_YES => '是',
+        self::IS_FIRST_NO => '否',
+        self::IS_FIRST_UNKNOWN => '未知',
+    ];
+
     public function behaviors()
     {
         return [

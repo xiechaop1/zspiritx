@@ -564,6 +564,19 @@ $this->title = '猜猜猜';
                 // getDoc();
 
                 $('#subdoc_content').val('');
+            } else if (type == 51 || type == 52) {
+                var st_answer = $("#st_answer").val();
+                if (content == st_answer) {
+                    // // right
+                    $('#right_icon').show();
+                    // setTimeout(function () {
+                    //     getPuzzle();
+                    // }, 3000);
+
+                } else {
+                    // wrong
+                    getPuzzle();
+                }
             } else {
                 getPuzzle();
             }
@@ -756,6 +769,10 @@ $this->title = '猜猜猜';
                     $('#wrong_btn').show();
                     $('#right_btn').show();
                     $('#right_answer').html('');
+                } else if (type == 51 || type == 52) {
+                    $('#topic').html(ajaxObj.data.puzzle.content);
+                    $('#st_answer').val(ajaxObj.data.puzzle.answer);
+                    $('#right_answer').html(ajaxObj.data.puzzle.answer);
                 }
 
                 // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';

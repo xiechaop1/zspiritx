@@ -160,6 +160,23 @@ class Puzzle extends Action
                     'answer' => '',
                 ];
                 break;
+            case GptContent::MSG_CLASS_NISHUOWOCAI_HOST:
+                $params = [
+                    'userId' => $userId,
+                    'storyId' => $storyId,
+                    'toUserId' => $userId,
+                ];
+                $genStoryTmp = Yii::$app->doubao->generateNswc('现在你想好一个物品、事物或者人物，玩家来猜就好啦', $params, 'host', true);
+                $genStory['content'] = '我想好啦，你来猜猜看！只允许问10个封闭问题哦，我只能回答"是"或者"不是"呢！';
+                break;
+            case GptContent::MSG_CLASS_NISHUOWOCAI_PLAYER:
+                $params = [
+                    'userId' => $userId,
+                    'storyId' => $storyId,
+                    'toUserId' => $userId,
+                ];
+                $genStory = Yii::$app->doubao->generateNswc('让玩家出题吧', $params, 'player', true);
+                break;
             default:
                 break;
         }

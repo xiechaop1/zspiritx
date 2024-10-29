@@ -69,10 +69,13 @@ class Doubao extends Component
         return $ret;
     }
 
-    public function getOldContents($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL) {
+    public function getOldContents($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL, $needFirst = false) {
         $beginTime = strtotime('-5 minute');
         $limit = 3;
-        $lastContents = $this->getContentsFromDb($userId, $toUserId, $msgClass, $beginTime, 0, $limit);
+        if ($needFirst) {
+            $lastFirst = $this->getContentsFromDb($userId, $toUserId, $msgClass, 0, $beginTime, 0, $limit, 0);
+        }
+        $lastContents = $this->getContentsFromDb($userId, $toUserId, $msgClass, 0, $beginTime, 0, $limit, 0);
 
         $oldContents = [];
         if (!empty($lastContents)) {
@@ -97,7 +100,7 @@ class Doubao extends Component
                 if (!empty($lastContent['content'])) {
                     if (\common\helpers\Common::isJson($lastContent['content'])) {
                         $contentObj = json_decode($lastContent['content'], true);
-                        $content = !empty($contentObj['content']) ? $contentObj['content'] : '';
+                        $content = !empty($contentObj['content']) ? $contentObj['content'] : $lastContent['content'];
                     } else {
                         $content = $lastContent['content'];
                     }
@@ -113,21 +116,46 @@ class Doubao extends Component
         return $oldContents;
     }
 
-    public function generateNswc($userMessage, $params, $aiRole = 'host') {
+    public function generateNswc($userMessage, $params, $aiRole = 'host', $isFirst = false) {
         if ($aiRole == 'host') {
             $roleTxt = '#角色#' . "\n" . '你是一个你说我猜游戏主持人，你负责出题，解答，引导游戏的进行';
-            $simple = [
-                'content' => '你的回答',
-                'answer' => '标准答案'
-            ];
-            $extMessages = [
-                '你想一个常见的物体、事物、人物、动物均可',
-                '玩家询问这个物体的特征，而你只回答是或者不是，如果你也无法判断，你就回答"我也不知道"',
-                '最后如果玩家猜对了，你就告诉玩家答对了，并且结束游戏',
-                '内容不超过200字',
-                '用JSON的形式返回',
-                '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
-            ];
+            if ($isFirst) {
+                $simple = [
+                    'content' => '你打招呼的一句话',
+                    'answer' => '随机生成的物体、事物、人物或者动物',
+//                'final' => '最终的答案（人物、事物或者物品）',
+                ];
+                $example = [
+                    'content' => '我已经想好啦，准备开始吧！',
+                    'answer' => '足球',
+                ];
+                $extMessages = [
+                    '你随机生成一个常见的物体、事物、人物、动物均可',
+                    '内容不超过50字',
+                    '用JSON的形式返回',
+                    '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+                    '#示例#' . json_encode($example, JSON_UNESCAPED_UNICODE),
+                ];
+            } else {
+                $simple = [
+                    'content' => '回答',
+//                'final' => '最终的答案（人物、事物或者物品）',
+                ];
+                $example = [
+                    'content' => '不是',
+                ];
+                $extMessages = [
+                    '你随机生成一个常见的物体、事物、人物、动物均可',
+                    '玩家询问这个物体的特征，而你只回答是或者不是，如果你也无法判断，你就回答"我也不知道"',
+                    '最后如果玩家猜对了，你就告诉玩家"猜对了"，并且结束游戏',
+                    '内容不超过50字',
+                    '用JSON的形式返回',
+                    '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
+                    '#示例#' . json_encode($example, JSON_UNESCAPED_UNICODE),
+                ];
+            }
+
+
             $msgClass = GptContent::MSG_CLASS_NISHUOWOCAI_HOST;
         } else {
             $roleTxt = '#角色#' . "\n" . '你是一个你说我猜游戏参与者，你负责出题，解答，引导游戏的进行';
@@ -153,13 +181,34 @@ class Doubao extends Component
         $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
 
-        $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
+        if (!$isFirst) {
+            $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
+        } else {
+            $oldContents = [];
+        }
 
 
-        $ret = $this->chatWithDoubao($userMessage, $oldContents, $extMessages, [$roleTxt], false);
+        $gptRet = $this->chatWithDoubao($userMessage, $oldContents, $extMessages, [$roleTxt], false);
 
         $prompt = $this->_prompt;
-        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+        $this->saveContentToDb($userId, $toUserId, $gptRet, $prompt, $msgClass, 0, $storyId, $this->model);
+
+        if (!\common\helpers\Common::isJson($gptRet)) {
+            $ret['content'] = $gptRet;
+        } else {
+            $ret = $gptRet;
+        }
+        
+        if (!empty($ret['answer'])
+            && mb_strpos($ret['answer'], '你想的答案是') !== false
+        ) {
+            preg_match('/你想的答案是(.*)[。]?/', $ret['answer'], $matches);
+            if (!empty($matches[1])) {
+                $ret['answer'] = $matches[1];
+            }
+        }
+
+        return $ret;
     }
 
     public function generateGuessByDescGame($userMessage, $params = []
@@ -880,7 +929,7 @@ class Doubao extends Component
         }
     }
 
-    public function saveContentToDb($userId, $toUserId, $content, $prompt = [], $msgClass = GptContent::MSG_CLASS_NORMAL, $senderId = 0, $storyId = 0, $gptModel = '', $msgType = GptContent::MSG_TYPE_TEXT) {
+    public function saveContentToDb($userId, $toUserId, $content, $prompt = [], $msgClass = GptContent::MSG_CLASS_NORMAL, $senderId = 0, $storyId = 0, $gptModel = '', $isFirst = GptContent::IS_FIRST_UNKNOWN, $msgType = GptContent::MSG_TYPE_TEXT) {
         try {
             $model = new GptContent();
             $model->user_id = $userId;
@@ -892,13 +941,14 @@ class Doubao extends Component
             $model->prompt = json_encode($prompt, JSON_UNESCAPED_UNICODE);
             $model->sender_id = $senderId;
             $model->story_id = $storyId;
+            $model->is_first = $isFirst;
             $model->save();
         } catch (\Exception $e) {
             throw $e;
         }
     }
 
-    public function getContentsFromDb($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL, $beginTime = 0, $endTime = 0, $limit = 20, $msgType = GptContent::MSG_TYPE_TEXT, $senderId = 0, $storyId = 0) {
+    public function getContentsFromDb($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL, $beginId = 0, $beginTime = 0, $endTime = 0, $limit = 20, $isFirst = GptContent::IS_FIRST_UNKNOWN, $msgType = GptContent::MSG_TYPE_TEXT, $senderId = 0, $storyId = 0) {
         $contentModel = GptContent::find()
             ->where([
                 'user_id' => $userId,
@@ -915,11 +965,17 @@ class Doubao extends Component
         if (!empty($storyId)) {
             $contentModel->andFilterWhere(['story_id' => $storyId]);
         }
+        if (!empty($beginId)) {
+            $contentModel->andFilterWhere(['>', 'id', $beginId]);
+        }
         if (!empty($beginTime)) {
             $contentModel->andFilterWhere(['>=', 'created_at', $beginTime]);
         }
         if (!empty($endTime)) {
             $contentModel->andFilterWhere(['<=', 'created_at', $endTime]);
+        }
+        if (!empty($isFirst)) {
+            $contentModel->andFilterWhere(['is_first' => $isFirst]);
         }
         $contentModel->orderBy('id desc');
         if ($limit > 0) {
