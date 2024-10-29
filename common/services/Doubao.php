@@ -197,7 +197,7 @@ class Doubao extends Component
         $prompt = $this->_prompt;
         $this->saveContentToDb($userId, $toUserId, $gptRet, $prompt, $msgClass, 0, $storyId, $this->model);
 
-        if (!\common\helpers\Common::isJson($gptRet)) {
+        if (!is_array($gptRet) && !\common\helpers\Common::isJson($gptRet)) {
             $ret['content'] = $gptRet;
         } else {
             $ret = $gptRet;
