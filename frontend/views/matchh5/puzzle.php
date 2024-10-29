@@ -216,11 +216,12 @@ $this->title = '猜猜猜';
 
             <div class="m-t-100" style="position: absolute; bottom: 10px;" id="answer-box">
                 <div class="answer-border2">
-                    <span style="float: left;"><textarea style="border: 0px; width:500px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
+                    <span style="float: left;"><textarea style="border: 0px; width:400px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
                     <span style="float: left; margin-left: 20px;"><input id="subdoc" type="button" style="color: black;
                     font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="发布"></span>
-                    <span style="float: left; margin-left: 20px;"><input id="record" type="button" style="color: black;
-                    font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="Rec"></span>
+                    <span style="float: left; margin-left: 20px;"><a id="record">
+                        <img id="mic_icon" src="../../static/img/match/mic_g.png" width="60" height="60" style="margin-left: 10px;"></a>
+                    </span>
 <!--                    <button id="btn_control">开始录音</button><div id="result"></div>-->
                 </div>
 
@@ -518,7 +519,9 @@ $this->title = '猜猜猜';
                 var data = $.toJSON(params);
                 Unity.call(data);
                 record_tag = 1;
-                $(this).val('Stop');
+                console.log($(this).find('img').attr('src'));
+                $(this).find('img').attr('src', '../../static/img/match/mic_re_g.png');
+                // $(this).val('Stop');
             } else {
                 var params = {
                     'gameFlag': "stopMicRec",
@@ -528,7 +531,8 @@ $this->title = '猜猜猜';
                 var data = $.toJSON(params);
                 Unity.call(data);
                 record_tag = 0;
-                $(this).val('Record');
+                $(this).find('img').attr('src', '../../static/img/match/mic_s_g.png');
+                // $(this).val('Record');
             }
         });
 
@@ -728,6 +732,7 @@ $this->title = '猜猜猜';
         var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
 
         $('#subdoc_content').val(voiceObj.data.text);
+        $('#mic_icon').attr('src', '../../static/img/match/mic_g.png');
     }
 
     function getPuzzle() {
