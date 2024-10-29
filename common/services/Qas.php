@@ -974,6 +974,21 @@ class Qas extends Component
         return $subjects;
     }
 
+    public function generateHistory($userId, $level, $ct = 100, $gold = 0) {
+            // Todo：临时强制保护
+//            $ct = 20;
+//            $subjects = $this->generateSubjectWithDoubao($level, Subject::SUBJECT_CLASS_MATH, $ct);
+            $subjects = $this->generateSubjectWithQa($level, $ct, Qa::QA_CLASS_HISTORY);
+            if (count($subjects) < 10) {
+                $gptSubjects = $this->generateSubjectWithDoubao($level, Qa::QA_CLASS_HISTORY, 10 - count($subjects), $userId);
+                foreach ($gptSubjects as $gptSub) {
+                    $subjects[] = $gptSub;
+                }
+            }
+
+        return $subjects;
+    }
+
     public function getUserQaCt($userId, $matchClass = 0, $mode = 1) {
         $userQaCt = 0;
         $userQa = UserQa::find()
