@@ -137,22 +137,25 @@ class VoiceApi extends ApiAction
 
             }
 
-            $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($aiContent, $userId);
-
-            $ttsFile = $ttsRet['file'];
-
             $strMaxLength = 85;
             $dialogCt = intval(mb_strlen($aiContent, 'utf-8') / $strMaxLength) + 1;
 
             $dialogArr = [];
             for ($i = 0; $i < $dialogCt; $i++) {
-                $dialogArr[] = [
+                $sentenceClip = mb_substr($aiContent, $i * $strMaxLength, $strMaxLength, 'utf-8');
+                $dialogTmp = [
                     'name' => '小灵语',
-                    'sentence' => mb_substr($aiContent, $i * $strMaxLength, $strMaxLength, 'utf-8'),
+                    'sentence' => $sentenceClip,
                     'to_user' => $userId,
                     'sender_id' => 0,
-                    'sentenceClipURL' => 'https://h5.zspiritx.com.cn/' . $ttsFile,
                 ];
+                $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($sentenceClip, $userId);
+
+                if (!empty($ttsRet['file']['saveFile'])) {
+                    $ttsFile = $ttsRet['file']['saveFile'];
+                    $dialogTmp['sentenceClipURL'] = $ttsFile;
+                }
+                $dialogArr[] = $dialogTmp;
             }
             Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
             return $aiRet;
