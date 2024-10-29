@@ -70,7 +70,7 @@ class VoiceApi extends ApiAction
         $sessionStageId = !empty($_request['session_stage_id']) ? $_request['session_stage_id'] : 0;
 
         $source = !empty($_request['source']) ? $_request['source'] : 0;
-        $type = !empty($_request['type']) ? $_request['type'] : 0;
+        $type = !empty($_request['type']) ? $_request['type'] : '';
 
         try {
             $time1 = time();
@@ -83,7 +83,7 @@ class VoiceApi extends ApiAction
             }
 
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
-            var_dump($word);
+//            var_dump($word);
 
             $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
 
