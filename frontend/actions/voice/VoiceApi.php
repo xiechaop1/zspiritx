@@ -126,7 +126,7 @@ class VoiceApi extends ApiAction
 
             $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params);
             $time2 = time();
-            var_dump($time2 - $time1);
+//            var_dump($time2 - $time1);
             $aiContent = '';
             if (!empty($aiRet['content'])) {
                 $aiContent = $aiRet['content'];
@@ -136,6 +136,10 @@ class VoiceApi extends ApiAction
 //                var_dump($aiRet);
 
             }
+
+            $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($aiContent, $userId);
+
+            $ttsFile = $ttsRet['file'];
 
             $strMaxLength = 85;
             $dialogCt = intval(mb_strlen($aiContent, 'utf-8') / $strMaxLength) + 1;
@@ -147,6 +151,7 @@ class VoiceApi extends ApiAction
                     'sentence' => mb_substr($aiContent, $i * $strMaxLength, $strMaxLength, 'utf-8'),
                     'to_user' => $userId,
                     'sender_id' => 0,
+                    'sentenceClipURL' => 'https://h5.zspiritx.com.cn/' . $ttsFile,
                 ];
             }
             Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
