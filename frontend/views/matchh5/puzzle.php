@@ -535,7 +535,7 @@ $this->title = '猜猜猜';
         $('#subdoc').click(function() {
             var content = $('#subdoc_content').val();
             if (content == '') {
-                return;
+                return false;
             }
             var type = $('[name=type]').val();
 
@@ -548,7 +548,17 @@ $this->title = '猜猜猜';
                     console.log($('#right_icon'));
                     $('#right_icon').show();
                     setTimeout(function () {
-                        getPuzzle();
+                        if (type == 41) {
+                            $('[name=type]').val(42);
+                            $('#topic').html('换你来说一个，我来猜！');
+                            $('#right_icon').hide();
+                            $('#wrong_icon').hide();
+                        } else {
+                            $('[name=type]').val(41);
+                            getPuzzle();
+                        };
+                        console.log($('[name=type]').val());
+
                     }, 3000);
                 } else {
                     // wrong
@@ -572,11 +582,17 @@ $this->title = '猜猜猜';
                     // setTimeout(function () {
                     //     getPuzzle();
                     // }, 3000);
+                    if (type == 51) {
+                        $('[name=type]').val(52);
+                    } else {
+                        $('[name=type]').val(51);
+                    };
 
                 } else {
                     // wrong
                     getPuzzle();
                 }
+                $('subdoc_content').val('');
             } else {
                 getPuzzle();
             }
@@ -587,7 +603,13 @@ $this->title = '猜猜猜';
             $('#wrong_btn').hide();
             var type = $('input[name=type]').val();
             if (type == 42) {
-                $('#topic').html('再来！你来描述，我来猜！');
+                $('#topic').html('换我出题了，让我想一想……');
+                setTimeout(function () {
+                    $('[name=type]').val(41);
+                    getPuzzle();
+
+                }, 3000);
+
             }
             // getPuzzle();
         });
@@ -597,7 +619,7 @@ $this->title = '猜猜猜';
             $('#wrong_btn').hide();
             var type = $('input[name=type]').val();
             if (type == 42) {
-                $('#topic').html('啊！我猜错了！再来一次吧！');
+                $('#topic').html('啊！我猜错了！你再说一个！');
             }
             // getPuzzle();
         });
@@ -716,6 +738,7 @@ $this->title = '猜猜猜';
         var oldsDiv = $('#topic').find('div');
         var olds = [];
 
+
         $('#right_icon').hide();
         $('#wrong_icon').hide();
 
@@ -758,6 +781,7 @@ $this->title = '猜猜猜';
                 var dataCon = $.toJSON(dataContent);
                 var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
 
+                $('#subdoc_content').val('');
                 console.log(ajaxObj);
 
                 if (type == 41) {
