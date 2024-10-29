@@ -152,7 +152,7 @@ class VoiceApi extends ApiAction
                 $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($sentenceClip, $userId);
 
                 if (!empty($ttsRet['file']['saveFile'])) {
-                    $ttsFile = $ttsRet['file']['saveFile'];
+                    $ttsFile = 'https://h5.zspiritx.com.cn/' . $ttsRet['file']['file'];
                     $dialogTmp['sentenceClipURL'] = $ttsFile;
                 }
                 $dialogArr[] = $dialogTmp;
