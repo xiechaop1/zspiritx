@@ -547,6 +547,7 @@ $this->title = '猜猜猜';
                 $('#right_icon').hide();
                 $('#wrong_icon').hide();
                 var st_answer = $("#st_answer").val();
+                content.replace('。', '');
                 if (content == st_answer) {
                     // right
                     console.log($('#right_icon'));
