@@ -73,6 +73,8 @@ class VoiceApi extends ApiAction
         $type = !empty($_request['type']) ? $_request['type'] : '';
 
         try {
+            $needVoice = false;
+            
             $time1 = time();
             $word = Yii::$app->xunfei->sendByFile($file['tmp_name']);
 
@@ -149,11 +151,14 @@ class VoiceApi extends ApiAction
                     'to_user' => $userId,
                     'sender_id' => 0,
                 ];
-                $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($sentenceClip, $userId);
 
-                if (!empty($ttsRet['file']['saveFile'])) {
-                    $ttsFile = 'https://h5.zspiritx.com.cn/' . $ttsRet['file']['file'];
-                    $dialogTmp['sentenceClipURL'] = $ttsFile;
+                if ($needVoice == false) {
+                    $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($sentenceClip, $userId);
+
+                    if (!empty($ttsRet['file']['saveFile'])) {
+                        $ttsFile = 'https://h5.zspiritx.com.cn/' . $ttsRet['file']['file'];
+                        $dialogTmp['sentenceClipURL'] = $ttsFile;
+                    }
                 }
                 $dialogArr[] = $dialogTmp;
             }
