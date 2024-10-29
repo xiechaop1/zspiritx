@@ -144,7 +144,7 @@ class Puzzle extends Action
 //    var_dump($genStory);
 //}
 //        exit;
-        $genStory = '';
+        $genStory = [];
         switch ($type) {
             case GptContent::MSG_CLASS_GUESS_BY_DESCRIPTION:
                 $params = [
