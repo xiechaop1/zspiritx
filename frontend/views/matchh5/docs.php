@@ -520,6 +520,10 @@ $this->title = '故事汇';
             }
         });
 
+        function getTalk(data) {
+            getTalkBase(data, 'subdoc_content', 'mic_icon');
+        }
+
         $('#subdoc').click(function() {
             var content = $('#subdoc_content').val();
             if (content == '') {
