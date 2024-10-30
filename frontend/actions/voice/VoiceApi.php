@@ -87,36 +87,38 @@ class VoiceApi extends ApiAction
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
 //            var_dump($word);
 
-            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
+            $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, GptContent::MSG_CLASS_NORMAL);
 
-            $oldContents = [];
-            if (!empty($lastContents)) {
-                foreach ($lastContents as $lastContent) {
-                    if (!empty($lastContent['prompt'])) {
-                        $oldPrompts = json_decode($lastContent['prompt'], true);
-                        if (!empty($oldPrompts)) {
-                            foreach ($oldPrompts as $oldPrompt) {
-                                if (!empty($oldPrompt['role']) && $oldPrompt['role'] != 'system') {
-                                    $oldContents[] = $oldPrompt;
-                                }
-                            }
-                        }
-                        if (!empty($lastContent['content'])) {
-                            if (Common::isJson($lastContent['content'])) {
-                                $contentObj = json_decode($lastContent['content'], true);
-                                $content = !empty($contentObj['content']) ? $contentObj['content'] : '';
-                            } else {
-                                $content = $lastContent['content'];
-                            }
-                            $oldContents[] = [
-                                'role'  => 'assistant',
-                                'content' => $content,
-                            ];
-
-                        }
-                    }
-                }
-            }
+//            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
+//
+//            $oldContents = [];
+//            if (!empty($lastContents)) {
+//                foreach ($lastContents as $lastContent) {
+//                    if (!empty($lastContent['prompt'])) {
+//                        $oldPrompts = json_decode($lastContent['prompt'], true);
+//                        if (!empty($oldPrompts)) {
+//                            foreach ($oldPrompts as $oldPrompt) {
+//                                if (!empty($oldPrompt['role']) && $oldPrompt['role'] != 'system') {
+//                                    $oldContents[] = $oldPrompt;
+//                                }
+//                            }
+//                        }
+//                        if (!empty($lastContent['content'])) {
+//                            if (Common::isJson($lastContent['content'])) {
+//                                $contentObj = json_decode($lastContent['content'], true);
+//                                $content = !empty($contentObj['content']) ? $contentObj['content'] : '';
+//                            } else {
+//                                $content = $lastContent['content'];
+//                            }
+//                            $oldContents[] = [
+//                                'role'  => 'assistant',
+//                                'content' => $content,
+//                            ];
+//
+//                        }
+//                    }
+//                }
+//            }
 
 //            var_dump($oldContents);
 
@@ -139,6 +141,7 @@ class VoiceApi extends ApiAction
 
             }
 
+            $aiContent = str_replace('\n', '', $aiContent);
             $strMaxLength = 85;
             $dialogCt = intval(mb_strlen($aiContent, 'utf-8') / $strMaxLength) + 1;
 

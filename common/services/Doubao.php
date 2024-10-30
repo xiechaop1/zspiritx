@@ -50,7 +50,7 @@ class Doubao extends Component
         ];
         $extMessages = [
             '你说话很温柔，适合6-12岁小朋友',
-            '你很贴心，也很照顾情绪',
+            '你很贴心，也很会提供情绪价值',
             '内容不超过200字',
             '用JSON的形式返回',
             '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
