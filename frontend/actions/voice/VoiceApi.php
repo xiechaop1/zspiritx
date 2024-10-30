@@ -152,7 +152,7 @@ class VoiceApi extends ApiAction
                     'sender_id' => 0,
                 ];
 
-                if ($needVoice == false) {
+                if ($needVoice === true) {
                     $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($sentenceClip, $userId);
 
                     if (!empty($ttsRet['file']['saveFile'])) {
