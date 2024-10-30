@@ -1726,10 +1726,11 @@ class MatchApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
         $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $msgClass = !empty($this->_get['msg_class']) ? $this->_get['msg_class'] : GptContent::MSG_TYPE_TEXT;
+        $senderId = !empty($this->_get['sender_id']) ? $this->_get['sender_id'] : 0;
         $beginTime = strtotime('-5 min');
         $limit = !empty($this->_get['limit']) ? $this->_get['limit'] : 20;
 
-        $old = Yii::$app->doubao->getOldContents($userId, $userId, $msgClass);
+        $old = Yii::$app->doubao->getOldContents($userId, $userId, $senderId, $msgClass);
 
         return ['content' => $old];
     }

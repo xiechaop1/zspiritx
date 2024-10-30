@@ -68,6 +68,7 @@ class VoiceApi extends ApiAction
         $storyId = !empty($_request['story_id']) ? $_request['story_id'] : 0;
         $userId = !empty($_request['user_id']) ? $_request['user_id'] : 0;
         $sessionStageId = !empty($_request['session_stage_id']) ? $_request['session_stage_id'] : 0;
+        $senderId = !empty($_request['sender_id']) ? $_request['sender_id'] : 0;
 
         $source = !empty($_request['source']) ? $_request['source'] : 0;
         $type = !empty($_request['type']) ? $_request['type'] : '';
@@ -87,9 +88,9 @@ class VoiceApi extends ApiAction
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
 //            var_dump($word);
 
-            $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, GptContent::MSG_CLASS_NORMAL);
+            $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL);
 
-//            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
+//            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
 //
 //            $oldContents = [];
 //            if (!empty($lastContents)) {

@@ -59,10 +59,11 @@ class Doubao extends Component
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
         $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_NORMAL;
 
-        $oldMessages = $this->getOldContents($userId, $toUserId, $msgClass);
+        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false);
 
@@ -74,13 +75,13 @@ class Doubao extends Component
         return $ret;
     }
 
-    public function getOldContents($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL, $needFirst = false) {
+    public function getOldContents($userId, $toUserId, $senderId = 0, $msgClass = GptContent::MSG_CLASS_NORMAL, $needFirst = false) {
         $beginTime = strtotime('-5 minute');
         $limit = 3;
         if ($needFirst) {
-            $lastFirst = $this->getContentsFromDb($userId, $toUserId, $msgClass, 0, $beginTime, 0, $limit, 0);
+            $lastFirst = $this->getContentsFromDb($userId, $toUserId, $senderId, $msgClass, 0, $beginTime, 0, $limit, 0);
         }
-        $lastContents = $this->getContentsFromDb($userId, $toUserId, $msgClass, 0, $beginTime, 0, $limit, 0);
+        $lastContents = $this->getContentsFromDb($userId, $toUserId, $senderId, $msgClass, 0, $beginTime, 0, $limit, 0);
 
         $oldContents = [];
         if (!empty($lastContents)) {
@@ -190,10 +191,11 @@ class Doubao extends Component
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
         $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
 
         if (!$isFirst) {
-            $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
+            $oldContents = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
         } else {
             $oldContents = [];
         }
@@ -255,12 +257,13 @@ class Doubao extends Component
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
         $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_GUESS_BY_DESCRIPTION;
 
-//        $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
+//        $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
 
-//        $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
+//        $oldContents = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
         $ret = $this->chatWithDoubao($userMessage, [], $extMessages, [$roleTxt], false);
 
@@ -314,7 +317,7 @@ class Doubao extends Component
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_GUESS_BY_GUEST;
 
-//        $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
+//        $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
 
 //        $oldContents = $this->getOldContents($userId, $toUserId, $msgClass);
 
@@ -963,7 +966,7 @@ class Doubao extends Component
         }
     }
 
-    public function getContentsFromDb($userId, $toUserId, $msgClass = GptContent::MSG_CLASS_NORMAL, $beginId = 0, $beginTime = 0, $endTime = 0, $limit = 20, $isFirst = GptContent::IS_FIRST_UNKNOWN, $msgType = GptContent::MSG_TYPE_TEXT, $senderId = 0, $storyId = 0) {
+    public function getContentsFromDb($userId, $toUserId, $senderId = 0, $msgClass = GptContent::MSG_CLASS_NORMAL, $beginId = 0, $beginTime = 0, $endTime = 0, $limit = 20, $isFirst = GptContent::IS_FIRST_UNKNOWN, $msgType = GptContent::MSG_TYPE_TEXT, $storyId = 0) {
         $contentModel = GptContent::find()
             ->where([
                 'user_id' => $userId,
