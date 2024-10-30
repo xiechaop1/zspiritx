@@ -497,28 +497,28 @@ $this->title = '故事汇';
 
         });
 
-        var record_tag = 0;
-        $('#record').click(function() {
-            if (record_tag == 0) {
-                var params = {
-                    'gameFlag': "startMicRec",
-                }
-                var data = $.toJSON(params);
-                Unity.call(data);
-                record_tag = 1;
-                $(this).val('Stop');
-            } else {
-                var params = {
-                    'gameFlag': "stopMicRec",
-                    'source':"doc",
-                    'type':'asr',
-                }
-                var data = $.toJSON(params);
-                Unity.call(data);
-                record_tag = 0;
-                $(this).val('Record');
-            }
-        });
+        // var record_tag = 0;
+        // $('#record').click(function() {
+        //     if (record_tag == 0) {
+        //         var params = {
+        //             'gameFlag': "startMicRec",
+        //         }
+        //         var data = $.toJSON(params);
+        //         Unity.call(data);
+        //         record_tag = 1;
+        //         $(this).val('Stop');
+        //     } else {
+        //         var params = {
+        //             'gameFlag': "stopMicRec",
+        //             'source':"doc",
+        //             'type':'asr',
+        //         }
+        //         var data = $.toJSON(params);
+        //         Unity.call(data);
+        //         record_tag = 0;
+        //         $(this).val('Record');
+        //     }
+        // });
 
         function getTalk(data) {
             getTalkBase(data, 'subdoc_content', 'mic_icon');
