@@ -851,12 +851,16 @@ class Doubao extends Component
             if (!empty($msg)) {
                 $msg = str_replace('```json', '', $msg);
                 $msg = str_replace('```', '', $msg);
+                // 过滤掉msg开头的\n
+                $msg = preg_replace('/^\\n/', '', $msg);
                 if (\common\helpers\Common::isJson($msg)) {
                     $ret = json_decode($msg, true);
                 } else {
                     $ret = $msg;
                 }
 //                $ret = json_decode($msg, true);
+
+
             }
         } else {
             $ret = [];
