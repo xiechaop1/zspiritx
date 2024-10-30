@@ -11,7 +11,7 @@ namespace frontend\assets;
 
 use yii\web\AssetBundle;
 
-class Matchh5Asset extends AssetBundle
+class Gameh5Asset extends AssetBundle
 {
     public $sourcePath = '@runtime/../../template';
 
@@ -30,8 +30,9 @@ class Matchh5Asset extends AssetBundle
         self::HOST . 'css/iconfont.css',
         self::HOST . 'css/animate.css',
         'html/h5/app.css',
-        'html/h5/qa.css',
-        'html/h5/margin.css',
+        self::HOST . 'html/h5/qa.css',
+        'html/h5/diy.css',
+
     ];
     public $js = [
         self::HOST . 'js/jquery/jQuery-2.1.3.min.js',
@@ -48,17 +49,8 @@ class Matchh5Asset extends AssetBundle
         self::HOST . 'js/getOptions.js',
         self::HOST . 'js/jquery.SuperSlide.2.1.3.js',
         'html/h5/app.js',
-        'html/h5/match.js',
         'html/h5/voice.js',
-//        'html/iat-js/example/crypto-js.js',
-//        'html/iat-js/dist/index.umd.js',
-//        'html/iat-js/example/iat/index.js',
-//        'html/iat-js/example/iat/input-file.js',
-//        'html/h5/jquery-hashtable.js',
         ];
-//<script src="/template/html/iat-js/example/crypto-js.js"></script>
-//<script src="/template/html/iat-js/dist/index.umd.js"></script>
-//<script src="/template/html/iat-js/example/iat/index.js"></script>
-//<script src="/template/html/iat-js/example/iat/input-file.js"></script>
+
 
 }

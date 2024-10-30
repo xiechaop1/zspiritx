@@ -14,7 +14,7 @@
  * @var \common\models\QA $qa
  */
 
-\frontend\assets\Matchh5Asset::register($this);
+\frontend\assets\Gameh5Asset::register($this);
 
 $this->registerMetaTag([
     'name' => 'referrer',
@@ -217,9 +217,9 @@ $this->title = '猜猜猜';
             <div class="m-t-100" style="position: absolute; bottom: 10px;" id="answer-box">
                 <div class="answer-border2">
                     <span style="float: left;"><textarea style="border: 0px; width:400px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
-                    <span style="float: left; margin-left: 20px;"><input id="subdoc" type="button" style="color: black;
+                    <span style="float: left; margin-left: 15px;"><input id="subdoc" type="button" style="color: black;
                     font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="发布"></span>
-                    <span style="float: left; margin-left: 20px;"><a id="record">
+                    <span style="float: left; margin-left: 15px;"><a id="record">
                         <img id="mic_icon" src="../../static/img/match/mic_g.png" width="60" height="60" style="margin-left: 10px;"></a>
                     </span>
 <!--                    <button id="btn_control">开始录音</button><div id="result"></div>-->
@@ -510,31 +510,31 @@ $this->title = '猜猜猜';
 
 
 
-        var record_tag = 0;
-        $('#record').click(function() {
-            if (record_tag == 0) {
-                var params = {
-                    'gameFlag': "startMicRec",
-                }
-                var data = $.toJSON(params);
-                Unity.call(data);
-                record_tag = 1;
-                console.log($(this).find('img').attr('src'));
-                $(this).find('img').attr('src', '../../static/img/match/mic_re_g.png');
-                // $(this).val('Stop');
-            } else {
-                var params = {
-                    'gameFlag': "stopMicRec",
-                    'recArgs_source':"doc",
-                    'recArgs_type':'asr',
-                }
-                var data = $.toJSON(params);
-                Unity.call(data);
-                record_tag = 0;
-                $(this).find('img').attr('src', '../../static/img/match/mic_s_g.png');
-                // $(this).val('Record');
-            }
-        });
+        // var record_tag = 0;
+        // $('#record').click(function() {
+        //     if (record_tag == 0) {
+        //         var params = {
+        //             'gameFlag': "startMicRec",
+        //         }
+        //         var data = $.toJSON(params);
+        //         Unity.call(data);
+        //         record_tag = 1;
+        //         console.log($(this).find('img').attr('src'));
+        //         $(this).find('img').attr('src', '../../static/img/match/mic_re_g.png');
+        //         // $(this).val('Stop');
+        //     } else {
+        //         var params = {
+        //             'gameFlag': "stopMicRec",
+        //             'recArgs_source':"doc",
+        //             'recArgs_type':'asr',
+        //         }
+        //         var data = $.toJSON(params);
+        //         Unity.call(data);
+        //         record_tag = 0;
+        //         $(this).find('img').attr('src', '../../static/img/match/mic_s_g.png');
+        //         // $(this).val('Record');
+        //     }
+        // });
 
         $('#subdoc').click(function() {
             var content = $('#subdoc_content').val();
@@ -728,13 +728,17 @@ $this->title = '猜猜猜';
     };
 
     function getTalk(data) {
-        var dataContent = data;
-        var dataCon = $.toJSON(dataContent);
-        var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
-
-        $('#subdoc_content').val(voiceObj.data.text);
-        $('#mic_icon').attr('src', '../../static/img/match/mic_g.png');
+        getTalkBase(data, 'subdoc_content', 'mic_icon');
     }
+
+    // function getTalk(data) {
+    //     var dataContent = data;
+    //     var dataCon = $.toJSON(dataContent);
+    //     var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+    //
+    //     $('#subdoc_content').val(voiceObj.data.text);
+    //     $('#mic_icon').attr('src', '../../static/img/match/mic_g.png');
+    // }
 
     function getPuzzle() {
         var story_id = $('input[name=story_id]').val();

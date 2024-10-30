@@ -158,7 +158,7 @@ $this->title = '故事汇';
             <div class="match-qa-box right">
                 <!--文本问题-->
                 <div id="ctitle" style="text-align: center; font-size: 36px; color: white; padding-top: 30px;">
-                    猜猜猜
+                    故事汇
                 </div>
                 <?php
 //                var_dump($genStory);exit;
@@ -180,34 +180,28 @@ $this->title = '故事汇';
                     <span>17</span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
-<!--                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">-->
-<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
-<!--                        题目-->
-<!--                    </div>-->
-<!--                    <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">-->
-<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
-<!--                        提示-->
-<!--                    </div>-->
-<!--                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">-->
-<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
-<!--                        解析-->
-<!--                    </div>-->
+                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        题目
+                    </div>
+                    <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        提示
+                    </div>
+                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        解析
+                    </div>
                 </div>
 
-                <div style="position: absolute; right: 50px; bottom: 20px;">
-                    <img src="../../static/img/match/right.png">
-                </div>
-                <div style="position: absolute; right: 50px; bottom: 20px;">
-                    <img src="../../static/img/match/wrong.png">
-                </div>
                 <div class="match-clock-bottom">
 <!--                    <div class="match-clock-bottom-left">-->
 <!--                        标题：<span class="text-1" id="ctitle1"></span>-->
 <!--                    </div>-->
                     <div class="match-clock-bottom-right">
-<!--                        分数-->
-<!--                        <span class="text-1" id="score">0</span>/字数-->
-<!--                        <span class="text-2" id="size">0</span>-->
+                        分数
+                        <span class="text-1" id="score">0</span>/字数
+                        <span class="text-2" id="size">0</span>
                     </div>
 
                 </div>
@@ -215,11 +209,12 @@ $this->title = '故事汇';
 
             <div class="m-t-100" style="position: absolute; bottom: 10px;" id="answer-box">
                 <div class="answer-border2">
-                    <span style="float: left;"><textarea style="border: 0px; width:500px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
-                    <span style="float: left; margin-left: 20px;"><input id="subdoc" type="button" style="color: black;
+                    <span style="float: left;"><textarea style="border: 0px; width:400px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
+                    <span style="float: left; margin-left: 15px;"><input id="subdoc" type="button" style="color: black;
                     font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="发布"></span>
-                    <span style="float: left; margin-left: 20px;"><input id="record" type="button" style="color: black;
-                    font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="Rec"></span>
+                    <span style="float: left; margin-left: 15px;"><a id="record">
+                        <img id="mic_icon" src="../../static/img/match/mic_g.png" width="60" height="60" style="margin-left: 10px;"></a>
+                    </span>
 <!--                    <button id="btn_control">开始录音</button><div id="result"></div>-->
                 </div>
 
@@ -531,22 +526,13 @@ $this->title = '故事汇';
                 return;
             }
 
-            var st_answer = $("#st_answer").val();
-            if (content == st_answer) {
-                // right
-                console.log($('#answer-right-box'));
-                $('#answer-right-box').fadeIn();
-            } else {
-                // wrong
-                console.log($('#answer-error-box'));
-                $('#answer-error-box').fadeIn();
+            $('#message-anaylze').html('');
+
+            if (content != undefined) {
+                var cont = '<div class="doc_content doc_content_user" role="user">' + content + '</div>';
+                $('#topic').append(cont);
             }
-
-            // $('#message-anaylze').html('');
-
-            // var cont = '<div class="doc_content doc_content_user" role="user">' + content + '</div>';
-            // $('#topic').append(cont)
-            // getDoc();
+            getDoc();
 
             $('#subdoc_content').val('');
         });
