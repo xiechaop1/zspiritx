@@ -26,15 +26,15 @@ $(function () {
         }
     });
 
-    function getTalkBase(data, objId, micIconId) {
-        var dataContent = data;
-        var dataCon = $.toJSON(dataContent);
-        var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
-
-        $('#' + objId).val(voiceObj.data.text);
-        $('#' + micIconId).attr('src', '../../static/img/match/mic_g.png');
-    }
-
 
 
 })
+
+function getTalkBase(data, objId, micIconId) {
+    var dataContent = data;
+    var dataCon = $.toJSON(dataContent);
+    var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+    $('#' + objId).val(voiceObj.data.text);
+    $('#' + micIconId).attr('src', '../../static/img/match/mic_g.png');
+}
