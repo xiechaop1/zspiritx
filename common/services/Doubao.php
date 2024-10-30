@@ -54,13 +54,16 @@ class Doubao extends Component
             '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
         ];
 
-        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false);
-
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
         $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_NORMAL;
+
+        $oldMessages = $this->getOldContents($userId, $toUserId, $msgClass);
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false);
+
 
         $prompt = $this->_prompt;
 
