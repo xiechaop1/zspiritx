@@ -42,7 +42,7 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
-    public function talk($userMessage, $oldMessages = [], $params = []) {
+    public function talk($userMessage, $oldMessages = [], $params = [], $model = '', $temperature = '') {
 
         $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
         $simple = [
@@ -142,11 +142,12 @@ class Doubao extends Component
 //                'final' => '最终的答案（人物、事物或者物品）',
                 ];
                 $example = [
-                    'content' => '不是',
+                    'content' => '不是，不是足球',
                 ];
                 $extMessages = [
+                    '你很温柔，适合6-12岁小朋友',
                     '你随机生成一个常见的物体、事物、人物、动物均可，然后返回答案',
-                    '玩家询问这个物体的特征，而你只回答是或者不是，如果你也无法判断，你就回答"我也不知道"',
+                    '玩家询问这个物体的特征，而你只"肯定回答"或者"否定回答"，如果你也无法判断，你就回答"我也不知道"',
                     '最后如果玩家猜对了，你就告诉玩家"猜对了"，并且结束游戏',
                     '内容不超过50字',
                     '用JSON的形式返回',
@@ -166,8 +167,9 @@ class Doubao extends Component
                 'content' => '这个物体是黄色的吗？',
             ];
             $extMessages = [
+                '你很温柔，适合6-12岁小朋友',
                 '玩家想了一个常见的物体、事物、人物或者动物，你来猜猜玩家想的是什么',
-                '你需要用封闭的问题，如：这个物体是黄色的吗？',
+                '你需要用封闭的问题',
                 '玩家只负责回答是或者不是',
                 '如果玩家回答是，那么你继续缩小范围',
                 '如果玩家回答不是，那么你将换一个特征继续猜测',

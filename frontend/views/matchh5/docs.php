@@ -638,7 +638,7 @@ $this->title = '故事汇';
     function getTalk(data) {
         getTalkBase(data, 'subdoc_content', 'mic_icon');
     }
-    
+
     function getDocPart(userTxt = '') {
         var story_id = $('input[name=story_id]').val();
         var level = $('input[name=level]').val();
