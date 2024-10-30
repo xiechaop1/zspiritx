@@ -1122,7 +1122,7 @@ class MatchApi extends ApiAction
         // 保存比赛状态
         $storyMatch->match_detail = json_encode($matchDetail, true);
         $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_END;
-//        $storyMatch->save();
+        $storyMatch->save();
 
 //        $matchFlow['flow'] = $matchDetail;
 

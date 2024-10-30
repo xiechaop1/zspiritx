@@ -127,6 +127,7 @@ class VoiceApi extends ApiAction
                 'userId' => $userId,
                 'toUserId' => $userId,
                 'storyId' => $storyId,
+                'senderId' => $senderId,
             ];
 
             $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params);
@@ -153,7 +154,7 @@ class VoiceApi extends ApiAction
                     'name' => '小灵语',
                     'sentence' => $sentenceClip,
                     'to_user' => $userId,
-                    'sender_id' => 0,
+                    'sender_id' => $senderId,
                 ];
 
                 if ($needVoice === true) {

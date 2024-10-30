@@ -40,6 +40,7 @@ class Doubao extends Component
 
     private $_prompt = [];
 
+
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
     public function talk($userMessage, $oldMessages = [], $params = [], $model = '', $temperature = '') {
