@@ -10,7 +10,7 @@ $(function () {
             Unity.call(data);
             record_tag = 1;
             console.log($(this).find('img').attr('src'));
-            $(this).find('img').attr('src', '../../static/img/match/mic_re_g.png');
+            $(this).find('img').attr('src', '../../static/img/match/mic_re_g1.png');
             // $(this).val('Stop');
         } else {
             var params = {
@@ -21,7 +21,7 @@ $(function () {
             var data = $.toJSON(params);
             Unity.call(data);
             record_tag = 0;
-            $(this).find('img').attr('src', '../../static/img/match/mic_s_g.png');
+            $(this).find('img').attr('src', '../../static/img/match/mic_s_g1.png');
             // $(this).val('Record');
         }
     });
@@ -36,5 +36,5 @@ function getTalkBase(data, objId, micIconId) {
     var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
 
     $('#' + objId).val(voiceObj.data.text);
-    $('#' + micIconId).attr('src', '../../static/img/match/mic_g.png');
+    $('#' + micIconId).attr('src', '../../static/img/match/mic_g1.png');
 }
