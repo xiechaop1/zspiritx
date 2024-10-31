@@ -39,6 +39,9 @@ class Processh5Controller extends Controller
             'set_home' => [
                 'class'     => 'frontend\actions\processh5\SetHome',
             ],
+            'menu' => [
+                'class'     => 'frontend\actions\processh5\Menu',
+            ],
         ];
     }
 }
