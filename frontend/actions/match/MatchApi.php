@@ -329,7 +329,7 @@ class MatchApi extends ApiAction
             ->one();
 
         if (empty($storyMatch)) {
-            return $this->renderErr('战斗还没有准备好！');
+            throw new \Exception('战斗还没有准备好！');
 //            throw new Exception('您没有准备参赛的赛车，请您用钥匙启动准备好以后，联系小精灵！', ErrorCode::STORY_MATCH_NOT_EXIST_READY);
         }
 
