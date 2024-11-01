@@ -985,7 +985,7 @@ class MatchApi extends ApiAction
 
                             // Todo: 暂时去掉保存，为了调试，最后统一打开
                             if (!empty($rivalPlayer->userModelLoc)
-                                && 1 != 1
+                                && 1 == 1
                             ) {
                                 $rivalPlayer->userModelLoc->user_model_loc_status = UserModelLoc::USER_MODEL_LOC_STATUS_DEAD;
                                 $rivalPlayer->userModelLoc->save();
