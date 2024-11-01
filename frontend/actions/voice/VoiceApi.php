@@ -155,6 +155,7 @@ class VoiceApi extends ApiAction
                     'sentence' => $sentenceClip,
                     'to_user' => $userId,
                     'sender_id' => $senderId,
+                    'viewMode' => 'rec',
                 ];
 
                 if ($needVoice === true) {
