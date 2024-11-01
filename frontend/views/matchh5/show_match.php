@@ -38,7 +38,9 @@ $this->title = '消息';
 <!--                </div>-->
 
                 <?php
-                if (!empty($model) && $model->ret == \common\models\StoryMatch::STORY_MATCH_RESULT_WIN) {
+                if (!empty($model) &&
+                (!empty($ret['ret']) && !empty($ret['user_id']) && $ret['user_id'] == $userId)
+                ){
                 ?>
                 <img src="../../static/img/match/bc_win.png" alt="" class="img-responsive  d-block m-auto"/>
                 <?php

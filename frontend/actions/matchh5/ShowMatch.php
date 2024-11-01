@@ -62,6 +62,8 @@ class ShowMatch extends Action
                     ->one();
             }
 
+            $storyMatchRet = !empty($storyMatch['ret']) ? json_decode($storyMatch['ret'], true) : [];
+
             // 清空战斗场景
             $clearScenario[] = [
 //                            'performerId' => 'PLAYER_' . $currentPlayer->id . '_' . $currentPlayer->user_model_id . '_' . $currentPlayer->m_story_model_id,
@@ -89,6 +91,7 @@ class ShowMatch extends Action
 
         return $this->controller->render('show_match', [
             'model'            => $storyMatch,
+            'ret'              => $storyMatchRet,
             'params'        => $_GET,
             'userId'        => $userId,
             'sessionId'     => $sessionId,

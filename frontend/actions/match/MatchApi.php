@@ -1060,7 +1060,7 @@ class MatchApi extends ApiAction
             $liveUser = current($liveTeams);
 
             if (!empty($liveUser) && $liveUser->id == $userId) {
-                $storyMatch->ret = StoryMatch::STORY_MATCH_RESULT_WIN;
+                $storyMatch->ret = json_encode(['ret' => StoryMatch::STORY_MATCH_RESULT_WIN, 'user_id' => $userId], JSON_UNESCAPED_UNICODE);
                 $matchDetail[] = [
                     'rivalPlayerId' => $rivalPlayer->id,
                     'rivalPlayerPetName' => $rivalPlayerPetName,
@@ -1089,7 +1089,7 @@ class MatchApi extends ApiAction
                     $userScore->save();
                 }
             } else {
-                $storyMatch->ret = StoryMatch::STORY_MATCH_RESULT_LOSE;
+                $storyMatch->ret = json_encode(['ret' => StoryMatch::STORY_MATCH_RESULT_LOSE, 'user_id' => $liveUser->id], JSON_UNESCAPED_UNICODE);
                 $matchDetail[] = [
                     'rivalPlayerId' => $rivalPlayer->id,
                     'rivalPlayerPetName' => $rivalPlayerPetName,
