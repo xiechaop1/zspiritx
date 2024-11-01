@@ -59,10 +59,10 @@ $this->title = '消息';
 </div>
 <script>
     window.onload = function () {
-        $('#btn1').slideDown(300);
-        $('#btn2').slideDown(500);
-        $('#btn3').slideDown(700);
-        $('#btn4').slideDown(900);
+        $('#btn1').fadeIn(1000);
+        $('#btn2').fadeIn(2000);
+        $('#btn3').fadeIn(3000);
+        $('#btn4').fadeIn(4000);
 
         $('.menubtn').click(function() {
             var answerType = $(this).attr('type');
