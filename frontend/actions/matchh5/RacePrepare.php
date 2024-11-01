@@ -113,6 +113,7 @@ class RacePrepare extends Action
 
             // 寻找自己未完结的比赛
             $storyMatchPlayerFound = StoryMatchPlayer::find()
+                ->select('match_id')
                 ->where([
                     'user_id' => $userId,
                     'match_player_status' => [
@@ -120,9 +121,10 @@ class RacePrepare extends Action
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
                     ]
-                ])
-                ->createCommand()
-                ->getRawSql();
+                ]);
+//                ->all();
+//                ->createCommand()
+//                ->getRawSql();
 //                ->orderBy([
 //                    'id' => SORT_DESC,
 //                ])
@@ -152,9 +154,9 @@ class RacePrepare extends Action
                         StoryMatch::STORY_MATCH_STATUS_PLAYING
                     ],
                 ])
-                ->andFilterWhere(
+                ->andFilterWhere([
                     'IN', 'id', $storyMatchPlayerFound
-                )
+                ])
                 ->one();
 
             if (!empty($storyMatch)) {
