@@ -121,24 +121,46 @@ class RacePrepare extends Action
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
                     ]
                 ])
-                ->orderBy([
-                    'id' => SORT_DESC,
+                ->createCommand()
+                ->getRawSql();
+//                ->orderBy([
+//                    'id' => SORT_DESC,
+//                ])
+//                ->one();
+
+//            if (!empty($storyMatchPlayerFound)) {
+//                $matchId = $storyMatchPlayerFound->match_id;
+//                $storyMatch = StoryMatch::find()
+//                    ->where([
+//                        'id' => $matchId,
+//                        'story_match_status' => [
+//                            StoryMatch::STORY_MATCH_STATUS_PREPARE,
+//                            StoryMatch::STORY_MATCH_STATUS_MATCHING,
+//                            StoryMatch::STORY_MATCH_STATUS_PLAYING
+//                        ]
+//                    ])
+//                    ->one();
+//            }
+
+            $storyMatch = StoryMatch::find()
+                ->where([
+                    'match_type' => StoryMatch::MATCH_TYPE_RACE,
+                    'story_id' => $storyId,
+                    'story_match_status' => [
+                        StoryMatch::STORY_MATCH_STATUS_PREPARE,
+                        StoryMatch::STORY_MATCH_STATUS_MATCHING,
+                        StoryMatch::STORY_MATCH_STATUS_PLAYING
+                    ],
                 ])
+                ->andFilterWhere(
+                    'IN', 'id', $storyMatchPlayerFound
+                )
                 ->one();
 
-            if (!empty($storyMatchPlayerFound)) {
-                $matchId = $storyMatchPlayerFound->match_id;
-                $storyMatch = StoryMatch::find()
-                    ->where([
-                        'id' => $matchId,
-                        'story_match_status' => [
-                            StoryMatch::STORY_MATCH_STATUS_PREPARE,
-                            StoryMatch::STORY_MATCH_STATUS_MATCHING,
-                            StoryMatch::STORY_MATCH_STATUS_PLAYING
-                        ]
-                    ])
-                    ->one();
+            if (!empty($storyMatch)) {
+                $matchId = $storyMatch->id;
             }
+
             if (empty($storyMatch)) {
 
                 // 寻找可以匹配的比赛
