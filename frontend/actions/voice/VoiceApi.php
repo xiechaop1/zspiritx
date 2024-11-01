@@ -76,7 +76,7 @@ class VoiceApi extends ApiAction
         try {
             $needVoice = false;
 
-            $time1 = time();
+            $time1 = tidme();
             $word = Yii::$app->xunfei->sendByFile($file['tmp_name']);
 
             if ($type == 'asr') {

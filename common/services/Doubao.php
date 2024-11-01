@@ -43,6 +43,13 @@ class Doubao extends Component
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
 
+    public $storyMatchClass2Model = [
+        StoryMatch::MATCH_CLASS_MATH => [
+            'model' => 'Qwen/Qwen2.5-Math-72B-Instruct',
+            'temperature' => 0.7,
+        ],
+    ];
+
     public function talk($userMessage, $oldMessages = [], $params = [], $model = '', $temperature = '') {
 
         $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
@@ -599,7 +606,10 @@ class Doubao extends Component
 //            $userMessagePre = '你是教育方面老师，针对5年级学生的历史知识体系，包含：中国古代史，夏商到战国时期为主。返回结果用JSON格式。题目随机。';
 //            $userMessagePre .= "\n出5道题目，每次生成的题目都不能相同。";
 //            $msgTemplate = [];
-            $ret = $response = $this->chatWithDoubao($userMessagePre, [], [], $msgTemplate);
+
+            $modelParams = !empty($this->storyMatchClass2Model[$matchClass]) ? $this->storyMatchClass2Model[$matchClass] : [];
+
+            $ret = $response = $this->chatWithDoubao($userMessagePre, [], [], $msgTemplate, true, $modelParams);
 //            $messages = !empty($response['choices'][0]['message']['content']) ? $messages = $response['choices'][0]['message']['content'] : '';
 //
 //            if (!empty($messages)) {
@@ -743,7 +753,7 @@ class Doubao extends Component
         return $ret;
     }
 
-    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true) {
+    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true, $modelParams = []) {
 
         if (empty($roleTxts)) {
             $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
@@ -801,6 +811,9 @@ class Doubao extends Component
 //        print_r($messages);
 //        exit;
 
+        $model = !empty($modelParams['model']) ? $modelParams['model'] : $this->model;
+        $temperature = !empty($modelParams['temperature']) ? $modelParams['temperature'] : $this->temperature;
+
         // Todo: 替换掉Doubao接口
 //        $data = array(
 ////            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
@@ -813,10 +826,10 @@ class Doubao extends Component
         $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
 //            'model' => 'deepseek-chat',
-            'model' => $this->model,
+            'model' => $model,
 //            'model' => 'ep-20240729104951-snm9z',
             'messages' => $messages,
-            'temperature' => $this->temperature,
+            'temperature' => $temperature,
 //'prompt' => implode("\n", $templateContents),
 //            'stream' => false,
 //            "response_format" => [
