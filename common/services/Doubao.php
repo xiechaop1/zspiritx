@@ -741,8 +741,8 @@ class Doubao extends Component
 //        $userMessage .= '#输出格式#' . '输出提示方法';
 
         $model = [
-            'model' => 'Qwen/Qwen2.5-Math-72B-Instruct',
-            'temperature' => 0.7,
+//            'model' => 'Qwen/Qwen2.5-Math-72B-Instruct',
+//            'temperature' => 0.7,
         ];
 
         $ret = $response = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, $roleMessages, true, $model);
