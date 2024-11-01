@@ -686,7 +686,7 @@ class Doubao extends Component
         }
 
         $roleMessages = [];
-        $simple = json_encode([
+        $simple = [
             'SUGGEST' => '问题的引导过程或者答案',
             'QUESTIONS' => [
                 '当前这一条引导信息的答案',
@@ -696,7 +696,7 @@ class Doubao extends Component
                 '可能还有的问题3',
 //                '可能还有的问题4',
             ],
-        ]);
+        ];
         $roleMessages[] = '#角色' . "\n" . '你是一个教育方面的老师';
 //        if (!empty($ques)) {
 //            $roleMessages[] = '#特点' . "\n" . '你直来直往，会直接给出问题答案';
