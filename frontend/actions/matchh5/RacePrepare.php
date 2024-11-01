@@ -168,6 +168,7 @@ class RacePrepare extends Action
                 // 寻找可以匹配的比赛
                 // 也就是参与的人数<2的比赛
                 $storyMatchPlayerCt = StoryMatchPlayer::find()
+                    ->select('match_id')
                     ->where([
                         'match_player_status' => [
                             StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
