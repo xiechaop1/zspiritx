@@ -45,8 +45,8 @@ class Doubao extends Component
 
     public $storyMatchClass2Model = [
         StoryMatch::MATCH_CLASS_MATH => [
-            'model' => 'Qwen/Qwen2.5-Math-72B-Instruct',
-            'temperature' => 0.7,
+//            'model' => 'Qwen/Qwen2.5-Math-72B-Instruct',
+//            'temperature' => 0.7,
         ],
     ];
 
@@ -740,7 +740,12 @@ class Doubao extends Component
         }
 //        $userMessage .= '#输出格式#' . '输出提示方法';
 
-        $ret = $response = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, $roleMessages);
+        $model = [
+            'model' => 'Qwen/Qwen2.5-Math-72B-Instruct',
+            'temperature' => 0.7,
+        ];
+
+        $ret = $response = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, $roleMessages, true, $model);
 
         file_put_contents('/tmp/test_doubao.log', var_export($roleMessages, true) . "\n\n\n" . var_export($response, true));
 //        var_dump($response);exit;
