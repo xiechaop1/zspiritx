@@ -515,7 +515,7 @@ class Qas extends Component
         $qaClass = !empty(StoryMatch::$matchClass2QaClass[$matchClass]) ? StoryMatch::$matchClass2QaClass[$matchClass] : $matchClass;
 
         $ret = [];
-        if (!empty($subjects)) {
+        if (!empty($subjects) && is_array($subjects)) {
             if (key($subjects) == '0') {
                 foreach ($subjects as $subj) {
                     $tmpSubj = \common\helpers\Qa::formatSubjectFromGPT($subj);
