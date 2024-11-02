@@ -173,22 +173,23 @@ class Doubao extends Component
 
             $msgClass = GptContent::MSG_CLASS_NISHUOWOCAI_HOST;
         } else {
-            $roleTxt = '#角色#' . "\n" . '你是一个你说我猜游戏参与者，你负责出题，解答，引导游戏的进行';
+            $roleTxt = '#角色#' . "\n" . '你是一个你说我猜游戏提问者，你负责猜出答案，引导游戏的进行';
             $simple = [
                 'content' => '你的猜测',
             ];
             $example = [
-                'content' => '这个物体是黄色的吗？',
+                'content' => '他是一个动物吗？',
             ];
+            $extMessages = [];
             $extMessages = [
                 '你很温柔，适合6-12岁小朋友',
                 '玩家想了一个常见的物体、事物、人物或者动物，你来猜猜玩家想的是什么',
-                '你需要用封闭的问题',
-                '玩家只负责回答是或者不是',
+                '你需要用封闭的问题，也就是问题的答案只有是和否，如：是一个人物吗？玩家只负责回答是或者不是',
+                '你需要先确定一个范围，比如：是不是可以动？如果是，那么是不是人物？如果是，是不是中国人？如果是，是不是还健在？如果是，是不是名人？如果是，他是不是演员？如果是，他是不是很善于动作片？诸如此类。',
                 '如果玩家回答是，那么你继续缩小范围',
                 '如果玩家回答不是，那么你将换一个特征继续猜测',
                 '直到玩家最后明确回答出物体是什么？或者中止游戏',
-                '内容不超过200字',
+                '内容不超过50字',
                 '用JSON的形式返回',
                 '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
                 '#示例#' . json_encode($example, JSON_UNESCAPED_UNICODE),
@@ -208,8 +209,9 @@ class Doubao extends Component
             $oldContents = [];
         }
 
-
-        $gptRet = $this->chatWithDoubao($userMessage, $oldContents, $extMessages, [$roleTxt], false);
+        $modelParams = [];
+//        $modelParams = ['stream' => true];
+        $gptRet = $this->chatWithDoubao($userMessage, $oldContents, $extMessages, [$roleTxt], false, $modelParams);
 
         $prompt = $this->_prompt;
         $this->saveContentToDb($userId, $toUserId, $gptRet, $prompt, $msgClass, 0, $storyId, $this->model);
@@ -819,6 +821,28 @@ class Doubao extends Component
         $model = !empty($modelParams['model']) ? $modelParams['model'] : $this->model;
         $temperature = !empty($modelParams['temperature']) ? $modelParams['temperature'] : $this->temperature;
 
+        if (!empty($modelParams)) {
+
+            $data = $modelParams;
+            $data['model'] = $model;
+            $data['temperature'] = $temperature;
+            $data['messages'] = $messages;
+        } else {
+            $data = array(
+//            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
+//            'model' => 'deepseek-chat',
+                'model' => $model,
+//            'model' => 'ep-20240729104951-snm9z',
+                'messages' => $messages,
+                'temperature' => $temperature,
+//'prompt' => implode("\n", $templateContents),
+//            'stream' => false,
+//            "response_format" => [
+//                'type' => 'json_object',
+//            ],
+            );
+        }
+
         // Todo: 替换掉Doubao接口
 //        $data = array(
 ////            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
@@ -828,19 +852,7 @@ class Doubao extends Component
 //            'temperature' => 0.8,
 ////            'stream' => false,
 //        );
-        $data = array(
-//            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
-//            'model' => 'deepseek-chat',
-            'model' => $model,
-//            'model' => 'ep-20240729104951-snm9z',
-            'messages' => $messages,
-            'temperature' => $temperature,
-//'prompt' => implode("\n", $templateContents),
-//            'stream' => false,
-//            "response_format" => [
-//                'type' => 'json_object',
-//            ],
-        );
+
         if ($isJson) {
             $data['response_format'] = [
                 'type' => 'json_object',

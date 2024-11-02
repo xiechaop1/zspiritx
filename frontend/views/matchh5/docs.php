@@ -209,7 +209,7 @@ $this->title = '故事汇';
 
             <div class="m-t-100" style="position: absolute; bottom: 10px;" id="answer-box">
                 <div class="answer-border2">
-                    <span style="float: left;"><textarea style="border: 0px; width:470px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
+                    <span style="float: left;"><textarea style="border: 0px; width:450px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
                     <span style="float: left; margin-left: 15px;">
                         <a id="subdoc">
                         <img id="input_icon" src="../../static/img/match/input_g2.png" width="60" height="60" style="margin-left: 0px;"></a>
