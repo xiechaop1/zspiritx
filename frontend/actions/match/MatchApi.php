@@ -1394,6 +1394,8 @@ class MatchApi extends ApiAction
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
         $messages = !empty($this->_get['messages']) ? $this->_get['messages'] : '';
 
+        $messages = strip_tags($messages);
+
         $ret = Yii::$app->doubaoTTS->ttsWithDoubao($messages, $userId);
 
         if (!empty($ret['file'])) {
