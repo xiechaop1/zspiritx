@@ -476,6 +476,7 @@ $this->title = '故事汇';
     var rivalTimerObj;
     var rivalTimerRunning;
     var topicSuggestion;
+    var audio_list = [];
     window.onload = function () {
         var i = 0;
 
@@ -805,6 +806,10 @@ $this->title = '故事汇';
         console.log(old);
 
         var ts = Date.now();
+        var nowIdx = 0;
+        var oldIdx = 0;
+        var oldData;
+        var playFlag = 0;
 
         $.ajax({
             type: "POST", //用POST方式传输
@@ -821,18 +826,34 @@ $this->title = '故事汇';
                 onprogress: function(e) {
                     console.log(e);
                     var data = e.target.response;
-                    data = data.replace(/\s\s\s\s\s\s\s\s/g, '');
+                    data = data.replace(/\s/g, '');
                     // var dataContent = data;
                     // var dataCon = $.toJSON(dataContent);
                     // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
                     // console.log(data);
                     var cont = $('#cont_' + ts);
+                    var newData = '';
+                    for (var i = oldIdx; i < data.length; i++) {
+                        var tmpData = data.substring(i, i + 1);
+                        newData += tmpData;
+                        if (tmpData == '。' || tmpData == '，' || tmpData == '！' || tmpData == '？') {
+                            oldIdx = i;
+                            getVoice(newData, i);
+                            newData = '';
+                        }
+                    }
+                    // var newData = data.substring(nowIdx);
+                    // nowIdx = data.length;
+                    // console.log(nowIdx);
+
                     if (cont.length > 0) {
                         cont.html(data);
+                        // playVoice();
                     } else {
                         var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
                         $('#topic').append(cont);
                     }
+                    oldData = data;
                     // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
                     // $('#topic').append(cont);
                 }
@@ -1054,6 +1075,92 @@ $this->title = '故事汇';
         });
     }
 
+    function getVoice(msg, idx) {
+        // console.log('|' + msg + '|');
+        // return false;
+        var story_id = $('input[name=story_id]').val();
+        var user_id = $('input[name=user_id]').val();
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/match/play_voice',
+            data: {
+                story_id: story_id,
+                user_id: user_id,
+                messages: msg,
+            },
+            onload: function (data) {
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                thisObj.removeClass('play_voice_btn_disable');
+                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status) {
+                var dataContent = data;
+                var dataCon = $.toJSON(dataContent);
+                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                console.log(voiceObj);
+                // audioVoice.src = voiceObj.data.file.file;
+
+                audio_list.push({
+                    idx: idx,
+                    msg: msg,
+                    voice: voiceObj.data.file.file,
+                });
+                audio_list.sort(function(a, b) {
+                    return parseInt(a.idx) - parseInt(b.idx);
+                });
+                // console.log(audio_list);
+                playVoice();
+
+                // audioVoice.play();
+                // thisObj.removeClass('play_voice_btn_disable');
+
+            }
+        });
+    }
+
+    function playVoice(){
+        var now_play = '';
+        var audioVoice = $('#audio_voice')[0];
+        // for (var ai in audio_list) {
+        //     if (audio_list[ai].msg == now_play) {
+        //         audioVoice.src = audio_list[ai].voice;
+        //         audioVoice.play();
+        //     }
+        // }
+        if (!audioVoice.paused) {
+            return false;
+        }
+        if (audioVoice.src == '') {
+            var curr_audio = audio_list.shift();
+            console.log(curr_audio);
+            if (curr_audio == undefined) {
+                return false;
+            }
+
+            audioVoice.src = curr_audio.voice;
+            audioVoice.play();
+        }
+
+        audioVoice.onended = function() {
+            var curr_audio = audio_list.shift();
+            console.log(curr_audio);
+            if (curr_audio == undefined) {
+                return false;
+            }
+
+            audioVoice.src = curr_audio.voice;
+            audioVoice.play();
+        }
+
+        return true;
+
+
+    }
 
 
     function getSugg(ques) {
