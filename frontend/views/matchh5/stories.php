@@ -25,7 +25,7 @@ $this->registerMetaTag([
 //    'content' => 'width=device-width; initial-scale=1.0',
 //]);
 
-$this->title = '练习赛';
+$this->title = '故事汇';
 
 ?>
 <style>
@@ -75,89 +75,37 @@ $this->title = '练习赛';
         transition: border-color 0.3s;
     }
 
-    .keyboard_area .keyboard {
-        width: 100px;
-        height: 75px;
-        margin: 0 10px;
-        background-color: #0b3452;
-        text-align: center;
-        font-size: 50px;
+    textarea:focus {
+        outline: none;
+        padding: 10px;
+    }
+
+    .doc_content_assistant {
         color: white;
-        border: 2px solid #0c84ff;
-        border-radius: 24px;
-        transition: border-color 0.3s;
     }
 
-    .keyboard_area .v_keyboard {
-        width: 100px;
-        height: 75px;
-        margin: 0 10px;
-        background-color: #0b3452;
-        text-align: center;
-        font-size: 50px;
-        color: white;
-        border: 2px solid #0c84ff;
-        border-radius: 24px;
-        transition: border-color 0.3s;
-    }
-
-    .keyboard_area .DELETE {
-        background-color: #a83800;
-        border: 2px solid #a80057;
-    }
-
-    .keyboard_area .keyboard_click {
-        background-color: #0c84ff;
-    }
-
-    .answer-border-response {
-        height: 75px;
-        margin: 0 10px;
-        text-align: center;
+    .doc_content_user {
         color: yellow;
-        border: 2px solid white;
-        border-radius: 14px;
-        transition: border-color 0.3s;
-        font-size: 24px;
     }
-
-    .keyboard_area .v_div_keyboard {
+    .doc_content {
+        clear: both;
         float: left;
-        width: 120px;
-        height: 120px;
-        margin: 0 10px;
-        background-color: #0b3452;
-        text-align: center;
-        font-size: 50px;
-        color: white;
-        border: 2px solid #0c84ff;
-        border-radius: 24px;
-        transition: border-color 0.3s;
+        margin: 0px;
+        padding: 0px;
     }
 
-    .keyboard_area .keyboard_label_big {
-        clear: both;
-        font-size: 40px;
+    .score_good_title {
+        font-size: 28px;
+        color: #FFD700;
         font-weight: bold;
-        color: white;
-        margin: 0px;
-        padding: 0px;
     }
 
-    .keyboard_area .keyboard_label_small {
-        clear: both;
-        font-size: 24px;
-        color: white;
-        margin: 0px;
-        padding: 0px;
+    .score_bad_title {
+        font-size: 28px;
+        color: #FFD700;
+        font-weight: bold;
     }
-    .keyboard_area .keyboard_label_delete {
-        clear: both;
-        font-size: 40px;
-        color: red;
-        margin: 0px;
-        padding: 0px;
-    }
+
 </style>
 <audio autoplay loop>
     <source src="" type="audio/mpeg">
@@ -170,6 +118,10 @@ $this->title = '练习赛';
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="match_class" value="<?= !empty($matchClass) ? $matchClass : 0 ?>">
 <input type="hidden" name="rtn_answer_type" id="rtn_answer_type" value="<?= $rtnAnswerType ?>">
+<input type="hidden" name="level" value="<?= $level ?>">
+
+<input type="hidden" name="mtitle" value="">
+<input type="hidden" name="mdesc" value="">
 
 <input type="hidden" name="subj_idx" id="subj_idx" value="0">
 <div class="w-100 m-auto">
@@ -190,36 +142,31 @@ $this->title = '练习赛';
     <div class="w-100 m-auto">
         <div class="p-20 bg-black">
             <div class="m-t-20">
-                <div class="match-qa-header-left3" style="width: 455px; text-align: left;">
+                <div class="match-qa-header-left3" style="width: 435px; text-align: left;">
                     <img src="<?= $user['avatar'] ?>" class="header-l">
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
                         <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
-                        <span id="gold_show"><?php
-                            if (!empty($userScore->score)) {
-                                if ($userScore->score > 10000) {
-                                    echo round($userScore->score / 10000, 2) . '万';
-                                } else {
-                                    echo $userScore->score;
-                                }
-                            } else {
-                                echo 0;
-                            }
-                            ?></span>
-                        <input type="hidden" id="gold" value="<?= !empty($userScore->score) ? $userScore->score : 0 ?>">
+                        <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
                     </div>
                 </div>
-                <div class="btn-m-green confirm_btn" style="margin-left: 60px;">
+                <div class="btn-m-green confirm_btn" style="margin-left: 80px;">
                     返回
                 </div>
 
             </div>
-
             <div class="match-qa-box right">
                 <!--文本问题-->
-                <div class="match-qa-content-text" style="line-height: 125%;" id="topic">
-                    <!--                    ︎开并百花丛，独立疏篱趣未穷。-->
+                <div id="ctitle" style="text-align: center; font-size: 36px; color: white; padding-top: 30px;">
+                    故事汇
                 </div>
+                <?php
+                //                var_dump($genStory);exit;
+                ?>
+                <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 500px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
+                    <?= !empty($genStory['content']) ? $genStory['content'] : '' ?>
+                </div>
+                <input type="hidden" id="st_answer" name="st_answer" value="<?= !empty($genStory['answer']) ? $genStory['answer'] : '' ?>">
                 <!--图片问题-->
                 <div class="match-qa-content-img" style="display: none;" id="image">
                     <img src="../../static/img/example.png" class="img-w-100">
@@ -233,31 +180,48 @@ $this->title = '练习赛';
                     <span>17</span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
-                    <div class="match-info" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">
-                        <img src="../../static/img/match/Frame.png" class="img-coin">
-                        详情
-                    </div>
+                    <!--                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">-->
+                    <!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
+                    <!--                        题目-->
+                    <!--                    </div>-->
                     <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
                     </div>
+                    <!--                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">-->
+                    <!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
+                    <!--                        解析-->
+                    <!--                    </div>-->
                 </div>
 
                 <div class="match-clock-bottom">
-                    <div class="match-clock-bottom-left">
-                        答题进度
-                        ：<span class="text-1" id="subjct">0</span>
-                    </div>
+                    <!--                    <div class="match-clock-bottom-left">-->
+                    <!--                        标题：<span class="text-1" id="ctitle1"></span>-->
+                    <!--                    </div>-->
                     <div class="match-clock-bottom-right">
-                        正确
-                        <span class="text-1" id="right_ct">0</span>/错误
-                        <span class="text-2" id="wrong_ct">0</span>
+                        分数
+                        <span class="text-1" id="score">0</span>/字数
+                        <span class="text-2" id="size">0</span>
                     </div>
 
                 </div>
             </div>
 
-            <div class="m-t-100" style="margin-top: 75px;" id="answer-box">
+            <div class="m-t-100" style="position: absolute; bottom: 10px;" id="answer-box">
+                <div class="answer-border2">
+                    <span style="float: left;"><textarea style="border: 0px; width:450px; height: 80px; padding: 10px; color: white; line-height: 110%; font-size: 28px;" id="subdoc_content"></textarea></span>
+                    <span style="float: left; margin-left: 15px;">
+                        <a id="subdoc">
+                        <img id="input_icon" src="../../static/img/match/input_g2.png" width="60" height="60" style="margin-left: 0px;"></a>
+                        <!--                        <input id="subdoc" type="button" style="color: black;-->
+                        <!--                    font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="发布">-->
+                    </span>
+                    <span style="float: left; margin-left: 15px;"><a id="record">
+                        <img id="mic_icon" src="../../static/img/match/mic_g1.png" width="45" height="60" style="margin-left: 0px;"></a>
+                    </span>
+                    <!--                    <button id="btn_control">开始录音</button><div id="result"></div>-->
+                </div>
+
                 <!--                <div class="answer-border2 worry">-->
                 <!--                    <input class="form-check-input" type="checkbox" name="challenge_answer" value="1" id="legal_person_yes_1">-->
                 <!--                    <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_1">-->
@@ -343,6 +307,29 @@ $this->title = '练习赛';
     </div>
 </div>
 
+<div class="modal fade" id="anaylze-info" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-lottery-bg">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 30px;right: 30px;">
+                <img src="../../static/img/icon-close.png" class="img-40">
+            </span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div class="m-t-50">
+                    <div class="fs-36 text-F6 text-center bold hide lottery-success-title">
+                        <img src="../../static/img/bg-lottery-text1.png" class="img-250">
+                    </div>
+                    <div class="fs-36  text-FF  text-center bold lottery-error-title">
+                        解析
+                    </div>
+
+                    <div id="message-anaylze" class="fs-24 text-FF text-left bold m-t-50 lottery-content" style="height: 600px; line-height: 125%; overflow: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 按钮：提示信息 -->
 <div class="modal fade" id="challenge-info" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -362,8 +349,6 @@ $this->title = '练习赛';
                     <input type="hidden" id="message-topic">
                     <input type="hidden" id="message-id">
                     <div id="message-content" class="fs-40 text-FF text-center bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
-                        <div id="message-content-ai" class="bold fs-28 message-content-ai" style="font-size: 28px; width: 80%;"></div>
-                        <div style="float: left;"><img src="/template/img/qa/btn_播放_nor@2x.png"></div>
                     </div>
                     <div id="message-question" style="height: 200px; overflow: auto;">
                         <!--                    <div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" data-dismiss="modal" style="margin-top: 25px;">-->
@@ -397,9 +382,11 @@ $this->title = '练习赛';
                         <img src="../../static/img/bg-lottery-text1.png" class="img-250">
                     </div>
                     <div class="fs-36  text-FF  text-center bold lottery-error-title">
-                        详情
+                        题目
                     </div>
 
+                    <input type="hidden" id="message-subj">
+                    <input type="hidden" id="message-id">
                     <div id="extend-content-container" class="fs-32 text-FF bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
                         <div id="extend-content"></div>
                         <div style="float: left; line-height: 200%;">
@@ -448,7 +435,7 @@ $this->title = '练习赛';
             <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
                 <div>
                     <div class="fs-36 text-F6 text-center bold">
-                        恭喜您，挑战成功
+                        恭喜您，猜对了
                     </div>
                     <div class="text-center m-t-30">
                     </div>
@@ -469,7 +456,7 @@ $this->title = '练习赛';
             <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
                 <div>
                     <div class="fs-36 text-F6 text-center bold">
-                        很遗憾，挑战失败
+                        猜错了，继续猜
                     </div>
                     <div class="m-t-40 bg-F5 p-20 fs-26 text-orange border-radius-r-5 border-radius-l-5">
 
@@ -489,25 +476,10 @@ $this->title = '练习赛';
     var rivalTimerObj;
     var rivalTimerRunning;
     var topicSuggestion;
+    var audio_list = [];
     window.onload = function () {
         var i = 0;
-        //var max = <?php //= $ct ?>//;
-        // var match_type = $('#match_type').val();
 
-
-        // if (match_type == 3) {
-        //     var matchTimer = setInterval(function() {
-        //         // $('#msg_' + i).show();
-        //         // if ($('#msg_' + i).length > 0) {
-        //         //     $('#msg_' + i).get(0).scrollIntoView();
-        //         // }
-        //         compTimer(matchTimer);
-        //         // console.log(i);
-        //         i++;
-        //     }, 1000);
-        // }
-
-// showSubject(0, obj);
 
         $('.msg-rtn-btn').click(function() {
             $('#message-box').modal('hide');
@@ -518,15 +490,87 @@ $this->title = '练习赛';
             // $('#message-box').modal('show');
             // $('#message-box').modal('show');
 
-            if ($('#message-topic').val() == $('#topic').html()) {
+            // if ($('#message-topic').val() == $('#topic').html()) {
+            //     return;
+            // }
+            // $('#message-content').html('正在思考……');
+
+            // setTimeout(function () {
+            //     getSugg('');
+            // }, 500);
+            $("#message-box").modal('show');
+
+        });
+
+        // var record_tag = 0;
+        // $('#record').click(function() {
+        //     if (record_tag == 0) {
+        //         var params = {
+        //             'gameFlag': "startMicRec",
+        //         }
+        //         var data = $.toJSON(params);
+        //         Unity.call(data);
+        //         record_tag = 1;
+        //         $(this).val('Stop');
+        //     } else {
+        //         var params = {
+        //             'gameFlag': "stopMicRec",
+        //             'source':"doc",
+        //             'type':'asr',
+        //         }
+        //         var data = $.toJSON(params);
+        //         Unity.call(data);
+        //         record_tag = 0;
+        //         $(this).val('Record');
+        //     }
+        // });
+
+        $('#subdoc').click(function() {
+            var content = $('#subdoc_content').val();
+            if (content == '') {
                 return;
             }
-            $('#message-content').html('正在思考……');
 
-            setTimeout(function () {
-                getSugg('');
-            }, 500);
-            $("#message-box").modal('show');
+            $('#message-anaylze').html('');
+
+            if (content != undefined) {
+                var cont = '<div class="doc_content doc_content_user" role="user">' + content + '</div>';
+                $('#topic').append(cont);
+            }
+            getDoc();
+
+            $('#subdoc_content').val('');
+        });
+
+        $('.subj-btn').click(function() {
+            // $('#message-box').modal('show');
+            // $('#message-box').modal('show');
+
+            if ($('#message-subj').val() != '') {
+                return;
+            }
+            $('#extend-content').html('正在思考……');
+
+            // setTimeout(function () {
+            getSubj('');
+            // }, 500);
+            $("#extend-info").modal('show');
+
+        });
+
+        $('.anaylze-btn').click(function() {
+            // $('#message-box').modal('show');
+            // $('#message-box').modal('show');
+
+            if ($('#message-anaylze').html() != '') {
+                return;
+            }
+            // $('#extend-content').html('正在思考……');
+
+            // setTimeout(function () {
+            getDocScore();
+            // }, 500);
+            $("#anaylze-info").modal('show');
 
         });
 
@@ -596,235 +640,317 @@ $this->title = '练习赛';
 
     };
 
-
-    function submitSubject(idx, chosenObj) {
-        var answer = obj[idx].st_answer;
-        var that=$("#answer-info");
-        // var match_type = $('#match_type').val();
-        var qa_type=that.attr("data-type");
-        // console.log(match_type);
-        // console.log(qa_type);
-        if (qa_type == 1 || qa_type == 30 || qa_type == 2 || qa_type == 3 || qa_type == 4) {
-            var v_select = $("input[name='challenge_answer']:checked").val();
-        } else if (qa_type == 7) {
-            var v_select = $("input[name='answer_txt']").val();
-        } else if (qa_type == 9) {
-            var v_select1 = $("input[name='answer_txt']").val();
-            var v_select2 = '';
-            // var v_select2 = $("#answer-border-response").html();
-            var v_select = v_select2 + v_select1;
-        } else if (qa_type == 8) {
-            var v_selects = $("input[name='answer_txt']");
-            var v_select = '';
-            for (var i = 0; i < v_selects.length; i++) {
-                v_select += v_selects[i].value;
-            }
-        }
-        var chosen = v_select;
-        console.log(chosen);
-        // return false;
-        // var chosen = $(chosenObj).val();
-
-        if (chosen == answer) {
-
-            showRet(chosenObj, 1);
-            setTimeout(function (){
-
-                addGold();
-                addRight();
-                addWrong();
-                addSubjCt();
-                // if (match_type == 2) {
-                //
-                //     if (ret == 0) {
-                //         // clearInterval(timer);
-                //         var answer = 1;
-                //         submitAnswer(answer);
-                //         // $('#answer-right-box').modal('show');
-                //
-                //     }
-                // }
-
-                recordQa(obj[idx], chosen);
-                var nIdx = idx + 1;
-                if (nIdx > obj.length - 10) {
-                    generateSubjects();
-                }
-
-                showSubject(nIdx);
-                $('input[name=answer_c]').attr('disabled', false);
-            },500);
-
-        } else {
-            $('#add_gold').val('0');
-            $('#add_right').val('0');
-            $('#add_wrong').val('1');
-            showRet(chosenObj, 2);
-            recordQa(obj[idx], chosen);
-            setTimeout(function () {
-                $('input[name=answer_c]').attr('disabled', false);
-            }, 1000);
-        }
+    function getTalk(data) {
+        getTalkBase(data, 'subdoc_content', 'mic_icon');
     }
 
-    function showRet(retObj, answer) {
-        var retCss = 'right';
-        var answerVoice = $('#audio_right')[0];
-        console.log(answer);
-        if (answer != 1) {
-            retCss = 'worry';
-            answerVoice = $('#audio_wrong')[0];
-        }
-        answerVoice.play();
-
-        $(retObj).parent().addClass(retCss);
-    }
-
-    function addGold() {
-        var gold = $('#gold').val();
-        var addGold = $('#add_gold').val();
-        var user_id = $('input[name=user_id]').val();
+    function getDocPart(userTxt = '') {
         var story_id = $('input[name=story_id]').val();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
+        var title = $('input[name=mtitle]').val();
+        var desc = $('input[name=mdesc]').val();
 
-        $.ajax({
-            type: "GET", //用POST方式传输
-            dataType: "json", //数据格式:JSON
-            async: false,
-            url: '/user/add_user_score',
-            data:{
-                user_id:user_id,
-                story_id:story_id,
-                // session_id:session_id,
-                // session_stage_id:session_stage_id,
-                score:addGold,
-            },
-            onload: function (data) {
-                // $('#answer-border-response').html('处理中……');
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
-                $.alert("网络异常，请检查网络情况");
-            },
-            success: function (data, status){
-                var dataContent=data;
-                var dataCon=$.toJSON(dataContent);
-                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
-                //console.log("ajax请求成功:"+data.toString())
+        var oldsDiv = $('#topic').find('div');
+        var olds = [];
+        oldsDiv.each(function() {
+            var oldRole = $(this).attr('role');
+            var oldContent = $(this).html();
 
-
-                //新消息获取成功
-                if(ajaxObj["code"]==200){
-
-                }
-                //新消息获取失败
-                else{
-                    // $.alert(obj.msg)
-                    console.log(ajaxObj.msg);
-                }
-
-            }
+            olds.push({
+                role: oldRole,
+                content: oldContent,
+            });
+            console.log(olds);
         });
 
-        if (addGold > 0) {
+        var old = $.toJSON(olds);
+        console.log(old);
 
-            var goldSpan = $('#gold_show');
-            var goldDiv = '<div id="showGold" style="z-index: 999999; position: absolute; top: 100px; left: ' + goldSpan.position().left + 'px; font-size: 70px; color: #e0a800; font-weight: bold; width: 300px;">+ ' + addGold + '</div>';
-            $('#gold_show').parent().append(goldDiv);
-            console.log(goldDiv);
-            $('#showGold').animate({
-                top: goldSpan.position().top - 10 + 'px',
-                opacity: '0'
-            }, 1200, function() {
-                $('#showGold').remove();
+        $.ajax({
+            type: "POST", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_doc',
+            data: {
+                story_id: story_id,
+                user_id: user_id,
+                // messages: msg,
+                title: title,
+                desc: desc,
+                old: old,
+                user_txt: userTxt,
+            },
+            onload: function (data) {
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                thisObj.removeClass('play_voice_btn_disable');
+                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status) {
+                var dataContent = data;
+                var dataCon = $.toJSON(dataContent);
+                var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                console.log(ajaxObj);
+
+                $('#subdoc_content').val(ajaxObj.data.doc.CONTENT);
+
+                // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';
+                // $('#topic').append(cont)
+                //
+                // $('#score').html(ajaxObj.data.doc.SCORE);
+                // $('#size').html($('#topic').html().length);
+                // if (ajaxObj.data.doc.TITLE != undefined) {
+                //     $('#ctitle').html(ajaxObj.data.doc.TITLE);
+                //     $('#ctitle1').html(ajaxObj.data.doc.TITLE);
+                //     $('#mtitle').val(ajaxObj.data.doc.TITLE);
+                //     $('#mdesc').val(ajaxObj.data.doc.DESC);
+                // }
+            }
+        });
+    }
+
+    function getDocScore() {
+        var story_id = $('input[name=story_id]').val();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
+        var title = $('input[name=mtitle]').val();
+        var desc = $('input[name=mdesc]').val();
+
+        var oldsDiv = $('#topic').find('div');
+        var olds = [];
+
+        oldsDiv.each(function() {
+            var oldRole = $(this).attr('role');
+            var oldContent = $(this).html();
+
+            olds.push({
+                role: oldRole,
+                content: oldContent,
             });
+            console.log(olds);
+        });
 
-            floNumber(addGold);
-            gold = parseInt(gold) + parseInt(addGold);
-            $('#gold').val(gold);
-            $('#gold_show').html(formatGold(gold));
-            $('#gold_show').css('opacity', 0).animate({
-                opacity: 1
-            }, 1000);
-        }
+        var old = $.toJSON(olds);
+        console.log(old);
+
+        $.ajax({
+            type: "POST", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_doc_score',
+            data: {
+                story_id: story_id,
+                user_id: user_id,
+                // messages: msg,
+                title: title,
+                desc: desc,
+                old: old,
+                user_txt: '',
+            },
+            onload: function (data) {
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                thisObj.removeClass('play_voice_btn_disable');
+                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status) {
+                var dataContent = data;
+                var dataCon = $.toJSON(dataContent);
+                var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                console.log(ajaxObj);
+
+                $('#message-anaylze').html(ajaxObj.data.ret);
+            }
+        });
     }
 
-    function formatGold(gold) {
-        if (gold >= 10000) {
-            return (gold / 10000).toFixed(2) + '万';
-        }
+    function getDocSize() {
+        var topicObjs = $('#topic').find('div');
+        var size = 0;
+
+        topicObjs.each(function() {
+            size += $(this).html().length;
+        });
+
+        $('#size').html(size);
     }
 
-    function addRight() {
-        var right = $('#right_ct').html();
-        var addRight = $('#add_right').val();
-        if (addRight > 0) {
-            floNumber(addRight);
-            right = parseInt(right) + parseInt(addRight);
-            $('#right_ct').html(right);
-            $('#right_ct').css('opacity', 0).animate({
-                opacity: 1
-            }, 1000);
-        }
+    function getDoc() {
+        var story_id = $('input[name=story_id]').val();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
+        var title = $('input[name=mtitle]').val();
+        var desc = $('input[name=mdesc]').val();
+        var user_txt = $('#subdoc_content').val();
+
+        var oldsDiv = $('#topic').find('div');
+        var olds = [];
+
+        oldsDiv.each(function() {
+            var oldRole = $(this).attr('role');
+            var oldContent = $(this).html();
+
+            olds.push({
+                role: oldRole,
+                content: oldContent,
+            });
+            console.log(olds);
+        });
+
+        var old = $.toJSON(olds);
+        console.log(old);
+
+        var ts = Date.now();
+        var nowIdx = 0;
+        var oldIdx = 0;
+        var oldData;
+        var playFlag = 0;
+
+        $.ajax({
+            type: "POST", //用POST方式传输
+            dataType: "text", //数据格式:JSON
+            // processData: false,
+            // contentType: false,
+            async: true,
+            // xhr: function() {
+            //     var xhr = new window.XMLHttpRequest();
+            //     xhr.overrideMimeType('text/plain; charset=UTF-8'); // 如果是JSON，则为 'application/json'
+            //     return xhr;
+            // },
+            xhrFields: {
+                onprogress: function(e) {
+                    console.log(e);
+                    var data = e.target.response;
+                    data = data.replace(/\s/g, '');
+                    // var dataContent = data;
+                    // var dataCon = $.toJSON(dataContent);
+                    // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+                    // console.log(data);
+                    var cont = $('#cont_' + ts);
+                    var newData = '';
+                    for (var i = oldIdx; i < data.length; i++) {
+                        var tmpData = data.substring(i, i + 1);
+                        newData += tmpData;
+                        if (tmpData == '。' || tmpData == '，' || tmpData == '！' || tmpData == '？') {
+                            oldIdx = i;
+                            getVoice(newData, i);
+                            newData = '';
+                        }
+                    }
+                    // var newData = data.substring(nowIdx);
+                    // nowIdx = data.length;
+                    // console.log(nowIdx);
+
+                    if (cont.length > 0) {
+                        cont.html(data);
+                        // playVoice();
+                    } else {
+                        var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                        $('#topic').append(cont);
+                    }
+                    oldData = data;
+                    // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                    // $('#topic').append(cont);
+                }
+            },
+            url: '/match/get_doc',
+            data: {
+                story_id: story_id,
+                user_id: user_id,
+                // messages: msg,
+                title: title,
+                desc: desc,
+                old: old,
+                user_txt: user_txt,
+            },
+            onload: function (data) {
+                console.log(data);
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status) {
+                // var dataContent = data;
+                // var dataCon = $.toJSON(dataContent);
+                // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+                //
+                // console.log(ajaxObj.choices);
+                data = data.replace(/\s\s\s\s\s\s\s\s/g, '');
+                console.log(data);
+                var cont = $('#cont_' + ts);
+                if (cont.length > 0) {
+                    cont.html(data);
+                } else {
+                    var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                    $('#topic').append(cont);
+                }
+
+                // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + data + '</div>';
+                // $('#topic').append(cont)
+                return true;
+
+                var dataContent = data;
+                var dataCon = $.toJSON(dataContent);
+                var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                console.log(ajaxObj);
+
+                var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';
+                $('#topic').append(cont)
+
+                $('#score').html(ajaxObj.data.doc.SCORE);
+                // $('#size').html($('#topic').html().length);
+                getDocSize();
+
+                console.log(ajaxObj.data.doc.TITLE);
+                if (ajaxObj.data.doc.TITLE != undefined) {
+                    $('#ctitle').html(ajaxObj.data.doc.TITLE);
+                    // $('#ctitle1').html(ajaxObj.data.doc.TITLE);
+                    $('input[name=mtitle]').val(ajaxObj.data.doc.TITLE);
+                    $('input[name=mdesc]').val(ajaxObj.data.doc.DESC);
+                }
+                console.log($('input[name=mtitle]').val());
+                console.log($('input[name=mdesc]').val());
+
+                $('#message-content').html('');
+                for (var i in ajaxObj.data.doc.QUES) {
+                    var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20 next-ques" style="margin-top: 25px;">';
+                    ques += '<label class="btn-green-m-choice active next-ques-btn " style="font-size: ' + size + 'px;">' + ajaxObj.data.doc.QUES[i]  + '</label>';
+                    ques += '</div>';
+                    console.log(ques);
+                    $('#message-content').append(ques);
+                };
+
+                $('.next-ques').click(function() {
+                    var thisObj = $(this).find('LABEL');
+
+                    $('#challenge-info').modal('hide');
+                    $('#subdoc_content').val('正在思考……');
+                    getDocPart(thisObj.html());
+                });
+            }
+        });
     }
 
-    function addWrong() {
-        var wrong = $('#wrong_ct').html();
-        var addWrong = $('#add_wrong').val();
-        if (addWrong > 0) {
-            floNumber(addWrong);
-            wrong = parseInt(wrong) + parseInt(addWrong);
-            $('#wrong_ct').html(wrong);
-            $('#wrong_ct').css('opacity', 0).animate({
-                opacity: 1
-            }, 1000);
-        }
-    }
-
-    function submitAnswer(answer) {
-        var that=$("#answer-info");
-        var qa_id=that.attr("data-qa");
-        var qa_type=that.attr("data-type");
-        var story_id=that.attr("data-story");
-        var user_id=$("input[name='user_id']").val();
-        var session_id=$("input[name='session_id']").val();
-        var session_stage_id=$("input[name='session_stage_id']").val();
-        var begin_ts=$("input[name='begin_ts']").val();
-        var v_ture=that.attr("data-value");
-        var v_detail=that.attr("data-detail");
-        var match_id=that.attr("data-match");
-
-        var score=$('#gold').val();
-        var subjct=$('#subjct').html();
-        var right_ct=$('#right_ct').html();
-        var wrong_ct=$('#wrong_ct').html();
-
-        // var answer;
-        // console.log(subjct);
-        // console.log(max_riv_subjct);
-        // if (subjct > max_riv_subjct) {
-        //     answer = 1;
-        // } else {
-        //     answer = 0;
-        // }
-
+    function getSubj() {
+        var story_id = $('input[name=story_id]').val();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
-            async: false,
-            url: '/match/update_match',
+            async: true,
+            url: '/match/get_doc_subj',
             data:{
-                user_id:user_id,
-                qa_id:qa_id,
                 story_id:story_id,
-                match_id:match_id,
-                session_id:session_id,
-                begin_ts:begin_ts,
-                score:score,
-                subjct:subjct,
-                right_ct:right_ct,
-                wrong_ct:wrong_ct,
-                answer:answer,
-                // riv_subjct:max_riv_subjct
+                level:level,
             },
             onload: function (data) {
                 $('#answer-border-response').html('处理中……');
@@ -839,56 +965,106 @@ $this->title = '练习赛';
                 var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
                 //console.log("ajax请求成功:"+data.toString())
 
-                //audio 素材
-                var audio_right=$("#audio_right")[0];
-                var audio_wrong=$("#audio_wrong")[0];
-
                 //新消息获取成功
                 if(ajaxObj["code"]==200){
+                    console.log(ajaxObj);
 
-                    if(answer == 1){
-                        $("#answer-box").hide();
-                        $("#answer-right-box").modal('show');
-                        audio_right.play();
+                    // if ($('#extend-content').html() == '正在思考……')  {
+                    $('#extend-content').html('');
+                    // }
 
-                        if (ajaxObj.data.score.score != undefined) {
-                            var score_text = "+" + ajaxObj.data.score.score + "枚";
-                            if (ajaxObj.data.score.addition > 0) {
-                                score_text = score_text + "（奖：" + ajaxObj.data.score.addition + "枚）";
-                            }
-                            $("#gold_score").html(score_text);
+                    var ajaxData = ajaxObj.data;
+                    for (var i in ajaxData.title) {
+                        var title = ajaxData.title[i].TITLE;
+                        var desc = ajaxData.title[i].DESC;
+                        var size = 28;
+                        if (title.length > 20) {
+                            size = 20;
                         }
-                        $('#rtn_answer_type').val(1);   // 成功
+                        var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" style="margin-top: 25px;">';
+                        ques += '<label class="btn-green-m-choice active choose_title " style="font-size: ' + size + 'px;" mtitle="' + title + '" mdesc="' + desc + '">' + title  + '</label>';
+                        ques += '</div>';
+                        console.log(ques);
+                        $('#extend-content').append(ques);
+                    }
 
-                        // setTimeout(function (){
-                        //     // Unity.call('WebViewOff&TrueAnswer');
-                        //     var params = {
-                        //         'WebViewOff':1,
-                        //         'AnswerType':1
-                        //     }
-                        //     var data=$.toJSON(params);
-                        //     Unity.call(data);
-                        // },2000);
-                    }
-                    else{
-                        $("#answer-box").hide();
-                        // $("#answer-error-box").removeClass('hide');
-                        $("#answer-error-box").modal('show');
-                        $('#rtn_answer_type').val(2);   // 失败
-                        // $("#h5-worry").modal('show');
-                        audio_wrong.play();
-                        // $(".retry_btn").show();
-                        // setTimeout(function (){
-                        //     // Unity.call('WebViewOff&FalseAnswer');
-                        //     // var params = {
-                        //     //     'WebViewOff':1,
-                        //     //     'AnswerType':2
-                        //     // }
-                        //     // var data=$.toJSON(params);
-                        //     // Unity.call(data);
-                        //     location.reload();
-                        // },2000);
-                    }
+                    $('.choose_title').click(function() {
+                        var thisObj = $(this);
+                        var mtitle = thisObj.attr('mtitle');
+                        var mdesc = thisObj.attr('mdesc');
+
+                        $('input[name=mtitle]').val(mtitle);
+                        $('input[name=mdesc]').val(mdesc);
+                        $('#ctitle').html(mtitle);
+                        // $('#ctitle1').html(mtitle);
+
+                        getDoc();
+                        $("#extend-info").modal('hide');
+
+                    });
+
+                    $('#message-subj').val(title);
+                    var msbox = document.querySelector('#message-content');
+                    msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
+                    console.log(ajaxObj.data.questions);
+
+
+                    $('.play_voice').click(function() {
+                        var thisObj = $(this);
+                        if (thisObj.hasClass('play_voice_btn_disable')) {
+                            return;
+                        }
+                        thisObj.addClass('play_voice_btn_disable');
+                        for (var ai in audio_list) {
+                            if (audio_list[ai].msg == $(this).parent().prev().html()) {
+                                audioVoice.src = audio_list[ai].voice;
+                                audioVoice.play();
+                                return;
+                            }
+                        }
+
+                        var msg = $(this).parent().prev().html();
+                        var userId = $('input[name=user_id]').val();
+                        console.log(msg);
+
+                        $.ajax({
+                            type: "GET", //用POST方式传输
+                            dataType: "json", //数据格式:JSON
+                            async: true,
+                            url: '/match/play_voice',
+                            data: {
+                                story_id: story_id,
+                                user_id: user_id,
+                                messages: msg,
+                            },
+                            onload: function (data) {
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                thisObj.removeClass('play_voice_btn_disable');
+                                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                                $.alert("网络异常，请检查网络情况");
+                            },
+                            success: function (data, status) {
+                                var dataContent = data;
+                                var dataCon = $.toJSON(dataContent);
+                                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                                console.log(voiceObj);
+                                audioVoice.src = voiceObj.data.file.file;
+
+                                audio_list.push({
+                                    msg: msg,
+                                    voice: voiceObj.data.file.file,
+                                });
+
+                                audioVoice.play();
+                                thisObj.removeClass('play_voice_btn_disable');
+
+                            }
+                        });
+                    });
+
+                    // $('#message-box').modal('show');
                 }
                 //新消息获取失败
                 else{
@@ -897,34 +1073,270 @@ $this->title = '练习赛';
 
             }
         });
-
-    };
-
-    function addSubjCt() {
-        var subjct = $('#subjct').html();
-        subjct++;
-        $('#subjct').html(subjct);
     }
 
-    function floNumber(num) {
-        var duration = 5;
-        var height = 0;
-        $('#number-floater').html(num);
-        $('#number-floater').css('opacity', 0) // 设置初始透明度为0
-            .animate({
-                top: '-=70',
-                // 'font-size': 70,
-                opacity: 1 // 渐显
-            }, 200)
-            .delay(duration) // 延迟随机时间
-            .animate({
-                top: '-=70',
-                opacity: 0, // 渐隐
-                'font-size': '-=15'
-            }, 150, function() {
-                $(this).css('top', height); // 动画完成后重置位置
-                $(this).css('font-size', 40);
+    function getVoice(msg, idx) {
+        // console.log('|' + msg + '|');
+        // return false;
+        var story_id = $('input[name=story_id]').val();
+        var user_id = $('input[name=user_id]').val();
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: false,
+            url: '/match/play_voice',
+            data: {
+                story_id: story_id,
+                user_id: user_id,
+                messages: msg,
+            },
+            onload: function (data) {
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                thisObj.removeClass('play_voice_btn_disable');
+                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status) {
+                var dataContent = data;
+                var dataCon = $.toJSON(dataContent);
+                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                console.log(voiceObj);
+                // audioVoice.src = voiceObj.data.file.file;
+
+                audio_list.push({
+                    idx: idx,
+                    msg: msg,
+                    voice: voiceObj.data.file.file,
+                });
+                audio_list.sort(function(a, b) {
+                    return parseInt(a.idx) - parseInt(b.idx);
+                });
+                // console.log(audio_list);
+                playVoice();
+
+                // audioVoice.play();
+                // thisObj.removeClass('play_voice_btn_disable');
+
+            }
+        });
+    }
+
+    function playVoice(){
+        var now_play = '';
+        var audioVoice = $('#audio_voice')[0];
+        // for (var ai in audio_list) {
+        //     if (audio_list[ai].msg == now_play) {
+        //         audioVoice.src = audio_list[ai].voice;
+        //         audioVoice.play();
+        //     }
+        // }
+        if (!audioVoice.paused) {
+            return false;
+        }
+        if (audioVoice.src == '') {
+            var curr_audio = audio_list.shift();
+            console.log(curr_audio);
+            if (curr_audio == undefined) {
+                return false;
+            }
+
+            audioVoice.src = curr_audio.voice;
+            audioVoice.play();
+        }
+
+        audioVoice.onended = function() {
+            var curr_audio = audio_list.shift();
+            console.log(curr_audio);
+            if (curr_audio == undefined) {
+                return false;
+            }
+
+            audioVoice.src = curr_audio.voice;
+            audioVoice.play();
+        }
+
+        return true;
+
+
+    }
+
+
+    function getSugg(ques) {
+        // $('#suggestion_content').toggle();
+        var topic = $('#topic').html();
+        var level = $('input[name=level]').val();
+        var user_id = $('input[name=user_id]').val();
+        var story_id = $('input[name=story_id]').val();
+        // var ques = '';
+        var old_messages = '';
+
+        var audio_list = [];
+
+        if (ques != '') {
+            var oldMsgs = [];
+            var tmpMessages = $('#message-content').find('div');
+            tmpMessages.each(function () {
+                console.log($(this));
+                var msg = $(this).html();
+                console.log(msg);
+                var msg_type = $(this).attr('msg_type');
+                if (msg_type != "btn") {
+                    var msgObj = {
+                        msg: msg,
+                        msg_type: msg_type,
+                    };
+                    console.log(msgObj);
+                    oldMsgs.push(msgObj);
+                }
             });
+            console.log(oldMsgs);
+            old_messages = JSON.stringify(oldMsgs);
+        } else {
+            $('#message-content').html('');
+        }
+        console.log(ques);
+        $('#message-question').html('');
+        var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="float: left; clear:both; font-size: 24px; width: 80%;">正在思考……</div>';
+        $('#message-content').append(sugdiv);
+
+        var audioVoice = $('#audio_voice')[0];
+
+        $.ajax({
+            type: "GET", //用POST方式传输
+            dataType: "json", //数据格式:JSON
+            async: true,
+            url: '/match/get_suggestion_from_subject',
+            data:{
+                story_id:story_id,
+                user_id:user_id,
+                topic:topic,
+                ques:ques,
+                old_messages:old_messages,
+                level:level,
+                match_class:match_class,
+            },
+            onload: function (data) {
+                $('#answer-border-response').html('处理中……');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("ajax请求失败:"+XMLHttpRequest,textStatus,errorThrown);
+                $.alert("网络异常，请检查网络情况");
+            },
+            success: function (data, status){
+                var dataContent=data;
+                var dataCon=$.toJSON(dataContent);
+                var ajaxObj = eval( "(" + dataCon + ")" );//转换后的JSON对象
+                //console.log("ajax请求成功:"+data.toString())
+
+                //新消息获取成功
+                if(ajaxObj["code"]==200){
+                    console.log(ajaxObj);
+                    var suggestion = ajaxObj.data.suggestion;
+                    if ($('#message-content').html() == '正在思考……')  {
+                        $('#message-content').html('');
+                    }
+                    // var sugdiv = '<div class="fs-24 btn-green-m-msg-ai-choice active message-content-ai" msg_type="assistant" style="clear:both; font-size: 24px; width: 80%;">' + suggestion + '</div>';
+                    // $('#message-content').append(sugdiv);
+                    // $('#message-content').html(suggestion);
+                    $('.message-content-ai').last().html(suggestion);
+                    $('#message-content').append('<div style="float: left; line-height: 200%;" msg_type="btn"><img class="play_voice" src="../../static/img/match/play.png" width="50"></div>');
+                    // var audioVoice = $('#audio_voice')[0];
+                    // audioVoice.src = ajaxObj.data.voice;
+                    // audioVoice.play();
+                    $('#message-topic').val(topic);
+                    var msbox = document.querySelector('#message-content');
+                    msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
+                    console.log(ajaxObj.data.questions);
+                    $('#message-question').html('');
+                    for (var qu in ajaxObj.data.questions) {
+                        var qutitle = ajaxObj.data.questions[qu];
+                        var size = 28;
+                        if (qutitle.length > 20) {
+                            size = 20;
+                        }
+                        var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20 next-ques" style="margin-top: 25px;">';
+                        ques += '<label class="btn-green-m-choice active " style="font-size: ' + size + 'px;">' + ajaxObj.data.questions[qu]  + '</label>';
+                        ques += '</div>';
+                        console.log(ques);
+                        $('#message-question').append(ques);
+                    }
+                    $('.next-ques').click(function() {
+                        var next_ques = $(this).find('label').html();
+                        // console.log(next_ques);
+                        var msgdiv = '<div class="fs-24 btn-green-m-msg-ai-choice old-msg-content my message-content-ai" msg_type="user" style="clear:both; font-size: 24px; width: 80%; float: right">' + next_ques + '</div>';
+                        $('#message-content').append(msgdiv);
+                        var msbox = document.querySelector('#message-content');
+                        msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
+                        getSugg(next_ques);
+                    });
+
+                    $('.play_voice').click(function() {
+                        var thisObj = $(this);
+                        if (thisObj.hasClass('play_voice_btn_disable')) {
+                            return;
+                        }
+                        thisObj.addClass('play_voice_btn_disable');
+                        for (var ai in audio_list) {
+                            if (audio_list[ai].msg == $(this).parent().prev().html()) {
+                                audioVoice.src = audio_list[ai].voice;
+                                audioVoice.play();
+                                return;
+                            }
+                        }
+
+                        var msg = $(this).parent().prev().html();
+                        var userId = $('input[name=user_id]').val();
+                        console.log(msg);
+
+                        $.ajax({
+                            type: "GET", //用POST方式传输
+                            dataType: "json", //数据格式:JSON
+                            async: true,
+                            url: '/match/play_voice',
+                            data: {
+                                story_id: story_id,
+                                user_id: user_id,
+                                messages: msg,
+                            },
+                            onload: function (data) {
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                thisObj.removeClass('play_voice_btn_disable');
+                                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                                $.alert("网络异常，请检查网络情况");
+                            },
+                            success: function (data, status) {
+                                var dataContent = data;
+                                var dataCon = $.toJSON(dataContent);
+                                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+
+                                console.log(voiceObj);
+                                audioVoice.src = voiceObj.data.file.file;
+
+                                audio_list.push({
+                                    msg: msg,
+                                    voice: voiceObj.data.file.file,
+                                });
+
+                                audioVoice.play();
+                                thisObj.removeClass('play_voice_btn_disable');
+
+                            }
+                        });
+                    });
+
+                    // $('#message-box').modal('show');
+                }
+                //新消息获取失败
+                else{
+                    $.alert(ajaxObj.msg)
+                }
+
+            }
+        });
     }
+
 
 </script>

@@ -131,6 +131,10 @@ class MatchApi extends ApiAction
                     $needTs = false;
                     $ret = $this->getStoryMatchPlayersProp();
                     break;
+                case 'get_stories':
+                    $needTs = false;
+                    $ret = $this->getStories();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -1790,6 +1794,26 @@ class MatchApi extends ApiAction
         return [
             'title' => $title,
         ];
+    }
+
+    public function getStories() {
+        $userTxt = !empty($this->_post['user_txt']) ? $this->_post['user_txt'] : '';
+        $level = !empty($this->_post['level']) ? $this->_post['level'] : 1;
+        $title = !empty($this->_post['title']) ? $this->_post['title'] : '';
+        $desc = !empty($this->_post['desc']) ? $this->_post['desc'] : '';
+        $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
+
+        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不用重复之前的内容，不超过50字。';
+        $userTxtExtend = '';
+
+        $old = json_decode($oldJson, true);
+
+//        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+        $genStory = Yii::$app->doubao->generateStory($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+//        echo $genStory;
+//        ob_flush();
+//        flush();
+        exit;
     }
 
     public function getDoc() {

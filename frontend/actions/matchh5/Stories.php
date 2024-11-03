@@ -44,7 +44,7 @@ use yii\web\NotFoundHttpException;
 class Stories extends Action
 {
 
-    
+
     public function run()
     {
         $userId = !empty($_GET['user_id']) ? $_GET['user_id'] : 0;
@@ -74,14 +74,14 @@ class Stories extends Action
             ])
             ->one();
 
-        if (empty($user)) {
-            return $this->renderErr('用户不存在！');
-        }
-
         if (!empty($user['avatar'])) {
             $user['avatar'] = Attachment::completeUrl($user['avatar']);
         } else {
             $user['avatar'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+        }
+
+        if (empty($user)) {
+            return $this->renderErr('用户不存在！');
         }
 
         $userExtends = UserExtends::find()
@@ -104,28 +104,28 @@ class Stories extends Action
 //
 //玄德谢别二客，便命良匠打造双股剑。云长造青龙偃月刀，又名“冷艳锯”，重八十二斤。张飞造丈八点钢矛。各置全身铠甲。共聚乡勇五百余人，来见邹靖。邹靖引见太守刘焉。三人参见毕，各通姓名。玄德说起宗派，刘焉大喜，遂认玄德为侄。不数日，人报黄巾贼将程远志统兵五万来犯涿郡。刘焉令邹靖引玄德等三人，统兵五百，前去破敌。玄德等欣然领军前进，直至大兴山下，与贼相见。贼众皆披发，以黄巾抹额。当下两军相对，玄德出马，左有云长，右有翼德，扬鞭大骂：“反国逆贼，何不早降！”程远志大怒，遣副将邓茂出战。张飞挺丈八蛇矛直出，手起处，刺中邓茂心窝，翻身落马。程远志见折了邓茂，拍马舞刀，直取张飞。云长舞动大刀，纵马飞迎。程远志见了，早吃一惊，措手不及，被云长刀起处，挥为两段。后人有诗赞二人曰：英雄露颖在今朝，一试矛兮一试刀。初出便将威力展，三分好把姓名标。', $level);
 //        $genStory = Yii::$app->doubao->generateStory('适合6-8岁小朋友阅读的故事，随机出5个', $level);
-        $old = [];
-        $old[] = [
-            'role' => 'assistant',
-            'content' => '春天来了，空气中弥漫着淡淡的花香，仿佛大地在一夜之间换上了新装。树枝上嫩绿的芽儿探出头来，好奇地打量着这个世界。小河边的柳树垂下了细长的枝条，像少女的长发在微风中轻轻摇曳。鸟儿在枝头欢快地歌唱，仿佛在庆祝春天的到来。田野里，农民伯伯已经开始忙碌起来，播种、施肥，期待着秋天的丰收。 ',
-//            'prefix' => True,
-        ];
-        $old[] = [
-            'role' => 'user',
-            'content' => '然而，春天不仅仅是大自然的复苏，它也象征着新的开始。每当春天来临，我总会感到一股莫名的力量在心中涌动，激励我向前迈进。春天，是希望的季节，是梦想的起点。',
-//            'prefix' => True,
-        ];
-        $old[] = [
-            'role' => 'assistant',
-            'content' => '然而，春天也有它独特的美中不足。虽然万物复苏，但有时也会带来一些不便。例如，春天的雨水虽然滋润了大地，但也可能导致道路泥泞，出行不便。',
-//            'prefix' => True,
-        ];
-        $old = [];
-
-        $userTxt = '但是我依然很喜欢春天！因为春天我就可以出门和小朋友一起玩耍了，我们跑上跑下，玩的不亦乐乎。';
+//        $old = [];
+//        $old[] = [
+//            'role' => 'assistant',
+//            'content' => '春天来了，空气中弥漫着淡淡的花香，仿佛大地在一夜之间换上了新装。树枝上嫩绿的芽儿探出头来，好奇地打量着这个世界。小河边的柳树垂下了细长的枝条，像少女的长发在微风中轻轻摇曳。鸟儿在枝头欢快地歌唱，仿佛在庆祝春天的到来。田野里，农民伯伯已经开始忙碌起来，播种、施肥，期待着秋天的丰收。 ',
+////            'prefix' => True,
+//        ];
+//        $old[] = [
+//            'role' => 'user',
+//            'content' => '然而，春天不仅仅是大自然的复苏，它也象征着新的开始。每当春天来临，我总会感到一股莫名的力量在心中涌动，激励我向前迈进。春天，是希望的季节，是梦想的起点。',
+////            'prefix' => True,
+//        ];
+//        $old[] = [
+//            'role' => 'assistant',
+//            'content' => '然而，春天也有它独特的美中不足。虽然万物复苏，但有时也会带来一些不便。例如，春天的雨水虽然滋润了大地，但也可能导致道路泥泞，出行不便。',
+////            'prefix' => True,
+//        ];
+//        $old = [];
+//
+//        $userTxt = '但是我依然很喜欢春天！因为春天我就可以出门和小朋友一起玩耍了，我们跑上跑下，玩的不亦乐乎。';
 //        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, '春来到', '春天来了，万物复苏，你眼中的春天是什么样的？请写一篇记叙文',
 //            $old);
-////        var_dump($genStory);exit;
+//        var_dump($genStory);exit;
 //var_dump(date('Y-m-d H:i:s', time()));
 //var_dump($old);
 //echo "<br>";
@@ -147,6 +147,7 @@ class Stories extends Action
             'initTimer' => 60,
             'user' => $user,
             'userScore' => $userScore,
+            'level' => $level,
         ]);
     }
 

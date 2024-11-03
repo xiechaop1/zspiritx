@@ -84,6 +84,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_doc_score',
             ],
+            'get_stories' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_stories',
+            ],
 
             'get_story_match' => [
                 'class' => 'frontend\actions\match\MatchApi',
