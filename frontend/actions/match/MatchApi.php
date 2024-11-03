@@ -56,9 +56,9 @@ class MatchApi extends ApiAction
 
         try {
             $this->_storyId = !empty($_REQUEST['story_id']) ? $_REQUEST['story_id'] : 0;
-            if (empty($this->_storyId)) {
-                throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
-            }
+//            if (empty($this->_storyId)) {
+//                throw new \Exception('剧本不存在', ErrorCode::STORY_NOT_FOUND);
+//            }
 
             $needTs = true;
             switch ($this->action) {
@@ -137,7 +137,6 @@ class MatchApi extends ApiAction
 
             }
         } catch (\Exception $e) {
-//            var_dump($e);exit;
             return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 
@@ -1469,9 +1468,11 @@ class MatchApi extends ApiAction
             ->all();
         
         $playersProp = [];
+        $playersCt = 0;
         if (!empty($storyMatchPlayers)) {
             foreach ($storyMatchPlayers as $player) {
                 $playersProp[$player->id] = json_decode($player->m_user_model_prop, true);
+                $playersCt++;
                 if ($player->team_id == 99 && 1 != 1) {
                     // AI
                     // 随机生成做题数量和正确数量
@@ -1523,7 +1524,10 @@ class MatchApi extends ApiAction
             }
         }
         
-        return ['story_match_players_prop' => $playersProp];
+        return [
+            'story_match_players_prop' => $playersProp,
+            'players_ct' => $playersCt,
+        ];
     }
 
     public function updateMatch() {
@@ -1793,23 +1797,33 @@ class MatchApi extends ApiAction
         $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
 
         $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不用重复之前的内容，不超过50字。';
+        $userTxtExtend = '';
 
         $old = json_decode($oldJson, true);
 
-        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+//        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+        $genStory = Yii::$app->doubao->generateStory($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+//        echo $genStory;
+//        ob_flush();
+//        flush();
+        exit;
+
+
+//        return ['doc' => $genStory];
+
 //var_dump($genStory);
-        if (!empty($genStory['CONTENT'])) {
-            if (!empty($old)) {
-                foreach ($old as $o) {
-                    $oldContent = $o['content'];
-//                    var_dump($oldContent);
-                    $genStory['CONTENT'] = str_replace($oldContent, '', $genStory['CONTENT']);
-                }
-            }
-        }
+//        if (!empty($genStory['CONTENT'])) {
+//            if (!empty($old)) {
+//                foreach ($old as $o) {
+//                    $oldContent = $o['content'];
+////                    var_dump($oldContent);
+//                    $genStory['CONTENT'] = str_replace($oldContent, '', $genStory['CONTENT']);
+//                }
+//            }
+//        }
 //var_dump($genStory);
 
-        return ['doc' => $genStory];
+//        return ['doc' => $genStory];
     }
 
     public function getTalkHistory() {

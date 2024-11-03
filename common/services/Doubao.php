@@ -456,7 +456,7 @@ class Doubao extends Component
         return $ret;
     }
 
-    public function generateStory($userMessage, $level = 0, $storyTitle = '', $storyContent = '', $oldMessages = []) {
+    public function generateStory($userMessage, $level = 0, $storyTitle = '', $storyContent = '', $oldMessages = [], $userMsgExtend = '') {
 
         $gradeName = $this->_getGradeNameFromLevel($level);
 
@@ -470,21 +470,21 @@ class Doubao extends Component
 //                '你需要编写一个故事，可以是四大名著，世界名著，中国名著中的某个故事或者某个段落，也可以是你自己编写的故事，一定要随机选题，不要重复',
                 '符合' . $gradeName . '小朋友认知的',
                 '把故事讲述成白话文，并且中间人物要有对话，描写人物内心活动',
-                '给出故事大纲，故事的题目，故事的内容，内容跌宕起伏，精彩纷呈，有人物、有对话、有剧情',
+//                '给出故事大纲，故事的题目，故事的内容，内容跌宕起伏，精彩纷呈，有人物、有对话、有剧情',
 //                '但不要给出结局，而是写到一个悬念处',
-                '并且再给出1个针对后来的问题，和2个基于当前的故事发展可能未来发展的走向或者问题，以及1个续写故事的话可能的剧情，每个不超过20字',
-                '用JSON的形式返回',
-                '#输出格式#' . json_encode([
-                    'TITLE' => '故事标题',
-                    'CONTENT' => '故事内容',
-                    'FRAME' => '故事大纲',
-                    'QUES' => [
-                        '后来呢？',
-                        '故事可能得走向或者问题2',
-                        '故事可能得走向或者问题3',
-                        '如果续写故事可能的剧情',
-                    ],
-                ], JSON_UNESCAPED_UNICODE),
+//                '并且再给出1个针对后来的问题，和2个基于当前的故事发展可能未来发展的走向或者问题，以及1个续写故事的话可能的剧情，每个不超过20字',
+//                '用JSON的形式返回',
+//                '#输出格式#' . json_encode([
+//                    'TITLE' => '故事标题',
+//                    'CONTENT' => '故事内容',
+//                    'FRAME' => '故事大纲',
+//                    'QUES' => [
+//                        '后来呢？',
+//                        '故事可能得走向或者问题2',
+//                        '故事可能得走向或者问题3',
+//                        '如果续写故事可能的剧情',
+//                    ],
+//                ], JSON_UNESCAPED_UNICODE),
             ];
         } else {
             $roleTxt = '#角色' . "\n" . '你是一个故事编写者，负责编写故事';
@@ -494,22 +494,29 @@ class Doubao extends Component
                 '故事大纲是：' . $storyContent,
                 '符合' . $gradeName . '小朋友认知的',
                 '续写的故事请满足原故事人物特性和整体剧情发展，不要给出结局，而是写到一个悬念处',
-                '并且再给出1个针对后来的问题，和3个基于当前的故事发展可能未来发展的走向或者问题，每个不超过20字',
-                '用JSON的形式返回',
-                '#输出格式#' . json_encode([
-                    'TITLE' => '故事标题',
-                    'CONTENT' => '故事内容',
-                    'FRAME' => '故事大纲',
-                    'QUES' => [
-                        '后来呢？',
-                        '故事可能得走向或者问题1',
-                        '故事可能得走向或者问题2',
-                        '故事可能得走向或者问题3',
-                    ],
-                ], JSON_UNESCAPED_UNICODE),
+//                '并且再给出1个针对后来的问题，和3个基于当前的故事发展可能未来发展的走向或者问题，每个不超过20字',
+//                '用JSON的形式返回',
+//                '#输出格式#' . json_encode([
+//                    'TITLE' => '故事标题',
+//                    'CONTENT' => '故事内容',
+//                    'FRAME' => '故事大纲',
+//                    'QUES' => [
+//                        '后来呢？',
+//                        '故事可能得走向或者问题1',
+//                        '故事可能得走向或者问题2',
+//                        '故事可能得走向或者问题3',
+//                    ],
+//                ], JSON_UNESCAPED_UNICODE),
             ];
         }
-        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt]);
+        $userMsgs = [];
+        $userMessage = implode("\n", $userMsgs) . "\n" . $userMessage . "\n" . $userMsgExtend;
+
+//        $extMessages = [];
+//        $oldMessages = [];
+//        $userMessage = '给我生成一个故事，10个字';
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false, [], true);
         return $ret;
     }
 
@@ -760,7 +767,7 @@ class Doubao extends Component
         return $ret;
     }
 
-    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true, $modelParams = []) {
+    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true, $modelParams = [], $isStream = false) {
 
         if (empty($roleTxts)) {
             $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
@@ -821,12 +828,25 @@ class Doubao extends Component
         $model = !empty($modelParams['model']) ? $modelParams['model'] : $this->model;
         $temperature = !empty($modelParams['temperature']) ? $modelParams['temperature'] : $this->temperature;
 
+        $opts = [];
+
+        if ($isStream) {
+//            $opts['stream'] = true;
+            $modelParams['stream'] = true;
+        }
+
         if (!empty($modelParams)) {
 
             $data = $modelParams;
             $data['model'] = $model;
             $data['temperature'] = $temperature;
             $data['messages'] = $messages;
+
+            if (!empty($modelParams['callback'])) {
+                $opts['callback'] = $modelParams['callback'];
+                $data['stream'] = true;
+            }
+
         } else {
             $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
@@ -836,12 +856,14 @@ class Doubao extends Component
                 'messages' => $messages,
                 'temperature' => $temperature,
 //'prompt' => implode("\n", $templateContents),
-//            'stream' => false,
+//            'stream' => true,
 //            "response_format" => [
 //                'type' => 'json_object',
 //            ],
             );
         }
+
+//        print_r($data);exit;
 
         // Todo: 替换掉Doubao接口
 //        $data = array(
@@ -863,7 +885,7 @@ class Doubao extends Component
 
         // Todo: 替换掉Doubao接口
 //        $response = $this->_call('/v3/chat/completions', $data, 'POST');
-        $response = $this->_call('/v1/chat/completions', $data, 'POST');
+        $response = $this->_call('/v1/chat/completions', $data, 'POST', $isJson, $opts, $isStream);
 //        var_dump($data);exit;
 //        $response = $this->_call('/beta/chat/completions', $data, 'POST');
 //        var_dump($response);exit;
@@ -876,6 +898,10 @@ class Doubao extends Component
         file_put_contents('/tmp/doubao.log', json_encode($response, JSON_UNESCAPED_UNICODE));
 //        var_dump($response);
 //        exit;
+
+        if ($isStream) {
+            return $response;
+        }
 
         $tmpRet =  json_decode($response, true);
         $msg = !empty($tmpRet['choices'][0]['message']['content']) ? $tmpRet['choices'][0]['message']['content'] : '';
@@ -1047,7 +1073,7 @@ class Doubao extends Component
         return $messages;
     }
 
-    private function _call($interface, $params = array(), $method = 'POST') {
+    private function _call($interface, $params = array(), $method = 'POST', $isJson = true, $opts = [], $isStream = false) {
         $url = $this->host . $interface;
 
         $headers = array(
@@ -1059,7 +1085,7 @@ class Doubao extends Component
 //        exit;
 //        var_dump($url);
         if ($method == 'POST') {
-            $response = Curl::curlPost($url, $params, $headers, true);
+            $response = Curl::curlPost($url, $params, $headers, true, $opts, $isStream);
         } else {
             $response = Curl::curlGet($url);
         }

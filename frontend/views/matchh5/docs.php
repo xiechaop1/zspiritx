@@ -180,18 +180,18 @@ $this->title = '故事汇';
                     <span>17</span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
-                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">
-                        <img src="../../static/img/match/Frame.png" class="img-coin">
-                        题目
-                    </div>
+<!--                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">-->
+<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
+<!--                        题目-->
+<!--                    </div>-->
                     <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
                     </div>
-                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">
-                        <img src="../../static/img/match/Frame.png" class="img-coin">
-                        解析
-                    </div>
+<!--                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">-->
+<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
+<!--                        解析-->
+<!--                    </div>-->
                 </div>
 
                 <div class="match-clock-bottom">
@@ -785,6 +785,7 @@ $this->title = '故事汇';
         var user_id = $('input[name=user_id]').val();
         var title = $('input[name=mtitle]').val();
         var desc = $('input[name=mdesc]').val();
+        var user_txt = $('#subdoc_content').val();
 
         var oldsDiv = $('#topic').find('div');
         var olds = [];
@@ -803,10 +804,39 @@ $this->title = '故事汇';
         var old = $.toJSON(olds);
         console.log(old);
 
+        var ts = Date.now();
+
         $.ajax({
             type: "POST", //用POST方式传输
-            dataType: "json", //数据格式:JSON
+            dataType: "text", //数据格式:JSON
+            // processData: false,
+            // contentType: false,
             async: true,
+            // xhr: function() {
+            //     var xhr = new window.XMLHttpRequest();
+            //     xhr.overrideMimeType('text/plain; charset=UTF-8'); // 如果是JSON，则为 'application/json'
+            //     return xhr;
+            // },
+            xhrFields: {
+                onprogress: function(e) {
+                    console.log(e);
+                    var data = e.target.response;
+                    data = data.replace(/\s\s\s\s\s\s\s\s/g, '');
+                    // var dataContent = data;
+                    // var dataCon = $.toJSON(dataContent);
+                    // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+                    // console.log(data);
+                    var cont = $('#cont_' + ts);
+                    if (cont.length > 0) {
+                        cont.html(data);
+                    } else {
+                        var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                        $('#topic').append(cont);
+                    }
+                    // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                    // $('#topic').append(cont);
+                }
+            },
             url: '/match/get_doc',
             data: {
                 story_id: story_id,
@@ -815,16 +845,36 @@ $this->title = '故事汇';
                 title: title,
                 desc: desc,
                 old: old,
-                user_txt: '',
+                user_txt: user_txt,
             },
             onload: function (data) {
+                console.log(data);
+
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                thisObj.removeClass('play_voice_btn_disable');
                 console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
                 $.alert("网络异常，请检查网络情况");
             },
             success: function (data, status) {
+                // var dataContent = data;
+                // var dataCon = $.toJSON(dataContent);
+                // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+                //
+                // console.log(ajaxObj.choices);
+                data = data.replace(/\s\s\s\s\s\s\s\s/g, '');
+                console.log(data);
+                var cont = $('#cont_' + ts);
+                if (cont.length > 0) {
+                    cont.html(data);
+                } else {
+                    var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                    $('#topic').append(cont);
+                }
+
+                // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + data + '</div>';
+                // $('#topic').append(cont)
+                return true;
+
                 var dataContent = data;
                 var dataCon = $.toJSON(dataContent);
                 var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象

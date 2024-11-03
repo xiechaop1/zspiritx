@@ -22,10 +22,11 @@ class Curl
 
      */
 
-    public static function curlPost($url,$postFields, $header = array(), $isJson = false, $opts = []){
+    public static function curlPost($url,$postFields, $header = array(), $isJson = false, $opts = [], $isStream = false){
 
         if (!$isJson) {
             $postFields = http_build_query($postFields);
+//            $postFields = json_encode($postFields);
         } else {
             $postFields = json_encode($postFields);
 
@@ -58,6 +59,21 @@ class Curl
             curl_setopt($ch, CURLOPT_TIMEOUT, $opts['CURLOPT_TIMEOUT']);
         }
 
+//        $callback = 'streamCall';
+        if ($isStream) {
+            if (!empty($opts['callback'])) {
+                $callback = $opts['callback'];
+            } else {
+                $callback = ['\common\services\Curl', 'streamCall'];
+            }
+            curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use ($callback)
+            {
+                // 调用回调函数处理数据
+                $callback($data);
+                return strlen($data); // 返回接收到的数据长度
+            });
+        }
+
 
 //        if (!empty($opts)) {
 //            foreach ($opts as $key => $value) {
@@ -76,6 +92,33 @@ class Curl
 
         return $result;
 
+    }
+
+    public static function streamCall($data) {
+
+        $dataJson = str_replace('data: ', '', $data);
+        $dataArray = json_decode($dataJson, true);
+
+        if (isset($dataArray['choices'][0]['delta']['content'])) {
+            echo $dataArray['choices'][0]['delta']['content'] . str_repeat('        ', 128);
+//            echo $dataArray['choices'][0]['delta']['content'] . ' 111';
+        }
+//        else {
+//            print_r($dataArray);
+//        }
+        ob_flush();
+        flush();
+//        echo $dataArray['choices'][0]['delta']['content'] . ' ';
+//        print $dataArray['choices'][0]['delta']['content'];
+//        if (!empty($dataArray['choices'][0]['delta']['content'])) {
+//            echo $dataArray['choices'][0]['delta']['content'];
+//        }
+//        ob_flush();
+//        flush();
+
+//        var_dump($data);
+//        ob_flush();
+//        flush();
     }
 
     public static function curlGet($url, $header = 0){
