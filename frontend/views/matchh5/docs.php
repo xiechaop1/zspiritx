@@ -838,7 +838,7 @@ $this->title = '故事汇';
                         newData += tmpData;
                         if (tmpData == '。' || tmpData == '！' || tmpData == '？') {
                             oldIdx = i;
-                            getVoice(newData, i);
+                            getAIVoice(newData, i);
                             newData = '';
                         }
                     }
@@ -1075,7 +1075,7 @@ $this->title = '故事汇';
         });
     }
 
-    function getVoice(msg, idx) {
+    function getAIVoice(msg, idx) {
         // console.log('|' + msg + '|');
         // return false;
         var story_id = $('input[name=story_id]').val();
