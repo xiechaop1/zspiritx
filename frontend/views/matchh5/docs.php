@@ -836,7 +836,7 @@ $this->title = '故事汇';
                     for (var i = oldIdx; i < data.length; i++) {
                         var tmpData = data.substring(i, i + 1);
                         newData += tmpData;
-                        if (tmpData == '。' || tmpData == '，' || tmpData == '！' || tmpData == '？') {
+                        if (tmpData == '。' || tmpData == '！' || tmpData == '？') {
                             oldIdx = i;
                             getVoice(newData, i);
                             newData = '';
@@ -1080,47 +1080,49 @@ $this->title = '故事汇';
         // return false;
         var story_id = $('input[name=story_id]').val();
         var user_id = $('input[name=user_id]').val();
-        $.ajax({
-            type: "GET", //用POST方式传输
-            dataType: "json", //数据格式:JSON
-            async: false,
-            url: '/match/play_voice',
-            data: {
-                story_id: story_id,
-                user_id: user_id,
-                messages: msg,
-            },
-            onload: function (data) {
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                thisObj.removeClass('play_voice_btn_disable');
-                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
-                $.alert("网络异常，请检查网络情况");
-            },
-            success: function (data, status) {
-                var dataContent = data;
-                var dataCon = $.toJSON(dataContent);
-                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
+        setTimeout(function() {
+            $.ajax({
+                type: "GET", //用POST方式传输
+                dataType: "json", //数据格式:JSON
+                async: false,
+                url: '/match/play_voice',
+                data: {
+                    story_id: story_id,
+                    user_id: user_id,
+                    messages: msg,
+                },
+                onload: function (data) {
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    thisObj.removeClass('play_voice_btn_disable');
+                    console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
+                    $.alert("网络异常，请检查网络情况");
+                },
+                success: function (data, status) {
+                    var dataContent = data;
+                    var dataCon = $.toJSON(dataContent);
+                    var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
 
-                console.log(voiceObj);
-                // audioVoice.src = voiceObj.data.file.file;
+                    console.log(voiceObj);
+                    // audioVoice.src = voiceObj.data.file.file;
 
-                audio_list.push({
-                    idx: idx,
-                    msg: msg,
-                    voice: voiceObj.data.file.file,
-                });
-                audio_list.sort(function(a, b) {
-                    return parseInt(a.idx) - parseInt(b.idx);
-                });
-                // console.log(audio_list);
-                playVoice();
+                    audio_list.push({
+                        idx: idx,
+                        msg: msg,
+                        voice: voiceObj.data.file.file,
+                    });
+                    audio_list.sort(function (a, b) {
+                        return parseInt(a.idx) - parseInt(b.idx);
+                    });
+                    // console.log(audio_list);
+                    playVoice();
 
-                // audioVoice.play();
-                // thisObj.removeClass('play_voice_btn_disable');
+                    // audioVoice.play();
+                    // thisObj.removeClass('play_voice_btn_disable');
 
-            }
-        });
+                }
+            });
+        }, 500);
     }
 
     function playVoice(){

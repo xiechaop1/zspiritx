@@ -836,7 +836,7 @@ $this->title = '故事汇';
                     for (var i = oldIdx; i < data.length; i++) {
                         var tmpData = data.substring(i, i + 1);
                         newData += tmpData;
-                        if (tmpData == '。' || tmpData == '，' || tmpData == '！' || tmpData == '？') {
+                        if (tmpData == '。' || tmpData == '！' || tmpData == '？') {
                             oldIdx = i;
                             getVoice(newData, i);
                             newData = '';
@@ -1080,6 +1080,7 @@ $this->title = '故事汇';
         // return false;
         var story_id = $('input[name=story_id]').val();
         var user_id = $('input[name=user_id]').val();
+        setTimeout(function() {
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON
@@ -1121,6 +1122,7 @@ $this->title = '故事汇';
 
             }
         });
+        }, 400);
     }
 
     function playVoice(){
