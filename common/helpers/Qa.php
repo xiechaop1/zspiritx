@@ -133,7 +133,7 @@ class Qa
 //            foreach ($gptResponse as $gpt) {
                 $answerIdx = $gpt['ANSWER'];
                 if (in_array($answerIdx, ['A', 'B', 'C', 'D'])) {
-                    $answer = !empty($gpt['OPTIONS'][$answerIdx]) ? $gpt['OPTIONS'][$answerIdx] : $answer;
+                    $answer = !empty($gpt['OPTIONS'][$answerIdx]) ? $gpt['OPTIONS'][$answerIdx] : $answerIdx;
                 } else {
                     $answer = $answerIdx;
                 }

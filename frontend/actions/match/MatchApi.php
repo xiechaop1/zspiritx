@@ -137,6 +137,7 @@ class MatchApi extends ApiAction
 
             }
         } catch (\Exception $e) {
+            var_dump($e);exit;
             return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 
@@ -172,14 +173,15 @@ class MatchApi extends ApiAction
             ])
             ->one();
 
-        if ($userId != $storyMatch->user_id) {
-            return false;
-        }
 
         if (!empty($storyMatch)) {
+            if ($userId != $storyMatch->user_id) {
+                return false;
+            }
+
             $storyMatchProp = json_decode($storyMatch->story_match_prop, true);
             if (!empty($storyMatchProp['subj_source'])
-                 && $storyMatchProp['subj_source'] == 'db'
+//                 && $storyMatchProp['subj_source'] == 'db'
             ) {
                 $userLevel = !empty($storyMatchProp['level']) ? $storyMatchProp['level'] : 1;
 //                $matchClass = !empty($storyMatchProp['match_class']) ? $storyMatchProp['match_class'] : Subject::SUBJECT_CLASS_MATH;
@@ -207,6 +209,7 @@ class MatchApi extends ApiAction
                         break;
 
                 }
+//                var_dump($subjects);
                 if (!empty($subjects)) {
                     $saveStoryMatchProp['subjects'] = $subjects;
                     $saveStoryMatchProp['subj_source'] = 'doubao';
