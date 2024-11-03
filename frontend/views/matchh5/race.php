@@ -217,7 +217,7 @@ $this->title = $storyMatch->match_name;
 
                 <div class="match-clock-bottom">
                     答题
-                    <span class="text-1" id="subjct"><?= !empty($myPlayer['prop']['subj_ct']) ? $myPlayer['prop']['subj_ct'] + 1 : 0 ?></span>/
+                    <span class="text-1" id="subjct"><?= !empty($myPlayer['prop']['subj_ct']) ? $myPlayer['prop']['subj_ct'] : 0 ?></span>/
                     <span class="text-2" id="subjtotal"><?= $ct ?></span>
                 </div>
             </div>
@@ -839,7 +839,7 @@ $this->title = $storyMatch->match_name;
         }
         var raceTimer = setInterval(function() {
             getStoryMatchPlayersProp(raceTimer);
-        }, 5000);
+        }, 1000);
         var storyMatchTimer = setInterval(function() {
             getStoryMatch(storyMatchTimer);
         }, 5000);
@@ -850,7 +850,7 @@ $this->title = $storyMatch->match_name;
 
         var maxSubjectsCt = <?= $ct ?>;
 
-        var initCt = <?= !empty($myPlayer['prop']['subj_ct']) ? $myPlayer['prop']['subj_ct'] : 1 ?>;
+        var initCt = <?= !empty($myPlayer['prop']['subj_ct']) ? $myPlayer['prop']['subj_ct'] : 0 ?>;
 
         showSubject(initCt);
     };
@@ -1022,7 +1022,6 @@ $this->title = $storyMatch->match_name;
         console.log(answer);
         if (chosen == answer || answer == "" || answer == undefined) {
 
-
             addGold();
             // addRight();
             // addWrong();
@@ -1102,7 +1101,7 @@ $this->title = $storyMatch->match_name;
                     $.each(propObj, function(uid, prop) {
                         if (prop != null && prop != undefined) {
                             var subjct = prop.subj_ct;
-                            if (subjct != $('#riv_subjct_' + uid).html()) {
+                            if (subjct != $('#riv_subjct_' + uid).html() && subjct != undefined) {
                                 $('#riv_subjct_' + uid).html(subjct);
                                 $('#riv_subjct_' + uid).css('opacity', 0).animate({
                                     opacity: 1
@@ -1170,6 +1169,9 @@ $this->title = $storyMatch->match_name;
                             $("#answer-box").hide();
                             //         // $("#answer-error-box").removeClass('hide');
                             $("#answer-error-box").modal('show');
+                        }
+                        for (var i = 0; i < intervalObjs.length; i++) {
+                            clearInterval(intervalObjs[i]);
                         }
                     } else {
                         return false;

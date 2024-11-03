@@ -183,7 +183,9 @@ class MatchApi extends ApiAction
                  && $storyMatchProp['subj_source'] == 'db'
             ) {
                 $userLevel = !empty($storyMatchProp['level']) ? $storyMatchProp['level'] : 1;
-                $matchClass = !empty($storyMatchProp['match_class']) ? $storyMatchProp['match_class'] : Subject::SUBJECT_CLASS_MATH;
+//                $matchClass = !empty($storyMatchProp['match_class']) ? $storyMatchProp['match_class'] : Subject::SUBJECT_CLASS_MATH;
+                $matchClass = $storyMatch->match_class;
+                $matchClass = empty($matchClass) ? Subject::SUBJECT_CLASS_MATH : $matchClass;
                 $subjects = [];
                 $maxLevel = $userLevel + 4 > 20 ? 20 : $userLevel + $levelRange;
                 switch ($matchClass) {
@@ -195,6 +197,11 @@ class MatchApi extends ApiAction
                         break;
                     case StoryMatch::MATCH_CLASS_ENGLISH:
 //                        $ct = 2;
+                        for ($level = $userLevel; $maxLevel; $level++) {
+                            $subjects = array_merge($subjects, $this->generateSubjectWithCt($ct, $level, $matchClass));
+                        }
+                        break;
+                    default:
                         for ($level = $userLevel; $maxLevel; $level++) {
                             $subjects = array_merge($subjects, $this->generateSubjectWithCt($ct, $level, $matchClass));
                         }
@@ -1341,6 +1348,40 @@ class MatchApi extends ApiAction
                     }
                 }
 
+                if ($status != 'playing'
+                    && $storyMatch->story_match_status == StoryMatch::STORY_MATCH_STATUS_MATCHING
+                ) {
+                    // 有一个概率加入AI
+                    $seed = rand(0,100);
+                    if ($seed > 95) {
+                        $userLevel = $storyMatch->level;
+                        $userInfo = [
+                            'user_name' => '玩家' . rand(10000, 99999),
+                        ];
+                        $avatar = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/icon/2024/05/x74pyndc2mwx8ppkrb4b88jzk5yrsxff.png?x-oss-process=image/format,png';
+                        $newPlayerTeam = 99;
+
+                        $userId = rand(10000000, 99999999);
+
+                        $userModelProp = json_encode([
+                            'level' => $userLevel,
+                        ], JSON_UNESCAPED_UNICODE);
+
+                        if ($newPlayerTeam != 0) {
+                            $storyMatchPlayer = new StoryMatchPlayer();
+                            $storyMatchPlayer->user_id = $userId;
+                            $storyMatchPlayer->team_id = $newPlayerTeam;
+                            $storyMatchPlayer->match_id = $matchId;
+                            $storyMatchPlayer->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING;
+                            $storyMatchPlayer->user_model_id = 0;
+                            $storyMatchPlayer->m_story_model_id = 0;
+                            $storyMatchPlayer->m_story_model_detail_id = 0;
+                            $storyMatchPlayer->m_user_model_prop = $userModelProp;
+                            $storyMatchPlayer->save();
+                        }
+                    }
+                }
+
             } else {
                 // 已经结束了
                 $status = 'end';
@@ -1431,6 +1472,54 @@ class MatchApi extends ApiAction
         if (!empty($storyMatchPlayers)) {
             foreach ($storyMatchPlayers as $player) {
                 $playersProp[$player->id] = json_decode($player->m_user_model_prop, true);
+                if ($player->team_id == 99 && 1 != 1) {
+                    // AI
+                    // 随机生成做题数量和正确数量
+                    $storyMatch = StoryMatch::findOne(['id' => $matchId]);
+                    if (!empty($storyMatch)) {
+                        if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_RACE) {
+                            $level = !empty($playersProp[$player->id]['level']) ? $playersProp[$player->id]['level'] : 1;
+                            $levelSpeed = 2500 - abs($level) * 250;
+                            if ($levelSpeed < 0) {
+                                $levelSpeed = 500;
+                            }
+                            $levelSpeed = 10000 - $levelSpeed;
+                            $seed = rand(0,10000);
+                            if ($seed > $levelSpeed) {
+                                if (!empty($playersProp[$player->id]['subj_ct'])) {
+                                    $playersProp[$player->id]['subj_ct'] = $playersProp[$player->id]['subj_ct'] + 1;
+                                } else {
+                                    $playersProp[$player->id]['subj_ct'] = 1;
+                                }
+                                $player->m_user_model_prop = json_encode($playersProp[$player->id], JSON_UNESCAPED_UNICODE);
+
+                                $thisPlayerProp = $playersProp[$player->id];
+
+                                $matchProp = json_decode($storyMatch->story_match_prop, true);
+                                if (!empty($matchProp['subjects'])) {
+                                    $maxSubjects = count($matchProp['subjects']);
+                                } else {
+                                    $maxSubjects = 0;
+                                }
+
+                                if ($thisPlayerProp['subj_ct'] >= $maxSubjects) {
+                                    $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_END;
+
+                                    if (empty($matchProp['winner'])) {
+                                        $matchProp['winner'] = $player->user_id;
+                                        $storyMatch->story_match_prop = json_encode($matchProp, true);
+                                        $storyMatch->story_match_status = StoryMatch::STORY_MATCH_STATUS_END;
+                                        $storyMatch->save();
+                                    }
+
+                                }
+                                $player->save();
+
+                            }
+                        }
+                    }
+                }
+
             }
         }
         

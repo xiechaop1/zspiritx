@@ -146,10 +146,11 @@ class Race extends Action
         $subjectsJson = $storyMatch->story_match_prop;
         $subjects = json_decode($subjectsJson, true);
 
-        $matchDetailJson = $storyMatch->match_detail;
-        $matchDetail = json_decode($matchDetailJson, true);
-        $fee = !empty($matchDetail['fee']) ? $matchDetail['fee'] : 2000;
-        $addGold = $fee / 5;
+//        $matchDetailJson = $storyMatch->match_detail;
+//        $matchDetail = json_decode($matchDetailJson, true);
+//        $fee = !empty($matchDetail['fee']) ? $matchDetail['fee'] : 2000;
+//        $addGold = $fee / 5;
+        $addGold = 20;
 
 //        var_dump($subjects);exit;
 //        // 保存比赛状态

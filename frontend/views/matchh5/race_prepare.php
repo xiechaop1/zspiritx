@@ -159,7 +159,9 @@ $this->title = '消息';
             comMatch();
         });
 
-        genSubjects();
+        // setTimeout(function(){
+            genSubjects();
+        // }, 500);
     };
 
     function comMatch() {
@@ -207,6 +209,7 @@ $this->title = '消息';
         var story_id = $('input[name="story_id"]').val();
         var user_id = $('input[name="user_id"]').val();
 
+        console.log('Generating subjects ... ');
         $.ajax({
             type: "GET", //用POST方式传输
             dataType: "json", //数据格式:JSON

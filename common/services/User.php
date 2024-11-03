@@ -154,6 +154,9 @@ class User extends Component
         }
         if ($mode == 1) {
             $targetLevel = $initLevel + $addLevel;
+            if ($targetLevel < 1) {
+                $targetLevel = 1;
+            }
         } else {
             $targetLevel = $addLevel;
         }
