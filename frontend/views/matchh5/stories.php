@@ -858,7 +858,7 @@ $this->title = '故事汇';
                     // $('#topic').append(cont);
                 }
             },
-            url: '/match/get_doc',
+            url: '/match/get_stories',
             data: {
                 story_id: story_id,
                 user_id: user_id,
