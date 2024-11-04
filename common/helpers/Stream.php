@@ -74,6 +74,7 @@ class Stream
                 }
                 $dialogArr[] = $dialogTmp;
                 Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
+                file_put_contents('/tmp/stream.log', var_export($dialogArr, true), FILE_APPEND);
             }
 //            echo $dataArray['choices'][0]['delta']['content'] . ' 111';
         }
