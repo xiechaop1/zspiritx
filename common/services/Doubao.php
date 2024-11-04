@@ -73,7 +73,13 @@ class Doubao extends Component
 
         $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
-        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false);
+        $modelParams = [
+            'stream' => true,
+            'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
+            'callback_params' => $params,
+        ];
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, true);
 
 
         $prompt = $this->_prompt;
@@ -852,6 +858,10 @@ class Doubao extends Component
             if (!empty($modelParams['callback'])) {
                 $opts['callback'] = $modelParams['callback'];
                 $data['stream'] = true;
+            }
+
+            if (!empty($modelParams['callback_params'])) {
+                $opts['callback_params'] = $modelParams['callback_params'];
             }
 
         } else {

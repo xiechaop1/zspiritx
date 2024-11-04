@@ -63,13 +63,19 @@ class Curl
         if ($isStream) {
             if (!empty($opts['callback'])) {
                 $callback = $opts['callback'];
+                $params = !empty($opts['callback_params']) ? $opts['callback_params'] : [];
             } else {
-                $callback = ['\common\services\Curl', 'streamCall'];
+                $callback = ['\common\helpers\Stream', 'streamCallbackToText'];
+                $params = [];
             }
-            curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use ($callback)
+            curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use ($callback, $params)
             {
                 // 调用回调函数处理数据
-                $callback($data);
+                if (!empty($params)) {
+                    $callback($data, $params);
+                } else {
+                    $callback($data);
+                }
                 return strlen($data); // 返回接收到的数据长度
             });
         }

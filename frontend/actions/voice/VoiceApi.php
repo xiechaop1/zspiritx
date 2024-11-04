@@ -128,9 +128,14 @@ class VoiceApi extends ApiAction
                 'toUserId' => $userId,
                 'storyId' => $storyId,
                 'senderId' => $senderId,
+                'sessionId' => $sessionId,
+                'sessionStageId' => $sessionStageId,
+                'needVoice' => $needVoice,
             ];
 
             $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params);
+            return $aiRet;
+
             $time2 = time();
 //            var_dump($time2 - $time1);
             $aiContent = '';

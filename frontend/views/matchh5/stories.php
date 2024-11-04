@@ -882,7 +882,7 @@ $this->title = '故事汇';
                 // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
                 //
                 // console.log(ajaxObj.choices);
-                data = data.replace(/\s\s\s\s\s\s\s\s/g, '');
+                data = data.replace(/\s/g, '');
                 console.log(data);
                 var cont = $('#cont_' + ts);
                 if (cont.length > 0) {
