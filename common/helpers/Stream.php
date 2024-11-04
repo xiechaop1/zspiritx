@@ -45,7 +45,9 @@ class Stream
         $sessionStageId = !empty($params['sessionStageId']) ? $params['sessionStageId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
 
-        if (isset($dataArray['choices'][0]['delta']['content'])) {
+        if (isset($dataArray['choices'][0]['delta']['content'])
+            || $dataArray['choices'][0]['finish_reasion'] == 'stop'
+        ) {
             $aiContent = $dataArray['choices'][0]['delta']['content'];
             $aiContent = str_replace('\n', '', $aiContent);
             self::$dialogTxt .= $aiContent;
