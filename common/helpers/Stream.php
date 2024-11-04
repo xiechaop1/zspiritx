@@ -47,7 +47,7 @@ class Stream
 
         file_put_contents('/tmp/streamCallbackToDialogAction.log', var_export($dataArray, true), FILE_APPEND);
         if (isset($dataArray['choices'][0]['delta']['content'])
-            || $dataArray['choices'][0]['finish_reason'] == 'stop'
+            || !empty($dataArray['choices'][0]['finish_reason'])
         ) {
             $aiContent = $dataArray['choices'][0]['delta']['content'];
             $aiContent = str_replace('\n', '', $aiContent);
