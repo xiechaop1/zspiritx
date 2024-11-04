@@ -124,6 +124,7 @@ $this->title = '故事汇';
 <input type="hidden" name="mdesc" value="">
 
 <input type="hidden" name="subj_idx" id="subj_idx" value="0">
+<input type="hidden" name="doc" id="doc">
 <div class="w-100 m-auto">
     <audio controls id="audio_right" class="hide">
         <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
@@ -780,6 +781,42 @@ $this->title = '故事汇';
         $('#size').html(size);
     }
 
+    var printLock = 0;
+    var printIdx = 0;
+    var printTs = '';
+    function printWord() {
+        if (printLock == 1) {
+            console.log('lock: ' + printLock);
+            return false;
+        }
+        var doc = $('input[name=doc]').val();
+
+        if (printIdx > doc.length) {
+            console.log('idx: ' + printIdx);
+            console.log('length: ' + doc.length);
+            printLock = 0;
+            return false;
+        }
+
+        printLock = 1;
+        var oneWord = doc.substring(printIdx, printIdx + 1);
+        console.log('word: ' + oneWord);
+
+        var cont = $('#cont_' + printTs);
+        if (cont.length > 0) {
+            cont.append(oneWord);
+            // playVoice();
+        } else {
+            var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + printTs + '" style="width: 100%;">' + oneWord + '</div>';
+            $('#topic').append(cont);
+        }
+        printIdx++;
+        console.log('new idx: ' + printIdx);
+        printLock = 0;
+        console.log('lock: ' + printLock);
+        setTimeout(function() { return printWord(); }, 300);
+    }
+
     function getDoc() {
         var story_id = $('input[name=story_id]').val();
         var level = $('input[name=level]').val();
@@ -811,6 +848,9 @@ $this->title = '故事汇';
         var oldData;
         var playFlag = 0;
 
+        printIdx = 0;
+        printTs = ts;
+
         $.ajax({
             type: "POST", //用POST方式传输
             dataType: "text", //数据格式:JSON
@@ -825,7 +865,7 @@ $this->title = '故事汇';
             xhrFields: {
                 onprogress: function(e) {
                     console.log(e);
-                    var data = e.target.response;
+                    var data = e.currentTarget.response;
                     data = data.replace(/\s/g, '');
                     // var dataContent = data;
                     // var dataCon = $.toJSON(dataContent);
@@ -842,17 +882,19 @@ $this->title = '故事汇';
                             newData = '';
                         }
                     }
+                    $('input[name=doc]').val(data);
+                    printWord();
                     // var newData = data.substring(nowIdx);
                     // nowIdx = data.length;
                     // console.log(nowIdx);
 
-                    if (cont.length > 0) {
-                        cont.html(data);
-                        // playVoice();
-                    } else {
-                        var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
-                        $('#topic').append(cont);
-                    }
+                    // if (cont.length > 0) {
+                    //     cont.html(data);
+                    //     // playVoice();
+                    // } else {
+                    //     var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                    //     $('#topic').append(cont);
+                    // }
                     oldData = data;
                     // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
                     // $('#topic').append(cont);
@@ -884,13 +926,14 @@ $this->title = '故事汇';
                 // console.log(ajaxObj.choices);
                 data = data.replace(/\s/g, '');
                 console.log(data);
-                var cont = $('#cont_' + ts);
-                if (cont.length > 0) {
-                    cont.html(data);
-                } else {
-                    var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
-                    $('#topic').append(cont);
-                }
+                printWord();
+                // var cont = $('#cont_' + ts);
+                // if (cont.length > 0) {
+                //     cont.html(data);
+                // } else {
+                //     var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                //     $('#topic').append(cont);
+                // }
 
                 // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + data + '</div>';
                 // $('#topic').append(cont)
