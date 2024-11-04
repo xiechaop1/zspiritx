@@ -1076,8 +1076,8 @@ $this->title = '故事汇';
     }
 
     function getAIVoice(msg, idx) {
-        // console.log('|' + msg + '|');
-        // return false;
+        console.log('|' + msg + '|');
+        return false;
         var story_id = $('input[name=story_id]').val();
         var user_id = $('input[name=user_id]').val();
         setTimeout(function() {

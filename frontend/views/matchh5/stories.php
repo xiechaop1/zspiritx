@@ -671,7 +671,7 @@ $this->title = '故事汇';
             type: "POST", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: true,
-            url: '/match/get_doc',
+            url: '/match/get_stories',
             data: {
                 story_id: story_id,
                 user_id: user_id,
@@ -1076,8 +1076,8 @@ $this->title = '故事汇';
     }
 
     function getAIVoice(msg, idx) {
-        // console.log('|' + msg + '|');
-        // return false;
+        console.log('|' + msg + '|');
+        return false;
         var story_id = $('input[name=story_id]').val();
         var user_id = $('input[name=user_id]').val();
         setTimeout(function() {
