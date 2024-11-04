@@ -478,6 +478,11 @@ $this->title = '故事汇';
     var rivalTimerRunning;
     var topicSuggestion;
     var audio_list = [];
+
+    var printLock = 0;
+    var printIdx = 0;
+    var printTs = '';
+
     window.onload = function () {
         var i = 0;
 
@@ -527,6 +532,10 @@ $this->title = '故事汇';
         // });
 
         $('#subdoc').click(function() {
+            $('input[name=doc]').val('');
+            printIdx = 0;
+            printLock = 1;
+
             var content = $('#subdoc_content').val();
             if (content == '') {
                 return;
@@ -781,9 +790,6 @@ $this->title = '故事汇';
         $('#size').html(size);
     }
 
-    var printLock = 0;
-    var printIdx = 0;
-    var printTs = '';
     function printWord() {
         if (printLock == 1) {
             console.log('lock: ' + printLock);
@@ -850,7 +856,7 @@ $this->title = '故事汇';
 
         printIdx = 0;
         printTs = ts;
-        $('input[name=doc]').val('');
+        printLock = 0;
 
         $.ajax({
             type: "POST", //用POST方式传输
