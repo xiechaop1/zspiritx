@@ -45,13 +45,15 @@ class Stream
         $sessionStageId = !empty($params['sessionStageId']) ? $params['sessionStageId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
 
+        file_put_contents('/tmp/streamCallbackToDialogAction.log', var_export($dataArray, true), FILE_APPEND);
         if (isset($dataArray['choices'][0]['delta']['content'])
-            || $dataArray['choices'][0]['finish_reasion'] == 'stop'
+            || $dataArray['choices'][0]['finish_reason'] == 'stop'
         ) {
             $aiContent = $dataArray['choices'][0]['delta']['content'];
             $aiContent = str_replace('\n', '', $aiContent);
             self::$dialogTxt .= $aiContent;
             $dialogArr = [];
+            file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTxt, 'UTF8'), FILE_APPEND);
             if (mb_strlen(self::$dialogTxt, 'UTF8') >= self::$dialogTxtMaxLength) {
                 $sentenceClip = mb_substr(self::$dialogTxt, 0, self::$dialogTxtMaxLength, 'UTF8');
                 self::$dialogTxt = mb_substr(self::$dialogTxt, self::$dialogTxtMaxLength, null, 'UTF8');
@@ -73,8 +75,9 @@ class Stream
                     }
                 }
                 $dialogArr[] = $dialogTmp;
-                Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
                 file_put_contents('/tmp/stream.log', var_export($dialogArr, true), FILE_APPEND);
+                Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
+
             }
 //            echo $dataArray['choices'][0]['delta']['content'] . ' 111';
         }
