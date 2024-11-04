@@ -51,6 +51,8 @@ class Stream
         ) {
             $aiContent = $dataArray['choices'][0]['delta']['content'];
             $aiContent = str_replace('\n', '', $aiContent);
+            $aiContent = str_replace('\r', '', $aiContent);
+            $aiContent = str_replace('\t', '', $aiContent);
             self::$dialogTxt .= $aiContent;
             $dialogArr = [];
 //            file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTxt, 'UTF8') . ' ' . self::$dialogTxtMaxLength . PHP_EOL, FILE_APPEND);
