@@ -431,6 +431,7 @@ class Doubao extends Component
 //            $extMessages[] = ['role' => 'assistant', 'content' => '作文要求：' . $docDesc];
         }
         $extMessages[] = '作文符合' . $gradeName . '的学生的认知水平';
+//        $extMessages[] = '20字以内';
         $extMessages[] = '你根据作文题目和要求，续写作文，留出关键问题等待学生继续完成';
         $extMessages[] = '然后你再根据现在的作文，给出4条可以续写的建议，每个不超过20字';
         $extMessages[] = '然后你针对当前这篇作文的现状，进行评分，评分标准参考小学生毕业要求';

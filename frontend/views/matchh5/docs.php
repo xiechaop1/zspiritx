@@ -158,7 +158,7 @@ $this->title = '故事汇';
             <div class="match-qa-box right">
                 <!--文本问题-->
                 <div id="ctitle" style="text-align: center; font-size: 36px; color: white; padding-top: 30px;">
-                    故事汇
+                    编作文
                 </div>
                 <?php
 //                var_dump($genStory);exit;
@@ -188,10 +188,10 @@ $this->title = '故事汇';
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
                     </div>
-<!--                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">-->
-<!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
-<!--                        解析-->
-<!--                    </div>-->
+                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        解析
+                    </div>
                 </div>
 
                 <div class="match-clock-bottom">
@@ -813,7 +813,7 @@ $this->title = '故事汇';
 
         $.ajax({
             type: "POST", //用POST方式传输
-            dataType: "text", //数据格式:JSON
+            dataType: "json", //数据格式:JSON
             // processData: false,
             // contentType: false,
             async: true,
@@ -822,42 +822,42 @@ $this->title = '故事汇';
             //     xhr.overrideMimeType('text/plain; charset=UTF-8'); // 如果是JSON，则为 'application/json'
             //     return xhr;
             // },
-            xhrFields: {
-                onprogress: function(e) {
-                    console.log(e);
-                    var data = e.target.response;
-                    data = data.replace(/\s/g, '');
-                    // var dataContent = data;
-                    // var dataCon = $.toJSON(dataContent);
-                    // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
-                    // console.log(data);
-                    var cont = $('#cont_' + ts);
-                    var newData = '';
-                    for (var i = oldIdx; i < data.length; i++) {
-                        var tmpData = data.substring(i, i + 1);
-                        newData += tmpData;
-                        if (tmpData == '。' || tmpData == '！' || tmpData == '？') {
-                            oldIdx = i;
-                            getAIVoice(newData, i);
-                            newData = '';
-                        }
-                    }
-                    // var newData = data.substring(nowIdx);
-                    // nowIdx = data.length;
-                    // console.log(nowIdx);
-
-                    if (cont.length > 0) {
-                        cont.html(data);
-                        // playVoice();
-                    } else {
-                        var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
-                        $('#topic').append(cont);
-                    }
-                    oldData = data;
-                    // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
-                    // $('#topic').append(cont);
-                }
-            },
+            // xhrFields: {
+            //     onprogress: function(e) {
+            //         console.log(e);
+            //         var data = e.target.response;
+            //         data = data.replace(/\s/g, '');
+            //         // var dataContent = data;
+            //         // var dataCon = $.toJSON(dataContent);
+            //         // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+            //         // console.log(data);
+            //         var cont = $('#cont_' + ts);
+            //         var newData = '';
+            //         for (var i = oldIdx; i < data.length; i++) {
+            //             var tmpData = data.substring(i, i + 1);
+            //             newData += tmpData;
+            //             if (tmpData == '。' || tmpData == '！' || tmpData == '？') {
+            //                 oldIdx = i;
+            //                 getAIVoice(newData, i);
+            //                 newData = '';
+            //             }
+            //         }
+            //         // var newData = data.substring(nowIdx);
+            //         // nowIdx = data.length;
+            //         // console.log(nowIdx);
+            //
+            //         if (cont.length > 0) {
+            //             cont.html(data);
+            //             // playVoice();
+            //         } else {
+            //             var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+            //             $('#topic').append(cont);
+            //         }
+            //         oldData = data;
+            //         // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+            //         // $('#topic').append(cont);
+            //     }
+            // },
             url: '/match/get_doc',
             data: {
                 story_id: story_id,
@@ -882,20 +882,19 @@ $this->title = '故事汇';
                 // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
                 //
                 // console.log(ajaxObj.choices);
-                data = data.replace(/\s\s\s\s\s\s\s\s/g, '');
-                console.log(data);
-                var cont = $('#cont_' + ts);
-                if (cont.length > 0) {
-                    cont.html(data);
-                } else {
-                    var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
-                    $('#topic').append(cont);
-                }
-
-                // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + data + '</div>';
-                // $('#topic').append(cont)
-                return true;
-
+                // data = data.replace(/\s\s\s\s\s\s\s\s/g, '');
+                // console.log(data);
+                // var cont = $('#cont_' + ts);
+                // if (cont.length > 0) {
+                //     cont.html(data);
+                // } else {
+                //     var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                //     $('#topic').append(cont);
+                // }
+                //
+                // // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + data + '</div>';
+                // // $('#topic').append(cont)
+                // return true;
                 var dataContent = data;
                 var dataCon = $.toJSON(dataContent);
                 var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象

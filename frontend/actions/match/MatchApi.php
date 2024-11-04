@@ -141,7 +141,7 @@ class MatchApi extends ApiAction
 
             }
         } catch (\Exception $e) {
-            var_dump($e);exit;
+//            var_dump($e);exit;
             return $this->fail($e->getCode() . ': ' . $e->getMessage());
         }
 
@@ -1823,34 +1823,34 @@ class MatchApi extends ApiAction
         $desc = !empty($this->_post['desc']) ? $this->_post['desc'] : '';
         $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
 
-        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不用重复之前的内容，不超过50字。';
+        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不用重复之前的内容，不超过5s0字。';
         $userTxtExtend = '';
 
         $old = json_decode($oldJson, true);
 
-//        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
-        $genStory = Yii::$app->doubao->generateStory($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+//        $genStory = Yii::$app->doubao->generateStory($userTxt, $level, $title, $desc, $old, $userTxtExtend);
 //        echo $genStory;
 //        ob_flush();
 //        flush();
-        exit;
+//        exit;
 
 
 //        return ['doc' => $genStory];
 
 //var_dump($genStory);
-//        if (!empty($genStory['CONTENT'])) {
-//            if (!empty($old)) {
-//                foreach ($old as $o) {
-//                    $oldContent = $o['content'];
-////                    var_dump($oldContent);
-//                    $genStory['CONTENT'] = str_replace($oldContent, '', $genStory['CONTENT']);
-//                }
-//            }
-//        }
-//var_dump($genStory);
+        if (!empty($genStory['CONTENT'])) {
+            if (!empty($old)) {
+                foreach ($old as $o) {
+                    $oldContent = $o['content'];
+//                    var_dump($oldContent);
+                    $genStory['CONTENT'] = str_replace($oldContent, '', $genStory['CONTENT']);
+                }
+            }
+        }
+// var_dump($genStory);
 
-//        return ['doc' => $genStory];
+        return ['doc' => $genStory];
     }
 
     public function getTalkHistory() {
