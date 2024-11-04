@@ -54,9 +54,10 @@ class Stream
             self::$dialogTxt .= $aiContent;
             $dialogArr = [];
             file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTxt, 'UTF8') . ' ' . self::$dialogTxtMaxLength . PHP_EOL, FILE_APPEND);
-            if (mb_strlen(self::$dialogTxt, 'UTF8') >= self::$dialogTxtMaxLength) {
+            if (mb_strlen(self::$dialogTxt, 'UTF8') >= self::$dialogTxtMaxLength
+                || !empty($dataArray['choices'][0]['finish_reason'])
+            ) {
                 $sentenceClip = mb_substr(self::$dialogTxt, 0, self::$dialogTxtMaxLength, 'UTF8');
-                self::$dialogTxt = mb_substr(self::$dialogTxt, self::$dialogTxtMaxLength, null, 'UTF8');
 
                 $dialogTmp = [
                     'name' => '小灵语',
@@ -77,6 +78,7 @@ class Stream
                 $dialogArr[] = $dialogTmp;
                 file_put_contents('/tmp/stream.log', var_export($dialogArr, true), FILE_APPEND);
                 Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
+                self::$dialogTxt = mb_substr(self::$dialogTxt, self::$dialogTxtMaxLength, null, 'UTF8');
 
             }
 //            echo $dataArray['choices'][0]['delta']['content'] . ' 111';
