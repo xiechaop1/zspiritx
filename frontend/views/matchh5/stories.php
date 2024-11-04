@@ -654,130 +654,6 @@ $this->title = '故事汇';
         getTalkBase(data, 'subdoc_content', 'mic_icon');
     }
 
-    function getDocPart(userTxt = '') {
-        var story_id = $('input[name=story_id]').val();
-        var level = $('input[name=level]').val();
-        var user_id = $('input[name=user_id]').val();
-        var title = $('input[name=mtitle]').val();
-        var desc = $('input[name=mdesc]').val();
-
-        var oldsDiv = $('#topic').find('div');
-        var olds = [];
-        oldsDiv.each(function() {
-            var oldRole = $(this).attr('role');
-            var oldContent = $(this).html();
-
-            olds.push({
-                role: oldRole,
-                content: oldContent,
-            });
-            console.log(olds);
-        });
-
-        var old = $.toJSON(olds);
-        console.log(old);
-
-        $.ajax({
-            type: "POST", //用POST方式传输
-            dataType: "json", //数据格式:JSON
-            async: true,
-            url: '/match/get_stories',
-            data: {
-                story_id: story_id,
-                user_id: user_id,
-                // messages: msg,
-                title: title,
-                desc: desc,
-                old: old,
-                user_txt: userTxt,
-            },
-            onload: function (data) {
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                thisObj.removeClass('play_voice_btn_disable');
-                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
-                $.alert("网络异常，请检查网络情况");
-            },
-            success: function (data, status) {
-                var dataContent = data;
-                var dataCon = $.toJSON(dataContent);
-                var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
-
-                console.log(ajaxObj);
-
-                $('#subdoc_content').val(ajaxObj.data.doc.CONTENT);
-
-                // var cont = '<div class="doc_content doc_content_assistant" role="assistant">' + ajaxObj.data.doc.CONTENT + '</div>';
-                // $('#topic').append(cont)
-                //
-                // $('#score').html(ajaxObj.data.doc.SCORE);
-                // $('#size').html($('#topic').html().length);
-                // if (ajaxObj.data.doc.TITLE != undefined) {
-                //     $('#ctitle').html(ajaxObj.data.doc.TITLE);
-                //     $('#ctitle1').html(ajaxObj.data.doc.TITLE);
-                //     $('#mtitle').val(ajaxObj.data.doc.TITLE);
-                //     $('#mdesc').val(ajaxObj.data.doc.DESC);
-                // }
-            }
-        });
-    }
-
-    function getDocScore() {
-        var story_id = $('input[name=story_id]').val();
-        var level = $('input[name=level]').val();
-        var user_id = $('input[name=user_id]').val();
-        var title = $('input[name=mtitle]').val();
-        var desc = $('input[name=mdesc]').val();
-
-        var oldsDiv = $('#topic').find('div');
-        var olds = [];
-
-        oldsDiv.each(function() {
-            var oldRole = $(this).attr('role');
-            var oldContent = $(this).html();
-
-            olds.push({
-                role: oldRole,
-                content: oldContent,
-            });
-            console.log(olds);
-        });
-
-        var old = $.toJSON(olds);
-        console.log(old);
-
-        $.ajax({
-            type: "POST", //用POST方式传输
-            dataType: "json", //数据格式:JSON
-            async: true,
-            url: '/match/get_doc_score',
-            data: {
-                story_id: story_id,
-                user_id: user_id,
-                // messages: msg,
-                title: title,
-                desc: desc,
-                old: old,
-                user_txt: '',
-            },
-            onload: function (data) {
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                thisObj.removeClass('play_voice_btn_disable');
-                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
-                $.alert("网络异常，请检查网络情况");
-            },
-            success: function (data, status) {
-                var dataContent = data;
-                var dataCon = $.toJSON(dataContent);
-                var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
-
-                console.log(ajaxObj);
-
-                $('#message-anaylze').html(ajaxObj.data.ret);
-            }
-        });
-    }
 
     function getDocSize() {
         var topicObjs = $('#topic').find('div');
@@ -796,6 +672,10 @@ $this->title = '故事汇';
             return false;
         }
         var doc = $('input[name=doc]').val();
+
+        if (doc == '') {
+            return false;
+        }
 
         if (printIdx > doc.length) {
             console.log('idx: ' + printIdx);
