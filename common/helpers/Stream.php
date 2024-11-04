@@ -35,6 +35,7 @@ class Stream
 
     public static function streamCallbackToDialogAction($data, $params = []) {
         $dataJson = str_replace('data: ', '', $data);
+        file_put_contents('/tmp/streamCallbackToDialogAction.log', $dataJson . PHP_EOL, FILE_APPEND);
         $dataArray = json_decode($dataJson, true);
 
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
