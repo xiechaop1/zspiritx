@@ -850,6 +850,7 @@ $this->title = '故事汇';
 
         printIdx = 0;
         printTs = ts;
+        $('input[name=doc]').val('');
 
         $.ajax({
             type: "POST", //用POST方式传输
