@@ -53,7 +53,7 @@ class Stream
             $aiContent = str_replace('\n', '', $aiContent);
             self::$dialogTxt .= $aiContent;
             $dialogArr = [];
-            file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTxt, 'UTF8'), FILE_APPEND);
+            file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTxt, 'UTF8') . ' ' . self::$dialogTxtMaxLength . PHP_EOL, FILE_APPEND);
             if (mb_strlen(self::$dialogTxt, 'UTF8') >= self::$dialogTxtMaxLength) {
                 $sentenceClip = mb_substr(self::$dialogTxt, 0, self::$dialogTxtMaxLength, 'UTF8');
                 self::$dialogTxt = mb_substr(self::$dialogTxt, self::$dialogTxtMaxLength, null, 'UTF8');
