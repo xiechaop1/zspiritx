@@ -54,12 +54,18 @@ class Stream
             $aiContent = str_replace('\r', '', $aiContent);
             $aiContent = str_replace('\t', '', $aiContent);
             self::$dialogTxt .= $aiContent;
+            self::$dialogTxt = str_replace('\n', '', self::$dialogTxt);
+            self::$dialogTxt = str_replace('\r', '', self::$dialogTxt);
+            self::$dialogTxt = str_replace('\t', '', self::$dialogTxt);
             $dialogArr = [];
 //            file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTxt, 'UTF8') . ' ' . self::$dialogTxtMaxLength . PHP_EOL, FILE_APPEND);
             if (mb_strlen(self::$dialogTxt, 'UTF8') >= self::$dialogTxtMaxLength
                 || !empty($dataArray['choices'][0]['finish_reason'])
             ) {
                 $sentenceClip = mb_substr(self::$dialogTxt, 0, self::$dialogTxtMaxLength, 'UTF8');
+                $sentenceClip = str_replace('\n', '', $sentenceClip);
+                $sentenceClip = str_replace('\r', '', $sentenceClip);
+                $sentenceClip = str_replace('\t', '', $sentenceClip);
 
                 $dialogTmp = [
                     'name' => '小灵语',
