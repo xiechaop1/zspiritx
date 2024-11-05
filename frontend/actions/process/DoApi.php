@@ -284,14 +284,14 @@ class DoApi extends ApiAction
                 $this->_userSessionInfo = $sessionObj;
             }
 
-            Yii::info('storyStages time begin: ' . microtime(true) . ' memory: ' . memory_get_usage());
+            Yii::info('[timedebug] storyStages time begin: ' . microtime(true) . ' memory: ' . memory_get_usage());
 
             $storyStages = StoryStages::find()
                 ->where(['story_id' => (int)$this->_storyId])
                 ->orderBy(['sort_by' => SORT_ASC]);
             $storyStages = $storyStages->all();
 
-            Yii::info('storyStages ct: ' . sizeof($storyStages) . ' time: ' . microtime(true) . ' memory: ' . memory_get_usage());
+            Yii::info('[timedebug] storyStages ct: ' . sizeof($storyStages) . ' time: ' . microtime(true) . ' memory: ' . memory_get_usage());
 
             foreach ($storyStages as $storyStage) {
                 $checkSessionStage = SessionStages::find()
@@ -321,14 +321,14 @@ class DoApi extends ApiAction
                 }
             }
 
-            Yii::info('storyModels time begin: ' . microtime(true) . ' memory: ' . memory_get_usage());
+            Yii::info('[timedebug] storyModels time begin: ' . microtime(true) . ' memory: ' . memory_get_usage());
             $storyModels = StoryModels::find()
                 ->where(['story_id' => (int)$this->_storyId]);
 //            if (!empty($this->_buildingId)) {
 //                $storyModels->andFilterWhere(['building_id' => (int)$this->_buildingId]);
 //            }
             $storyModels = $storyModels->all();
-            Yii::info('storyModels ct: ' . sizeof($storyModels) . ' time: ' . microtime(true) . ' memory: ' . memory_get_usage());
+            Yii::info('[timedebug] storyModels ct: ' . sizeof($storyModels) . ' time: ' . microtime(true) . ' memory: ' . memory_get_usage());
             foreach ($storyModels as $storyModel) {
                 $checkSessionModel = SessionModels::find()
                     ->where([
@@ -366,14 +366,14 @@ class DoApi extends ApiAction
                 $sessionModel->save();
             }
 
-            Yii::info('Qa time begin: ' . microtime(true) . ' memory: ' . memory_get_usage());
+            Yii::info('[timedebug] Qa time begin: ' . microtime(true) . ' memory: ' . memory_get_usage());
             $qaModels = Qa::find()
                 ->where([
                     'story_id'  => (int)$this->_storyId,
                 ])
                 ->all();
 
-            Yii::info('Qa ct: ' . sizeof($qaModels) . ' time: ' . microtime(true) . ' memory: ' . memory_get_usage());
+            Yii::info('[timedebug] Qa ct: ' . sizeof($qaModels) . ' time: ' . microtime(true) . ' memory: ' . memory_get_usage());
             foreach ($qaModels as $qaModel) {
                 $checkSessionQa = SessionQa::find()
                     ->where([
@@ -395,7 +395,7 @@ class DoApi extends ApiAction
                 $sessionQa->snapshot = json_encode($qaModel->toArray(), true);
                 $sessionQa->save();
             }
-            Yii::info('Qa time end: ' . microtime(true) . ' memory: ' . memory_get_usage());
+            Yii::info('[timedebug] Qa time end: ' . microtime(true) . ' memory: ' . memory_get_usage());
 
 //            $knowledge = Knowledge::find()
 //                ->where([
