@@ -232,19 +232,19 @@ class Common
         return false;
     }
 
-    public static function formatNumberToStr($num, $changeUnit = true, $decimal = 0, $decTag = '.', $thousandTag = ',') {
+    public static function formatNumberToStr($num, $changeUnit = true, $baseDecimal = 0, $decimal = 2, $decTag = '.', $thousandTag = ',') {
         if ($changeUnit) {
             if ($num > 100000000) {
                 $num = $num / 100000000;
-                $num = number_format($num, 2, $decTag, $thousandTag) . '亿';
+                $num = number_format($num, $decimal, $decTag, $thousandTag) . '亿';
             } elseif ($num > 10000) {
                 $num = $num / 10000;
-                $num = number_format($num, 2, $decTag, $thousandTag) . '万';
+                $num = number_format($num, $decimal, $decTag, $thousandTag) . '万';
             } else {
-                $num = number_format($num, $decimal, $decTag, $thousandTag);
+                $num = number_format($num, $baseDecimal, $decTag, $thousandTag);
             }
         } else {
-            $num = number_format($num, $decimal, $decTag, $thousandTag);
+            $num = number_format($num, $baseDecimal, $decTag, $thousandTag);
         }
         return $num;
     }
