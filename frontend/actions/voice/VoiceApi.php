@@ -72,6 +72,7 @@ class VoiceApi extends ApiAction
 
         // Todo:
         // 调用阿里云接口，把图片加prompt传给他
+        $ret = Yii::$app->doubao->talkWithImage($img);
 
         return $ret;
     }

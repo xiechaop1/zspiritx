@@ -89,6 +89,60 @@ class Doubao extends Component
         return $ret;
     }
 
+    public function talkWithImage($userMessage, $imageBase64, $params = [], $model = '', $temperature = '') {
+//        $msgClass = GptContent::MSG_CLASS_NORMAL;
+        $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以从图片中回答各种问题';
+//        $simple = [
+//            'content' => '回答问题',
+//        ];
+//        $extMessages = [
+//            '你说话很温柔，适合6-12岁小朋友',
+//            '你很贴心，也很会提供情绪价值',
+//            '你从图片中分析出来当前图片主要包含的人物、物品等',
+//            '然后你分析一个可能发展的故事',
+//            '内容不超过500字',
+//        ];
+//        $userId = !empty($params['userId']) ? $params['userId'] : 0;
+//        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+//        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+//        $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
+//        $toUserId = !empty($toUserId) ? $toUserId : $userId;
+//        $msgClass = GptContent::MSG_CLASS_NORMAL;
+//
+//        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
+
+        $oldMessages = [];
+        $extMessages = [];
+
+        $msg = [
+            [
+                'type' => 'image_url',
+                'image_url' => [
+                    'url' => $imageBase64,
+                ],
+            ],
+            [
+                'type' => 'text',
+                'text' => $userMessage,
+            ]
+        ];
+
+        $modelParams = [
+            'stream' => true,
+            'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
+            'callback_params' => $params,
+        ];
+
+        $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, true);
+
+
+//        $prompt = $this->_prompt;
+
+//        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+
+        return $ret;
+    }
+
     public function getOldContents($userId, $toUserId, $senderId = 0, $msgClass = GptContent::MSG_CLASS_NORMAL, $needFirst = false) {
         $beginTime = strtotime('-5 minute');
         $limit = 3;
