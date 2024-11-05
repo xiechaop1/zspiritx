@@ -186,7 +186,7 @@ $this->title = $storyMatch->match_name;
                 <div class="match-qa-header-left2">
                     <img src="<?= $user['avatar'] ?>" class="header-m">
                     <img src="../../static/img/match/coin.png">
-                    <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
+                    <span id="gold"><?= !empty($userScore->score) ? \common\helpers\Common::formatNumberToStr($userScore->score, true, 2, 0) : 0 ?></span>
                 </div>
                 <div class="match-qa-header-right">
                     本场选手

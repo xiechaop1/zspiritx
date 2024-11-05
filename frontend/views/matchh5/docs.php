@@ -147,7 +147,7 @@ $this->title = '故事汇';
                     <div class="progress-title">
                         <span class="text-1 text-FF"><?= $user->user_name ?></span>
                         <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">
-                        <span id="gold"><?= !empty($userScore->score) ? $userScore->score : 0 ?></span>
+                        <span id="gold"><?= !empty($userScore->score) ? \common\helpers\Common::formatNumberToStr($userScore->score, true, 2, 0) : 0 ?></span>
                     </div>
                 </div>
                 <div class="btn-m-green confirm_btn" style="margin-left: 80px;">

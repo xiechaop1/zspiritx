@@ -48,7 +48,7 @@ $this->title = '消息';
 <!--            <div class="progress-title">-->
 <!--                <span class="text-1 text-FF">--><?php //= $userInfo->user_name ?><!--</span>-->
 <!--                <img src="../../static/img/match/coin.png" class="m-l-20 m-r-10">-->
-<!--                <span id="gold">--><?php //= !empty($userScore->score) ? $userScore->score : 0 ?><!--</span>-->
+<!--                <span id="gold">--><?php //= !empty($userScore->score) ? \common\helpers\Common::formatNumberToStr($userScore->score, true, 2, 0) : 0 ?><!--</span>-->
 <!--            </div>-->
 <!--        </div>-->
 <!---->
