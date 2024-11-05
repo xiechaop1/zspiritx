@@ -48,6 +48,9 @@ class VoiceApi extends ApiAction
                 case 'ws':
                     $ret = $this->ws();
                     break;
+                case 'image':
+                    $ret = $this->image();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -58,6 +61,19 @@ class VoiceApi extends ApiAction
         }
 
         return $this->success($ret);
+    }
+
+    public function image() {
+        $ret = true;
+
+        $dataBase64 = !empty($_POST['data']) ? $_POST['data'] : '';
+
+        $img = base64_decode($dataBase64);
+
+        // Todo:
+        // 调用阿里云接口，把图片加prompt传给他
+
+        return $ret;
     }
 
     public function ws() {

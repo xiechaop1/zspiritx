@@ -38,6 +38,11 @@ class VoiceController extends Controller
                 'action' => 'ws',
                 'dirPrefix' => 'voice',
             ],
+            'image' => [
+                'class' => 'frontend\actions\voice\VoiceApi',
+                'action' => 'image',
+                'dirPrefix' => 'image',
+            ],
         ];
     }
 
