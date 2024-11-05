@@ -1824,7 +1824,7 @@ class MatchApi extends ApiAction
 
         $prompt = !empty($imgPromptData['EN_SENTENCE']) ? $imgPromptData['EN_SENTENCE'] : '';
         if (empty($prompt) && is_array($imgPromptData)) {
-            $prompt = !empty($imgPromptData[0]['EN_SENTENCE']) ? $imgPromptData[0]['EN_SENTENCE'] : '';
+            $prompt = !empty($imgPromptData[sizeof($imgPromptData) - 1]['EN_SENTENCE']) ? $imgPromptData[sizeof($imgPromptData) - 1]['EN_SENTENCE'] : '';
         }
 //        var_dump($prompt);
 //        var_dump($prompt);exit;
