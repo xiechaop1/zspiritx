@@ -370,6 +370,7 @@ class DoApi extends ApiAction
             $qaModels = Qa::find()
                 ->where([
                     'story_id'  => (int)$this->_storyId,
+                    'qa_class'  => Qa::QA_CLASS_NORMAL,
                 ])
                 ->all();
 
