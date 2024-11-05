@@ -136,6 +136,13 @@ class Doubao extends Component
         return $oldContents;
     }
 
+    public function generateImageFromText($msg) {
+
+        $ret = $this->genImageWithGPT($msg);
+
+        return $ret;
+    }
+
     public function generateNswc($userMessage, $params, $aiRole = 'host', $isFirst = false) {
         if ($aiRole == 'host') {
             $roleTxt = '#角色#' . "\n" . '你是一个你说我猜游戏主持人，你负责出题，解答，引导游戏的进行';
@@ -780,8 +787,7 @@ class Doubao extends Component
         return $ret;
     }
 
-    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true, $modelParams = [], $isStream = false) {
-
+    private function _genPrompt($userMessage, $oldMessages = [], $templateContents = [], $roleTxts = []) {
         if (empty($roleTxts)) {
             $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
             $templateMessages[] = array('role' => 'system', 'content' => $roleTxt);
@@ -830,6 +836,158 @@ class Doubao extends Component
         Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
         file_put_contents('/tmp/test_doubao_i.log', var_export($messages, true));
         $this->_prompt = $messages;
+
+        return $messages;
+    }
+
+    public function genImagePromptWithMessage($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array()) {
+
+        $roleTxts[] = '#角色' . "\n" . '你是一个AI Prompt生成助手，你负责把输入生成模型的prompt';
+
+        $extMessages = [
+            '首先从内容中提取一个场景，包含主人公，主要的场景、物品、动物等',
+            '把这个场景描述压缩到50字以内的描述，只是客观描述场景，不带有心理活动',
+            '把这段话翻译成英文',
+            '不超过100字',
+            '返回JSON',
+            '#格式#' . json_encode([
+                'CONTENT' => '关键场景',
+                'KEY_SENTENCE' => '压缩后的描述',
+                'EN_SENTENCE' => '翻译英文后的话',
+            ], JSON_UNESCAPED_UNICODE),
+        ];
+
+        $templateContents = array_merge($templateContents, $extMessages);
+
+//        $messages = $this->_genPrompt($userMessage, $oldMessages, $templateContents, $roleTxts);
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $templateContents, $roleTxts, false);
+        Yii::info('doubao image prompt ret: ' . json_encode($ret, JSON_UNESCAPED_UNICODE));
+        return $ret;
+    }
+
+    public function genImageWithGPT($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $modelParams = []) {
+
+//        $messages = $this->_genPrompt($userMessage, $oldMessages, $templateContents, $roleTxts);
+        $messages = $userMessage;
+
+        $model = !empty($modelParams['model']) ? $modelParams['model'] : 'stabilityai/stable-diffusion-3-5-large';
+        $temperature = !empty($modelParams['temperature']) ? $modelParams['temperature'] : $this->temperature;
+        $batchSize = !empty($modelParams['batch_size']) ? $modelParams['batch_size'] : 1;
+        $imageSize = !empty($modelParams['image_size']) ? $modelParams['image_size'] : '1024x1024';
+        $seed = !empty($modelParams['seed']) ? $modelParams['seed'] : 4999999999;
+        $numInterfenceSteps = !empty($modelParams['num_interference_steps']) ? $modelParams['num_interference_steps'] : 20;
+        $guidanceScale = !empty($modelParams['guidance_scale']) ? $modelParams['guidance_scale'] : 7.5;
+
+        $opts = [];
+
+        if (!empty($modelParams)) {
+
+            $data = $modelParams;
+            $data['model'] = $model;
+            $data['temperature'] = $temperature;
+//            $data['messages'] = $messages;
+            $data['prompt'] = $data['messages'];
+
+            if (!empty($modelParams['callback'])) {
+                $opts['callback'] = $modelParams['callback'];
+//                $data['stream'] = true;
+            }
+
+            if (!empty($modelParams['callback_params'])) {
+                $opts['callback_params'] = $modelParams['callback_params'];
+            }
+
+        } else {
+            $data = array(
+                'model' => $model,
+                'prompt' => $messages,
+                'temperature' => $temperature,
+                'batch_size' => $batchSize,
+                'image_size' => $imageSize,
+                'seed' => $seed,
+                'num_interference_steps' => $numInterfenceSteps,
+                'guidance_scale' => $guidanceScale,
+
+//            "response_format" => [
+//                'type' => 'json_object',
+//            ],
+            );
+        }
+
+        file_put_contents('/tmp/test_doubao_img_i.log', json_encode($data, JSON_UNESCAPED_UNICODE));
+
+        $response = $this->_call('v1/images/generations', $data, 'POST', true, $opts, false);
+//        var_dump($data);exit;
+//        var_dump($response);exit;
+//        if (!empty($oldMessages)) {
+//            print_r($oldMessages);
+//            print_r($messages);
+//            print_r($response);
+//        }
+        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+        file_put_contents('/tmp/doubao.log', json_encode($response, JSON_UNESCAPED_UNICODE));
+//        var_dump($response);
+//        exit;
+
+        $tmpRet =  json_decode($response, true);
+
+        return $tmpRet;
+
+    }
+
+    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true, $modelParams = [], $isStream = false) {
+
+//        if (empty($roleTxts)) {
+//            $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
+//            $templateMessages[] = array('role' => 'system', 'content' => $roleTxt);
+//        } else {
+//            foreach ($roleTxts as $roleTxt) {
+//                $templateMessages[] = array('role' => 'system', 'content' => $roleTxt);
+//            }
+//        }
+//
+//        $messages = [];
+//        if (!empty($userMessage)) {
+//            $userMsg = array(
+////            array('role' => 'system', 'content' => $roleTxt),
+//                array('role' => 'user', 'content' => $userMessage),
+////                array('role' => 'user', 'content' => '请继续续写作文'),
+//            );
+//        } else {
+//            $userMsg = [];
+//        }
+//
+////        $templateMessages = array();
+//        if (!empty($templateContents)) {
+//            foreach ($templateContents as $templateContent) {
+////                $templateMessages[] = array('role' => 'assistant', 'content' => $templateContent);
+//                $templateMessages[] = array('role' => 'system', 'content' => $templateContent);
+//            }
+//        }
+//
+//        if (!empty($oldMessages)) {
+////            array_unshift($oldMessages, ['role' => 'assistant', 'content' => '#历史消息']);
+////            array_unshift($oldMessages, ['role' => 'system', 'content' => '#历史消息']);
+////            foreach ($oldMessages as $oldMessage) {
+////                $oldMessageArray[] = [
+////                    'role' => 'assistant',
+////                    'content' => $oldMessage,
+////                    'prefix' => True,
+////                ];
+////            }
+//            $messages = array_merge($messages, $oldMessages);
+////            $messages += $oldMessageArray;
+//        }
+//        $messages = array_merge($templateMessages, $messages);
+////        $messages = array_merge($messages, $templateMessages);
+//        $messages = array_merge($messages, $userMsg);
+////        var_dump($messages);exit;
+//        Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
+//        file_put_contents('/tmp/test_doubao_i.log', var_export($messages, true));
+//        $this->_prompt = $messages;
+
+        $messages = $this->_genPrompt($userMessage, $oldMessages, $templateContents, $roleTxts);
 //        if (!empty($oldMessages)) {
 //            var_dump($messages);exit;
 //        }
@@ -855,6 +1013,10 @@ class Doubao extends Component
             $data['temperature'] = $temperature;
             $data['messages'] = $messages;
 
+            if (!empty($modelParams['type']) && $modelParams['type'] == 'image') {
+                $data['prompt'] = $data['messages'];
+            }
+
             if (!empty($modelParams['callback'])) {
                 $opts['callback'] = $modelParams['callback'];
                 $data['stream'] = true;
@@ -879,7 +1041,6 @@ class Doubao extends Component
 //            ],
             );
         }
-
 //        print_r($data);exit;
 
         // Todo: 替换掉Doubao接口
@@ -897,6 +1058,7 @@ class Doubao extends Component
                 'type' => 'json_object',
             ];
         }
+        file_put_contents('/tmp/test_doubao_data.log', var_export($data, true));
 //var_dump($data);exit;
 //        Yii::info('chatGPT data: ' . json_encode($data));
 

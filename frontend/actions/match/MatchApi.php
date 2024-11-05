@@ -135,6 +135,10 @@ class MatchApi extends ApiAction
                     $needTs = false;
                     $ret = $this->getStories();
                     break;
+                case 'get_image':
+                    $needTs = false;
+                    $ret = $this->getImage();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -1794,6 +1798,44 @@ class MatchApi extends ApiAction
         return [
             'title' => $title,
         ];
+    }
+
+    public function getImage() {
+        $userTxt = !empty($this->_post['user_txt']) ? $this->_post['user_txt'] : '';
+        $level = !empty($this->_post['level']) ? $this->_post['level'] : 1;
+        $title = !empty($this->_post['title']) ? $this->_post['title'] : '';
+        $desc = !empty($this->_post['desc']) ? $this->_post['desc'] : '';
+        $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
+
+//        $userTxt = '好的，那我们就来讲一个简单又有趣的故事吧！从前，在一个遥远的小村庄里，住着一个聪明伶俐的小女孩，名叫小红。小红的家里很穷，但她总是笑眯眯的，心里充满了对世界的美好向往。一天，村里的大人们都在讨论，说是要选出一个勇士，去森林里寻找一种神奇的果实，这种果实能让整个村庄都变得富足起来。小红虽然年纪小，但她心里有个声音告诉她：“我也要去试试，为什么勇士不能是我呢？”于是，小红偷偷准备了一些干粮，打算第二天就出发。可是，她又有些害怕，因为她听说森林里有各种各样的怪兽。“我害怕吗？”小红心想，“我害怕，但我也想让我的家人过上好日子。”小红深吸一口气，决定鼓起勇气，踏上旅程。她心里默念：“勇敢的小红，你是最棒的！”故事就讲到这里，小红出发了，她会遇到什么危险呢？又会怎样克服呢？';
+        $userTxt = strip_tags($userTxt);
+//        $msg = '请把下面的内容生成一个stabilityai的stable-diffusion-3-5-large模型用的prompt，英文输出' . "\n";
+        $msg = '';
+        $msg .= $userTxt;
+
+//        var_dump($msg);
+//exit;
+
+        $old = json_decode($oldJson, true);
+
+//        $genStory = Yii::$app->doubao->generateDoc($userTxt, $level, $title, $desc, $old, $userTxtExtend);
+
+        $imgPromptData = Yii::$app->doubao->genImagePromptWithMessage($msg);
+
+        $prompt = !empty($imgPromptData['EN_SENTENCE']) ? $imgPromptData['EN_SENTENCE'] : '';
+//        var_dump($prompt);
+//        var_dump($prompt);exit;
+
+        $imageData = Yii::$app->doubao->genImageWithGPT($prompt);
+        $image = !empty($imageData['images'][0]['url']) ? $imageData['images'][0]['url'] : '';
+
+        $ret = [
+            'word_data' => $imgPromptData,
+            'prompt' => $prompt,
+            'url' => $image,
+        ];
+
+        return ['image' => $ret];
     }
 
     public function getStories() {

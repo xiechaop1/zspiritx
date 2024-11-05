@@ -181,13 +181,14 @@ $this->title = '故事汇';
                     <span>17</span>
                 </div>
                 <div class="d-block text-center m-t-50" style="margin-top: 10px;">
-                    <!--                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">-->
-                    <!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
-                    <!--                        题目-->
-                    <!--                    </div>-->
+
                     <div class="match-info sugg-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#challenge-info">
                         <img src="../../static/img/match/Frame.png" class="img-coin">
                         提示
+                    </div>
+                    <div class="match-info subj-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#extend-info">
+                        <img src="../../static/img/match/Frame.png" class="img-coin">
+                        图片
                     </div>
                     <!--                    <div class="match-info anaylze-btn" style="margin: 10px auto;" data-toggle="modal" data-target="#anaylze-info">-->
                     <!--                        <img src="../../static/img/match/Frame.png" class="img-coin">-->
@@ -383,16 +384,15 @@ $this->title = '故事汇';
                         <img src="../../static/img/bg-lottery-text1.png" class="img-250">
                     </div>
                     <div class="fs-36  text-FF  text-center bold lottery-error-title">
-                        题目
+                        图片
                     </div>
 
                     <input type="hidden" id="message-subj">
                     <input type="hidden" id="message-id">
                     <div id="extend-content-container" class="fs-32 text-FF bold m-t-50 lottery-content" style="height: 600px; overflow: auto;">
+                        <img class="" src="" id="story_img" style="width: 100%">
                         <div id="extend-content"></div>
-                        <div style="float: left; line-height: 200%;">
-                            <img class="play_voice_extend" src="../../static/img/match/play.png" width="50">
-                        </div>
+
                     </div>
 
                     <div class="fs-36 text-F6 text-center bold m-t-50 m-b-40" data-dismiss="modal">
@@ -559,10 +559,10 @@ $this->title = '故事汇';
             if ($('#message-subj').val() != '') {
                 return;
             }
-            $('#extend-content').html('正在思考……');
+            $('#extend-content').html('正在生成图片……');
 
             // setTimeout(function () {
-            getSubj('');
+            getImage();
             // }, 500);
             $("#extend-info").modal('show');
 
@@ -677,7 +677,7 @@ $this->title = '故事汇';
             return false;
         }
 
-        // console.log('idx: ' + printIdx);
+        console.log('idx: ' + printIdx);
         if (printIdx > doc.length) {
             console.log('length: ' + doc.length);
             printLock = 0;
@@ -686,7 +686,11 @@ $this->title = '故事汇';
 
         printLock = 1;
         var oneWord = doc.substring(printIdx, printIdx + 1);
-        // console.log('word: ' + oneWord);
+        if (oneWord == '') {
+            printLock = 0;
+            return false;
+        }
+        console.log('word: ' + oneWord);
 
         var cont = $('#cont_' + printTs);
         if (cont.length > 0) {
@@ -697,7 +701,7 @@ $this->title = '故事汇';
             $('#topic').append(cont);
         }
         printIdx++;
-        // console.log('new idx: ' + printIdx);
+        console.log('new idx: ' + printIdx);
         printLock = 0;
         // console.log('lock: ' + printLock);
         setTimeout(function() { return printWord(); }, 300);
@@ -814,6 +818,7 @@ $this->title = '故事汇';
                 data = data.replace(/\s/g, '');
                 console.log(data);
                 printWord();
+                $('#story_img').attr('src', '');
                 // var cont = $('#cont_' + ts);
                 // if (cont.length > 0) {
                 //     cont.html(data);
@@ -869,17 +874,43 @@ $this->title = '故事汇';
         });
     }
 
-    function getSubj() {
+    function getImage() {
         var story_id = $('input[name=story_id]').val();
         var level = $('input[name=level]').val();
         var user_id = $('input[name=user_id]').val();
+
+        var oldsDiv = $('#topic').find('div');
+        var olds = [];
+
+        oldsDiv.each(function() {
+            var oldRole = $(this).attr('role');
+            var oldContent = $(this).html();
+
+            olds.push(
+            //     {
+            //     role: oldRole,
+            //     content: oldContent,
+            // }
+                oldContent
+            );
+            console.log(olds);
+        });
+
+        var user_txt = $.toJSON(olds);
+
+        var storyImage = $('#story_img').attr('src');
+        if (storyImage != "") {
+            return false;
+        }
+
         $.ajax({
-            type: "GET", //用POST方式传输
+            type: "POST", //用POST方式传输
             dataType: "json", //数据格式:JSON
             async: true,
-            url: '/match/get_doc_subj',
+            url: '/match/get_image',
             data:{
                 story_id:story_id,
+                user_txt:user_txt,
                 level:level,
             },
             onload: function (data) {
@@ -900,99 +931,10 @@ $this->title = '故事汇';
                     console.log(ajaxObj);
 
                     // if ($('#extend-content').html() == '正在思考……')  {
-                    $('#extend-content').html('');
+                    $('#extend-content').html(ajaxObj.data.image.word_data.KEY_SENTENCE);
+                    $('#story_img').attr('src', ajaxObj.data.image.url);
                     // }
-
-                    var ajaxData = ajaxObj.data;
-                    for (var i in ajaxData.title) {
-                        var title = ajaxData.title[i].TITLE;
-                        var desc = ajaxData.title[i].DESC;
-                        var size = 28;
-                        if (title.length > 20) {
-                            size = 20;
-                        }
-                        var ques = '<div class="fs-36 text-F6 text-center bold m-t-50 m-b-20" style="margin-top: 25px;">';
-                        ques += '<label class="btn-green-m-choice active choose_title " style="font-size: ' + size + 'px;" mtitle="' + title + '" mdesc="' + desc + '">' + title  + '</label>';
-                        ques += '</div>';
-                        console.log(ques);
-                        $('#extend-content').append(ques);
-                    }
-
-                    $('.choose_title').click(function() {
-                        var thisObj = $(this);
-                        var mtitle = thisObj.attr('mtitle');
-                        var mdesc = thisObj.attr('mdesc');
-
-                        $('input[name=mtitle]').val(mtitle);
-                        $('input[name=mdesc]').val(mdesc);
-                        $('#ctitle').html(mtitle);
-                        // $('#ctitle1').html(mtitle);
-
-                        getDoc();
-                        $("#extend-info").modal('hide');
-
-                    });
-
-                    $('#message-subj').val(title);
-                    var msbox = document.querySelector('#message-content');
-                    msbox.scrollTo(0, msbox.scrollHeight - msbox.clientHeight);
-                    console.log(ajaxObj.data.questions);
-
-
-                    $('.play_voice').click(function() {
-                        var thisObj = $(this);
-                        if (thisObj.hasClass('play_voice_btn_disable')) {
-                            return;
-                        }
-                        thisObj.addClass('play_voice_btn_disable');
-                        for (var ai in audio_list) {
-                            if (audio_list[ai].msg == $(this).parent().prev().html()) {
-                                audioVoice.src = audio_list[ai].voice;
-                                audioVoice.play();
-                                return;
-                            }
-                        }
-
-                        var msg = $(this).parent().prev().html();
-                        var userId = $('input[name=user_id]').val();
-                        console.log(msg);
-
-                        $.ajax({
-                            type: "GET", //用POST方式传输
-                            dataType: "json", //数据格式:JSON
-                            async: true,
-                            url: '/match/play_voice',
-                            data: {
-                                story_id: story_id,
-                                user_id: user_id,
-                                messages: msg,
-                            },
-                            onload: function (data) {
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                thisObj.removeClass('play_voice_btn_disable');
-                                console.log("ajax请求失败:" + XMLHttpRequest, textStatus, errorThrown);
-                                $.alert("网络异常，请检查网络情况");
-                            },
-                            success: function (data, status) {
-                                var dataContent = data;
-                                var dataCon = $.toJSON(dataContent);
-                                var voiceObj = eval("(" + dataCon + ")");//转换后的JSON对象
-
-                                console.log(voiceObj);
-                                audioVoice.src = voiceObj.data.file.file;
-
-                                audio_list.push({
-                                    msg: msg,
-                                    voice: voiceObj.data.file.file,
-                                });
-
-                                audioVoice.play();
-                                thisObj.removeClass('play_voice_btn_disable');
-
-                            }
-                        });
-                    });
+                    
 
                     // $('#message-box').modal('show');
                 }

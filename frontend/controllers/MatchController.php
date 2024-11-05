@@ -106,6 +106,10 @@ class MatchController extends Controller
                 'class' => 'frontend\actions\match\MatchApi',
                 'action' => 'get_talk_history',
             ],
+            'get_image' => [
+                'class' => 'frontend\actions\match\MatchApi',
+                'action' => 'get_image',
+            ],
 
         ];
     }
