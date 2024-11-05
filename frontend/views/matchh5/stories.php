@@ -677,8 +677,8 @@ $this->title = '故事汇';
             return false;
         }
 
+        // console.log('idx: ' + printIdx);
         if (printIdx > doc.length) {
-            console.log('idx: ' + printIdx);
             console.log('length: ' + doc.length);
             printLock = 0;
             return false;
@@ -686,7 +686,7 @@ $this->title = '故事汇';
 
         printLock = 1;
         var oneWord = doc.substring(printIdx, printIdx + 1);
-        console.log('word: ' + oneWord);
+        // console.log('word: ' + oneWord);
 
         var cont = $('#cont_' + printTs);
         if (cont.length > 0) {
@@ -697,9 +697,9 @@ $this->title = '故事汇';
             $('#topic').append(cont);
         }
         printIdx++;
-        console.log('new idx: ' + printIdx);
+        // console.log('new idx: ' + printIdx);
         printLock = 0;
-        console.log('lock: ' + printLock);
+        // console.log('lock: ' + printLock);
         setTimeout(function() { return printWord(); }, 300);
     }
 
