@@ -909,7 +909,7 @@ class Doubao extends Component
             '#格式#' . json_encode([
                 'CONTENT' => '关键场景',
                 'KEY_SENTENCE' => '压缩后的描述',
-                'EN_SENTENCE' => '翻译英文后的话',
+                'EN_SENTENCE' => '把压缩后的描述翻译英文',
             ], JSON_UNESCAPED_UNICODE),
         ];
 
