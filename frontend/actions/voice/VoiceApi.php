@@ -68,11 +68,12 @@ class VoiceApi extends ApiAction
 
         $dataBase64 = !empty($_POST['data']) ? $_POST['data'] : '';
 
+        $word = '请分析一下这张照片，回答一下你都看到了什么？并且根据看到的东西，描述一个场景。';
         $img = base64_decode($dataBase64);
 
         // Todo:
         // 调用阿里云接口，把图片加prompt传给他
-        $ret = Yii::$app->doubao->talkWithImage($img);
+        $ret = Yii::$app->doubao->talkWithImage($word, $img);
 
         return $ret;
     }
