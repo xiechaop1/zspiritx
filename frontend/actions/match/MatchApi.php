@@ -135,6 +135,10 @@ class MatchApi extends ApiAction
                     $needTs = false;
                     $ret = $this->getStories();
                     break;
+                case 'get_stories_sugg':
+                    $needTs = false;
+                    $ret = $this->getStoriesSugg();
+                    break;
                 case 'get_image':
                     $needTs = false;
                     $ret = $this->getImage();
@@ -1859,6 +1863,18 @@ class MatchApi extends ApiAction
 //        ob_flush();
 //        flush();
         exit;
+    }
+
+    public function getStoriesSugg() {
+        $level = !empty($this->_get['level']) ? $this->_get['level'] : 0;
+        $matchClass = !empty($this->_get['match_class']) ? $this->_get['match_class'] : 0;
+        $ct = !empty($this->_get['ct']) ? $this->_get['ct'] : 10;
+        $prompt = !empty($this->_get['prompt']) ? $this->_get['prompt'] : '';
+        $needSave = !empty($this->_get['need_save']) ? $this->_get['need_save'] : true;
+        $extends = !empty($this->_get['extends']) ? $this->_get['extends'] : [];
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+//        $userWareId = !empty($this->_get['user_ware_id']) ? $this->_get['user_ware_id'] : 0;
+        return Yii::$app->qas->generateSubjectWithDoubao($level, $matchClass, $ct, $userId, $prompt, $extends, $needSave);
     }
 
     public function getDoc() {

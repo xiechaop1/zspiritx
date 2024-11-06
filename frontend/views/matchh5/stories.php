@@ -165,6 +165,7 @@ $this->title = '故事汇';
                 //                var_dump($genStory);exit;
                 ?>
                 <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 500px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
+                    <div class="doc_content doc_content_assistant" role="assistant" id="cont_0" style="width: 100%;">你想听什么故事呀？或者我想一个故事讲给你，好不好呀？</div>
                     <?= !empty($genStory['content']) ? $genStory['content'] : '' ?>
                 </div>
                 <input type="hidden" id="st_answer" name="st_answer" value="<?= !empty($genStory['answer']) ? $genStory['answer'] : '' ?>">
@@ -201,9 +202,9 @@ $this->title = '故事汇';
                     <!--                        标题：<span class="text-1" id="ctitle1"></span>-->
                     <!--                    </div>-->
                     <div class="match-clock-bottom-right">
-                        分数
-                        <span class="text-1" id="score">0</span>/字数
-                        <span class="text-2" id="size">0</span>
+<!--                        分数-->
+<!--                        <span class="text-1" id="score">0</span>/字数-->
+<!--                        <span class="text-2" id="size">0</span>-->
                     </div>
 
                 </div>
@@ -219,7 +220,7 @@ $this->title = '故事汇';
                         <!--                    font-size:28px; background-color: #DAFC70;border-radius: 24px; width:100px;" value="发布">-->
                     </span>
                     <span style="float: left; margin-left: 15px;"><a id="record">
-                        <img id="mic_icon" src="../../static/img/match/mic_g1.png" width="45" height="60" style="margin-left: 0px;"></a>
+                        <img id="mic_icon" src="../../static/img/match/mic_g1.png" width="45" height="60" style="margin-left: 10px;"></a>
                     </span>
                     <!--                    <button id="btn_control">开始录音</button><div id="result"></div>-->
                 </div>
