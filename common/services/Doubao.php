@@ -131,6 +131,7 @@ class Doubao extends Component
             'stream' => true,
             'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
             'callback_params' => $params,
+            'model' => 'Qwen/Qwen2.5-Image-72B-Instruct',
         ];
 
         $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, true);
