@@ -844,6 +844,7 @@ class Doubao extends Component
     }
 
     private function _genPrompt($userMessage, $oldMessages = [], $templateContents = [], $roleTxts = []) {
+        $templateMessages = [];
         if (empty($roleTxts)) {
 //            $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
 //            $templateMessages[] = array('role' => 'system', 'content' => $roleTxt);
