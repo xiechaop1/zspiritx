@@ -66,16 +66,43 @@ class VoiceApi extends ApiAction
     public function image() {
         $ret = true;
 
+
+        $_request = $_REQUEST;
+        $sessionId = !empty($_request['session_id']) ? $_request['session_id'] : 0;
+        $storyId = !empty($_request['story_id']) ? $_request['story_id'] : 0;
+        $userId = !empty($_request['user_id']) ? $_request['user_id'] : 0;
+        $sessionStageId = !empty($_request['session_stage_id']) ? $_request['session_stage_id'] : 0;
+        $senderId = !empty($_request['sender_id']) ? $_request['sender_id'] : 0;
+
+        $source = !empty($_request['source']) ? $_request['source'] : 0;
+        $type = !empty($_request['type']) ? $_request['type'] : '';
+
+        $dialogId = !empty($_request['dialog_id']) ? $_request['dialog_id'] : 0;
+
+        $needVoice = false;
+
         $dataBase64 = !empty($_POST['data']) ? $_POST['data'] : '';
+
 
         $word = '请分析一下这张照片，回答一下你都看到了什么？并且根据看到的东西，描述一个场景。';
 //        $img = base64_decode($dataBase64);
         $img = $dataBase64;
         file_put_contents('/tmp/camshot_1.log', $img);
 
+        $params = [
+            'userId' => $userId,
+            'toUserId' => $userId,
+            'storyId' => $storyId,
+            'senderId' => $senderId,
+            'sessionId' => $sessionId,
+            'sessionStageId' => $sessionStageId,
+            'needVoice' => $needVoice,
+            'dialogId' => $dialogId,
+        ];
+
         // Todo:
         // 调用阿里云接口，把图片加prompt传给他
-        $ret = Yii::$app->doubao->talkWithImage($word, $img);
+        $ret = Yii::$app->doubao->talkWithImage($word, $img, $params);
 
         return $ret;
     }

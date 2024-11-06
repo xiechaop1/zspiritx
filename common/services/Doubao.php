@@ -111,6 +111,7 @@ class Doubao extends Component
 //
 //        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
+
         $oldMessages = [];
         $extMessages = [];
 
@@ -128,12 +129,13 @@ class Doubao extends Component
         ];
 
         $modelParams = [
-//            'stream' => true,
-//            'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
-//            'callback_params' => $params,
+            'stream' => true,
+            'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
+            'callback_params' => $params,
 //            'model' => 'Qwen/Qwen2.5-Image-72B-Instruct',
             'model' => 'OpenGVLab/InternVL2-26B',
         ];
+
 
         $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [], false, $modelParams, true);
 
