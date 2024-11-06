@@ -118,7 +118,7 @@ class Doubao extends Component
             [
                 'type' => 'image_url',
                 'image_url' => [
-                    'url' => $imageBase64,
+                    'url' => 'data:image/jpeg;base64,' . $imageBase64,
                 ],
             ],
             [
@@ -135,7 +135,7 @@ class Doubao extends Component
             'model' => 'OpenGVLab/InternVL2-26B',
         ];
 
-        $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, true);
+        $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, false);
 
 
 //        $prompt = $this->_prompt;
