@@ -44,6 +44,7 @@ class Stream
         $sessionId = !empty($params['sessionId']) ? $params['sessionId'] : 0;
         $sessionStageId = !empty($params['sessionStageId']) ? $params['sessionStageId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+        $dialogId = !empty($params['dialogId']) ? $params['dialogId'] : 0;
 
 //        file_put_contents('/tmp/streamCallbackToDialogAction.log', var_export($dataArray, true), FILE_APPEND);
         if (isset($dataArray['choices'][0]['delta']['content'])
@@ -73,6 +74,7 @@ class Stream
                     'to_user' => $userId,
                     'sender_id' => $senderId,
                     'viewMode' => 'rec',
+                    'dialog_id' => $dialogId,
                 ];
 
                 if ($needVoice === true) {

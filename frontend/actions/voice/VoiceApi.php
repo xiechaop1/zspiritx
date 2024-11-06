@@ -91,6 +91,8 @@ class VoiceApi extends ApiAction
         $source = !empty($_request['source']) ? $_request['source'] : 0;
         $type = !empty($_request['type']) ? $_request['type'] : '';
 
+        $dialogId = !empty($_request['dialog_id']) ? $_request['dialog_id'] : 0;
+
         try {
             $needVoice = false;
 
@@ -149,6 +151,7 @@ class VoiceApi extends ApiAction
                 'sessionId' => $sessionId,
                 'sessionStageId' => $sessionStageId,
                 'needVoice' => $needVoice,
+                'dialogId' => $dialogId,
             ];
 
             $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params);
