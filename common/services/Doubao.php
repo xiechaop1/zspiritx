@@ -133,21 +133,31 @@ class Doubao extends Component
             ]
         ];
 
+        $model = 'OpenGVLab/InternVL2-26B';
         $modelParams = [
             'stream' => true,
             'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
             'callback_params' => $params,
 //            'model' => 'Qwen/Qwen2.5-Image-72B-Instruct',
-            'model' => 'OpenGVLab/InternVL2-26B',
+            'model' => $model,
         ];
 
 
         $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [], false, $modelParams, true);
 
+        $userId = !empty($params['userId']) ? $params['userId'] : 0;
+        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+        $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
+        $toUserId = !empty($toUserId) ? $toUserId : $userId;
+        $msgClass = GptContent::MSG_CLASS_NORMAL;
 
-//        $prompt = $this->_prompt;
+//        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
-//        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+
+        $prompt = $this->_prompt;
+
+        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, $senderId, $storyId, $model);
 
         return $ret;
     }

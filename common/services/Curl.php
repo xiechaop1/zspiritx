@@ -66,7 +66,7 @@ class Curl
                 $params = !empty($opts['callback_params']) ? $opts['callback_params'] : [];
             } else {
                 $callback = ['\common\helpers\Stream', 'streamCallbackToText'];
-                $params = [];
+                $params = !empty($opts['callback_params']) ? $opts['callback_params'] : [];
             }
             curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use ($callback, $params)
             {

@@ -9,6 +9,7 @@
 namespace common\helpers;
 
 use common\models\Actions;
+use common\models\GptContent;
 use yii;
 
 class Stream
@@ -18,13 +19,31 @@ class Stream
 
     public static $dialogTxt = '';
 
-    public static function streamCallbackToText($data) {
+    public static $dialogTmpTxt = '';
+
+    public static function streamCallbackToText($data, $params = []) {
         $dataJson = str_replace('data: ', '', $data);
         $dataArray = json_decode($dataJson, true);
 
         if (isset($dataArray['choices'][0]['delta']['content'])) {
+            self::$dialogTxt .= $dataArray['choices'][0]['delta']['content'];
             echo $dataArray['choices'][0]['delta']['content'] . str_repeat('        ', 128);
 //            echo $dataArray['choices'][0]['delta']['content'] . ' 111';
+        }
+        if (!empty($dataArray['choices'][0]['finish_reason'])) {
+            if (!empty($params) && $params['need_save'] == true) {
+                $userId = !empty($params['userId']) ? $params['userId'] : 0;
+                $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+                $content = self::$dialogTxt;
+                $prompt = !empty($params['prompt']) ? $params['prompt'] : '';
+                $msgClass = !empty($params['msgClass']) ? $params['msgClass'] : 0;
+                $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
+                $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+                $gptModel = !empty($params['gptModel']) ? $params['gptModel'] : '';
+                $isFirst = !empty($params['isFirst']) ? $params['isFirst'] : false;
+
+                Yii::$app->doubao->saveContentToDb($userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
+            }
         }
 //        else {
 //            print_r($dataArray);
@@ -54,16 +73,14 @@ class Stream
             $aiContent = str_replace("\n", '', $aiContent);
             $aiContent = str_replace("\r", '', $aiContent);
             $aiContent = str_replace("\t", '', $aiContent);
+            self::$dialogTmpTxt .= $aiContent;
             self::$dialogTxt .= $aiContent;
-//            self::$dialogTxt = str_replace("\n", '', self::$dialogTxt);
-//            self::$dialogTxt = str_replace("\r", '', self::$dialogTxt);
-//            self::$dialogTxt = str_replace("\t", '', self::$dialogTxt);
             $dialogArr = [];
-//            file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTxt, 'UTF8') . ' ' . self::$dialogTxtMaxLength . PHP_EOL, FILE_APPEND);
-            if (mb_strlen(self::$dialogTxt, 'UTF8') >= self::$dialogTxtMaxLength
+//            file_put_contents('/tmp/stream.log', mb_strlen(self::$dialogTmpTxt, 'UTF8') . ' ' . self::$dialogTxtMaxLength . PHP_EOL, FILE_APPEND);
+            if (mb_strlen(self::$dialogTmpTxt, 'UTF8') >= self::$dialogTxtMaxLength
                 || !empty($dataArray['choices'][0]['finish_reason'])
             ) {
-                $sentenceClip = mb_substr(self::$dialogTxt, 0, self::$dialogTxtMaxLength, 'UTF8');
+                $sentenceClip = mb_substr(self::$dialogTmpTxt, 0, self::$dialogTxtMaxLength, 'UTF8');
 //                $sentenceClip = str_replace("\n", '', $sentenceClip);
 //                $sentenceClip = str_replace("\r", '', $sentenceClip);
 //                $sentenceClip = str_replace("\t", '', $sentenceClip);
@@ -88,7 +105,19 @@ class Stream
                 $dialogArr[] = $dialogTmp;
                 file_put_contents('/tmp/stream.log', var_export($dialogArr, true), FILE_APPEND);
                 Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
-                self::$dialogTxt = mb_substr(self::$dialogTxt, self::$dialogTxtMaxLength, null, 'UTF8');
+                self::$dialogTmpTxt = mb_substr(self::$dialogTmpTxt, self::$dialogTxtMaxLength, null, 'UTF8');
+
+//                if (!empty($dataArray['choices'][0]['finish_reason'])) {
+//                    $toUserId = $userId;
+//                    $content = self::$dialogTxt;
+//                    $prompt = !empty($params['prompt']) ? $params['prompt'] : '';
+//                    $msgClass = !empty($params['msgClass']) ? $params['msgClass'] : 0;
+//                    $gptModel = !empty($params['gptModel']) ? $params['gptModel'] : '';
+//                    $isFirst = !empty($params['isFirst']) ? $params['isFirst'] : false;
+//
+//                    Yii::$app->doubao->saveContentToDb($userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
+//
+//                }
 
             }
 //            echo $dataArray['choices'][0]['delta']['content'] . ' 111';
