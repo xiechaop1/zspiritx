@@ -1117,6 +1117,7 @@ class Doubao extends Component
             }
 
             if (!empty($modelParams['callback_params'])) {
+                $modelParams['callback_params']['prompt'] = $messages;
                 $opts['callback_params'] = $modelParams['callback_params'];
             }
 
