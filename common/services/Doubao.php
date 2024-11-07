@@ -76,7 +76,7 @@ class Doubao extends Component
         $model = $this->model;
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
-        $params['isFirst'] = true;
+        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $modelParams = [
             'stream' => true,
@@ -87,9 +87,9 @@ class Doubao extends Component
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, true);
 
 
-        $prompt = $this->_prompt;
-
-        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+//        $prompt = $this->_prompt;
+//
+//        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
 
         return $ret;
     }
