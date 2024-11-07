@@ -154,8 +154,18 @@ class Doubao extends Component
 
 //        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
-
         $prompt = $this->_prompt;
+
+        if (!empty($prompt)) {
+            foreach ($prompt as $idx => $onePrompt) {
+//                if (!empty($onePrompt['role']) && $onePrompt['role'] == 'assistant') {
+//                    $onePrompt['role'] = 'system';
+//                }
+                if (!empty($onePrompt['content'][0]['img_url']) && strpos(substr($onePrompt['content'][0]['img_url'], 0, 50), 'base64') !== false) {
+                    unset($prompt[$idx]['content'][0]['img_url']);
+                } 
+            }
+        }
 
         $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, $senderId, $storyId, $model);
 
