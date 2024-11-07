@@ -88,7 +88,9 @@ class VoiceApi extends ApiAction
         $word = '';
         $word .= '根据照片的场景，提取关键物品或者人物' . "\n"
             . '描述一下关键物品和人物' . "\n"
-            . '猜测玩家当前的状态，并且询问一下是否需要帮助，例如：是否需要介绍一下？是否需要游戏建议等等';
+            . '猜测玩家当前的状态' . "\n"
+            . '询问一下是否需要帮助，例如：是否需要一些建议？或者介绍一下东西？或者是否可以一起参与？' . "\n"
+            . '总体不超过200字';
 //        $img = base64_decode($dataBase64);
         $img = $dataBase64;
 //        file_put_contents('/tmp/camshot_1.log', $img);
@@ -143,37 +145,6 @@ class VoiceApi extends ApiAction
 
             $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL);
 
-//            $lastContents = Yii::$app->doubao->getContentsFromDb($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL, strtotime('-5 minute'), 0, 1);
-//
-//            $oldContents = [];
-//            if (!empty($lastContents)) {
-//                foreach ($lastContents as $lastContent) {
-//                    if (!empty($lastContent['prompt'])) {
-//                        $oldPrompts = json_decode($lastContent['prompt'], true);
-//                        if (!empty($oldPrompts)) {
-//                            foreach ($oldPrompts as $oldPrompt) {
-//                                if (!empty($oldPrompt['role']) && $oldPrompt['role'] != 'system') {
-//                                    $oldContents[] = $oldPrompt;
-//                                }
-//                            }
-//                        }
-//                        if (!empty($lastContent['content'])) {
-//                            if (Common::isJson($lastContent['content'])) {
-//                                $contentObj = json_decode($lastContent['content'], true);
-//                                $content = !empty($contentObj['content']) ? $contentObj['content'] : '';
-//                            } else {
-//                                $content = $lastContent['content'];
-//                            }
-//                            $oldContents[] = [
-//                                'role'  => 'assistant',
-//                                'content' => $content,
-//                            ];
-//
-//                        }
-//                    }
-//                }
-//            }
-
 //            var_dump($oldContents);
 
             $params = [
@@ -190,45 +161,6 @@ class VoiceApi extends ApiAction
             $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params);
             return $aiRet;
 
-            $time2 = time();
-//            var_dump($time2 - $time1);
-            $aiContent = '';
-            if (!empty($aiRet['content'])) {
-                $aiContent = $aiRet['content'];
-//                var_dump($aiRet['content']);
-            } else {
-                $aiContent = $aiRet;
-//                var_dump($aiRet);
-
-            }
-
-            $aiContent = str_replace('\n', '', $aiContent);
-            $strMaxLength = 85;
-            $dialogCt = intval(mb_strlen($aiContent, 'utf-8') / $strMaxLength) + 1;
-
-            $dialogArr = [];
-            for ($i = 0; $i < $dialogCt; $i++) {
-                $sentenceClip = mb_substr($aiContent, $i * $strMaxLength, $strMaxLength, 'utf-8');
-                $dialogTmp = [
-                    'name' => '小灵语',
-                    'sentence' => $sentenceClip,
-                    'to_user' => $userId,
-                    'sender_id' => $senderId,
-                    'viewMode' => 'rec',
-                ];
-
-                if ($needVoice === true) {
-                    $ttsRet = Yii::$app->doubaoTTS->ttsWithDoubao($sentenceClip, $userId);
-
-                    if (!empty($ttsRet['file']['saveFile'])) {
-                        $ttsFile = 'https://h5.zspiritx.com.cn/' . $ttsRet['file']['file'];
-                        $dialogTmp['sentenceClipURL'] = $ttsFile;
-                    }
-                }
-                $dialogArr[] = $dialogTmp;
-            }
-            Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
-            return $aiRet;
         } catch (\Exception $e) {
             throw $e;
         }
