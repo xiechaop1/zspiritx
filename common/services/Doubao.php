@@ -73,6 +73,11 @@ class Doubao extends Component
 
         $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
+        $model = $this->model;
+        $params['gptModel'] = $model;
+        $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
+        $params['isFirst'] = true;
+
         $modelParams = [
             'stream' => true,
             'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
@@ -134,6 +139,10 @@ class Doubao extends Component
         ];
 
         $model = 'OpenGVLab/InternVL2-26B';
+        $params['gptModel'] = $model;
+        $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
+        $params['isFirst'] = true;
+
         $modelParams = [
             'stream' => true,
             'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
@@ -145,12 +154,12 @@ class Doubao extends Component
 
         $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [], false, $modelParams, true);
 
-        $userId = !empty($params['userId']) ? $params['userId'] : 0;
-        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
-        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
-        $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
-        $toUserId = !empty($toUserId) ? $toUserId : $userId;
-        $msgClass = GptContent::MSG_CLASS_NORMAL;
+//        $userId = !empty($params['userId']) ? $params['userId'] : 0;
+//        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
+//        $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
+//        $senderId = !empty($params['senderId']) ? $params['senderId'] : 0;
+//        $toUserId = !empty($toUserId) ? $toUserId : $userId;
+//        $msgClass = GptContent::MSG_CLASS_NORMAL;
 
 //        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
