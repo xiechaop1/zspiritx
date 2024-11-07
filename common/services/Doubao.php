@@ -141,7 +141,7 @@ class Doubao extends Component
         $model = 'OpenGVLab/InternVL2-26B';
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
-        $params['isFirst'] = true;
+        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $modelParams = [
             'stream' => true,
