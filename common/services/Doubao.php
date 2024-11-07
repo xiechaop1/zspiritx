@@ -161,13 +161,14 @@ class Doubao extends Component
 //                if (!empty($onePrompt['role']) && $onePrompt['role'] == 'assistant') {
 //                    $onePrompt['role'] = 'system';
 //                }
-                if (!empty($onePrompt['content'][0]['img_url']) && strpos(substr($onePrompt['content'][0]['img_url'], 0, 50), 'base64') !== false) {
-                    unset($prompt[$idx]['content'][0]['img_url']);
+                if (!empty($onePrompt['content'][0]['img_url']['url']) && strpos(substr($onePrompt['content'][0]['img_url']['url'], 0, 50), 'base64') !== false) {
+                    unset($prompt[$idx]['content'][0]['img_url']['url']);
                 } 
             }
+            var_dump($prompt);
         }
 
-        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, $senderId, $storyId, $model);
+//        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, $senderId, $storyId, $model);
 
         return $ret;
     }
