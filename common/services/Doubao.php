@@ -200,11 +200,16 @@ class Doubao extends Component
                 ) {
                     continue;
                 }
+
                 if (!empty($lastContent['prompt'])) {
                     $oldPrompts = json_decode($lastContent['prompt'], true);
                     if (!empty($oldPrompts)) {
                         foreach ($oldPrompts as $oldPrompt) {
-                            if (!empty($oldPrompt['role']) && $oldPrompt['role'] != 'system') {
+                            if (!empty($oldPrompt['role'])
+                                && $oldPrompt['role'] != 'system'
+                                && !empty($oldPrompt['content'][0]['type'])
+                                && $oldPrompt['content'][0]['type'] != 'image_url'
+                            ) {
                                 $oldContents[] = $oldPrompt;
                             }
                         }
@@ -217,6 +222,7 @@ class Doubao extends Component
                     } else {
                         $content = $lastContent['content'];
                     }
+
                     $oldContents[] = [
                         'role'  => 'assistant',
                         'content' => $content,
