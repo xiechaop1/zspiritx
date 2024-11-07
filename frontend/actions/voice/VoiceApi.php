@@ -84,7 +84,11 @@ class VoiceApi extends ApiAction
         $dataBase64 = !empty($_POST['data']) ? $_POST['data'] : '';
 
 
-        $word = '分析一下照片，提取关键物品，描述一下，并推测一下玩家状态，为玩家提供帮助';
+//        $word = '分析一下照片，提取关键物品，描述一下，并推测一下玩家状态，为玩家提供帮助';
+        $word = '';
+        $word .= '根据照片的场景，提取关键物品或者人物' . "\n"
+            . '描述一下关键物品和人物' . "\n"
+            . '猜测玩家当前的状态，并且询问一下是否需要帮助，例如：是否需要介绍一下？是否需要游戏建议等等';
 //        $img = base64_decode($dataBase64);
         $img = $dataBase64;
 //        file_put_contents('/tmp/camshot_1.log', $img);
