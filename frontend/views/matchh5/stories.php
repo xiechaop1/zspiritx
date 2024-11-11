@@ -756,7 +756,7 @@ $this->title = '故事汇';
             // },
 //             xhrFields: {
 //                 onprogress: function(e) {
-            xhr:xhrOnProgress(function(e){
+            xhr:onprogress(function(e){
              console.log(e);
                                 var data = e.currentTarget.response;
                                 data = data.replace(/\s/g, '');
