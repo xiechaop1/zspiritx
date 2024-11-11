@@ -754,47 +754,44 @@ $this->title = '故事汇';
             //     xhr.overrideMimeType('text/plain; charset=UTF-8'); // 如果是JSON，则为 'application/json'
             //     return xhr;
             // },
-//             xhrFields: {
-//                 onprogress: function(e) {
-            xhr:onprogress(function(e){
-             console.log(e);
-                                var data = e.currentTarget.response;
-                                data = data.replace(/\s/g, '');
-                                // var dataContent = data;
-                                // var dataCon = $.toJSON(dataContent);
-                                // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
-                                // console.log(data);
-                                var cont = $('#cont_' + ts);
-                                var newData = '';
-                                for (var i = oldIdx; i < data.length; i++) {
-                                    var tmpData = data.substring(i, i + 1);
-                                    newData += tmpData;
-                                    if (tmpData == '。' || tmpData == '！' || tmpData == '？') {
-                                        oldIdx = i;
-                                        getAIVoice(newData, i);
-                                        newData = '';
-                                    }
-                                }
-                                $('input[name=doc]').val(data);
-                                printWord();
-                                // var newData = data.substring(nowIdx);
-                                // nowIdx = data.length;
-                                // console.log(nowIdx);
+            xhrFields: {
+                onprogress: function(e) {
+                    console.log(e);
+                    var data = e.currentTarget.response;
+                    data = data.replace(/\s/g, '');
+                    // var dataContent = data;
+                    // var dataCon = $.toJSON(dataContent);
+                    // var ajaxObj = eval("(" + dataCon + ")");//转换后的JSON对象
+                    // console.log(data);
+                    var cont = $('#cont_' + ts);
+                    var newData = '';
+                    for (var i = oldIdx; i < data.length; i++) {
+                        var tmpData = data.substring(i, i + 1);
+                        newData += tmpData;
+                        if (tmpData == '。' || tmpData == '！' || tmpData == '？') {
+                            oldIdx = i;
+                            getAIVoice(newData, i);
+                            newData = '';
+                        }
+                    }
+                    $('input[name=doc]').val(data);
+                    printWord();
+                    // var newData = data.substring(nowIdx);
+                    // nowIdx = data.length;
+                    // console.log(nowIdx);
 
-                                // if (cont.length > 0) {
-                                //     cont.html(data);
-                                //     // playVoice();
-                                // } else {
-                                //     var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
-                                //     $('#topic').append(cont);
-                                // }
-                                oldData = data;
-                                // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
-                                // $('#topic').append(cont);
-            }),
-
-//                 }
-//             },
+                    // if (cont.length > 0) {
+                    //     cont.html(data);
+                    //     // playVoice();
+                    // } else {
+                    //     var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                    //     $('#topic').append(cont);
+                    // }
+                    oldData = data;
+                    // var cont = '<div class="doc_content doc_content_assistant" role="assistant" id="cont_' + ts + '" style="width: 100%;">' + data + '</div>';
+                    // $('#topic').append(cont);
+                }
+            },
             url: '/match/get_stories',
             data: {
                 story_id: story_id,
