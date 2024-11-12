@@ -1852,7 +1852,7 @@ class MatchApi extends ApiAction
         $desc = !empty($this->_post['desc']) ? $this->_post['desc'] : '';
         $oldJson = !empty($this->_post['old']) ? $this->_post['old'] : '';
 
-        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请继续接着完成作文，不用重复之前的内容，不超过50字。';
+        $userTxtExtend = !empty($this->_post['user_txt_extend']) ? $this->_post['user_txt_extend'] : '请续写故事，不用重复之前的内容，不超过50字。';
         $userTxtExtend = '';
 
         $old = json_decode($oldJson, true);

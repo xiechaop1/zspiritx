@@ -140,6 +140,10 @@ class VoiceApi extends ApiAction
 
         $dialogId = !empty($_request['dialog_id']) ? $_request['dialog_id'] : 0;
 
+        $storyModelId= !empty($_request['story_model_id']) ? $_request['story_model_id'] : 0;
+
+
+
         try {
             $needVoice = false;
 
@@ -157,6 +161,17 @@ class VoiceApi extends ApiAction
 
             $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL);
 
+            $roleParams = [];
+            if (!empty($storyModelId)) {
+                $storyModel = StoryModel::findOne()
+                    ->where(['id' => $storyModelId]);
+
+                if (!empty($storyModel->dialog2)) {
+                    $dialog2 = json_decode($storyModel->dialog2, true);
+                    $roleParams = $dialog2;
+                }
+            }
+
 //            var_dump($oldContents);
 
             $params = [
@@ -170,7 +185,7 @@ class VoiceApi extends ApiAction
                 'dialogId' => $dialogId,
             ];
 
-            $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params);
+            $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params, $roleParams);
             return $aiRet;
 
         } catch (\Exception $e) {

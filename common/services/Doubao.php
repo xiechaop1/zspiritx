@@ -50,19 +50,30 @@ class Doubao extends Component
         ],
     ];
 
-    public function talk($userMessage, $oldMessages = [], $params = [], $model = '', $temperature = '') {
+    public function talk($userMessage, $oldMessages = [], $params = [], $roleParams = '', $temperature = '') {
 
-        $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
+        $roleTxt = !empty($roleParams['role']) ? $roleParams['role'] : '';
+        $extMessages = !empty($roleParams['talk_ext']) ? $roleParams['talk_ext'] : [];
+        if (empty($roleTxt)) {
+            $roleTxt = '#角色#' . "\n" . '你是一个温柔的知心姐姐，喜欢读书，学富五车，懂得很多知识，可以回答各种问题';
+        } else {
+            if (!is_array($roleTxt) && strpos($roleTxt, '#角色#') === false) {
+                $roleTxt = '#角色#' . "\n" . $roleTxt;
+            }
+        }
         $simple = [
             'content' => '回答问题',
         ];
-        $extMessages = [
-            '你说话很温柔，适合6-12岁小朋友',
-            '你很贴心，也很会提供情绪价值',
-            '内容不超过500字',
+        if (empty($extMessages)) {
+            $extMessages = [
+                '你说话很温柔，适合6-12岁小朋友',
+                '你很贴心，也很会提供情绪价值',
+//                '内容不超过500字',
 //            '用JSON的形式返回',
 //            '#输出格式#' . json_encode($simple, JSON_UNESCAPED_UNICODE),
-        ];
+            ];
+        }
+        $extMessages[] = '内容不超过500字';
 
         $userId = !empty($params['userId']) ? $params['userId'] : 0;
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
@@ -71,7 +82,7 @@ class Doubao extends Component
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_NORMAL;
 
-        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
+//        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
         $model = $this->model;
         $params['gptModel'] = $model;
