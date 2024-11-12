@@ -691,7 +691,7 @@ $this->title = '故事汇';
             printLock = 0;
             return false;
         }
-        console.log('word: ' + oneWord);
+//         console.log('word: ' + oneWord);
 
         var cont = $('#cont_' + printTs);
         if (cont.length > 0) {
