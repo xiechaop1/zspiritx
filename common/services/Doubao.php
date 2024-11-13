@@ -1155,8 +1155,8 @@ class Doubao extends Component
         $model = !empty($modelParams['model']) ? $modelParams['model'] : $this->model;
         $temperature = !empty($modelParams['temperature']) ? $modelParams['temperature'] : $this->temperature;
 
-        if (!empty($cfg['uri'])) {
-            $uri = $cfg['uri'];
+        if (!empty($cfg->uri)) {
+            $uri = $cfg->uri;
         } else {
             $uri = $this->uri;
         }
