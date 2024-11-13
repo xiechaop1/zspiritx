@@ -160,17 +160,22 @@ $this->title = 'Puzzle';
                         <div class="puzzle_image_item" style="width: <?= $width ?>px; height: <?= $width ?>px;" id="puzzle_image_<?= $ct ?>" lock="<?= $isLock ?>" right_val="<?= !empty($iList[$ct]) ? $ct : '' ?>" val="<?= $ct ?>">
                             <?php
                             if (!empty($iList[$ct])) {
-                                $storyModel = $iList[$ct]['storyModel'];
-                                $smConf = $iList[$ct]['conf'];
-                                if (!empty($smConf['is_lock']) && $smConf['is_lock'] == '1') {
+                                if (!empty($iList[$ct]['storyModel'])) {
+                                    $storyModel = $iList[$ct]['storyModel'];
 
-                                    if (!empty($storyModel->icon)) {
-                                        $showItem = '<img src="' . \common\helpers\Attachment::completeUrl($storyModel->icon, true) . '" class="puzzle_image_img">';
+                                    $smConf = $iList[$ct]['conf'];
+                                    if (!empty($smConf['is_lock']) && $smConf['is_lock'] == '1') {
+
+                                        if (!empty($storyModel->icon)) {
+                                            $showItem = '<img src="' . \common\helpers\Attachment::completeUrl($storyModel->icon, true) . '" class="puzzle_image_img">';
+                                        } else {
+                                            $showItem = $storyModel->story_model_name;
+                                        }
                                     } else {
-                                        $showItem = $storyModel->story_model_name;
+                                        $showItem = '';
                                     }
                                 } else {
-                                    $showItem = '';
+                                    $showItem = $iList[$ct]['word'];
                                 }
                                 echo $showItem;
                             }

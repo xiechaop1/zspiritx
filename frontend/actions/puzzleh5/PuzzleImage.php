@@ -153,6 +153,25 @@ class PuzzleImage extends Action
                 }
             }
         } else {
+            if (!empty($qaOne['selected_json']['selected'])) {
+                $str = $qaOne['selected_json']['selected'];
+            } else {
+                $str = $qaOne['selected_json'];
+            }
+
+            $str = str_replace(chr(13), '', $str);
+            $str = str_replace(chr(10), '', $str);
+            $str = str_replace($qaOne['st_selected'], '', $str);
+            $strLen = mb_strlen($str, 'utf-8');
+            $iList = [];
+            for ($i=0; $i<$strLen; $i++) {
+                $conf = ['val' => $i, 'right_val' => $i];
+                $w = mb_substr($str, $i, 1, 'utf-8');
+                $iList[] = ['word' => $w, 'conf' => $conf];
+                $keyStoryModels[$i] = $w;
+            }
+            shuffle($iList);
+
 
         }
 
