@@ -85,6 +85,31 @@ class Doubao extends Component
 
         $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
+        if (!empty($oldMessages)) {
+            foreach ($oldMessages as $oldMsg) {
+                if (!empty($oldMsg['content'][0]['type']) && $oldMsg['content'][0]['type'] == 'image_url') {
+                    // 需要换一个模型
+                    $cfg = !empty(Yii::$app->zhipuI) ? Yii::$app->zhipuI : [];
+
+                    if (!empty($cfg->apiKey)) {
+                        $this->apiKey = $cfg->apiKey;
+                    }
+
+                    if (!empty($cfg->host)) {
+                        $this->host = $cfg->host;
+                    }
+
+                    if (!empty($cfg->model)) {
+                        $this->model = $cfg->model;
+                    }
+
+                    if (!empty($cfg->temperature)) {
+                        $this->temperature = $cfg->temperature;
+                    }
+                }
+            }
+        }
+
         $model = $this->model;
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
@@ -194,7 +219,7 @@ class Doubao extends Component
         $host = '';
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
-        $params['isFirst'] = GptContent::IS_FIRST_YES;
+//        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $modelParams = [
             'stream' => true,
