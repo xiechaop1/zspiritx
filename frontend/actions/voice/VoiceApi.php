@@ -86,8 +86,9 @@ class VoiceApi extends ApiAction
         $dataBase64 = !empty($_POST['data']) ? $_POST['data'] : '';
 
         if (!empty($storyModelId)) {
-            $storyModel = StoryModels::findOne()
-                ->where(['id' => $storyModelId]);
+            $storyModel = StoryModels::find()
+                ->where(['id' => $storyModelId])
+                ->one();
 
             if (!empty($storyModel->dialog2)) {
                 $dialog2 = json_decode($storyModel->dialog2, true);
@@ -181,8 +182,9 @@ class VoiceApi extends ApiAction
 
             $roleParams = [];
             if (!empty($storyModelId)) {
-                $storyModel = StoryModels::findOne()
-                    ->where(['id' => $storyModelId]);
+                $storyModel = StoryModels::find()
+                    ->where(['id' => $storyModelId])
+                    ->one();
 
                 if (!empty($storyModel->dialog2)) {
                     $dialog2 = json_decode($storyModel->dialog2, true);
