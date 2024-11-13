@@ -78,11 +78,27 @@ class VoiceApi extends ApiAction
         $type = !empty($_request['type']) ? $_request['type'] : '';
 
         $dialogId = !empty($_request['dialog_id']) ? $_request['dialog_id'] : 0;
+        $storyModelId = !empty($_request['story_model_id']) ? $_request['story_model_id'] : 0;
 
         $needVoice = false;
 
         $dataBase64 = !empty($_POST['data']) ? $_POST['data'] : '';
 
+        if (!empty($storyModelId)) {
+            $storyModel = StoryModel::findOne()
+                ->where(['id' => $storyModelId]);
+
+            if (!empty($storyModel->dialog2)) {
+                $dialog2 = json_decode($storyModel->dialog2, true);
+                $roleParams = $dialog2;
+            }
+        }
+
+//            var_dump($oldContents);
+
+        if (empty($senderId) && !empty($storyModelId)) {
+            $senderId = $storyModelId;
+        }
 
 //        $word = '分析一下照片，提取关键物品，描述一下，并推测一下玩家状态，为玩家提供帮助';
         $word = '';
@@ -100,8 +116,8 @@ class VoiceApi extends ApiAction
             . '#格式#描述关键物品和背景知识，给出的判断和建议。【场景：场景类型】' . "\n"
 //            . '并且根据可能存在的问题，给出一些建议' . "\n"
             . '总体不超过200字' . "\n"
-            . '#样例#这是一篇数学作业，其中包括1+1=，2+2=，是数学的基础逻辑计算。需要帮助解析吗？【场景：作业】' . "\n"
-            . '#样例#这像是在遛狗，是柯基狗，这种狗狗的腿比较短，但是很聪明，长相很可爱。需要更详细介绍一下吗？【场景：户外】' . "\n";
+            . '#样例#这是一篇数学作业，其中包括1+1=，2+2=，是数学的基础逻辑计算。需要帮助解析吗？' . "\n"
+            . '#样例#这像是在遛狗，是柯基狗，这种狗狗的腿比较短，但是很聪明，长相很可爱。需要更详细介绍一下吗？' . "\n";
 
 //        $img = base64_decode($dataBase64);
         $img = $dataBase64;
@@ -116,6 +132,7 @@ class VoiceApi extends ApiAction
             'sessionStageId' => $sessionStageId,
             'needVoice' => $needVoice,
             'dialogId' => $dialogId,
+            'senderName' => !empty($storyModel->story_model_name) ? $storyModel->story_model_name : '小灵语',
         ];
 
         // Todo:
@@ -140,7 +157,7 @@ class VoiceApi extends ApiAction
 
         $dialogId = !empty($_request['dialog_id']) ? $_request['dialog_id'] : 0;
 
-        $storyModelId= !empty($_request['story_model_id']) ? $_request['story_model_id'] : 0;
+        $storyModelId = !empty($_request['story_model_id']) ? $_request['story_model_id'] : 0;
 
 
 
@@ -174,6 +191,10 @@ class VoiceApi extends ApiAction
 
 //            var_dump($oldContents);
 
+            if (empty($senderId) && !empty($storyModelId)) {
+                $senderId = $storyModelId;
+            }
+
             $params = [
                 'userId' => $userId,
                 'toUserId' => $userId,
@@ -183,6 +204,7 @@ class VoiceApi extends ApiAction
                 'sessionStageId' => $sessionStageId,
                 'needVoice' => $needVoice,
                 'dialogId' => $dialogId,
+                'senderName' => !empty($storyModel->story_model_name) ? $storyModel->story_model_name : '小灵语',
             ];
 
             $aiRet = Yii::$app->doubao->talk($word, $oldContents, $params, $roleParams);

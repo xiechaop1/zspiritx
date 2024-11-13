@@ -40,6 +40,11 @@ $this->title = '故事汇';
     .play_voice_btn_disable {
         filter: grayscale(100%);
     }
+    .bg-black {
+        background-image: url("../../static/img/match/starback.jpg");
+        background-size: 140% 140%;
+        background-repeat: no-repeat;
+    }
 
     .code-input input {
         width: 55px;

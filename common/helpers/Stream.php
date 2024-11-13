@@ -85,8 +85,13 @@ class Stream
 //                $sentenceClip = str_replace("\r", '', $sentenceClip);
 //                $sentenceClip = str_replace("\t", '', $sentenceClip);
 
+                $senderName = '小灵语';
+                if (!empty($params['senderName'])) {
+                    $senderName = $params['senderName'];
+                }
+
                 $dialogTmp = [
-                    'name' => '小灵语',
+                    'name' => $senderName,
                     'sentence' => $sentenceClip,
                     'to_user' => $userId,
                     'sender_id' => $senderId,
