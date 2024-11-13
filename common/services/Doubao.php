@@ -155,7 +155,9 @@ class Doubao extends Component
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
         $params['isFirst'] = GptContent::IS_FIRST_YES;
 
-        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
+        $cfg = [];
+
+//        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
 //
 //        if (!empty($cfg['apiKey'])) {
 //            $this->apiKey = $cfg['apiKey'];
