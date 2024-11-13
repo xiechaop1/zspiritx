@@ -1236,6 +1236,8 @@ class Doubao extends Component
                 $opts['callback_params'] = $modelParams['callback_params'];
             }
 
+            $opts['needVoice'] = !empty($modelParams['needVoice']) ? $modelParams['needVoice'] : false;
+
         } else {
             $data = array(
 //            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
