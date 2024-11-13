@@ -121,13 +121,13 @@ class Stream
                     $gptModel = !empty($params['gptModel']) ? $params['gptModel'] : '';
                     $isFirst = !empty($params['isFirst']) ? $params['isFirst'] : false;
 
-                    if (!empty($prompt)) {
-                        foreach ($prompt as $idx => $onePrompt) {
-                            if (!empty($onePrompt['content'][0]['image_url']['url']) && strpos(substr($onePrompt['content'][0]['image_url']['url'], 0, 50), 'base64') !== false) {
-                                unset($prompt[$idx]['content'][0]['image_url']['url']);
-                            }
+//                    if (!empty($prompt)) {
+//                        foreach ($prompt as $idx => $onePrompt) {
+//                            if (!empty($onePrompt['content'][0]['image_url']['url']) && strpos(substr($onePrompt['content'][0]['image_url']['url'], 0, 50), 'base64') !== false) {
+//                                unset($prompt[$idx]['content'][0]['image_url']['url']);
+//                            }
                         }
-                    }
+//                    }
 
                     Yii::$app->doubao->saveContentToDb($userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
 
