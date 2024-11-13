@@ -150,6 +150,7 @@ class Doubao extends Component
         ];
 
         $model = 'OpenGVLab/InternVL2-26B';
+        $host = '';
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
         $params['isFirst'] = GptContent::IS_FIRST_YES;
@@ -1028,7 +1029,28 @@ class Doubao extends Component
 
         file_put_contents('/tmp/test_doubao_img_i.log', json_encode($data, JSON_UNESCAPED_UNICODE));
 
-        $response = $this->_call('v1/images/generations', $data, 'POST', true, $opts, false);
+        $cfg = Yii::$app->config->get('zhipuI');
+
+        if (!empty($cfg['apiKey'])) {
+            $this->apiKey = $cfg['apiKey'];
+        }
+
+        if (!empty($cfg['host'])) {
+            $this->host = $cfg['host'];
+        }
+
+        if (!empty($cfg['model'])) {
+            $this->model = $cfg['model'];
+        }
+
+        if (!empty($cfg['temperature'])) {
+            $this->temperature = $cfg['temperature'];
+        }
+
+        $uri = 'api/paas/v4/chat/completions';
+//        $uri = 'v1/images/generations';
+
+        $response = $this->_call($uri, $data, 'POST', true, $opts, false);
 //        var_dump($data);exit;
 //        var_dump($response);exit;
 //        if (!empty($oldMessages)) {
@@ -1047,7 +1069,7 @@ class Doubao extends Component
 
     }
 
-    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true, $modelParams = [], $isStream = false) {
+    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array(), $isJson = true, $modelParams = [], $isStream = false, $cfg = []) {
 
 //        if (empty($roleTxts)) {
 //            $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
@@ -1106,6 +1128,22 @@ class Doubao extends Component
 //        exit;
 //        print_r($messages);
 //        exit;
+
+        if (!empty($cfg['apiKey'])) {
+            $this->apiKey = $cfg['apiKey'];
+        }
+
+        if (!empty($cfg['host'])) {
+            $this->host = $cfg['host'];
+        }
+
+        if (!empty($cfg['model'])) {
+            $this->model = $cfg['model'];
+        }
+
+        if (!empty($cfg['temperature'])) {
+            $this->temperature = $cfg['temperature'];
+        }
 
         $model = !empty($modelParams['model']) ? $modelParams['model'] : $this->model;
         $temperature = !empty($modelParams['temperature']) ? $modelParams['temperature'] : $this->temperature;
@@ -1365,7 +1403,11 @@ class Doubao extends Component
     }
 
     private function _call($interface, $params = array(), $method = 'POST', $isJson = true, $opts = [], $isStream = false) {
-        $url = $this->host . $interface;
+        if (!empty($host)) {
+            $url = $host . $interface;
+        } else {
+            $url = $this->host . $interface;
+        }
 
         $headers = array(
             'Content-Type: application/json',
