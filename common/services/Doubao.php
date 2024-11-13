@@ -1236,7 +1236,7 @@ class Doubao extends Component
                 $opts['callback_params'] = $modelParams['callback_params'];
             }
 
-            $opts['needVoice'] = !empty($modelParams['needVoice']) ? $modelParams['needVoice'] : false;
+            $opts['callback_params']['needVoice'] = !empty($modelParams['needVoice']) ? $modelParams['needVoice'] : false;
 
         } else {
             $data = array(
