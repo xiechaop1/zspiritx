@@ -126,7 +126,7 @@ class Stream
 //                            if (!empty($onePrompt['content'][0]['image_url']['url']) && strpos(substr($onePrompt['content'][0]['image_url']['url'], 0, 50), 'base64') !== false) {
 //                                unset($prompt[$idx]['content'][0]['image_url']['url']);
 //                            }
-                        }
+//                        }
 //                    }
 
                     Yii::$app->doubao->saveContentToDb($userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
