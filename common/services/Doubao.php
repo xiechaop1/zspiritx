@@ -155,6 +155,26 @@ class Doubao extends Component
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
         $params['isFirst'] = GptContent::IS_FIRST_YES;
 
+        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
+//
+//        if (!empty($cfg['apiKey'])) {
+//            $this->apiKey = $cfg['apiKey'];
+//        }
+//
+//        if (!empty($cfg['host'])) {
+//            $this->host = $cfg['host'];
+//        }
+//
+//        if (!empty($cfg['model'])) {
+//            $this->model = $cfg['model'];
+//        }
+//
+//        if (!empty($cfg['temperature'])) {
+//            $this->temperature = $cfg['temperature'];
+//        }
+//
+//        $uri = 'api/paas/v4/chat/completions';
+
         $modelParams = [
             'stream' => true,
             'callback' => ['\common\helpers\Stream', 'streamCallbackToDialogAction'],
@@ -164,7 +184,7 @@ class Doubao extends Component
         ];
 
 
-        $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [], false, $modelParams, true);
+        $ret = $this->chatWithDoubao($msg, $oldMessages, $extMessages, [], false, $modelParams, true, $cfg);
 
 //        $userId = !empty($params['userId']) ? $params['userId'] : 0;
 //        $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
@@ -1029,26 +1049,8 @@ class Doubao extends Component
 
         file_put_contents('/tmp/test_doubao_img_i.log', json_encode($data, JSON_UNESCAPED_UNICODE));
 
-        $cfg = Yii::$app->config->get('zhipuI');
 
-        if (!empty($cfg['apiKey'])) {
-            $this->apiKey = $cfg['apiKey'];
-        }
-
-        if (!empty($cfg['host'])) {
-            $this->host = $cfg['host'];
-        }
-
-        if (!empty($cfg['model'])) {
-            $this->model = $cfg['model'];
-        }
-
-        if (!empty($cfg['temperature'])) {
-            $this->temperature = $cfg['temperature'];
-        }
-
-        $uri = 'api/paas/v4/chat/completions';
-//        $uri = 'v1/images/generations';
+        $uri = 'v1/images/generations';
 
         $response = $this->_call($uri, $data, 'POST', true, $opts, false);
 //        var_dump($data);exit;
