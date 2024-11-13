@@ -137,11 +137,20 @@ class Doubao extends Component
 //        ];
         $extMessages = [];
 
+        // 把Base64图片数据转换为图片，并落地
+        $imageBase64 = str_replace('data:image/jpeg;base64,', '', $imageBase64);
+        $imageBase64 = str_replace(' ', '+', $imageBase64);
+        $imageBase64 = base64_decode($imageBase64);
+        $imgFile = '/tmp/img/' . time() . '.jpg';
+        file_put_contents($imgFile, $imageBase64);
+        $imgUrl = 'https://h5.zspiritx.com.cn/' . $imgFile;
+
         $msg = [
             [
                 'type' => 'image_url',
                 'image_url' => [
-                    'url' => 'data:image/jpeg;base64,' . $imageBase64,
+//                    'url' => 'data:image/jpeg;base64,' . $imageBase64,
+                    'url' => $imgUrl,
                 ],
             ],
             [
@@ -244,8 +253,8 @@ class Doubao extends Component
                         foreach ($oldPrompts as $oldPrompt) {
                             if (!empty($oldPrompt['role'])
                                 && $oldPrompt['role'] != 'system'
-                                && !empty($oldPrompt['content'][0]['type'])
-                                && $oldPrompt['content'][0]['type'] != 'image_url'
+//                                && !empty($oldPrompt['content'][0]['type'])
+//                                && $oldPrompt['content'][0]['type'] != 'image_url'
                             ) {
                                 $oldContents[] = $oldPrompt;
                             }
