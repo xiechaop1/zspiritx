@@ -174,7 +174,7 @@ class Doubao extends Component
 //        $uri = 'api/paas/v4/chat/completions';
 //
 //        $cfg['uri'] = $uri;
-        $model = empty($model) ? 'OpenGVLab/InternVL2-26B' : $model;
+        $model = empty($this->model) ? 'OpenGVLab/InternVL2-26B' : $this->model;
         $host = '';
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
