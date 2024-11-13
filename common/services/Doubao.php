@@ -157,24 +157,24 @@ class Doubao extends Component
         $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $cfg = [];
-
+        $cfg = !empty(Yii::$app->zhipuI) ? Yii::$app->zhipuI : [];
 //        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
 //
-//        if (!empty($cfg['apiKey'])) {
-//            $this->apiKey = $cfg['apiKey'];
-//        }
-//
-//        if (!empty($cfg['host'])) {
-//            $this->host = $cfg['host'];
-//        }
-//
-//        if (!empty($cfg['model'])) {
-//            $this->model = $cfg['model'];
-//        }
-//
-//        if (!empty($cfg['temperature'])) {
-//            $this->temperature = $cfg['temperature'];
-//        }
+        if (!empty($cfg['apiKey'])) {
+            $this->apiKey = $cfg['apiKey'];
+        }
+
+        if (!empty($cfg['host'])) {
+            $this->host = $cfg['host'];
+        }
+
+        if (!empty($cfg['model'])) {
+            $this->model = $cfg['model'];
+        }
+
+        if (!empty($cfg['temperature'])) {
+            $this->temperature = $cfg['temperature'];
+        }
 //
 //        $uri = 'api/paas/v4/chat/completions';
 //
