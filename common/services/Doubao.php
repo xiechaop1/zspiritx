@@ -141,13 +141,16 @@ class Doubao extends Component
         $imageBase64 = str_replace('data:image/jpeg;base64,', '', $imageBase64);
         $imageBase64 = str_replace(' ', '+', $imageBase64);
         $imageBase64 = base64_decode($imageBase64);
-        $imgDir = Yii::getAlias('@webroot') . '/tmp/img/' . Date('Y/m/d');
-        if (!is_dir($imgDir)) {
-            mkdir($imgDir, 0777, true);
+        $imgDirRoot = Yii::getAlias('@webroot');
+        $imgDir = '/tmp/img/' . Date('Y/m/d');
+        $tmpDir = $imgDirRoot. $imgDir;
+        if (!is_dir($tmpDir)) {
+            mkdir($tmpDir, 0777, true);
         }
-        $imgFile = $imgDir . '/' . time() . rand(1000,9999) . '.jpg';
+        $imgFileName = '/' . time() . rand(1000,9999) . '.jpg';
+        $imgFile = $tmpDir . $imgFileName;
         file_put_contents($imgFile, $imageBase64);
-        $imgUrl = 'https://h5.zspiritx.com.cn/' . $imgFile;
+        $imgUrl = 'https://h5.zspiritx.com.cn/' . $imgDir . $imgFileName;
 
         $msg = [
             [
