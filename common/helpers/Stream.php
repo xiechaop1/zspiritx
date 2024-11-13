@@ -55,6 +55,8 @@ class Stream
     public static function streamCallbackToDialogAction($data, $params = []) {
         file_put_contents('/tmp/streamCallbackToDialogAction.log', 'old: ' . $data . PHP_EOL, FILE_APPEND);
         $dataJson = str_replace('data: ', '', $data);
+        $dataJson = str_replace('[DONE]', '', $dataJson);
+        $dataJson = str_replace("\n", '', $dataJson);
 //        file_put_contents('/tmp/streamCallbackToDialogAction.log', $dataJson . PHP_EOL, FILE_APPEND);
         $dataArray = json_decode($dataJson, true);
 
