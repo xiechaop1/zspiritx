@@ -117,6 +117,7 @@ class Doubao extends Component
         $model = $this->model;
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
+        $params['needVoice'] = true;
 //        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $modelParams = [
@@ -224,6 +225,7 @@ class Doubao extends Component
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
 //        $params['isFirst'] = GptContent::IS_FIRST_YES;
+        $params['needVoice'] = true;
 
         $modelParams = [
             'stream' => true,
@@ -231,7 +233,6 @@ class Doubao extends Component
             'callback_params' => $params,
 //            'model' => 'Qwen/Qwen2.5-Image-72B-Instruct',
             'model' => $model,
-            'needVoice' => true,
         ];
 
 
@@ -1236,7 +1237,10 @@ class Doubao extends Component
                 $opts['callback_params'] = $modelParams['callback_params'];
             }
 
-            $opts['callback_params']['needVoice'] = !empty($modelParams['needVoice']) ? $modelParams['needVoice'] : false;
+            if (!empty($modelParams['needVoice'])) {
+                $opts['callback_params']['needVoice'] = $modelParams['needVoice'];
+            }
+//            $opts['callback_params']['needVoice'] = !empty($modelParams['needVoice']) ? $modelParams['needVoice'] : false;
 
         } else {
             $data = array(
