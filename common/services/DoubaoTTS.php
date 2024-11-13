@@ -77,66 +77,6 @@ class DoubaoTTS extends Component
         return $ret;
     }
 
-    public function chatWithDoubao($userMessage, $oldMessages = [], $templateContents = array(), $roleTxts = array()) {
-
-        if (empty($roleTxts)) {
-            $roleTxt = '#角色' . "\n" . '你是一个教育方面的老师，你负责出题，解答和解析';
-            $templateMessages[] = array('role' => 'system', 'content' => $roleTxt);
-        } else {
-            foreach ($roleTxts as $roleTxt) {
-                $templateMessages[] = array('role' => 'system', 'content' => $roleTxt);
-            }
-        }
-        $messages = array(
-//            array('role' => 'system', 'content' => $roleTxt),
-            array('role' => 'user', 'content' => $userMessage)
-        );
-
-//        $templateMessages = array();
-        if (!empty($templateContents)) {
-            foreach ($templateContents as $templateContent) {
-                $templateMessages[] = array('role' => 'assistant', 'content' => $templateContent);
-            }
-        }
-
-        if (!empty($oldMessages)) {
-            array_unshift($oldMessages, ['role' => 'system', 'content' => '#历史消息']);
-            $messages = array_merge($messages, $oldMessages);
-        }
-        $messages = array_merge($templateMessages, $messages);
-        Yii::info('doubao messages: ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
-//        if (!empty($oldMessages)) {
-//            var_dump($messages);exit;
-//        }
-//        var_dump($messages);
-//        print_r($messages);
-//        exit;
-
-        $data = array(
-//            'model' => 'ep-20240627053837-vs8wn',  // 或者使用其他模型
-//            'model' => 'ep-20240628070258-6m88j',
-            'model' => 'ep-20240729104951-snm9z',
-            'messages' => $messages,
-            'temperature' => 0.7,
-//            'stream' => false,
-        );
-
-//        Yii::info('chatGPT data: ' . json_encode($data));
-
-        $response = $this->_call('/v3/chat/completions', $data, 'POST');
-//        if (!empty($oldMessages)) {
-//            print_r($oldMessages);
-//            print_r($messages);
-//            print_r($response);
-//        }
-        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
-//        file_put_contents('/tmp/doubao.tmp', json_encode($response, JSON_UNESCAPED_UNICODE));
-//        var_dump($response);
-//        exit;
-
-        return json_decode($response, true);
-    }
-
     private function _call($interface, $params = array(), $method = 'POST') {
         $url = self::HOST . $interface;
 
