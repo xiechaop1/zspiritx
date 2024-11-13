@@ -37,6 +37,7 @@ class Doubao extends Component
     public $model = '';
     public $temperature = '';
     public $host = '';
+    public $uri = '';
 
     private $_prompt = [];
 
@@ -157,25 +158,27 @@ class Doubao extends Component
 
         $cfg = [];
 
-//        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
-//
-//        if (!empty($cfg['apiKey'])) {
-//            $this->apiKey = $cfg['apiKey'];
-//        }
-//
-//        if (!empty($cfg['host'])) {
-//            $this->host = $cfg['host'];
-//        }
-//
-//        if (!empty($cfg['model'])) {
-//            $this->model = $cfg['model'];
-//        }
-//
-//        if (!empty($cfg['temperature'])) {
-//            $this->temperature = $cfg['temperature'];
-//        }
-//
-//        $uri = 'api/paas/v4/chat/completions';
+        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
+
+        if (!empty($cfg['apiKey'])) {
+            $this->apiKey = $cfg['apiKey'];
+        }
+
+        if (!empty($cfg['host'])) {
+            $this->host = $cfg['host'];
+        }
+
+        if (!empty($cfg['model'])) {
+            $this->model = $cfg['model'];
+        }
+
+        if (!empty($cfg['temperature'])) {
+            $this->temperature = $cfg['temperature'];
+        }
+
+        $uri = 'api/paas/v4/chat/completions';
+
+        $cfg['uri'] = $uri;
 
         $modelParams = [
             'stream' => true,
@@ -1152,6 +1155,13 @@ class Doubao extends Component
         $model = !empty($modelParams['model']) ? $modelParams['model'] : $this->model;
         $temperature = !empty($modelParams['temperature']) ? $modelParams['temperature'] : $this->temperature;
 
+        if (!empty($cfg['uri'])) {
+            $uri = $cfg['uri'];
+        } else {
+            $uri = $this->uri;
+        }
+        $uri = empty($uri) ? '/v1/chat/completions' : $uri;
+
         $opts = [];
 
         if ($isStream) {
@@ -1218,7 +1228,7 @@ class Doubao extends Component
 
         // Todo: 替换掉Doubao接口
 //        $response = $this->_call('/v3/chat/completions', $data, 'POST');
-        $response = $this->_call('/v1/chat/completions', $data, 'POST', $isJson, $opts, $isStream);
+        $response = $this->_call($uri, $data, 'POST', $isJson, $opts, $isStream);
 //        var_dump($data);exit;
 //        $response = $this->_call('/beta/chat/completions', $data, 'POST');
 //        var_dump($response);exit;

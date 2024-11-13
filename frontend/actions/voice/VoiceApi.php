@@ -13,6 +13,7 @@ use common\extensions\Uploader;
 use common\helpers\Common;
 use common\models\Actions;
 use common\models\GptContent;
+use common\models\StoryModels;
 use frontend\actions\ApiAction;
 use yii;
 
@@ -85,7 +86,7 @@ class VoiceApi extends ApiAction
         $dataBase64 = !empty($_POST['data']) ? $_POST['data'] : '';
 
         if (!empty($storyModelId)) {
-            $storyModel = StoryModel::findOne()
+            $storyModel = StoryModels::findOne()
                 ->where(['id' => $storyModelId]);
 
             if (!empty($storyModel->dialog2)) {
@@ -180,7 +181,7 @@ class VoiceApi extends ApiAction
 
             $roleParams = [];
             if (!empty($storyModelId)) {
-                $storyModel = StoryModel::findOne()
+                $storyModel = StoryModels::findOne()
                     ->where(['id' => $storyModelId]);
 
                 if (!empty($storyModel->dialog2)) {
