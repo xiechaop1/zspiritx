@@ -83,12 +83,12 @@ class Doubao extends Component
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_NORMAL;
 
-//        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
+        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
         $model = $this->model;
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
-        $params['isFirst'] = GptContent::IS_FIRST_YES;
+//        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $modelParams = [
             'stream' => true,
