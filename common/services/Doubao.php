@@ -150,35 +150,35 @@ class Doubao extends Component
             ]
         ];
 
-        $model = 'OpenGVLab/InternVL2-26B';
-        $host = '';
-        $params['gptModel'] = $model;
-        $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
-        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $cfg = [];
         $cfg = !empty(Yii::$app->zhipuI) ? Yii::$app->zhipuI : [];
 //        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
 //
-        if (!empty($cfg['apiKey'])) {
-            $this->apiKey = $cfg['apiKey'];
+        if (!empty($cfg->apiKey)) {
+            $this->apiKey = $cfg->apiKey;
         }
 
-        if (!empty($cfg['host'])) {
-            $this->host = $cfg['host'];
+        if (!empty($cfg->host)) {
+            $this->host = $cfg->host;
         }
 
-        if (!empty($cfg['model'])) {
-            $this->model = $cfg['model'];
+        if (!empty($cfg->model)) {
+            $this->model = $cfg->model;
         }
 
-        if (!empty($cfg['temperature'])) {
-            $this->temperature = $cfg['temperature'];
+        if (!empty($cfg->temperature)) {
+            $this->temperature = $cfg->temperature;
         }
 //
 //        $uri = 'api/paas/v4/chat/completions';
 //
 //        $cfg['uri'] = $uri;
+        $model = empty($model) ? 'OpenGVLab/InternVL2-26B' : $model;
+        $host = '';
+        $params['gptModel'] = $model;
+        $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
+        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $modelParams = [
             'stream' => true,
@@ -1136,20 +1136,20 @@ class Doubao extends Component
 //        print_r($messages);
 //        exit;
 
-        if (!empty($cfg['apiKey'])) {
-            $this->apiKey = $cfg['apiKey'];
+        if (!empty($cfg->apiKey)) {
+            $this->apiKey = $cfg->apiKey;
         }
 
-        if (!empty($cfg['host'])) {
-            $this->host = $cfg['host'];
+        if (!empty($cfg->host)) {
+            $this->host = $cfg->host;
         }
 
-        if (!empty($cfg['model'])) {
-            $this->model = $cfg['model'];
+        if (!empty($cfg->model)) {
+            $this->model = $cfg->model;
         }
 
-        if (!empty($cfg['temperature'])) {
-            $this->temperature = $cfg['temperature'];
+        if (!empty($cfg->temperature)) {
+            $this->temperature = $cfg->temperature;
         }
 
         $model = !empty($modelParams['model']) ? $modelParams['model'] : $this->model;
