@@ -85,11 +85,13 @@ class Doubao extends Component
 
         $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
+        $cfg = [];
+
         if (!empty($oldMessages)) {
             foreach ($oldMessages as $oldMsg) {
                 if (!empty($oldMsg['content'][0]['type']) && $oldMsg['content'][0]['type'] == 'image_url') {
                     // 需要换一个模型
-                    $cfg = !empty(Yii::$app->zhipuI) ? Yii::$app->zhipuI : [];
+                    $cfg = !empty(Yii::$app->imageModel) ? Yii::$app->imageModel : [];
 
                     if (!empty($cfg->apiKey)) {
                         $this->apiKey = $cfg->apiKey;
@@ -106,6 +108,8 @@ class Doubao extends Component
                     if (!empty($cfg->temperature)) {
                         $this->temperature = $cfg->temperature;
                     }
+
+                    break;
                 }
             }
         }
@@ -121,7 +125,7 @@ class Doubao extends Component
             'callback_params' => $params,
         ];
 
-        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, true);
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false, $modelParams, true, $cfg);
 
 
 //        $prompt = $this->_prompt;
@@ -193,7 +197,7 @@ class Doubao extends Component
 
 
         $cfg = [];
-        $cfg = !empty(Yii::$app->zhipuI) ? Yii::$app->zhipuI : [];
+        $cfg = !empty(Yii::$app->imageModel) ? Yii::$app->imageModel : [];
 //        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
 //
         if (!empty($cfg->apiKey)) {
@@ -227,6 +231,7 @@ class Doubao extends Component
             'callback_params' => $params,
 //            'model' => 'Qwen/Qwen2.5-Image-72B-Instruct',
             'model' => $model,
+            'needVoice' => true,
         ];
 
 
