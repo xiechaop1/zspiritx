@@ -141,7 +141,7 @@ class Doubao extends Component
         $imageBase64 = str_replace('data:image/jpeg;base64,', '', $imageBase64);
         $imageBase64 = str_replace(' ', '+', $imageBase64);
         $imageBase64 = base64_decode($imageBase64);
-        $imgFile = '/tmp/img/' . time() . '.jpg';
+        $imgFile = '/tmp/img/' . Date('Y/m/d') . '/' . time() . '.jpg';
         file_put_contents($imgFile, $imageBase64);
         $imgUrl = 'https://h5.zspiritx.com.cn/' . $imgFile;
 
