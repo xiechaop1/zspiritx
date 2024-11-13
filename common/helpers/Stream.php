@@ -66,7 +66,7 @@ class Stream
         $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
         $dialogId = !empty($params['dialogId']) ? $params['dialogId'] : 0;
 
-//        file_put_contents('/tmp/streamCallbackToDialogAction.log', var_export($dataArray, true), FILE_APPEND);
+        file_put_contents('/tmp/streamCallbackToDialogAction.log', var_export($dataArray, true), FILE_APPEND);
         if (isset($dataArray['choices'][0]['delta']['content'])
             || !empty($dataArray['choices'][0]['finish_reason'])
         ) {
