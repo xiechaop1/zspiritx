@@ -158,27 +158,27 @@ class Doubao extends Component
 
         $cfg = [];
 
-        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
-
-        if (!empty($cfg['apiKey'])) {
-            $this->apiKey = $cfg['apiKey'];
-        }
-
-        if (!empty($cfg['host'])) {
-            $this->host = $cfg['host'];
-        }
-
-        if (!empty($cfg['model'])) {
-            $this->model = $cfg['model'];
-        }
-
-        if (!empty($cfg['temperature'])) {
-            $this->temperature = $cfg['temperature'];
-        }
-
-        $uri = 'api/paas/v4/chat/completions';
-
-        $cfg['uri'] = $uri;
+//        $cfg = !empty(Yii::$app->params['zhipuI']) ? Yii::$app->params['zhipuI'] : [];
+//
+//        if (!empty($cfg['apiKey'])) {
+//            $this->apiKey = $cfg['apiKey'];
+//        }
+//
+//        if (!empty($cfg['host'])) {
+//            $this->host = $cfg['host'];
+//        }
+//
+//        if (!empty($cfg['model'])) {
+//            $this->model = $cfg['model'];
+//        }
+//
+//        if (!empty($cfg['temperature'])) {
+//            $this->temperature = $cfg['temperature'];
+//        }
+//
+//        $uri = 'api/paas/v4/chat/completions';
+//
+//        $cfg['uri'] = $uri;
 
         $modelParams = [
             'stream' => true,
