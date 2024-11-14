@@ -47,7 +47,8 @@ class DoubaoTTS extends Component
                 'uid'   => $userId
             ],
             'audio' => [
-                'voice_type' => 'zh_female_linjianvhai_moon_bigtts',
+//                'voice_type' => 'zh_female_linjianvhai_moon_bigtts',
+                'voice_type' => 'BV051_streaming',
                 'encoding' => 'mp3',
                 'speed_ratio' => 1.0,
             ],
