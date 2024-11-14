@@ -29,6 +29,15 @@ $this->title = $storyMatch->match_name;
 
 ?>
 <style>
+    .bg-black {
+        background-color: white;
+        background-image: url("../../static/img/match/knockback.png");
+        background-size: 100%;
+        /*background-size: cover;*/
+        background-repeat: no-repeat;
+        background-position: bottom;
+    }
+
     .code-input {
         display: flex;
     }
