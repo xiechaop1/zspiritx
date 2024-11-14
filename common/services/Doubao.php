@@ -118,7 +118,7 @@ class Doubao extends Component
         $model = $this->model;
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
-        $params['needVoice'] = true;
+//        $params['needVoice'] = true;
 //        $params['isFirst'] = GptContent::IS_FIRST_YES;
 
         $modelParams = [
@@ -226,7 +226,7 @@ class Doubao extends Component
         $params['gptModel'] = $model;
         $params['msgClass'] = GptContent::MSG_CLASS_NORMAL;
 //        $params['isFirst'] = GptContent::IS_FIRST_YES;
-        $params['needVoice'] = true;
+//        $params['needVoice'] = true;
 
         $modelParams = [
             'stream' => true,
