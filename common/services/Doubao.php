@@ -40,6 +40,7 @@ class Doubao extends Component
     public $uri = '';
 
     private $_prompt = [];
+    private $_msgId = '';
 
 
     const ROLE_GENERATE_SUBJECT = '你是一个小灵镜，负责出题和解答';
@@ -410,7 +411,12 @@ class Doubao extends Component
         $gptRet = $this->chatWithDoubao($userMessage, $oldContents, $extMessages, [$roleTxt], false, $modelParams);
 
         $prompt = $this->_prompt;
-        $this->saveContentToDb($userId, $toUserId, $gptRet, $prompt, $msgClass, 0, $storyId, $this->model);
+        if (empty($this->_msgId)) {
+            $this->_msgId = $msgId = md5(json_encode($this->_prompt, true) . time());
+        } else {
+            $msgId = $this->_msgId;
+        }
+        $this->saveContentToDb($msgId, $userId, $toUserId, $gptRet, $prompt, $msgClass, 0, $storyId, $this->model);
 
         if (!is_array($gptRet) && !\common\helpers\Common::isJson($gptRet)) {
             $ret['content'] = $gptRet;
@@ -539,7 +545,12 @@ class Doubao extends Component
         }
 
         $prompt = $this->_prompt;
-        $this->saveContentToDb($userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
+        if (empty($this->_msgId)) {
+            $this->_msgId = $msgId = md5(json_encode($this->_prompt, true) . time());
+        } else {
+            $msgId = $this->_msgId;
+        }
+        $this->saveContentToDb($msgId, $userId, $toUserId, $ret, $prompt, $msgClass, 0, $storyId, $this->model);
 
         return $ret;
 
@@ -1175,6 +1186,7 @@ class Doubao extends Component
 //        $this->_prompt = $messages;
 
         $messages = $this->_genPrompt($userMessage, $oldMessages, $templateContents, $roleTxts);
+        $this->_msgId = $msgId = md5(json_encode($messages, JSON_UNESCAPED_UNICODE) . microtime());
 //        if (!empty($oldMessages)) {
 //            var_dump($messages);exit;
 //        }
@@ -1239,6 +1251,10 @@ class Doubao extends Component
 
             if (!empty($modelParams['needVoice'])) {
                 $opts['callback_params']['needVoice'] = $modelParams['needVoice'];
+            }
+
+            if (!empty($msgId)) {
+                $opts['callback_params']['msgId'] = $msgId;
             }
 //            $opts['callback_params']['needVoice'] = !empty($modelParams['needVoice']) ? $modelParams['needVoice'] : false;
 
@@ -1399,19 +1415,29 @@ class Doubao extends Component
         }
     }
 
-    public function saveContentToDb($userId, $toUserId, $content, $prompt = [], $msgClass = GptContent::MSG_CLASS_NORMAL, $senderId = 0, $storyId = 0, $gptModel = '', $isFirst = GptContent::IS_FIRST_UNKNOWN, $msgType = GptContent::MSG_TYPE_TEXT) {
+    public function saveContentToDb($msgId, $userId, $toUserId, $content, $prompt = [], $msgClass = GptContent::MSG_CLASS_NORMAL, $senderId = 0, $storyId = 0, $gptModel = '', $isFirst = GptContent::IS_FIRST_UNKNOWN, $msgType = GptContent::MSG_TYPE_TEXT) {
         try {
-            $model = new GptContent();
-            $model->user_id = $userId;
-            $model->to_user_id = $toUserId;
+
+            $model = GptContent::find()
+                ->where([
+                    'msg_id' => $msgId,
+                ])
+                ->one();
+
+            if (empty($model)) {
+                $model = new GptContent();
+                $model->user_id = $userId;
+                $model->to_user_id = $toUserId;
+                $model->msg_type = $msgType;
+                $model->msg_class = $msgClass;
+                $model->gpt_model = $gptModel;
+                $model->prompt = json_encode($prompt, JSON_UNESCAPED_UNICODE);
+                $model->sender_id = $senderId;
+                $model->story_id = $storyId;
+                $model->is_first = $isFirst;
+            }
             $model->content = json_encode($content, JSON_UNESCAPED_UNICODE);
-            $model->msg_type = $msgType;
-            $model->msg_class = $msgClass;
-            $model->gpt_model = $gptModel;
-            $model->prompt = json_encode($prompt, JSON_UNESCAPED_UNICODE);
-            $model->sender_id = $senderId;
-            $model->story_id = $storyId;
-            $model->is_first = $isFirst;
+
             $model->save();
         } catch (\Exception $e) {
             throw $e;

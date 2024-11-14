@@ -30,7 +30,7 @@ class Stream
             echo $dataArray['choices'][0]['delta']['content'] . str_repeat('        ', 128);
 //            echo $dataArray['choices'][0]['delta']['content'] . ' 111';
         }
-        if (!empty($dataArray['choices'][0]['finish_reason'])) {
+//        if (!empty($dataArray['choices'][0]['finish_reason'])) {
             if (!empty($params) && $params['need_save'] == true) {
                 $userId = !empty($params['userId']) ? $params['userId'] : 0;
                 $toUserId = !empty($params['toUserId']) ? $params['toUserId'] : 0;
@@ -41,10 +41,11 @@ class Stream
                 $storyId = !empty($params['storyId']) ? $params['storyId'] : 0;
                 $gptModel = !empty($params['gptModel']) ? $params['gptModel'] : '';
                 $isFirst = !empty($params['isFirst']) ? $params['isFirst'] : false;
+                $msgId = !empty($params['msgId']) ? $params['msgId'] : '';
 
-                Yii::$app->doubao->saveContentToDb($userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
+                Yii::$app->doubao->saveContentToDb($msgId, $userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
             }
-        }
+//        }
 //        else {
 //            print_r($dataArray);
 //        }
@@ -116,13 +117,14 @@ class Stream
                 Yii::$app->act->addWithoutTag($sessionId, $sessionStageId, $storyId, $userId, $dialogArr, Actions::ACTION_TYPE_DIALOG);
                 self::$dialogTmpTxt = mb_substr(self::$dialogTmpTxt, self::$dialogTxtMaxLength, null, 'UTF8');
 
-                if (!empty($dataArray['choices'][0]['finish_reason'])) {
+//                if (!empty($dataArray['choices'][0]['finish_reason'])) {
                     $toUserId = $userId;
                     $content = self::$dialogTxt;
                     $prompt = !empty($params['prompt']) ? $params['prompt'] : '';
                     $msgClass = !empty($params['msgClass']) ? $params['msgClass'] : 0;
                     $gptModel = !empty($params['gptModel']) ? $params['gptModel'] : '';
                     $isFirst = !empty($params['isFirst']) ? $params['isFirst'] : false;
+                    $msgId = !empty($params['msgId']) ? $params['msgId'] : '';
 
 //                    if (!empty($prompt)) {
 //                        foreach ($prompt as $idx => $onePrompt) {
@@ -132,9 +134,9 @@ class Stream
 //                        }
 //                    }
 
-                    Yii::$app->doubao->saveContentToDb($userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
+                    Yii::$app->doubao->saveContentToDb($msgId, $userId, $toUserId, $content, $prompt, $msgClass, $senderId, $storyId, $gptModel, $isFirst);
 
-                }
+//                }
 
             }
 //            echo $dataArray['choices'][0]['delta']['content'] . ' 111';

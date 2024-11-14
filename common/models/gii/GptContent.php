@@ -25,7 +25,7 @@ class GptContent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gpt_model',  ], 'string'],
+            [['gpt_model', 'msg_id', ], 'string'],
             [['user_id', 'sender_id', 'to_user_id', 'story_id', 'msg_type', 'msg_class', 'is_first', ], 'integer'],
             [['content', 'prompt'], 'string'],
             [['status', 'is_delete', 'created_at', 'updated_at',], 'integer'],
