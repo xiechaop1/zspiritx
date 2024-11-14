@@ -34,6 +34,12 @@ $this->title = '消息';
         float: left;
         width: 120px;
     }
+    .bg-black {
+        background-image: url("../../static/img/match/raceback.jpg");
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: bottom;
+    }
 </style>
 <input type="hidden" name="match_id" value="<?= $matchId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">

@@ -29,6 +29,14 @@ $this->title = '练习赛';
 
 ?>
 <style>
+    .bg-black {
+        background-color: white;
+        background-image: url("../../static/img/match/raceback1.png");
+        background-size: 100%;
+        /*background-size: cover;*/
+        background-repeat: no-repeat;
+        background-position: bottom;
+    }
     .answer-tag-word {
         position: relative;
         margin-left: 80px;
