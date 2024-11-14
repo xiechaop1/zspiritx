@@ -277,7 +277,7 @@ class Doubao extends Component
     }
 
     public function getOldContents($userId, $toUserId, $senderId = 0, $msgClass = GptContent::MSG_CLASS_NORMAL, $needFirst = false) {
-        $beginTime = strtotime('-5 minute');
+        $beginTime = strtotime('-2 minute');
         $limit = 3;
         if ($needFirst) {
             $lastFirst = $this->getContentsFromDb($userId, $toUserId, $senderId, $msgClass, 0, $beginTime, 0, $limit, 0);
