@@ -29,6 +29,12 @@ $this->title = $storyMatch->match_name;
 
 ?>
 <style>
+    .bg-black {
+        background-image: url("../../static/img/match/bookback1.jpg");
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+
     .answer-tag-word {
         position: relative;
         margin-left: 80px;
@@ -175,7 +181,7 @@ $this->title = $storyMatch->match_name;
 <input type="hidden" name="level" value="<?= $level ?>">
 
 <input type="hidden" name="rival_speed_rate" id="rival_speed_rate" value="1">
-<div class="w-100 m-auto">
+<div class="w-100 m-auto backimg">
     <audio controls id="audio_right" class="hide">
         <source src="../../static/audio/qa_right.mp3" type="audio/mpeg">
         您的浏览器不支持 audio 元素。
