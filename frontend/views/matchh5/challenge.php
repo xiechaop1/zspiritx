@@ -33,6 +33,7 @@ $this->title = $storyMatch->match_name;
         background-image: url("../../static/img/match/bookback1.jpg");
         background-size: 100%;
         background-repeat: no-repeat;
+        background-position: bottom;
     }
 
     .answer-tag-word {
