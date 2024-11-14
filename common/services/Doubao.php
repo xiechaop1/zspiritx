@@ -1435,6 +1435,7 @@ class Doubao extends Component
                 $model->sender_id = $senderId;
                 $model->story_id = $storyId;
                 $model->is_first = $isFirst;
+                $model->msg_id = $msgId;
             }
             $model->content = json_encode($content, JSON_UNESCAPED_UNICODE);
 
