@@ -123,7 +123,7 @@ class Stream
                     $prompt = !empty($params['prompt']) ? $params['prompt'] : '';
                     $msgClass = !empty($params['msgClass']) ? $params['msgClass'] : 0;
                     $gptModel = !empty($params['gptModel']) ? $params['gptModel'] : '';
-                    $isFirst = !empty($params['isFirst']) ? $params['isFirst'] : false;
+                    $isFirst = !empty($params['isFirst']) ? $params['isFirst'] : GptContent::IS_FIRST_UNKNOWN;
                     $msgId = !empty($params['msgId']) ? $params['msgId'] : '';
 
 //                    if (!empty($prompt)) {
