@@ -34,17 +34,17 @@ $this->title = '消息';
         float: left;
         width: 120px;
     }
-    .bg-black {
-        background-image: url("../../static/img/match/raceback.jpg");
-        background-size: 100%;
-        background-repeat: no-repeat;
-        background-position: bottom;
-    }
+    /*.bg-black {*/
+    /*    background-image: url("../../static/img/match/raceback.jpg");*/
+    /*    background-size: 140%;*/
+    /*    background-repeat: no-repeat;*/
+    /*}*/
 </style>
 <input type="hidden" name="match_id" value="<?= $matchId ?>">
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <input type="hidden" name="user_id" value="<?= $userId ?>">
 <input type="hidden" name="join_expire_time" value="<?= !empty($storyMatch->join_expire_time) ? $storyMatch->join_expire_time : 0 ?>">
+<input type="hidden" name="subj_source" value="<?= !empty($storyMatchProp['subj_source']) ? $storyMatchProp['subj_source'] : 'db' ?>">
 
 <div class="w-100 m-auto">
     <!--组队倒计时时间-->
@@ -60,7 +60,7 @@ $this->title = '消息';
 <!---->
 <!--    </div>-->
 
-    <div class="p-20 bg-black">
+    <div class="p-20 bg-black1">
         <div class="match-circle m-t-50">
             <div class="match-circle1">
                 <div class="match-circle2">
@@ -165,9 +165,15 @@ $this->title = '消息';
             comMatch();
         });
 
-        // setTimeout(function(){
+        var subjSource = $('input[name="subj_source"]').val();
+
+        if (subjSource == 'db') {
+
+
+            // setTimeout(function(){
             genSubjects();
-        // }, 500);
+            // }, 500);
+        }
     };
 
     function comMatch() {

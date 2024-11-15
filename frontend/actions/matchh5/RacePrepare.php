@@ -106,7 +106,8 @@ class RacePrepare extends Action
                         'story_id' => $storyId,
                         'story_match_status' => [
                             StoryMatch::STORY_MATCH_STATUS_PREPARE,
-                            StoryMatch::STORY_MATCH_STATUS_MATCHING
+                            StoryMatch::STORY_MATCH_STATUS_MATCHING,
+                            StoryMatch::STORY_MATCH_STATUS_PLAYING
                         ],
                     ])
                     ->one();
@@ -390,6 +391,9 @@ class RacePrepare extends Action
 
         $msg = '您的比赛准备就绪，准备开始吧！';
 
+        $tmpStoryMatchProp = json_decode($storyMatch->story_match_prop, true);
+
+
         return $this->controller->render('race_prepare', [
             'params'        => $_GET,
             'userId'        => $userId,
@@ -397,6 +401,7 @@ class RacePrepare extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'storyMatch'   => $storyMatch,
+            'storyMatchProp' => $tmpStoryMatchProp,
             'qaId'          => $qaId,
             'matchId'      => $matchId,
             'answerType'    => 2,
