@@ -91,59 +91,89 @@ class KnockoutPrepare extends Action
 
         if (empty($matchId)) {
             // 查找当前用户正在匹配或者参加的比赛
-            $storyMatchPlayers = StoryMatchPlayer::find()
+//            $storyMatchPlayers = StoryMatchPlayer::find()
+//                ->where([
+//                    'user_id' => $userId,
+////                    'match_type' => $matchType,
+//                    'match_player_status' => [
+//                        StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
+//                        StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
+//                        StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
+//                    ],
+//                ])
+//                ->orderBy('id desc')
+//                ->all();
+//
+//            $matchIds = [];
+//            if (!empty($storyMatchPlayers)) {
+//                foreach ($storyMatchPlayers as $storyMatchPlayer) {
+//                    $matchIds[] = $storyMatchPlayer->match_id;
+//                }
+//            }
+            $storyMatchPlayerFound = StoryMatchPlayer::find()
+                ->select('match_id')
                 ->where([
                     'user_id' => $userId,
-//                    'match_type' => $matchType,
                     'match_player_status' => [
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PREPARE,
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_MATCHING,
                         StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_PLAYING,
-                    ],
-                ])
-                ->orderBy('id desc')
-                ->all();
+                    ]
+                ]);
 
-            $matchIds = [];
-            if (!empty($storyMatchPlayers)) {
-                foreach ($storyMatchPlayers as $storyMatchPlayer) {
-                    $matchIds[] = $storyMatchPlayer->match_id;
-                }
-            }
-        }
-
-        if (!empty($matchIds)) {
-            // 如果存在正在进行的比赛，那么找到这条数据
             $storyMatch = StoryMatch::find()
                 ->where([
-                    'id' => $matchIds,
-                    'match_type' => $matchType,
-//                    'user_id' => $userId,
-//                    'session_id' => $sessionId,
-//                    'story_id' => $storyId,
+                    'match_type' => StoryMatch::MATCH_TYPE_KNOCKOUT,
+                    'match_class' => $matchClass,
+                    'story_id' => $storyId,
                     'story_match_status' => [
                         StoryMatch::STORY_MATCH_STATUS_PREPARE,
                         StoryMatch::STORY_MATCH_STATUS_MATCHING,
-                        StoryMatch::STORY_MATCH_STATUS_PLAYING,
+                        StoryMatch::STORY_MATCH_STATUS_PLAYING
                     ],
                 ])
                 ->andFilterWhere([
-                    'level' => [
-                        $userLevel, $userLevel+1
-                    ]
+                    'IN', 'id', $storyMatchPlayerFound
                 ])
-                ->orderBy(['level' => SORT_ASC])
-//                ->andFilterWhere(['<=', 'join_expire_time', time()])
                 ->one();
+
             if (!empty($storyMatch)) {
                 $matchId = $storyMatch->id;
             }
-
-//            if (empty($storyMatch)) {
-////                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
-//                return $this->renderErr('对战不存在');
-//            }
         }
+
+//        if (!empty($matchIds)) {
+//            // 如果存在正在进行的比赛，那么找到这条数据
+//            $storyMatch = StoryMatch::find()
+//                ->where([
+//                    'id' => $matchIds,
+//                    'match_type' => $matchType,
+////                    'user_id' => $userId,
+////                    'session_id' => $sessionId,
+////                    'story_id' => $storyId,
+//                    'story_match_status' => [
+//                        StoryMatch::STORY_MATCH_STATUS_PREPARE,
+//                        StoryMatch::STORY_MATCH_STATUS_MATCHING,
+//                        StoryMatch::STORY_MATCH_STATUS_PLAYING,
+//                    ],
+//                ])
+//                ->andFilterWhere([
+//                    'level' => [
+//                        $userLevel, $userLevel+1
+//                    ]
+//                ])
+//                ->orderBy(['level' => SORT_ASC])
+////                ->andFilterWhere(['<=', 'join_expire_time', time()])
+//                ->one();
+//            if (!empty($storyMatch)) {
+//                $matchId = $storyMatch->id;
+//            }
+//
+////            if (empty($storyMatch)) {
+//////                throw new Exception('对战不存在', ErrorCode::STORY_MATCH_NOT_READY);
+////                return $this->renderErr('对战不存在');
+////            }
+//        }
 
         if (empty($matchId)) {
             // 查找当前正在匹配期的比赛

@@ -157,6 +157,7 @@ class RacePrepare extends Action
                 $storyMatch = StoryMatch::find()
                     ->where([
                         'match_type' => StoryMatch::MATCH_TYPE_RACE,
+                        'match_class' => $matchClass,
                         'story_id' => $storyId,
                         'story_match_status' => [
                             StoryMatch::STORY_MATCH_STATUS_PREPARE,
