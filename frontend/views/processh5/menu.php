@@ -39,7 +39,7 @@ $this->title = '消息';
     <div class="p-20 bg-black">
         <div class="w-100 p-30  m-b-10" style="text-align: center;">
             <div class="btn-m-green background-darkgrey m-t-30 m-r-20 menubtn" id="btn1" type="1" style="display: none;">
-                <img src="../../static/img/index/dialog_btn_g.png" width="60" height="60">
+                <img src="../../static/img/index/func_btn_g.png" width="60" height="60">
             </div>
             <div class="btn-m-green background-darkgrey m-t-30 m-r-20 menubtn" id="btn2" type="2" style="display: none;">
                 <img src="../../static/img/index/mic_btn_g.png" width="45" height="60">
