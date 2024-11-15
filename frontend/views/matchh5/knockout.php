@@ -1246,7 +1246,7 @@ $this->title = $storyMatch->match_name;
 
     function compTimer(matchTimer) {
         var timer = $('#timer').html();
-        // timer--;
+        timer--;
         $('#timer').html(timer);
         if (timer == 0) {
             $('#answer-box').hide();
