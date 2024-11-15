@@ -1268,8 +1268,25 @@ class MatchApi extends ApiAction
 
         $playerIds = [];
         $playersCt = 0;
+
         if (!empty($players)) {
+            $initScore = 10000;
+            $maxLevel = 21;
             foreach ($players as $player) {
+                if ($player->team_id == 99) {
+                    $playerProp = !empty($player->m_user_model_prop) ? json_decode($player->m_user_model_prop, true) : [];
+                    $playerLevel = !empty($playerProp['level']) ? $playerProp['level'] : 1;
+
+                    $passLine = $initScore - abs($maxLevel - $playerLevel) * 10;
+                    $seed = rand(0, 10000);
+                    if ($seed > $passLine) {
+                        $player->match_player_status = StoryMatchPlayer::STORY_MATCH_PLAYER_STATUS_LOST;
+                        $player->save();
+                        continue;
+                    }
+                }
+
+
                 $playerIds[] = $player->id;
                 $playersCt++;
             }
