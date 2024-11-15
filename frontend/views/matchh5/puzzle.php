@@ -30,7 +30,7 @@ $this->title = '猜猜猜';
 ?>
 <style>
     .bg-black {
-        background-image: url("../../static/img/match/guessback.jpg");
+        background-image: url("../../static/img/match/guessback1.jpg");
         background-size: 110%;
         background-repeat: no-repeat;
     }
