@@ -169,7 +169,8 @@ $this->title = '故事汇';
                 <?php
 //                var_dump($genStory);exit;
                 ?>
-                <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 500px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
+                <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 600px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
+                    <div class="doc_content doc_content_assistant" role="assistant" id="cont_0" style="width: 100%;">我们来一起写作文吧，你写一个开头吧！</div>
                     <?= !empty($genStory['content']) ? $genStory['content'] : '' ?>
                 </div>
                 <input type="hidden" id="st_answer" name="st_answer" value="<?= !empty($genStory['answer']) ? $genStory['answer'] : '' ?>">
