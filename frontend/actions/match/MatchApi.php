@@ -1488,7 +1488,7 @@ class MatchApi extends ApiAction
             foreach ($storyMatchPlayers as $player) {
                 $playersProp[$player->id] = json_decode($player->m_user_model_prop, true);
                 $playersCt++;
-                if ($player->team_id == 99 && 1 != 1) {
+                if ($player->team_id == 99) {
                     // AI
                     // 随机生成做题数量和正确数量
                     $storyMatch = StoryMatch::findOne(['id' => $matchId]);
@@ -1496,7 +1496,7 @@ class MatchApi extends ApiAction
                         if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_RACE) {
                             $level = !empty($playersProp[$player->id]['level']) ? $playersProp[$player->id]['level'] : 1;
                             $levelSpeed = 2500 - abs($level) * 250;
-                            if ($levelSpeed < 0) {
+                            if ($levelSpeed < 500) {
                                 $levelSpeed = 500;
                             }
                             $levelSpeed = 10000 - $levelSpeed;

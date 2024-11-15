@@ -825,7 +825,7 @@ $this->title = $storyMatch->match_name;
         //maxSubjectsCt = <?php //= $ct ?>//;
         var match_type = $('#match_type').val();
 
-        if (match_type == 4) {
+        if (match_type == 4 || match_type == 5) {
             var matchTimer = setInterval(function() {
                 // $('#msg_' + i).show();
                 // if ($('#msg_' + i).length > 0) {
@@ -1418,7 +1418,7 @@ $this->title = $storyMatch->match_name;
 
     function compTimer(matchTimer) {
         var timer = $('#timer').html();
-        // timer--;
+        timer--;
         $('#timer').html(timer);
         if (timer == 0) {
             $('#answer-box').hide();
