@@ -31,7 +31,7 @@ $this->title = '故事汇';
 <style>
     .bg-black {
         background-image: url("../../static/img/match/starback1.jpg");
-        background-size: 140% 140%;
+        background-size: 140%;
         background-repeat: no-repeat;
     }
 

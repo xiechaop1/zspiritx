@@ -42,7 +42,7 @@ $this->title = '故事汇';
     }
     .bg-black {
         background-image: url("../../static/img/match/storyback.jpg");
-        background-size: 120% 120%;
+        background-size: 120%;
         background-repeat: no-repeat;
     }
 

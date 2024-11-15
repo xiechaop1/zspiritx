@@ -31,7 +31,7 @@ $this->title = '猜猜猜';
 <style>
     .bg-black {
         background-image: url("../../static/img/match/moonback.jpg");
-        background-size: 140% 140%;
+        background-size: 110%;
         background-repeat: no-repeat;
     }
 
