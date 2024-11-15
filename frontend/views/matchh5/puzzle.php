@@ -30,11 +30,11 @@ $this->title = '猜猜猜';
 ?>
 <style>
     .bg-black {
-        background-image: url("../../static/img/match/starback1.jpg");
+        background-image: url("../../static/img/match/moonback.jpg");
         background-size: 140% 140%;
         background-repeat: no-repeat;
     }
-    
+
     .answer-tag-word {
         position: relative;
         margin-left: 80px;
