@@ -30,7 +30,7 @@ $this->title = $storyMatch->match_name;
 ?>
 <style>
     .bg-black {
-        background-image: url("../../static/img/match/bookback1.jpg");
+        background-image: url("../../static/img/match/moonback.jpg");
         background-size: 100%;
         background-repeat: no-repeat;
         background-position: bottom;
