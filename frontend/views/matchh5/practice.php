@@ -30,7 +30,6 @@ $this->title = '练习赛';
 ?>
 <style>
     .bg-black {
-        background-color: white;
         background-image: url("../../static/img/match/bookback1.jpg");
         background-size: 100%;
         /*background-size: cover;*/
