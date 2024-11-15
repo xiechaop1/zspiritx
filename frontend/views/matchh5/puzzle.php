@@ -31,7 +31,7 @@ $this->title = '猜猜猜';
 <style>
     .bg-black {
         background-image: url("../../static/img/match/guessback1.jpg");
-        background-size: 110%;
+        background-size: 130%;
         background-repeat: no-repeat;
     }
 
@@ -147,7 +147,7 @@ $this->title = '猜猜猜';
     </audio>
 
     <div class="w-100 m-auto">
-        <div class="p-20 bg-black">
+        <div class="p-20 bg-black1">
             <div class="m-t-20">
                 <div class="match-qa-header-left3" style="width: 435px; text-align: left;">
                     <img src="<?= $user['avatar'] ?>" class="header-l">
@@ -170,7 +170,7 @@ $this->title = '猜猜猜';
                 <?php
 //                var_dump($genStory);exit;
                 ?>
-                <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 400px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
+                <div class="match-qa-content-text" style="overflow: auto; padding-top:20px; height: 580px; text-align: left; text-indent: 2em; line-height: 150%; font-size: 28px;" id="topic">
                     <?= !empty($genStory['content']) ? $genStory['content'] : '' ?>
                 </div>
                 <input type="hidden" id="st_answer" name="st_answer" value="<?= !empty($genStory['answer']) ? $genStory['answer'] : '' ?>">
