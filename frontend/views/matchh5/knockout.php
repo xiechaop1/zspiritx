@@ -30,12 +30,11 @@ $this->title = $storyMatch->match_name;
 ?>
 <style>
     .bg-black {
-        background-color: white;
-        background-image: url("../../static/img/match/knockback.png");
+        background-image: url("../../static/img/match/knockback1.png");
         background-size: 100%;
         /*background-size: cover;*/
         background-repeat: no-repeat;
-        background-position: bottom;
+        /*background-position: bottom;*/
     }
 
     .code-input {
@@ -190,7 +189,7 @@ $this->title = $storyMatch->match_name;
     </audio>
 
     <div class="w-100 m-auto">
-        <div class="p-20 bg-black">
+        <div class="p-20 bg-black1">
             <div class="m-t-20 m-b-60">
                 <div class="match-qa-header-left2">
                     <img src="<?= $user['avatar'] ?>" class="header-m">
