@@ -1512,7 +1512,7 @@ class MatchApi extends ApiAction
                     if (!empty($storyMatch)) {
                         if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_RACE && $storyMatch->story_match_status == StoryMatch::STORY_MATCH_STATUS_PLAYING) {
                             $level = !empty($playersProp[$player->id]['level']) ? $playersProp[$player->id]['level'] : 1;
-                            $levelSpeed = 2500 - abs($level) * 250;
+                            $levelSpeed = 2500 - abs($level) * 100;
                             if ($levelSpeed < 500) {
                                 $levelSpeed = 500;
                             }
