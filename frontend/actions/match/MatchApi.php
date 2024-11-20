@@ -1493,6 +1493,7 @@ class MatchApi extends ApiAction
     
     public function getStoryMatchPlayersProp() {
         $matchId = !empty($this->_get['story_match_id']) ? $this->_get['story_match_id'] : 0;
+        $maxSubjects = !empty($this->_get['max_subj_ct']) ? $this->_get['max_subj_ct'] : 0;
         $storyMatchPlayers = StoryMatchPlayer::find()
             ->where([
                 'match_id' => $matchId,
@@ -1529,10 +1530,12 @@ class MatchApi extends ApiAction
                                 $thisPlayerProp = $playersProp[$player->id];
 
                                 $matchProp = json_decode($storyMatch->story_match_prop, true);
-                                if (!empty($matchProp['subjects'])) {
-                                    $maxSubjects = count($matchProp['subjects']);
-                                } else {
-                                    $maxSubjects = 0;
+                                if (empty($maxSubjects)) {
+                                    if (!empty($matchProp['subjects'])) {
+                                        $maxSubjects = count($matchProp['subjects']);
+                                    } else {
+                                        $maxSubjects = 0;
+                                    }
                                 }
 
                                 if ($thisPlayerProp['subj_ct'] >= $maxSubjects) {

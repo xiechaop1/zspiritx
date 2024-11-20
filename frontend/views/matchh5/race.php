@@ -1086,6 +1086,7 @@ $this->title = $storyMatch->match_name;
                 user_id:user_id,
                 story_id:story_id,
                 story_match_id:story_match_id,
+                max_subj_ct:maxSubjectsCt,
             },
             onload: function (data) {
                 // $('#answer-border-response').html('处理中……');
