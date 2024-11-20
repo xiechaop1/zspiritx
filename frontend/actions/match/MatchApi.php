@@ -1586,8 +1586,13 @@ class MatchApi extends ApiAction
 //            if (!empty($scoreOld)) {
 //                $score = !empty($scoreOld->score) ? $scoreOld->score : $score;
 //            }
+            if ($answer == 0) {
+                // 错误答案不加分
+                $score = 0;
+            } else {
 
-            Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
+                Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
+            }
 
             if ($storyMatch->match_type != StoryMatch::MATCH_TYPE_KNOCKOUT) {
                 $userExtends = Yii::$app->userService->updateUserLevelWithRight($userId, $subjectCt, $rightCt);
