@@ -1201,7 +1201,7 @@ $this->title = $storyMatch->match_name;
 
 
     function addGold() {
-        var gold = $('#gold').html();
+        var gold = $('#gold').val();
         var goldShow = $('#gold_show');
         var addGold = $('#add_gold').val();
         var user_id = $('input[name=user_id]').val();
