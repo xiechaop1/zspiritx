@@ -1584,7 +1584,7 @@ class MatchApi extends ApiAction
 
             $scoreOld = Yii::$app->score->get($userId, $storyId, $sessionId);
             if (!empty($scoreOld)) {
-                $score = !empty($scoreOld->score) ? $scoreOld->score + $score : $score;
+                $score = !empty($scoreOld->score) ? $scoreOld->score : $score;
             }
 
             Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
