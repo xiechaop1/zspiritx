@@ -846,9 +846,11 @@ $this->title = $storyMatch->match_name;
         var raceTimer = setInterval(function() {
             getStoryMatchPlayersProp(raceTimer);
         }, 1000);
+        intervalObjs.push(raceTimer);
         var storyMatchTimer = setInterval(function() {
             getStoryMatch(storyMatchTimer);
         }, 5000);
+        intervalObjs.push(storyMatchTimer);
 // showSubject(0, obj);
         var dataContent = <?= $subjectsJson ?>;
         var dataCon=$.toJSON(dataContent);
