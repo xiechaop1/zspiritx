@@ -1202,7 +1202,7 @@ $this->title = $storyMatch->match_name;
 
     function addGold() {
         var gold = $('#gold').html();
-        var goldShow = $('#gold_show').html();
+        var goldShow = $('#gold_show');
         var addGold = $('#add_gold').val();
         var user_id = $('input[name=user_id]').val();
         var story_id = $('input[name=story_id]').val();
@@ -1249,8 +1249,8 @@ $this->title = $storyMatch->match_name;
         if (addGold > 0) {
             floNumber(addGold);
             gold = parseInt(gold) + parseInt(addGold);
-            $('#goldShow').html(gold);
-            $('#goldShow').css('opacity', 0).animate({
+            goldShow.html(gold);
+            goldShow.css('opacity', 0).animate({
                 opacity: 1
             }, 1000);
         }
