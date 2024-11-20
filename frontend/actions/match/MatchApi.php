@@ -1575,6 +1575,7 @@ class MatchApi extends ApiAction
         $subjectCt = !empty($this->_get['subjct']) ? $this->_get['subjct'] : 0;
         $rightCt = !empty($this->_get['right_ct']) ? $this->_get['right_ct'] : 0;
         $wrongCt = !empty($this->_get['wrong_ct']) ? $this->_get['wrong_ct'] : 0;
+        $maxSubjects = !empty($this->_get['max_subj_ct']) ? $this->_get['max_subj_ct'] : 0;
 
         $storyMatch = StoryMatch::find()->where(['id' => $matchId])->one();
 
@@ -1620,10 +1621,12 @@ class MatchApi extends ApiAction
             if ($storyMatch->match_type == StoryMatch::MATCH_TYPE_RACE) {
 
                 $matchProp = json_decode($storyMatch->story_match_prop, true);
-                if (!empty($matchProp['subjects'])) {
-                    $maxSubjects = count($matchProp['subjects']);
-                } else {
-                    $maxSubjects = 0;
+                if (empty($maxSubjects)) {
+                    if (!empty($matchProp['subjects'])) {
+                        $maxSubjects = count($matchProp['subjects']);
+                    } else {
+                        $maxSubjects = 0;
+                    }
                 }
                 $myPlayer = StoryMatchPlayer::find()
                     ->where([

@@ -1301,7 +1301,8 @@ $this->title = $storyMatch->match_name;
         var v_detail=that.attr("data-detail");
         var match_id=that.attr("data-match");
 
-        var score=$('#add_gold').val();
+        // var score=$('#add_gold').val();
+        var score = 0;
         var subjct=$('#subjct').html();
         var right_ct=$('#right_ct').html();
         var wrong_ct=0;
@@ -1332,6 +1333,7 @@ $this->title = $storyMatch->match_name;
                 right_ct:right_ct,
                 wrong_ct:wrong_ct,
                 answer:answer,
+                max_subj_ct:maxSubjectsCt,
                 // riv_subjct:max_riv_subjct
             },
             onload: function (data) {
