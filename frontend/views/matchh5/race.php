@@ -1250,6 +1250,7 @@ $this->title = $storyMatch->match_name;
             floNumber(addGold);
             gold = parseInt(gold) + parseInt(addGold);
             goldShow.html(gold);
+            $('#gold').val(gold);
             goldShow.css('opacity', 0).animate({
                 opacity: 1
             }, 1000);
