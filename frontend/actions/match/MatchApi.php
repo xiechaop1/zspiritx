@@ -1582,10 +1582,10 @@ class MatchApi extends ApiAction
         try {
             $transaction = Yii::$app->db->beginTransaction();
 
-            $scoreOld = Yii::$app->score->get($userId, $storyId, $sessionId);
-            if (!empty($scoreOld)) {
-                $score = !empty($scoreOld->score) ? $scoreOld->score : $score;
-            }
+//            $scoreOld = Yii::$app->score->get($userId, $storyId, $sessionId);
+//            if (!empty($scoreOld)) {
+//                $score = !empty($scoreOld->score) ? $scoreOld->score : $score;
+//            }
 
             Yii::$app->score->add($userId, $storyId, $sessionId, 0, $score);
 

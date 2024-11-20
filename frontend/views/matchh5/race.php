@@ -192,7 +192,8 @@ $this->title = $storyMatch->match_name;
                 <div class="match-qa-header-left2">
                     <img src="<?= $user['avatar'] ?>" class="header-m">
                     <img src="../../static/img/match/coin.png">
-                    <span id="gold"><?= !empty($userScore->score) ? \common\helpers\Common::formatNumberToStr($userScore->score, true, 0, 0) : 0 ?></span>
+                    <span id="gold_show"><?= !empty($userScore->score) ? \common\helpers\Common::formatNumberToStr($userScore->score, true, 0, 0) : 0 ?></span>
+                    <input type="hidden" name="gold" id="gold" value="<?= !empty($userScore->score) ? $userScore->score : 0 ?>">
                 </div>
                 <div class="match-qa-header-right">
                     本场选手
@@ -1201,6 +1202,7 @@ $this->title = $storyMatch->match_name;
 
     function addGold() {
         var gold = $('#gold').html();
+        var goldShow = $('#gold_show').html();
         var addGold = $('#add_gold').val();
         var user_id = $('input[name=user_id]').val();
         var story_id = $('input[name=story_id]').val();
@@ -1247,8 +1249,8 @@ $this->title = $storyMatch->match_name;
         if (addGold > 0) {
             floNumber(addGold);
             gold = parseInt(gold) + parseInt(addGold);
-            $('#gold').html(gold);
-            $('#gold').css('opacity', 0).animate({
+            $('#goldShow').html(gold);
+            $('#goldShow').css('opacity', 0).animate({
                 opacity: 1
             }, 1000);
         }
@@ -1298,7 +1300,7 @@ $this->title = $storyMatch->match_name;
         var v_detail=that.attr("data-detail");
         var match_id=that.attr("data-match");
 
-        var score=$('#gold').html();
+        var score=$('#add_gold').val();
         var subjct=$('#subjct').html();
         var right_ct=$('#right_ct').html();
         var wrong_ct=0;
