@@ -1284,9 +1284,9 @@ $this->title = $storyMatch->match_name;
 
     function submitAnswer(answer) {
 
-        for (var i = 0; i < intervalObjs.length; i++) {
-            clearInterval(intervalObjs[i]);
-        }
+        // for (var i = 0; i < intervalObjs.length; i++) {
+        //     clearInterval(intervalObjs[i]);
+        // }
 
         var that=$("#answer-info");
         var qa_id=that.attr("data-qa");
