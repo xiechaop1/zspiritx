@@ -249,19 +249,19 @@ class RacePrepare extends Action
                             break;
                         case StoryMatch::MATCH_CLASS_ENGLISH:
                             $ct = 7;
-                            for ($level = $userLevel; $maxLevel; $level++) {
+                            for ($level = $userLevel; $level <= $maxLevel; $level++) {
                                 $subjects = array_merge($subjects, $this->generateEnglishWithCt($ct, $level,0 , $userId));
                             }
                             break;
                         case StoryMatch::MATCH_CLASS_CHINESE:
                             $ct = 7;
-                            for ($level = $userLevel; $maxLevel; $level++) {
+                            for ($level = $userLevel; $level <= $maxLevel; $level++) {
                                 $subjects = array_merge($subjects, $this->generateChineseWithCt($ct, $level,0 , $userId));
                             }
                             break;
                         default:
                             $ct = 7;
-                            for ($level = $userLevel; $maxLevel; $level++) {
+                            for ($level = $userLevel; $level <= $maxLevel; $level++) {
                                 $subjects = array_merge($subjects, $this->generateSubjectsWithCt($ct, $level, $matchClass));
                             }
                             break;
@@ -324,6 +324,7 @@ class RacePrepare extends Action
     //            }
 
             }
+
         } else {
 
             // Todo: 考虑要不要生成一个User
@@ -354,7 +355,6 @@ class RacePrepare extends Action
                 $storyMatchPlayer->save();
             }
         }
-
 
         $storyMatchPlayers = StoryMatchPlayer::find()
             ->where([
