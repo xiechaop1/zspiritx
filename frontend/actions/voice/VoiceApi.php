@@ -164,7 +164,7 @@ class VoiceApi extends ApiAction
 
 
         try {
-            $needVoice = false;
+            $needVoice = true;
 
             $time1 = time();
             $word = Yii::$app->xunfei->sendByFile($file['tmp_name']);
