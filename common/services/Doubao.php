@@ -129,7 +129,7 @@ class Doubao extends Component
         $toUserId = !empty($toUserId) ? $toUserId : $userId;
         $msgClass = GptContent::MSG_CLASS_NORMAL;
 
-        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
+//        $oldMessages = $this->getOldContents($userId, $toUserId, $senderId, $msgClass);
 
         $cfg = [];
 
