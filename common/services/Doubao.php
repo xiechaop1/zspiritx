@@ -60,12 +60,12 @@ class Doubao extends Component
         for ($i=0; $i<$len; $i++) {
             $tmp = mb_substr($msg, $i, 1, 'UTF-8');
             if (in_array($tmp, ['。','！','？'])) {
-                if (mb_strpos($str, '：', 'UTF-8') != false) {
+                if (strpos($str, '：') != false) {
                     $oldMessages = [];
                     $simple = [
                         [
-                            'role' => '说话人1',
-                            'text' => '说话内容1',
+                            'role' => '说话人',
+                            'text' => '说话内容',
                         ],
                     ];
                     $extMessages = [
