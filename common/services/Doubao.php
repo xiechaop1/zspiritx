@@ -72,7 +72,7 @@ class Doubao extends Component
                         '这段文字包含了对话，请将文字提取出说话的人，结构化输出',
                         '#输出格式#'. json_encode($simple, JSON_UNESCAPED_UNICODE),
                     ];
-                    $userMessage = $msg;
+                    $userMessage = $str;
                     $roleTxt = '你是一个语言结构梳理老师';
 
                     $gptRet = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], true);
