@@ -64,10 +64,8 @@ class Doubao extends Component
                 if (strpos($str, '：') != false) {
                     $oldMessages = [];
                     $simple = [
-                        [
-                            'role' => '说话人',
-                            'text' => '说话内容',
-                        ],
+                        'role' => '说话人',
+                        'text' => '说话内容',
                     ];
                     $extMessages = [
                         '这段文字包含了对话，请将文字提取出说话的人，结构化输出',
