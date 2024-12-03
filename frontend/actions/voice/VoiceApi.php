@@ -179,6 +179,7 @@ class VoiceApi extends ApiAction
 //            var_dump($word);
 
             $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL);
+            $oldContents = [];
 
             $roleParams = [];
             if (!empty($storyModelId)) {
