@@ -52,6 +52,38 @@ class Doubao extends Component
         ],
     ];
 
+    public function say2struct($msg) {
+        $oldMessages = [];
+        $simple = [
+            [
+                'role' => '旁白',
+                'text' => '旁白内容1',
+            ],
+            [
+                'role' => '说话人1',
+                'text' => '说话内容1',
+            ],
+            [
+                'role' => '旁白',
+                'text' => '旁白内容2',
+            ],
+            [
+                'role' => '说话人2',
+                'text' => '说话内容2',
+            ],
+        ];
+        $extMessages = [
+            '这段文字包含了对话，请将文字提取出说话的人，结构化输出',
+            '#输出格式#'. json_encode($simple, JSON_UNESCAPED_UNICODE),
+        ];
+        $userMessage = $msg;
+        $roleTxt = '你是一个语言结构梳理老师';
+
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], false);
+
+        return $ret;
+    }
+
     public function talk($userMessage, $oldMessages = [], $params = [], $roleParams = '', $temperature = '') {
 
         $roleTxt = !empty($roleParams['role']) ? $roleParams['role'] : '';
