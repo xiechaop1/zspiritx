@@ -138,7 +138,7 @@ class Doubao extends Component
         $userMessage = $msg;
         $roleTxt = '你是一个语言结构梳理老师';
 
-        $gptRet = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], true);
+        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], true);
 
 //        $ret[] = [
 //            'role' => $gptRet['role'],
