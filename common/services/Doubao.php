@@ -53,35 +53,46 @@ class Doubao extends Component
     ];
 
     public function say2struct($msg) {
-        $oldMessages = [];
-        $simple = [
-            [
-                'role' => '旁白',
-                'text' => '旁白内容1',
-            ],
-            [
-                'role' => '说话人1',
-                'text' => '说话内容1',
-            ],
-            [
-                'role' => '旁白',
-                'text' => '旁白内容2',
-            ],
-            [
-                'role' => '说话人2',
-                'text' => '说话内容2',
-            ],
-        ];
-        $extMessages = [
-            '这段文字包含了对话，请将文字提取出说话的人，结构化输出',
-            '非说话内容，全部都是旁白',
-            '#输出格式#'. json_encode($simple, JSON_UNESCAPED_UNICODE),
-        ];
-        $userMessage = $msg;
-        $roleTxt = '你是一个语言结构梳理老师';
 
-        $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], true);
+        $len = mb_strlen($msg, 'UTF-8');
+        $str = '';
+        $ret = [];
+        for ($i=0; $i<$len; $i++) {
+            $tmp = mb_substr($msg, 0, 1, 'UTF-8');
+            if (in_array($tmp, ['。','！','？'])) {
+                if (mb_strpos($str, '：', 'UTF-8') != false) {
+                    $oldMessages = [];
+                    $simple = [
+                        [
+                            'role' => '说话人1',
+                            'text' => '说话内容1',
+                        ],
+                    ];
+                    $extMessages = [
+                        '这段文字包含了对话，请将文字提取出说话的人，结构化输出',
+                        '#输出格式#'. json_encode($simple, JSON_UNESCAPED_UNICODE),
+                    ];
+                    $userMessage = $msg;
+                    $roleTxt = '你是一个语言结构梳理老师';
 
+                    $gptRet = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], true);
+
+                    $ret[] = [
+                        'role' => $gptRet['role'],
+                        'text' => $str,
+                    ];
+
+                } else {
+                    $ret[] = [
+                        'role' => '旁白',
+                        'text' => $str,
+                    ];
+                }
+                $str = '';
+            }
+            $str .= $tmp;
+        }
+        
         return $ret;
     }
 
