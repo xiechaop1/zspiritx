@@ -178,8 +178,8 @@ class VoiceApi extends ApiAction
 //            $word = Yii::$app->xunfei->sendRealByFile($file['tmp_name']);
 //            var_dump($word);
 
-            $oldContents = [];
-//            $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL);
+//            $oldContents = [];
+            $oldContents = Yii::$app->doubao->getOldContents($userId, $userId, $senderId, GptContent::MSG_CLASS_NORMAL);
 
             $roleParams = [];
             if (!empty($storyModelId)) {

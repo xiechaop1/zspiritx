@@ -37,14 +37,14 @@ class DoubaoTTS extends Component
 
 
     public function ttsWithDoubao($message, $userId = 0) {
-        if (strpos($message, '：') !== false) {
-            $res = Yii::$app->doubao->say2struct($message);
-            file_put_contents('/tmp/tts.log', $message . PHP_EOL);
-            file_put_contents('/tmp/tts.log', print_r($res, true) , FILE_APPEND);
-            var_dump($res);
-            var_dump($message);
-            exit;
-        }
+//        if (strpos($message, '：') !== false) {
+//            $res = Yii::$app->doubao->say2struct($message);
+//            file_put_contents('/tmp/tts.log', $message . PHP_EOL);
+//            file_put_contents('/tmp/tts.log', print_r($res, true) , FILE_APPEND);
+//            var_dump($res);
+//            var_dump($message);
+//            exit;
+//        }
         $params = [
             'app' => [
                 'appid' => $this->appId,
