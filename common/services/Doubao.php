@@ -91,8 +91,9 @@ class Doubao extends Component
                 $str = '';
             }
             $str .= $tmp;
+
         }
-        
+
         return $ret;
     }
 
