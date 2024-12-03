@@ -58,7 +58,7 @@ class Doubao extends Component
         $str = '';
         $ret = [];
         for ($i=0; $i<$len; $i++) {
-            $tmp = mb_substr($msg, 0, 1, 'UTF-8');
+            $tmp = mb_substr($msg, $i, 1, 'UTF-8');
             if (in_array($tmp, ['。','！','？'])) {
                 if (mb_strpos($str, '：', 'UTF-8') != false) {
                     $oldMessages = [];
