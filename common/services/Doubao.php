@@ -120,23 +120,22 @@ class Doubao extends Component
 //            ];
 //        }
         $oldMessages = [];
-        $simple = [
+        $format = [
             [
-                'role' => '旁白',
-                'text' => '旁白内容',
+                'role' => '说话人1',
+                'text' => '说话内容1',
             ],
             [
-                'role' => '说话人',
-                'text' => '说话内容',
+                'role' => '说话人2',
+                'text' => '说话内容2',
             ],
         ];
         $extMessages = [
-            '这段文字包含了对话，请将文字提取出说话的人，结构化输出',
-            '所有不在冒号（：），前引号（"）和后引号（"）内的内容，全部按"旁白"处理',
-            '#输出格式#'. json_encode($simple, JSON_UNESCAPED_UNICODE),
+            '这段文字包含了对话，请将文字提取出说话的人和内容，结构化输出',
+            '#输出格式#'. json_encode($format, JSON_UNESCAPED_UNICODE),
         ];
         $userMessage = $msg;
-        $roleTxt = '你是一个语言结构梳理老师';
+        $roleTxt = '你是一个语言专家';
 
         $ret = $this->chatWithDoubao($userMessage, $oldMessages, $extMessages, [$roleTxt], true);
 

@@ -37,14 +37,42 @@ class DoubaoTTS extends Component
 
 
     public function ttsWithDoubao($message, $userId = 0) {
-//        if (strpos($message, '：') !== false) {
-//            $res = Yii::$app->doubao->say2struct($message);
-//            file_put_contents('/tmp/tts.log', $message . PHP_EOL);
-//            file_put_contents('/tmp/tts.log', print_r($res, true) , FILE_APPEND);
+        if (strpos($message, '“') !== false) {
+            $msgLists = [];
+            $res = Yii::$app->doubao->say2struct($message);
+            file_put_contents('/tmp/tts.log', $message . PHP_EOL);
+            file_put_contents('/tmp/tts.log', print_r($res, true) , FILE_APPEND);
+
+            $tmpMsg = $message;
+            $start = 0;
+            if (!empty($res) && is_array($res)) {
+                foreach ($res as $sayOne) {
+                    if (is_array($sayOne)) {
+                        $role = !empty($sayOne['role']) ? $sayOne['role'] : '';
+                        $text = !empty($sayOne['text']) ? $sayOne['text'] : '';
+
+                        if (!empty($text)) {
+                            $txtPos = mb_strpos($tmpMsg, $text, 0, 'UTF-8');
+                            $msgLists[] = [
+                                'role' => 0,
+                                'text' => mb_substr($tmpMsg, $start, $txtPos, 'UTF-8'),
+                            ];
+                            $msgLists[] = [
+                                'role' => $role,
+                                'text' => $text,
+                            ];
+                            $tmpMsg = mb_substr($tmpMsg, mb_strlen($text, 'UTF-8') + $txtPos, mb_strlen($tmpMsg, 'UTF-8'), 'UTF-8');
+                        }
+                    }
+                }
+            }
+            file_put_contents('/tmp/tts.log', print_r($msgLists, true) , FILE_APPEND);
+
 //            var_dump($res);
 //            var_dump($message);
-//            exit;
-//        }
+            exit;
+        }
+        exit;
         $params = [
             'app' => [
                 'appid' => $this->appId,
