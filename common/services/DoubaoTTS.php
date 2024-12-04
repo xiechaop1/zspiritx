@@ -66,6 +66,10 @@ class DoubaoTTS extends Component
                     }
                 }
             }
+            $msgLists[] = [
+                'role' => 0,
+                'text' => $tmpMsg,
+            ];
             file_put_contents('/tmp/tts.log', print_r($msgLists, true) , FILE_APPEND);
 
 //            var_dump($res);
