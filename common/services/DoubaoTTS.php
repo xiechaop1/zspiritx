@@ -72,7 +72,13 @@ class DoubaoTTS extends Component
 //            var_dump($message);
             exit;
         }
-        exit;
+        $ret = [
+//                'res' => $response,
+            'msg' => $message,
+            'file' => '',
+        ];
+        return $ret;
+
         $params = [
             'app' => [
                 'appid' => $this->appId,
