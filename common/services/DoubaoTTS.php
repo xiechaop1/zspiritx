@@ -60,7 +60,7 @@ class DoubaoTTS extends Component
                         if (!empty($text)) {
                             $txtPos = mb_strpos($tmpMsg, $text, 0, 'UTF-8');
                             $msgLists[] = [
-                                'role' => 0,
+                                'role' => 'Unknown',
                                 'text' => mb_substr($tmpMsg, $start, $txtPos, 'UTF-8'),
                             ];
                             $msgLists[] = [
@@ -73,10 +73,10 @@ class DoubaoTTS extends Component
                 }
             }
             $msgLists[] = [
-                'role' => 0,
+                'role' => 'Unknown',
                 'text' => $tmpMsg,
             ];
-            file_put_contents('/tmp/tts.log', print_r($msgLists, true) , FILE_APPEND);
+//            file_put_contents('/tmp/tts.log', print_r($msgLists, true) , FILE_APPEND);
 
 //            var_dump($res);
 //            var_dump($message);
@@ -97,10 +97,13 @@ class DoubaoTTS extends Component
         $tmpData = '';
         $voiceType = 'BV051_streaming';
         $roleVoice = [];
+
+        file_put_contents('/tmp/tts.log', print_r($msgLists, true) , FILE_APPEND);
+
         if (!empty($msgLists)) {
             foreach ($msgLists as $msgList) {
                 $role = !empty($msgList['role']) ? $msgList['role'] : 0;
-                if ($role == 0) {
+                if ($role == 'Unknown') {
                     $voiceType = 'BV051_streaming';
                 } else {
                     if (!empty($roleVoice[$role])) {
