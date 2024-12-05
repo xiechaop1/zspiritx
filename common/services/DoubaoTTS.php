@@ -34,16 +34,22 @@ class DoubaoTTS extends Component
 
     public $clusterId;
 
+    public $voiceTypeLists = [
+        'BV063_streaming',
+        'BV417_streaming',
+        'BV050_streaming',
+        'BV061_streaming',
+    ];
 
 
     public function ttsWithDoubao($message, $userId = 0) {
         file_put_contents('/tmp/tts.log', $message . PHP_EOL);
-        $voiceTypeLists = [
-            'BV063_streaming',
-            'BV417_streaming',
-            'BV050_streaming',
-            'BV061_streaming',
-        ];
+//        $voiceTypeLists = [
+//            'BV063_streaming',
+//            'BV417_streaming',
+//            'BV050_streaming',
+//            'BV061_streaming',
+//        ];
         $msgLists = [];
         if (strpos($message, '“') !== false) {
             $res = Yii::$app->doubao->say2struct($message);
@@ -109,7 +115,7 @@ class DoubaoTTS extends Component
                     if (!empty($roleVoice[$role])) {
                         $voiceType = $roleVoice[$role];
                     } else {
-                        $voiceType = array_shift($voiceTypeLists);
+                        $voiceType = array_shift($this->voiceTypeLists);
                         $roleVoice[$role] = $voiceType;
                     }
                 }
