@@ -80,7 +80,7 @@ class DoubaoTTS extends Component
 
 //            var_dump($res);
 //            var_dump($message);
-            exit;
+//            exit;
         } else {
             $msgLists[] = [
                 'role' => 0,
