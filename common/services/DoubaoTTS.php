@@ -45,6 +45,8 @@ class DoubaoTTS extends Component
         'Unknown' => 'BV051_streaming',
     ];
 
+    public $voiceType = '';
+
 
     public function ttsWithDoubao($message, $userId = 0) {
         file_put_contents('/tmp/tts.log', $message . PHP_EOL);
@@ -112,15 +114,15 @@ class DoubaoTTS extends Component
 
         if (!empty($msgLists)) {
             foreach ($msgLists as $msgList) {
-                $role = !empty($msgList['role']) ? $msgList['role'] : 0;
-                if ($role == 'Unknown') {
-                    $voiceType = 'BV051_streaming';
+                $role = !empty($msgList['role']) ? $msgList['role'] : 'Unknown';
+                if ($this->voiceType == '' && $role == 'Unknown') {
+                    $this->voiceType = 'BV051_streaming';
                 } else {
                     if (!empty($this->roleVoice[$role])) {
-                        $voiceType = $this->roleVoice[$role];
+                        $this->voiceType = $this->roleVoice[$role];
                     } else {
-                        $voiceType = array_shift($this->voiceTypeLists);
-                        $this->roleVoice[$role] = $voiceType;
+                        $this->voiceType = array_shift($this->voiceTypeLists);
+                        $this->roleVoice[$role] = $this->voiceType;
                     }
                 }
                 $params = [
@@ -134,7 +136,7 @@ class DoubaoTTS extends Component
                     ],
                     'audio' => [
         //                'voice_type' => 'zh_female_linjianvhai_moon_bigtts',
-                        'voice_type' => $voiceType,
+                        'voice_type' => $this->voiceType,
                         'encoding' => 'mp3',
                         'speed_ratio' => 1.0,
                     ],
