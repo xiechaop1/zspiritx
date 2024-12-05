@@ -116,10 +116,10 @@ class DoubaoTTS extends Component
         if (!empty($msgLists)) {
             foreach ($msgLists as $msgList) {
                 $role = !empty($msgList['role']) ? $msgList['role'] : 'Unknown';
-                if ($this->voiceType == '' && $role == 'Unknown') {
-                    $this->voiceType = 'BV051_streaming';
-                } else if ($this->voiceType != '' && $isBegin == 1) {
+                if ($this->voiceType != '' && $isBegin == 1) {
 
+                } else if ($role == 'Unknown') {
+                    $this->voiceType = 'BV051_streaming';
                 } else {
                     if (!empty($this->roleVoice[$role])) {
                         $this->voiceType = $this->roleVoice[$role];
