@@ -49,6 +49,7 @@ class DoubaoTTS extends Component
 
 
     public function ttsWithDoubao($message, $userId = 0) {
+        $isBegin = 1;
         file_put_contents('/tmp/tts.log', $message . PHP_EOL);
 //        $voiceTypeLists = [
 //            'BV063_streaming',
@@ -117,7 +118,7 @@ class DoubaoTTS extends Component
                 $role = !empty($msgList['role']) ? $msgList['role'] : 'Unknown';
                 if ($this->voiceType == '' && $role == 'Unknown') {
                     $this->voiceType = 'BV051_streaming';
-                } else if ($this->voiceType != '' && $role != 'Unknown') {
+                } else if ($this->voiceType != '' && $role != 'Unknown' && $isBegin == 0) {
                     if (!empty($this->roleVoice[$role])) {
                         $this->voiceType = $this->roleVoice[$role];
                     } else {
@@ -152,6 +153,7 @@ class DoubaoTTS extends Component
                 $response = json_decode($response, true);
 
                 $ret = $response;
+                $isBegin = 0;
 
                 if (!empty($response['data'])) {
                     $tmpData .= $response['data'];
