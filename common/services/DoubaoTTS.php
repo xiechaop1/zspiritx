@@ -41,6 +41,10 @@ class DoubaoTTS extends Component
         'BV061_streaming',
     ];
 
+    public $roleVoice = [
+        'Unknown' => 'BV051_streaming',
+    ];
+
 
     public function ttsWithDoubao($message, $userId = 0) {
         file_put_contents('/tmp/tts.log', $message . PHP_EOL);
@@ -112,11 +116,11 @@ class DoubaoTTS extends Component
                 if ($role == 'Unknown') {
                     $voiceType = 'BV051_streaming';
                 } else {
-                    if (!empty($roleVoice[$role])) {
-                        $voiceType = $roleVoice[$role];
+                    if (!empty($this->roleVoice[$role])) {
+                        $voiceType = $this->roleVoice[$role];
                     } else {
                         $voiceType = array_shift($this->voiceTypeLists);
-                        $roleVoice[$role] = $voiceType;
+                        $this->roleVoice[$role] = $voiceType;
                     }
                 }
                 $params = [
