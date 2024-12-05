@@ -38,8 +38,14 @@ class DoubaoTTS extends Component
 
     public function ttsWithDoubao($message, $userId = 0) {
         file_put_contents('/tmp/tts.log', $message . PHP_EOL);
+        $voiceTypeLists = [
+            'BV063_streaming',
+            'BV417_streaming',
+            'BV050_streaming',
+            'BV061_streaming',
+        ];
+        $msgLists = [];
         if (strpos($message, '“') !== false) {
-            $msgLists = [];
             $res = Yii::$app->doubao->say2struct($message);
             file_put_contents('/tmp/tts.log', print_r($res, true) , FILE_APPEND);
 
@@ -75,46 +81,73 @@ class DoubaoTTS extends Component
 //            var_dump($res);
 //            var_dump($message);
             exit;
-        }
-        $ret = [
-//                'res' => $response,
-            'msg' => $message,
-            'file' => '',
-        ];
-        return $ret;
-
-        $params = [
-            'app' => [
-                'appid' => $this->appId,
-                'token' => $this->token,
-                'cluster' => $this->clusterId,
-            ],
-            'user' => [
-                'uid'   => $userId
-            ],
-            'audio' => [
-//                'voice_type' => 'zh_female_linjianvhai_moon_bigtts',
-                'voice_type' => 'BV051_streaming',
-                'encoding' => 'mp3',
-                'speed_ratio' => 1.0,
-            ],
-            'request' => [
-                'reqid' => $userId . rand(10000, 99999),
+        } else {
+            $msgLists[] = [
+                'role' => 0,
                 'text' => $message,
-                'operation' => 'query',
-            ],
-        ];
+            ];
+        }
+//        $ret = [
+////                'res' => $response,
+//            'msg' => $message,
+//            'file' => '',
+//        ];
+//        return $ret;
 
-        $response = $this->_call('/api/v1/tts', $params, 'POST');
+        $tmpData = '';
+        $voiceType = 'BV051_streaming';
+        $roleVoice = [];
+        if (!empty($msgLists)) {
+            foreach ($msgLists as $msgList) {
+                $role = !empty($msgList['role']) ? $msgList['role'] : 0;
+                if ($role == 0) {
+                    $voiceType = 'BV051_streaming';
+                } else {
+                    if (!empty($roleVoice[$role])) {
+                        $voiceType = $roleVoice[$role];
+                    } else {
+                        $voiceType = array_shift($voiceTypeLists);
+                        $roleVoice[$role] = $voiceType;
+                    }
+                }
+                $params = [
+                    'app' => [
+                        'appid' => $this->appId,
+                        'token' => $this->token,
+                        'cluster' => $this->clusterId,
+                    ],
+                    'user' => [
+                        'uid'   => $userId
+                    ],
+                    'audio' => [
+        //                'voice_type' => 'zh_female_linjianvhai_moon_bigtts',
+                        'voice_type' => $voiceType,
+                        'encoding' => 'mp3',
+                        'speed_ratio' => 1.0,
+                    ],
+                    'request' => [
+                        'reqid' => $userId . rand(10000, 99999),
+                        'text' => $msgList['text'],
+                        'operation' => 'query',
+                    ],
+                ];
 
-        $response = json_decode($response, true);
+                $response = $this->_call('/api/v1/tts', $params, 'POST');
 
-        $ret = $response;
+                $response = json_decode($response, true);
 
-        if (!empty($response['data'])) {
-            $fileInfo = $this->base642File($response['data'], $message);
+                $ret = $response;
+
+                if (!empty($response['data'])) {
+                    $tmpData .= $response['data'];
+                }
+            }
+        }
+        $ret = [];
+        if (!empty($tmpData)) {
+            $fileInfo = $this->base642File($tmpData, $message);
             $ret = [
-//                'res' => $response,
+                //                'res' => $response,
                 'msg' => $message,
                 'file' => $fileInfo,
             ];
