@@ -38,7 +38,6 @@ $this->title = 'AR剧本杀';
 </audio>
 <input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>">
 <input type="hidden" id="unity_version" name="unity_version" value="<?= $unityVersion ?>">
-
 <div style="position: absolute; z-index: 999; margin: 20px; color: white; font-size: 24px;">
   <?php
   if (empty($unityVersion)) {
@@ -275,6 +274,25 @@ $this->title = 'AR剧本杀';
   <?php
 
     }
+  }
+  ?>
+  <?php
+  if (empty($storyId) && !empty($userId)) {
+  ?>
+  <script>
+    window.onload = function () {
+      var userId = <?= $userId ?>;
+      var params = {
+        'WebViewOff': 1,
+        'UserId': userId,
+        'StoryId': 5
+      }
+      var data = $.toJSON(params);
+      console.log(data);
+      Unity.call(data);
+    }
+  </script>
+  <?php
   }
   ?>
 <!--  <div class="item">-->

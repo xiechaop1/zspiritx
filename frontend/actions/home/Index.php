@@ -37,6 +37,7 @@ class Index extends Action
         $image = Attachment::completeUrl($image, false);
         $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
 
+        $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
 //        $banner = [
 //            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
 //            'taoranting' => Attachment::completeUrl('img/home/taoranting1.jpg', true),
@@ -72,8 +73,12 @@ class Index extends Action
             //Yii::error($e->getMessage());
         }
 
-        $stories = Story::find()
-            ->where(['story_status' => [Story::STORY_STATUS_ONLINE, Story::STORY_STATUS_OPEN_WAIT]])
+        $stories = Story::find();
+        if (!empty($storyId)) {
+            $stories = $stories->where(['id' => $storyId]);
+        }
+        $stories = $stories
+            ->andFilterWhere(['story_status' => [Story::STORY_STATUS_ONLINE, Story::STORY_STATUS_OPEN_WAIT]])
             ->orderBy(['sort_by' => SORT_ASC])
             ->all();
 
@@ -102,6 +107,7 @@ class Index extends Action
             'bgSound' => $bgm,
             'unityVersion' => $unityVersion,
             'beginTs' => $beginTs,
+            'storyId' => $storyId,
 
 //            'banner' => $banner,
         ]);
