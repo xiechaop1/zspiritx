@@ -123,7 +123,7 @@ $this->title = 'AR剧本杀';
       <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
         <a href="javascript:void(0);" class="return_back_btn">返回</a>
       </div>
-      <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 150px; margin: 35px;">
+      <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; left: 0px; margin: 35px;">
         <a href="/home/my<?= !empty($unityVersion) ? '?unity_version=' . $unityVersion : "" ?>">我的</a>
       </div>
 
@@ -177,6 +177,9 @@ $this->title = 'AR剧本杀';
     <input type="hidden" name="storyId" value="<?= $story->id ?>">
     <input type="hidden" name="orderStatus" value="<?= !empty($ordersMap[$story->id]) ? $ordersMap[$story->id] : 0 ?>">
     <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
+      <a href="javascript:void(0);" class="return_back_btn">返回</a>
+    </div>
+    <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; left: 0px; margin: 35px;">
       <a href="/home/my<?= !empty($unityVersion) ? '?unity_version=' . $unityVersion : '' ?>">我的</a>
     </div>
     <img decoding="async"  src="<?= \common\helpers\Attachment::completeUrl($story->cover_image) ?>" alt="First slide" class="img-w-100">
