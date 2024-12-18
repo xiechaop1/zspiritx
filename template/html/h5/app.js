@@ -1688,7 +1688,8 @@ $(function () {
                                 'WebViewOff': 1,
                                 'DebugInfo': isDebug,
                                 'UserId': userId,
-                                'StoryId': storyId
+                                'StoryId': storyId,
+                                'gotoStory': storyId,
                             }
                             var data = $.toJSON(params);
                             console.log(data);
