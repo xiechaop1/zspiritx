@@ -1726,6 +1726,15 @@ $(function () {
         }
     });
 
+    $(".return_back_btn").click(function() {
+        var params = {
+            'WebViewOff': 1,
+        }
+        var data = $.toJSON(params);
+        console.log(data);
+        Unity.call(data);
+    });
+
     $(".owl-carousel .buy_btn").click(function() {
         var t = $(this).parent().parent().parent();
         var isDebug = t.find("input[name='isDebug']").val();

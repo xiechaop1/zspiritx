@@ -121,8 +121,12 @@ $this->title = 'AR剧本杀';
     <div class="item">
       <!-- onclick="Unity.call('WebViewOff&StartARScene');" -->
       <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 0px; margin: 35px;">
-        <a href="/home/my?unity_version=<?= $unityVersion ?>">我的</a>
+        <a href="javascript:void(0);" class="return_back_btn">返回</a>
       </div>
+      <div class="btn-m-green m-t-30 float-right m-r-20" style="position: absolute; right: 150px; margin: 35px;">
+        <a href="/home/my<?= !empty($unityVersion) ? '?unity_version=' . $unityVersion : "" ?>">我的</a>
+      </div>
+
 
       <img decoding="async"  src="<?= $image ?>" alt="First slide" class="img-w-100">
       <div class="text-content">
@@ -290,6 +294,8 @@ $this->title = 'AR剧本杀';
       var data = $.toJSON(params);
       console.log(data);
       Unity.call(data);
+
+
     }
   </script>
   <?php
