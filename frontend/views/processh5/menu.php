@@ -42,10 +42,10 @@ $this->title = '消息';
                 <img src="../../static/img/index/func_btn_g.png" width="60" height="60">
             </div>
             <div class="btn-m-green background-darkgrey m-t-30 m-r-20 menubtn" id="btn2" type="2" style="display: none;">
-                <img src="../../static/img/index/mic_btn_g.png" width="45" height="60">
+                <img src="../../static/img/index/msg_btn_g.png" width="60" height="60">
             </div>
             <div class="btn-m-green background-darkgrey m-t-30 m-r-20 menubtn" id="btn3" type="3" style="display: none;">
-                <img src="../../static/img/index/camera_btn_g.png" width="60" height="60">
+                <img src="../../static/img/index/my_btn_g.png" width="60" height="60">
             </div>
             <div class="btn-m-green background-darkgrey m-t-30 m-r-20 menubtn" id="btn4" type="4" style="display: none;">
                 <img src="../../static/img/index/home_btn_g.png" width="60" height="60">
