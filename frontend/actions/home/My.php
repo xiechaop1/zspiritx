@@ -34,6 +34,7 @@ class My extends Action
 
         $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
         $userId = Cookie::getCookie('user_id');
+        $from = !empty($_GET['from']) ? $_GET['from'] : '';
         if (empty($userId)) {
             header('Location: /passport/web_login' . !empty($unityVersion) ? '?unity_version=' . $unityVersion : '');
         }
@@ -67,7 +68,7 @@ class My extends Action
             'userInfo'  => $user,
             'urls'       => $urls,
             'unityVersion' => $unityVersion,
-//            'banner' => $banner,
+            'from'      => $from,
         ]);
     }
 }

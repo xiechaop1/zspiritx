@@ -106,10 +106,23 @@ $this->title = '灵镜新世界-我的';
                 <div class="m-t-30 col-sm-12 col-md-12">
                     <div class="answer-border">
                         <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
+                        <?php
+                        if (!empty($from) && $from == 'homebtn') {
+                            ?>
+                            <label class="form-check-label fs-30 answer-btn">
+                                <!--                  <span class="answer-tag"></span>-->
+                                <span ><a href="javascript:void(0)" class="return_back_btn">返回</a></span>
+                            </label>
+                            <?php
+                        } else {
+                        ?>
                         <label class="form-check-label fs-30 answer-btn">
                             <!--                  <span class="answer-tag"></span>-->
                             <span ><a href="/home/index<?= !empty($unityVersion) ? "?unity_version=" . $unityVersion : "" ?>">返回</a></span>
                         </label>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
