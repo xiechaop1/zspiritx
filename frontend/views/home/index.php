@@ -285,23 +285,33 @@ $this->title = 'AR剧本杀';
   ?>
   <?php
   if (empty($storyId) && !empty($userId)) {
-  ?>
-  <script>
-    window.onload = function () {
-      var userId = <?= $userId ?>;
-      var params = {
-        'WebViewOff': 1,
-        'UserId': userId,
-        'StoryId': 5
+    if (!empty($user) &&
+        $user->user_type == \common\models\User::USER_TYPE_INNER
+        && $user->mobile != 101
+        && ($user->mobile < 90
+            || $user->mobile >120)
+    )
+    {
+
+    } else {
+    ?>
+    <script>
+      window.onload = function () {
+        var userId = <?= $userId ?>;
+        var params = {
+          'WebViewOff': 1,
+          'UserId': userId,
+          'StoryId': 5
+        }
+        var data = $.toJSON(params);
+        console.log(data);
+        Unity.call(data);
+
+
       }
-      var data = $.toJSON(params);
-      console.log(data);
-      Unity.call(data);
-
-
+    </script>
+    <?php
     }
-  </script>
-  <?php
   }
   ?>
 <!--  <div class="item">-->
