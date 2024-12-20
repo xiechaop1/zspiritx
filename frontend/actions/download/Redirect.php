@@ -28,7 +28,7 @@ class Redirect extends Action
                 $downloadAllow = 1;
                 break;
             case 'android':
-                $uri = 'https://file.zspiritx.com.cn/download/lingjing_huawei_v1.apk';
+                $uri = 'https://file.zspiritx.com.cn/download/lingjing_android_v2.apk';
                 $downloadAllow = 1;
                 break;
             default:
