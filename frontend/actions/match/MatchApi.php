@@ -1110,7 +1110,8 @@ class MatchApi extends ApiAction
                     $userScore->save();
                 }
             } else {
-                $storyMatch->ret = json_encode(['ret' => StoryMatch::STORY_MATCH_RESULT_LOSE, 'user_id' => $liveUser->id], JSON_UNESCAPED_UNICODE);
+                $liveUserId = !empty($liveUser->id) ? $liveUser->id : 0;
+                $storyMatch->ret = json_encode(['ret' => StoryMatch::STORY_MATCH_RESULT_LOSE, 'user_id' => $liveUserId], JSON_UNESCAPED_UNICODE);
                 $matchDetail[] = [
                     'rivalPlayerId' => $rivalPlayer->id,
                     'rivalPlayerPetName' => $rivalPlayerPetName,
