@@ -62,10 +62,12 @@ class UserModels extends Component
                             ) {
                                 $storyModelClassFind = StoryModels::STORY_MODEL_CLASS_RIVAL;
                                 $rate = rand(1, 100);
-                                foreach (StoryModels::$storyModelClassRate as $tempStoryModelClass => $tempRate) {
-                                    if ($rate <= $tempRate) {
-                                        $storyModelClassFind = $tempStoryModelClass;
-                                        break;
+                                if (!empty(StoryModels::$storyModelClassRate)) {
+                                    foreach (StoryModels::$storyModelClassRate as $tempStoryModelClass => $tempRate) {
+                                        if ($rate <= $tempRate) {
+                                            $storyModelClassFind = $tempStoryModelClass;
+                                            break;
+                                        }
                                     }
                                 }
                             } else {
@@ -77,12 +79,15 @@ class UserModels extends Component
                                 if ($locationTypes[0] == '风景名胜' || $locationTypes[1] == '住宅区') {
                                     $storyModelClassFind = StoryModels::STORY_MODEL_CLASS_RIVAL;
                                     $rate = rand(1, 100);
-                                    foreach (StoryModels::$storyModelClassRate as $tempStoryModelClass => $tempRate) {
-                                        if ($rate <= $tempRate) {
-                                            $storyModelClassFind = $tempStoryModelClass;
-                                            break;
+                                    if (!empty(StoryModels::$storyModelClassRate)) {
+                                        foreach (StoryModels::$storyModelClassRate as $tempStoryModelClass => $tempRate) {
+                                            if ($rate <= $tempRate) {
+                                                $storyModelClassFind = $tempStoryModelClass;
+                                                break;
+                                            }
                                         }
                                     }
+
                                 } else {
                                     $storyModelClassFind = StoryModels::STORY_MODEL_CLASS_RIVAL;
                                 }
