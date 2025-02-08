@@ -154,6 +154,16 @@ echo \dmstr\widgets\Alert::widget();
                 $dialogTxt = '';
             }
             echo $form->field($storyModel, 'dialog2')->textarea(['value' => !empty($storyModel->dialog2) ? $dialogTxt: '', 'rows' => 20])->label('对话2');
+
+            if (!empty($storyModel->posing)) {
+                $dialogTxt = var_export(\common\helpers\Model::decodeDialog($storyModel->posing), true);
+                // 去掉数组中下标
+                // 让数组内容在textarea中文本显示
+                $dialogTxt = preg_replace('/\s*\d+\s*=>\s*/', "\n", $dialogTxt) . ';';
+            } else {
+                $dialogTxt = '';
+            }
+            echo $form->field($storyModel, 'posing')->textarea(['value' => !empty($storyModel->posing) ? $dialogTxt: '', 'rows' => 20])->label('放置姿势');
 //            echo $form->field($storyModel, 'dialog')->textarea(['value' => !empty($storyModel->dialog) ? var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true) . ';': '', 'rows' => 20])->label('对话');
             echo $form->field($storyModel, 'active_type')->widget('\kartik\select2\Select2', [
                 'data' => \common\models\StoryModels::$activeType2Name,

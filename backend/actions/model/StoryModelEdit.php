@@ -75,6 +75,7 @@ class StoryModelEdit extends Action
 
             $model->dialog = Model::encodeDialog($model->dialog, $model);
             $model->dialog2 = Model::encodeDialog($model->dialog2, $model);
+            $model->posing = Model::encodeDialog($model->posing, $model);
 
             if (!empty($model->scan_image_path)){
                 $scanImagePathInfo = pathinfo($model->scan_image_path);
