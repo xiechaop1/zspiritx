@@ -203,6 +203,7 @@ class DoApi extends ApiAction
                     StoryModels::SCAN_IMAGE_TYPE_RANDOM_PLANE_AFTER_SCAN,
                     StoryModels::SCAN_IMAGE_TYPE_FIX_PLANE_AFTER_SCAN,
                     StoryModels::SCAN_IMAGE_TYPE_RANDOM_AROUND_USER_AFTER_SCAN,
+                    StoryModels::SCAN_IMAGE_TYPE_FOLLOW_IMAGE,
                 ],
             ])
             ->andFilterWhere([
