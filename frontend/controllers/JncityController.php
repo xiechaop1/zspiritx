@@ -13,19 +13,21 @@ use yii\web\Controller;
 
 class JncityController extends Controller
 {
-    public $layout = '@frontend/views/layouts/main_h5.php';
+    public $layout = '@frontend/views/layouts/main_w.php';
 
     public function actions()
     {
         return [
-            'poi' => [
-                'class'     => 'frontend\actions\jncity\Poi',
+            'poi_list' => [
+                'class' => 'frontend\actions\jncity\JncityApi',
+                'action' => 'poi_list',
             ],
             'upload' => [
                 'class'     => 'frontend\actions\jncity\Upload',
             ],
-            'get_doc' => [
-                'class'     => 'frontend\actions\jncity\GetDoc',
+            'get_story' => [
+                'class' => 'frontend\actions\jncity\JncityApi',
+                'action' => 'get_story',
             ],
             'menu' => [
                 'class'     => 'frontend\actions\jncity\Menu',
