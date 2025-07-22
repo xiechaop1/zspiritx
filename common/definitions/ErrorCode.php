@@ -108,4 +108,7 @@ class ErrorCode extends Api
 
     const USER_DATA_UPDATE_FAILED = -140001; // 用户数据更新失败
 
+    const EBOOK_GEN_VIDEO_FAILED = -210001; // 电子书视频生成失败
+    const EBOOK_UPLOAD_FILE_EMPTY = -210002; // 电子书上传文件不能为空
+
 }
