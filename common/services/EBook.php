@@ -142,6 +142,8 @@ class EBook extends Component
             return false;
         }
 
+        $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
+
         if (!empty($pois)) {
             $videoId = '';
             foreach ($pois as $poi) {
@@ -151,7 +153,7 @@ class EBook extends Component
                 }
             }
 
-            $this->newVideoToDb($userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+            $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
         }
     }
 
@@ -172,6 +174,8 @@ class EBook extends Component
             return false;
         }
 
+        $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
+
         if (!empty($pois)) {
             $videoId = '';
             foreach ($pois as $poi) {
@@ -181,7 +185,7 @@ class EBook extends Component
                 }
             }
 
-            $this->newVideoToDb($userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+            $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
         }
     }
 
@@ -380,40 +384,44 @@ class EBook extends Component
         }
     }
 
-    public function newVideoToDb($userId, $storyId, $ebookStory, $ebookStoryParams, $poiId, $videoId) {
-        try {
-
-            $userEbook = UserEBook::find()
-                ->where([
-                    'user_id' => $userId,
-                    'ebook_story' => $ebookStory,
+    public function newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId) {
+        $userEbook = UserEBook::find()
+            ->where([
+                'user_id' => $userId,
+                'ebook_story' => $ebookStoryId,
 //                    'ebook_status' => UserEBook::USER_EBOOK_STATUS_DEFAULT
-                ])
-                ->orderBy(['id' => SORT_DESC])
-                ->one();
+            ])
+            ->orderBy(['id' => SORT_DESC])
+            ->one();
 
-            if (is_array($ebookStoryParams)) {
-                $ebookStoryParams = json_encode($ebookStoryParams, JSON_UNESCAPED_UNICODE);
-            }
+        if (is_array($ebookParam)) {
+            $ebookStoryParams = json_encode($ebookParam, JSON_UNESCAPED_UNICODE);
+        }
 
-            if (empty($userEbook)) {
-                $userEbook = new UserEBook();
-                $userEbook->user_id = $userId;
-                $userEbook->story_id = $storyId;
-                $userEbook->ebook_story = $ebookStory;
-                $userEbook->ebook_story_params = $ebookStoryParams;
-                $userEbook->ebook_status = UserEBook::USER_EBOOK_STATUS_DEFAULT;
-                $r = $userEbook->save();
+        if (empty($userEbook) || $userEbook->ebook_status == UserEBook::USER_EBOOK_STATUS_COMPLETED) {
+            $userEbook = new UserEBook();
+            $userEbook->user_id = $userId;
+            $userEbook->story_id = $storyId;
+            $userEbook->ebook_story = $ebookStoryId;
+            $userEbook->ebook_story_params = $ebookStoryParams;
+            $userEbook->ebook_status = UserEBook::USER_EBOOK_STATUS_DEFAULT;
+            $r = $userEbook->save();
 
-                $userEbookId = Yii::$app->db->getLastInsertID();
-            } elseif ($userEbook->ebook_status == UserEBook::USER_EBOOK_STATUS_DEFAULT) {
-                $userEbook->ebook_story = $ebookStory;
-                $userEbook->ebook_story_params = $ebookStoryParams;
-                $r = $userEbook->save();
-                $userEbookId = $userEbook->id;
-            }
+            $userEbookId = Yii::$app->db->getLastInsertID();
+        } elseif ($userEbook->ebook_status == UserEBook::USER_EBOOK_STATUS_DEFAULT) {
+            $userEbook->ebook_story = $ebookStoryId;
+            $userEbook->ebook_story_params = $ebookStoryParams;
+            $r = $userEbook->save();
+            $userEbookId = $userEbook->id;
+        } else {
+            $userEbookId = $userEbook->id;
+        }
 
+        return $userEbookId;
+    }
 
+    public function newVideoToDb($userEbookId, $userId, $storyId, $ebookStory, $ebookStoryParams, $poiId, $videoId) {
+        try {
 
             $model = UserEBookRes::find()
                 ->where([

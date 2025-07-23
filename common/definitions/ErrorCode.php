@@ -110,5 +110,8 @@ class ErrorCode extends Api
 
     const EBOOK_GEN_VIDEO_FAILED = -210001; // 电子书视频生成失败
     const EBOOK_UPLOAD_FILE_EMPTY = -210002; // 电子书上传文件不能为空
+    const EBOOK_USER_EBOOK_STATUS_PLAYING = -210003; // 电子书正在进行
+    const EBOOK_USER_EBOOK_STATUS_COMPLETED = -210004; // 电子书已完成
+    const EBOOK_USER_EBOOK_STATUS_NONE = -210005; // 电子书尚未开启
 
 }

@@ -58,6 +58,9 @@ class JncityApi extends ApiAction
                 case 'story_list':
                     $ret = $this->storyList();
                     break;
+                case 'change_story':
+                    $ret = $this->changeStory();
+                    break;
                 case 'get_story':
                     $ret = $this->getStory();
                     break;
@@ -101,6 +104,46 @@ class JncityApi extends ApiAction
         }
 
         return $storyList;
+    }
+
+    public function changeStory() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $ebookStory = !empty($this->_get['ebook_story']) ? $this->_get['ebook_story'] : '';
+
+        $userEbook = UserEBook::find()
+            ->where([
+                'user_id' => $userId,
+            ])
+            ->orderBy([
+                'id' => SORT_DESC,
+            ])
+            ->one();
+
+        if (!empty($userEbook)) {
+            if ($userEbook->ebook_status == UserEBook::USER_EBOOK_STATUS_PLAYING) {
+                throw new \Exception('当前的电子书已经进行中，不能修改故事', ErrorCode::EBOOK_USER_EBOOK_STATUS_PLAYING);
+            } else if ($userEbook->ebook_status == UserEBook::USER_EBOOK_STATUS_COMPLETED) {
+                throw new \Exception('当前电子书已完成，请重新开始新的电子书', ErrorCode::EBOOK_USER_EBOOK_STATUS_COMPLETED);
+            }
+
+            $ebookParam = !empty(UserEBook::$poiList[$ebookStory])
+                ? UserEBook::$poiList[$ebookStory] : [];
+
+            if (empty($ebookParam)) {
+                return false;
+            }
+
+            $storyId = 100;
+
+            $userEbook->ebook_story = $ebookStory;
+            $userEbook->ebook_story_params = $ebookParam;
+            $r = $userEbook->save();
+
+            return $userEbook;
+
+        } else {
+            throw new \Exception('电子书尚未开启', ErrorCode::EBOOK_USER_EBOOK_STATUS_NONE);
+        }
     }
 
     public function getUserEbook() {

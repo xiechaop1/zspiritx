@@ -29,6 +29,10 @@ class JncityController extends Controller
                 'class' => 'frontend\actions\jncity\JncityApi',
                 'action' => 'get_story',
             ],
+            'change_story' => [
+                'class' => 'frontend\actions\jncity\JncityApi',
+                'action' => 'change_story',
+            ],
             'get_user_ebook' => [
                 'class' => 'frontend\actions\jncity\JncityApi',
                 'action' => 'get_user_ebook',
