@@ -103,6 +103,11 @@ class JncityApi extends ApiAction
             return [];
         }
 
+        foreach ($storyList as &$story) {
+            $story['poi'] = !empty(UserEBook::$poiList[$story['poi']])
+                ? UserEBook::$poiList[$story['poi']] : [];
+        }
+
         return $storyList;
     }
 
@@ -253,6 +258,8 @@ class JncityApi extends ApiAction
         $storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
         $story = !empty(UserEBook::$storyList[$storyId]) ? UserEBook::$storyList[$storyId] : [];
+        $story['poi'] = !empty(UserEBook::$poiList[$story['poi']])
+            ? UserEBook::$poiList[$story['poi']] : [];
 
         return $story;
 
