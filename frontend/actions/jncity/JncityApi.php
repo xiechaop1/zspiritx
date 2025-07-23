@@ -61,6 +61,12 @@ class JncityApi extends ApiAction
                 case 'get_story':
                     $ret = $this->getStory();
                     break;
+                case 'get_user_ebook':
+                    $ret = $this->getUserEbook();
+                    break;
+                case 'get_user_last_ebook':
+                    $ret = $this->getUserLastEbook();
+                    break;
                 case 'upload':
                     $ret = $this->upload();
                     break;
@@ -95,6 +101,58 @@ class JncityApi extends ApiAction
         }
 
         return $storyList;
+    }
+
+    public function getUserEbook() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+
+//        if (empty($userId)) {
+//            throw new \Exception('用户ID不能为空', ErrorCode::EBOOK_USER_ID_EMPTY);
+//        }
+
+        $userEbook = UserEBook::find()
+            ->where(['user_id' => $userId])
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        $ret = [];
+
+        if (!empty($userEbook)) {
+            foreach ($userEbook as $ue) {
+                $tmp = $ue->toArray();
+                $tmp['created_at_str'] = Date('Y-m-d H::s', $ue->created_at);
+//                $tmp['user_ebook_res'] = $ue->ebookres;
+                $ret[] = $tmp;
+            }
+        }
+
+        return $ret;
+    }
+
+    public function getUserLastEbook() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+
+//        if (empty($userId)) {
+//            throw new \Exception('用户ID不能为空', ErrorCode::EBOOK_USER_ID_EMPTY);
+//        }
+
+        $userEbook = UserEBook::find()
+            ->where(['user_id' => $userId])
+            ->orderBy(['id' => SORT_DESC])
+            ->one();
+
+        $ret = [];
+
+        if (!empty($userEbook)) {
+//            foreach ($userEbook as $ue) {
+            $tmp = $userEbook->toArray();
+            $tmp['created_at_str'] = Date('Y-m-d H::s', $userEbook->created_at);
+            $tmp['user_ebook_res'] = $userEbook->ebookres;
+            $ret = $tmp;
+//            }
+        }
+
+        return $ret;
     }
 
     public function upload() {
