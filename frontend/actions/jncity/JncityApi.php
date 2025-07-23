@@ -67,6 +67,9 @@ class JncityApi extends ApiAction
                 case 'get_user_ebook':
                     $ret = $this->getUserEbook();
                     break;
+                case 'get_user_one_ebook':
+                    $ret = $this->getUserOneEbook();
+                    break;
                 case 'get_user_last_ebook':
                     $ret = $this->getUserLastEbook();
                     break;
@@ -169,9 +172,37 @@ class JncityApi extends ApiAction
             foreach ($userEbook as $ue) {
                 $tmp = $ue->toArray();
                 $tmp['created_at_str'] = Date('Y-m-d H::s', $ue->created_at);
-//                $tmp['user_ebook_res'] = $ue->ebookres;
+                $tmp['user_ebook_res'] = $ue->ebookres;
+                $tmp['mission_ct'] = !empty($ue->ebookres) ? sizeof($ue->ebookres) : 0;
+
                 $ret[] = $tmp;
             }
+        }
+
+        return $ret;
+    }
+
+    public function getUserOneEbook() {
+        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
+        $ebookId = !empty($this->_get['user_ebook_id']) ? $this->_get['user_ebook_id'] : 0;
+
+//        if (empty($userId)) {
+//            throw new \Exception('用户ID不能为空', ErrorCode::EBOOK_USER_ID_EMPTY);
+//        }
+
+        $userEbook = UserEBook::find()
+            ->where(['user_id' => $userId])
+            ->andFilterWhere(['id' => $ebookId])
+//            ->orderBy(['id' => SORT_DESC])
+            ->one();
+
+        $ret = [];
+
+        if (!empty($userEbook)) {
+            $tmp = $userEbook->toArray();
+            $tmp['created_at_str'] = Date('Y-m-d H::s', $userEbook->created_at);
+            $tmp['user_ebook_res'] = $userEbook->ebookres;
+            $ret = $tmp;
         }
 
         return $ret;
@@ -210,9 +241,10 @@ class JncityApi extends ApiAction
             throw new \Exception('上传文件不能为空', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
         }
 
-        $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
-        $ebookStoryId = !empty($this->_get['ebook_story_id']) ? $this->_get['ebook_story_id'] : 0;
-        $poiId = !empty($this->_get['poi_id']) ? $this->_get['poi_id'] : 0;
+        $request = $_REQUEST;
+        $userId = !empty($request['user_id']) ? $request['user_id'] : 0;
+        $ebookStoryId = !empty($request['ebook_story_id']) ? $request['ebook_story_id'] : 0;
+        $poiId = !empty($request['poi_id']) ? $request['poi_id'] : 0;
 
         try {
             $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $file);

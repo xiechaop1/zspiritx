@@ -45,6 +45,10 @@ class JncityController extends Controller
                 'class' => 'frontend\actions\jncity\JncityApi',
                 'action' => 'get_user_last_ebook',
             ],
+            'get_user_one_ebook' => [
+                'class' => 'frontend\actions\jncity\JncityApi',
+                'action' => 'get_user_one_ebook',
+            ],
             'menu' => [
                 'class'     => 'frontend\actions\jncity\Menu',
             ],
