@@ -22,6 +22,10 @@ class JncityController extends Controller
                 'class' => 'frontend\actions\jncity\JncityApi',
                 'action' => 'poi_list',
             ],
+            'story_list' => [
+                'class' => 'frontend\actions\jncity\JncityApi',
+                'action' => 'story_list',
+            ],
             'upload' => [
                 'class'     => 'frontend\actions\jncity\Upload',
             ],
