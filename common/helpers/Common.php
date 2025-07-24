@@ -576,4 +576,31 @@ class Common
 //        imagedestroy($gameImage);
     }
 
+    /**
+     * 使用本地IP库判断是否在香港（备选方案）
+     * 需要下载IP库文件到指定路径
+     * @param string $ip
+     * @return bool
+     */
+    public static function checkPosByIP($ip, $pos = '香港')
+    {
+        // 方法1：使用纯真IP库（需要下载qqwry.dat文件）
+        $ipFile = Yii::getAlias('@common/data/qqwry.dat');
+        if (file_exists($ipFile)) {
+            try {
+                // 这里需要引入纯真IP库的查询类
+                $location = QQWry::query($ip, $ipFile);
+                if ($location && strpos($location, $pos) !== false) {
+                    return true;
+                }
+                // return strpos($location, '香港') !== false;
+            } catch (\Exception $e) {
+                // Yii::error("纯真IP库查询失败: " . $e->getMessage());
+            }
+            return false;
+        }
+
+        return false;
+    }
+
 }
