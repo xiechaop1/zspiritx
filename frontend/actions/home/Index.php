@@ -13,6 +13,7 @@ use common\definitions\Common;
 use common\helpers\Attachment;
 use common\helpers\Client;
 use common\helpers\Cookie;
+use common\helpers\QQWry;
 use common\models\Order;
 use common\models\Story;
 use common\models\User;
@@ -164,19 +165,6 @@ class Index extends Action
                 // Yii::error("纯真IP库查询失败: " . $e->getMessage());
             }
             return false;
-        }
-        
-        // 方法2：使用GeoIP2数据库（需要下载GeoLite2-Country.mmdb文件）
-        $geoipFile = Yii::getAlias('@common/data/GeoLite2-Country.mmdb');
-        if (file_exists($geoipFile)) {
-            try {
-                // 需要安装 geoip2/geoip2 包
-                // $reader = new \GeoIp2\Database\Reader($geoipFile);
-                // $record = $reader->country($ip);
-                // return $record->country->isoCode === 'HK';
-            } catch (\Exception $e) {
-                Yii::error("GeoIP2查询失败: " . $e->getMessage());
-            }
         }
         
         return false;
