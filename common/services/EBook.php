@@ -407,7 +407,8 @@ class EBook extends Component
             $userEbook->ebook_status = UserEBook::USER_EBOOK_STATUS_DEFAULT;
             $r = $userEbook->save();
 
-            $userEbookId = Yii::$app->db->getLastInsertID();
+//            $userEbookId = Yii::$app->db->getLastInsertID();
+            $userEbookId = $userEbook->getPrimaryKey();
         } elseif ($userEbook->ebook_status == UserEBook::USER_EBOOK_STATUS_DEFAULT) {
             $userEbook->ebook_story = $ebookStoryId;
             $userEbook->ebook_story_params = $ebookStoryParams;
