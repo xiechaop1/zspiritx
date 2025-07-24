@@ -51,6 +51,14 @@ class My extends Action
 
 //        var_dump($userKnowledge);exit;
 
+        $defStoryId = 5;
+
+        $userIp = Yii::$app->request->userIP;
+        $isHongKong = \common\helpers\Common::checkPosByIP($userIp, '香港');
+        if ($isHongKong) {
+            $defStoryId = 16;       //  坚尼地城的剧本ID
+        }
+
         return $this->controller->render('my', [
             'params'        => $_GET,
             'userId'        => $userId,
@@ -58,6 +66,7 @@ class My extends Action
             'sessionId'     => $sessionId,
             'storyId'       => $storyId,
             'userKnowledge' => $userKnowledge,
+            'defStoryId'    => $defStoryId,
         ]);
     }
 }

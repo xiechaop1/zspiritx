@@ -44,7 +44,6 @@ class Index extends Action
         $defStoryId = 5;
 
         // 实现一段代码，判断用户的IP是不是在香港地区
-        $isHongKong = false;
         $userIp = Yii::$app->request->userIP;
         
         // if (!empty($userIp) && $userIp !== '127.0.0.1' && $userIp !== '::1') {
@@ -64,7 +63,7 @@ class Index extends Action
         // }
         
         // 如果需要更精确的判断，可以使用以下备选方案
-        $isHongKong = $this->checkHongKongByIP($userIp);
+        $isHongKong = \common\helpers\Common::checkPosByIP($userIp, '香港');
         if ($isHongKong) {
             $defStoryId = 16;       //  坚尼地城的剧本ID
         }
@@ -178,7 +177,7 @@ class Index extends Action
             }
             return false;
         }
-        
+
         return false;
     }
 }
