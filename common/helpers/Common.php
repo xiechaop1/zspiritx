@@ -8,6 +8,8 @@
 
 namespace common\helpers;
 
+use Yii;
+
 
 class Common
 {
