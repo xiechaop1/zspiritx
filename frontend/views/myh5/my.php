@@ -135,8 +135,8 @@ $this->title = '我的';
         var userId = <?= $userId ?>;
         var params = {
             'WebViewOff': 1,
-            'UserId': userId,
-            'StoryId': <?= $defStoryId ?>
+            // 'UserId': userId,
+            'gotoStory': <?= $defStoryId ?>
         }
         var data = $.toJSON(params);
         console.log(data);
