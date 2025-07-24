@@ -38,6 +38,35 @@ class Index extends Action
         $unityVersion = !empty($_GET['unity_version']) ? $_GET['unity_version'] : '';
 
         $storyId = !empty($_GET['story_id']) ? $_GET['story_id'] : 0;
+
+        $defStoryId = 5;
+
+        // 实现一段代码，判断用户的IP是不是在香港地区
+        $isHongKong = false;
+        $userIp = Yii::$app->request->userIP;
+        
+        // if (!empty($userIp) && $userIp !== '127.0.0.1' && $userIp !== '::1') {
+        //     try {
+        //         // 使用免费的IP地理位置API
+        //         $apiUrl = "http://ip-api.com/json/{$userIp}?fields=status,message,country,regionName,city";
+        //         $response = file_get_contents($apiUrl);
+        //         $ipData = json_decode($response, true);
+                
+        //         if ($ipData && $ipData['status'] === 'success') {
+        //             $isHongKong = ($ipData['country'] === 'Hong Kong');
+        //             Yii::info("IP: {$userIp}, Country: {$ipData['country']}, City: {$ipData['city']}, IsHK: " . ($isHongKong ? 'true' : 'false'));
+        //         }
+        //     } catch (\Exception $e) {
+        //         Yii::error("IP地理位置查询失败: " . $e->getMessage());
+        //     }
+        // }
+        
+        // 如果需要更精确的判断，可以使用以下备选方案
+        $isHongKong = $this->checkHongKongByIP($userIp);
+        if ($isHongKong) {
+            $defStoryId = 16;       //  坚尼地城的剧本ID
+        }
+
 //        $banner = [
 //            'zhuluoji' => Attachment::completeUrl('img/home/konglong2.jpg', true),
 //            'taoranting' => Attachment::completeUrl('img/home/taoranting1.jpg', true),
@@ -111,5 +140,45 @@ class Index extends Action
 
 //            'banner' => $banner,
         ]);
+    }
+    
+    /**
+     * 使用本地IP库判断是否在香港（备选方案）
+     * 需要下载IP库文件到指定路径
+     * @param string $ip
+     * @return bool
+     */
+    private function checkHongKongByIP($ip, $tag = '香港')
+    {
+        // 方法1：使用纯真IP库（需要下载qqwry.dat文件）
+        $ipFile = Yii::getAlias('@common/data/qqwry.dat');
+        if (file_exists($ipFile)) {
+            try {
+                // 这里需要引入纯真IP库的查询类
+                $location = QQWry::query($ip, $ipFile);
+                if ($location && strpos($location, $tag) !== false) {
+                    return true;
+                }
+                // return strpos($location, '香港') !== false;
+            } catch (\Exception $e) {
+                // Yii::error("纯真IP库查询失败: " . $e->getMessage());
+            }
+            return false;
+        }
+        
+        // 方法2：使用GeoIP2数据库（需要下载GeoLite2-Country.mmdb文件）
+        $geoipFile = Yii::getAlias('@common/data/GeoLite2-Country.mmdb');
+        if (file_exists($geoipFile)) {
+            try {
+                // 需要安装 geoip2/geoip2 包
+                // $reader = new \GeoIp2\Database\Reader($geoipFile);
+                // $record = $reader->country($ip);
+                // return $record->country->isoCode === 'HK';
+            } catch (\Exception $e) {
+                Yii::error("GeoIP2查询失败: " . $e->getMessage());
+            }
+        }
+        
+        return false;
     }
 }

@@ -301,7 +301,7 @@ $this->title = 'AR剧本杀';
         var params = {
           'WebViewOff': 1,
           'UserId': userId,
-          'StoryId': 5
+          'StoryId': <?= $defStoryId ?>
         }
         var data = $.toJSON(params);
         console.log(data);

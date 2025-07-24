@@ -8,31 +8,15 @@
 
 namespace console\controllers;
 
-use common\models\EnglishWords;
-use common\models\Poem;
-use common\models\UserCompany;
 use common\models\UserEBookRes;
 use liyifei\chinese2pinyin\Chinese2pinyin;
-use common\models\City;
-use common\models\MemberSpecial;
-use common\models\Orders;
-use common\models\ConsultantCompany;
-use common\models\Job;
-use common\models\Documents;
-use common\models\Company;
-use common\models\Industry;
-use common\models\IndustryLink;
-use common\models\Post;
-use common\models\Recommend;
-use common\models\RecommendHistory;
-use common\models\Tag;
-use common\models\PostBasic;
-use common\models\Member;
-use common\helpers\No;
 use yii\db\Query;
 
 use yii\console\Controller;
 use Yii;
+
+use OSS\OssClient;
+use OSS\Core\OssException;
 
 class JncityController extends Controller
 {
@@ -56,8 +40,46 @@ class JncityController extends Controller
             if ($status == 'succeeded') {
                 $videoUrl = !empty($ret['content']['video_url']) ? $ret['content']['video_url'] : '';
                 if (!empty($videoUrl)) {
-                    $row->video_url = $videoUrl;
-                    $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS;
+                    // 1. 下载视频到本地
+                    $tmpVideo = '/tmp/video_' . uniqid() . '.mp4';
+                    file_put_contents($tmpVideo, file_get_contents($videoUrl));
+
+                    // 2. 指定本地 MP3 路径
+                    $mp3Path = '/Users/choice/Projects/zspiritx/a.mp3'; // 你可以根据实际情况修改
+
+                    // 3. 合成新视频
+                    $outputVideo = '/tmp/output_' . uniqid() . '.mp4';
+                    $cmd = "ffmpeg -y -i {$tmpVideo} -i {$mp3Path} -c:v copy -c:a aac -strict experimental -map 0:v:0 -map 1:a:0 -shortest {$outputVideo}";
+                    exec($cmd, $out, $retCode);
+
+                    if ($retCode === 0 && file_exists($outputVideo)) {
+                        // OSS配置
+                        $accessKeyId = '你的AccessKeyId';
+                        $accessKeySecret = '你的AccessKeySecret';
+                        $endpoint = '你的Endpoint'; // 例如: oss-cn-shanghai.aliyuncs.com
+                        $bucket = '你的Bucket名称';
+
+                        $ossFileName = 'videos/' . basename($outputVideo);
+
+                        try {
+                            $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
+                            $ossClient->uploadFile($bucket, $ossFileName, $outputVideo);
+
+                            $newVideoUrl = 'https://' . $bucket . '.' . $endpoint . '/' . $ossFileName;
+
+                            $row->video_url = $newVideoUrl;
+                            $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS;
+                        } catch (OssException $e) {
+                            $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
+                            echo "OSS上传失败: " . $e->getMessage() . "\n";
+                        }
+                    } else {
+                        $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
+                    }
+
+                    // 5. 清理临时文件
+                    @unlink($tmpVideo);
+                    @unlink($outputVideo);
                 } else {
                     $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
                 }
