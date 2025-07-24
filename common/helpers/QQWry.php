@@ -17,6 +17,7 @@ class QQWry
     protected static $fp = null;
     protected static $ipBegin = 0;
     protected static $ipEnd = 0;
+    protected static $datFile = null;
 
     public static function query($ip, $datFile = null)
     {
@@ -26,12 +27,19 @@ class QQWry
         if (!file_exists($datFile)) {
             return false;
         }
-        self::$fp = fopen($datFile, 'rb');
-        if (!self::$fp) {
-            return false;
+        // 只在首次调用时打开文件
+        if (self::$fp === null || self::$datFile !== $datFile) {
+            if (self::$fp !== null) {
+                fclose(self::$fp);
+            }
+            self::$fp = fopen($datFile, 'rb');
+            self::$datFile = $datFile;
+            if (!self::$fp) {
+                return false;
+            }
+            self::$ipBegin = self::getLong4(0);
+            self::$ipEnd = self::getLong4(4);
         }
-        self::$ipBegin = self::getLong4(0);
-        self::$ipEnd = self::getLong4(4);
         $ip = gethostbyname($ip);
         $ip = self::ip2long($ip);
         $l = 0;
@@ -56,12 +64,19 @@ class QQWry
             }
         }
         if (!$find) {
-            fclose(self::$fp);
             return false;
         }
         $location = self::getLocation();
-        fclose(self::$fp);
         return $location;
+    }
+
+    // 脚本结束时自动关闭文件
+    public function __destruct()
+    {
+        if (self::$fp !== null) {
+            fclose(self::$fp);
+            self::$fp = null;
+        }
     }
 
     protected static function getLong4($offset = -1)
