@@ -17,6 +17,7 @@ use common\helpers\QQWry;
 use common\models\Order;
 use common\models\Story;
 use common\models\User;
+use common\models\UserStory;
 use yii\base\Action;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
@@ -98,6 +99,17 @@ class Index extends Action
 
             if (strlen($user->mobile) <= 4) {
                 $user->user_type = User::USER_TYPE_INNER;
+            } else {
+                $userStory = UserStory::find()
+                    ->where([
+                        'user_id' => $userId
+                    ])
+                    ->orderBy(['updated_at' => SORT_DESC])
+                    ->one();
+
+                if (!empty($userStory->story_id)) {
+                    $defStoryId = $userStory->story_id;
+                }
             }
         } catch (\Exception $e) {
             //Yii::error($e->getMessage());
