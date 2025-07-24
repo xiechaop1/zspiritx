@@ -138,8 +138,8 @@ class Index extends Action
             'unityVersion' => $unityVersion,
             'beginTs' => $beginTs,
             'storyId' => $storyId,
+            'defStoryId' => $defStoryId,
 
-//            'banner' => $banner,
         ]);
     }
     
