@@ -24,9 +24,9 @@ use yii\web\Request;
 class SetEbookStory extends Action
 {
 
-    
     public function run()
     {
+        echo 'm';exit;
         $userId = !empty($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
         $ebookStory = UserEBook::find()
             ->where([
@@ -89,8 +89,8 @@ class SetEbookStory extends Action
         return $this->controller->render('set_ebook_story', [
             'params'        => $_REQUEST,
             'userId'        => $userId,
-            'ebook_story_id'    => $ebookStoryId,
-            'ebook_story_list'   => $ebookStoryList,
+            'ebookStoryId'    => $ebookStoryId,
+//            'ebook_story_list'   => $ebookStoryList,
         ]);
     }
 }
