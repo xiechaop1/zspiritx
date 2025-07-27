@@ -100,9 +100,6 @@ $this->title = '我的';
                 <div class="m-t-30 col-sm-12 col-md-12">
                     <div class="answer-border">
                         <label class="form-check-label fs-30 answer-btn">
-                            <span class="answer-tag">
-                              <img src="../../static/img/my/task.png" class="list-icon-s"/>
-                            </span>
                             <div class="set">
                                 故事：
                             </div>
@@ -124,7 +121,7 @@ $this->title = '我的';
                                 </select>
                             </div>
                             <div class="set">
-                                <input type="submit" value="变更">
+                                <input type="submit" value="变更" class="btn-m-green m-t-30 float-right m-r-20 change">
                             </div>
 
 
