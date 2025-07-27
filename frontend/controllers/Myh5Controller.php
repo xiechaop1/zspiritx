@@ -33,6 +33,9 @@ class Myh5Controller extends Controller
             'orders' => [
                 'class' => 'frontend\actions\myh5\Orders',
             ],
+            'set_ebook_story' => [
+                'class' => 'frontend\actions\myh5\SetEbookStory',
+            ],
         ];
     }
 }
