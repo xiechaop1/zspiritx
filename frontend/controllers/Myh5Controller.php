@@ -15,7 +15,7 @@ use yii\web\Controller;
 class Myh5Controller extends Controller
 {
     public $layout = '@frontend/views/layouts/main_h5.php';
-
+    public $enableCsrfValidation = false;
     public function actions()
     {
         $request = \Yii::$app->request;

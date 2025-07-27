@@ -39,8 +39,7 @@ class SetEbookStory extends Action
                 'id' => SORT_DESC,
             ])
             ->one();
-
-        if (Yii::$app->request->isAjax && Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 //            $userId = !empty($_POST['user_id']) ? $_POST['user_id'] : 0;
 
             if (!empty($ebookStory) && $ebookStory->ebook_status == UserEBook::USER_EBOOK_STATUS_PLAYING) {

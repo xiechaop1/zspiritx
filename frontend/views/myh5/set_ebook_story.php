@@ -83,13 +83,14 @@ $this->title = '我的';
                     <div class="npc-name">
                         设置电子书故事
                     </div>
-
                     <?php
                     if (!empty($message)) {
                         ?>
-                                <?= $message ?>
+                    <div style="margin: 20px; padding: 10px; font-height: 150%;">
+                    <?= $message ?>
+                    </div>
 
-                        <div class="btn-m-green m-t-30 float-right m-r-20" id="msg_return_btn">
+                        <div class="btn-m-green m-t-30 float-right m-r-20" id="set_return_ebook">
                             返回
                         </div>
                     <?php
@@ -121,7 +122,7 @@ $this->title = '我的';
                                 </select>
                             </div>
                             <div class="set">
-                                <input type="submit" value="变更" class="btn-m-green m-t-30 float-right m-r-20 change">
+                                <input type="submit" value="变更" class="btn-m-green m-t-30" style="width: 200px; height: 80px;">
                             </div>
 
 
@@ -146,8 +147,8 @@ $this->title = '我的';
 </div>
 <script>
     window.onload = function () {
-        $('#msg_return_btn').click(function () {
-            location.go(-1);
+        $('#set_return_ebook').click(function () {
+            location.href= '/myh5/set_ebook_story?user_id=<?=$userId?>';
         });
     };
 </script>
