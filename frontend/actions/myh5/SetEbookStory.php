@@ -26,7 +26,6 @@ class SetEbookStory extends Action
 
     public function run()
     {
-        echo 'm';exit;
         $userId = !empty($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
         $ebookStory = UserEBook::find()
             ->where([
