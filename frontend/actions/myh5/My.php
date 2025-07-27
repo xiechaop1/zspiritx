@@ -11,6 +11,7 @@ namespace frontend\actions\myh5;
 
 use common\models\Knowledge;
 use common\models\User;
+use common\models\UserEBook;
 use common\models\UserKnowledge;
 use yii\base\Action;
 
@@ -59,6 +60,24 @@ class My extends Action
             $defStoryId = 16;       //  坚尼地城的剧本ID
         }
 
+//        $ebookStory = UserEBook::find()
+//            ->where([
+//                'user_id' => $userId,
+//                'ebook_status' => [
+//                    UserEBook::USER_EBOOK_STATUS_DEFAULT,
+//                    UserEBook::USER_EBOOK_STATUS_PLAYING
+//                ]
+//            ])
+//            ->orderBy([
+//                'id' => SORT_DESC,
+//            ])
+//            ->one();
+//
+//        $ebookStoryId = 0;
+//        if (!empty($ebookStory)) {
+//            $ebookStoryId = $ebookStory->ebook_story;
+//        }
+
         return $this->controller->render('my', [
             'params'        => $_GET,
             'userId'        => $userId,
@@ -67,6 +86,8 @@ class My extends Action
             'storyId'       => $storyId,
             'userKnowledge' => $userKnowledge,
             'defStoryId'    => $defStoryId,
+            'isHongKong'    => $isHongKong,
+//            'ebookStoryId'   => $ebookStoryId,
         ]);
     }
 }

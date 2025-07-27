@@ -75,6 +75,9 @@ $this->title = '我的';
                 </div>
 
             </div>
+                    <?php
+                    if (!$isHongKong) {
+                    ?>
                     <div class="row" id="answer-box">
                         <div class="m-t-30 col-sm-12 col-md-12">
                             <div class="answer-border">
@@ -106,6 +109,27 @@ $this->title = '我的';
                         </div>
 
                     </div>
+                    <?php
+                    } else {
+                    ?>
+                        <div class="row" id="answer-box">
+                            <div class="m-t-30 col-sm-12 col-md-12">
+                                <div class="answer-border">
+                                    <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
+                                    <label class="form-check-label fs-30 answer-btn">
+                                    <span class="answer-tag">
+                                        <img src="../../static/img/my/task.png" class="list-icon-s"/>
+                                    </span>
+                                        <span style="padding-left: 90px; "><a href="/myh5/set_ebook_story?user_id=<?= $userId ?>&session_id=<?= $sessionId ?>&story_id=<?= $storyId ?>">切换电子书剧本</a></span>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    <?php
+                    }
+                    ?>
                     <div class="row" id="answer-box">
                         <div class="m-t-30 col-sm-12 col-md-12">
                             <div class="answer-border">

@@ -100,16 +100,16 @@ class JncityApi extends ApiAction
     }
 
     public function storyList() {
-        $storyList = UserEBook::$storyList;
+        $storyList = UserEBook::$poiList;
 
         if (empty($storyList)) {
             return [];
         }
 
-        foreach ($storyList as &$story) {
-            $story['poi'] = !empty(UserEBook::$poiList[$story['poi']])
-                ? UserEBook::$poiList[$story['poi']] : [];
-        }
+//        foreach ($storyList as &$story) {
+//            $story['poi'] = !empty(UserEBook::$poiList[$story['poi']])
+//                ? UserEBook::$poiList[$story['poi']] : [];
+//        }
 
         return $storyList;
     }
