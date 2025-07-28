@@ -104,7 +104,7 @@ $this->title = '我的';
                             <div class="set">
                             </div>
                             <div class="grade_options">
-                                <select name="user_ebook_story_id">
+                                <select name="user_ebook_story_id" style="border: 0px; background-color: black; color: #fff; padding: 10px; height: 80px;">
                                 <?php
                                 foreach (\common\models\UserEBook::$poiList as $userEbookStoryId => $story) {
                                     ?>
