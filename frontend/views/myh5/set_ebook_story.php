@@ -103,8 +103,8 @@ $this->title = '我的';
                         <label class="form-check-label fs-30 answer-btn">
                             <div class="set">
                             </div>
-                            <div class="grade_options">
-                                <select name="user_ebook_story_id" style="border: 0px; background-color: black; color: #fff; padding: 10px; height: 80px;">
+                            <div class="grade_options" style="border: 0px;">
+                                <select name="user_ebook_story_id" style="border: 0px; background-color: #DAFC70; color: black; padding: 10px; height: 80px;">
                                 <?php
                                 foreach (\common\models\UserEBook::$poiList as $userEbookStoryId => $story) {
                                     ?>
