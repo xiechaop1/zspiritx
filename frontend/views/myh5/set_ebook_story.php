@@ -99,10 +99,9 @@ $this->title = '我的';
                     <form method="post">
             <div class="row" id="answer-box">
                 <div class="m-t-30 col-sm-12 col-md-12">
-                    <div class="answer-border">
+                    <div class="answer-border" style="border: 0px; ">
                         <label class="form-check-label fs-30 answer-btn">
                             <div class="set">
-                                故事：
                             </div>
                             <div class="grade_options">
                                 <select name="user_ebook_story_id">
@@ -121,8 +120,8 @@ $this->title = '我的';
                                 ?>
                                 </select>
                             </div>
-                            <div class="set">
-                                <input type="submit" value="变更" class="btn-m-green m-t-30" style="width: 200px; height: 80px;">
+                            <div class="set" style="margin-top: 50px;">
+                                <input type="submit" value="变更" class="btn-m-green m-t-30" style="position: relative; width: 200px; height: 80px;">
                             </div>
 
 
