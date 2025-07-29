@@ -73,24 +73,29 @@ class EBook extends Component
 
     public function generateVideoBase64($userMessage, $image = '', $params = []) {
         $modelParams = $params;
-        // 通过$image（文件路径），获取图片类型
-        $extension = pathinfo($image, PATHINFO_EXTENSION);
-        switch ($extension) {
-            case 'jpg':
-            case 'jpeg':
-                $imageType = 'jpeg';
-                break;
-            case 'png':
-                $imageType = 'png';
-                break;
-            case 'gif':
-                $imageType = 'gif';
-                break;
-            default:
-                $imageType = 'jpeg';
-                break;
+        if (!\common\helpers\Common::isBase64($image)) {
+            // 通过$image（文件路径），获取图片类型
+            $extension = pathinfo($image, PATHINFO_EXTENSION);
+            switch ($extension) {
+                case 'jpg':
+                case 'jpeg':
+                    $imageType = 'jpeg';
+                    break;
+                case 'png':
+                    $imageType = 'png';
+                    break;
+                case 'gif':
+                    $imageType = 'gif';
+                    break;
+                default:
+                    $imageType = 'jpeg';
+                    break;
+            }
+            $imageBase64 = base64_encode(file_get_contents($image));
+        } else {
+            $imageBase64 = $image;
+            $imageType = 'jpeg';
         }
-        $imageBase64 = base64_encode(file_get_contents($image));
         $prompt = $this->_genPrompt($userMessage, $imageBase64, $imageType);
         $ret = $this->chatWithDoubao($prompt, $modelParams);
 

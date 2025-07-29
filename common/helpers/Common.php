@@ -234,6 +234,16 @@ class Common
         return false;
     }
 
+    public static function isBase64($string) {
+        $data = base64_decode($string, true);
+        // 检查是否成功解码
+        if ($data === false) {
+            return false;
+        }
+        // 检查解码后的长度是否合理
+        return strlen($string) == ((strlen($data) * 4) / 3);
+    }
+
     public static function formatNumberToStr($num, $changeUnit = true, $baseDecimal = 0, $decimal = 2, $decTag = '.', $thousandTag = ',') {
         if ($changeUnit) {
             if ($num > 100000000) {
