@@ -245,8 +245,13 @@ class JncityApi extends ApiAction
         $ebookStoryId = !empty($request['ebook_story_id']) ? $request['ebook_story_id'] : 0;
         $poiId = !empty($request['poi_id']) ? $request['poi_id'] : 0;
 
+        $filePath = !empty($file['tmp_name']) ? $file['tmp_name'] : '';
+        if (empty($filePath)) {
+            throw new \Exception('上传文件失败', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
+        }
+
         try {
-            $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $file);
+            $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $filePath);
             if ($ret === false) {
                 throw new \Exception('生成视频失败: AI错误', ErrorCode::EBOOK_GEN_VIDEO_FAILED);
             }
