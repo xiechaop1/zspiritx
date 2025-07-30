@@ -49,15 +49,15 @@ class UserEBook extends \common\models\gii\UserEbook
                         'resources' => [
                             [
                                 'img' => '',
-                                'video_prompt' => '请在篮球场打卡',
+                                'video_prompt' => '主人公戴着白色头戴式耳机，身后背着吉他，站在路边，一辆双层绿色香港叮叮车从主人公面前驶过，主人公走近叮叮车，一个男人在车里举手打招呼，镜头从右到左平移拍摄，景别从人物全景转到远景',
                             ],
                             [
                                 'img' => '',
-                                'video_prompt' => '请在篮球场打卡',
+//                                'video_prompt' => '请在篮球场打卡',
                             ],
                             [
                                 'img' => '',
-                                'video_prompt' => '请在篮球场打卡',
+//                                'video_prompt' => '请在篮球场打卡',
                             ]
                         ],
                         'duration' => 10,
