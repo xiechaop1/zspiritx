@@ -86,6 +86,7 @@ $this->title = '上传图片';
             var userId = $('input[name="user_id"]').val();
             var poiId = $('#poi').val();
             var file = $('input[name="fileUpload"]')[0].files[0];
+            var ebookStory = <?= $ebookStory ?>;
 
             if (poiId == 0) {
                 alert('请选择地点');
@@ -97,41 +98,42 @@ $this->title = '上传图片';
                 return;
             }
 
-            var params = {
-                "getPhotoArgs":{
-                    "url":"https://api.zspiritx.com.cn/jncity/upload",
-                    "ebook_story_id": <?= $ebookStory ?>,
-                    "poi_id": poiId
-                }
-            }
-
-            var data=$.toJSON(params);
-            Unity.call(data);
-
-
-            // var formData = new FormData();
-            // formData.append('fileUpload', file);
-            // formData.append('user_id', userId);
-            // formData.append('poi_id', poiId);
+            //var params = {
+            //    "getPhotoArgs":{
+            //        "url":"https://api.zspiritx.com.cn/jncity/upload",
+            //        "ebook_story_id": <?php //= $ebookStory ?>//,
+            //        "poi_id": poiId
+            //    }
+            //}
             //
-            // $.ajax({
-            //     url: '/jncityh5/uploadimage',
-            //     type: 'POST',
-            //     data: formData,
-            //     processData: false,
-            //     contentType: false,
-            //     success: function (response) {
-            //         if (response.success) {
-            //             alert('上传成功');
-            //             window.location.href = '/jncityh5/index';
-            //         } else {
-            //             alert(response.message);
-            //         }
-            //     },
-            //     error: function () {
-            //         alert('上传失败，请重试');
-            //     }
-            // });
+            //var data=$.toJSON(params);
+            //Unity.call(data);
+
+
+            var formData = new FormData();
+            formData.append('fileUpload', file);
+            formData.append('user_id', userId);
+            formData.append('poi_id', poiId);
+            formData.append('ebook_story_id', ebookStory);
+
+            $.ajax({
+                url: '/jncity/upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        alert('上传成功');
+                        // window.location.href = '/jncityh5/index';
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('上传失败，请重试');
+                }
+            });
         });
     };
 </script>

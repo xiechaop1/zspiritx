@@ -47,7 +47,6 @@ class JncityApi extends ApiAction
     {
         $this->_get = Yii::$app->request->get();
 
-
         try {
             $this->_storyId = !empty($this->_get['story_id']) ? $this->_get['story_id'] : 0;
 
@@ -248,16 +247,19 @@ class JncityApi extends ApiAction
 
         try {
             $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $file);
-            $videoId = '';
-            if (!empty($ret['id'])) {
-                $videoId = $ret['id'];
+            if ($ret === false) {
+                throw \Exception('生成视频失败: AI错误', ErrorCode::EBOOK_GEN_VIDEO_FAILED);
             }
+//            $videoId = '';
+//            if (!empty($ret['id'])) {
+//                $videoId = $ret['id'];
+//            }
         } catch (\Exception $e) {
             throw \Exception('生成视频失败: ' . $e->getMessage(), ErrorCode::EBOOK_GEN_VIDEO_FAILED);
         }
 
         return [
-            'msg' => '视频生成中，ID：' . $videoId,
+            'msg' => '视频生成中',
         ];
 
     }

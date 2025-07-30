@@ -15,6 +15,10 @@ class JncityController extends Controller
 {
     public $layout = '@frontend/views/layouts/main_w.php';
 
+    public function init() {
+        $this->enableCsrfValidation  = false;
+    }
+
     public function actions()
     {
         return [
@@ -27,7 +31,8 @@ class JncityController extends Controller
                 'action' => 'story_list',
             ],
             'upload' => [
-                'class'     => 'frontend\actions\jncity\Upload',
+                'class' => 'frontend\actions\jncity\JncityApi',
+                'action' => 'upload',
             ],
             'get_story' => [
                 'class' => 'frontend\actions\jncity\JncityApi',

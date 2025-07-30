@@ -170,28 +170,39 @@ class EBook extends Component
             return false;
         }
 
-        $storyId = 100;
+        $storyId = 16;
 
-        $pois = !empty($ebookParam['pois'][$poiId])
-            ? $ebookParam['pois'][$poiId] : [];
+        $pois = !empty($ebookParam['pois'][$poiId - 1])
+            ? $ebookParam['pois'][$poiId - 1] : [];
 
-        if (empty($poi)) {
+        if (empty($pois)) {
             return false;
         }
 
         $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
 
+        $isCreating = False;
         if (!empty($pois)) {
-            $videoId = '';
             foreach ($pois as $poi) {
-                $ret = $this->generateVideoBase64($poi['prompt'], $image);
-                if (!empty($ret['id'])) {
-                    $videoId = $ret['id'];
+                if (!empty($poi['resources'])) {
+                    foreach ($poi['resources'] as $res) {
+                        if (!empty($res['video_prompt'])) {
+                            $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
+                            if (!empty($ret['id'])) {
+                                $videoId = $ret['id'];
+                                $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+                                $isCreating = True;
+                            }
+                        }
+                    }
                 }
+
+
             }
 
-            $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+
         }
+        return $isCreating;
     }
 
     public function searchWithId($id) {
