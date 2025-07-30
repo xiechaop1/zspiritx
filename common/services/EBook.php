@@ -140,7 +140,7 @@ class EBook extends Component
 
         $storyId = 100;
 
-        $pois = !empty($ebookParam['pois'][$poiId])
+        $poi = !empty($ebookParam['pois'][$poiId])
             ? $ebookParam['pois'][$poiId] : [];
 
         if (empty($poi)) {
@@ -149,26 +149,20 @@ class EBook extends Component
 
         $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
 
-        if (!empty($pois)) {
-            foreach ($pois as $poi) {
-                if (!empty($poi['resources'])) {
-                    foreach ($poi['resources'] as $res) {
-                        if (!empty($res['video_prompt'])) {
-                            $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
-                            if (!empty($ret['id'])) {
-                                $videoId = $ret['id'];
-                                $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
-                                $isCreating = True;
-                            }
-                        }
+        $isCreating = False;
+        if (!empty($poi['resources'])) {
+            foreach ($poi['resources'] as $res) {
+                if (!empty($res['video_prompt'])) {
+                    $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
+                    if (!empty($ret['id'])) {
+                        $videoId = $ret['id'];
+                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+                        $isCreating = True;
                     }
                 }
-
-
             }
-
-
         }
+
         return $isCreating;
     }
 
@@ -182,36 +176,29 @@ class EBook extends Component
 
         $storyId = 16;
 
-        $pois = !empty($ebookParam['pois'][$poiId - 1])
+        $poi = !empty($ebookParam['pois'][$poiId - 1])
             ? $ebookParam['pois'][$poiId - 1] : [];
 
-        if (empty($pois)) {
+        if (empty($poi)) {
             return false;
         }
 
         $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
 
         $isCreating = False;
-        if (!empty($pois)) {
-            foreach ($pois as $poi) {
-                if (!empty($poi['resources'])) {
-                    foreach ($poi['resources'] as $res) {
-                        if (!empty($res['video_prompt'])) {
-                            $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
-                            if (!empty($ret['id'])) {
-                                $videoId = $ret['id'];
-                                $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
-                                $isCreating = True;
-                            }
-                        }
+        if (!empty($poi['resources'])) {
+            foreach ($poi['resources'] as $res) {
+                if (!empty($res['video_prompt'])) {
+                    $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
+                    if (!empty($ret['id'])) {
+                        $videoId = $ret['id'];
+                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+                        $isCreating = True;
                     }
                 }
-
-
             }
-
-
         }
+
         return $isCreating;
     }
 
