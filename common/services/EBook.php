@@ -150,16 +150,26 @@ class EBook extends Component
         $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
 
         if (!empty($pois)) {
-            $videoId = '';
             foreach ($pois as $poi) {
-                $ret = $this->generateVideo($poi['prompt'], $image);
-                if (!empty($ret['id'])) {
-                    $videoId = $ret['id'];
+                if (!empty($poi['resources'])) {
+                    foreach ($poi['resources'] as $res) {
+                        if (!empty($res['video_prompt'])) {
+                            $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
+                            if (!empty($ret['id'])) {
+                                $videoId = $ret['id'];
+                                $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+                                $isCreating = True;
+                            }
+                        }
+                    }
                 }
+
+
             }
 
-            $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+
         }
+        return $isCreating;
     }
 
     public function generateVideoBase64WithEbookStory($ebookStoryId , $userId, $poiId = 1, $image, $params = []) {

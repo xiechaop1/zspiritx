@@ -248,7 +248,7 @@ class JncityApi extends ApiAction
         try {
             $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $file);
             if ($ret === false) {
-                throw \Exception('生成视频失败: AI错误', ErrorCode::EBOOK_GEN_VIDEO_FAILED);
+                throw new \Exception('生成视频失败: AI错误', ErrorCode::EBOOK_GEN_VIDEO_FAILED);
             }
 //            $videoId = '';
 //            if (!empty($ret['id'])) {
