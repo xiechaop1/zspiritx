@@ -255,7 +255,7 @@ class JncityApi extends ApiAction
 //                $videoId = $ret['id'];
 //            }
         } catch (\Exception $e) {
-            throw \Exception('生成视频失败: ' . $e->getMessage(), ErrorCode::EBOOK_GEN_VIDEO_FAILED);
+            throw new \Exception('生成视频失败: ' . $e->getMessage(), ErrorCode::EBOOK_GEN_VIDEO_FAILED);
         }
 
         return [
@@ -277,7 +277,7 @@ class JncityApi extends ApiAction
                 $videoId = $ret['id'];
             }
         } catch (\Exception $e) {
-            throw \Exception('生成视频失败: ' . $e->getMessage(), ErrorCode::EBOOK_GEN_VIDEO_FAILED);
+            throw new \Exception('生成视频失败: ' . $e->getMessage(), ErrorCode::EBOOK_GEN_VIDEO_FAILED);
         }
 
         return [
