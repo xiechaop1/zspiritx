@@ -65,9 +65,13 @@ class UploadImage extends Action
             $ebookStory = 1;
         }
 
+        $poiList = !empty(UserEBook::$poiList[$ebookStory]) ? UserEBook::$poiList[$ebookStory]['pois'] : [];
+
         return $this->controller->render('uploadimage', [
             'userId' => $userId,
             'storyId' => $storyId,
+            'poiList' => $poiList,
+            'ebookStory' => $ebookStory,
         ]);
 
     }

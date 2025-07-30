@@ -37,7 +37,6 @@ class UserEBook extends \common\models\gii\UserEbook
             'story' => '80年代香港的港剧',
             'desc' => '80-90年香港的《射雕》《上海滩》都是经典',
             'pois' => [
-                1 => [
                     [
                         'poi_id' => 1,
                         'page' => 1,
@@ -219,7 +218,7 @@ class UserEBook extends \common\models\gii\UserEbook
                             ]
                         ],
                     ],
-                ],
+
 
             ],
         ],
@@ -228,7 +227,6 @@ class UserEBook extends \common\models\gii\UserEbook
             'story' => '现代香港',
             'desc' => '完全现代香港的故事',
             'pois' => [
-                1 => [
                     [
                         'poi_id' => 1,
                         'page' => 1,
@@ -410,7 +408,7 @@ class UserEBook extends \common\models\gii\UserEbook
                             ]
                         ],
                     ],
-                ],
+
 
             ],
         ],

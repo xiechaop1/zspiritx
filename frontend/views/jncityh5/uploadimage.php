@@ -30,8 +30,6 @@ $this->title = '上传图片';
 ?>
 
 <input type="hidden" name="user_id" value="<?= $userId ?>">
-<input type="hidden" name="session_id" value="<?= $sessionId ?>">
-<input type="hidden" name="story_id" value="<?= $storyId ?>">
 
 <div class="w-100 m-auto">
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 50px;">
@@ -42,143 +40,26 @@ $this->title = '上传图片';
                         返回
                     </div>
                     <div class="npc-name" style="background-color: #000; color: #DAFC70">
-                        <?= $title ?>
+                        上传视频
                     </div>
-                    <div style="clear:both; color: white; font-size: 28px; font-weight: bold; margin-top: 30px; padding-bottom: 15px; border-bottom: 1px #fff solid;">
-                        <?php
-                        if (!empty($menus)) {
-                            foreach ($menus as $menuType => $menuName) {
-                                if ($menuType == $shopWareType) {
-                                    $style = 'border-bottom: 4px #DAFC70 solid; color: #DAFC70';
-                                } else {
-                                    $style = 'color: #fff';
-                                }
-                                $req = $_REQUEST;
-                                $req['shop_ware_type'] = $menuType;
-                                $urlParams = http_build_query($req);
-                                ?>
-                                <a href="/shoph5/shop?<?= $urlParams ?>">
-                        <span style="<?= $style ?>; padding: 15px; ">
-                            <?= !empty($menus[$menuType])
-                                ? $menus[$menuType] : '未知' ?>
-                        </span>
-                                </a>
-                                <?php
-                            }
-                        }
-                        ?>
-                    </div>
-            <div class="row" id="answer-box" style="margin-top: 20px;">
-                <?php
-                foreach ($model as $item) {
-                    $label = !empty($item->ware_name) ? $item->ware_name : $item->storyModel->story_model_name;
-                    $desc = !empty($item->intro) ? $item->intro : ' - ';
-                    if (empty($desc)) {
-                        !empty($item->storyModel->story_model_desc) ? $item->storyModel->story_model_desc : '-';
-                    }
-                    $icon = !empty($item->icon) ? $item->icon : '';
-                    if (empty($icon)) {
-                        $icon = !empty($item->storyModel->icon) ? $item->storyModel->icon : '';
-                    }
-                    $txt = $label;
-
-                ?>
-                <div class="m-t-100 col-sm-12 col-md-12" style="margin-top: 0px; padding: 5px; " id="baggage_area">
-                    <div class="answer-border2" style="height: 100%;">
-<!--                        <input class="form-check-input" type="radio" name="item" value="--><?php //= $item->id ?><!--" id="legal_person_yes_--><?php //= $item->id ?><!--" >-->
-                        <label class="form-check-label fs-30 answer-btn" for="legal_person_yes_<?= $item->id ?>" style="padding-top: 20px;">
-<!--                            <span class="answer-tag2">--><?php //= $item->store_ct ?><!--</span>-->
-                            <div class="col-sm-2" style="float: left;">
-                            <?php
-                            if (!empty($icon)) {
-                                echo '<img src="' . \common\helpers\Attachment::completeUrl($icon, true) . '" width="80" class=" m-r-10" style="border-radius: 20px;" title="' . $txt . '">';
-                            } else {
-                                echo $txt;
-                            }
+            <div class="row" id="answer-box" style="margin-top: 50px;">
+                地点：
+                <select id="poi">
+                    <option value="0">请选择</option>
+                    <?php
+                    if (!empty($poiList)) {
+                        foreach ($poiList as $poi) {
                             ?>
-                            </div>
-                            <div class="col-sm-6" style="float: left; width: 350px; text-align: left; line-height: 125%;">
-                                <?= $txt ?>
-                                <br>
-                                <span class="fs-20" style="color: #999">
-                                <?= $desc ?>
-                                </span>
-                                <?php
-                                if ($shopWareType == \common\models\ShopWares::SHOP_WARE_TYPE_PACKAGE) {
-                                    ?>
-
-                                <br>
-                                <span class="fs-20" style="color: #999">
-                                有效期：<?php
-                                    if (empty($item->period)) {
-                                        echo '永久';
-                                    } else {
-                                        echo $item->period . '天';
-                                    }
-                                    ?>
-                                </span>
-                                    <?php
-                                }
-                                ?>
-                            </div>
-                            <div class="col-sm-4" style="float: left;">
-                                <?php
-                                switch ($item->pay_way) {
-                                    case \common\models\ShopWares::PAY_WAY_MONEY:
-//                                            echo '<img src="../../static/img/pay/wechat_pay_icon.png" width="30">';
-                                        if ($item->discount >= 1000) {
-                                            $discount = '￥' . number_format($item->discount, 0);
-                                        } else {
-                                            $discount = '￥' . number_format($item->discount, 2);
-                                        }
-                                        if ($item->price >= 1000) {
-                                            $price = '￥' . number_format($item->price, 0);
-                                        } else {
-                                            $price = '￥' . number_format($item->price, 2);
-                                        }
-                                        $buyIcon = '';
-                                        $buyClass = 'shop_buy_pay_btn';
-                                        break;
-                                    case \common\models\ShopWares::PAY_WAY_SCORE:
-                                    default:
-                                        $buyIcon = '<img src="../../static/img/qa/gold.png" width="50">';
-                                        $discount = \common\helpers\Common::formatNumberToStr($item->discount, true);
-                                        $price = \common\helpers\Common::formatNumberToStr($item->price, true);
-                                        $buyClass = 'shop_buy_score_btn';
-                                        break;
-                                }
-                                ?>
-
-                                <div class="shop_buy_btn <?= $buyClass ?>" id="shop_buy_btn" data-id="<?= $item->id ?>" act="1">
-                                    <?php
-                                    echo '<div style="float: left; margin-right: 3px;">';
-                                    echo $buyIcon;
-                                    echo '</div>';
-
-                                    if (!empty($item->discount)) {
-                                        echo '<div style="float: left; line-height: 150%; text-align: right; ">';
-                                        echo '<span class="fs-32 bold">' . $discount . '</span><br>';
-                                        echo '<span class="fs-24 bold" style="color: #666666; text-decoration: line-through; ">' . $price . '</span>';
-                                        echo '</div>';
-                                    }
-                                    else {
-                                        echo '<div style="float: left; line-height: 150%;">';
-                                        echo '<span class="fs-32 bold">' . $price . '</span>';
-                                        echo '</div>';
-                                    }
-
-                                ?>
-                                </div>
-
-                            </div>
-
-
-                    </label>
-                    </div>
-                </div>
-                <?php
-                }
-                ?>
+                            <option value="<?= $poi['poi_id'] ?>"><?= $poi['poi_name'] ?></option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+                <div class="row" id="answer-box" style="margin-top: 20px;">
+                照片：
+                    <input type="file" name="fileUpload" style="font-size: 24px;">
 
             </div>
 <!--                    <div class="btn-m-green m-t-30 float-right m-r-20" id="return_btn">
@@ -186,66 +67,74 @@ $this->title = '上传图片';
                     </div> -->
                 </div>
             </div>
-
-        </div>
-        </div>
-
-    <div class="modal fade" id="shop_ware_detail" tabindex="-1" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content fs-30 bold w-100 text-FF title-box-border">
-                <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 5px;right: 15px;">
-                    <div><img src="../../static/img/qa/close_btn.png" alt="" class="img-36  d-inline-block m-r-10 vertical-mid"></div>
-                </span>
-<!--                <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">-->
-                    <div>
-                            <div class="npc-name" id="title">
-
-                            </div>
-
-                            <div class="row" id="html">
-
-                            </div>
-                            <div class="row" id="desc">
-
-                            </div>
-                        <div>
-
-                        <div class="btn-m-green m-t-30 float-right m-r-20" id="dialog_return_btn" target_id="baggage_detail" need_refresh="0">
-                            返回
-                        </div>
-
-                    </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-<div style="position: fixed; bottom: 0px; margin:10px; width: 100%;">
-    <div class="w-100 p-30  m-b-10">
-        <div class="w-1-0 d-flex">
-            <div class="fs-30 bold w-100 text-FF" style="float: left;">
-
-            </div>
-            <div class="fs-30 bold w-100 text-FF" style="float: left; position: relative; right: 0px;">
-                <div style="position: absolute; top: -50px;right: 50px; ">
-                    <img src="../../static/img/qa/gold.png" width="50">
-                    <?php
-                    if (!empty($userScore->score)) {
-                        $score = $userScore->score;
-                    } else {
-                        $score = 0;
-                    }
-                    ?>
-                    <span id="user_score_ret"><?= \common\helpers\Common::formatNumberToStr($score, true) ?></span>
+            <div class="row" id="answer-box" style="margin-top: 20px;">
+                <div class="btn-m-green m-t-30  m-l-30" style="" id="upload_btn">
+                    上传
                 </div>
-
             </div>
 
         </div>
-    </div>
-</div>
+        </div>
+
+
 
 </div>
+<script>
+    window.onload = function () {
+
+        $('#upload_btn').click(function () {
+            var userId = $('input[name="user_id"]').val();
+            var poiId = $('#poi').val();
+            var file = $('input[name="fileUpload"]')[0].files[0];
+
+            if (poiId == 0) {
+                alert('请选择地点');
+                return;
+            }
+
+            if (!file) {
+                alert('请选择文件');
+                return;
+            }
+
+            var params = {
+                "getPhotoArgs":{
+                    "url":"https://api.zspiritx.com.cn/jncity/upload",
+                    "ebook_story_id": <?= $ebookStory ?>,
+                    "poi_id": poiId
+                }
+            }
+
+            var data=$.toJSON(params);
+            Unity.call(data);
+
+
+            // var formData = new FormData();
+            // formData.append('fileUpload', file);
+            // formData.append('user_id', userId);
+            // formData.append('poi_id', poiId);
+            //
+            // $.ajax({
+            //     url: '/jncityh5/uploadimage',
+            //     type: 'POST',
+            //     data: formData,
+            //     processData: false,
+            //     contentType: false,
+            //     success: function (response) {
+            //         if (response.success) {
+            //             alert('上传成功');
+            //             window.location.href = '/jncityh5/index';
+            //         } else {
+            //             alert(response.message);
+            //         }
+            //     },
+            //     error: function () {
+            //         alert('上传失败，请重试');
+            //     }
+            // });
+        });
+    };
+</script>
 
 
 
