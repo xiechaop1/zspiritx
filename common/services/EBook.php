@@ -98,7 +98,7 @@ class EBook extends Component
         }
         $prompt = $this->_genBailianPrompt($userMessage, $imageBase64, $imageType);
         $inputParams = $this->_genBaiLianParams($params);
-        $inputParams = [];
+//        $inputParams = [];
         $ret = $this->chatWithBailian($prompt, $inputParams);
 //        $ret = $this->chatWithDoubao($prompt, $modelParams);
 
@@ -291,6 +291,7 @@ class EBook extends Component
         $isJson = True;
         $opts = [];
 
+        Yii::debug('bailian param: ' . json_encode($data, JSON_UNESCAPED_UNICODE));
         $response = $this->_call($uri, $data, 'POST', $isJson, $opts);
         Yii::info('bailian ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 
@@ -608,12 +609,14 @@ class EBook extends Component
 //        var_dump($params);
 //        exit;
 //        var_dump($url);
+        Yii::info('ai headers : ' . json_encode($headers, JSON_UNESCAPED_UNICODE));
+        Yii::info('ai params : ' . json_encode($params, JSON_UNESCAPED_UNICODE));
         if ($method == 'POST') {
             $response = Curl::curlPost($url, $params, $headers, true, $opts, $isStream);
         } else {
             $response = Curl::curlGet($url);
         }
-        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+//        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 //        file_put_contents('/tmp/tmp.tmp', $response);
 //        var_dump($response);exit;
 
