@@ -97,12 +97,65 @@ class EBook extends Component
             $imageType = 'jpeg';
         }
         $prompt = $this->_genPrompt($userMessage, $imageBase64, $imageType);
-        $ret = $this->chatWithDoubao($prompt, $modelParams);
+        $inputParams = $this->_genBaiLianParams($params);
+        $ret = $this->chatWithBailian($prompt, $inputParams);
+//        $ret = $this->chatWithDoubao($prompt, $modelParams);
 
         return $ret;
     }
 
-    private function _genPrompt($userMessage, $image, $imageType = 'jpg') {
+    private function _genBaiLianParams($params) {
+//
+//        if (!empty($params['duration'])) {
+//            $baiLianParams['duration'] = $params['duration'];
+//        }
+//
+//        if (!empty($params['watermark'])) {
+//            $baiLianParams['watermark'] = $params['watermark'];
+//        }
+//
+//        if (!empty($params['seed'])) {
+//            $baiLianParams['seed'] = $params['seed'];
+//        }
+//
+//        if (!empty($params['resolution'])) {
+//            $baiLianParams['resolution'] = $params['resolution'];
+//        }
+//
+//        if (!empty($params['prompt_extend'])) {
+//            $baiLianParams['prompt_extend'] = $params['prompt_extend'];
+//        }
+        $baiLianParams = $params;
+
+        return $baiLianParams;
+    }
+
+    private function _genBaiLianPrompt($userMessage, $image, $imageType = 'jpeg') {
+        if ($imageType == 'file') {
+            $img = [
+                'type' => 'image_url',
+                'image_url' => [
+                    'url' => $image
+                ]
+            ];
+        } else {
+            $img = [
+                'type' => 'image_url',
+                'image_url' => [
+                    'url' => 'data:image/' . $imageType . ';base64,' . $image,
+                ]
+            ];
+        }
+
+        $input = [
+            'prompt' => $userMessage,
+            'img_url' => $img,
+        ];
+
+        return $input;
+    }
+
+    private function _genPrompt($userMessage, $image, $imageType = 'jpeg') {
         $text = [
             'type' => 'text',
             'text' => $userMessage
@@ -203,7 +256,8 @@ class EBook extends Component
     }
 
     public function searchWithId($id) {
-        $uri = '/v3/contents/generations/tasks/' . $id;
+//        $uri = '/v3/contents/generations/tasks/' . $id;
+        $uri = '/api/v1/tasks/' . $id;
 
         $response = $this->_call($uri, [], 'GET', true);
 
@@ -216,6 +270,38 @@ class EBook extends Component
 
         $tmpRet =  json_decode($response, true);
         return $tmpRet;
+    }
+
+    public function chatWithBailian($prompt, $params) {
+        $data = [
+            'input' => $prompt,
+            'parameters' => $params,
+            'model' => $this->model
+        ];
+
+        $uri = $this->uri;
+        $isJson = True;
+        $opts = [];
+
+        $response = $this->_call($uri, $data, 'POST', $isJson, $opts);
+        Yii::info('bailian ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+
+        if (!empty($response)) {
+            $ret = json_decode($response, true);
+
+            if (!empty($ret['code'])) {
+                throw new \Exception($ret['message'], $ret['code']);
+            }
+
+            if (!empty($ret['output']['task_id'])) {
+                return $ret['output']['task_id'];
+            }
+        }
+
+        return '';
+
+
+
     }
 
     public function chatWithDoubao($prompt, $modelParams =[], $cfg = [], $isJson = True) {
@@ -503,11 +589,7 @@ class EBook extends Component
 
 
     private function _call($interface, $params = array(), $method = 'POST', $isJson = true, $opts = [], $isStream = false) {
-        if (!empty($host)) {
-            $url = $host . $interface;
-        } else {
-            $url = $this->host . $interface;
-        }
+        $url = $this->host . $interface;
 
         $headers = array(
             'Content-Type: application/json',
