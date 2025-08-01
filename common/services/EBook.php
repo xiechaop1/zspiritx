@@ -98,6 +98,7 @@ class EBook extends Component
         }
         $prompt = $this->_genBailianPrompt($userMessage, $imageBase64, $imageType);
         $inputParams = $this->_genBaiLianParams($params);
+        $inputParams = [];
         $ret = $this->chatWithBailian($prompt, $inputParams);
 //        $ret = $this->chatWithDoubao($prompt, $modelParams);
 
@@ -279,9 +280,12 @@ class EBook extends Component
     public function chatWithBailian($prompt, $params) {
         $data = [
             'input' => $prompt,
-            'parameters' => $params,
             'model' => $this->model
         ];
+
+        if (!empty($params)) {
+            $data['parameters'] = $params;
+        }
 
         $uri = $this->uri;
         $isJson = True;
