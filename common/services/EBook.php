@@ -137,19 +137,9 @@ class EBook extends Component
 
     private function _genBaiLianPrompt($userMessage, $image, $imageType = 'jpeg') {
         if ($imageType == 'file') {
-            $img = [
-                'type' => 'image_url',
-                'image_url' => [
-                    'url' => $image
-                ]
-            ];
+            $img = $image;
         } else {
-            $img = [
-                'type' => 'image_url',
-                'image_url' => [
-                    'url' => 'data:image/' . $imageType . ';base64,' . $image,
-                ]
-            ];
+            $img = 'data:image/' . $imageType . ';base64,' . $image;
         }
 
         $input = [
@@ -292,8 +282,8 @@ class EBook extends Component
         $opts = [];
 
         $tmpdata = $data;
-        if (!empty($tmpdata['input']['image_url']['url'])) {
-            $tmpdata['input']['image_url']['url'] = substr($tmpdata['input']['image_url']['url'], 0, 50);
+        if (!empty($tmpdata['input']['img_url'])) {
+            $tmpdata['input']['img_url'] = substr($tmpdata['input']['img_url'], 0, 50);
         }
 
         Yii::debug('bailian param: ' . json_encode($tmpdata, JSON_UNESCAPED_UNICODE));
