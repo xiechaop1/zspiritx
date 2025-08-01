@@ -30,8 +30,10 @@ class Curl
         } else {
             $postFields = json_encode($postFields);
 
-            $header[] = 'Content-Type: application/json; charset=utf-8';
-            $header[] = 'Content-Length: ' . strlen($postFields);
+            if (empty($header)) {
+                $header[] = 'Content-Type: application/json; charset=utf-8';
+                $header[] = 'Content-Length: ' . strlen($postFields);
+            }
 
         }
 

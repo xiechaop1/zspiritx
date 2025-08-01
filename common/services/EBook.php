@@ -593,7 +593,8 @@ class EBook extends Component
 
         $headers = array(
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $this->apiKey
+            'Authorization: Bearer ' . $this->apiKey,
+            'X-DashScope-Async: enable',
         );
 
 //        var_dump($params);
