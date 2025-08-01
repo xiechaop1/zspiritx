@@ -291,7 +291,12 @@ class EBook extends Component
         $isJson = True;
         $opts = [];
 
-        Yii::debug('bailian param: ' . json_encode($data, JSON_UNESCAPED_UNICODE));
+        $tmpdata = $data;
+        if (!empty($tmpdata['input']['image_url']['url'])) {
+            $tmpdata['input']['image_url']['url'] = substr($tmpdata['input']['image_url']['url'], 0, 50);
+        }
+
+        Yii::debug('bailian param: ' . json_encode($tmpdata, JSON_UNESCAPED_UNICODE));
         $response = $this->_call($uri, $data, 'POST', $isJson, $opts);
         Yii::info('bailian ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 
