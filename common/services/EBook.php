@@ -615,7 +615,7 @@ class EBook extends Component
 //        exit;
 //        var_dump($url);
         Yii::info('ai headers : ' . json_encode($headers, JSON_UNESCAPED_UNICODE));
-        Yii::info('ai params : ' . json_encode($params, JSON_UNESCAPED_UNICODE));
+//        Yii::info('ai params : ' . json_encode($params, JSON_UNESCAPED_UNICODE));
         if ($method == 'POST') {
             $response = Curl::curlPost($url, $params, $headers, true, $opts, $isStream);
         } else {
