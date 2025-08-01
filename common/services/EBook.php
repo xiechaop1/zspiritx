@@ -99,7 +99,8 @@ class EBook extends Component
         $prompt = $this->_genBailianPrompt($userMessage, $imageBase64, $imageType);
         $inputParams = $this->_genBaiLianParams($params);
 //        $inputParams = [];
-        $ret = $this->chatWithBailian($prompt, $inputParams);
+        $taskId = $this->chatWithBailian($prompt, $inputParams);
+        $ret['id'] = $taskId;
 //        $ret = $this->chatWithDoubao($prompt, $modelParams);
 
         return $ret;
