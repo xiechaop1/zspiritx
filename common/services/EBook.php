@@ -535,6 +535,8 @@ class EBook extends Component
                 ])
                 ->one();
 
+            $ebookStoryParams = is_array($ebookStoryParams) ? json_encode($ebookStoryParams, JSON_UNESCAPED_UNICODE) : $ebookStoryParams;
+
             if (empty($model)) {
                 $model = new UserEBookRes();
                 $model->user_id = $userId;
@@ -560,7 +562,7 @@ class EBook extends Component
 
             if ($rr == false) {
                 Yii::error($model->getErrors());
-                throw new \Exception($model->getErrors());
+                throw new \Exception('数据库报错');
             }
             return $rr;
 //            $model->save();
