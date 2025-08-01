@@ -127,7 +127,7 @@ $this->title = '上传图片';
                         alert('上传成功');
                         // window.location.href = '/jncityh5/index';
                     } else {
-                        alert(response.message);
+                        alert(response.data.msg);
                     }
                 },
                 error: function () {
