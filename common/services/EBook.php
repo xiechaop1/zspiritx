@@ -200,12 +200,12 @@ class EBook extends Component
 
         $isCreating = False;
         if (!empty($poi['resources'])) {
-            foreach ($poi['resources'] as $res) {
+            foreach ($poi['resources'] as $idx => $res) {
                 if (!empty($res['video_prompt'])) {
                     $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
-                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
                         $isCreating = True;
                     }
                 }
@@ -236,12 +236,12 @@ class EBook extends Component
 
         $isCreating = False;
         if (!empty($poi['resources'])) {
-            foreach ($poi['resources'] as $res) {
+            foreach ($poi['resources'] as $idx => $res) {
                 if (!empty($res['video_prompt'])) {
                     $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
-                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId);
+                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
                         $isCreating = True;
                     }
                 }
@@ -525,7 +525,7 @@ class EBook extends Component
         return $userEbookId;
     }
 
-    public function newVideoToDb($userEbookId, $userId, $storyId, $ebookStory, $ebookStoryParams, $poiId, $videoId) {
+    public function newVideoToDb($userEbookId, $userId, $storyId, $ebookStory, $ebookStoryParams, $poiId, $videoId, $resId) {
         try {
 
             $model = UserEBookRes::find()
@@ -544,6 +544,7 @@ class EBook extends Component
                 $model->ebook_story = $ebookStory;
                 $model->ebook_story_params = $ebookStoryParams;
                 $model->poi_id = $poiId;
+                $model->resource_id = $resId;
                 $model->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT;
                 $model->ai_video_m_id = $videoId;
                 $rr = $model->save();

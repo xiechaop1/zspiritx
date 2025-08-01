@@ -40,30 +40,49 @@ class JncityController extends Controller
             if ($status == 'succeeded') {
                 $videoUrl = !empty($ret['content']['video_url']) ? $ret['content']['video_url'] : '';
                 if (!empty($videoUrl)) {
+                    $ebookStoryParams = !empty($model->ebook_story_params) ? json_decode($model->ebook_story_params, true) : [];
+                    $poiId = !empty($model->poi_id) ? $model->poi_id : 0;
+                    $resId = $model->resource_id;
+                    $resources = !empty($ebookStoryParams[$model->ebook_story][$poiId]['resources'][$resId]) ? $ebookStoryParams[$model->ebook_story][$poiId]['resources'][$resId] : [];
+
                     // 1. 下载视频到本地
                     $tmpVideo = '/tmp/video_' . uniqid() . '.mp4';
                     file_put_contents($tmpVideo, file_get_contents($videoUrl));
 
                     // 2. 指定本地 MP3 路径
-                    $mp3Path = '/Users/choice/Projects/zspiritx/a.mp3'; // 你可以根据实际情况修改
+                    if (!empty($resources['bgm'])) {
+                        $mp3Path = $resources['bgm'];
 
-                    // 3. 合成新视频
-                    $outputVideo = '/tmp/output_' . uniqid() . '.mp4';
-                    $cmd = "ffmpeg -y -i {$tmpVideo} -i {$mp3Path} -c:v copy -c:a aac -strict experimental -map 0:v:0 -map 1:a:0 -shortest {$outputVideo}";
-                    exec($cmd, $out, $retCode);
+                        // 3. 合成新视频
+                        $outputVideo = '/tmp/output_' . uniqid() . '.mp4';
+                        $cmd = "ffmpeg -y -i {$tmpVideo} -i {$mp3Path} -c:v copy -c:a aac -strict experimental -map 0:v:0 -map 1:a:0 -shortest {$outputVideo}";
+                        exec($cmd, $out, $retCode);
+                        $tmpVideo = $outputVideo;
+                    } else {
+//                        $mp3Path = Yii::$app->params['default_bgm'];
+                    }
+//                    $mp3Path = '/Users/choice/Projects/zspiritx/a.mp3'; // 你可以根据实际情况修改
 
-                    if ($retCode === 0 && file_exists($outputVideo)) {
+
+
+                    if ($retCode === 0 && file_exists($tmpVideo)) {
                         // OSS配置
-                        $accessKeyId = '你的AccessKeyId';
-                        $accessKeySecret = '你的AccessKeySecret';
-                        $endpoint = '你的Endpoint'; // 例如: oss-cn-shanghai.aliyuncs.com
-                        $bucket = '你的Bucket名称';
+//                        $accessKeyId = '你的AccessKeyId';
+//                        $accessKeySecret = '你的AccessKeySecret';
+//                        $endpoint = '你的Endpoint'; // 例如: oss-cn-shanghai.aliyuncs.com
+//                        $bucket = '你的Bucket名称';
 
-                        $ossFileName = 'videos/' . basename($outputVideo);
+                        $accessKeyId = Yii::$app->params['oss.accesskeyid'];
+                        $accessKeySecret = Yii::$app->params['oss.accesskeysecret'];
+                        $endpoint = Yii::$app->params['endpoint'];
+                        $host = Yii::$app->params['oss.host'];
+                        $bucket = Yii::$app->params['oss.bucket'];
+
+                        $ossFileName = 'videos/' . basename($tmpVideo);
 
                         try {
                             $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
-                            $ossClient->uploadFile($bucket, $ossFileName, $outputVideo);
+                            $ossClient->uploadFile($bucket, $ossFileName, $tmpVideo);
 
                             $newVideoUrl = 'https://' . $bucket . '.' . $endpoint . '/' . $ossFileName;
 
