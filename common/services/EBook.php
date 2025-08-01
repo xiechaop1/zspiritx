@@ -125,6 +125,10 @@ class EBook extends Component
 //        if (!empty($params['prompt_extend'])) {
 //            $baiLianParams['prompt_extend'] = $params['prompt_extend'];
 //        }
+        if (empty($params['resolution'])) {
+            $params['resolution'] = '480P';
+        }
+
         $baiLianParams = $params;
 
         return $baiLianParams;
