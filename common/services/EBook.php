@@ -96,7 +96,7 @@ class EBook extends Component
             $imageBase64 = $image;
             $imageType = 'jpeg';
         }
-        $prompt = $this->_genPrompt($userMessage, $imageBase64, $imageType);
+        $prompt = $this->_genBailianPrompt($userMessage, $imageBase64, $imageType);
         $inputParams = $this->_genBaiLianParams($params);
         $ret = $this->chatWithBailian($prompt, $inputParams);
 //        $ret = $this->chatWithDoubao($prompt, $modelParams);
