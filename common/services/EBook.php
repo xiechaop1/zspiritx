@@ -290,7 +290,7 @@ class EBook extends Component
             $ret = json_decode($response, true);
 
             if (!empty($ret['code'])) {
-                throw new \Exception($ret['message'], $ret['code']);
+                throw new \Exception($ret['message']);
             }
 
             if (!empty($ret['output']['task_id'])) {
