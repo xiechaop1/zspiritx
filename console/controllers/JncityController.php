@@ -118,8 +118,8 @@ class JncityController extends Controller
                 }
                 $r = $row->save();
             } else if ($status != 'RUNNING') {
-//                $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
-//                $r = $row->save();
+                $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
+                $r = $row->save();
             }
             $i++;
 
