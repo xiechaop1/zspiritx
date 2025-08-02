@@ -35,10 +35,11 @@ class JncityController extends Controller
         foreach ($model as $row) {
             $videoId = $row->ai_video_m_id;
 
-            $ret = Yii::$app->ebook->searchWithId($videoId);
-            $status = !empty($ret['status']) ? $ret['status'] : '';
-            if ($status == 'succeeded') {
-                $videoUrl = !empty($ret['content']['video_url']) ? $ret['content']['video_url'] : '';
+            $retData = Yii::$app->ebook->searchWithId($videoId);
+            $ret = !empty($retData['output']) ? $retData['output'] : [];
+            $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
+            if ($status == 'SUCCEEDED') {
+                $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
                 if (!empty($videoUrl)) {
                     $ebookStoryParams = !empty($model->ebook_story_params) ? json_decode($model->ebook_story_params, true) : [];
                     $poiId = !empty($model->poi_id) ? $model->poi_id : 0;
@@ -103,7 +104,7 @@ class JncityController extends Controller
                     $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
                 }
                 $r = $row->save();
-            } else if ($status != 'running') {
+            } else if ($status != 'RUNNING') {
                 $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
                 $r = $row->save();
             }

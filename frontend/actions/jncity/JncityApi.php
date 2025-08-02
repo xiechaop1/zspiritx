@@ -94,6 +94,12 @@ class JncityApi extends ApiAction
     public function poiList() {
         $poiList = UserEBook::$poiList;
 
+        $ebookStory = !empty($this->_get['ebook_story']) ? $this->_get['ebook_story'] : '';
+
+        if (!empty($ebookStory)) {
+            $poiList = !empty($poiList[$ebookStory]['pois']) ? $poiList[$ebookStory]['pois'] : [];
+        }
+
         return $poiList;
 
     }
