@@ -24,8 +24,8 @@ class JncityController extends Controller
         $model = UserEBookRes::find();
         $model->andFilterWhere([
             'ebook_res_status' => [
-                UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT
-                UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE
+                UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT,
+                UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE,
             ],
         ]);
         $model = $model->all();
