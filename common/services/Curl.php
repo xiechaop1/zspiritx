@@ -133,9 +133,11 @@ class Curl
 
         $ch = curl_init ();
 
-        curl_setopt ( $ch, CURLOPT_HEADER, $header );
+        curl_setopt ( $ch, CURLOPT_HEADER, 0 );
 
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+
+        curl_setopt ( $ch, CURLOPT_HTTPHEADER, $header );
 
         curl_setopt ( $ch, CURLOPT_URL, $url );
 
