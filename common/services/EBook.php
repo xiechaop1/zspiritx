@@ -618,7 +618,7 @@ class EBook extends Component
         if ($method == 'POST') {
             $response = Curl::curlPost($url, $params, $headers, true, $opts, $isStream);
         } else {
-            $response = Curl::curlGet($url);
+            $response = Curl::curlGet($url, $headers);
         }
 //        Yii::info('doubao ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 //        file_put_contents('/tmp/tmp.tmp', $response);
