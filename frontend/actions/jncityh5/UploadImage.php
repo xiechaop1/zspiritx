@@ -11,6 +11,7 @@ namespace frontend\actions\jncityh5;
 
 use common\models\UserEBook;
 use yii\base\Action;
+use Yii;
 
 class UploadImage extends Action
 {
