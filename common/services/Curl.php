@@ -129,7 +129,7 @@ class Curl
 //        flush();
     }
 
-    public static function curlGet($url, $header = 0){
+    public static function curlGet($url, $header = []){
 
         $ch = curl_init ();
 

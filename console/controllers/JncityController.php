@@ -45,15 +45,15 @@ class JncityController extends Controller
             $retData = Yii::$app->ebook->searchWithId($videoId);
             $ret = !empty($retData['output']) ? $retData['output'] : [];
             $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
-            print("Status is " . $status);
+            print("Status is " . $status . "\n");
             if ($status == 'SUCCEEDED') {
                 $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
                 print("Video url: ". $videoUrl . "\n");
                 if (!empty($videoUrl)) {
-                    $ebookStoryParams = !empty($model->ebook_story_params) ? json_decode($model->ebook_story_params, true) : [];
-                    $poiId = !empty($model->poi_id) ? $model->poi_id : 0;
-                    $resId = $model->resource_id;
-                    $resources = !empty($ebookStoryParams[$model->ebook_story][$poiId]['resources'][$resId]) ? $ebookStoryParams[$model->ebook_story][$poiId]['resources'][$resId] : [];
+                    $ebookStoryParams = !empty($row->ebook_story_params) ? json_decode($row->ebook_story_params, true) : [];
+                    $poiId = !empty($row->poi_id) ? $row->poi_id : 0;
+                    $resId = $row->resource_id;
+                    $resources = !empty($ebookStoryParams[$row->ebook_story][$poiId]['resources'][$resId]) ? $ebookStoryParams[$row->ebook_story][$poiId]['resources'][$resId] : [];
 
                     // 1. 下载视频到本地
                     $tmpVideo = '/tmp/video_' . uniqid() . '.mp4';
