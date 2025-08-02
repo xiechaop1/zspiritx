@@ -32,14 +32,19 @@ class JncityController extends Controller
         }
 
         $ret = [];
+        print("Found " . count($model) . " records to process.\n");
+        $i = 1;
         foreach ($model as $row) {
+            print ("Processing {$i} user ebook res id: " . $row->id . "\n");
             $videoId = $row->ai_video_m_id;
 
             $retData = Yii::$app->ebook->searchWithId($videoId);
             $ret = !empty($retData['output']) ? $retData['output'] : [];
             $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
+            print("Status is " . $status);
             if ($status == 'SUCCEEDED') {
                 $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
+                print("Video url: ". $videoUrl);
                 if (!empty($videoUrl)) {
                     $ebookStoryParams = !empty($model->ebook_story_params) ? json_decode($model->ebook_story_params, true) : [];
                     $poiId = !empty($model->poi_id) ? $model->poi_id : 0;
@@ -51,7 +56,9 @@ class JncityController extends Controller
                     file_put_contents($tmpVideo, file_get_contents($videoUrl));
 
                     // 2. 指定本地 MP3 路径
+                    $retCode = 0;
                     if (!empty($resources['bgm'])) {
+                        print("Bgm is : ". $resources['bgm']);
                         $mp3Path = $resources['bgm'];
 
                         // 3. 合成新视频
@@ -67,6 +74,7 @@ class JncityController extends Controller
 
 
                     if ($retCode === 0 && file_exists($tmpVideo)) {
+                        print("Uploading file to oss : ". $tmpVideo);
                         // OSS配置
 //                        $accessKeyId = '你的AccessKeyId';
 //                        $accessKeySecret = '你的AccessKeySecret';
@@ -108,6 +116,7 @@ class JncityController extends Controller
                 $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
                 $r = $row->save();
             }
+            $i++;
 
         }
 
