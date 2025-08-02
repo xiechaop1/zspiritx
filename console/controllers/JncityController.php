@@ -23,11 +23,15 @@ class JncityController extends Controller
     public function actionGetvideo() {
         $model = UserEBookRes::find();
         $model->andFilterWhere([
-            'ebook_res_status' => UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE
+            'ebook_res_status' => [
+                UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT
+                UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE
+            ],
         ]);
         $model = $model->all();
 
         if (empty($model)) {
+            print("No datas \n");
             return [];
         }
 
@@ -44,7 +48,7 @@ class JncityController extends Controller
             print("Status is " . $status);
             if ($status == 'SUCCEEDED') {
                 $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
-                print("Video url: ". $videoUrl);
+                print("Video url: ". $videoUrl . "\n");
                 if (!empty($videoUrl)) {
                     $ebookStoryParams = !empty($model->ebook_story_params) ? json_decode($model->ebook_story_params, true) : [];
                     $poiId = !empty($model->poi_id) ? $model->poi_id : 0;
@@ -74,7 +78,7 @@ class JncityController extends Controller
 
 
                     if ($retCode === 0 && file_exists($tmpVideo)) {
-                        print("Uploading file to oss : ". $tmpVideo);
+                        print("Uploading file to oss : ". $tmpVideo ."\n");
                         // OSS配置
 //                        $accessKeyId = '你的AccessKeyId';
 //                        $accessKeySecret = '你的AccessKeySecret';
