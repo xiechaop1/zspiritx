@@ -21,7 +21,7 @@ class UploadImage extends Action
     
     public function run()
     {
-//        $this->_get = Yii::$app->request->get();
+        $this->_get = Yii::$app->request->get();
 //
 //        $sessionId = !empty($this->_get['session_id']) ? $this->_get['session_id'] : 0;
         $userId = !empty($this->_get['user_id']) ? $this->_get['user_id'] : 0;
