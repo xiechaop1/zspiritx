@@ -206,7 +206,7 @@ class JncityApi extends ApiAction
         if (!empty($userEbook)) {
             $tmp = $userEbook->toArray();
             $tmp['created_at_str'] = Date('Y-m-d H::s', $userEbook->created_at);
-            $tmp['user_ebook_res'] = $userEbook->ebookres;
+            $tmp['user_ebook_res'] = $userEbook->ebookRes;
             $ret = $tmp;
         }
 
