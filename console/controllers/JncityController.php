@@ -87,7 +87,7 @@ class JncityController extends Controller
 
                         $accessKeyId = Yii::$app->params['oss.accesskeyid'];
                         $accessKeySecret = Yii::$app->params['oss.accesskeysecret'];
-                        $endpoint = Yii::$app->params['endpoint'];
+                        $endpoint = Yii::$app->params['oss.endpoint'];
                         $host = Yii::$app->params['oss.host'];
                         $bucket = Yii::$app->params['oss.bucket'];
 
