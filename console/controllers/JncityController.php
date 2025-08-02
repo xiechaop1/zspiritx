@@ -98,6 +98,7 @@ class JncityController extends Controller
                             $ossClient->uploadFile($bucket, $ossFileName, $tmpVideo);
 
                             $newVideoUrl = 'https://' . $bucket . '.' . $endpoint . '/' . $ossFileName;
+                            print("New video url: " . $newVideoUrl . "\n");
 
                             $row->ai_video_url = $newVideoUrl;
                             $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS;
