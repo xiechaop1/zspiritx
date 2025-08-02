@@ -99,7 +99,7 @@ class JncityController extends Controller
 
                             $newVideoUrl = 'https://' . $bucket . '.' . $endpoint . '/' . $ossFileName;
 
-                            $row->video_url = $newVideoUrl;
+                            $row->ai_video_url = $newVideoUrl;
                             $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS;
                         } catch (OssException $e) {
                             $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
