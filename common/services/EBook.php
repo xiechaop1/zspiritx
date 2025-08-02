@@ -541,6 +541,7 @@ class EBook extends Component
                 $model = new UserEBookRes();
                 $model->user_id = $userId;
                 $model->story_id = $storyId;
+                $model->user_ebook_id = $userEbookId;
                 $model->ebook_story = $ebookStory;
                 $model->ebook_story_params = $ebookStoryParams;
                 $model->poi_id = $poiId;
