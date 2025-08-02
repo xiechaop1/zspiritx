@@ -177,6 +177,7 @@ class JncityApi extends ApiAction
             foreach ($userEbook as $ue) {
                 $tmp = $ue->toArray();
                 $tmp['created_at_str'] = Date('Y-m-d H::s', $ue->created_at);
+                $tmp['ebook_story_params'] = json_decode($ue->ebook_story_params, true);
                 $tmp['user_ebook_res'] = $ue->ebookRes;
                 $tmp['mission_ct'] = !empty($ue->ebookRes) ? sizeof($ue->ebookRes) : 0;
 
@@ -206,6 +207,7 @@ class JncityApi extends ApiAction
         if (!empty($userEbook)) {
             $tmp = $userEbook->toArray();
             $tmp['created_at_str'] = Date('Y-m-d H::s', $userEbook->created_at);
+            $tmp['ebook_story_params'] = json_decode($userEbook->ebook_story_params, true);
             $tmp['user_ebook_res'] = $userEbook->ebookRes;
             $ret = $tmp;
         }
