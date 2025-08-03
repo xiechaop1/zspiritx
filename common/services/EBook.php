@@ -537,6 +537,7 @@ class EBook extends Component
 
             $ebookStoryParams = is_array($ebookStoryParams) ? json_encode($ebookStoryParams, JSON_UNESCAPED_UNICODE) : $ebookStoryParams;
 
+            $rr = true;
             if (empty($model)) {
                 $model = new UserEBookRes();
                 $model->user_id = $userId;
