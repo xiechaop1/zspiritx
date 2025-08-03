@@ -234,6 +234,19 @@ class EBook extends Component
 
         $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
 
+        $userEbookRes = UserEBookRes::find()
+            ->where([
+                'user_ebook_id'   => $userEbookId,
+                'poi_id' => $poiId,
+            ])
+            ->one();
+
+        if (!empty($userEbookRes)) {
+            Yii::error('有视频正在生成');
+            throw new \Exception('有视频正在生成', 1001);
+//            return false;
+        }
+
         $isCreating = False;
         if (!empty($poi['resources'])) {
             foreach ($poi['resources'] as $idx => $res) {
