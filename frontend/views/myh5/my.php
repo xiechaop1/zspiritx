@@ -36,7 +36,7 @@ $this->title = '我的';
 <input type="hidden" name="story_id" value="<?= $storyId ?>">
 <div class="w-100 m-auto">
     <div class="btn-m-green m-t-30  m-l-30" id="return_btn">
-         退出
+         返回
     </div>
     <div class="p-20 bg-black w-100 m-t-80" style="position: absolute; left: 0px; top: 100px;">
         <div class="w-100 p-30  m-b-10">
@@ -150,12 +150,17 @@ $this->title = '我的';
                             <div class="answer-border">
                                 <!-- <input class="form-check-input" type="radio" name="knowledge" value="' . $item->id . '" id="legal_person_yes_' . $item->id . '" > -->
                                 <label class="form-check-label fs-30 answer-btn">
-                                    <!--                  <span class="answer-tag"></span>-->
-                                    <span ><a href="javascript:void(0);" id="logout_btn">退出</a></span>
+                                    <span class="answer-tag">
+                                        <img src="../../static/img/my/task.png" class="list-icon-s"/>
+                                    </span>
+                                    <span style="padding-left: 90px; "><a href="javascript:void(0);" id="logout_btn">退出登录</a></span>
                                 </label>
+
                             </div>
                         </div>
+
                     </div>
+
                 </div>
             </div>
 
