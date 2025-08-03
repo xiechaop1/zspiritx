@@ -37,6 +37,7 @@ class EBook extends Component
     private $_token;
 
     public $model = '';
+    public $txtModel = '';
     public $temperature = '';
     public $host = '';
     public $uri = '';
@@ -71,7 +72,7 @@ class EBook extends Component
         return $ret;
     }
 
-    public function generateVideoBase64($userMessage, $image = '', $params = []) {
+    public function generateVideoBase64($userMessage, $image = '', $type = 'img2video', $params = []) {
         $modelParams = $params;
         if (!\common\helpers\Common::isBase64($image)) {
             // 通过$image（文件路径），获取图片类型
@@ -97,16 +98,16 @@ class EBook extends Component
             $imageType = 'jpeg';
         }
         $prompt = $this->_genBailianPrompt($userMessage, $imageBase64, $imageType);
-        $inputParams = $this->_genBaiLianParams($params);
+        $inputParams = $this->_genBaiLianParams($params, $imageType);
 //        $inputParams = [];
-        $taskId = $this->chatWithBailian($prompt, $inputParams);
+        $taskId = $this->chatWithBailian($prompt, $inputParams, $type);
         $ret['id'] = $taskId;
 //        $ret = $this->chatWithDoubao($prompt, $modelParams);
 
         return $ret;
     }
 
-    private function _genBaiLianParams($params) {
+    private function _genBaiLianParams($params, $type = 'img2video') {
 //
 //        if (!empty($params['duration'])) {
 //            $baiLianParams['duration'] = $params['duration'];
@@ -127,8 +128,16 @@ class EBook extends Component
 //        if (!empty($params['prompt_extend'])) {
 //            $baiLianParams['prompt_extend'] = $params['prompt_extend'];
 //        }
-        if (empty($params['resolution'])) {
+        if ($type == 'img2video' && empty($params['resolution'])) {
             $params['resolution'] = '480P';
+        }
+
+        if ($type == 'txt2video' && empty($params['size'])) {
+            $params['size'] = '480*832';
+        }
+
+        if (empty($params['prompt_extend'])) {
+            $params['prompt_extend'] = true;
         }
 
         $baiLianParams = $params;
@@ -241,17 +250,21 @@ class EBook extends Component
             ])
             ->one();
 
-        if (!empty($userEbookRes)) {
+        if (!empty($userEbookRes) && in_array($userEbookRes->ebook_res_status, [
+                UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE,
+                UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT
+            ]) ) {
             Yii::error('有视频正在生成');
             throw new \Exception('有视频正在生成', 1001);
-//            return false;
+            return false;
         }
 
         $isCreating = False;
         if (!empty($poi['resources'])) {
             foreach ($poi['resources'] as $idx => $res) {
                 if (!empty($res['video_prompt'])) {
-                    $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
+                    $poiType = !empty($poi['type']) ? $poi['type'] : 'img2video';
+                    $ret = $this->generateVideoBase64($poi['video_prompt'], $image, $poiType);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
                         $r = $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
@@ -282,10 +295,17 @@ class EBook extends Component
         return $tmpRet;
     }
 
-    public function chatWithBailian($prompt, $params) {
+    public function chatWithBailian($prompt, $params, $type = 'img2video') {
+
+        if ($type == 'img2video') {
+            $model = $this->model;
+        } else {
+            $model = $this->txtModel;
+        }
+
         $data = [
             'input' => $prompt,
-            'model' => $this->model
+            'model' => $model
         ];
 
         if (!empty($params)) {
