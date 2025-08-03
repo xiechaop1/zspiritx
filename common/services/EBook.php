@@ -241,7 +241,8 @@ class EBook extends Component
                     $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
-                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
+                        $r = $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
+
                         $isCreating = True;
                     }
                 }
@@ -537,7 +538,7 @@ class EBook extends Component
 
             $ebookStoryParams = is_array($ebookStoryParams) ? json_encode($ebookStoryParams, JSON_UNESCAPED_UNICODE) : $ebookStoryParams;
 
-            $rr = true;
+            $rr = false;
             if (empty($model)) {
                 $model = new UserEBookRes();
                 $model->user_id = $userId;
@@ -563,7 +564,7 @@ class EBook extends Component
                 $rr = $model->save();
             }
 
-            if ($rr == false) {
+            if ($rr === false) {
                 Yii::error($model->getErrors());
                 throw new \Exception('数据库报错');
             }
