@@ -99,15 +99,18 @@ class Index extends Action
             if (strlen($user->mobile) <= 4) {
                 $user->user_type = User::USER_TYPE_INNER;
             } else {
-                $userStory = UserStory::find()
-                    ->where([
-                        'user_id' => $userId
-                    ])
-                    ->orderBy(['updated_at' => SORT_DESC])
-                    ->one();
+                if ($defStoryId != 16) {
+                    // Todo：临时方案，香港目前只有一个剧本，因此香港之外的地区再执行进入上次剧本
+                    $userStory = UserStory::find()
+                        ->where([
+                            'user_id' => $userId
+                        ])
+                        ->orderBy(['updated_at' => SORT_DESC])
+                        ->one();
 
-                if (!empty($userStory->story_id)) {
-                    $defStoryId = $userStory->story_id;
+                    if (!empty($userStory->story_id)) {
+                        $defStoryId = $userStory->story_id;
+                    }
                 }
             }
         } catch (\Exception $e) {
