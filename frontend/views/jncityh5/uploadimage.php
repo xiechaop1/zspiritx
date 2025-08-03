@@ -81,8 +81,11 @@ $this->title = '上传图片';
 </div>
 <script>
     window.onload = function () {
-
+        is_enable = true;
         $('#upload_btn').click(function () {
+            if (is_enable == false) {
+                alert('正在上传……');
+            }
             var userId = $('input[name="user_id"]').val();
             var poiId = $('#poi').val();
             var file = $('input[name="fileUpload"]')[0].files[0];
@@ -97,6 +100,7 @@ $this->title = '上传图片';
                 alert('请选择文件');
                 return;
             }
+            is_enable = false;
 
             //var params = {
             //    "getPhotoArgs":{
@@ -109,7 +113,8 @@ $this->title = '上传图片';
             //var data=$.toJSON(params);
             //Unity.call(data);
 
-
+            $(this).attr('enable', false);
+            $(this).val('上传中...');
             var formData = new FormData();
             formData.append('fileUpload', file);
             formData.append('user_id', userId);
@@ -125,12 +130,18 @@ $this->title = '上传图片';
                 success: function (response) {
                     if (response.success) {
                         alert('上传成功');
+                        $(this).attr('enable', true);
+                        is_enable = true;
                         // window.location.href = '/jncityh5/index';
                     } else {
+                        $(this).attr('enable', true);
+                        is_enable = true;
                         alert(response.data.msg);
                     }
                 },
                 error: function () {
+                    $(this).attr('enable', true);
+                    is_enable = true;
                     alert('上传失败，请重试');
                 }
             });

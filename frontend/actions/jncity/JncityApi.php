@@ -245,6 +245,7 @@ class JncityApi extends ApiAction
         $file = $_FILES['fileUpload'];
 
         if (empty($file)) {
+            Yii::error('上传文件不能为空');
             throw new \Exception('上传文件不能为空', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
         }
 
@@ -261,6 +262,7 @@ class JncityApi extends ApiAction
         try {
             $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $filePath);
             if ($ret === false) {
+                Yii::error('生成视频失败，返回结果：' . json_encode($ret));
                 throw new \Exception('AI错误', ErrorCode::EBOOK_GEN_VIDEO_FAILED);
             }
 //            $videoId = '';
@@ -268,6 +270,7 @@ class JncityApi extends ApiAction
 //                $videoId = $ret['id'];
 //            }
         } catch (\Exception $e) {
+            Yii::error('生成视频失败: ' . $e->getMessage());
             throw new \Exception('生成视频失败: ' . $e->getMessage(), ErrorCode::EBOOK_GEN_VIDEO_FAILED);
         }
 
