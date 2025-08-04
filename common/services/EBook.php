@@ -597,7 +597,7 @@ class EBook extends Component
                 $rr = $model->save();
             }
 
-            if ($rr === false) {
+            if ($rr === false && !empty($model->getErrors())) {
                 Yii::error($model->getErrors());
                 throw new \Exception('数据库报错');
             }
