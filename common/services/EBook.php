@@ -254,7 +254,7 @@ class EBook extends Component
                 UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE,
                 UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT
             ]) ) {
-            Yii::error('有视频正在生成');
+            Yii::error('[JNCITY] 有视频正在生成');
             throw new \Exception('有视频正在生成', 1001);
             return false;
         }
@@ -596,6 +596,7 @@ class EBook extends Component
                 $model->ai_video_m_id = $videoId;
                 $rr = $model->save();
             }
+            Yii::info('[JNCITY] new video to db, add data to db: '. $rr);
 
             if ($rr === false && !empty($model->getErrors())) {
                 Yii::error($model->getErrors());
