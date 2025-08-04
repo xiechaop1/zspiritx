@@ -114,7 +114,7 @@ $this->title = '上传图片';
             //Unity.call(data);
 
             $(this).attr('enable', false);
-            $(this).val('上传中...');
+            $(this).html('上传中...');
             var formData = new FormData();
             formData.append('fileUpload', file);
             formData.append('user_id', userId);
@@ -128,10 +128,10 @@ $this->title = '上传图片';
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    if (response.success) {
+                    if (response.data.code == 0) {
                         alert('上传成功');
-                        $(this).attr('enable', true);
-                        is_enable = true;
+                        $(this).attr('enable', false);
+                        is_enable = false;
                         // window.location.href = '/jncityh5/index';
                     } else {
                         $(this).attr('enable', true);

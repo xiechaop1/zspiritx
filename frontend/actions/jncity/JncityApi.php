@@ -273,12 +273,14 @@ class JncityApi extends ApiAction
             Yii::error('生成视频失败: ' . $e->getMessage());
 //            throw new \Exception('生成视频失败: ' . $e->getMessage(), ErrorCode::EBOOK_GEN_VIDEO_FAILED);
             return [
+                'code' => -100,
                 'msg' => '生成视频失败: ' . $e->getMessage(),
             ];
         }
 
         return [
-            'msg' => '视频生成中',
+            'code' => 0,
+            'msg' => '上传成功，视频生成中，请您稍后关注……',
         ];
 
     }
