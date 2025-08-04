@@ -84,7 +84,7 @@ $this->title = '上传图片';
         is_enable = true;
         $('#upload_btn').click(function () {
             if (is_enable == false) {
-                alert('正在上传……');
+                $.alert('正在上传……');
             }
             var userId = $('input[name="user_id"]').val();
             var poiId = $('#poi').val();
@@ -92,12 +92,12 @@ $this->title = '上传图片';
             var ebookStory = <?= $ebookStory ?>;
 
             if (poiId == 0) {
-                alert('请选择地点');
+                $.alert('请选择地点');
                 return;
             }
 
             if (!file) {
-                alert('请选择文件');
+                $.alert('请选择文件');
                 return;
             }
             is_enable = false;
@@ -129,7 +129,7 @@ $this->title = '上传图片';
                 contentType: false,
                 success: function (response) {
                     if (response.data.code == 0) {
-                        alert('上传成功');
+                        $.alert('上传成功');
                         $(this).attr('enable', false);
                         is_enable = false;
                         // window.location.href = '/jncityh5/index';
@@ -137,12 +137,13 @@ $this->title = '上传图片';
                         $(this).attr('enable', true);
                         is_enable = true;
                         alert(response.data.msg);
+                        $(this).html('上传');
                     }
                 },
                 error: function () {
                     $(this).attr('enable', true);
                     is_enable = true;
-                    alert('上传失败，请重试');
+                    $.alert('上传失败，请重试');
                 }
             });
         });
