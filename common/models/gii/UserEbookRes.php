@@ -27,7 +27,7 @@ class UserEbookRes extends \yii\db\ActiveRecord
         return [
             [['story_id', 'user_id', 'user_ebook_id', 'ebook_story', 'poi_id', 'page', 'ebook_res_status', ], 'integer'],
             [['created_at', 'updated_at',], 'integer'],
-            [['ai_video_m_id', 'ai_video_url', 'ai_image_url', 'ai_content', 'ebook_story_params', ], 'string'],
+            [['ai_video_m_id', 'ai_video_url', 'ai_image_url', 'ai_bgm_url', 'ai_content', 'ebook_story_params', ], 'string'],
         ];
     }
 

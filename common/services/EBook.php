@@ -267,7 +267,7 @@ class EBook extends Component
                     $ret = $this->generateVideoBase64($poi['video_prompt'], $image, $poiType);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
-                        $r = $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
+                        $r = $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx, $res);
 
                         $isCreating = True;
                     }
@@ -559,7 +559,7 @@ class EBook extends Component
         return $userEbookId;
     }
 
-    public function newVideoToDb($userEbookId, $userId, $storyId, $ebookStory, $ebookStoryParams, $poiId, $videoId, $resId) {
+    public function newVideoToDb($userEbookId, $userId, $storyId, $ebookStory, $ebookStoryParams, $poiId, $videoId, $resId, $param = []) {
         try {
 
             $model = UserEBookRes::find()
@@ -583,6 +583,9 @@ class EBook extends Component
                 $model->resource_id = $resId;
                 $model->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT;
                 $model->ai_video_m_id = $videoId;
+                if (!empty($param['bgm'])) {
+                    $model->ai_bgm_url = $param['bgm'];
+                }
                 $rr = $model->save();
             } else if (
                 in_array(
