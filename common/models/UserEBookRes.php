@@ -20,11 +20,14 @@ class UserEBookRes extends \common\models\gii\UserEbookRes
     const USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL = 12; // 视频生成失败
     const USER_EBOOK_RES_STATUS_COMPLETED = 20; // 完成
 
+    const USER_EBOOK_RES_STATUS_VIDEO_CANCEL = 18;      // 视频生成取消
+
     public static $userEbookStatus2Name = [
         self::USER_EBOOK_RES_STATUS_DEFAULT => '默认',
         self::USER_EBOOK_RES_STATUS_VIDEO_GENERATE => '视频生成中',
         self::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS => '视频生成成功',
         self::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL => '视频生成失败',
+        self::USER_EBOOK_RES_STATUS_VIDEO_CANCEL => '视频生成取消',
         self::USER_EBOOK_RES_STATUS_COMPLETED => '完成',
     ];
 

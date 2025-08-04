@@ -46,80 +46,89 @@ class JncityController extends Controller
             $ret = !empty($retData['output']) ? $retData['output'] : [];
             $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
             print("Status is " . $status . "\n");
-            if ($status == 'SUCCEEDED') {
-                $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
-                print("Video url: ". $videoUrl . "\n");
-                if (!empty($videoUrl)) {
-                    $ebookStoryParams = !empty($row->ebook_story_params) ? json_decode($row->ebook_story_params, true) : [];
-                    $poiId = !empty($row->poi_id) ? $row->poi_id : 0;
-                    $resId = $row->resource_id;
-                    $resources = !empty($ebookStoryParams[$row->ebook_story][$poiId]['resources'][$resId]) ? $ebookStoryParams[$row->ebook_story][$poiId]['resources'][$resId] : [];
+            switch ($status) {
+                case 'SUCCEEDED':
+                    $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
+                    print("Video url: ". $videoUrl . "\n");
+                    if (!empty($videoUrl)) {
+                        $ebookStoryParams = !empty($row->ebook_story_params) ? json_decode($row->ebook_story_params, true) : [];
+                        $poiId = !empty($row->poi_id) ? $row->poi_id : 0;
+                        $resId = $row->resource_id;
+                        $resources = !empty($ebookStoryParams[$row->ebook_story][$poiId]['resources'][$resId]) ? $ebookStoryParams[$row->ebook_story][$poiId]['resources'][$resId] : [];
 
-                    // 1. 下载视频到本地
-                    $tmpVideo = '/tmp/video_' . uniqid() . '.mp4';
-                    file_put_contents($tmpVideo, file_get_contents($videoUrl));
+                        // 1. 下载视频到本地
+                        $tmpVideo = '/tmp/video_' . uniqid() . '.mp4';
+                        file_put_contents($tmpVideo, file_get_contents($videoUrl));
 
-                    // 2. 指定本地 MP3 路径
-                    $retCode = 0;
-                    if (!empty($resources['bgm'])) {
-                        print("Bgm is : ". $resources['bgm']);
-                        $mp3Path = $resources['bgm'];
+                        // 2. 指定本地 MP3 路径
+                        $retCode = 0;
+                        if (!empty($resources['bgm'])) {
+                            print("Bgm is : ". $resources['bgm']);
+                            $mp3Path = $resources['bgm'];
 
-                        // 3. 合成新视频
-                        $outputVideo = '/tmp/output_' . uniqid() . '.mp4';
-                        $cmd = "ffmpeg -y -i {$tmpVideo} -i {$mp3Path} -c:v copy -c:a aac -strict experimental -map 0:v:0 -map 1:a:0 -shortest {$outputVideo}";
-                        exec($cmd, $out, $retCode);
-                        $tmpVideo = $outputVideo;
-                    } else {
-//                        $mp3Path = Yii::$app->params['default_bgm'];
-                    }
-//                    $mp3Path = '/Users/choice/Projects/zspiritx/a.mp3'; // 你可以根据实际情况修改
-
-
-
-                    if ($retCode === 0 && file_exists($tmpVideo)) {
-                        print("Uploading file to oss : ". $tmpVideo ."\n");
-                        // OSS配置
-//                        $accessKeyId = '你的AccessKeyId';
-//                        $accessKeySecret = '你的AccessKeySecret';
-//                        $endpoint = '你的Endpoint'; // 例如: oss-cn-shanghai.aliyuncs.com
-//                        $bucket = '你的Bucket名称';
-
-                        $accessKeyId = Yii::$app->params['oss.accesskeyid'];
-                        $accessKeySecret = Yii::$app->params['oss.accesskeysecret'];
-                        $endpoint = Yii::$app->params['oss.endpoint'];
-                        $host = Yii::$app->params['oss.host'];
-                        $bucket = Yii::$app->params['oss.bucket'];
-
-                        $ossFileName = 'videos/' . basename($tmpVideo);
-
-                        try {
-                            $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
-                            $ossClient->uploadFile($bucket, $ossFileName, $tmpVideo);
-
-                            $newVideoUrl = 'https://' . $bucket . '.' . $endpoint . '/' . $ossFileName;
-                            print("New video url: " . $newVideoUrl . "\n");
-
-                            $row->ai_video_url = $newVideoUrl;
-                            $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS;
-                        } catch (OssException $e) {
-                            $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
-                            echo "OSS上传失败: " . $e->getMessage() . "\n";
+                            // 3. 合成新视频
+                            $outputVideo = '/tmp/output_' . uniqid() . '.mp4';
+                            $cmd = "ffmpeg -y -i {$tmpVideo} -i {$mp3Path} -c:v copy -c:a aac -strict experimental -map 0:v:0 -map 1:a:0 -shortest {$outputVideo}";
+                            exec($cmd, $out, $retCode);
+                            $tmpVideo = $outputVideo;
+                        } else {
+    //                        $mp3Path = Yii::$app->params['default_bgm'];
                         }
+    //                    $mp3Path = '/Users/choice/Projects/zspiritx/a.mp3'; // 你可以根据实际情况修改
+
+
+
+                        if ($retCode === 0 && file_exists($tmpVideo)) {
+                            print("Uploading file to oss : ". $tmpVideo ."\n");
+                            // OSS配置
+    //                        $accessKeyId = '你的AccessKeyId';
+    //                        $accessKeySecret = '你的AccessKeySecret';
+    //                        $endpoint = '你的Endpoint'; // 例如: oss-cn-shanghai.aliyuncs.com
+    //                        $bucket = '你的Bucket名称';
+
+                            $accessKeyId = Yii::$app->params['oss.accesskeyid'];
+                            $accessKeySecret = Yii::$app->params['oss.accesskeysecret'];
+                            $endpoint = Yii::$app->params['oss.endpoint'];
+                            $host = Yii::$app->params['oss.host'];
+                            $bucket = Yii::$app->params['oss.bucket'];
+
+                            $ossFileName = 'videos/' . basename($tmpVideo);
+
+                            try {
+                                $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
+                                $ossClient->uploadFile($bucket, $ossFileName, $tmpVideo);
+
+                                $newVideoUrl = 'https://' . $bucket . '.' . $endpoint . '/' . $ossFileName;
+                                print("New video url: " . $newVideoUrl . "\n");
+
+                                $row->ai_video_url = $newVideoUrl;
+                                $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS;
+                            } catch (OssException $e) {
+                                $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
+                                echo "OSS上传失败: " . $e->getMessage() . "\n";
+                            }
+                        } else {
+                            $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
+                        }
+
+                        // 5. 清理临时文件
+                        @unlink($tmpVideo);
+                        @unlink($outputVideo);
                     } else {
                         $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
                     }
-
-                    // 5. 清理临时文件
-                    @unlink($tmpVideo);
-                    @unlink($outputVideo);
-                } else {
+                    $r = $row->save();
+                    break;
+                case 'RUNNING':
+                    break;
+                case 'UNKNOWN':
+                    $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_CANCEL;
+                    $r = $row->save();
+                    break;
+                default:
                     $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
-                }
-                $r = $row->save();
-            } else if ($status != 'RUNNING') {
-                $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
-                $r = $row->save();
+                    $r = $row->save();
+                    break;
             }
             $i++;
 
