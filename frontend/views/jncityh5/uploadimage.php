@@ -79,6 +79,48 @@ $this->title = '上传图片';
 
 
 </div>
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="h5-right" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div>
+                    <div class="fs-36 text-F6 text-center bold">
+                        成功
+                    </div>
+                    <div class="text-center m-t-30" id="right_text">
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 按钮：用于打开模态框 -->
+<div class="modal fade" id="h5-worry" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
+            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
+                <div>
+                    <div class="fs-36 text-F6 text-center bold">
+                        出错了
+                    </div>
+                    <div class="m-t-40 bg-F5 p-20 fs-26 text-orange border-radius-r-5 border-radius-l-5" id="worry_text">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
     window.onload = function () {
         is_enable = true;
@@ -129,21 +171,28 @@ $this->title = '上传图片';
                 contentType: false,
                 success: function (response) {
                     if (response.data.code == 0) {
-                        $.alert('上传成功');
+                        // $.alert('上传成功');
+                        $('#right_text').html('上传成功，正在生成视频……');
+                        $('#h5-right').fadeOut();
                         $(this).attr('enable', false);
                         is_enable = false;
                         // window.location.href = '/jncityh5/index';
                     } else {
                         $(this).attr('enable', true);
                         is_enable = true;
-                        alert(response.data.msg);
+                        $('#worry_text').html(response.data.msg);
+                        $('#h5-worry').fadeOut();
+                        // $.alert(response.data.msg);
                         $(this).html('上传');
                     }
                 },
                 error: function () {
                     $(this).attr('enable', true);
                     is_enable = true;
-                    $.alert('上传失败，请重试');
+                    // $.alert('上传失败，请重试');
+                    $('#worry_text').html('上传失败');
+                    $('#h5-worry').fadeOut();
+
                 }
             });
         });
