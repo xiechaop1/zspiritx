@@ -173,7 +173,7 @@ $this->title = '上传图片';
                     if (response.data.code == 0) {
                         // $.alert('上传成功');
                         $('#right_text').html('上传成功，正在生成视频……');
-                        $('#h5-right').fadeOut();
+                        $('#h5-right').modal('show');
                         $(this).attr('enable', false);
                         is_enable = false;
                         // window.location.href = '/jncityh5/index';
@@ -181,7 +181,7 @@ $this->title = '上传图片';
                         $(this).attr('enable', true);
                         is_enable = true;
                         $('#worry_text').html(response.data.msg);
-                        $('#h5-worry').fadeOut();
+                        $('#h5-worry').modal('show');
                         // $.alert(response.data.msg);
                         $(this).html('上传');
                     }
