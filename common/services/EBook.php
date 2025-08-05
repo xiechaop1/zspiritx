@@ -207,11 +207,27 @@ class EBook extends Component
 
         $userEbookId = $this->newEBookToDb($userId, $ebookStoryId, $ebookParam, $storyId);
 
+        $userEbookRes = UserEBookRes::find()
+            ->where([
+                'user_ebook_id'   => $userEbookId,
+                'poi_id' => $poiId,
+            ])
+            ->one();
+
+        if (!empty($userEbookRes) && in_array($userEbookRes->ebook_res_status, [
+                UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE,
+                UserEBookRes::USER_EBOOK_RES_STATUS_DEFAULT
+            ]) ) {
+            Yii::error('[JNCITY] 有视频正在生成');
+            throw new \Exception('有视频正在生成', 1001);
+            return false;
+        }
+
         $isCreating = False;
         if (!empty($poi['resources'])) {
             foreach ($poi['resources'] as $idx => $res) {
                 if (!empty($res['video_prompt'])) {
-                    $ret = $this->generateVideoBase64($poi['video_prompt'], $image);
+                    $ret = $this->generateVideoBase64($res['video_prompt'], $image);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
                         $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
@@ -263,8 +279,8 @@ class EBook extends Component
         if (!empty($poi['resources'])) {
             foreach ($poi['resources'] as $idx => $res) {
                 if (!empty($res['video_prompt'])) {
-                    $poiType = !empty($poi['type']) ? $poi['type'] : 'img2video';
-                    $ret = $this->generateVideoBase64($poi['video_prompt'], $image, $poiType);
+                    $poiType = !empty($res['type']) ? $res['type'] : 'img2video';
+                    $ret = $this->generateVideoBase64($res['video_prompt'], $image, $poiType);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
                         $r = $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx, $res);
