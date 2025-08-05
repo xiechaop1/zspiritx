@@ -337,9 +337,9 @@ class EBook extends Component
             $tmpdata['input']['img_url'] = substr($tmpdata['input']['img_url'], 0, 50);
         }
 
-        Yii::debug('bailian param: ' . json_encode($tmpdata, JSON_UNESCAPED_UNICODE));
+        Yii::debug('[JNCITY]bailian param: ' . json_encode($tmpdata, JSON_UNESCAPED_UNICODE));
         $response = $this->_call($uri, $data, 'POST', $isJson, $opts);
-        Yii::info('bailian ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+        Yii::info('[JNCITY]bailian ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 
         if (!empty($response)) {
             $ret = json_decode($response, true);
