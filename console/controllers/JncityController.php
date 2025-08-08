@@ -76,6 +76,21 @@ class JncityController extends Controller
                         }
     //                    $mp3Path = '/Users/choice/Projects/zspiritx/a.mp3'; // 你可以根据实际情况修改
 
+                        if (!empty($resource['srt'])) {
+                            print("Srt is : " . $resource['srt']);
+
+                            $srtFile = $resource['srt'];
+
+                            $outputVideo = '/tmp/output_' . uniqid() . '.mp4';
+                            $cmd = "ffmpeg -i {$tmpVideo} -vf subtitles={$srtFile} {$outputVideo}";
+                            exec($cmd, $out, $retCode);
+                            if ($retCode !== 0) {
+                                echo "FFmpeg command failed: " . implode("\n", $out) . "\n";
+                            } else {
+                                $tmpVideo = $outputVideo;
+                            }
+                        }
+
 
 
                         if ($retCode === 0 && file_exists($tmpVideo)) {
