@@ -57,7 +57,8 @@ class SetEbookStory extends Action
                 $ebookStory->user_id = $userId;
             }
             $ebookStory->ebook_story = $userEbookStoryId;
-            $ebookStory->ebook_story_params = json_encode(!empty(UserEBook::$poiList[$userEbookStoryId]) ? UserEBook::$poiList[$userEbookStoryId] : [], JSON_UNESCAPED_UNICODE);
+//            $ebookStory->ebook_story_params = json_encode(!empty(UserEBook::$poiList[$userEbookStoryId]) ? UserEBook::$poiList[$userEbookStoryId] : [], JSON_UNESCAPED_UNICODE);
+            $ebookStory->ebook_story_params = json_encode(Yii::$app->ebook->getStoryParams($userEbookStoryId));
 
             $ret = $ebookStory->save();
             if (!$ret) {
@@ -81,7 +82,7 @@ class SetEbookStory extends Action
             $ebookStoryId = $ebookStory->ebook_story;
         }
 
-        $ebookStoryList = UserEBook::$poiList;
+//        $ebookStoryList = UserEBook::$poiList;
 
 
         return $this->controller->render('set_ebook_story', [

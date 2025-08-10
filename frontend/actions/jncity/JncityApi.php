@@ -92,12 +92,15 @@ class JncityApi extends ApiAction
 
     // 获取问答列表
     public function poiList() {
-        $poiList = UserEBook::$poiList;
+//        $poiList = UserEBook::$poiList;
 
         $ebookStory = !empty($this->_get['ebook_story']) ? $this->_get['ebook_story'] : '';
 
         if (!empty($ebookStory)) {
-            $poiList = !empty($poiList[$ebookStory]['pois']) ? $poiList[$ebookStory]['pois'] : [];
+            $poiList = Yii::$app->ebook->getStoryParams($ebookStory);
+            $poiList = !empty($poiList['pois']) ? $poiList['pois'] : [];
+        } else {
+            $poiList = Yii::$app->ebook->getStoryParams();
         }
 
         return $poiList;
@@ -105,7 +108,8 @@ class JncityApi extends ApiAction
     }
 
     public function storyList() {
-        $storyList = UserEBook::$poiList;
+//        $storyList = UserEBook::$poiList;
+        $storyList = Yii::$app->ebook->getStoryParams(0);
 
         if (empty($storyList)) {
             return [];
@@ -139,8 +143,10 @@ class JncityApi extends ApiAction
                 throw new \Exception('当前电子书已完成，请重新开始新的电子书', ErrorCode::EBOOK_USER_EBOOK_STATUS_COMPLETED);
             }
 
-            $ebookParam = !empty(UserEBook::$poiList[$ebookStory])
-                ? UserEBook::$poiList[$ebookStory] : [];
+//            $ebookParam = !empty(UserEBook::$poiList[$ebookStory])
+//                ? UserEBook::$poiList[$ebookStory] : [];
+
+            $ebookParam = Yii::$app->ebook->getStoryParams($ebookStory);
 
             if (empty($ebookParam)) {
                 return false;
@@ -316,7 +322,8 @@ class JncityApi extends ApiAction
 //        $story['poi'] = !empty(UserEBook::$poiList[$story['poi']])
 //            ? UserEBook::$poiList[$story['poi']] : [];
 
-        $story = !empty(UserEBook::$poiList[$storyId]) ? UserEBook::$poiList[$storyId] : [];
+//        $story = !empty(UserEBook::$poiList[$storyId]) ? UserEBook::$poiList[$storyId] : [];
+        $story = Yii::$app->ebook->getStoryParams($storyId);
 
         return $story;
 

@@ -66,7 +66,9 @@ class UploadImage extends Action
             $ebookStory = 1;
         }
 
-        $poiList = !empty(UserEBook::$poiList[$ebookStory]) ? UserEBook::$poiList[$ebookStory]['pois'] : [];
+//        $poiList = !empty(UserEBook::$poiList[$ebookStory]) ? UserEBook::$poiList[$ebookStory]['pois'] : [];
+        $params = Yii::$app->ebook->getStoryParams($ebookStory);
+        $poiList = !empty($params['pois']) ? $params['pois'] : [];
 
         return $this->controller->render('uploadimage', [
             'userId' => $userId,

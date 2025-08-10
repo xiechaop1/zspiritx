@@ -63,6 +63,30 @@ class EBook extends Component
         ],
     ];
 
+    public function getStoryParams($storyId = 0) {
+        $ebook = \common\models\EBook::find();
+        if (!empty($storyId)) {
+            $ebook->andFilterWhere(['story_id' => $storyId]);
+        }
+        $ebook = $ebook->asArray()->all();
+
+        $ret = [];
+        if (!empty($ebook)) {
+            if (!empty($storyId)) {
+                foreach ($ebook as $idx => $row) {
+                    $row['story_params'] = json_decode($ebook['story_params'], true);
+                    $ret = $row['story_params'];
+                }
+            } else {
+                foreach ($ebook as $row) {
+                    $row['story_params'] = json_decode($ebook['story_params'], true);
+                    $ret[$row['story_id']] = $row['story_params'];
+                }
+            }
+        }
+
+        return $ret;
+    }
 
     public function generateVideo($userMessage, $image = '', $params = []) {
         $modelParams = $params;
@@ -189,8 +213,10 @@ class EBook extends Component
     }
 
     public function generateVideoWithEbookStory($ebookStoryId , $userId, $poiId = 1, $image, $params = []) {
-        $ebookParam = !empty(UserEBook::$poiList[$ebookStoryId])
-            ? UserEBook::$poiList[$ebookStoryId] : [];
+//        $ebookParam = !empty(UserEBook::$poiList[$ebookStoryId])
+//            ? UserEBook::$poiList[$ebookStoryId] : [];
+
+        $ebookParams = $this->getStoryParams($ebookStoryId);
 
         if (empty($ebookParam)) {
             return false;
@@ -241,8 +267,10 @@ class EBook extends Component
     }
 
     public function generateVideoBase64WithEbookStory($ebookStoryId , $userId, $poiId = 1, $image, $params = []) {
-        $ebookParam = !empty(UserEBook::$poiList[$ebookStoryId])
-            ? UserEBook::$poiList[$ebookStoryId] : [];
+//        $ebookParam = !empty(UserEBook::$poiList[$ebookStoryId])
+//            ? UserEBook::$poiList[$ebookStoryId] : [];
+//        $ebookParams = Yii::$app->ebook->getStoryParams($ebookStoryId);
+        $ebookParams = $this->getStoryParams($ebookStoryId);
 
         if (empty($ebookParam)) {
             return false;

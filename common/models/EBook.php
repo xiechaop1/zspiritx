@@ -9,27 +9,10 @@
 namespace common\models;
 
 
-class UserEBook extends \common\models\gii\UserEbook
+class EBook extends \common\models\gii\Ebook
 {
 
-    public $is_show;
 
-    const USER_EBOOK_STATUS_DEFAULT = 0; // 默认
-    const USER_EBOOK_STATUS_PLAYING = 1; // 进行中
-    const USER_EBOOK_STATUS_COMPLETED = 10; // 完成
-    public static $userEbookStatus2Name = [
-        self::USER_EBOOK_STATUS_DEFAULT => '默认',
-        self::USER_EBOOK_STATUS_PLAYING => '进行中',
-        self::USER_EBOOK_STATUS_COMPLETED => '完成',
-    ];
-
-    public static $storyList = [
-        1 => [
-            'id' => 1,
-            'story' => 'Story1',
-            'poi' => 1,
-        ],
-    ];
 
     public static $poiList = [
         1 => [
@@ -460,18 +443,6 @@ class UserEBook extends \common\models\gii\UserEbook
                 'class' => 'yii\behaviors\TimestampBehavior',
             ]
         ];
-    }
-
-    public function getUser() {
-        return $this->hasOne('common\models\User',  ['id' => 'user_id']);
-    }
-
-    public function getStory(){
-        return $this->hasOne('common\models\Story',  ['id' => 'story_id']);
-    }
-
-    public function getEbookRes() {
-        return $this->hasMany('common\models\UserEBookRes', ['user_ebook_id' => 'id']);
     }
 
 

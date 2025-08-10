@@ -106,7 +106,8 @@ $this->title = '我的';
                             <div class="grade_options" style="border: 0px;">
                                 <select name="user_ebook_story_id" style="border: 0px; background-color: #DAFC70; color: black; padding: 10px; height: 80px;">
                                 <?php
-                                foreach (\common\models\UserEBook::$poiList as $userEbookStoryId => $story) {
+                                $poiList = Yii::$app->ebook->getStoryParams();
+                                foreach ($poiList as $userEbookStoryId => $story) {
                                     ?>
                                     <option value="<?= $story['id'] ?>"
                                         <?php

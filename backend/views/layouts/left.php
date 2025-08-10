@@ -160,6 +160,18 @@
                         ]
                     ],
                     [
+                        'label' => '电子书管理',
+                        'icon' => 'folder-open',
+                        'items' => [
+                            [
+                                'label' => '电子书列表',
+                                'url' => ['/ebook/story'],
+                                'active' => in_array($this->context->route, ['ebook/story', 'ebook/edit' ]),
+                                'visible' => \common\helpers\AdminRole::checkRole(\common\definitions\Admin::ROLE_EDITOR)
+                            ],
+                        ]
+                    ],
+                    [
                         'label' => '地盘管理',
                         'icon' => 'folder-open',
                         'items' => [
