@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "{{%story_model}}".
  *
  */
-class Ebook extends \yii\db\ActiveRecord
+class EBook extends \yii\db\ActiveRecord
 {
 
     /**

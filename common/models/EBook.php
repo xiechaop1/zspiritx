@@ -9,7 +9,7 @@
 namespace common\models;
 
 
-class EBook extends \common\models\gii\Ebook
+class EBook extends \common\models\gii\EBook
 {
 
 

@@ -9,7 +9,7 @@
 namespace backend\actions\ebook;
 
 
-use common\models\Ebook;
+use common\models\EBook;
 use kartik\form\ActiveForm;
 use liyifei\base\helpers\Net;
 use yii\base\Action;
@@ -23,16 +23,16 @@ class Edit extends Action
         $id = Net::get('id');
 
         if ($id) {
-            $model = \backend\models\Ebook::findOne($id);
+            $model = \backend\models\EBook::findOne($id);
             $isNew = false;
         } else {
-            $model = new \backend\models\Ebook();
+            $model = new \backend\models\EBook();
             $isNew = true;
         }
 
         if (Yii::$app->request->isAjax) {
             $id = Net::post('id');
-            $storyModel = \backend\models\Ebook::findOne($id);
+            $storyModel = \backend\models\EBook::findOne($id);
 
             switch (Net::post('action')) {
                 case 'delete':

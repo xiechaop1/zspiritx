@@ -82,7 +82,7 @@ class Story extends Action
             return $this->controller->refresh();
         }
 
-        $searchModel = new \backend\models\Ebook();
+        $searchModel = new \backend\models\EBook();
         $dataProvider = $searchModel->search(\Yii::$app->request->getQueryParams());
 
         return $this->controller->render('story', [

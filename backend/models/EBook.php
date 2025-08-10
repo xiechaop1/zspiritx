@@ -13,7 +13,7 @@ use common\definitions\Common;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class Ebook extends \common\models\Ebook
+class EBook extends \common\models\EBook
 {
 
     public $date_range;
@@ -34,7 +34,7 @@ class Ebook extends \common\models\Ebook
 
     public function search($params)
     {
-        $query = \common\models\Ebook::find();
+        $query = \common\models\EBook::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'sort' => false
