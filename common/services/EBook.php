@@ -74,12 +74,12 @@ class EBook extends Component
         if (!empty($ebook)) {
             if (!empty($storyId)) {
                 foreach ($ebook as $idx => $row) {
-                    $row['story_params'] = json_decode($ebook['story_params'], true);
+                    $row['story_params'] = json_decode($row['story_params'], true);
                     $ret = $row['story_params'];
                 }
             } else {
                 foreach ($ebook as $row) {
-                    $row['story_params'] = json_decode($ebook['story_params'], true);
+                    $row['story_params'] = json_decode($row['story_params'], true);
                     $ret[$row['story_id']] = $row['story_params'];
                 }
             }
