@@ -248,7 +248,11 @@ class JncityApi extends ApiAction
     }
 
     public function upload() {
-        $file = $_FILES['fileUpload'];
+        if (!empty($_FILES['fileUpload'])) {
+            $file = $_FILES['fileUpload'];
+        } else {
+            $file = $_FILES['file'];
+        }
 
         if (empty($file)) {
             Yii::error('上传文件不能为空');
