@@ -270,7 +270,7 @@ class EBook extends Component
 //        $ebookParam = !empty(UserEBook::$poiList[$ebookStoryId])
 //            ? UserEBook::$poiList[$ebookStoryId] : [];
 //        $ebookParams = Yii::$app->ebook->getStoryParams($ebookStoryId);
-        $ebookParams = $this->getStoryParams($ebookStoryId);
+        $ebookParam = $this->getStoryParams($ebookStoryId);
 
         if (empty($ebookParam)) {
             return false;
