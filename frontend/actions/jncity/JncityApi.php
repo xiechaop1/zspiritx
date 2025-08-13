@@ -204,7 +204,7 @@ class JncityApi extends ApiAction
 
         $userEbook = UserEBook::find()
             ->where(['user_id' => $userId])
-            ->andFilterWhere(['id' => $ebookId])
+            ->andFilterWhere(['ebook_story' => $ebookId])
 //            ->orderBy(['id' => SORT_DESC])
             ->one();
 
