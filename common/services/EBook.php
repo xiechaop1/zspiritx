@@ -163,11 +163,11 @@ class EBook extends Component
             $params['duration'] = '10';
         }
 
-        if (!empty($params['resolution'])) {
+        if (empty($params['resolution'])) {
             $params['resolution'] = '768P';
         }
 
-        if (!empty($params['callback'])) {
+        if (empty($params['callback'])) {
             $params = $this->hailuoCallback;
         }
 
