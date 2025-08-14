@@ -170,7 +170,7 @@ class EBook extends Component
         }
 
         if (empty($params['callback'])) {
-            $params = $this->hailuoCallback;
+            $params['callback'] = $this->hailuoCallback;
         }
 
 //        $tmp = $params;
