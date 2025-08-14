@@ -41,6 +41,7 @@ class EBook extends Component
     public $temperature = '';
     public $host = '';
     public $uri = '';
+    public $hailuoUri = '';
     public $hailuoCallback = '';
 
     private $_prompt = [];
