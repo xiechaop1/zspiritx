@@ -151,9 +151,11 @@ class EBook extends Component
             'first_frame_image' => $img,
         ];
 
-        $tmp = $input;
-        unset($tmp['first_frame_image']);
-        Yii::info('[JNCITY] hailuo prompt: ' . json_encode($tmp, JSON_UNESCAPED_UNICODE));
+//        $tmp = $input;
+//        if (isset($tmp['first_frame_image'])) {
+//            unset($tmp['first_frame_image']);
+//        }
+//        Yii::info('[JNCITY] hailuo prompt: ' . json_encode($tmp, JSON_UNESCAPED_UNICODE));
 
         return $input;
     }
@@ -171,9 +173,11 @@ class EBook extends Component
             $params = $this->hailuoCallback;
         }
 
-        $tmp = $params;
-        unset($tmp['first_frame_image']);
-        Yii::info('[JNCITY] hailuo params: ' . json_encode($tmp, JSON_UNESCAPED_UNICODE));
+//        $tmp = $params;
+//        if (isset($tmp['first_frame_image'])) {
+//            unset($tmp['first_frame_image']);
+//        }
+//        Yii::info('[JNCITY] hailuo params: ' . json_encode($tmp, JSON_UNESCAPED_UNICODE));
 
         return $params;
     }
