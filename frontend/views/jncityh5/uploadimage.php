@@ -184,6 +184,7 @@ $this->title = '上传图片';
                         $('#h5-worry').modal('show');
                         // $.alert(response.data.msg);
                         $(this).html('上传');
+                        $is_enable = false;
                     }
                 },
                 error: function () {
@@ -191,7 +192,10 @@ $this->title = '上传图片';
                     is_enable = true;
                     // $.alert('上传失败，请重试');
                     $('#worry_text').html('上传失败');
-                    $('#h5-worry').fadeOut();
+                    $('#h5-worry').modal('show');
+                    $(this).attr('enable', false);
+                    $(this).html('上传');
+                    $is_enable = false;
 
                 }
             });
