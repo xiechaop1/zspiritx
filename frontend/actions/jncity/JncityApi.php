@@ -258,7 +258,7 @@ class JncityApi extends ApiAction
         }
 
         if (empty($file)) {
-            Yii::error('上传文件不能为空');
+            Yii::error('[JNCITY] 上传文件不能为空');
             throw new \Exception('[JNCITY]上传文件不能为空', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
         }
 
@@ -269,6 +269,7 @@ class JncityApi extends ApiAction
 
         $filePath = !empty($file['tmp_name']) ? $file['tmp_name'] : '';
         if (empty($filePath)) {
+            Yii::error('[JNCITY] 上传文件失败');
             throw new \Exception('上传文件失败', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
         }
 

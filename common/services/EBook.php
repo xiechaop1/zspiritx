@@ -425,7 +425,7 @@ class EBook extends Component
     }
 
     public function chatWithHailuo($params) {
-        
+
         $data = $params;
 
         $uri = $this->hailuoUri;
