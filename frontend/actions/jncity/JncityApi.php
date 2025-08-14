@@ -269,7 +269,7 @@ class JncityApi extends ApiAction
 
         $filePath = !empty($file['tmp_name']) ? $file['tmp_name'] : '';
         if (empty($filePath)) {
-            Yii::error('[JNCITY] 上传文件失败' . print_r($file, true));
+            Yii::error('[JNCITY] 上传文件失败' . json_encode($file, JSON_UNESCAPED_UNICODE));
             throw new \Exception('上传文件失败', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
         }
 
