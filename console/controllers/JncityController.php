@@ -73,7 +73,8 @@ class JncityController extends Controller
 //            $ret = !empty($retData['output']) ? $retData['output'] : [];
 //            $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
 //            print("Status is " . $status . "\n");
-            $retData = $this->_getVideoFromTongyi($videoId);
+//            $retData = $this->_getVideoFromTongyi($videoId);
+            $retData = $this->_getVideoFromHailuo($videoId);
             $status = $retData['status'];
             $videoUrl = !empty($retData['video_url']) ? $retData['video_url'] : '';
             switch ($status) {
