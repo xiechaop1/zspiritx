@@ -445,7 +445,7 @@ class EBook extends Component
             $tmpdata['first_frame_image'] = substr($tmpdata['first_frame_image'], 0, 50);
         }
 
-        Yii::debug('[JNCITY]hailuo param: ' . json_encode($tmpdata, JSON_UNESCAPED_UNICODE));
+        Yii::info('[JNCITY]hailuo param: ' . json_encode($tmpdata, JSON_UNESCAPED_UNICODE));
         $response = $this->_call($uri, $data, 'POST', $isJson, $opts);
         Yii::info('[JNCITY]hailuo ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
 

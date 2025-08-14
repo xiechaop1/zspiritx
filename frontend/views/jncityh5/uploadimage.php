@@ -155,8 +155,11 @@ $this->title = '上传图片';
             //var data=$.toJSON(params);
             //Unity.call(data);
 
-            $(this).attr('enable', false);
-            $(this).html('上传中...');
+            // $(this).attr('enable', false);
+            // $(this).html('上传中...');
+            var btnObj = $(this);
+            btnObj.html('正在上传...');
+            btnObj.attr('enable', false);
             var formData = new FormData();
             formData.append('fileUpload', file);
             formData.append('user_id', userId);
@@ -174,8 +177,9 @@ $this->title = '上传图片';
                         // $.alert('上传成功');
                         $('#right_text').html('上传成功，正在生成视频……');
                         $('#h5-right').modal('show');
-                        $(this).attr('enable', false);
-                        is_enable = false;
+                        btnObj.attr('enable', false);
+                        btnObj.html('上传');
+                        is_enable = true;
                         // window.location.href = '/jncityh5/index';
                     } else {
                         $(this).attr('enable', true);
@@ -183,8 +187,9 @@ $this->title = '上传图片';
                         $('#worry_text').html(response.data.msg);
                         $('#h5-worry').modal('show');
                         // $.alert(response.data.msg);
-                        $(this).html('上传');
-                        $is_enable = false;
+                        btnObj.attr('enable', false);
+                        btnObj.html('上传');
+                        $is_enable = true;
                     }
                 },
                 error: function () {
@@ -193,9 +198,9 @@ $this->title = '上传图片';
                     // $.alert('上传失败，请重试');
                     $('#worry_text').html('上传失败');
                     $('#h5-worry').modal('show');
-                    $(this).attr('enable', false);
-                    $(this).html('上传');
-                    $is_enable = false;
+                    btnObj.attr('enable', false);
+                    btnObj.html('上传');
+                    $is_enable = true;
 
                 }
             });
