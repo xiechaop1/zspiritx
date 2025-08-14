@@ -41,6 +41,7 @@ class EBook extends Component
     public $temperature = '';
     public $host = '';
     public $uri = '';
+    public $hailuoCallback = '';
 
     private $_prompt = [];
     private $_msgId = '';
@@ -121,14 +122,51 @@ class EBook extends Component
             $imageBase64 = $image;
             $imageType = 'jpeg';
         }
-        $prompt = $this->_genBailianPrompt($userMessage, $imageBase64, $imageType);
-        $inputParams = $this->_genBaiLianParams($params, $imageType);
+//        $prompt = $this->_genBailianPrompt($userMessage, $imageBase64, $imageType);
+//        $inputParams = $this->_genBaiLianParams($params, $imageType);
+//        $taskId = $this->chatWithBailian($prompt, $inputParams, $type);
+
+        $params = $this->_genHailuoPrompt($userMessage, $imageBase64, $imageType);
+        $params = $this->_genHailuoParams($params);
+
+        $taskId = $this->chatWithHailuo($params);
+
 //        $inputParams = [];
-        $taskId = $this->chatWithBailian($prompt, $inputParams, $type);
         $ret['id'] = $taskId;
 //        $ret = $this->chatWithDoubao($prompt, $modelParams);
 
         return $ret;
+    }
+
+    private function _genHailuoPrompt($userMessage, $image, $imageType = 'jpeg') {
+        if ($imageType == 'file') {
+            $img = $image;
+        } else {
+            $img = 'data:image/' . $imageType . ';base64,' . $image;
+        }
+
+        $input = [
+            'prompt' => $userMessage,
+            'first_frame_image' => $img,
+        ];
+
+        return $input;
+    }
+
+    private function _genHailuoParams($params) {
+        if (empty($params['duration'])) {
+            $params['duration'] = '10';
+        }
+
+        if (!empty($params['resolution'])) {
+            $params['resolution'] = '768P';
+        }
+
+        if (!empty($params['callback'])) {
+            $params = $this->hailuoCallback;
+        }
+
+        return $params;
     }
 
     private function _genBaiLianParams($params, $type = 'img2video') {
@@ -322,6 +360,46 @@ class EBook extends Component
         return $isCreating;
     }
 
+    public function searchWithIdByHailuo($id) {
+        $uri = '/v1/query/video_generation';
+
+        $params = [
+            'task_id' => $id,
+        ];
+
+        $response = $this->_call($uri, $params, 'GET', true);
+
+        Yii::info('hailuo search ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+        file_put_contents('/tmp/hailuo_search.log', json_encode($response, JSON_UNESCAPED_UNICODE));
+
+        if (empty($response)) {
+            return [];
+        }
+
+        $tmpRet =  json_decode($response, true);
+
+        $ret = [
+            'status' => !empty($tmpRet['status']) ? $tmpRet['status'] : '',
+            'video_url' => '',
+        ];
+
+        if (!empty($tmpRet['status']) && $tmpRet['status'] == 'Success') {
+            $fileId = !empty($tmpRet['file_id']) ? $tmpRet['file_id'] : '';
+
+            if (!empty($fileId)) {
+                $fileUri = '/v1/files/retrieve?file_id=' . $fileId;
+
+                $fileRes = $this->_call($fileUri, [], 'GET', true);
+
+                if (!empty($fileRes['file']['download_url'])) {
+                    $ret['video_url'] = $fileRes['file']['download_url'];
+                }
+            }
+        }
+
+        return $ret;
+    }
+
     public function searchWithId($id) {
 //        $uri = '/v3/contents/generations/tasks/' . $id;
         $uri = '/api/v1/tasks/' . $id;
@@ -339,8 +417,44 @@ class EBook extends Component
         return $tmpRet;
     }
 
-    public function chatWithBailian($prompt, $params, $type = 'img2video') {
+    public function chatWithHailuo($params) {
+        // eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJHcm91cE5hbWUiOiLljJfkuqzluoTnlJ_np5HmioDmnInpmZDotKPku7vlhazlj7giLCJVc2VyTmFtZSI6ImNob2ljZSIsIkFjY291bnQiOiIiLCJTdWJqZWN0SUQiOiIxOTU1NDU1NDgwNTc4OTc0MjAwIiwiUGhvbmUiOiIxODUwMDA0MTE5MyIsIkdyb3VwSUQiOiIxOTU1NDU1NDgwNTc0Nzc5ODk2IiwiUGFnZU5hbWUiOiIiLCJNYWlsIjoiIiwiQ3JlYXRlVGltZSI6IjIwMjUtMDgtMTQgMDE6MDM6MDUiLCJUb2tlblR5cGUiOjEsImlzcyI6Im1pbmltYXgifQ.q7BLpc51GPZ2KPtXI670fYVtrT1YtMwk0FohefcgXhGpKlwR-MVt78btytECUtzeUhtvY8RbsPQkpMIBE-1RFiRJJiD--0KrCk_HN7yo10scRYiKWWw7ItC_MOpnWnEcoPShKg3-gcYMpJepZiqx5jHhKnQL8MGn-ue1DSkBREByI7PsSzBSOKMvfhLsifp9zF3P5pVl-zW81-rb7PDt-mCOMp4f5yeBtfI07lnjUKkpLV8-WSZPW5fnjYsdJReMUrd18KGAKwgNxtLnArp-Urikfz1q2kSbhJkC03dk5HOogNvmwtia0etS2CHY2_5dL0KmYI2fQijVA4O1H3AtOQ
 
+        $data = $params;
+
+        $uri = $this->hailuoUri;
+        $isJson = True;
+        $opts = [];
+
+        $tmpdata = $data;
+        if (!empty($tmpdata['first_frame_image'])) {
+            $tmpdata['first_frame_image'] = substr($tmpdata['first_frame_image'], 0, 50);
+        }
+
+        Yii::debug('[JNCITY]hailuo param: ' . json_encode($tmpdata, JSON_UNESCAPED_UNICODE));
+        $response = $this->_call($uri, $data, 'POST', $isJson, $opts);
+        Yii::info('[JNCITY]hailuo ret: ' . json_encode($response, JSON_UNESCAPED_UNICODE));
+
+        if (!empty($response)) {
+            $ret = json_decode($response, true);
+
+            if (!empty($ret['code'])) {
+                throw new \Exception($ret['message']);
+            }
+
+            if (!empty($ret['task_id'])) {
+                return $ret['task_id'];
+            }
+        }
+
+        return '';
+
+
+
+    }
+
+    public function chatWithBailian($prompt, $params, $type = 'img2video') {
+        // eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJHcm91cE5hbWUiOiLljJfkuqzluoTnlJ_np5HmioDmnInpmZDotKPku7vlhazlj7giLCJVc2VyTmFtZSI6ImNob2ljZSIsIkFjY291bnQiOiIiLCJTdWJqZWN0SUQiOiIxOTU1NDU1NDgwNTc4OTc0MjAwIiwiUGhvbmUiOiIxODUwMDA0MTE5MyIsIkdyb3VwSUQiOiIxOTU1NDU1NDgwNTc0Nzc5ODk2IiwiUGFnZU5hbWUiOiIiLCJNYWlsIjoiIiwiQ3JlYXRlVGltZSI6IjIwMjUtMDgtMTQgMDE6MDM6MDUiLCJUb2tlblR5cGUiOjEsImlzcyI6Im1pbmltYXgifQ.q7BLpc51GPZ2KPtXI670fYVtrT1YtMwk0FohefcgXhGpKlwR-MVt78btytECUtzeUhtvY8RbsPQkpMIBE-1RFiRJJiD--0KrCk_HN7yo10scRYiKWWw7ItC_MOpnWnEcoPShKg3-gcYMpJepZiqx5jHhKnQL8MGn-ue1DSkBREByI7PsSzBSOKMvfhLsifp9zF3P5pVl-zW81-rb7PDt-mCOMp4f5yeBtfI07lnjUKkpLV8-WSZPW5fnjYsdJReMUrd18KGAKwgNxtLnArp-Urikfz1q2kSbhJkC03dk5HOogNvmwtia0etS2CHY2_5dL0KmYI2fQijVA4O1H3AtOQ
         if ($type == 'img2video') {
             $model = $this->model;
         } else {

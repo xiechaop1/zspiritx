@@ -78,6 +78,9 @@ class JncityApi extends ApiAction
                 case 'generate_video':
                     $ret = $this->generateVideo();
                     break;
+                case 'check_hailuo_video':
+                    $ret = $this->checkHailuoVideo();
+                    break;
                 default:
                     $ret = [];
                     break;
@@ -314,6 +317,16 @@ class JncityApi extends ApiAction
         return [
             'msg' => '视频生成中，ID：' . $videoId,
         ];
+    }
+
+    public function checkHailuoVideo() {
+        $challenge = !empty($this->_get['challenge']) ? $this->_get['challenge'] : '';
+
+        if (!empty($challenge)) {
+            return ['challenge' => $challenge];
+        } else {
+            return ['status' => 'success'];
+        }
     }
 
 

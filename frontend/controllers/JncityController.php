@@ -61,6 +61,10 @@ class JncityController extends Controller
                 'class' => 'frontend\actions\jncity\JncityApi',
                 'action' => 'generate_video',
             ],
+            'check_hailuo_video' => [
+                'class' => 'frontend\actions\jncity\JncityApi',
+                'action' => 'check_hailuo_video',
+            ],
         ];
     }
 }

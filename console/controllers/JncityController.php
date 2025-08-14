@@ -20,6 +20,33 @@ use OSS\Core\OssException;
 
 class JncityController extends Controller
 {
+    private function _getVideoFromTongyi($videoId) {
+        $retData = Yii::$app->ebook->searchWithId($videoId);
+        $ret = !empty($retData['output']) ? $retData['output'] : [];
+        $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
+        print("Status is " . $status . "\n");
+        $res = [
+            'status' => $status,
+            'video_url' => '',
+        ];
+        switch ($status) {
+            case 'SUCCEEDED':
+                $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
+                print("Video url: " . $videoUrl . "\n");
+                $res['video_url'] = $videoUrl;
+                break;
+        }
+
+        return $res;
+
+    }
+
+    private function _getVideoFromHailuo($videoId) {
+        $res = Yii::$app->ebook->searchWithIdByHailuo($videoId);
+
+        return $res;
+    }
+
     public function actionGetvideo() {
         $model = UserEBookRes::find();
         $model->andFilterWhere([
@@ -42,14 +69,17 @@ class JncityController extends Controller
             print ("Processing {$i} user ebook res id: " . $row->id . "\n");
             $videoId = $row->ai_video_m_id;
 
-            $retData = Yii::$app->ebook->searchWithId($videoId);
-            $ret = !empty($retData['output']) ? $retData['output'] : [];
-            $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
-            print("Status is " . $status . "\n");
+//            $retData = Yii::$app->ebook->searchWithId($videoId);
+//            $ret = !empty($retData['output']) ? $retData['output'] : [];
+//            $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
+//            print("Status is " . $status . "\n");
+            $retData = $this->_getVideoFromTongyi($videoId);
+            $status = $retData['status'];
+            $videoUrl = !empty($retData['video_url']) ? $retData['video_url'] : '';
             switch ($status) {
                 case 'SUCCEEDED':
-                    $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
-                    print("Video url: ". $videoUrl . "\n");
+//                    $videoUrl = !empty($ret['video_url']) ? $ret['video_url'] : '';
+//                    print("Video url: ". $videoUrl . "\n");
                     if (!empty($videoUrl)) {
                         $ebookStoryParams = !empty($row->ebook_story_params) ? json_decode($row->ebook_story_params, true) : [];
                         $poiId = !empty($row->poi_id) ? $row->poi_id : 0;
