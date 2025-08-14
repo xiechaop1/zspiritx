@@ -163,16 +163,16 @@ class EBook extends Component
 
     private function _genHailuoParams($params) {
         if (empty($params['duration'])) {
-            $params['duration'] = '10';
+            $params['duration'] = 10;
         }
 
         if (empty($params['resolution'])) {
             $params['resolution'] = '768P';
         }
 
-        if (empty($params['callback'])) {
-            $params['callback'] = $this->hailuoCallback;
-        }
+//        if (empty($params['callback'])) {
+//            $params['callback'] = $this->hailuoCallback;
+//        }
 
 //        $tmp = $params;
 //        if (isset($tmp['first_frame_image'])) {
