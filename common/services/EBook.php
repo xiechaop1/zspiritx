@@ -151,6 +151,8 @@ class EBook extends Component
             'first_frame_image' => $img,
         ];
 
+        Yii::info('[JNCITY] hailuo prompt: ' . json_encode($input, JSON_UNESCAPED_UNICODE));
+
         return $input;
     }
 
@@ -166,6 +168,8 @@ class EBook extends Component
         if (!empty($params['callback'])) {
             $params = $this->hailuoCallback;
         }
+
+        Yii::info('[JNCITY] hailuo params: ' . json_encode($params, JSON_UNESCAPED_UNICODE));
 
         return $params;
     }
@@ -312,6 +316,7 @@ class EBook extends Component
         $ebookParam = $this->getStoryParams($ebookStoryId);
 
         if (empty($ebookParam)) {
+            Yii::warning('[JNCITY] 没有找到故事');
             return false;
         }
 
@@ -321,6 +326,7 @@ class EBook extends Component
             ? $ebookParam['pois'][$poiId - 1] : [];
 
         if (empty($poi)) {
+            Yii::warning('[JNCITY] 没有找到POI');
             return false;
         }
 
@@ -419,8 +425,7 @@ class EBook extends Component
     }
 
     public function chatWithHailuo($params) {
-        // eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJHcm91cE5hbWUiOiLljJfkuqzluoTnlJ_np5HmioDmnInpmZDotKPku7vlhazlj7giLCJVc2VyTmFtZSI6ImNob2ljZSIsIkFjY291bnQiOiIiLCJTdWJqZWN0SUQiOiIxOTU1NDU1NDgwNTc4OTc0MjAwIiwiUGhvbmUiOiIxODUwMDA0MTE5MyIsIkdyb3VwSUQiOiIxOTU1NDU1NDgwNTc0Nzc5ODk2IiwiUGFnZU5hbWUiOiIiLCJNYWlsIjoiIiwiQ3JlYXRlVGltZSI6IjIwMjUtMDgtMTQgMDE6MDM6MDUiLCJUb2tlblR5cGUiOjEsImlzcyI6Im1pbmltYXgifQ.q7BLpc51GPZ2KPtXI670fYVtrT1YtMwk0FohefcgXhGpKlwR-MVt78btytECUtzeUhtvY8RbsPQkpMIBE-1RFiRJJiD--0KrCk_HN7yo10scRYiKWWw7ItC_MOpnWnEcoPShKg3-gcYMpJepZiqx5jHhKnQL8MGn-ue1DSkBREByI7PsSzBSOKMvfhLsifp9zF3P5pVl-zW81-rb7PDt-mCOMp4f5yeBtfI07lnjUKkpLV8-WSZPW5fnjYsdJReMUrd18KGAKwgNxtLnArp-Urikfz1q2kSbhJkC03dk5HOogNvmwtia0etS2CHY2_5dL0KmYI2fQijVA4O1H3AtOQ
-
+        
         $data = $params;
 
         $uri = $this->hailuoUri;
