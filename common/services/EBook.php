@@ -147,6 +147,7 @@ class EBook extends Component
         }
 
         $input = [
+            'model' => $this->model,
             'prompt' => $userMessage,
             'first_frame_image' => $img,
         ];
