@@ -21,7 +21,7 @@ use OSS\Core\OssException;
 class JncityController extends Controller
 {
     private function _getVideoFromTongyi($videoId) {
-        $retData = Yii::$app->ebook->searchWithId($videoId);
+        $retData = Yii::$app->ebook->searchWithIdByHailuo($videoId);
         $ret = !empty($retData['output']) ? $retData['output'] : [];
         $status = !empty($ret['task_status']) ? $ret['task_status'] : '';
         print("Status is " . $status . "\n");
@@ -43,6 +43,8 @@ class JncityController extends Controller
 
     private function _getVideoFromHailuo($videoId) {
         $res = Yii::$app->ebook->searchWithIdByHailuo($videoId);
+
+        print("ret is " . json_encode($res, JSON_UNESCAPED_UNICODE) . "\n");
 
         return $res;
     }
@@ -96,6 +98,13 @@ class JncityController extends Controller
                         if (!empty($resources['bgm'])) {
                             print("Bgm is : ". $resources['bgm']);
                             $mp3Path = $resources['bgm'];
+
+                            $tmpMp3File = '/tmp/' . md5($resources['bgm']) . '.mp3';
+                            if (!file_exists($tmpMp3File)) {
+                                // 下载MP3文件到本地
+                                file_put_contents($tmpMp3File, file_get_contents($mp3Path));
+                            }
+                            $mp3Path = $tmpMp3File;
 
                             // 3. 合成新视频
                             $outputVideo = '/tmp/output_' . uniqid() . '.mp4';

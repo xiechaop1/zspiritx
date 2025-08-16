@@ -262,6 +262,21 @@ class JncityApi extends ApiAction
             throw new \Exception('[JNCITY]上传文件不能为空', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
         }
 
+        // 检查文件上传错误
+        if (!empty($file['error'])) {
+            $errorMsg = $this->getUploadErrorMessage($file['error']);
+            Yii::error('[JNCITY] 文件上传错误: ' . $errorMsg . ', 文件信息: ' . json_encode($file, JSON_UNESCAPED_UNICODE));
+            throw new \Exception('文件上传失败: ' . $errorMsg, ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
+        }
+
+        // 检查文件大小
+        $maxFileSize = $this->getMaxUploadSize();
+        if ($file['size'] > $maxFileSize) {
+            $maxSizeMB = round($maxFileSize / 1024 / 1024, 2);
+            Yii::error('[JNCITY] 文件大小超限: ' . $file['size'] . ' > ' . $maxFileSize);
+            throw new \Exception("文件大小超过限制，最大允许 {$maxSizeMB}MB", ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
+        }
+
         $request = $_REQUEST;
         $userId = !empty($request['user_id']) ? $request['user_id'] : 0;
         $ebookStoryId = !empty($request['ebook_story_id']) ? $request['ebook_story_id'] : 0;
@@ -347,6 +362,67 @@ class JncityApi extends ApiAction
 
     }
 
+    /**
+     * 获取文件上传错误信息
+     * @param int $errorCode
+     * @return string
+     */
+    private function getUploadErrorMessage($errorCode)
+    {
+        $errorMessages = [
+            UPLOAD_ERR_OK => '没有错误',
+            UPLOAD_ERR_INI_SIZE => '文件大小超过了 php.ini 中 upload_max_filesize 的值',
+            UPLOAD_ERR_FORM_SIZE => '文件大小超过了表单中 MAX_FILE_SIZE 的值',
+            UPLOAD_ERR_PARTIAL => '文件只有部分被上传',
+            UPLOAD_ERR_NO_FILE => '没有文件被上传',
+            UPLOAD_ERR_NO_TMP_DIR => '找不到临时文件夹',
+            UPLOAD_ERR_CANT_WRITE => '文件写入失败',
+            UPLOAD_ERR_EXTENSION => '文件上传被扩展程序中断',
+        ];
 
+        return isset($errorMessages[$errorCode]) ? $errorMessages[$errorCode] : '未知错误';
+    }
+
+    /**
+     * 获取最大上传文件大小
+     * @return int
+     */
+    private function getMaxUploadSize()
+    {
+        $maxUploadSize = ini_get('upload_max_filesize');
+        $maxPostSize = ini_get('post_max_size');
+        $memoryLimit = ini_get('memory_limit');
+
+        // 转换为字节
+        $maxUploadSize = $this->convertToBytes($maxUploadSize);
+        $maxPostSize = $this->convertToBytes($maxPostSize);
+        $memoryLimit = $this->convertToBytes($memoryLimit);
+
+        // 取最小值
+        return min($maxUploadSize, $maxPostSize, $memoryLimit);
+    }
+
+    /**
+     * 将 PHP 大小字符串转换为字节
+     * @param string $size
+     * @return int
+     */
+    private function convertToBytes($size)
+    {
+        $size = strtolower(trim($size));
+        $last = strtolower($size[strlen($size) - 1]);
+        $size = (int) $size;
+
+        switch ($last) {
+            case 'g':
+                $size *= 1024;
+            case 'm':
+                $size *= 1024;
+            case 'k':
+                $size *= 1024;
+        }
+
+        return $size;
+    }
 
 }

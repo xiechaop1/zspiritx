@@ -80,6 +80,21 @@ $this->title = '上传图片';
 
 </div>
 
+<!-- Loading遮罩层 -->
+<div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="text-align: center; color: white;">
+        <div style="width: 50px; height: 50px; border: 3px solid #f3f3f3; border-top: 3px solid #DAFC70; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+        <div style="font-size: 18px; color: #DAFC70;">正在上传，请稍候...</div>
+    </div>
+</div>
+
+<style>
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
 <!-- 按钮：用于打开模态框 -->
 <div class="modal fade" id="h5-right" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -124,10 +139,22 @@ $this->title = '上传图片';
 <script>
     window.onload = function () {
         is_enable = true;
+        
+        // 显示Loading遮罩
+        function showLoading() {
+            $('#loading-overlay').css('display', 'flex');
+        }
+        
+        // 隐藏Loading遮罩
+        function hideLoading() {
+            $('#loading-overlay').hide();
+        }
         $('#upload_btn').click(function () {
             if (is_enable == false) {
                 $.alert('正在上传……');
+                return;
             }
+            
             var userId = $('input[name="user_id"]').val();
             var poiId = $('#poi').val();
             var file = $('input[name="fileUpload"]')[0].files[0];
@@ -142,24 +169,15 @@ $this->title = '上传图片';
                 $.alert('请选择文件');
                 return;
             }
+            
+            // 显示Loading遮罩
+            showLoading();
             is_enable = false;
 
-            //var params = {
-            //    "getPhotoArgs":{
-            //        "url":"https://api.zspiritx.com.cn/jncity/upload",
-            //        "ebook_story_id": <?php //= $ebookStory ?>//,
-            //        "poi_id": poiId
-            //    }
-            //}
-            //
-            //var data=$.toJSON(params);
-            //Unity.call(data);
-
-            // $(this).attr('enable', false);
-            // $(this).html('上传中...');
             var btnObj = $(this);
             btnObj.html('正在上传...');
             btnObj.attr('enable', false);
+            
             var formData = new FormData();
             formData.append('fileUpload', file);
             formData.append('user_id', userId);
@@ -173,35 +191,34 @@ $this->title = '上传图片';
                 processData: false,
                 contentType: false,
                 success: function (response) {
+                    // 隐藏Loading遮罩
+                    hideLoading();
+                    
                     if (response.data.code == 0) {
-                        // $.alert('上传成功');
                         $('#right_text').html('上传成功，正在生成视频……');
                         $('#h5-right').modal('show');
-                        btnObj.attr('enable', false);
                         btnObj.html('上传');
                         is_enable = true;
-                        // window.location.href = '/jncityh5/index';
                     } else {
-                        $(this).attr('enable', true);
-                        is_enable = true;
                         $('#worry_text').html(response.data.msg);
                         $('#h5-worry').modal('show');
-                        // $.alert(response.data.msg);
-                        btnObj.attr('enable', false);
                         btnObj.html('上传');
-                        $is_enable = true;
+                        is_enable = true;
                     }
                 },
-                error: function () {
-                    $(this).attr('enable', true);
-                    is_enable = true;
-                    // $.alert('上传失败，请重试');
-                    $('#worry_text').html('上传失败');
+                error: function (xhr, status, error) {
+                    // 隐藏Loading遮罩
+                    hideLoading();
+                    
+                    var errorMsg = '上传失败，请重试';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    
+                    $('#worry_text').html(errorMsg);
                     $('#h5-worry').modal('show');
-                    btnObj.attr('enable', false);
                     btnObj.html('上传');
-                    $is_enable = true;
-
+                    is_enable = true;
                 }
             });
         });
