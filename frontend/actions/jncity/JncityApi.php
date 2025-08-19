@@ -207,7 +207,7 @@ class JncityApi extends ApiAction
 
         $userEbook = UserEBook::find()
             ->where(['user_id' => $userId])
-            ->andFilterWhere(['ebook_story' => $ebookId])
+            ->andFilterWhere(['id' => $ebookId])
 //            ->orderBy(['id' => SORT_DESC])
             ->one();
 
@@ -217,7 +217,15 @@ class JncityApi extends ApiAction
             $tmp = $userEbook->toArray();
             $tmp['created_at_str'] = Date('Y-m-d H::s', $userEbook->created_at);
             $tmp['ebook_story_params'] = json_decode($userEbook->ebook_story_params, true);
-            $tmp['user_ebook_res'] = $userEbook->ebookRes;
+            $tmpRes = $userEbook->ebookRes->toArray();
+            if (!empty($tmpRes)) {
+                foreach ($tmpRes as &$tmpRow) {
+                    if (!empty($tmpRow['ebook_story_params'])) {
+                        $tmpRow['ebook_story_params'] = json_decode($tmpRow['ebook_story_params'], true);
+                    }
+                }
+            }
+            $tmp['user_ebook_res'] = $tmpRes;
             $ret = $tmp;
         }
 
