@@ -396,8 +396,21 @@ class EBook extends Component
 
         $tmpRet =  json_decode($response, true);
 
+        $status = '';
+        if (!empty($tmpRet['status'])) {
+            switch ($tmpRet['status']) {
+                case 'Success':
+                    $status = 'SUCCEEDED';
+                    break;
+                default:
+                    $status = '';
+                    break;
+            }
+        }
+
         $ret = [
-            'status' => !empty($tmpRet['status']) ? $tmpRet['status'] : '',
+            'status' => $status,
+//            !empty($tmpRet['status']) ? $tmpRet['status'] : '',
             'video_url' => '',
         ];
 
