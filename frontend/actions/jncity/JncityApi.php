@@ -223,13 +223,21 @@ class JncityApi extends ApiAction
 //                $tmpRes = $tmpRes->toArray();
                 foreach ($tmpRes as $tmpRow) {
                     $tmpOne = $tmpRow->toArray();
-                    if (!empty($tmpOne['ebook_story_params'])) {
-                        $tmpOne['ebook_story_params'] = json_decode($tmpRow['ebook_story_params'], true);
-                    }
-                    $tmpData[] = $tmpOne;
+                    unset($tmpOne['ebook_story_params']);
+//                    if (!empty($tmpOne['ebook_story_params'])) {
+//                        $tmpOne['ebook_story_params'] = json_decode($tmpRow['ebook_story_params'], true);
+//                    }
+                    $tmpData[$tmpOne['poi_id']] = $tmpOne;
                 }
             }
-            $tmp['user_ebook_res'] = $tmpData;
+            if (!empty($tmp['ebook_story_params']['pois'])) {
+                foreach ($tmp['ebook_story_params']['pois'] as &$poiRow) {
+                    if (!empty($tmpData[$poiRow['poi_id']])) {
+                        $poiRow['user_ebook_res'] = $tmpData[$poiRow['poi_id']];
+                    }
+                }
+            }
+//            $tmp['user_ebook_res'] = $tmpData;
             $ret = $tmp;
         }
 
