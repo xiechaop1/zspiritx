@@ -189,7 +189,7 @@ class JncityApi extends ApiAction
                 $tmp['ebook_story_params'] = json_decode($ue->ebook_story_params, true);
                 $tmp['user_ebook_res'] = $ue->ebookRes;
                 $tmp['mission_ct'] = !empty($ue->ebookRes) ? sizeof($ue->ebookRes) : 0;
-
+                $tmp['ebook_status_str'] = !empty(UserEBook::$userEbookStatus2Name[$ue->ebook_status]) ? UserEBook::$userEbookStatus2Name[$ue->ebook_status] : '未知状态';
                 $ret[] = $tmp;
             }
         }
