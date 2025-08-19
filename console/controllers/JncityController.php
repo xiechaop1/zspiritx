@@ -95,11 +95,11 @@ class JncityController extends Controller
 
                         // 2. 指定本地 MP3 路径
                         $retCode = 0;
-                        if (!empty($resources['bgm'])) {
-                            print("Bgm is : ". $resources['bgm']);
-                            $mp3Path = $resources['bgm'];
+                        if (!empty($resources['com_bgm'])) {
+                            print("Bgm is : ". $resources['com_bgm']);
+                            $mp3Path = $resources['com_bgm'];
 
-                            $tmpMp3File = '/tmp/' . md5($resources['bgm']) . '.mp3';
+                            $tmpMp3File = '/tmp/' . md5($resources['com_bgm']) . '.mp3';
                             if (!file_exists($tmpMp3File)) {
                                 // 下载MP3文件到本地
                                 file_put_contents($tmpMp3File, file_get_contents($mp3Path));
