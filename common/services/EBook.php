@@ -402,6 +402,9 @@ class EBook extends Component
                 case 'Success':
                     $status = 'SUCCEEDED';
                     break;
+                case 'Processing':
+                    $status = 'RUNNING';
+                    break;
                 default:
                     $status = '';
                     break;
