@@ -67,7 +67,7 @@ $this->title = '上传图片';
                     </div> -->
                 </div>
             </div>
-            <div class="row" id="answer-box" style="margin-top: 20px;">
+            <div class="row" id="answer-box" style="margin-top: 20px; z-index: 0;">
                 <div class="btn-m-green m-t-30  m-l-30" style="" id="upload_btn">
                     上传
                 </div>
@@ -81,7 +81,7 @@ $this->title = '上传图片';
 </div>
 
 <!-- Loading遮罩层 -->
-<div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 9999; justify-content: center; align-items: center;">
+<div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 99999; justify-content: center; align-items: center;">
     <div style="text-align: center; color: white;">
         <div style="width: 50px; height: 50px; border: 3px solid #f3f3f3; border-top: 3px solid #DAFC70; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
         <div style="font-size: 18px; color: #DAFC70;">正在上传，请稍候...</div>
@@ -93,46 +93,44 @@ $this->title = '上传图片';
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* 确保遮罩层覆盖所有元素 */
+#loading-overlay,
+#success-overlay,
+#error-overlay {
+    pointer-events: auto;
+}
+
+/* 遮罩层显示时禁用页面滚动 */
+body.modal-open {
+    overflow: hidden;
+}
 </style>
 
-<!-- 按钮：用于打开模态框 -->
-<div class="modal fade" id="h5-right" tabindex="-1" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
-            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
-                <div>
-                    <div class="fs-36 text-F6 text-center bold">
-                        成功
-                    </div>
-                    <div class="text-center m-t-30" id="right_text">
-
-                    </div>
-
-                </div>
+<!-- 成功提示遮罩层 -->
+<div id="success-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 99999; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; border-radius: 10px; padding: 30px; max-width: 500px; width: 90%; position: relative;">
+        <span class="close-btn" style="position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #999;" onclick="closeSuccessModal()">×</span>
+        <div style="text-align: center;">
+            <div style="font-size: 36px; color: #333; font-weight: bold; margin-bottom: 20px;">
+                成功
             </div>
-
+            <div id="right_text" style="margin-top: 20px; color: #666;">
+            </div>
         </div>
     </div>
 </div>
 
-
-<!-- 按钮：用于打开模态框 -->
-<div class="modal fade" id="h5-worry" tabindex="-1" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <span class="close delete-note  m-t-15 m-r-20  fs-24 absolute  z-9999 iconfont iconbtn-guanbi" data-dismiss="modal" style="top: 15px;right: 15px;"></span>
-            <div class="p-20-40 relative h5 m-t-30" name="loginStr" style="width: 600px;">
-                <div>
-                    <div class="fs-36 text-F6 text-center bold">
-                        出错了
-                    </div>
-                    <div class="m-t-40 bg-F5 p-20 fs-26 text-orange border-radius-r-5 border-radius-l-5" id="worry_text">
-
-                    </div>
-                </div>
+<!-- 错误提示遮罩层 -->
+<div id="error-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 99999; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; border-radius: 10px; padding: 30px; max-width: 500px; width: 90%; position: relative;">
+        <span class="close-btn" style="position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #999;" onclick="closeErrorModal()">×</span>
+        <div style="text-align: center;">
+            <div style="font-size: 36px; color: #333; font-weight: bold; margin-bottom: 20px;">
+                出错了
             </div>
-
+            <div id="worry_text" style="margin-top: 20px; padding: 20px; background: #f5f5f5; border-radius: 5px; color: #ff6600; font-size: 16px;">
+            </div>
         </div>
     </div>
 </div>
@@ -143,12 +141,53 @@ $this->title = '上传图片';
         // 显示Loading遮罩
         function showLoading() {
             $('#loading-overlay').css('display', 'flex');
+            $('body').addClass('modal-open');
         }
         
         // 隐藏Loading遮罩
         function hideLoading() {
             $('#loading-overlay').hide();
+            $('body').removeClass('modal-open');
         }
+        
+        // 显示成功提示遮罩
+        function showSuccessModal(message) {
+            $('#right_text').html(message);
+            $('#success-overlay').css('display', 'flex');
+            $('body').addClass('modal-open');
+        }
+        
+        // 显示错误提示遮罩
+        function showErrorModal(message) {
+            $('#worry_text').html(message);
+            $('#error-overlay').css('display', 'flex');
+            $('body').addClass('modal-open');
+        }
+        
+        // 关闭成功提示遮罩
+        window.closeSuccessModal = function() {
+            $('#success-overlay').hide();
+            $('body').removeClass('modal-open');
+        }
+        
+        // 关闭错误提示遮罩
+        window.closeErrorModal = function() {
+            $('#error-overlay').hide();
+            $('body').removeClass('modal-open');
+        }
+        
+        // 点击遮罩层关闭对话框
+        $(document).on('click', '#success-overlay', function(e) {
+            if (e.target === this) {
+                closeSuccessModal();
+            }
+        });
+        
+        $(document).on('click', '#error-overlay', function(e) {
+            if (e.target === this) {
+                closeErrorModal();
+            }
+        });
         $('#upload_btn').click(function () {
             if (is_enable == false) {
                 $.alert('正在上传……');
@@ -195,13 +234,11 @@ $this->title = '上传图片';
                     hideLoading();
                     
                     if (response.data.code == 0) {
-                        $('#right_text').html('上传成功，正在生成视频……');
-                        $('#h5-right').modal('show');
+                        showSuccessModal('上传成功，正在生成视频……');
                         btnObj.html('上传');
                         is_enable = true;
                     } else {
-                        $('#worry_text').html(response.data.msg);
-                        $('#h5-worry').modal('show');
+                        showErrorModal(response.data.msg);
                         btnObj.html('上传');
                         is_enable = true;
                     }
@@ -215,8 +252,7 @@ $this->title = '上传图片';
                         errorMsg = xhr.responseJSON.message;
                     }
                     
-                    $('#worry_text').html(errorMsg);
-                    $('#h5-worry').modal('show');
+                    showErrorModal(errorMsg);
                     btnObj.html('上传');
                     is_enable = true;
                 }
