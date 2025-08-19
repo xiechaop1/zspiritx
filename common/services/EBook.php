@@ -379,9 +379,11 @@ class EBook extends Component
     public function searchWithIdByHailuo($id) {
         $uri = '/v1/query/video_generation';
 
-        $params = [
-            'task_id' => $id,
-        ];
+//        $params = [
+//            'task_id' => $id,
+//        ];
+        $params = [];
+        $uri .= '?task_id=' . $id;
 
         $response = $this->_call($uri, $params, 'GET', true);
 
@@ -406,6 +408,8 @@ class EBook extends Component
                 $fileUri = '/v1/files/retrieve?file_id=' . $fileId;
 
                 $fileRes = $this->_call($fileUri, [], 'GET', true);
+                $fileRes = json_decode($fileRes, true);
+                file_put_contents('/tmp/hailuo_search_file.log', json_encode($fileRes, JSON_UNESCAPED_UNICODE));
 
                 if (!empty($fileRes['file']['download_url'])) {
                     $ret['video_url'] = $fileRes['file']['download_url'];
