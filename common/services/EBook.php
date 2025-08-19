@@ -791,6 +791,9 @@ class EBook extends Component
             }
             Yii::info('[JNCITY] new video to db, add data to db: '. $rr);
 
+            if ($rr == 1) {
+                $rr = true;
+            }
             if ($rr === false && !empty($model->getErrors())) {
                 Yii::error($model->getErrors());
                 throw new \Exception('数据库报错');
