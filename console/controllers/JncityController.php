@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use common\models\UserEBook;
 use common\models\UserEBookRes;
 use liyifei\chinese2pinyin\Chinese2pinyin;
 use yii\db\Query;
@@ -173,6 +174,18 @@ class JncityController extends Controller
                         $row->ebook_res_status = UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_FAIL;
                     }
                     $r = $row->save();
+
+                    $ebookStatus = $this->_checkUserEBookStatus($row);
+                    if ($ebookStatus == UserEBook::USER_EBOOK_STATUS_COMPLETED) {
+                        $userEBook = UserEBook::find()
+                            ->where(['id' => $row->user_ebook_id])
+                            ->one();
+
+                        if (!empty($userEBook)) {
+                            $userEBook->ebook_status = $ebookStatus;
+                            $userEBook->save();
+                        }
+                    }
                     break;
                 case 'RUNNING':
                     break;
@@ -187,6 +200,44 @@ class JncityController extends Controller
             }
             $i++;
 
+        }
+
+        return $ret;
+
+    }
+
+    private function _checkUserEBookStatus($userEBookRes) {
+        $tmpParams = $userEBookRes->ebook_story_params;
+        $tmpParamsArray = json_decode($tmpParams, true);
+
+        if (!empty($tmpParamsArray['pois'])) {
+            $max_num = sizeof($tmpParamsArray['pois']);
+        } else {
+            $max_num = 7;
+        }
+        $checkModel = UserEBookRes::find()
+            ->where(['user_ebook_id' => $userEBookRes->user_ebook_id])
+            ->andFilterWhere(['user_id' => $userEBookRes->user_id])
+            ->andFilterWhere(['ebook_res_status' => UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS])
+            ->all();
+
+        $poiStatus = [];
+        $ret = UserEBook::USER_EBOOK_STATUS_DEFAULT;
+        $comCt = 0;
+        if (!empty($checkModel)) {
+            foreach ($checkModel as $row) {
+                if ($row->ebook_res_status == UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS
+                    && !(isset($poiStatus[$row->poi_id]) && $poiStatus[$row->poi_id] == UserEBookRes::USER_EBOOK_RES_STATUS_VIDEO_GENERATE_SUCCESS)
+                ) {
+                    $comCt++;
+                    $poiStatus[$row->poi_id] = $row->ebook_res_status;
+                }
+            }
+        }
+        if ($comCt == $max_num) {
+            $ret = UserEBook::USER_EBOOK_STATUS_COMPLETED;
+        } else if ($comCt > 0) {
+            $ret = UserEBook::USER_EBOOK_STATUS_PLAYING;
         }
 
         return $ret;
