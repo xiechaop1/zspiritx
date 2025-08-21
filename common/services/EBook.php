@@ -41,6 +41,7 @@ class EBook extends Component
     public $temperature = '';
     public $host = '';
     public $uri = '';
+    public $resolution = '';
     public $hailuoUri = '';
     public $hailuoCallback = '';
 
@@ -178,7 +179,7 @@ class EBook extends Component
         }
 
         if (empty($params['resolution'])) {
-            $params['resolution'] = '768P';
+            $params['resolution'] = $this->resolution;
         }
 
 //        if (empty($params['callback'])) {
