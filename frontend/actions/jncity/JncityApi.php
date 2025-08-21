@@ -308,6 +308,7 @@ class JncityApi extends ApiAction
         $poiId = !empty($request['poi_id']) ? $request['poi_id'] : 0;
 
         $filePath = !empty($file['tmp_name']) ? $file['tmp_name'] : '';
+        $fileExt = pathinfo($file['name'], PATHINFO_EXTENSION);
         if (empty($filePath)) {
             Yii::error('[JNCITY] 上传文件失败' . json_encode($file, JSON_UNESCAPED_UNICODE));
             throw new \Exception('上传文件失败', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
@@ -319,7 +320,7 @@ class JncityApi extends ApiAction
         $host = Yii::$app->params['oss.host'];
         $bucket = Yii::$app->params['oss.bucket'];
 
-        $ossFileName = 'jncity/images/' . basename($filePath);
+        $ossFileName = 'jncity/images/' . basename($filePath) . '.' . $fileExt;
 
         try {
             $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
