@@ -21,6 +21,7 @@ use common\models\StoryStages;
 use common\models\UserBook;
 use common\models\UserData;
 use common\models\UserEBook;
+use common\models\UserEBookRes;
 use common\models\UserKnowledge;
 use common\models\UserQa;
 use common\models\User;
@@ -29,6 +30,8 @@ use common\models\UserList;
 use common\models\UserScore;
 use common\models\UserStory;
 use frontend\actions\ApiAction;
+use OSS\Core\OssException;
+use OSS\OssClient;
 use yii;
 
 class JncityApi extends ApiAction
@@ -166,6 +169,8 @@ class JncityApi extends ApiAction
         } else {
             throw new \Exception('电子书尚未开启', ErrorCode::EBOOK_USER_EBOOK_STATUS_NONE);
         }
+
+        return true;
     }
 
     public function getUserEbook() {
@@ -308,8 +313,26 @@ class JncityApi extends ApiAction
             throw new \Exception('上传文件失败', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
         }
 
+        $accessKeyId = Yii::$app->params['oss.accesskeyid'];
+        $accessKeySecret = Yii::$app->params['oss.accesskeysecret'];
+        $endpoint = Yii::$app->params['oss.endpoint'];
+        $host = Yii::$app->params['oss.host'];
+        $bucket = Yii::$app->params['oss.bucket'];
+
+        $ossFileName = 'jncity/images/' . basename($filePath);
+
         try {
-            $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $filePath);
+            $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
+            $ossClient->uploadFile($bucket, $ossFileName, $filePath);
+
+            $newImageUrl = 'https://' . $bucket . '.' . $endpoint . '/' . $ossFileName;
+
+        } catch (OssException $e) {
+            throw new \Exception('OSS上传文件失败', ErrorCode::EBOOK_UPLOAD_FILE_EMPTY);
+        }
+
+        try {
+            $ret = Yii::$app->ebook->generateVideoBase64WithEbookStory($ebookStoryId, $userId, $poiId, $newImageUrl);
 //            sleep(3);
 //            $ret = false;
             if ($ret === false) {

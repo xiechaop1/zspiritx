@@ -92,8 +92,19 @@ class EBook extends Component
 
     public function generateVideo($userMessage, $image = '', $params = []) {
         $modelParams = $params;
-        $prompt = $this->_genPrompt($userMessage, $image, 'file');
-        $ret = $this->chatWithDoubao($prompt, $modelParams);
+//        $prompt = $this->_genPrompt($userMessage, $image, 'file');
+//        $ret = $this->chatWithDoubao($prompt, $modelParams);
+
+        $params = $this->_genHailuoPrompt($userMessage, $image, 'file');
+        $params = $this->_genHailuoParams($params);
+
+        $taskId = $this->chatWithHailuo($params);
+
+//        $inputParams = [];
+        $ret['id'] = $taskId;
+//        $ret = $this->chatWithDoubao($prompt, $modelParams);
+
+        return $ret;
 
         return $ret;
     }
@@ -305,10 +316,10 @@ class EBook extends Component
         if (!empty($poi['resources'])) {
             foreach ($poi['resources'] as $idx => $res) {
                 if (!empty($res['video_prompt'])) {
-                    $ret = $this->generateVideoBase64($res['video_prompt'], $image);
+                    $ret = $this->generateVideo($res['video_prompt'], $image);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
-                        $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
+                        $this->newVideoToDb($userEbookId, $userId, $storyId, $image, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx);
                         $isCreating = True;
                     }
                 }
@@ -365,7 +376,7 @@ class EBook extends Component
                     $ret = $this->generateVideoBase64($res['video_prompt'], $image, $poiType);
                     if (!empty($ret['id'])) {
                         $videoId = $ret['id'];
-                        $r = $this->newVideoToDb($userEbookId, $userId, $storyId, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx, $res);
+                        $r = $this->newVideoToDb($userEbookId, $userId, $storyId, $image, $ebookStoryId, $ebookParam, $poiId, $videoId, $idx, $res);
 
                         $isCreating = True;
                     }
@@ -752,7 +763,7 @@ class EBook extends Component
         return $userEbookId;
     }
 
-    public function newVideoToDb($userEbookId, $userId, $storyId, $ebookStory, $ebookStoryParams, $poiId, $videoId, $resId, $param = []) {
+    public function newVideoToDb($userEbookId, $userId, $storyId, $image, $ebookStory, $ebookStoryParams, $poiId, $videoId, $resId, $param = []) {
         try {
 
             $model = UserEBookRes::find()
@@ -771,6 +782,7 @@ class EBook extends Component
                 $model->story_id = $storyId;
                 $model->user_ebook_id = $userEbookId;
                 $model->ebook_story = $ebookStory;
+                $model->image = $image;
                 $model->ebook_story_params = $ebookStoryParams;
                 $model->poi_id = $poiId;
                 $model->resource_id = $resId;

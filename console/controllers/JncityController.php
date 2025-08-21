@@ -148,7 +148,7 @@ class JncityController extends Controller
                             $host = Yii::$app->params['oss.host'];
                             $bucket = Yii::$app->params['oss.bucket'];
 
-                            $ossFileName = 'videos/' . basename($tmpVideo);
+                            $ossFileName = 'jncity/videos/' . basename($tmpVideo);
 
                             try {
                                 $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
