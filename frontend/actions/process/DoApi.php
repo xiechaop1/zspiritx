@@ -248,6 +248,8 @@ class DoApi extends ApiAction
             ->all();
 
         $ret['models']['particle'] = $praticle;
+//        $ret['oss']['host'] = 'https://zspiritx.oss-cn-beijing.aliyuncs.com/';
+        $ret['oss']['host'] = Yii::$app->params['oss.host'];
 
         return $ret;
     }
