@@ -82,7 +82,7 @@ class DialogGenerator extends Component
 1. 使用复杂对话格式(PHP数组结构)
 2. localID必须按照"模型名-dialog-序号"的格式,例如:"{$modelName}-dialog-0"
 3. 每条对话必须有合理的nextID指向下一条对话
-4. 对话结束时要有空对话(结束对话),空对话只包含localID和nextID
+4. 对话结束时要有空对话(结束对话)，空对话只包含localID和nextID，空对话的nextID指的就是重复起始的对话localID
 5. 如果需要选择分支,使用userSelections数组
 6. 如果需要显示/隐藏模型,使用showModels/hideModels数组
 7. 直接输出PHP数组代码,不要包含任何解释文字
