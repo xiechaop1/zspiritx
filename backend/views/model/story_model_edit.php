@@ -136,6 +136,25 @@ echo \dmstr\widgets\Alert::widget();
 //            ])->label('是否兜底');
 //            echo $form->field($storyModel, 'undertake_trigger_timeout')->textInput(['value' => $storyModel->undertake_trigger_timeout])->label('兜底执行时间（s）');
 //            echo $form->field($storyModel, 'undertake_alive_timeout')->textInput(['value' => $storyModel->undertake_alive_timeout])->label('兜底持续时间（s）');
+
+            // AI生成对话输入框
+            ?>
+            <div class="form-group">
+                <label class="control-label col-sm-3">AI生成对话</label>
+                <div class="col-sm-6">
+                    <textarea id="ai-dialog-description" class="form-control" rows="3"
+                        placeholder="请描述你想要生成的对话内容，例如：小灵语和玩家讨论数学问题，有3个选择分支"></textarea>
+                    <button type="button" id="generate-dialog-btn" class="btn btn-primary" style="margin-top: 10px;">
+                        <i class="fa fa-magic"></i> 生成对话
+                    </button>
+                    <span id="generate-loading" style="display:none; margin-left: 10px;">
+                        <i class="fa fa-spinner fa-spin"></i> 正在生成中...
+                    </span>
+                    <div id="generate-error" class="alert alert-danger" style="display:none; margin-top: 10px;"></div>
+                </div>
+            </div>
+            <?php
+
             if (!empty($storyModel->dialog)) {
                 $dialogTxt = var_export(\common\helpers\Model::decodeDialog($storyModel->dialog), true);
                 // 去掉数组中下标
@@ -238,3 +257,68 @@ echo \dmstr\widgets\Alert::widget();
 
         </div>
     </div>
+
+<script>
+$(document).ready(function() {
+    $('#generate-dialog-btn').click(function() {
+        var description = $('#ai-dialog-description').val();
+        if (!description) {
+            alert('请输入对话描述');
+            return;
+        }
+
+        var existingDialog = $('#storymodels-dialog').val();
+        var modelName = $('#storymodels-story_model_name').val();
+
+        // 如果模型名为空,使用默认名称
+        if (!modelName) {
+            modelName = 'Model';
+        }
+
+        // 隐藏错误提示
+        $('#generate-error').hide();
+
+        // 显示加载状态
+        $('#generate-loading').show();
+        $('#generate-dialog-btn').prop('disabled', true);
+
+        $.ajax({
+            url: window.location.href,
+            method: 'POST',
+            data: {
+                action: 'generate_dialog',
+                description: description,
+                existing_dialog: existingDialog,
+                model_name: modelName
+            },
+            dataType: 'json',
+            timeout: 60000, // 60秒超时
+            success: function(response) {
+                if (response.success) {
+                    $('#storymodels-dialog').val(response.dialog);
+                    alert('对话生成成功!');
+                    // 清空输入框
+                    $('#ai-dialog-description').val('');
+                } else {
+                    $('#generate-error').text('生成失败: ' + (response.message || '未知错误')).show();
+                }
+            },
+            error: function(xhr, status, error) {
+                var errorMsg = '请求失败';
+                if (status === 'timeout') {
+                    errorMsg = '请求超时,AI生成时间过长,请稍后重试';
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                } else {
+                    errorMsg = '网络错误: ' + error;
+                }
+                $('#generate-error').text(errorMsg).show();
+            },
+            complete: function() {
+                $('#generate-loading').hide();
+                $('#generate-dialog-btn').prop('disabled', false);
+            }
+        });
+    });
+});
+</script>

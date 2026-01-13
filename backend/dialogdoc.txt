@@ -1,0 +1,377 @@
+基本框架：（请复制下面的结构开始更改，其中以 “//”开头的行是提示引导词，在最终上传时需删除）
+
+array (
+  'Name' => '小灵语',
+  'Intro' => 'LingYu-dialog-0',
+  'avatar' => 'https://zspiritx.oss-cn-beijing.aliyuncs.com/img/avatar/11/avatar_girl_300x300.png',
+  'ActionOnPlaced' => 
+  array (
+  // 模型基本配置贴在这里
+  ),
+  'Dialog' => 
+  array (
+// 对话主体贴在这里
+  ),
+);
+
+对于基本框架，其中Name为模型的名字，Intro为起始状态的第一条对话的ID（ID的接续关系后面篇幅专门说明），avatar为默认头像（没有则删去此行）。
+如果使用的是基于简单对话的自动补全id（或者沿用了“物品id-dialog-对话序号”的标准格式），Intro可以“auto-对话序号”的格式来缩略；如果默认对话即为最上方的第一条，可以不写intro。
+ActionOnPlaced中的配置信息有专门篇幅说明。
+
+对于非常简单的流对话，对话主体可以采用简单的格式化文本进行配置，无需使用对话条结构。格式化文本由编号、发言人、对话文本（或url）、音频四部分组成，使用英文双冒号（::）进行分离。其完整id会根据模型名自动补全，会自动识别网址为url，同时会指定跳转至下一条对话。音频部分可省略。样例如下：
+'0::小灵语::你好，我是小灵语',
+（这是仅对话样例，自动补全的id为 LingYu-dialog-0 ）
+
+'1::小灵语::欢迎来到“灵镜新世界”，这里您将体验一个全新的AR世界::voice/guide/Fairy1.mp3',
+（这是语音对话样例，自动补全的id为 LingYu-dialog-1 ）
+
+'2::小灵语::https://h5.zspiritx.com.cn/processh5/guide?story_id=7',
+（这是网页样例，自动补全的id为 LingYu-dialog-1 ）
+
+同样，对于非常简单的对话流，空对话的结构由编号、目的地id三部分组成，使用英文双冒号（::）进行分离。其完整id会根据模型名自动补全，同时会指定跳转至自动补全的目的地对话。样例如下：
+'end1::4',
+（这条对话自动补全的id为 LingYu-dialog-end1 ，跳转对话的id为 LingYu-dialog-4 ）
+
+当简单对话中需要执行show、hide、entityAction这三项常用指令时，或者使用userSelections显示多个选项时，在对话的文本或网页的url后，或空对话的最后加入对应的操作指令：
+show指令：{#showModels#（这里是需要显示的模型的id，多个模型使用#分开）} 
+例子：{#showModels#test-obj1} 
+hide指令：{#hideModels#（这里是需要隐藏的模型的id，多个模型使用#分开）} 
+例子：{#hideModels#test-obj2} 
+entityAction指令：{#entityAction#（这里是需要跳转的指令对，以“对话id缩写@模型id”的结构书写，多个模型使用#分开）}
+例子：{#entityAction#5@test-obj3}'
+userSelections{#userSelections#（这里各个选项的文本，使用#分开）}
+例子：{#userSelections#选项1#选项2}'
+具体等效关系参见完整教程中对应部分
+
+比较特别的，如果需要隐藏模型自身，可以使用{#hideModels#{#this}}这个固定写法，{#this} 等价于模型自己的id，这是一个通用写法，可以避免反复配置。
+
+当有多个对话可选时（比如使用网页选项或者答题），在序号后加入nextID指令：{#nextID#（这里是跳转对话的序号，使用#分开）}
+
+简单对话中需要使用头像时，则在名字后插入avatarURL指令：{#avatarURL#（图片的完整网址）}
+
+由简单对话流构成的对话结构如下：
+array (
+  'Name' => '小灵语',
+  'Intro' => 'auto-0',
+  'ActionOnPlaced' => 
+  array (
+  ),
+  'Dialog' => 
+  array (
+'0::小灵语{#avatarURL#https://zspiritx.oss-cn-beijing.aliyuncs.com/img/avatar/11/avatar_girl_300x300.png}::你好，我是小灵语{#showModels#test-obj1} ',
+'1::小灵语::欢迎来到“灵镜新世界”，这里您将体验一个全新的AR世界{#hideModels#test-obj2} ::voice/guide/Fairy1.mp3',
+'2::小灵语::https://h5.zspiritx.com.cn/processh5/guide?story_id=7{#entityAction#5@test-obj3}',
+'end1::1{#hideModels#{#this}}',
+  ),
+);
+
+
+简单对话对应的完整指令均会在下方对应的完整“对话条”中附上对应写法。
+而在使用复杂配置时，对话主体内容为任意数量个“对话条”顺序排列而成，单个对话条的可选结构如下：
+
+基本对话：（只显示文字不显示其他）（将sentence内容替换为对话文本，name替换为发言人的名字，ID保持接续关系，avatar为此对话头像，使用默认头像则删去）
+array (
+      'localID' => 'LingYu-dialog-0',
+      'name' => '小灵语',
+      'sentence' => '你好，我是小灵语',
+      'nextID' => 
+      array (
+'LingYu-dialog-1',
+      ),
+    ),
+	
+对应的简单对话如下：
+'0::小灵语::你好，我是小灵语',
+	
+如果直接跳转下一句，可以删去nextID相关，保持最简单结构（后续所有对话都遵守这个规则，所以不再重复）：
+	array (
+      'localID' => 'LingYu-dialog-0',
+      'name' => '小灵语',
+      'sentence' => '你好，我是小灵语',
+    ),
+	
+基本对话：（只显示文字，有语音）（将sentence内容替换为对话文本，name替换为发言人的名字，sentenceClipURL为音频文件的名字，ID保持接续关系）
+array (
+      'localID' => 'LingYu-dialog-1',
+      'name' => '小灵语',
+      'sentence' => '欢迎来到“灵镜新世界”，这里您将体验一个全新的AR世界',
+      'sentenceClipURL' => 'voice/guide/Fairy1.mp3',
+      'nextID' => 
+      array (
+'LingYu-dialog-2',
+      ),
+    ),
+	
+对应的简单对话如下：
+1::小灵语::欢迎来到“灵镜新世界”，这里您将体验一个全新的AR世界::voice/guide/Fairy1.mp3',
+
+基本对话：（打开一个网页）（将url替换为打开的网页地址，ID保持接续关系）
+array (
+      'localID' => 'LingYu-dialog-2',
+      'name' => '小灵语',
+      'url' => 'https://h5.zspiritx.com.cn/processh5/guide?story_id=7',
+      'nextID' => 
+      array (
+'LingYu-dialog-end1',
+      ),
+    ),
+	
+对应的简单对话如下：
+'2::小灵语::https://h5.zspiritx.com.cn/processh5/guide?story_id=7',
+
+结束对话：（这个对话需要出现在任何需要关闭窗口的时候，它的nextID指向下一次点击时显示的对话内容）
+array (
+      'localID' => 'LingYu-dialog-end1',
+      'name' => '小灵语',
+      'nextID' => 
+      array (
+'LingYu-dialog-4',
+      ),
+    ),
+	
+对应的简单对话如下：
+'end1::4',
+	
+特殊对话：（对话的选择分支）（nextID中的顺序与userSelections的顺序对应）
+array (
+      'localID' => 'LingYu-dialog-4',
+      'name' => '小灵语',
+      'sentence' => '有什么需要帮助的地方？',
+      'userSelections' => 
+      array (
+	  '查看教程',
+	  '取消',
+      ),
+      'nextID' => 
+      array (
+'LingYu-dialog-2',
+'LingYu-dialog-end1',
+      ),
+    ),
+	
+对应的简单对话如下：
+'4{#nextID#2#end1}::小灵语::有什么需要帮助的地方？{#userSelections#查看教程#取消}',
+	
+特殊对话：（url的选择分支）（nextID中的顺序与url问答页面中的配置对应）
+array (
+      'localID' => 'LingYu-dialog-4',
+      'name' => '小灵语',
+      'url' => 'https://h5.zspiritx.com.cn/processh5/guide?story_id=7',
+      'nextID' => 
+      array (
+'LingYu-dialog-2',
+'LingYu-dialog-end1',
+      ),
+    ),
+
+对应的简单对话如下：
+'4{#nextID#2#end1}::小灵语::https://h5.zspiritx.com.cn/processh5/guide?story_id=7',
+	
+基本对话：（放置模型）（将showModels的列表中内容替换为需要放置的模型的id）
+array (
+      'localID' => 'LingYu-dialog-5',
+      'name' => '小灵语',
+      'sentence' => '快去看看新模型吧',
+      'showModels' => 
+      array (
+'Test-obj1',
+      ),
+      'nextID' => 
+      array (
+'LingYu-dialog-6',
+      ),
+    ),
+	
+其等效简单对话结构如下：
+'5::小灵语::快去看看新模型吧{#showModels#Test-obj1}',
+	
+特殊对话：（隐藏模型）（将hideModels的列表中内容替换为需要隐藏的模型的id）
+array (
+      'localID' => 'LingYu-dialog-6',
+      'name' => '小灵语',
+      'sentence' => '模型现在收起来了',
+      'hideModels' => 
+      array (
+'Test-obj1',
+      ),
+      'nextID' => 
+      array (
+'LingYu-dialog-end2',
+      ),
+    ),
+	
+其等效简单对话结构如下：
+'6::小灵语::模型现在收起来了{#hideModels#Test-obj1}',
+	
+特殊对话：（让另一个模型的对话进度跳转）（这个对话将发生在另一个模型中，作用是影响目标模型小灵语的对话进度，其中targetEntityID是模型的Model Inst UID，actionID则是目标对话的id）
+array (
+      'localID' => 'Test-dialog-0',
+      'name' => '木桩',
+      'sentence' => '小灵语现在功能改变了',
+	 'entityActionChanges' => 
+      array (
+array (
+          'targetEntityID' => 'LingYu',
+          'actionID' => 'LingYu-dialog-5',
+        ),
+      ),
+      'nextID' => 
+      array (
+'Test-dialog-end',
+      ),
+    ),
+	
+	其等效简单对话结构如下：
+'0::木桩::小灵语现在功能改变了{#entityAction#5@LingYu}',
+	
+对于模型基本配置，我们可以有如下的内容：
+
+模型位置移动，模型如果不想放在地上，就用下面这组命令改变模型的初始位置：（moveY是提高1米，moveX是向右1米，moveZ是向前1米，例子中的010就是模型放下后向上移动1，常用于让物体飘起了）
+    'moveX' => 0,
+    'moveY' => 1,
+    'moveZ' => 0,
+
+模型的文本显示，如果模型有文本显示功能，会显示对应文字：
+'visualText'=>'小灵语',
+
+模型的图片显示，如果模型有图片显示功能，会打开对应网页的图片，并调整图片长宽到对应参数：（visualImage是网址，imgWidth是图片宽，imgHeight是图片高）
+  'visualImage' => 'https://zspiritx.oss-cn-beijing.aliyuncs.com/story_model/visual/11/audi_vision.png',
+  'imgWidth' => 3000,
+  'imgHeight' => 2000,
+
+模型一旦出现立即播放对话，这个很少使用，几乎只在每个场景开场打招呼的模型上出现：
+    'entityFlag' => 'autoPlay',
+  
+ 对于一个常见的模型配置，我们只需要将需要改动的内容贴入ActionOnPlaced之中即可，就像这个：
+    'ActionOnPlaced' => 
+  array (
+    'visualText'=>'小灵语',
+    'moveY' => 1,
+  ),
+
+ 关于ID的接续关系，我们需要让每一条普通对话的nextID指向下一个对话的localID。如果一串对话结束了，它应当指向一个结束对话（内容为空的对话）的localID。
+ 对于结束对话，它的nextID应该指向用户点击这个模型时的下一个对话，而不是在剧本上的下一个对话。举例来说，如果小灵语第一次对话有ABC三条内容，之后进入空对话X，如果此时玩家立刻点击会开始第二组不同的对胡DEF，它才应该被指向D；如果此时玩家不能看见对话D（比如对话D需要先做完任务），那么此时X的nextID应该指向C，然后在完成对应任务后在其他地方使用跳转对话让小灵语的对话更改为D。
+  下面是一个完整的复杂结构对话例子，在这个例子中，dilalog0、1、2是首次点击后顺序播放的，随后进入END1；当用户抵达END1后再次对话，会进入对话4的选择分支，用户可以选择再次查看对话2，也可以选择回到END1；对话5、6与END2的循环，则需要在外部通过其他模型的跳转对话进入，可以注意到对话5将一个模型放出了，随后对话6又收回了这个模型，这里仅仅作为代码演示，实际使用中请不要放下模型立即收回。
+ 
+ array (
+  'Name' => '小灵语',
+  'Intro' => 'LingYu-dialog-0',
+  'avatar' => 'https://zspiritx.oss-cn-beijing.aliyuncs.com/img/avatar/11/avatar_girl_300x300.png',
+  'ActionOnPlaced' => 
+  array (
+    'moveY' => 1,
+  ),
+  'Dialog' => 
+  array (
+array (
+      'localID' => 'LingYu-dialog-0',
+      'name' => '小灵语',
+      'sentence' => '你好，我是小灵语',
+      'userSelections' => 
+      array (
+      ),
+      'nextID' => 
+      array (
+'LingYu-dialog-1',
+      ),
+    ),
+array (
+      'localID' => 'LingYu-dialog-1',
+      'name' => '小灵语',
+      'sentence' => '欢迎来到“灵镜新世界”，这里您将体验一个全新的AR世界',
+      'sentenceClipURL' => 'voice/guide/Fairy1.mp3',
+      'nextID' => 
+      array (
+'LingYu-dialog-2',
+      ),
+    ),
+array (
+      'localID' => 'LingYu-dialog-2',
+      'name' => '小灵语',
+      'url' => 'https://h5.zspiritx.com.cn/processh5/guide?story_id=7',
+      'nextID' => 
+      array (
+'LingYu-dialog-end1',
+      ),
+    ),
+array (
+      'localID' => 'LingYu-dialog-end1',
+      'name' => '小灵语',
+      'nextID' => 
+      array (
+'LingYu-dialog-4',
+      ),
+    ),
+array (
+      'localID' => 'LingYu-dialog-4',
+      'name' => '小灵语',
+      'sentence' => '有什么需要帮助的地方？',
+      'userSelections' => 
+      array (
+	  '查看教程',
+	  '取消',
+      ),
+      'nextID' => 
+      array (
+'LingYu-dialog-2',
+'LingYu-dialog-end1',
+      ),
+    ),
+array (
+      'localID' => 'LingYu-dialog-5',
+      'name' => '小灵语',
+      'sentence' => '快去看看新模型吧',
+      'showModels' => 
+      array (
+'Test-obj1',
+      ),
+      'nextID' => 
+      array (
+'LingYu-dialog-6',
+      ),
+    ),
+array (
+      'localID' => 'LingYu-dialog-6',
+      'name' => '小灵语',
+      'sentence' => '模型现在收起来了',
+      'hideModels' => 
+      array (
+'Test-obj1',
+      ),
+      'nextID' => 
+      array (
+'LingYu-dialog-end2',
+      ),
+    ),
+array (
+      'localID' => 'LingYu-dialog-end2',
+      'name' => '小灵语',
+      'nextID' => 
+      array (
+'LingYu-dialog-5',
+      ),
+    ),
+  ),
+);
+
+而该模型使用简单对话配置后则显示如下：
+ array (
+  'Name' => '小灵语',
+  'Intro' => 'LingYu-dialog-0',
+  'avatar' => 'https://zspiritx.oss-cn-beijing.aliyuncs.com/img/avatar/11/avatar_girl_300x300.png',
+  'ActionOnPlaced' => 
+  array (
+    'moveY' => 1,
+  ),
+  'Dialog' => 
+  array (
+ '0::小灵语::你好，我是小灵语',
+'1::小灵语::欢迎来到“灵镜新世界”，这里您将体验一个全新的AR世界::voice/guide/Fairy1.mp3',
+'2::小灵语::https://h5.zspiritx.com.cn/processh5/guide?story_id=7',
+'end1::4',
+'4{#nextID#2#end1}::小灵语::有什么需要帮助的地方？{#userSelections#查看教程#取消}',
+'5::小灵语::快去看看新模型吧{#showModels#Test-obj1}',
+'6::小灵语::模型现在收起来了{#hideModels#Test-obj1}',
+'end2::5',
+  ),
+);

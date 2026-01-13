@@ -58,6 +58,30 @@ class StoryModelEdit extends Action
                     }
 
                     break;
+                case 'generate_dialog':
+                    // AI生成对话功能
+                    $description = Net::post('description');
+                    $existingDialog = Net::post('existing_dialog');
+                    $modelName = Net::post('model_name');
+
+                    try {
+                        // 调用DialogGenerator服务生成对话
+                        $generator = new \common\services\DialogGenerator();
+                        $result = $generator->generateDialog($description, $existingDialog, $modelName);
+
+                        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+                        return [
+                            'success' => true,
+                            'dialog' => $result,
+                        ];
+                    } catch (\Exception $e) {
+                        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+                        return [
+                            'success' => false,
+                            'message' => $e->getMessage(),
+                        ];
+                    }
+                    break;
                 default:
                     Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
                     $model->load(Yii::$app->request->post());
