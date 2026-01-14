@@ -269,10 +269,16 @@ $(document).ready(function() {
 
         var existingDialog = $('#storymodels-dialog').val();
         var modelName = $('#storymodels-story_model_name').val();
+        var modelInstUId = $('#storymodels-model_inst_u_id').val();
 
         // 如果模型名为空,使用默认名称
         if (!modelName) {
             modelName = 'Model';
+        }
+
+        // 如果model_inst_u_id为空，使用默认值
+        if (!modelInstUId) {
+            modelInstUId = 'Model';
         }
 
         // 隐藏错误提示
@@ -289,7 +295,8 @@ $(document).ready(function() {
                 action: 'generate_dialog',
                 description: description,
                 existing_dialog: existingDialog,
-                model_name: modelName
+                model_name: modelName,
+                model_inst_u_id: modelInstUId
             },
             dataType: 'json',
             timeout: 60000, // 60秒超时
