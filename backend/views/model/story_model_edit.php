@@ -269,19 +269,15 @@ $(document).ready(function() {
 
         var existingDialog = $('#storymodels-dialog').val();
 
-        // 从model_id的Select2控件获取选中的模型名称(用于对话中的name)
-        var modelName = '';
-        var selectedModel = $('#storymodels-model_id').select2('data');
-        if (selectedModel && selectedModel.length > 0 && selectedModel[0].text) {
-            modelName = selectedModel[0].text;
-        }
+        // 从story_model_name字段获取剧本模型名称(用于对话中的name)
+        var storyModelName = $('#storymodels-story_model_name').val();
 
         // 从model_inst_u_id字段获取值(用于localID)
         var modelInstUId = $('#storymodels-model_inst_u_id').val();
 
         // 验证必要字段
-        if (!modelName) {
-            alert('请先选择模型');
+        if (!storyModelName) {
+            alert('请先填写剧本模型名称');
             return;
         }
 
@@ -305,7 +301,7 @@ $(document).ready(function() {
                 action: 'generate_dialog',
                 description: description,
                 existing_dialog: existingDialog,
-                model_name: modelName,
+                story_model_name: storyModelName,
                 model_inst_u_id: modelInstUId
             },
             dataType: 'json',
