@@ -17,17 +17,23 @@ class DialogGenerator extends Component
      * 生成对话的主方法
      * @param string $userDescription 用户描述的对话需求
      * @param string $existingDialog 现有的对话内容
-     * @param string $modelName 模型名称
+     * @param string $modelName 模型名称(用于对话中的name字段)
+     * @param string $modelInstUId 模型实例UID(用于localID的前缀)
      * @return string 生成或合并后的对话代码
      */
-    public function generateDialog($userDescription, $existingDialog = '', $modelName = '')
+    public function generateDialog($userDescription, $existingDialog = '', $modelName = '', $modelInstUId = '')
     {
         try {
+            // 如果modelInstUId为空，使用modelName作为后备
+            if (empty($modelInstUId)) {
+                $modelInstUId = $modelName;
+            }
+
             // 1. 构建AI Prompt
-            $prompt = $this->buildPrompt($userDescription, $modelName);
+            $prompt = $this->buildPrompt($userDescription, $modelName, $modelInstUId);
 
             // 2. 调用Doubao服务
-            $aiResponse = $this->callAI($prompt, $modelName);
+            $aiResponse = $this->callAI($prompt, $modelName, $modelInstUId);
 
             // 3. 解析AI返回的内容
             $newDialog = $this->parseAIResponse($aiResponse);
@@ -38,7 +44,7 @@ class DialogGenerator extends Component
                 return $newDialog;
             } else {
                 // 如果有现有对话,进行智能合并
-                return $this->mergeDialogs($existingDialog, $newDialog, $modelName);
+                return $this->mergeDialogs($existingDialog, $newDialog, $modelInstUId);
             }
         } catch (\Exception $e) {
             Yii::error('DialogGenerator Error: ' . $e->getMessage());
@@ -49,10 +55,11 @@ class DialogGenerator extends Component
     /**
      * 构建AI Prompt
      * @param string $description 用户描述
-     * @param string $modelName 模型名称
+     * @param string $modelName 模型名称(用于对话中的name字段)
+     * @param string $modelInstUId 模型实例UID(用于localID的前缀)
      * @return array Prompt消息数组
      */
-    private function buildPrompt($description, $modelName)
+    private function buildPrompt($description, $modelName, $modelInstUId)
     {
         // 读取dialogdoc.txt的关键部分作为规范
         $dialogDocPath = Yii::getAlias('@backend') . '/dialogdoc.txt';
@@ -80,53 +87,54 @@ class DialogGenerator extends Component
 #任务要求#
 请根据用户的描述,生成完整的对话数组。注意:
 1. 使用复杂对话格式(PHP数组结构)
-2. localID必须按照"模型名-dialog-序号"的格式,例如:"{$modelName}-dialog-0"
-3. 每条对话必须有合理的nextID指向下一条对话
-4. 对话结束时要有空对话(结束对话)，空对话只包含localID和nextID，空对话的nextID指的就是重复起始的对话localID，例如：
+2. localID必须按照"模型实例UID-dialog-序号"的格式,例如:"{$modelInstUId}-dialog-0"（注意：这里使用的是模型实例UID，不是模型名称）
+3. 对话中的name字段使用模型名称:"{$modelName}"
+4. 每条对话必须有合理的nextID指向下一条对话
+5. 对话结束时要有空对话(结束对话)，空对话只包含localID和nextID，空对话的nextID指的就是重复起始的对话localID，例如：
    array (
-     'localID' => '{$modelName}-dialog-end1',
-     'name' => '发言人名字',
+     'localID' => '{$modelInstUId}-dialog-end1',
+     'name' => '{$modelName}',
      'nextID' =>
      array (
-       '{$modelName}-dialog-（最后要重复那句的ID）',
+       '{$modelInstUId}-dialog-（最后要重复那句的ID）',
      ),
    ),
-5. 如果需要选择分支,使用userSelections数组
-6. 如果需要显示/隐藏模型,使用showModels/hideModels数组
-7. 直接输出PHP数组代码,不要包含任何解释文字
-8. 不要使用markdown代码块标记(如```php),直接输出纯PHP数组代码
-9. 必须返回完整的数组结构,包括外层的array()
+6. 如果需要选择分支,使用userSelections数组
+7. 如果需要显示/隐藏模型,使用showModels/hideModels数组
+8. 直接输出PHP数组代码,不要包含任何解释文字
+9. 不要使用markdown代码块标记(如```php),直接输出纯PHP数组代码
+10. 必须返回完整的数组结构,包括外层的array()
 
 #输出格式示例#
 array (
   'Name' => '{$modelName}',
-  'Intro' => '{$modelName}-dialog-0',
+  'Intro' => '{$modelInstUId}-dialog-0',
   'Dialog' =>
   array (
     array (
-      'localID' => '{$modelName}-dialog-0',
-      'name' => '发言人名字',
+      'localID' => '{$modelInstUId}-dialog-0',
+      'name' => '{$modelName}',
       'sentence' => '对话内容',
       'nextID' =>
       array (
-        '{$modelName}-dialog-1',
+        '{$modelInstUId}-dialog-1',
       ),
     ),
     array (
-      'localID' => '{$modelName}-dialog-1',
-      'name' => '发言人名字',
+      'localID' => '{$modelInstUId}-dialog-1',
+      'name' => '{$modelName}',
       'sentence' => '对话内容',
       'nextID' =>
       array (
-        '{$modelName}-dialog-end1',
+        '{$modelInstUId}-dialog-end1',
       ),
     ),
     array (
-      'localID' => '{$modelName}-dialog-end1',
-      'name' => '发言人名字',
+      'localID' => '{$modelInstUId}-dialog-end1',
+      'name' => '{$modelName}',
       'nextID' =>
       array (
-        '{$modelName}-dialog-0',
+        '{$modelInstUId}-dialog-0',
       ),
     ),
   ),
@@ -138,7 +146,7 @@ EOT;
         ];
 
         // 用户需求
-        $userContent = "模型名: {$modelName}\n需求描述: {$description}";
+        $userContent = "模型名称(用于name字段): {$modelName}\n模型实例UID(用于localID前缀): {$modelInstUId}\n需求描述: {$description}";
         $messages[] = [
             'role' => 'user',
             'content' => $userContent
@@ -174,9 +182,10 @@ EOT;
      * 调用Doubao AI服务
      * @param array $messages Prompt消息
      * @param string $modelName 模型名称
+     * @param string $modelInstUId 模型实例UID
      * @return string AI返回的内容
      */
-    private function callAI($messages, $modelName)
+    private function callAI($messages, $modelName, $modelInstUId)
     {
         $doubao = Yii::$app->doubao;
 
@@ -251,10 +260,10 @@ EOT;
      * 智能合并对话
      * @param string $existingDialog 现有对话代码
      * @param string $newDialog 新生成的对话代码
-     * @param string $modelName 模型名称
+     * @param string $modelInstUId 模型实例UID
      * @return string 合并后的对话代码
      */
-    private function mergeDialogs($existingDialog, $newDialog, $modelName)
+    private function mergeDialogs($existingDialog, $newDialog, $modelInstUId)
     {
         try {
             // 1. 解析现有对话
@@ -262,10 +271,10 @@ EOT;
             $newArray = eval('return ' . $newDialog . ';');
 
             // 2. 提取现有对话的最大ID
-            $maxId = $this->extractMaxDialogId($existingDialog, $modelName);
+            $maxId = $this->extractMaxDialogId($existingDialog, $modelInstUId);
 
             // 3. 调整新对话的ID,从maxId+1开始
-            $adjustedNewArray = $this->adjustDialogIds($newArray, $maxId + 1, $modelName);
+            $adjustedNewArray = $this->adjustDialogIds($newArray, $maxId + 1, $modelInstUId);
 
             // 4. 找到现有对话的最后一个非空对话,修改其nextID
             $existingDialogs = $existingArray['Dialog'];
@@ -305,15 +314,15 @@ EOT;
     /**
      * 提取现有对话的最大ID序号
      * @param string $dialog 对话代码
-     * @param string $modelName 模型名称
+     * @param string $modelInstUId 模型实例UID
      * @return int 最大ID序号
      */
-    private function extractMaxDialogId($dialog, $modelName)
+    private function extractMaxDialogId($dialog, $modelInstUId)
     {
         $maxId = -1;
 
-        // 正则匹配所有的 localID => 'modelName-dialog-数字'
-        $pattern = "/'localID'\s*=>\s*'" . preg_quote($modelName, '/') . "-dialog-(\d+)'/";
+        // 正则匹配所有的 localID => 'modelInstUId-dialog-数字'
+        $pattern = "/'localID'\s*=>\s*'" . preg_quote($modelInstUId, '/') . "-dialog-(\d+)'/";
         preg_match_all($pattern, $dialog, $matches);
 
         if (!empty($matches[1])) {
@@ -323,7 +332,7 @@ EOT;
         }
 
         // 同时检查 end1, end2 等结束对话的ID
-        $endPattern = "/'localID'\s*=>\s*'" . preg_quote($modelName, '/') . "-dialog-end(\d+)'/";
+        $endPattern = "/'localID'\s*=>\s*'" . preg_quote($modelInstUId, '/') . "-dialog-end(\d+)'/";
         preg_match_all($endPattern, $dialog, $endMatches);
 
         if (!empty($endMatches[0])) {
@@ -338,10 +347,10 @@ EOT;
      * 调整对话数组的ID
      * @param array $dialogArray 对话数组
      * @param int $startId 起始ID
-     * @param string $modelName 模型名称
+     * @param string $modelInstUId 模型实例UID
      * @return array 调整后的对话数组
      */
-    private function adjustDialogIds($dialogArray, $startId, $modelName)
+    private function adjustDialogIds($dialogArray, $startId, $modelInstUId)
     {
         if (!isset($dialogArray['Dialog'])) {
             return $dialogArray;
@@ -359,10 +368,10 @@ EOT;
 
                 // 判断是否是end对话
                 if (preg_match('/-dialog-end\d*$/', $oldId)) {
-                    $newId = $modelName . '-dialog-end' . $endCount;
+                    $newId = $modelInstUId . '-dialog-end' . $endCount;
                     $endCount++;
                 } else {
-                    $newId = $modelName . '-dialog-' . $currentId;
+                    $newId = $modelInstUId . '-dialog-' . $currentId;
                     $currentId++;
                 }
 
