@@ -102,7 +102,7 @@ class DialogGenerator extends Component
 #任务要求#
 请根据用户的描述,生成完整的对话数组。注意:
 1. localID必须按照"模型实例UID-dialog-序号"的格式,例如:"{$modelInstUId}-dialog-0"（注意：这里使用的是模型实例UID，不是模型名称）
-2. 要分析出对话的具体人名，放到name字段中
+2. 要分析出对话的具体人名，放到name字段中，比如：name: 对话内容
 EOT;
 
         // 如果使用dialogdoc.txt（简化版），添加优先级说明
