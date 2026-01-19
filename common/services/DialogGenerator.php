@@ -203,9 +203,18 @@ EOT;
             $phpCode = var_export($response, true);
         }
 
-        // 清理可能的markdown标记
+        // 清理可能的markdown标记和PHP标签
         $phpCode = str_replace('```php', '', $phpCode);
         $phpCode = str_replace('```', '', $phpCode);
+        $phpCode = str_replace('<?php', '', $phpCode);
+        $phpCode = str_replace('<?', '', $phpCode);
+        $phpCode = str_replace('?>', '', $phpCode);
+
+        // 清理开头可能出现的 "php" 单词（单独成行或后面跟着换行）
+        $phpCode = preg_replace('/^\s*php\s*\n/im', '', $phpCode);
+        // 清理任何行首的"php"关键字
+        $phpCode = preg_replace('/^php\s+/im', '', $phpCode);
+
         $phpCode = trim($phpCode);
 
         // 检测是否是简单对话流格式（以引号开头，不是array(开头）
@@ -235,8 +244,9 @@ EOT;
                 throw new \Exception('AI返回的数组缺少Dialog字段');
             }
         } catch (\Exception $e) {
-            Yii::error('ParseAIResponse Error: ' . $e->getMessage() . "\nResponse: " . $phpCode);
-            throw new \Exception('AI返回的格式不正确,请重试');
+            // 记录更详细的错误信息，包括原始响应和清理后的代码
+            Yii::error('ParseAIResponse Error: ' . $e->getMessage() . "\n原始响应: " . substr($response, 0, 500) . "\n清理后代码: " . substr($phpCode, 0, 500));
+            throw new \Exception('AI返回的格式不正确,请重试。错误：' . $e->getMessage());
         }
 
         return $phpCode;
