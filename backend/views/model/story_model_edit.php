@@ -324,8 +324,6 @@ $(document).ready(function() {
                 if (response.success) {
                     $('#storymodels-dialog').val(response.dialog);
                     alert('对话生成成功!');
-                    // 清空输入框
-                    $('#ai-dialog-description').val('');
                 } else {
                     $('#generate-error').text('生成失败: ' + (response.message || '未知错误')).show();
                 }
