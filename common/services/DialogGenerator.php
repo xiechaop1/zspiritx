@@ -106,7 +106,7 @@ EOT;
 
         // 如果使用dialogdoc.txt（简化版），添加优先级说明
         if ($version === 'simple') {
-            $taskRequirement .= "\n8. **重要：如果有冲突，优先遵循上述对话规范文档中的规范**";
+            $taskRequirement .= "\n2. **重要：如果有冲突，优先遵循上述对话规范文档中的规范**";
         }
 
         $messages[] = [
