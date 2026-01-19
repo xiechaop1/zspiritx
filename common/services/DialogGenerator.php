@@ -37,7 +37,7 @@ class DialogGenerator extends Component
             $aiResponse = $this->callAI($prompt, $modelName, $modelInstUId);
 
             // 3. 解析AI返回的内容
-            $newDialog = $this->parseAIResponse($aiResponse, $modelName, $modelInstUId);
+            $newDialog = $this->parseAIResponse($aiResponse, $version, $modelName, $modelInstUId);
 
             // 4. 智能合并对话
             if (empty($existingDialog) || trim($existingDialog) === '') {
@@ -194,7 +194,7 @@ EOT;
      * @param string $modelInstUId 模型实例UID
      * @return string 格式化后的PHP数组代码
      */
-    private function parseAIResponse($response, $modelName = '', $modelInstUId = '')
+    private function parseAIResponse($response, $version = 'simple', $modelName = '', $modelInstUId = '')
     {
         // 如果返回的已经是字符串,直接使用
         if (is_string($response)) {
@@ -219,9 +219,12 @@ EOT;
 
         // 检测是否是简单对话流格式（以引号开头，不是array(开头）
         $isSimpleFormat = false;
-        if (preg_match('/^\s*[\'"]/', $phpCode)) {
+        if ($version == 'simple') {
             $isSimpleFormat = true;
         }
+//        if (preg_match('/^\s*[\'"]/', $phpCode)) {
+//            $isSimpleFormat = true;
+//        }
 
         // 如果是简单对话流格式，需要包装成完整的array结构
 //        if ($isSimpleFormat) {
