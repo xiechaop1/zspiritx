@@ -102,12 +102,6 @@ class DialogGenerator extends Component
 #任务要求#
 请根据用户的描述,生成完整的对话数组。注意:
 1. localID必须按照"模型实例UID-dialog-序号"的格式,例如:"{$modelInstUId}-dialog-0"（注意：这里使用的是模型实例UID，不是模型名称）
-2. 对话中的name字段使用模型名称:"{$modelName}"
-3. 每条对话必须有合理的nextID指向下一条对话
-4. 对话结束时要有空对话(结束对话)
-5. 直接输出PHP数组代码,不要包含任何解释文字
-6. 不要使用markdown代码块标记(如```php),直接输出纯PHP数组代码
-7. 必须返回完整的数组结构,包括外层的array()
 EOT;
 
         // 如果使用dialogdoc.txt（简化版），添加优先级说明
