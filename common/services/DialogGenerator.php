@@ -19,9 +19,10 @@ class DialogGenerator extends Component
      * @param string $existingDialog 现有的对话内容
      * @param string $modelName 模型名称(用于对话中的name字段)
      * @param string $modelInstUId 模型实例UID(用于localID的前缀)
+     * @param string $version 版本选择: 'simple'=简化版, 'full'=完整版
      * @return string 生成或合并后的对话代码
      */
-    public function generateDialog($userDescription, $existingDialog = '', $modelName = '', $modelInstUId = '')
+    public function generateDialog($userDescription, $existingDialog = '', $modelName = '', $modelInstUId = '', $version = 'simple')
     {
         try {
             // 如果modelInstUId为空，使用modelName作为后备
@@ -30,7 +31,7 @@ class DialogGenerator extends Component
             }
 
             // 1. 构建AI Prompt
-            $prompt = $this->buildPrompt($userDescription, $modelName, $modelInstUId);
+            $prompt = $this->buildPrompt($userDescription, $modelName, $modelInstUId, $version);
 
             // 2. 调用Doubao服务
             $aiResponse = $this->callAI($prompt, $modelName, $modelInstUId);
@@ -57,16 +58,30 @@ class DialogGenerator extends Component
      * @param string $description 用户描述
      * @param string $modelName 模型名称(用于对话中的name字段)
      * @param string $modelInstUId 模型实例UID(用于localID的前缀)
+     * @param string $version 版本选择: 'simple'=简化版, 'full'=完整版
      * @return array Prompt消息数组
      */
-    private function buildPrompt($description, $modelName, $modelInstUId)
+    private function buildPrompt($description, $modelName, $modelInstUId, $version = 'simple')
     {
-        // 读取dialogdoc.txt的关键部分作为规范
-        $dialogDocPath = Yii::getAlias('@backend') . '/dialogdoc.txt';
-        $dialogDoc = file_get_contents($dialogDocPath);
+        // 根据版本选择读取不同的prompt文件
+        if ($version === 'full') {
+            // 完整版：读取dialogfull.txt
+            $promptFilePath = Yii::getAlias('@backend') . '/dialogfull.txt';
+        } else {
+            // 简化版：读取dialogdoc.txt
+            $promptFilePath = Yii::getAlias('@backend') . '/dialogdoc.txt';
+        }
 
-        // 提取关键部分(简化版,避免prompt过长)
-        $keyParts = $this->extractKeyParts($dialogDoc);
+        // 读取prompt文件内容
+        if (!file_exists($promptFilePath)) {
+            throw new \Exception("Prompt文件不存在: {$promptFilePath}");
+        }
+
+        $promptContent = file_get_contents($promptFilePath);
+
+        // 替换变量
+        $promptContent = str_replace('{$modelInstUId}', $modelInstUId, $promptContent);
+        $promptContent = str_replace('{$modelName}', $modelName, $promptContent);
 
         $messages = [];
 
@@ -76,70 +91,30 @@ class DialogGenerator extends Component
             'content' => '#角色#' . "\n" . '你是一个专业的AR游戏对话系统设计师,精通对话脚本编写和PHP数组结构。'
         ];
 
-        // 对话规范
+        // 对话规范（使用完整的prompt文件内容）
         $messages[] = [
             'role' => 'system',
-            'content' => '#对话规范#' . "\n" . $keyParts
+            'content' => '#对话规范#' . "\n" . $promptContent
         ];
 
-        // 任务要求
+        // 任务要求（基础要求）
         $taskRequirement = <<<EOT
 #任务要求#
 请根据用户的描述,生成完整的对话数组。注意:
-1. 使用复杂对话格式(PHP数组结构)
-2. localID必须按照"模型实例UID-dialog-序号"的格式,例如:"{$modelInstUId}-dialog-0"（注意：这里使用的是模型实例UID，不是模型名称）
-3. 对话中的name字段使用模型名称:"{$modelName}"
-4. 每条对话必须有合理的nextID指向下一条对话
-5. 对话结束时要有空对话(结束对话)，空对话只包含localID和nextID，空对话的nextID指的就是重复起始的对话localID，例如：
-   array (
-     'localID' => '{$modelInstUId}-dialog-end1',
-     'name' => '{$modelName}',
-     'nextID' =>
-     array (
-       '{$modelInstUId}-dialog-（最后要重复那句的ID）',
-     ),
-   ),
-6. 如果需要选择分支,使用userSelections数组
-7. 如果需要显示/隐藏模型,使用showModels/hideModels数组
-8. 直接输出PHP数组代码,不要包含任何解释文字
-9. 不要使用markdown代码块标记(如```php),直接输出纯PHP数组代码
-10. 必须返回完整的数组结构,包括外层的array()
-
-#输出格式示例#
-array (
-  'Name' => '{$modelName}',
-  'Intro' => '{$modelInstUId}-dialog-0',
-  'Dialog' =>
-  array (
-    array (
-      'localID' => '{$modelInstUId}-dialog-0',
-      'name' => '{$modelName}',
-      'sentence' => '对话内容',
-      'nextID' =>
-      array (
-        '{$modelInstUId}-dialog-1',
-      ),
-    ),
-    array (
-      'localID' => '{$modelInstUId}-dialog-1',
-      'name' => '{$modelName}',
-      'sentence' => '对话内容',
-      'nextID' =>
-      array (
-        '{$modelInstUId}-dialog-end1',
-      ),
-    ),
-    array (
-      'localID' => '{$modelInstUId}-dialog-end1',
-      'name' => '{$modelName}',
-      'nextID' =>
-      array (
-        '{$modelInstUId}-dialog-0',
-      ),
-    ),
-  ),
-);
+1. localID必须按照"模型实例UID-dialog-序号"的格式,例如:"{$modelInstUId}-dialog-0"（注意：这里使用的是模型实例UID，不是模型名称）
+2. 对话中的name字段使用模型名称:"{$modelName}"
+3. 每条对话必须有合理的nextID指向下一条对话
+4. 对话结束时要有空对话(结束对话)
+5. 直接输出PHP数组代码,不要包含任何解释文字
+6. 不要使用markdown代码块标记(如```php),直接输出纯PHP数组代码
+7. 必须返回完整的数组结构,包括外层的array()
 EOT;
+
+        // 如果使用dialogdoc.txt（简化版），添加优先级说明
+        if ($version === 'simple') {
+            $taskRequirement .= "\n8. **重要：如果有冲突，优先遵循上述对话规范文档中的规范**";
+        }
+
         $messages[] = [
             'role' => 'system',
             'content' => $taskRequirement

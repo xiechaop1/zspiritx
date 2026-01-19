@@ -64,11 +64,12 @@ class StoryModelEdit extends Action
                     $existingDialog = Net::post('existing_dialog');
                     $storyModelName = Net::post('story_model_name');
                     $modelInstUId = Net::post('model_inst_u_id');
+                    $dialogVersion = Net::post('dialog_version', 'simple'); // 默认简化版
 
                     try {
                         // 调用DialogGenerator服务生成对话
                         $generator = new \common\services\DialogGenerator();
-                        $result = $generator->generateDialog($description, $existingDialog, $storyModelName, $modelInstUId);
+                        $result = $generator->generateDialog($description, $existingDialog, $storyModelName, $modelInstUId, $dialogVersion);
 
                         Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
                         return [

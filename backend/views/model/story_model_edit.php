@@ -142,6 +142,16 @@ echo \dmstr\widgets\Alert::widget();
             <div class="form-group">
                 <label class="control-label col-sm-3">AI生成对话</label>
                 <div class="col-sm-6">
+                    <div class="radio" style="margin-bottom: 10px;">
+                        <label style="margin-right: 20px;">
+                            <input type="radio" name="dialog-version" value="simple" checked>
+                            简化版（基于简单对话流）
+                        </label>
+                        <label>
+                            <input type="radio" name="dialog-version" value="full">
+                            完整版（完整指令对话流）
+                        </label>
+                    </div>
                     <textarea id="ai-dialog-description" class="form-control" rows="3"
                         placeholder="请描述你想要生成的对话内容，例如：小灵语和玩家讨论数学问题，有3个选择分支"></textarea>
                     <button type="button" id="generate-dialog-btn" class="btn btn-primary" style="margin-top: 10px;">
@@ -269,6 +279,9 @@ $(document).ready(function() {
 
         var existingDialog = $('#storymodels-dialog').val();
 
+        // 获取版本选择
+        var dialogVersion = $('input[name="dialog-version"]:checked').val();
+
         // 从story_model_name字段获取剧本模型名称(用于对话中的name)
         var storyModelName = $('#storymodels-story_model_name').val();
 
@@ -302,7 +315,8 @@ $(document).ready(function() {
                 description: description,
                 existing_dialog: existingDialog,
                 story_model_name: storyModelName,
-                model_inst_u_id: modelInstUId
+                model_inst_u_id: modelInstUId,
+                dialog_version: dialogVersion
             },
             dataType: 'json',
             timeout: 60000, // 60秒超时
