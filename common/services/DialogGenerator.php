@@ -224,29 +224,32 @@ EOT;
         }
 
         // 如果是简单对话流格式，需要包装成完整的array结构
-        if ($isSimpleFormat) {
-            // 提取对话内容（假设是逗号分隔的字符串数组）
-            // 包装成完整的Dialog数组结构，包含Name、Intro等字段
-            $intro = !empty($modelInstUId) ? $modelInstUId . '-dialog-0' : 'auto-0';
-            $phpCode = "array (\n  'Name' => '" . addslashes($modelName) . "',\n  'Intro' => '{$intro}',\n  'Dialog' => \n  array (\n" . $phpCode . "\n  ),\n)";
-        }
+//        if ($isSimpleFormat) {
+//            // 提取对话内容（假设是逗号分隔的字符串数组）
+//            // 包装成完整的Dialog数组结构，包含Name、Intro等字段
+//            $intro = !empty($modelInstUId) ? $modelInstUId . '-dialog-0' : 'auto-0';
+//            $phpCode = "array (\n  'Name' => '" . addslashes($modelName) . "',\n  'Intro' => '{$intro}',\n  'Dialog' => \n  array (\n" . $phpCode . "\n  ),\n)";
+//        }
 
         // 验证是否是有效的PHP数组代码
         // 尝试eval来验证(在沙盒环境中)
-        try {
-            $testArray = eval('return ' . $phpCode . ';');
-            if (!is_array($testArray)) {
-                throw new \Exception('AI返回的内容不是有效的PHP数组');
-            }
+        if (!$isSimpleFormat) {
 
-            // 验证必要的字段
-            if (!isset($testArray['Dialog']) || !is_array($testArray['Dialog'])) {
-                throw new \Exception('AI返回的数组缺少Dialog字段');
+            try {
+                $testArray = eval('return ' . $phpCode . ';');
+                if (!is_array($testArray)) {
+                    throw new \Exception('AI返回的内容不是有效的PHP数组');
+                }
+
+                // 验证必要的字段
+                if (!isset($testArray['Dialog']) || !is_array($testArray['Dialog'])) {
+                    throw new \Exception('AI返回的数组缺少Dialog字段');
+                }
+            } catch (\Exception $e) {
+                // 记录更详细的错误信息，包括原始响应和清理后的代码
+                Yii::error('ParseAIResponse Error: ' . $e->getMessage() . "\n原始响应: " . substr($response, 0, 500) . "\n清理后代码: " . substr($phpCode, 0, 500));
+                throw new \Exception('AI返回的格式不正确,请重试。错误：' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            // 记录更详细的错误信息，包括原始响应和清理后的代码
-            Yii::error('ParseAIResponse Error: ' . $e->getMessage() . "\n原始响应: " . substr($response, 0, 500) . "\n清理后代码: " . substr($phpCode, 0, 500));
-            throw new \Exception('AI返回的格式不正确,请重试。错误：' . $e->getMessage());
         }
 
         return $phpCode;
