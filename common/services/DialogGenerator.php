@@ -37,7 +37,7 @@ class DialogGenerator extends Component
             $aiResponse = $this->callAI($prompt, $modelName, $modelInstUId);
 
             // 3. 解析AI返回的内容
-            $newDialog = $this->parseAIResponse($aiResponse);
+            $newDialog = $this->parseAIResponse($aiResponse, $modelName, $modelInstUId);
 
             // 4. 智能合并对话
             if (empty($existingDialog) || trim($existingDialog) === '') {
@@ -190,9 +190,11 @@ EOT;
     /**
      * 解析AI返回的内容
      * @param string $response AI返回的内容
+     * @param string $modelName 模型名称
+     * @param string $modelInstUId 模型实例UID
      * @return string 格式化后的PHP数组代码
      */
-    private function parseAIResponse($response)
+    private function parseAIResponse($response, $modelName = '', $modelInstUId = '')
     {
         // 如果返回的已经是字符串,直接使用
         if (is_string($response)) {
@@ -205,6 +207,20 @@ EOT;
         $phpCode = str_replace('```php', '', $phpCode);
         $phpCode = str_replace('```', '', $phpCode);
         $phpCode = trim($phpCode);
+
+        // 检测是否是简单对话流格式（以引号开头，不是array(开头）
+        $isSimpleFormat = false;
+        if (preg_match('/^\s*[\'"]/', $phpCode)) {
+            $isSimpleFormat = true;
+        }
+
+        // 如果是简单对话流格式，需要包装成完整的array结构
+        if ($isSimpleFormat) {
+            // 提取对话内容（假设是逗号分隔的字符串数组）
+            // 包装成完整的Dialog数组结构，包含Name、Intro等字段
+            $intro = !empty($modelInstUId) ? $modelInstUId . '-dialog-0' : 'auto-0';
+            $phpCode = "array (\n  'Name' => '" . addslashes($modelName) . "',\n  'Intro' => '{$intro}',\n  'Dialog' => \n  array (\n" . $phpCode . "\n  ),\n)";
+        }
 
         // 验证是否是有效的PHP数组代码
         // 尝试eval来验证(在沙盒环境中)
