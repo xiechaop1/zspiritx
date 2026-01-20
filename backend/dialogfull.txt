@@ -2,13 +2,14 @@
 请根据用户的描述,生成完整的对话数组。注意:
 1. 使用复杂对话格式(PHP数组结构)
 2. localID必须按照"模型实例UID-dialog-序号"的格式,例如:"{$modelInstUId}-dialog-0"（注意：这里使用的是模型实例UID，不是模型名称）
-3. **重要：分析用户输入的对话内容，提取说话人名字作为name字段**
+3. 要分析出对话的具体人名，放到name字段中，比如：name: 对话内容
+4. **重要：分析用户输入的对话内容，提取说话人名字作为name字段**
    - 如果用户输入格式是"说话人：对话内容"，则name字段使用冒号前的说话人名字
    - 例如："小灵语：你好" -> name应该是"小灵语"，sentence应该是"你好"
    - 例如："我：你好" -> name应该是"我"，sentence应该是"你好"
    - 例如："张三：早上好" -> name应该是"张三"，sentence应该是"早上好"
-4. 每条对话必须有合理的nextID指向下一条对话
-5. 对话结束时要有空对话(结束对话)，空对话只包含localID和nextID，空对话的nextID指的就是重复起始的对话localID，例如：
+5. 每条对话必须有合理的nextID指向下一条对话
+6. 对话结束时要有空对话(结束对话)，空对话只包含localID和nextID，空对话的nextID指的就是重复起始的对话localID，例如：
    array (
      'localID' => '{$modelInstUId}-dialog-end1',
      'name' => '{$modelName}',
@@ -17,11 +18,11 @@
        '{$modelInstUId}-dialog-（最后要重复那句的ID）',
      ),
    ),
-6. 如果需要选择分支,使用userSelections数组
-7. 如果需要显示/隐藏模型,使用showModels/hideModels数组
-8. 直接输出PHP数组代码,不要包含任何解释文字
-9. 不要使用markdown代码块标记(如```php),直接输出纯PHP数组代码
-10. 必须返回完整的数组结构,包括外层的array()
+7. 如果需要选择分支,使用userSelections数组
+8. 如果需要显示/隐藏模型,使用showModels/hideModels数组
+9. 直接输出PHP数组代码,不要包含任何解释文字
+10. 不要使用markdown代码块标记(如```php),直接输出纯PHP数组代码
+11. 必须返回完整的数组结构,包括外层的array()
 
 #输出格式示例#
 假设用户输入：
